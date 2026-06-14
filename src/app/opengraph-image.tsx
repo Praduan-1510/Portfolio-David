@@ -1,5 +1,9 @@
 import { ImageResponse } from "next/og";
-import { site } from "@/lib/site";
+import { site, SITE_URL } from "@/lib/site";
+
+// Caption host tracks the single source of truth, so the card never contradicts
+// the live domain (e.g. on preview deploys or once the production domain changes).
+const SITE_HOST = new URL(SITE_URL).host;
 
 /*
  * Root social card (1200×630). Dark-monochrome, instrument-grade composition:
@@ -11,7 +15,7 @@ import { site } from "@/lib/site";
  * no external font fetches to fail at build/edge time. Literal hex is required
  * here because ImageResponse takes raw CSS, not Tailwind tokens.
  */
-export const alt = "Praduan Saha — Graphic & UI/UX Designer";
+export const alt = "Praduan Saha — UI/UX & Graphic Designer";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -95,7 +99,7 @@ export default function OpengraphImage() {
             color: MUTED,
           }}
         >
-          Kolkata · praduansaha.com
+          Kolkata · {SITE_HOST}
         </div>
       </div>
     ),

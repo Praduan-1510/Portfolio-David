@@ -138,7 +138,7 @@ export function Hero() {
 
         <Reveal trigger="load" delay={SEQ.sub} duration={durations.base}>
           <Text variant="body-l" className="mt-space-5 max-w-[48ch] text-muted">
-            {"I'm Praduan Saha, a UI/UX and graphic designer with 7+ years turning complex ideas into clean interfaces and cohesive visual systems — across web, mobile, and brand."}
+            {"I'm Praduan Saha, a UI/UX and graphic designer working since 2019 — turning complex ideas into clean interfaces and cohesive visual systems across web, mobile, and brand."}
           </Text>
         </Reveal>
 

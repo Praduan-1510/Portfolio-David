@@ -21,12 +21,16 @@ interface AnimatedDividerProps {
   from?: "left" | "right" | "center";
   /** Tween duration (seconds). */
   duration?: number;
+  /** Paint the rule with the site spectrum (faded ends) instead of the flat
+   *  hairline — the structural "signal" thread between sections. */
+  spectrum?: boolean;
 }
 
 export function AnimatedDivider({
   className,
   from = "left",
   duration = durations.slow,
+  spectrum = false,
 }: AnimatedDividerProps) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
@@ -50,14 +54,28 @@ export function AnimatedDivider({
         },
       );
     },
-    { scope: ref, dependencies: [reduced, from, duration] },
+    { scope: ref, dependencies: [reduced, from, duration], revertOnUpdate: true },
   );
+
+  // Spectrum rule: the gradient as the rule itself, masked to fade in/out at both
+  // ends so it reads as a thread caught mid-run rather than a hard rainbow bar.
+  const spectrumStyle: React.CSSProperties | undefined = spectrum
+    ? {
+        background: "var(--spectrum-gradient)",
+        opacity: 0.7,
+        maskImage:
+          "linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent)",
+        WebkitMaskImage:
+          "linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent)",
+      }
+    : undefined;
 
   return (
     <div
       ref={ref}
       aria-hidden="true"
-      className={cn("h-px w-full bg-line", className)}
+      className={cn("h-px w-full", spectrum ? "" : "bg-line", className)}
+      style={spectrumStyle}
     />
   );
 }

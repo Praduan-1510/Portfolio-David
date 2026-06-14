@@ -1,5 +1,6 @@
 import NextLink from "next/link";
 import { Container, Text } from "@/components/primitives";
+import { site } from "@/lib/site";
 
 /*
  * Site footer. Static server component — mark, one-line descriptor, nav, social,
@@ -12,18 +13,30 @@ const nav = [
 ];
 
 const socials = [
-  {
-    href: "https://www.linkedin.com/in/praduan-saha-9a8965172",
-    label: "LinkedIn",
-  },
-  { href: "mailto:spraduan@gmail.com", label: "Email" },
+  { href: site.linkedIn, label: "LinkedIn" },
+  { href: `mailto:${site.email}`, label: "Email" },
 ];
 
 export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-space-11 border-t border-line">
+    <footer className="relative mt-space-11 border-t border-line">
+      {/* Closing spectrum thread — the hero opens by resolving the spectrum into
+          the wordmark; the footer lays it back out flat across the top edge as a
+          bookend. Faded ends so it's a thread, not a bar. Decorative. */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px"
+        style={{
+          background: "var(--spectrum-gradient)",
+          opacity: 0.7,
+          maskImage:
+            "linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent)",
+          WebkitMaskImage:
+            "linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent)",
+        }}
+      />
       <Container as="div" className="flex flex-col gap-space-8 py-space-9 md:flex-row md:items-start md:justify-between">
         <div className="max-w-[40ch]">
           <p className="font-display text-body-l font-semibold tracking-[-0.02em]">
@@ -37,12 +50,12 @@ export function Footer() {
 
         <div className="flex gap-space-9">
           <nav aria-label="Footer">
-            <ul className="space-y-space-2">
+            <ul>
               {nav.map((item) => (
                 <li key={item.href}>
                   <NextLink
                     href={item.href}
-                    className="font-sans text-caption text-muted hover:text-fg"
+                    className="inline-flex min-h-[44px] items-center font-sans text-caption text-muted hover:text-fg"
                   >
                     {item.label}
                   </NextLink>
@@ -51,14 +64,14 @@ export function Footer() {
             </ul>
           </nav>
           <nav aria-label="Social">
-            <ul className="space-y-space-2">
+            <ul>
               {socials.map((item) => (
                 <li key={item.href}>
                   <a
                     href={item.href}
                     target={item.href.startsWith("http") ? "_blank" : undefined}
                     rel={item.href.startsWith("http") ? "noreferrer noopener" : undefined}
-                    className="font-sans text-caption text-muted hover:text-fg"
+                    className="inline-flex min-h-[44px] items-center font-sans text-caption text-muted hover:text-fg"
                   >
                     {item.label}
                   </a>

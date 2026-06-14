@@ -15,8 +15,9 @@ import { prefersReducedMotion } from "@/hooks/useReducedMotion";
  * SplitFlapText sets those fills inline (and is outside this design pass, so we
  * don't edit it); we override them from this scope with a small scoped rule that
  * only bites once the `data-settled` marker is set. The marker is applied after
- * the entrance choreography finishes (PRADUAN's longest tile settles ~2s in) — or
- * immediately under reduced motion, where the flaps render settled from frame one.
+ * the entrance choreography finishes ("PRADUAN SAHA"'s longest tile settles ~3.4s
+ * in) — or immediately under reduced motion, where the flaps render settled from
+ * frame one.
  */
 export function HeroWordmark() {
   const [settled, setSettled] = useState(false);
@@ -27,9 +28,10 @@ export function HeroWordmark() {
       setSettled(true);
       return;
     }
-    // The last tile of "PRADUAN" settles ~2s in (startDelay + flips·speed); add a
-    // small cushion so the dissolve never clips a still-flipping tile.
-    const t = setTimeout(() => setSettled(true), 2300);
+    // The last tile of "PRADUAN SAHA" settles ~3.4s in (startDelay 1320ms + 41
+    // flips·50ms for the index-11 tile); add a small cushion so the dissolve never
+    // clips a still-flipping tile.
+    const t = setTimeout(() => setSettled(true), 3700);
     return () => clearTimeout(t);
   }, []);
 
@@ -58,10 +60,15 @@ export function HeroWordmark() {
           transition: opacity 0.45s ease;
         }
       `}</style>
+      {/* "PRADUAN SAHA" is 12 tiles wide (~8.3em incl. the inter-word gap), so the
+          clamp floor is lowered from 2.75rem to 1.85rem: below ~330px viewport the
+          flaps shrink to fit the gutter instead of overflowing. Desktop max (7rem)
+          is unchanged, so the settled wordmark reads the same on wide screens. */}
       <SplitFlapText
-        text="PRADUAN"
-        fontSize="clamp(2.75rem, 9vw, 7rem)"
+        text="PRADUAN SAHA"
+        fontSize="clamp(1.85rem, 9vw, 7rem)"
         className="font-semibold text-fg"
+        multicolor
       />
     </div>
   );

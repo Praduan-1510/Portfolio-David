@@ -13,6 +13,7 @@ import {
 } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { SPECTRUM } from "@/lib/spectrum";
 
 /*
  * Split-flap (departure board) text — a SHORT, UPPERCASE wordmark whose letters
@@ -22,6 +23,9 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
  *   - flipping state recolored from hardcoded orange to our --accent, settling to
  *     --fg on the --bg near-black (DESIGN_GUIDELINES.md §4 monochrome + a single
  *     accent used as a transient "computational" highlight, not a base);
+ *   - an opt-in `multicolor` board (the hero) cycles each tile through a 5-colour
+ *     "counter" palette WHILE flipping — per-tile, keyed by index — then settles to
+ *     the same monochrome --fg, so the resting wordmark stays on-brand;
  *   - typeface points at --font-display (Bricolage Grotesque) instead of --font-bebas;
  *   - sound is MUTED by default with an accessible toggle (no autoplaying audio, §13);
  *   - reduced motion renders the settled text instantly — no flipping, no audio;
@@ -166,16 +170,28 @@ interface SplitFlapTextProps {
   speed?: number;
   /** CSS font-size for the flaps; defaults to the v0 giant clamp. */
   fontSize?: string;
+  /** Cycle tiles through the multi-colour "counter" palette while flipping (each
+   *  tile a fixed colour by index, settling to --fg regardless). Off → the flip
+   *  uses the single --accent. Used by the hero wordmark. */
+  multicolor?: boolean;
 }
 
 const CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
 const DEFAULT_FONT_SIZE = "clamp(4rem, 15vw, 14rem)";
+
+// The shared site spectrum (lib/spectrum.ts). A `multicolor` board gives each tile
+// a fixed colour from this list (by index) while it flips, then every tile settles
+// to --fg — a warm→cool sweep across the wordmark so adjacent letters never share a
+// hue. The hero counter was this palette's first use; the same five now run the
+// site's structural signals (progress bar, section dots, indices, seams).
+const FLAP_PALETTE = SPECTRUM;
 
 function SplitFlapTextInner({
   text,
   className = "",
   speed = 50,
   fontSize = DEFAULT_FONT_SIZE,
+  multicolor = false,
 }: SplitFlapTextProps) {
   const chars = useMemo(() => text.split(""), [text]);
   const [animationKey, setAnimationKey] = useState(0);
@@ -212,6 +228,7 @@ function SplitFlapTextInner({
             speed={speed}
             fontSize={fontSize}
             reduced={reduced}
+            multicolor={multicolor}
             playClick={audio?.playClick}
           />
         ))}
@@ -232,6 +249,7 @@ interface SplitFlapCharProps {
   speed: number;
   fontSize: string;
   reduced: boolean;
+  multicolor: boolean;
   playClick?: () => void;
 }
 
@@ -243,6 +261,7 @@ function SplitFlapChar({
   speed,
   fontSize,
   reduced,
+  multicolor,
   playClick,
 }: SplitFlapCharProps) {
   const displayChar = CHARSET.includes(char) ? char : " ";
@@ -255,10 +274,13 @@ function SplitFlapChar({
 
   const tileDelay = 0.15 * index;
 
-  // Recolored from the v0 orange: a transient accent while flipping, settling to
-  // our foreground on the near-black bg.
-  const bgColor = isSettled ? "var(--bg)" : "color-mix(in srgb, var(--accent) 20%, transparent)";
-  const textColor = isSettled ? "var(--fg)" : "var(--accent)";
+  // Transient colour while flipping, settling to our foreground on the near-black
+  // bg. A `multicolor` board draws a fixed per-tile hue from the counter palette
+  // (keyed by index); otherwise it's the single --accent. Either way the tile and
+  // its faint card tint settle to --fg / --bg, so the resting wordmark is mono.
+  const flipColor = multicolor ? FLAP_PALETTE[index % FLAP_PALETTE.length] : "var(--accent)";
+  const bgColor = isSettled ? "var(--bg)" : `color-mix(in srgb, ${flipColor} 20%, transparent)`;
+  const textColor = isSettled ? "var(--fg)" : flipColor;
 
   useEffect(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);

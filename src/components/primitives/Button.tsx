@@ -34,7 +34,8 @@ const shapeClasses: Record<ButtonShape, string> = {
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  md: "px-space-5 py-space-3 text-caption",
+  // min-h keeps the touch target >= 44px even at the compact caption type step.
+  md: "min-h-[2.75rem] px-space-5 py-space-3 text-caption",
   lg: "px-space-6 py-space-4 text-body",
 };
 
@@ -81,9 +82,14 @@ export function Button(props: AsButton | AsLink) {
         ? ((rest as React.AnchorHTMLAttributes<HTMLAnchorElement>).rel ??
           "noopener noreferrer")
         : (rest as React.AnchorHTMLAttributes<HTMLAnchorElement>).rel;
+      // New-tab links need a programmatic cue — the visual ↗ glyph alone isn't
+      // announced. Append an sr-only note when the caller opens a new tab.
+      const opensNewTab =
+        (rest as React.AnchorHTMLAttributes<HTMLAnchorElement>).target === "_blank";
       return (
         <a href={href} className={classes} {...rest} rel={rel}>
           {children}
+          {opensNewTab && <span className="sr-only"> (opens in a new tab)</span>}
         </a>
       );
     }

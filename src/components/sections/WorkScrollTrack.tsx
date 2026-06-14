@@ -7,7 +7,8 @@ import { gsap, ScrollTrigger, registerGsap, gsapEase } from "@/lib/motion/gsap";
 import { durations } from "@/lib/motion/durations";
 import { stagger as staggerTokens, distance } from "@/lib/motion/tokens";
 import { useLenis } from "@/lib/lenis/useLenis";
-import { Text, PhoneFrame } from "@/components/primitives";
+import { cn } from "@/lib/utils/cn";
+import { Text, ProjectCover } from "@/components/primitives";
 import { prefersReducedMotion } from "@/hooks/useReducedMotion";
 import type { ProjectMeta } from "@/types/project";
 
@@ -35,8 +36,20 @@ export function WorkScrollTrack({ projects }: { projects: ProjectMeta[] }) {
       const track = trackRef.current;
       if (!section || !track) return;
 
-      const getDistance = () =>
-        Math.max(0, track.scrollWidth - window.innerWidth);
+      // Measure the track from LAYOUT, not scrollWidth. The reveal scales entering
+      // panels to 0.92, and CSS transforms shrink an element's scroll-overflow
+      // contribution — so track.scrollWidth under-reports the real width while any
+      // panel is mid-entrance, leaving the pin too short and the last panel parked
+      // off the right edge (clipped + never crossing the highlight threshold).
+      // offsetLeft/offsetWidth of the trailing child ignore transforms, so this is
+      // the true content width regardless of reveal state.
+      const getDistance = () => {
+        const last = track.lastElementChild as HTMLElement | null;
+        const contentWidth = last
+          ? last.offsetLeft + last.offsetWidth
+          : track.scrollWidth;
+        return Math.max(0, contentWidth - window.innerWidth);
+      };
 
       const tween = gsap.to(track, {
         x: () => -getDistance(),
@@ -58,18 +71,29 @@ export function WorkScrollTrack({ projects }: { projects: ProjectMeta[] }) {
       if (!prefersReducedMotion()) {
         const panels = gsap.utils.toArray<HTMLElement>("[data-panel]", section);
         panels.forEach((panel) => {
-          gsap.from(panel, {
-            autoAlpha: 0.35,
-            scale: 0.92,
-            ease: "none",
-            scrollTrigger: {
-              trigger: panel,
-              containerAnimation: tween,
-              start: "left 88%",
-              end: "left 48%",
-              scrub: true,
+          // Animate the INNER wrapper, not the panel: scaling the panel shifts its
+          // measured edges, which corrupts this containerAnimation trigger's
+          // geometry — the last panel then never reaches its "left 48%" end and
+          // stays dim. The trigger reads the unscaled panel; `fromTo` pins explicit
+          // end values so the reveal can't inherit a wrong end from the entrance.
+          const inner = panel.querySelector<HTMLElement>("[data-panel-inner]");
+          if (!inner) return;
+          gsap.fromTo(
+            inner,
+            { autoAlpha: 0.35, scale: 0.92 },
+            {
+              autoAlpha: 1,
+              scale: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: panel,
+                containerAnimation: tween,
+                start: "left 88%",
+                end: "left 48%",
+                scrub: true,
+              },
             },
-          });
+          );
         });
 
         // Entrance choreography that SUPPORTS the set-piece: as the section pins,
@@ -170,6 +194,9 @@ export function WorkScrollTrack({ projects }: { projects: ProjectMeta[] }) {
             ? ({ "--accent": project.accent } as React.CSSProperties)
             : undefined;
           const ordinal = String(i + 1).padStart(2, "0");
+          // Web projects use a wide landscape browser frame, centered in the
+          // stage rather than the portrait phone rising from its base.
+          const isWeb = project.kind === "web";
           return (
             <NextLink
               key={project.slug}
@@ -179,13 +206,25 @@ export function WorkScrollTrack({ projects }: { projects: ProjectMeta[] }) {
               style={accentStyle}
               aria-label={`View case study: ${project.title}`}
               onFocus={handlePanelFocus}
-              className="group grid h-[68vh] max-h-[42rem] w-[clamp(30rem,72vw,56rem)] shrink-0 grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] items-center gap-space-9 rounded-[4px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg"
+              className="group block h-[68vh] max-h-[42rem] w-[clamp(30rem,72vw,56rem)] shrink-0 rounded-[4px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg"
             >
+              {/* Inner wrapper carries the dim→bright + scale reveal, so the panel
+                  itself stays transform-free and its crossing-trigger geometry is
+                  stable (the GSAP reveal targets [data-panel-inner]). */}
+              <div
+                data-panel-inner
+                className="grid h-full grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] items-center gap-space-9 will-change-[transform,opacity]"
+              >
               {/* Media stage — a tall accent-washed panel with the cover screen
                   rising from its base and the oversized index numeral set behind
                   it. Fills the panel height so the composition reads as a poster
                   rather than a small phone floating in space. */}
-              <div className="relative isolate flex h-full items-end justify-center overflow-hidden rounded-[4px] border border-line bg-bg transition-[border-color,box-shadow] duration-base ease-out-quad group-hover:border-neon group-hover:shadow-neon">
+              <div
+                className={cn(
+                  "relative isolate flex h-full justify-center overflow-hidden rounded-[4px] border border-line bg-bg transition-[border-color,box-shadow] duration-base ease-out-quad group-hover:border-neon group-hover:shadow-neon",
+                  isWeb ? "items-center" : "items-end",
+                )}
+              >
                 <div
                   aria-hidden="true"
                   className="absolute inset-0 -z-10 transition-opacity duration-slow ease-out-quad group-hover:opacity-100"
@@ -205,14 +244,22 @@ export function WorkScrollTrack({ projects }: { projects: ProjectMeta[] }) {
                     GSAP effect) and lifts on hover. */}
                 <div
                   data-media
-                  className="w-[clamp(9rem,15vw,15rem)] translate-y-[6%] will-change-transform"
+                  className={cn(
+                    "will-change-transform",
+                    isWeb
+                      ? "w-[clamp(18rem,32vw,32rem)]"
+                      : "w-[clamp(9rem,15vw,15rem)] translate-y-[6%]",
+                  )}
                 >
-                  <PhoneFrame
-                    src={project.cover}
-                    alt={`${project.title} — cover screen`}
-                    sizes="15rem"
-                    imgClassName="object-top transition-transform duration-slow ease-out-quad will-change-transform group-hover:scale-[1.04]"
+                  <ProjectCover
+                    project={project}
+                    sizes={isWeb ? "(min-width:768px) 32rem, 60vw" : "15rem"}
                     className="transition-transform duration-base ease-out-quad group-hover:-translate-y-1"
+                    imgClassName={
+                      isWeb
+                        ? "transition-transform duration-slow ease-out-quad group-hover:scale-[1.02]"
+                        : "object-top transition-transform duration-slow ease-out-quad will-change-transform group-hover:scale-[1.04]"
+                    }
                   />
                 </div>
               </div>
@@ -274,12 +321,23 @@ export function WorkScrollTrack({ projects }: { projects: ProjectMeta[] }) {
                   </span>
                 </span>
               </div>
+              </div>
             </NextLink>
           );
         })}
         {/* Trailing spacer (a flex child counts toward scroll distance, unlike
-            trailing padding) — lets the last panel rest off the edge. */}
-        <div aria-hidden="true" className="w-[clamp(1.25rem,16vw,10rem)] shrink-0" />
+            trailing padding) — sized so the LAST panel comes to rest CENTERED in
+            the viewport rather than jammed against the right edge (where it was
+            clipped and never crossed the reveal's "left 48%" highlight threshold).
+            The space after the panel is gap(6vw) + spacer; for the panel to centre,
+            that must equal (100vw − panelWidth)/2, so spacer = 44vw − 0.5·panelWidth
+            (panelWidth is the same clamp as the panel). Viewport-independent; the
+            max() keeps it positive on the widest screens. */}
+        <div
+          aria-hidden="true"
+          className="shrink-0"
+          style={{ width: "max(2rem, 44vw - 0.5 * clamp(30rem, 72vw, 56rem))" }}
+        />
       </div>
     </section>
   );

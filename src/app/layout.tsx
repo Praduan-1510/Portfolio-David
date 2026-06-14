@@ -34,6 +34,10 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   // Base for resolving relative OG/twitter image paths to absolute URLs.
   metadataBase: new URL(SITE_URL),
+  // Home canonical. Each sub-page overrides alternates.canonical with its own
+  // path (metadata merges per-field, so an un-overridden page would otherwise
+  // inherit "/"). metadataBase resolves these relative paths to absolute URLs.
+  alternates: { canonical: "/" },
   title: {
     default: "Praduan Saha — UI/UX & Graphic Designer",
     template: "%s — Praduan Saha",

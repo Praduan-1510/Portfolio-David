@@ -19,7 +19,7 @@
   --black-950: #0a0a0b; /* primary background, near-black */
   --offwhite-50: #f3f3f1; /* primary foreground */
   --gray-400: #8c8c92; /* secondary text */
-  --gray-600: #55555c; /* captions / technical mono labels */
+  --gray-600: #55555c; /* DECORATIVE/non-text only (2.7:1 on bg — fails AA). Caption/mono label TEXT uses --muted. */
   --surface-900: #141417; /* raised surface / cards on near-black */
 
   /* Project accents — the ONLY colour anywhere on the site. Applied per project
@@ -29,6 +29,32 @@
   --lime: #c9e94b; /* Spendee */
   --orange: #f7a53b; /* Voyager */
   --blue: #46b4f0; /* Decathlon */
+
+  /* Spectrum palette — the site's five signature hues. First used as the hero
+     wordmark's "counter" (the flaps cycle through these before settling to mono),
+     now the shared SIGNAL layer for structure + wayfinding: the scroll-progress
+     bar, the section-rail dots, numbered indices, and the hairline seams. Built
+     from the site's own colour language — the three project accents above (blue /
+     lime / amber) plus a cool violet and a warm rose — so it reads as one family
+     across a warm→cool sweep. Deliberately distinct from the two existing colour
+     roles: the neon-green INTERACTION signal and the per-project IDENTITY accents.
+     It only ever paints thin structural marks (lines, dots, small indices), never
+     a fill behind content, so colour still belongs to the work (Design.md §4). */
+  --spectrum-violet: #a98bff;
+  --spectrum-blue: var(--blue);
+  --spectrum-lime: var(--lime);
+  --spectrum-amber: var(--orange);
+  --spectrum-rose: #ff5e8f;
+  /* The five stops as one reusable left→right gradient — progress bar, seams,
+     and lit edges all read from this so the sweep is identical everywhere. */
+  --spectrum-gradient: linear-gradient(
+    90deg,
+    var(--spectrum-violet) 0%,
+    var(--spectrum-blue) 28%,
+    var(--spectrum-lime) 52%,
+    var(--spectrum-amber) 76%,
+    var(--spectrum-rose) 100%
+  );
 
   /* Signal — the one interaction colour. A vivid neon green used site-wide for
      the live hover/affordance state (every card lights up to it) and for
@@ -212,6 +238,182 @@ html.lenis body {
     animation: hero-map-drift 60s var(--ease-in-out-quart) infinite alternate;
     will-change: transform;
   }
+}
+
+/* BrowserMockup (the "Live Slab") — the web case-study centerpiece. The stage
+   sets the perspective; the slab carries the 3D tilt, a layered depth shadow, and
+   a RESTING teal glow (the project accent → static, so it survives reduced motion).
+   On hover/focus it squares up, lifts toward the viewer, and the rim flips to the
+   neon interaction signal. Transform/opacity/box-shadow only → 60fps. */
+/* Feathered portrait. All FOUR edges dissolve into the page so the image has no
+   hard border — it floats on the near-black. Built by intersecting a horizontal
+   feather (fades left+right) with a vertical one (fades top+bottom); the centre
+   stays fully opaque, so a centred subject reads sharp while the surrounding
+   environment melts away. Used on the home About teaser + the About-page bio. */
+.about-portrait {
+  -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      #000 16%,
+      #000 84%,
+      transparent 100%
+    ),
+    linear-gradient(to bottom, transparent 0%, #000 13%, #000 87%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      #000 16%,
+      #000 84%,
+      transparent 100%
+    ),
+    linear-gradient(to bottom, transparent 0%, #000 13%, #000 87%, transparent 100%);
+  mask-composite: intersect;
+}
+
+/* Perspective for the PortraitFrame pointer-tilt layer (the cursor-follow depth
+   on the About portraits). Only sets the 3D viewing distance; the tilt itself is
+   applied/guarded in components/motion/PortraitFrame.tsx. */
+.portrait-frame {
+  perspective: 1200px;
+}
+
+.browser-stage {
+  perspective: 1800px;
+  perspective-origin: 50% 32%;
+}
+.browser-slab {
+  transform: rotateX(7deg) rotateY(-9deg) rotateZ(0.4deg);
+  transform-origin: 50% 60%;
+  transition:
+    transform var(--dur-slow) var(--ease-out-quad),
+    box-shadow var(--dur-slow) var(--ease-out-quad);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.5),
+    0 18px 40px -12px rgba(0, 0, 0, 0.7),
+    0 60px 120px -30px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 0 70px -16px color-mix(in srgb, var(--accent) 38%, transparent);
+}
+@media (hover: hover) {
+  .browser-slab:hover,
+  .browser-slab:focus-within {
+    transform: rotateX(3deg) rotateY(-4deg) translateZ(24px) scale(1.015);
+    box-shadow:
+      0 2px 6px rgba(0, 0, 0, 0.5),
+      0 18px 40px -12px rgba(0, 0, 0, 0.7),
+      0 60px 120px -30px rgba(0, 0, 0, 0.85),
+      0 0 0 1px var(--neon),
+      0 0 80px -14px var(--neon-glow);
+  }
+}
+/* One orchestrated landing — only when motion is allowed (the `to` matches the
+   resting transform so it holds cleanly). Reduced motion → static tilted slab. */
+@keyframes browser-land {
+  from {
+    opacity: 0;
+    transform: rotateX(14deg) rotateY(-16deg) translateY(28px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: rotateX(7deg) rotateY(-9deg) rotateZ(0.4deg) translateY(0) scale(1);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .browser-slab {
+    animation: browser-land var(--dur-slower) var(--ease-out-expo) both;
+  }
+  /* Bigger centerpiece lands from a gentler, more frontal tilt so the page stays
+     readable at full width (its resting transform is set on [data-variant] below). */
+  .browser-slab[data-variant="big"] {
+    animation: browser-land-big var(--dur-slower) var(--ease-out-expo) both;
+  }
+}
+
+/* ── Web case-study centerpiece — the "boot" intro ───────────────────────────
+   With `boot`, the hero slab powers on like a live capture connecting: the frame
+   lands, the chrome lights up (dots → URL), a dark shutter scans up off the screen
+   (a teal scan-line riding its leading edge) to reveal the site, then the live
+   badge blinks on. Pure transform/opacity, staggered by animation-delay, gated to
+   no-preference — under reduced motion every element rests at its visible end
+   state (shutter parked off-screen), so the finished slab shows with no motion. */
+.browser-slab[data-variant="big"] {
+  /* Dimensional resting tilt for the full-width centerpiece (also the reduced-motion
+     rest state). browser-land-big's `to` matches this so the landing holds clean.
+     The cursor parallax (.bm-tilt below) layers on top of this. */
+  transform: rotateX(6deg) rotateY(-7deg) rotateZ(0.3deg);
+}
+@media (hover: hover) {
+  /* Hover LIFTS the slab toward the viewer (translateZ) + lights the neon glow,
+     keeping the base rotation so it doesn't fight the cursor parallax wrapper. */
+  .browser-slab[data-variant="big"]:hover,
+  .browser-slab[data-variant="big"]:focus-within {
+    transform: rotateX(6deg) rotateY(-7deg) rotateZ(0.3deg) translateZ(26px) scale(1.01);
+  }
+}
+@keyframes browser-land-big {
+  from {
+    opacity: 0;
+    transform: rotateX(13deg) rotateY(-12deg) translateY(30px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: rotateX(6deg) rotateY(-7deg) rotateZ(0.3deg) translateY(0) scale(1);
+  }
+}
+
+/* Cursor parallax — a wrapper between the perspective stage and the slab that
+   rotates toward the pointer (vars set in JS), so the mockup reads as a physical
+   3D object you can look around. It LAYERS on the slab's own tilt (preserve-3d),
+   and lives on a separate element so it never collides with the slab's boot
+   keyframe fill. Vars rest at 0 → no tilt under reduced motion / touch (JS only
+   wires the listeners on fine pointers). */
+.bm-tilt {
+  transform: rotateX(var(--bm-mx, 0deg)) rotateY(var(--bm-my, 0deg));
+  transform-style: preserve-3d;
+  transition: transform var(--dur-base) var(--ease-out-quad);
+  will-change: transform;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .browser-slab[data-boot] .bm-dot {
+    animation: bm-pop 0.4s var(--ease-out-back) both;
+  }
+  .browser-slab[data-boot] .bm-dot:nth-child(1) { animation-delay: 0.42s; }
+  .browser-slab[data-boot] .bm-dot:nth-child(2) { animation-delay: 0.49s; }
+  .browser-slab[data-boot] .bm-dot:nth-child(3) { animation-delay: 0.56s; }
+  .browser-slab[data-boot] .bm-url {
+    animation: bm-url-in 0.5s var(--ease-out-expo) both;
+    animation-delay: 0.58s;
+  }
+  .browser-slab[data-boot] .bm-shutter {
+    animation: bm-shutter 0.85s var(--ease-in-out-quart) both;
+    animation-delay: 0.72s;
+  }
+  .browser-slab[data-boot] .bm-badge {
+    animation: bm-blink 0.5s var(--ease-out-back) both;
+    animation-delay: 1.55s;
+  }
+}
+@keyframes bm-pop {
+  from { opacity: 0; transform: scale(0); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes bm-url-in {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* The shutter starts over the screen (translateY 0) and scans down off the bottom,
+   uncovering the page top→bottom. Resting state (no animation) is parked below, so
+   reduced motion shows the screen fully revealed. */
+@keyframes bm-shutter {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+@keyframes bm-blink {
+  0% { opacity: 0; transform: scale(0.85); }
+  45% { opacity: 1; }
+  62% { opacity: 0.4; }
+  to { opacity: 1; transform: scale(1); }
 }
 
 @layer components {

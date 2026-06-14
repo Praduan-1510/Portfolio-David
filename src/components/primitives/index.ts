@@ -5,5 +5,6 @@ export { Link } from "./Link";
 export { Button } from "./Button";
 export type { ButtonVariant, ButtonShape, ButtonSize } from "./Button";
 export { Eyebrow } from "./Eyebrow";
-export { MediaFrame } from "./MediaFrame";
 export { PhoneFrame } from "./PhoneFrame";
+export { BrowserMockup } from "./BrowserMockup";
+export { ProjectCover } from "./ProjectCover";

@@ -69,7 +69,7 @@ export function CountUp({
         },
       });
     },
-    { scope: ref, dependencies: [reduced, value, from, decimals, duration] },
+    { scope: ref, dependencies: [reduced, value, from, decimals, duration], revertOnUpdate: true },
   );
 
   return (

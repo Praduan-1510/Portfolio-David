@@ -44,12 +44,17 @@ export function ScrollProgress({ className }: ScrollProgressProps) {
       className={`pointer-events-none fixed inset-x-0 top-0 z-[60] h-[3px] ${className ?? ""}`}
       aria-hidden="true"
     >
-      {/* Colour reads --progress-accent (set per case-study route), falling back
-          to the monochrome foreground so the base chrome stays colourless (§4). */}
+      {/* Colour reads --progress-accent when a case-study route sets it (a single
+          project hue — identity wins inside a project); everywhere else it falls
+          back to the site spectrum gradient, so the bar reads as the wayfinding
+          signal. `background` (not background-color) accepts either a flat colour
+          or the gradient image. The bar scales via scaleX, so the gradient is the
+          full spectrum compressed into the filled width — a complete sweep that
+          grows as you scroll. */}
       <div
         ref={ref}
         className="h-full w-full"
-        style={{ backgroundColor: "var(--progress-accent, var(--fg))" }}
+        style={{ background: "var(--progress-accent, var(--spectrum-gradient))" }}
       />
     </div>
   );

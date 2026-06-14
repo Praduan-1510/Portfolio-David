@@ -15,6 +15,19 @@ export interface Credit {
   name: string;
 }
 
+/** A looping site / screen-recording video shown in a landscape browser mockup
+ *  (the centerpiece for a `kind: "web"` case study). */
+export interface ProjectVideo {
+  /** MP4 source under /public (H.264 — broad support). */
+  src: string;
+  /** Optional WebM source (smaller; offered first via <source>). */
+  webm?: string;
+  /** Poster frame — the static still for reduced-motion + pre-decode. */
+  poster: string;
+  /** Intrinsic aspect ratio, e.g. "40/26", reserving the box to avoid CLS. */
+  aspect?: string;
+}
+
 /** A single app screen in a case-study gallery. */
 export interface Screen {
   /** Image path under /public. */
@@ -52,10 +65,18 @@ export interface ProjectMeta {
   services: string[];
   /** 1–2 sentence teaser for the index. */
   summary: string;
-  /** Hero image path. */
+  /** Hero image path (a phone cover for apps; the video poster for web). */
   cover: string;
-  /** Screens grouped by product flow — the source of truth for the gallery. */
-  flows: ScreenFlow[];
+  /** Medium. "app" (default) → portrait phone frames; "web" → landscape browser
+   *  mockup driven by `video`. */
+  kind?: "app" | "web";
+  /** Looping site video shown in the browser mockup (required when kind: "web"). */
+  video?: ProjectVideo;
+  /** Live site URL — surfaced prominently for shipped/real work. */
+  liveUrl?: string;
+  /** Screens grouped by product flow — the source of truth for the gallery.
+   *  Required for app projects; optional for web (the video carries the story). */
+  flows?: ScreenFlow[];
   /** Flat list of every screen `src`, derived from `flows` in the content layer. */
   gallery: string[];
   /** Optional per-project accent hex — themes the case-study route. */
@@ -65,8 +86,6 @@ export interface ProjectMeta {
   disclaimer?: string;
   /** Headline outcomes. */
   metrics?: Metric[];
-  /** Slug of the next case study. */
-  nextProject?: string;
   /** Production credits. */
   credits?: Credit[];
   /** Show on the home page. */

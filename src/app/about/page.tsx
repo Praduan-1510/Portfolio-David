@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Container, Text, Eyebrow, Button } from "@/components/primitives";
 import {
   Reveal,
@@ -7,7 +8,9 @@ import {
   Marquee,
   CountUp,
   Magnetic,
+  PortraitFrame,
 } from "@/components/motion";
+import { spectrumAt } from "@/lib/spectrum";
 import { TimelineRail } from "./TimelineRail";
 import { ProfileHero } from "./ProfileHero";
 
@@ -15,6 +18,17 @@ export const metadata: Metadata = {
   title: "About",
   description:
     "Graphic and UI/UX designer based in Kolkata — creating digital experiences through systematic design thinking and precise execution.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About — Praduan Saha",
+    description:
+      "Graphic and UI/UX designer based in Kolkata — creating digital experiences through systematic design thinking and precise execution.",
+  },
+  twitter: {
+    title: "About — Praduan Saha",
+    description:
+      "Graphic and UI/UX designer based in Kolkata — creating digital experiences through systematic design thinking and precise execution.",
+  },
 };
 
 const BIO = [
@@ -224,11 +238,14 @@ export default function About() {
       >
         <Marquee
           speed={32}
-          items={DISCIPLINES.map((d) => (
+          items={DISCIPLINES.map((d, i) => (
             <span key={d} className="inline-flex items-center gap-space-5">
+              {/* Diamond separators step through the spectrum so the band carries a
+                  quiet moving sweep of colour; the words stay monochrome. */}
               <span
                 aria-hidden="true"
-                className="inline-block h-[6px] w-[6px] rotate-45 bg-fg"
+                className="inline-block h-[6px] w-[6px] rotate-45"
+                style={{ backgroundColor: spectrumAt(i) }}
               />
               <span className="font-display text-[clamp(1.5rem,3.6vw,2.5rem)] font-medium tracking-[-0.01em] text-muted">
                 {d}
@@ -267,18 +284,37 @@ export default function About() {
           <Reveal as="div" y={12} className="md:pt-space-2">
             <Eyebrow>Bio</Eyebrow>
           </Reveal>
-          <StaggerGroup className="max-w-[var(--measure)] space-y-space-4" stagger={0.08}>
-            {BIO.map((para, i) => (
-              <Text key={i} variant={i === 0 ? "body-l" : "body"} className="text-muted">
-                {para}
-              </Text>
-            ))}
-          </StaggerGroup>
+          <div className="grid items-start gap-space-8 lg:grid-cols-[1fr_auto] lg:gap-space-9">
+            <StaggerGroup className="max-w-[var(--measure)] space-y-space-4" stagger={0.08}>
+              {BIO.map((para, i) => (
+                <Text key={i} variant={i === 0 ? "body-l" : "body"} className="text-muted">
+                  {para}
+                </Text>
+              ))}
+            </StaggerGroup>
+            {/* Portrait — same four-side feather + PortraitFrame dynamics as the
+                home teaser (clip-wipe entrance + scroll breath + desktop pointer
+                tilt), floating beside the bio with no hard border. */}
+            <PortraitFrame
+              delay={0.1}
+              className="portrait-frame group relative mx-auto aspect-[4/5] w-full max-w-[20rem] overflow-hidden lg:w-[19rem] lg:max-w-none"
+            >
+              <Image
+                src="/images/about/portrait.webp"
+                alt="Praduan Saha on a tree-lined path in Kolkata"
+                fill
+                sizes="(min-width: 1024px) 19rem, (min-width: 768px) 40vw, 80vw"
+                placeholder="blur"
+                blurDataURL="data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADwAQCdASoMAA8AA4BaJaQAArL079cHM0AA/oOGxqwDGhDz99VmzWx2x3nwOyeIDoqLoPgyN/J98JGfhrAyTXTP+UUuYx/qbFBrUg6wY9LOJ/yQAAA="
+                className="about-portrait object-cover object-center transition-transform duration-slow ease-out-quad motion-safe:group-hover:scale-[1.03]"
+              />
+            </PortraitFrame>
+          </div>
         </div>
       </Container>
 
       <Container>
-        <AnimatedDivider />
+        <AnimatedDivider spectrum />
       </Container>
 
       {/* ── Approach ─ numbered principles ──────────────────────────────── */}
@@ -297,7 +333,12 @@ export default function About() {
                 aria-hidden="true"
                 className="absolute left-0 top-0 h-px w-full origin-left scale-x-0 bg-neon transition-transform duration-base ease-out-quad group-hover/appr:scale-x-100"
               />
-              <span className="font-mono text-caption text-muted transition-colors duration-base ease-out-quad group-hover/appr:text-neon">
+              {/* Index in its spectrum hue at rest; the neon interaction signal
+                  still takes over on hover. */}
+              <span
+                className="font-mono text-caption text-[var(--idx)] transition-colors duration-base ease-out-quad group-hover/appr:text-neon"
+                style={{ "--idx": spectrumAt(i) } as React.CSSProperties}
+              >
                 {String(i + 1).padStart(2, "0")}
               </span>
               <Text
@@ -332,7 +373,10 @@ export default function About() {
                 </span>
                 <div className="min-w-0">
                   <div className="flex items-baseline gap-space-3">
-                    <span className="font-mono text-caption text-muted">
+                    <span
+                      className="font-mono text-caption"
+                      style={{ color: spectrumAt(i) }}
+                    >
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <Text
@@ -362,7 +406,7 @@ export default function About() {
       </Container>
 
       <Container>
-        <AnimatedDivider />
+        <AnimatedDivider spectrum />
       </Container>
 
       {/* ── Experience ─ the timeline draws on scroll ───────────────────── */}
@@ -421,7 +465,7 @@ export default function About() {
       </Container>
 
       <Container>
-        <AnimatedDivider />
+        <AnimatedDivider spectrum />
       </Container>
 
       {/* ── Certifications ──────────────────────────────────────────────── */}

@@ -1,7 +1,7 @@
 "use client";
 
 import NextLink from "next/link";
-import { Container, Text, PhoneFrame } from "@/components/primitives";
+import { Container, Text, ProjectCover } from "@/components/primitives";
 import { StaggerGroup } from "@/components/motion";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -79,6 +79,9 @@ function WorkStackRow({
   // Alternate the media side so the sequence reads as a rhythm, not a column.
   const mediaLeft = index % 2 === 0;
   const ordinal = String(index + 1).padStart(2, "0");
+  // Web projects use a wide landscape browser frame, centered in the stage
+  // rather than the portrait phone rising from its base.
+  const isWeb = project.kind === "web";
 
   return (
     <li
@@ -99,7 +102,11 @@ function WorkStackRow({
             mediaLeft ? "md:order-1" : "md:order-2"
           }
         >
-          <div className="relative isolate flex aspect-[4/3] items-end justify-center overflow-hidden rounded-[3px] border border-line bg-bg transition-[border-color,box-shadow] duration-base ease-out-quad group-hover:border-neon group-hover:shadow-neon">
+          <div
+            className={`relative isolate flex aspect-[4/3] justify-center overflow-hidden rounded-[3px] border border-line bg-bg transition-[border-color,box-shadow] duration-base ease-out-quad group-hover:border-neon group-hover:shadow-neon ${
+              isWeb ? "items-center" : "items-end"
+            }`}
+          >
             {/* Accent wash rising from the base of the stage. */}
             <div
               aria-hidden="true"
@@ -117,14 +124,26 @@ function WorkStackRow({
             >
               {ordinal}
             </span>
-            {/* Cover screen in a phone frame, anchored low and bleeding off-edge
-                so it reads as rising out of the stage. Lifts on hover. */}
-            <div className="w-[42%] translate-y-[8%] transition-transform duration-base ease-out-quad will-change-transform group-hover:-translate-y-1">
-              <PhoneFrame
-                src={project.cover}
-                alt={`${project.title} — cover screen`}
-                sizes="(min-width: 768px) 14rem, 42vw"
-                imgClassName="object-top transition-transform duration-slow ease-out-quad will-change-transform group-hover:scale-[1.04]"
+            {/* Cover frame — a portrait phone anchored low and bleeding off-edge
+                (app), or a landscape browser window centered in the stage (web).
+                Lifts on hover. */}
+            <div
+              className={`transition-transform duration-base ease-out-quad will-change-transform group-hover:-translate-y-1 ${
+                isWeb ? "w-[82%]" : "w-[42%] translate-y-[8%]"
+              }`}
+            >
+              <ProjectCover
+                project={project}
+                sizes={
+                  isWeb
+                    ? "(min-width: 768px) 30rem, 86vw"
+                    : "(min-width: 768px) 14rem, 42vw"
+                }
+                imgClassName={
+                  isWeb
+                    ? "transition-transform duration-slow ease-out-quad group-hover:scale-[1.02]"
+                    : "object-top transition-transform duration-slow ease-out-quad will-change-transform group-hover:scale-[1.04]"
+                }
               />
             </div>
           </div>

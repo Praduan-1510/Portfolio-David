@@ -6,7 +6,16 @@ import { getAllProjectsMeta } from "@/lib/content/work";
 
 export const metadata: Metadata = {
   title: "Work",
-  description: "Selected case studies in product design and engineering.",
+  description: "Selected case studies in product design and front-end development.",
+  alternates: { canonical: "/work" },
+  openGraph: {
+    title: "Work — Praduan Saha",
+    description: "Selected case studies in product design and front-end development.",
+  },
+  twitter: {
+    title: "Work — Praduan Saha",
+    description: "Selected case studies in product design and front-end development.",
+  },
 };
 
 /*
@@ -51,7 +60,7 @@ export default function WorkPage() {
         </Reveal>
 
         {/* Hairline draws across to separate the header from the sequence. */}
-        <AnimatedDivider from="left" className="mt-space-8" />
+        <AnimatedDivider from="left" spectrum className="mt-space-8" />
       </Container>
 
       <WorkIndex projects={projects} />

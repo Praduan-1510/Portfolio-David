@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Container } from "@/components/primitives";
 import { cn } from "@/lib/utils/cn";
+import { spectrumAt } from "@/lib/spectrum";
 
 /*
  * Site navigation. Client component so the current route can be marked active
@@ -126,7 +127,7 @@ export function Nav() {
           aria-expanded={open}
           aria-controls="mobile-menu"
           onClick={() => setOpen(true)}
-          className="-mr-space-2 flex h-10 w-10 items-center justify-center rounded-[2px] text-fg md:hidden"
+          className="-mr-space-2 flex h-11 w-11 items-center justify-center rounded-[2px] text-fg md:hidden"
         >
           <span aria-hidden="true" className="relative block h-[10px] w-[22px]">
             <span className="absolute left-0 top-0 h-[1.5px] w-full bg-current" />
@@ -153,7 +154,7 @@ export function Nav() {
               type="button"
               aria-label="Close menu"
               onClick={() => setOpen(false)}
-              className="-mr-space-2 flex h-10 w-10 items-center justify-center rounded-[2px] text-fg"
+              className="-mr-space-2 flex h-11 w-11 items-center justify-center rounded-[2px] text-fg"
             >
               <span aria-hidden="true" className="relative block h-[18px] w-[18px]">
                 <span className="absolute left-1/2 top-1/2 h-[1.5px] w-full -translate-x-1/2 -translate-y-1/2 rotate-45 bg-current" />
@@ -181,7 +182,10 @@ export function Nav() {
                       onClick={() => setOpen(false)}
                       className="flex items-baseline gap-space-4 py-space-2"
                     >
-                      <span className="font-mono text-caption text-muted">
+                      <span
+                        className="font-mono text-caption"
+                        style={{ color: spectrumAt(i) }}
+                      >
                         {String(i + 1).padStart(2, "0")}
                       </span>
                       <span

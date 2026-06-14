@@ -1,4 +1,6 @@
+import Image from "next/image";
 import { Container, Eyebrow, Button, Link } from "@/components/primitives";
+import { spectrumAt } from "@/lib/spectrum";
 import { ProjectCard } from "@/components/work/ProjectCard";
 import { Hero } from "@/components/sections/Hero";
 import { HomeAtmosphere } from "@/components/sections/HomeAtmosphere";
@@ -11,6 +13,7 @@ import {
   CountUp,
   AnimatedDivider,
   Magnetic,
+  PortraitFrame,
 } from "@/components/motion";
 import { getFeaturedProjectsMeta, getAllProjectsMeta } from "@/lib/content/work";
 
@@ -79,18 +82,21 @@ export default function Home() {
           {stats.map((s, i) => (
             <div
               key={s.label}
-              className="group flex flex-col gap-space-3 py-space-7 pl-space-5 pr-space-4 first:pl-0 [&:not(:first-child)]:border-l [&:not(:first-child)]:border-line"
+              className="group flex min-w-0 flex-col gap-space-3 py-space-7 pl-space-3 pr-space-2 first:pl-0 sm:pl-space-5 sm:pr-space-4 [&:not(:first-child)]:border-l [&:not(:first-child)]:border-line"
             >
+              {/* Index ticks each carry their spectrum hue, so the gauge cluster
+                  reads as a colour-coded instrument row (the figures stay mono). */}
               <span
                 aria-hidden="true"
-                className="font-mono text-caption tabular-nums text-muted opacity-60"
+                className="font-mono text-caption tabular-nums"
+                style={{ color: spectrumAt(i) }}
               >
                 {String(i + 1).padStart(2, "0")}
               </span>
               <dt className="font-display text-display-l leading-none tabular-nums transition-colors duration-base ease-out-quad group-hover:text-neon">
                 <CountUp value={s.value} />
               </dt>
-              <dd className="font-mono text-caption uppercase tracking-[0.14em] text-muted">
+              <dd className="font-mono text-caption uppercase tracking-[0.06em] text-muted sm:tracking-[0.14em]">
                 {s.label}
               </dd>
             </div>
@@ -143,33 +149,63 @@ export default function Home() {
       </Container>
 
       <Container>
-        <AnimatedDivider />
+        <AnimatedDivider spectrum />
       </Container>
 
-      {/* About teaser */}
+      {/* About teaser — the statement on the left, a full monochrome portrait
+          holding the right side. The image has NO frame: it dissolves into the
+          page on its inner (left) edge + bottom via a soft mask, so it blends
+          with the statement instead of sitting in a box. Subject sits right, so
+          only the receding path/trees fade. Grayscale webp keeps colour reserved
+          for the spectrum accents; parallax + hover give it life (reduced-motion
+          → static, fully visible). */}
       <Container as="section" id="about" className="scroll-mt-16 py-space-9">
-        <div className="max-w-[var(--measure)]">
-          <Reveal>
-            <Eyebrow>About</Eyebrow>
-          </Reveal>
-          <TextReveal
-            as="h2"
-            by="words"
-            delay={0.08}
-            className="mt-space-3 font-display text-display-l"
+        <div className="grid items-center gap-space-7 md:grid-cols-2 md:gap-space-9">
+          {/* Left — the statement. */}
+          <div className="min-w-0">
+            <Reveal>
+              <Eyebrow>About</Eyebrow>
+            </Reveal>
+            <TextReveal
+              as="h2"
+              by="words"
+              delay={0.08}
+              className="mt-space-3 font-display text-display-l"
+            >
+              Creating digital experiences through systematic design thinking and precise execution.
+            </TextReveal>
+            <Reveal delay={0.12}>
+              <Link href="/about" className="mt-space-6 inline-block">
+                More about me
+              </Link>
+            </Reveal>
+          </div>
+
+          {/* Right — the portrait. All four edges feather into the page
+              (.about-portrait) so it floats with no hard border, dissolving into
+              the statement beside it. PortraitFrame layers a cinematic clip-wipe
+              entrance + a linear scroll "breath" + a desktop pointer-tilt — all
+              reduced-motion-safe, the mask untouched. Grayscale keeps colour for
+              the accents. */}
+          <PortraitFrame
+            delay={0.18}
+            className="portrait-frame group relative mx-auto aspect-[4/5] w-full min-w-0 max-w-[24rem] overflow-hidden md:max-w-none"
           >
-            Creating digital experiences through systematic design thinking and precise execution.
-          </TextReveal>
-          <Reveal delay={0.12}>
-            <Link href="/about" className="mt-space-5 inline-block">
-              More about me
-            </Link>
-          </Reveal>
+            <Image
+              src="/images/about/portrait.webp"
+              alt="Praduan Saha on a tree-lined path in Kolkata"
+              fill
+              sizes="(min-width: 768px) 46vw, 100vw"
+              placeholder="blur"
+              blurDataURL="data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADwAQCdASoMAA8AA4BaJaQAArL079cHM0AA/oOGxqwDGhDz99VmzWx2x3nwOyeIDoqLoPgyN/J98JGfhrAyTXTP+UUuYx/qbFBrUg6wY9LOJ/yQAAA="
+              className="about-portrait object-cover object-center transition-transform duration-slow ease-out-quad motion-safe:group-hover:scale-[1.03]"
+            />
+          </PortraitFrame>
         </div>
       </Container>
 
       <Container>
-        <AnimatedDivider />
+        <AnimatedDivider spectrum />
       </Container>
 
       {/* Contact CTA — a framed panel with real depth: a layered radial glow from
@@ -179,10 +215,20 @@ export default function Home() {
       <Container as="section" id="contact" className="scroll-mt-16 py-space-9">
         <Reveal>
           <div className="card-neon relative isolate overflow-hidden rounded-[3px] border border-line bg-surface p-space-8 md:p-space-9">
-            {/* Top accent hairline — a thin lit edge across the crown of the panel. */}
+            {/* Top accent hairline — the spectrum lit across the crown of the
+                panel (faded ends), so the closing CTA carries the same signal as
+                the hero and footer. */}
             <span
               aria-hidden="true"
-              className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-fg to-transparent opacity-40"
+              className="absolute inset-x-0 top-0 h-px"
+              style={{
+                background: "var(--spectrum-gradient)",
+                opacity: 0.6,
+                maskImage:
+                  "linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent)",
+                WebkitMaskImage:
+                  "linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent)",
+              }}
             />
             {/* Layered radial glow — a soft pool of light in the upper-left so the
                 panel reads as lit, not flat. */}

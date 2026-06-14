@@ -1,24 +1,41 @@
 import type { Metadata } from "next";
-import { Container, Text, Eyebrow, Link, Button } from "@/components/primitives";
+import { ArrowUpRight } from "lucide-react";
+import { Container, Text, Eyebrow, Button } from "@/components/primitives";
 import { Reveal, StaggerGroup, TextReveal, AnimatedNoise } from "@/components/motion";
+import { site } from "@/lib/site";
+import { cn } from "@/lib/utils/cn";
 
 export const metadata: Metadata = {
   title: "Contact",
   description:
     "Have a project in mind, or just want to say hello? Email is the fastest way to reach Praduan Saha.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Contact — Praduan Saha",
+    description:
+      "Have a project in mind, or just want to say hello? Email is the fastest way to reach Praduan Saha.",
+  },
+  twitter: {
+    title: "Contact — Praduan Saha",
+    description:
+      "Have a project in mind, or just want to say hello? Email is the fastest way to reach Praduan Saha.",
+  },
 };
 
 // Email + LinkedIn + location (phone intentionally left off — Content/Site.md).
+// Values are the human-readable display; the raw URL lives in `href`. The old
+// LinkedIn row printed the full URL (linkedin.com/in/praduan-saha-9a8965172),
+// which wrapped to two broken lines — the display is a clean vanity handle instead.
 const CHANNELS = [
   {
     label: "Email",
-    value: "spraduan@gmail.com",
-    href: "mailto:spraduan@gmail.com",
+    value: site.email,
+    href: `mailto:${site.email}`,
   },
   {
     label: "LinkedIn",
-    value: "linkedin.com/in/praduan-saha-9a8965172",
-    href: "https://www.linkedin.com/in/praduan-saha-9a8965172",
+    value: "in/praduan-saha",
+    href: site.linkedIn,
   },
   { label: "Location", value: "Kolkata, West Bengal, India" },
 ];
@@ -115,28 +132,73 @@ export default function Contact() {
             <Reveal as="div" trigger="load" delay={0.3}>
               {/* bg-surface (a var() token) can't take a /opacity modifier — it
                   silently no-ops — so the panel uses the solid raised surface. */}
-              <div className="card-neon rounded-[3px] border border-line bg-surface p-space-7">
+              <div className="card-neon relative overflow-hidden rounded-[3px] border border-line bg-surface p-space-7">
+                {/* Spectrum thread across the panel crown — the wayfinding signal,
+                    consistent with the home CTA and footer (faded ends). */}
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-x-0 top-0 h-px"
+                  style={{
+                    background: "var(--spectrum-gradient)",
+                    opacity: 0.6,
+                    maskImage:
+                      "linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent)",
+                    WebkitMaskImage:
+                      "linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent)",
+                  }}
+                />
                 <Eyebrow>Channels</Eyebrow>
-                <StaggerGroup as="dl" className="mt-space-5" trigger="load" delay={0.5} stagger={0.08}>
-                  {CHANNELS.map((channel) => (
-                    <div
-                      key={channel.label}
-                      className="card-neon-row flex flex-col gap-space-1 border-t border-line py-space-4 first:border-t-0 first:pt-0"
-                    >
-                      <dt className="font-mono text-caption uppercase tracking-[0.14em] text-muted">
-                        {channel.label}
-                      </dt>
-                      <dd>
-                        {channel.href ? (
-                          <Link href={channel.href} className="text-body">
+                {/* Each channel is a full-width row: a mono label tag over a clean
+                    value, with a trailing arrow on the links. The whole row is the
+                    target (lights to neon + the arrow drifts on hover); the static
+                    Location row carries no arrow, so interactive vs. info reads at a
+                    glance. Replaces the old stacked dt/dd where the raw LinkedIn URL
+                    wrapped into two broken lines. */}
+                <StaggerGroup as="div" className="mt-space-5" trigger="load" delay={0.5} stagger={0.08}>
+                  {CHANNELS.map((channel) => {
+                    const rowClass =
+                      "flex items-start justify-between gap-space-4 border-t border-line py-space-4 first:border-t-0 first:pt-0";
+                    const body = (
+                      <>
+                        <span className="min-w-0 flex-1">
+                          <span className="block font-mono text-caption uppercase tracking-[0.16em] text-muted">
+                            {channel.label}
+                          </span>
+                          <span
+                            className={cn(
+                              "mt-space-2 block text-body-l text-fg",
+                              channel.href &&
+                                "truncate transition-colors duration-fast ease-out-quad group-hover:text-neon",
+                            )}
+                          >
                             {channel.value}
-                          </Link>
-                        ) : (
-                          <span className="text-body">{channel.value}</span>
+                          </span>
+                        </span>
+                        {channel.href && (
+                          <ArrowUpRight
+                            aria-hidden="true"
+                            className="mt-[2px] h-[18px] w-[18px] shrink-0 text-muted transition-[transform,color] duration-fast ease-out-quad group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-neon"
+                          />
                         )}
-                      </dd>
-                    </div>
-                  ))}
+                      </>
+                    );
+                    return channel.href ? (
+                      <a
+                        key={channel.label}
+                        href={channel.href}
+                        target={/^https?:/.test(channel.href) ? "_blank" : undefined}
+                        rel={/^https?:/.test(channel.href) ? "noreferrer noopener" : undefined}
+                        aria-label={`${channel.label}: ${channel.value}`}
+                        className={cn("card-neon-row group rounded-[2px]", rowClass)}
+                      >
+                        {body}
+                      </a>
+                    ) : (
+                      <div key={channel.label} className={rowClass}>
+                        {body}
+                      </div>
+                    );
+                  })}
                 </StaggerGroup>
 
                 <Reveal
@@ -146,14 +208,15 @@ export default function Contact() {
                   className="mt-space-7 flex flex-col gap-space-3"
                 >
                   <Button
-                    href="mailto:spraduan@gmail.com"
+                    href={`mailto:${site.email}`}
                     variant="primary"
                     className="w-full"
                   >
                     Email me
                   </Button>
                   <Button
-                    href="https://www.linkedin.com/in/praduan-saha-9a8965172"
+                    href={site.linkedIn}
+                    target="_blank"
                     variant="secondary"
                     className="w-full"
                   >

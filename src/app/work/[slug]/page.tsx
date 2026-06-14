@@ -2,12 +2,22 @@ import type { Metadata } from "next";
 import NextLink from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import { Container, Text, Eyebrow, Link, PhoneFrame } from "@/components/primitives";
+import {
+  Container,
+  Text,
+  Eyebrow,
+  Link,
+  Button,
+  PhoneFrame,
+  BrowserMockup,
+  ProjectCover,
+} from "@/components/primitives";
 import {
   Reveal,
   StaggerGroup,
   TextReveal,
   Parallax,
+  Magnetic,
   RouteProgressAccent,
 } from "@/components/motion";
 import { mdxComponents } from "@/components/mdx/mdx-components";
@@ -16,7 +26,9 @@ import {
   getProjectSlugs,
   getAllProjectsMeta,
 } from "@/lib/content/work";
+import { slugify } from "@/lib/utils/slugify";
 import { SITE_URL, site } from "@/lib/site";
+import { CaseStudyNav } from "./CaseStudyNav";
 
 type Params = { slug: string };
 
@@ -38,7 +50,9 @@ export async function generateMetadata({
   return {
     title: project.meta.title,
     description: project.meta.summary,
+    alternates: { canonical: `/work/${slug}` },
     openGraph: { title: project.meta.title, description: project.meta.summary },
+    twitter: { title: project.meta.title, description: project.meta.summary },
   };
 }
 
@@ -52,11 +66,27 @@ export default async function CaseStudy({
   if (!project) notFound();
 
   const { meta, content } = project;
+  const isWeb = meta.kind === "web";
+  const liveHost = meta.liveUrl
+    ? meta.liveUrl.replace(/^https?:\/\//, "").replace(/\/+$/, "")
+    : undefined;
 
   // Next project: the following entry by order, wrapping around.
   const all = getAllProjectsMeta();
   const idx = all.findIndex((p) => p.slug === slug);
   const next = idx >= 0 ? all[(idx + 1) % all.length] : null;
+
+  // Three key screens for the signature showcase — the cover centred, flanked by
+  // the next two distinct screens (a confident "big reveal" of the actual work).
+  const heroScreens = Array.from(new Set([meta.cover, ...meta.gallery])).slice(0, 3);
+
+  // Narrative sections (the MDX h2s) for the sticky "Contents" rail — extracted
+  // from the raw MDX so the ids match the slugs the heading renderer sets.
+  const sections = content.split("\n").flatMap((line) => {
+    const m = line.match(/^##\s+(.+?)\s*$/);
+    return m ? [{ id: slugify(m[1]), label: m[1].replace(/\*\*/g, "").trim() }] : [];
+  });
+  const hasContents = sections.length >= 2;
 
   // Theme the route to the project accent (semantic remap, §4/§8) and run it on
   // the dark surface so any accent (lime/orange/blue) stays high-contrast (§3).
@@ -90,89 +120,306 @@ export default async function CaseStudy({
       />
       {/* Theme the global scroll-progress bar to this project's accent. */}
       {meta.accent && <RouteProgressAccent accent={meta.accent} />}
-      {/* Full-bleed cover hero — accent wash + title/meta + the cover screen. */}
+      {/* Cover hero — accent field + faint blueprint grid, a big title, an
+          instrument spec strip, the cover screen lifted on an accent glow, and a
+          hairline scroll cue that frames the reveal below. */}
       <header className="relative isolate overflow-hidden border-b border-line">
         <div
           aria-hidden="true"
           className="absolute inset-0 -z-10"
           style={{
             background:
-              "radial-gradient(70% 60% at 72% 18%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 70%)",
+              "radial-gradient(64% 64% at 76% 14%, color-mix(in srgb, var(--accent) 24%, transparent), transparent 68%)",
           }}
         />
-        <Container className="grid items-center gap-space-9 py-space-11 md:grid-cols-[1.15fr_0.85fr]">
-          <div>
-            <Reveal trigger="load">
-              <Eyebrow>
-                <span
-                  aria-hidden="true"
-                  className="mr-space-2 inline-block h-[8px] w-[8px] rounded-full bg-accent align-middle"
-                />
-                {meta.client} · {meta.year}
-              </Eyebrow>
-            </Reveal>
-            <TextReveal
-              as="h1"
-              by="lines"
-              trigger="load"
-              delay={0.1}
-              className="mt-space-4 max-w-[18ch] font-display text-display-l"
-            >
-              {meta.title}
-            </TextReveal>
-            <Reveal trigger="load" delay={0.28} className="mt-space-5">
-              <Text variant="body-l" className="max-w-[46ch] text-muted">
-                {meta.summary}
-              </Text>
-            </Reveal>
-
-            {meta.disclaimer && (
-              <Reveal trigger="load" delay={0.36} className="mt-space-5">
-                <p
-                  role="note"
-                  className="inline-flex items-center gap-space-2 rounded-[2px] border border-line px-space-3 py-space-2 font-mono text-caption uppercase tracking-[0.1em] text-muted"
-                >
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 opacity-50"
+          style={{
+            backgroundImage: "radial-gradient(currentColor 0.5px, transparent 0.5px)",
+            backgroundSize: "22px 22px",
+            color: "rgba(255,255,255,0.04)",
+          }}
+        />
+        {isWeb ? (
+          <>
+            {/* Compact web header — eyebrow + a title row that carries the live CTA,
+                then a short summary. Kept deliberately tight so the full-width
+                capture below dominates the intro instead of being pushed off-screen. */}
+            <Container className="pt-space-10 pb-space-6">
+              <Reveal trigger="load">
+                <Eyebrow>
                   <span
                     aria-hidden="true"
-                    className="inline-block h-[6px] w-[6px] shrink-0 rounded-full bg-muted"
+                    className="mr-space-2 inline-block h-[8px] w-[8px] rounded-full bg-accent align-middle"
                   />
-                  {meta.disclaimer}
-                </p>
+                  {meta.client} · {meta.year}
+                </Eyebrow>
               </Reveal>
-            )}
-
-            <StaggerGroup
-              as="dl"
-              trigger="load"
-              delay={0.42}
-              className="mt-space-8 grid grid-cols-2 gap-space-6 border-t border-line pt-space-6"
-            >
-              <div>
-                <dt className="font-mono text-caption uppercase tracking-[0.14em] text-muted">
-                  Role
-                </dt>
-                <dd className="mt-space-2 text-body">{meta.role}</dd>
+              <div className="mt-space-4 flex flex-col gap-space-5 md:flex-row md:items-end md:justify-between md:gap-space-9">
+                <TextReveal
+                  as="h1"
+                  by="lines"
+                  trigger="load"
+                  delay={0.1}
+                  className="max-w-[16ch] font-display text-display-l"
+                >
+                  {meta.title}
+                </TextReveal>
+                {meta.liveUrl && (
+                  <Reveal
+                    trigger="load"
+                    delay={0.3}
+                    className="flex shrink-0 flex-wrap items-center gap-x-space-5 gap-y-space-3 md:pb-space-2"
+                  >
+                    <Magnetic>
+                      <Button href={meta.liveUrl} target="_blank" variant="primary">
+                        Visit site ↗
+                      </Button>
+                    </Magnetic>
+                    <span className="inline-flex items-center gap-space-2 font-mono text-caption uppercase tracking-[0.14em] text-muted">
+                      <span
+                        aria-hidden="true"
+                        className="h-[7px] w-[7px] rounded-full bg-neon motion-safe:animate-status-pulse"
+                      />
+                      Live · {liveHost}
+                    </span>
+                  </Reveal>
+                )}
               </div>
-              <div>
-                <dt className="font-mono text-caption uppercase tracking-[0.14em] text-muted">
-                  Services
-                </dt>
-                <dd className="mt-space-2 text-body">{meta.services.join(", ")}</dd>
-              </div>
-            </StaggerGroup>
-          </div>
+              <Reveal trigger="load" delay={0.24} className="mt-space-5">
+                <Text variant="body-l" className="max-w-[62ch] text-muted">
+                  {meta.summary}
+                </Text>
+              </Reveal>
+              {meta.disclaimer && (
+                <Reveal trigger="load" delay={0.34} className="mt-space-4">
+                  <p
+                    role="note"
+                    className="inline-flex items-center gap-space-2 rounded-[2px] border border-line px-space-3 py-space-2 font-mono text-caption uppercase tracking-[0.1em] text-muted"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="inline-block h-[6px] w-[6px] shrink-0 rounded-full bg-muted"
+                    />
+                    {meta.disclaimer}
+                  </p>
+                </Reveal>
+              )}
+            </Container>
 
-          <div className="mx-auto w-full max-w-[16rem]">
-            <PhoneFrame
-              src={meta.cover}
-              alt={`${meta.title} — cover screen`}
-              priority
-              sizes="16rem"
-              imgClassName="object-top"
-            />
+            {/* Full-width capture stage — the showpiece. Runs the orchestrated `boot`
+                intro (chrome lights up → screen scans in → live badge) on a gentler
+                `big` resting tilt; entrance/tilt/glow are CSS + reduced-motion-safe,
+                and the <video> is IO-gated + preload="none" so it never blocks LCP. */}
+            <Container className="relative pb-space-7">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 inset-y-[-8%] -z-10"
+                style={{
+                  background:
+                    "radial-gradient(58% 64% at 50% 46%, color-mix(in srgb, var(--accent) 15%, transparent), transparent 76%)",
+                }}
+              />
+              <BrowserMockup
+                tilt="hero"
+                boot
+                big
+                priority
+                mp4={meta.video?.src}
+                webm={meta.video?.webm}
+                poster={meta.video?.poster ?? meta.cover}
+                liveUrl={meta.liveUrl}
+                domain={liveHost}
+                alt={`${meta.title} — homepage, looping screen recording`}
+                sizes="(min-width: 768px) 78rem, 92vw"
+              />
+            </Container>
+
+            {/* Spec strip below the capture — instrument fact sheet. */}
+            <Container className="pb-space-9">
+              <StaggerGroup
+                as="dl"
+                className="grid grid-cols-2 gap-x-space-6 gap-y-space-6 border-t border-line pt-space-6 sm:grid-cols-4"
+              >
+                <div>
+                  <dt className="font-mono text-caption uppercase tracking-[0.14em] text-muted">
+                    Role
+                  </dt>
+                  <dd className="mt-space-2 text-body">{meta.role}</dd>
+                </div>
+                <div>
+                  <dt className="font-mono text-caption uppercase tracking-[0.14em] text-muted">
+                    Year
+                  </dt>
+                  <dd className="mt-space-2 text-body">{meta.year}</dd>
+                </div>
+                <div className="col-span-2">
+                  <dt className="font-mono text-caption uppercase tracking-[0.14em] text-muted">
+                    Services
+                  </dt>
+                  <dd className="mt-space-2 text-body">{meta.services.join(", ")}</dd>
+                </div>
+              </StaggerGroup>
+            </Container>
+          </>
+        ) : (
+          <Container className="grid items-center gap-space-9 pt-space-11 pb-space-9 md:grid-cols-[1.12fr_0.88fr]">
+            <div>
+              <Reveal trigger="load">
+                <Eyebrow>
+                  <span
+                    aria-hidden="true"
+                    className="mr-space-2 inline-block h-[8px] w-[8px] rounded-full bg-accent align-middle"
+                  />
+                  {meta.client} · {meta.year}
+                </Eyebrow>
+              </Reveal>
+              <TextReveal
+                as="h1"
+                by="lines"
+                trigger="load"
+                delay={0.1}
+                className="mt-space-4 max-w-[14ch] font-display text-display-xl"
+              >
+                {meta.title}
+              </TextReveal>
+              <Reveal trigger="load" delay={0.28} className="mt-space-5">
+                <Text variant="body-l" className="max-w-[46ch] text-muted">
+                  {meta.summary}
+                </Text>
+              </Reveal>
+
+              {meta.disclaimer && (
+                <Reveal trigger="load" delay={0.36} className="mt-space-5">
+                  <p
+                    role="note"
+                    className="inline-flex items-center gap-space-2 rounded-[2px] border border-line px-space-3 py-space-2 font-mono text-caption uppercase tracking-[0.1em] text-muted"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="inline-block h-[6px] w-[6px] shrink-0 rounded-full bg-muted"
+                    />
+                    {meta.disclaimer}
+                  </p>
+                </Reveal>
+              )}
+
+              {/* Spec strip — instrument fact sheet (Role · Year · Services). */}
+              <StaggerGroup
+                as="dl"
+                trigger="load"
+                delay={0.42}
+                className="mt-space-8 grid grid-cols-2 gap-x-space-6 gap-y-space-6 border-t border-line pt-space-6 sm:grid-cols-4"
+              >
+                <div>
+                  <dt className="font-mono text-caption uppercase tracking-[0.14em] text-muted">
+                    Role
+                  </dt>
+                  <dd className="mt-space-2 text-body">{meta.role}</dd>
+                </div>
+                <div>
+                  <dt className="font-mono text-caption uppercase tracking-[0.14em] text-muted">
+                    Year
+                  </dt>
+                  <dd className="mt-space-2 text-body">{meta.year}</dd>
+                </div>
+                <div className="col-span-2">
+                  <dt className="font-mono text-caption uppercase tracking-[0.14em] text-muted">
+                    Services
+                  </dt>
+                  <dd className="mt-space-2 text-body">{meta.services.join(", ")}</dd>
+                </div>
+              </StaggerGroup>
+            </div>
+
+            <Reveal trigger="load" delay={0.2} className="relative mx-auto w-full max-w-[17rem]">
+              <div
+                aria-hidden="true"
+                className="absolute -inset-10 -z-10"
+                style={{
+                  background:
+                    "radial-gradient(closest-side, color-mix(in srgb, var(--accent) 20%, transparent), transparent)",
+                }}
+              />
+              <PhoneFrame
+                src={meta.cover}
+                alt={`${meta.title} — cover screen`}
+                priority
+                sizes="17rem"
+                imgClassName="object-top"
+              />
+            </Reveal>
+          </Container>
+        )}
+
+        {/* Scroll cue — instrument hairline framing the reveal below. */}
+        <Container className="relative z-10 pb-space-7">
+          <div className="flex items-center gap-space-4 font-mono text-caption uppercase tracking-[0.18em] text-muted">
+            <span className="shrink-0">Case study</span>
+            <span aria-hidden="true" className="h-px flex-1 bg-line" />
+            <span className="shrink-0">
+              {meta.services.length} services ·{" "}
+              {isWeb ? "live site" : `${meta.gallery.length} screens`}
+            </span>
           </div>
         </Container>
       </header>
+
+      {/* Signature showcase — a confident "big reveal" of the work: the cover
+          centred and lifted, flanked by two more screens, on an accent glow with
+          a woven parallax. Reduced-motion-safe (Parallax degrades to static). */}
+      {meta.kind !== "web" && heroScreens.length === 3 && (
+        <section className="relative isolate overflow-hidden border-b border-line py-space-10">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 -z-10"
+            style={{
+              background:
+                "radial-gradient(54% 68% at 50% 28%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%)",
+            }}
+          />
+          <Container>
+            <Reveal>
+              <div className="mx-auto flex max-w-[42rem] items-end justify-center gap-space-4 sm:gap-space-7">
+                <div className="hidden w-[28%] -translate-y-2 sm:block">
+                  <Parallax speed={0.05}>
+                    <PhoneFrame
+                      src={heroScreens[1]}
+                      alt={`${meta.title} — screen`}
+                      sizes="14rem"
+                      imgClassName="object-top"
+                      className="opacity-80"
+                    />
+                  </Parallax>
+                </div>
+                <div className="relative z-10 w-[62%] -translate-y-6 sm:w-[40%]">
+                  <Parallax speed={0.09}>
+                    <PhoneFrame
+                      src={heroScreens[0]}
+                      alt={`${meta.title} — cover screen`}
+                      sizes="(min-width: 640px) 18rem, 62vw"
+                      imgClassName="object-top"
+                      className="shadow-[0_44px_100px_-32px_rgba(0,0,0,0.92)]"
+                    />
+                  </Parallax>
+                </div>
+                <div className="hidden w-[28%] -translate-y-2 sm:block">
+                  <Parallax speed={0.07}>
+                    <PhoneFrame
+                      src={heroScreens[2]}
+                      alt={`${meta.title} — screen`}
+                      sizes="14rem"
+                      imgClassName="object-top"
+                      className="opacity-80"
+                    />
+                  </Parallax>
+                </div>
+              </div>
+            </Reveal>
+          </Container>
+        </section>
+      )}
 
       {/* Metrics (only if the case study defines them). */}
       {meta.metrics && meta.metrics.length > 0 && (
@@ -195,16 +442,25 @@ export default async function CaseStudy({
           lead is keyed off document position rather than a per-element tag). The
           measure keeps the column at a readable line length (§5). */}
       <Container as="section" className="py-space-10">
-        <Reveal className="max-w-[var(--measure)] [&>p:first-of-type]:mb-space-7 [&>p:first-of-type]:font-display [&>p:first-of-type]:text-body-l [&>p:first-of-type]:leading-[1.5] [&>p:first-of-type]:text-fg">
-          <MDXRemote source={content} components={mdxComponents} />
-        </Reveal>
+        {hasContents ? (
+          <div className="grid gap-space-7 lg:grid-cols-[12rem_minmax(0,1fr)] lg:gap-space-9">
+            <CaseStudyNav sections={sections} className="hidden lg:block" />
+            <Reveal className="max-w-[var(--measure)] [&>p:first-of-type]:mb-space-7 [&>p:first-of-type]:font-display [&>p:first-of-type]:text-body-l [&>p:first-of-type]:leading-[1.5] [&>p:first-of-type]:text-fg">
+              <MDXRemote source={content} components={mdxComponents} />
+            </Reveal>
+          </div>
+        ) : (
+          <Reveal className="max-w-[var(--measure)] [&>p:first-of-type]:mb-space-7 [&>p:first-of-type]:font-display [&>p:first-of-type]:text-body-l [&>p:first-of-type]:leading-[1.5] [&>p:first-of-type]:text-fg">
+            <MDXRemote source={content} components={mdxComponents} />
+          </Reveal>
+        )}
       </Container>
 
       {/* Screens — grouped by product flow and captioned, so the gallery reads
           as a walkthrough of the experience rather than a flat wall of phones.
           Each flow carries a mono index (§3 instrument-grade), a hairline, and
           a count; tall screens anchor to the top so their header stays visible. */}
-      {meta.flows.length > 0 && (
+      {meta.flows && meta.flows.length > 0 && (
         <Container as="section" data-screens className="relative isolate border-t border-line py-space-10">
           {/* Faint accent wash anchoring the gallery header — gives the long
               screens section atmosphere/depth without competing with the phones
@@ -288,36 +544,46 @@ export default async function CaseStudy({
         </Container>
       )}
 
-      {/* Next project. */}
+      {/* Next project — a bold full-bleed CTA: oversized title, an arrow cue, and
+          the next cover lifting on hover (neon affordance). */}
       {next && (
-        <Container as="section" className="border-t border-line py-space-10">
-          <Reveal>
-          <NextLink
-            href={`/work/${next.slug}`}
-            className="group flex items-center gap-space-6"
-          >
-            <div className="w-[5rem] shrink-0 sm:w-[6rem]">
-              <PhoneFrame
-                src={next.cover}
-                alt={`${next.title} — cover`}
-                sizes="6rem"
-                imgClassName="object-top"
-                className="transition-[transform,box-shadow] duration-base ease-out-quad group-hover:-translate-y-1 group-hover:shadow-neon"
-              />
-            </div>
-            <div>
-              <Eyebrow>Next project</Eyebrow>
-              <Text
-                as="span"
-                variant="display-l"
-                className="mt-space-2 block group-hover:text-neon"
+        <section className="relative isolate overflow-hidden border-t border-line">
+          <NextLink href={`/work/${next.slug}`} className="group block">
+            <Container className="flex items-center justify-between gap-space-7 py-space-11">
+              <Reveal className="min-w-0">
+                <Eyebrow>Next project</Eyebrow>
+                <Text
+                  as="span"
+                  variant="display-xl"
+                  className="mt-space-3 block font-display transition-colors duration-base ease-out-quad group-hover:text-neon"
+                >
+                  {next.title}
+                </Text>
+                <span className="mt-space-5 inline-flex items-center gap-space-2 font-mono text-caption uppercase tracking-[0.18em] text-muted transition-colors duration-base ease-out-quad group-hover:text-neon">
+                  View case study
+                  <span
+                    aria-hidden="true"
+                    className="transition-transform duration-base ease-out-quad group-hover:translate-x-1"
+                  >
+                    →
+                  </span>
+                </span>
+              </Reveal>
+              <div
+                className={`hidden shrink-0 sm:block ${
+                  next.kind === "web" ? "w-[14rem] lg:w-[19rem]" : "w-[8rem] lg:w-[10rem]"
+                }`}
               >
-                {next.title}
-              </Text>
-            </div>
+                <ProjectCover
+                  project={next}
+                  sizes={next.kind === "web" ? "19rem" : "10rem"}
+                  imgClassName="object-top transition-[transform,box-shadow] duration-base ease-out-quad group-hover:-translate-y-1.5"
+                  className="transition-[transform,box-shadow] duration-base ease-out-quad group-hover:-translate-y-1.5 group-hover:shadow-neon"
+                />
+              </div>
+            </Container>
           </NextLink>
-          </Reveal>
-        </Container>
+        </section>
       )}
 
       <Container className="pb-space-10">

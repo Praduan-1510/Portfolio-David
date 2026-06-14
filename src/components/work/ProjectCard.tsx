@@ -1,5 +1,5 @@
 import NextLink from "next/link";
-import { Text, PhoneFrame } from "@/components/primitives";
+import { Text, ProjectCover } from "@/components/primitives";
 import { cn } from "@/lib/utils/cn";
 import type { ProjectMeta } from "@/types/project";
 
@@ -30,6 +30,9 @@ export function ProjectCard({
     ? ({ "--accent": project.accent } as React.CSSProperties)
     : undefined;
   const wide = layout === "wide";
+  // Web projects use a landscape browser frame — wide + vertically centered in
+  // the stage — rather than the portrait phone "rising from the base".
+  const isWeb = project.kind === "web";
 
   return (
     <article className="group">
@@ -84,22 +87,36 @@ export function ProjectCard({
                 "inset 0 1px 0 color-mix(in srgb, var(--accent) 22%, transparent), inset 0 0 0 1px rgba(255,255,255,0.04), inset 0 -40px 60px -30px rgba(0,0,0,0.6)",
             }}
           />
-          {/* Cover screen in a phone frame, anchored low and bleeding off-edge. */}
+          {/* Cover frame — a portrait phone anchored low (app), or a landscape
+              browser window centered in the stage (web). */}
           <div
             className={cn(
-              "absolute left-1/2 -translate-x-1/2 transition-transform duration-base ease-out-quad will-change-transform group-hover:-translate-y-2",
-              wide ? "top-[14%] w-[32%] md:top-[16%] md:w-[34%]" : "top-[12%] w-[40%]",
+              "absolute left-1/2 -translate-x-1/2 transition-transform duration-base ease-out-quad will-change-transform",
+              isWeb
+                ? cn(
+                    "top-1/2 -translate-y-1/2 group-hover:-translate-y-[calc(50%+0.5rem)]",
+                    wide ? "w-[82%]" : "w-[80%]",
+                  )
+                : cn(
+                    "group-hover:-translate-y-2",
+                    wide ? "top-[14%] w-[32%] md:top-[16%] md:w-[34%]" : "top-[12%] w-[40%]",
+                  ),
             )}
           >
-            <PhoneFrame
-              src={project.cover}
-              alt={`${project.title} — cover screen`}
+            <ProjectCover
+              project={project}
               sizes={
-                wide
-                  ? "(min-width: 768px) 14rem, 34vw"
-                  : "(min-width: 768px) 12rem, 40vw"
+                isWeb
+                  ? "(min-width: 768px) 30rem, 82vw"
+                  : wide
+                    ? "(min-width: 768px) 14rem, 34vw"
+                    : "(min-width: 768px) 12rem, 40vw"
               }
-              imgClassName="object-top transition-transform duration-slow ease-out-quad will-change-transform group-hover:scale-[1.05]"
+              imgClassName={
+                isWeb
+                  ? "transition-transform duration-slow ease-out-quad group-hover:scale-[1.02]"
+                  : "object-top transition-transform duration-slow ease-out-quad will-change-transform group-hover:scale-[1.05]"
+              }
             />
           </div>
           {/* Corner affordance. */}

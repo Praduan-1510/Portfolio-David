@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils/cn";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useLenis } from "@/lib/lenis/useLenis";
+import { spectrumAt } from "@/lib/spectrum";
 
 /*
  * Desktop-only left rail — a section-aware scroll indicator that COMPLEMENTS the
@@ -69,10 +70,14 @@ export function SideNav() {
       style={{ backgroundColor: "color-mix(in srgb, var(--bg) 75%, transparent)" }}
     >
       <ul className="flex flex-col gap-space-5 px-space-4">
-        {navItems.map(({ id, label }) => {
+        {navItems.map(({ id, label }, i) => {
           const active = activeSection === id;
+          // Each section owns one spectrum hue, so the rail reads as a legend:
+          // position in the page = position in the spectrum. The hue rides on a
+          // per-item `--dot` var so the dot + label can pick it up at rest/hover
+          // while the base list stays monochrome.
           return (
-            <li key={id}>
+            <li key={id} style={{ "--dot": spectrumAt(i) } as React.CSSProperties}>
               <button
                 type="button"
                 onClick={() => scrollToSection(id)}
@@ -85,15 +90,15 @@ export function SideNav() {
                   className={cn(
                     "h-1.5 w-1.5 rounded-full transition-all duration-base ease-out-quad",
                     active
-                      ? "scale-125 bg-accent"
-                      : "bg-muted opacity-40 group-hover:bg-fg group-hover:opacity-70",
+                      ? "scale-125 bg-[var(--dot)]"
+                      : "bg-muted opacity-40 group-hover:bg-[var(--dot)] group-hover:opacity-90",
                   )}
                 />
                 <span
                   aria-hidden="true"
                   className={cn(
                     "absolute left-space-5 whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.18em] opacity-0 transition-all duration-fast ease-out-quad group-hover:left-space-6 group-hover:opacity-100",
-                    active ? "text-accent" : "text-muted",
+                    active ? "text-[var(--dot)]" : "text-muted",
                   )}
                 >
                   {label}

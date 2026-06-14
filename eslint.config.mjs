@@ -1,16 +1,15 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+// Flat ESLint config (Next 16 / ESLint 9). eslint-config-next ships native flat
+// configs at these subpaths, so we import them directly — the older FlatCompat
+// (@eslint/eslintrc) shim throws a "circular structure" error on this plugin set.
+import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
+import nextTypescript from "eslint-config-next/typescript";
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...nextCoreWebVitals,
+  ...nextTypescript,
+  {
+    ignores: [".next/**", "node_modules/**", "scripts/**", "next-env.d.ts"],
+  },
 ];
 
 export default eslintConfig;

@@ -7,6 +7,7 @@ import { easings } from "@/lib/motion/easings";
 import { durations } from "@/lib/motion/durations";
 import { transitions } from "@/lib/motion/tokens";
 import { ScrollTrigger } from "@/lib/motion/gsap";
+import { useLenis } from "@/lib/lenis/useLenis";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 /*
@@ -34,18 +35,26 @@ let hasMounted = false;
 export function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const reduced = useReducedMotion();
+  const lenis = useLenis();
   const [firstLoad] = useState(() => !hasMounted);
 
   useEffect(() => {
     hasMounted = true;
   }, []);
 
-  // Reset scroll + refresh ScrollTrigger when the route changes.
+  // Reset scroll to the top + refresh ScrollTrigger when the route changes.
+  // Lenis owns the scroll position and PERSISTS across routes (it's mounted once
+  // in the root layout), so a bare window.scrollTo is overridden on Lenis's next
+  // RAF tick — the new page would open at the previous route's offset (e.g. deep
+  // inside the pinned work track). Reset the Lenis instance itself (immediate, no
+  // smooth, force past any lenis-stop), and fall back to native scroll when smooth
+  // scroll is off (reduced motion → lenis is null).
   useEffect(() => {
+    if (lenis) lenis.scrollTo(0, { immediate: true, force: true });
     window.scrollTo(0, 0);
     const id = window.setTimeout(() => ScrollTrigger.refresh(), 80);
     return () => window.clearTimeout(id);
-  }, [pathname]);
+  }, [pathname, lenis]);
 
   if (reduced) return <>{children}</>;
 

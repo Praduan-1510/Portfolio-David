@@ -30,7 +30,6 @@ function assertProjectMeta(
     "services",
     "summary",
     "cover",
-    "flows",
     "featured",
     "order",
   ] as const;
@@ -51,23 +50,43 @@ function assertProjectMeta(
   if (!Array.isArray(data.services))
     throw new Error(`[content] ${slug}.mdx: "services" must be an array`);
 
-  // Validate the grouped screen flows: each flow needs a title and a non-empty
-  // list of { src, caption } screens. Authoring mistakes fail the build, not
-  // render blank.
-  if (!Array.isArray(data.flows) || data.flows.length === 0)
-    throw new Error(`[content] ${slug}.mdx: "flows" must be a non-empty array`);
-  for (const [fi, flow] of (data.flows as unknown[]).entries()) {
-    const f = flow as Record<string, unknown>;
-    if (typeof f?.title !== "string" || !Array.isArray(f?.screens) || f.screens.length === 0)
+  // Medium: "app" (default) tells the story in portrait phone flows; "web" tells
+  // it through a landscape browser mockup driven by a video.
+  const kind = (data.kind as string | undefined) ?? "app";
+  if (kind !== "app" && kind !== "web")
+    throw new Error(`[content] ${slug}.mdx: "kind" must be "app" or "web"`);
+
+  if (kind === "web") {
+    const v = data.video as Record<string, unknown> | undefined;
+    if (!v || typeof v.src !== "string" || typeof v.poster !== "string")
       throw new Error(
-        `[content] ${slug}.mdx: flows[${fi}] needs a "title" and a non-empty "screens" array`,
+        `[content] ${slug}.mdx: web projects need a "video" with string "src" and "poster"`,
       );
-    for (const [si, screen] of (f.screens as unknown[]).entries()) {
-      const s = screen as Record<string, unknown>;
-      if (typeof s?.src !== "string" || typeof s?.caption !== "string")
+    if (data.liveUrl !== undefined && typeof data.liveUrl !== "string")
+      throw new Error(`[content] ${slug}.mdx: "liveUrl" must be a string`);
+  }
+
+  // App projects require a non-empty `flows`. Any flows present (either kind) are
+  // validated: each flow needs a title and a non-empty list of { src, caption }
+  // screens. Authoring mistakes fail the build, not render blank.
+  if (kind === "app" && (!Array.isArray(data.flows) || data.flows.length === 0))
+    throw new Error(`[content] ${slug}.mdx: app projects need a non-empty "flows" array`);
+  if (data.flows !== undefined) {
+    if (!Array.isArray(data.flows))
+      throw new Error(`[content] ${slug}.mdx: "flows" must be an array`);
+    for (const [fi, flow] of (data.flows as unknown[]).entries()) {
+      const f = flow as Record<string, unknown>;
+      if (typeof f?.title !== "string" || !Array.isArray(f?.screens) || f.screens.length === 0)
         throw new Error(
-          `[content] ${slug}.mdx: flows[${fi}].screens[${si}] needs string "src" and "caption"`,
+          `[content] ${slug}.mdx: flows[${fi}] needs a "title" and a non-empty "screens" array`,
         );
+      for (const [si, screen] of (f.screens as unknown[]).entries()) {
+        const s = screen as Record<string, unknown>;
+        if (typeof s?.src !== "string" || typeof s?.caption !== "string")
+          throw new Error(
+            `[content] ${slug}.mdx: flows[${fi}].screens[${si}] needs string "src" and "caption"`,
+          );
+      }
     }
   }
   // Optional accent themes the route — if present it must be a usable hex.
@@ -100,7 +119,7 @@ export function getProjectBySlug(slug: string): Project | null {
   // Validate the §8 schema, then attach the slug (filename is the source of
   // truth) and derive the flat gallery list from the grouped flows.
   assertProjectMeta(slug, data);
-  const gallery = data.flows.flatMap((flow) => flow.screens.map((s) => s.src));
+  const gallery = (data.flows ?? []).flatMap((flow) => flow.screens.map((s) => s.src));
   const meta: ProjectMeta = { ...data, slug, gallery };
   return { meta, content };
 }

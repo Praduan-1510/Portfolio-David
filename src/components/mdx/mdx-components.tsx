@@ -1,4 +1,16 @@
 import { Text, Link } from "@/components/primitives";
+import { slugify } from "@/lib/utils/slugify";
+
+// Flatten MDX children to plain text so an h2's id matches the slug the contents
+// rail derives from the raw MDX (handles plain strings, arrays, and inline nodes).
+function toText(node: React.ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(toText).join("");
+  if (node && typeof node === "object" && "props" in node) {
+    return toText((node as { props?: { children?: React.ReactNode } }).props?.children);
+  }
+  return "";
+}
 
 /*
  * Maps MDX elements in case-study bodies to token-styled primitives. Passed to
@@ -27,7 +39,8 @@ export const mdxComponents = {
     <Text
       as="h2"
       variant="heading"
-      className="mt-space-9 mb-space-4 flex items-baseline gap-space-3 scroll-mt-space-8 first:mt-0"
+      id={slugify(toText(children))}
+      className="mt-space-9 mb-space-4 flex items-baseline gap-space-3 scroll-mt-space-9 first:mt-0"
       {...props}
     >
       <span

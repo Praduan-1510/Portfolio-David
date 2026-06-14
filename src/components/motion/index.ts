@@ -2,6 +2,7 @@ export { Reveal } from "./Reveal";
 export { StaggerGroup } from "./StaggerGroup";
 export { TextReveal } from "./TextReveal";
 export { Parallax } from "./Parallax";
+export { PortraitFrame } from "./PortraitFrame";
 export { SplitText } from "./SplitText";
 export { CountUp } from "./CountUp";
 export { AnimatedDivider } from "./AnimatedDivider";

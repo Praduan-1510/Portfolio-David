@@ -1,0 +1,20 @@
+export { Reveal } from "./Reveal";
+export { StaggerGroup } from "./StaggerGroup";
+export { TextReveal } from "./TextReveal";
+export { Parallax } from "./Parallax";
+export { SplitText } from "./SplitText";
+export { CountUp } from "./CountUp";
+export { AnimatedDivider } from "./AnimatedDivider";
+// MagneticButton is the canonical magnetic wrapper; `Magnetic` is its shared-language alias.
+export { MagneticButton, MagneticButton as Magnetic } from "./MagneticButton";
+export { ScrollProgress } from "./ScrollProgress";
+export { RouteProgressAccent } from "./RouteProgressAccent";
+export { PageTransition } from "./PageTransition";
+export { Marquee } from "./Marquee";
+export { LogoMarquee } from "./LogoMarquee";
+export { AnimatedNoise } from "./AnimatedNoise";
+export {
+  SplitFlapText,
+  SplitFlapAudioProvider,
+  SplitFlapMuteToggle,
+} from "./SplitFlapText";

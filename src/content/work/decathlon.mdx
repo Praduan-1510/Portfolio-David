@@ -72,32 +72,46 @@ A sports retailer's catalogue spans dozens of sports and thousands of products. 
 
 So this redesign focuses on three things: fast discovery (categories, search, filters), product pages that make the buying decision easy, and a short, confident checkout. The constraint underneath all three is the catalogue's size — which is why discovery and narrowing carry the design rather than the home page alone.
 
-
 ## Research
 
-No primary user research was conducted — this is a concept grounded in competitive and domain analysis rather than interviews, surveys, or usability tests. I mapped the landscape instead: a teardown of the live Decathlon app plus large multi-category retailers, against published e-commerce UX research.
+No primary user research was conducted — this is a concept grounded in competitive and domain analysis rather than interviews, surveys, or usability tests. I mapped the landscape instead: a teardown of the live Decathlon app plus large multi-category retailers, against published e-commerce UX research. Four things came out of it.
 
-**The catalogue's scale is the core constraint, so narrowing has to lead.** With 60–70+ sports and thousands of products across 80+ in-house brands, the design can't lean on a home page to do the work. That's why the flow runs categories → search → filter chips → full filter sheet, and why I treated filtering as a headline rather than an afterthought — which the live app's own filter complaints reinforce.
-
-**Faceted filtering has a documented "good" pattern, and most retailers miss it.** Baymard's filter research and mobile faceted-search write-ups point the same way: show match counts on each option so users don't hit zero-result dead ends (the way Booking.com does), surface applied filters as removable chips above the grid rather than buried in a panel (ASOS's inline-chip model), and use an explicit "apply" step on mobile instead of disorienting live refresh. Baymard notes only ~16% of sites get faceted search right — so doing it well is a real differentiator.
-
-**Checkout is where e-commerce leaks, and the leaks are nameable.** Baymard puts average documented cart abandonment around 70%, with unexpected extra costs the top non-browsing reason (~39%) and "checkout too long/complicated" a named driver (~18%). The average checkout runs ~5 steps and far more form fields than the ideal. That makes a short, low-field three-step checkout — and showing the full price breakdown up front — defensible design decisions, not stylistic ones.
-
-**Image-first browsing fits a visual catalogue.** Mobile retail guidance favors photo-led grids with a consistent aspect ratio so products sit in predictable positions, and Decathlon's range is already organized around visually distinct passion brands per sport. That's the browse model sports apps like Nike's lean on, and it's the one this concept adopts.
+<FindingStack>
+  <Finding title="The catalogue's scale is the core constraint, so narrowing has to lead.">
+    With 60–70+ sports and thousands of products across 80+ in-house brands, the design can't lean on a home page to do the work. That's why the flow runs categories → search → filter chips → full filter sheet, and why I treated filtering as a headline rather than an afterthought — which the live app's own filter complaints reinforce.
+  </Finding>
+  <Finding title='Faceted filtering has a documented "good" pattern, and most retailers miss it.'>
+    Baymard's filter research and mobile faceted-search write-ups point the same way: show match counts on each option so users don't hit zero-result dead ends (the way Booking.com does), surface applied filters as removable chips above the grid rather than buried in a panel (ASOS's inline-chip model), and use an explicit "apply" step on mobile instead of disorienting live refresh. Baymard notes only ~16% of sites get faceted search right — so doing it well is a real differentiator.
+  </Finding>
+  <Finding title="Checkout is where e-commerce leaks, and the leaks are nameable.">
+    Baymard puts average documented cart abandonment around 70%, with unexpected extra costs the top non-browsing reason (~39%) and "checkout too long/complicated" a named driver (~18%). The average checkout runs ~5 steps and far more form fields than the ideal. That makes a short, low-field three-step checkout — and showing the full price breakdown up front — defensible design decisions, not stylistic ones.
+  </Finding>
+  <Finding title="Image-first browsing fits a visual catalogue.">
+    Mobile retail guidance favors photo-led grids with a consistent aspect ratio so products sit in predictable positions, and Decathlon's range is already organized around visually distinct passion brands per sport. That's the browse model sports apps like Nike's lean on, and it's the one this concept adopts.
+  </Finding>
+</FindingStack>
 
 ## Strategy
 
 A few decisions shaped the product.
 
-**Image-first browsing.** Home and category screens are dense, photo-led grids — sport and product imagery does the navigating, which suits a visual, multi-sport catalogue far better than text lists.
-
-**Fast narrowing.** Search pairs prominent filter chips with a full filter sheet — price range, category counts, size, brand — so a broad query like "running shoes" (48 results) narrows to the right pair in a tap or two. The chips live above the grid so applied filters stay visible, and option counts keep the user off dead-end zero-result pages.
-
-**A short, legible checkout.** A three-step flow — address → payment → confirm — with a clear bag summary, promo code, and one primary action per screen keeps a high-stakes moment calm. The full price breakdown — subtotal, discount, GST, delivery — surfaces in the bag before checkout, so cost is never a late surprise.
-
-**One brand colour, used with restraint.** Decathlon's blue anchors actions and brand moments against a clean white interface, so the products and photography stay the focus. I tuned the live brand blue to a lighter shade for AA contrast on dark surfaces — an accessibility-driven adjustment I'd confirm against brand guidelines.
-
-**A consistent five-tab shell.** Home, Categories, Travel store, Bag, Account — covering browse, buy, and manage — with a clear active state throughout.
+<DecisionCards>
+  <DecisionCard title="Image-first browsing.">
+    Home and category screens are dense, photo-led grids — sport and product imagery does the navigating, which suits a visual, multi-sport catalogue far better than text lists.
+  </DecisionCard>
+  <DecisionCard title="Fast narrowing.">
+    Search pairs prominent filter chips with a full filter sheet — price range, category counts, size, brand — so a broad query like "running shoes" (48 results) narrows to the right pair in a tap or two. The chips live above the grid so applied filters stay visible, and option counts keep the user off dead-end zero-result pages.
+  </DecisionCard>
+  <DecisionCard title="A short, legible checkout.">
+    A three-step flow — address → payment → confirm — with a clear bag summary, promo code, and one primary action per screen keeps a high-stakes moment calm. The full price breakdown — subtotal, discount, GST, delivery — surfaces in the bag before checkout, so cost is never a late surprise.
+  </DecisionCard>
+  <DecisionCard title="One brand colour, used with restraint.">
+    Decathlon's blue anchors actions and brand moments against a clean white interface, so the products and photography stay the focus. I tuned the live brand blue to a lighter shade for AA contrast on dark surfaces — an accessibility-driven adjustment I'd confirm against brand guidelines.
+  </DecisionCard>
+  <DecisionCard title="A consistent five-tab shell.">
+    Home, Categories, Travel store, Bag, Account — covering browse, buy, and manage — with a clear active state throughout.
+  </DecisionCard>
+</DecisionCards>
 
 ## Design
 
@@ -105,17 +119,45 @@ A few decisions shaped the product.
 
 A branded blue splash — "your sports, your world" — into get-started and sign-in, then a photo-led home: a sale hero, a photo grid of sport categories, with location-aware delivery and search up top.
 
+<ScreenBeat
+  src="/images/work/decathlon/home.png"
+  side="right"
+  label="Home"
+  caption="A sale hero over a photo grid of sports lets imagery do the navigating — search and location-aware delivery sit up top so intent has a fast path out of a vast catalogue."
+/>
+
 ### Browse & find
 
 Categories present the full catalogue as a scannable image grid spanning every sport. A search query returns a two-column product grid with ratings and discounted prices; filter chips and a full filter sheet — price range, category counts, size, brand — narrow it fast. Product detail leads with a large product image, price with the original struck through, a rating, colour and size selectors, a description, and Add to bag — everything the buying decision needs, in one screen.
+
+<ScreenBeat
+  src="/images/work/decathlon/filters.png"
+  side="left"
+  label="Filters"
+  caption="Category counts on each option keep users off zero-result dead ends, and an explicit apply step replaces disorienting live refresh — so a broad query narrows in a tap or two."
+/>
 
 ### Bag & checkout
 
 The bag shows line items with quantity steppers and savings, a promo-code field, and a price breakdown — subtotal, discount, GST, delivery — into checkout. From there, a three-step address → payment → confirm flow with multiple payment methods ends in a clean order-confirmed screen with continue-shopping and order tracking.
 
+<ScreenBeat
+  src="/images/work/decathlon/checkout.png"
+  side="right"
+  label="Checkout"
+  caption="Three steps, one primary action per screen, and the full cost shown before the user commits — a short, low-field flow built against the documented drivers of cart abandonment."
+/>
+
 ### Account
 
 A profile with club membership, orders, wishlist, saved addresses, and support. The orders screen carries status tabs — all, active, delivered, returns — plus reorder and review. Wishlist saves products as cards with quick add-to-cart, and a store locator maps store coverage with nearby stores and photos.
+
+<ScreenBeat
+  src="/images/work/decathlon/travel-store.png"
+  side="left"
+  label="Store locator"
+  caption="A map of nearby stores with photos keeps the 1,900-store footprint useful on the phone — bridging the catalogue to the physical range a sports buyer often wants to try in person."
+/>
 
 ## Craft
 
@@ -124,6 +166,13 @@ A clean, light interface anchored by Decathlon's blue; photo-led category and pr
 ## Outcome
 
 An end-to-end e-commerce design: 13 screens spanning onboarding, home, categories, search and filtering, product detail, bag, a three-step checkout, confirmation, account, orders, wishlist, and store locator — unified by one design system.
+
+<Stats>
+  <Stat value="13" label="screens" />
+  <Stat value="4" label="product flows" />
+  <Stat value="3" label="step checkout" />
+  <Stat value="1" label="design system" />
+</Stats>
 
 ## Reflection
 

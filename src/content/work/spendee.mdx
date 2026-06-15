@@ -89,25 +89,40 @@ The design challenge: bring all of it into one place — and make a dense, high-
 
 No primary user research was conducted — this is a concept grounded in competitive and domain analysis rather than interviews, surveys, or usability tests. What I did do was map the landscape: a teardown of India's real SMB bookkeeping and fintech tools, plus desk research into how GST filing, UPI collection, and MSME credit actually work. Three things came out of it.
 
-**The workflow is genuinely fragmented across separate categories of product.** There's a mature tool for each job — Khatabook and OkCredit for the ledger, Vyapar and myBillBook for GST billing, the government GSTN portal (usually via an accountant) for filing, UPI apps for collection, and banks or NBFCs for credit — but no single dominant tool spans all of them. The "super-app" thesis isn't a hunch; it's a response to observable market segmentation.
+<FindingStack>
+  <Finding title="The workflow is genuinely fragmented across separate categories of product.">
+    There's a mature tool for each job — Khatabook and OkCredit for the ledger, Vyapar and myBillBook for GST billing, the government GSTN portal (usually via an accountant) for filing, UPI apps for collection, and banks or NBFCs for credit — but no single dominant tool spans all of them. The "super-app" thesis isn't a hunch; it's a response to observable market segmentation.
+  </Finding>
+  <Finding title='The "I Gave / I Got" ledger entry is a convention, not an invention.'>
+    Every leading khata app models the core transaction as a binary gave-versus-got entry — the digital translation of the centuries-old paper bahi khata. Building on it is a deliberate decision to lower the learning curve, not a feature I dreamed up.
+  </Finding>
+  <Finding title="Good books unlocking credit mirrors a real shift in Indian lending.">
+    The MSME credit gap is enormous and only a small fraction of these businesses can access formal credit, largely because they lack the financial records and collateral banks ask for. But underwriting is moving toward cash-flow and GST-data-based models — through the consent-driven Account Aggregator framework and OCEN — that assess repayment capacity from invoices and bank flows instead of paperwork. A ledger-health score built from on-time payments, inflow, and GST compliance is plausible precisely because that lending model already exists.
+  </Finding>
+</FindingStack>
 
-**The "I Gave / I Got" ledger entry is a convention, not an invention.** Every leading khata app models the core transaction as a binary gave-versus-got entry — the digital translation of the centuries-old paper bahi khata. Building on it is a deliberate decision to lower the learning curve, not a feature I dreamed up.
-
-**Good books unlocking credit mirrors a real shift in Indian lending.** The MSME credit gap is enormous and only a small fraction of these businesses can access formal credit, largely because they lack the financial records and collateral banks ask for. But underwriting is moving toward cash-flow and GST-data-based models — through the consent-driven Account Aggregator framework and OCEN — that assess repayment capacity from invoices and bank flows instead of paperwork. A ledger-health score built from on-time payments, inflow, and GST compliance is plausible precisely because that lending model already exists.
-
-The honest caveat: the category is crowded, cheap or free, and hard to monetize — competitors are mature and some have struggled toward profitability. That tempers the concept's claims and points the differentiation at the credit thread and GST-as-a-guided-flow rather than parity features.
+<Aside label="The honest caveat">
+  The category is crowded, cheap or free, and hard to monetize — competitors are mature and some have struggled toward profitability. That tempers the concept's claims and points the differentiation at the credit thread and GST-as-a-guided-flow rather than parity features.
+</Aside>
 
 ## Strategy
 
 A few decisions shaped the whole product.
 
-**Start from a model the owner already knows: "I Gave / I Got."** The core ledger entry is built on the khata mental model — money you gave (payable) versus money you got (receivable) — so the most frequent action feels familiar from the first use rather than like accounting software.
-
-**A calm dark interface where colour is information, not decoration.** The entire app sits on near-black, which lets colour carry meaning: green for money in and settled, red for overdue and money out, amber for pending items and approaching deadlines. The eye learns the system once and reads every screen faster for it.
-
-**Surface the next action, not just the data.** Every screen leads with something to do — "File & Pay Now", "Collect from 3 clients", "Get ₹62k Today", "Apply in 2 Minutes" — turning passive numbers into prompts that move the business forward.
-
-**One consistent shell.** A five-slot bottom bar — Home, Ledger, a central add button, Bank, More — keeps the highest-frequency actions one tap away everywhere in the app, with a recurring header pattern (back · section label · title) so you always know where you are.
+<DecisionCards>
+  <DecisionCard title='Start from a model the owner already knows: "I Gave / I Got."'>
+    The core ledger entry is built on the khata mental model — money you gave (payable) versus money you got (receivable) — so the most frequent action feels familiar from the first use rather than like accounting software.
+  </DecisionCard>
+  <DecisionCard title="Colour is information, not decoration.">
+    The entire app sits on near-black, which lets colour carry meaning: green for money in and settled, red for overdue and money out, amber for pending items and approaching deadlines. The eye learns the system once and reads every screen faster for it.
+  </DecisionCard>
+  <DecisionCard title="Surface the next action, not just the data.">
+    Every screen leads with something to do — "File & Pay Now", "Collect from 3 clients", "Get ₹62k Today", "Apply in 2 Minutes" — turning passive numbers into prompts that move the business forward.
+  </DecisionCard>
+  <DecisionCard title="One consistent shell.">
+    A five-slot bottom bar — Home, Ledger, a central add button, Bank, More — keeps the highest-frequency actions one tap away everywhere in the app, with a recurring header pattern (back · section label · title) so you always know where you are.
+  </DecisionCard>
+</DecisionCards>
 
 ## Design
 
@@ -118,6 +133,13 @@ A short, four-step intro frames the value — a smart ledger, AI that watches yo
 ### Dashboard
 
 The home screen answers one question: *how is my business right now?* Net position with its monthly trend, money to get versus give, a cash-velocity gauge, quick actions, recent activity, and surfaced alerts for GST due and low stock — the whole state of the business above the fold.
+
+<ScreenBeat
+  src="/images/work/spendee/dashboard.png"
+  side="right"
+  label="Dashboard"
+  caption="One glance answers “how is my business right now?” — net position and trend, money to get versus give, a cash-velocity gauge, and the alerts that actually need action, all above the fold."
+/>
 
 ### Ledger
 
@@ -131,6 +153,13 @@ Every customer and vendor with their outstanding balance and status, filterable 
 
 The compliance hub, and the screen I'm most proud of: GSTR-3B and GSTR-1 summaries, tax liability against available input tax credit, deadline countdowns, and one-tap file-and-pay. GST filing carries real, recurring pressure — GSTR-1 by the 11th and GSTR-3B by the 20th, filed in sequence, with input-tax-credit reconciliation and per-day late fees on top. The GST Center turns that stressful, easy-to-miss obligation into a guided task.
 
+<ScreenBeat
+  src="/images/work/spendee/gst-center.png"
+  side="left"
+  label="GST Center"
+  caption="Liability against available input-tax credit, deadline countdowns, and one-tap file-and-pay turn a stressful, easy-to-miss obligation into a guided task."
+/>
+
 ### Reports
 
 A P&L summary, a six-month cash-flow chart, and the metrics owners actually act on — average collection period, working capital, gross margin — exportable as a PDF.
@@ -143,6 +172,13 @@ A built-in account with card, balance, a virtual account for UPI collections, an
 
 The payoff of keeping good books: a ledger-health score built from on-time payments, inflow, and GST compliance, used to pre-approve working capital and let owners discount specific invoices for cash. This is the thread that ties the whole product together — good data in the ledger becomes real financial leverage.
 
+<ScreenBeat
+  src="/images/work/spendee/credit-growth.png"
+  side="right"
+  label="Credit & Growth"
+  caption="The payoff of good books: a ledger-health score from on-time payments, inflow, and GST compliance pre-approves working capital — data in the ledger becomes real leverage."
+/>
+
 ### Notifications & settings
 
 Prioritised alerts split into urgent and earlier — overdue payments, filing deadlines, low stock — plus a settings hub for business profile, reminders, team access, and Tally-compatible data export.
@@ -151,9 +187,18 @@ Prioritised alerts split into urgent and earlier — overdue payments, filing de
 
 One dark surface; a status colour system (green / red / amber) that encodes meaning across the app; rounded cards as the primary container; a consistent header pattern; the five-slot bottom navigation with a central add button; and a rounded, slightly geometric display face paired with a clean UI sans.
 
+<StatusColourSystem />
+
 ## Outcome
 
 An end-to-end product design: 19 screens spanning onboarding, authentication, ledger, contacts, invoicing, GST, reporting, banking, credit, and settings — held together by a single design system and one consistent navigation model.
+
+<Stats>
+  <Stat value="19" label="screens" />
+  <Stat value="6" label="product flows" />
+  <Stat value="10" label="feature areas" />
+  <Stat value="1" label="design system" />
+</Stats>
 
 ## Reflection
 

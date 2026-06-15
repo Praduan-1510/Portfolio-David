@@ -445,7 +445,9 @@ export default async function CaseStudy({
         {hasContents ? (
           <div className="grid gap-space-7 lg:grid-cols-[12rem_minmax(0,1fr)] lg:gap-space-9">
             <CaseStudyNav sections={sections} className="hidden lg:block" />
-            <Reveal className="max-w-[var(--measure)] [&>p:first-of-type]:mb-space-7 [&>p:first-of-type]:font-display [&>p:first-of-type]:text-body-l [&>p:first-of-type]:leading-[1.5] [&>p:first-of-type]:text-fg">
+            {/* Full-cell column: text self-clamps to --measure (in mdx-components)
+                while media (<Shot>) uses the full width and can alternate sides. */}
+            <Reveal className="min-w-0 [&>p:first-of-type]:mb-space-7 [&>p:first-of-type]:font-display [&>p:first-of-type]:text-body-l [&>p:first-of-type]:leading-[1.5] [&>p:first-of-type]:text-fg">
               <MDXRemote source={content} components={mdxComponents} />
             </Reveal>
           </div>

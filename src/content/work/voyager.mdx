@@ -94,25 +94,39 @@ Booking a trip usually means bouncing between an inspiration source, a flight si
 
 No primary user research was conducted — Voyager is a concept, so there were no interviews, surveys, usability tests, or proprietary metrics. Instead I mapped the landscape: a competitive teardown of real travel apps plus published industry data on how people actually plan. The insights below are what that landscape told me, and they shaped the bets that follow.
 
-**The fragmentation is real, and getting worse.** Expedia's Path to Purchase research found travellers visit roughly 277 sites before booking — a seven-fold rise from the 38 reported a decade earlier — moving in sequence across OTAs, airline sites, hotel sites, and meta-search, with page views spiking toward the final day. The problem Voyager is built to solve isn't shrinking, which justifies the core bet: collapse discover → plan → book → travel into one flow.
-
-**There's a genuine gap in the middle.** TripIt, Wanderlog, and Google Travel organise bookings made elsewhere but can't sell inventory; Hopper, Booking.com, and Airbnb sell inventory but don't own the day-by-day plan. Voyager's design — a real booking stepper sitting directly beside a day-by-day itinerary and a documents wallet — aims squarely at the seam neither side fully covers.
-
-**Real planning still leaks into ad-hoc tools.** People fall back on Notes apps, Google Docs, and spreadsheets to hold the plan together, which is exactly why TripIt's most-loved feature is an offline master itinerary. That told me the day-by-day itinerary and the documents wallet aren't decorative add-ons — they answer the "keep it together, available offline" need head-on.
-
-**The all-in-one scope matches where the category convention sits.** Points-for-upgrades loyalty (Booking.com's tiered Genius programme, Hopper's Carrot Cash credits) is a proven, expected mechanic, not an invention — so a Gold-tier rewards screen reads as table stakes. And the consolidation Voyager assumes is the same direction the incumbents are already moving, so the scope is aligned with the industry, not a contrarian bet.
+<FindingStack>
+  <Finding title="The fragmentation is real, and getting worse.">
+    Expedia's Path to Purchase research found travellers visit roughly 277 sites before booking — a seven-fold rise from the 38 reported a decade earlier — moving in sequence across OTAs, airline sites, hotel sites, and meta-search, with page views spiking toward the final day. The problem Voyager is built to solve isn't shrinking, which justifies the core bet: collapse discover → plan → book → travel into one flow.
+  </Finding>
+  <Finding title="There's a genuine gap in the middle.">
+    TripIt, Wanderlog, and Google Travel organise bookings made elsewhere but can't sell inventory; Hopper, Booking.com, and Airbnb sell inventory but don't own the day-by-day plan. Voyager's design — a real booking stepper sitting directly beside a day-by-day itinerary and a documents wallet — aims squarely at the seam neither side fully covers.
+  </Finding>
+  <Finding title="Real planning still leaks into ad-hoc tools.">
+    People fall back on Notes apps, Google Docs, and spreadsheets to hold the plan together, which is exactly why TripIt's most-loved feature is an offline master itinerary. That told me the day-by-day itinerary and the documents wallet aren't decorative add-ons — they answer the "keep it together, available offline" need head-on.
+  </Finding>
+  <Finding title="The all-in-one scope matches where the category convention sits.">
+    Points-for-upgrades loyalty (Booking.com's tiered Genius programme, Hopper's Carrot Cash credits) is a proven, expected mechanic, not an invention — so a Gold-tier rewards screen reads as table stakes. And the consolidation Voyager assumes is the same direction the incumbents are already moving, so the scope is aligned with the industry, not a contrarian bet.
+  </Finding>
+</FindingStack>
 
 ## Strategy
 
 A few decisions shaped the whole product.
 
-**Two moods, on purpose.** The browse-and-dream screens — home, search, map, trips, profile — sit on deep navy with a topographic-map motif and warm orange, so they feel like wanderlust. The task-heavy screens — the booking steps, details, settings — flip to clean light backgrounds so picking dates, paying, and reading an itinerary stay calm and legible. The app changes its tone to match what you're doing. That split maps onto a real tension in the journey: inspiration is emotional and open-ended, but booking and itinerary-reading are high-stakes and demand legibility.
-
-**A booking flow you can always orient in.** A persistent four-step progress stepper — dates & guests → customise → payment → confirmation — runs across the top of the flow, so the traveller always knows how far along they are and what's left. It's a deliberate counter to the research grind, where page views balloon near the purchase: orientation is the design response to a journey that the data shows gets more chaotic as booking approaches.
-
-**One warm accent doing the work.** Orange marks every primary action and highlight across both themes — Book Now, Continue, prices, active states — so the path forward is always obvious whichever mode you're in.
-
-**Inspiration first, logistics second.** Home and search lead with photography — big, saveable destination cards with duration and price — putting the dream up front, with the practical filters (flights, hotels, tours, packages) one tap away.
+<DecisionCards>
+  <DecisionCard title="Two moods, on purpose.">
+    The browse-and-dream screens — home, search, map, trips, profile — sit on deep navy with a topographic-map motif and warm orange, so they feel like wanderlust. The task-heavy screens — the booking steps, details, settings — flip to clean light backgrounds so picking dates, paying, and reading an itinerary stay calm and legible. The app changes its tone to match what you're doing. That split maps onto a real tension in the journey: inspiration is emotional and open-ended, but booking and itinerary-reading are high-stakes and demand legibility.
+  </DecisionCard>
+  <DecisionCard title="A booking flow you can always orient in.">
+    A persistent four-step progress stepper — dates & guests → customise → payment → confirmation — runs across the top of the flow, so the traveller always knows how far along they are and what's left. It's a deliberate counter to the research grind, where page views balloon near the purchase: orientation is the design response to a journey that the data shows gets more chaotic as booking approaches.
+  </DecisionCard>
+  <DecisionCard title="One warm accent doing the work.">
+    Orange marks every primary action and highlight across both themes — Book Now, Continue, prices, active states — so the path forward is always obvious whichever mode you're in.
+  </DecisionCard>
+  <DecisionCard title="Inspiration first, logistics second.">
+    Home and search lead with photography — big, saveable destination cards with duration and price — putting the dream up front, with the practical filters (flights, hotels, tours, packages) one tap away.
+  </DecisionCard>
+</DecisionCards>
 
 ## Design
 
@@ -120,17 +134,45 @@ A few decisions shaped the whole product.
 
 A topographic splash — "your world awaits" — into a three-step intro that frames the value (explore 150+ countries, AI-built itineraries) over immersive destination collages. Sign-up is a warm, branded screen over the same topographic pattern, with Google and Apple options.
 
+<ScreenBeat
+  src="/images/work/voyager/splash.png"
+  side="right"
+  label="Splash"
+  caption="The topographic motif opens on wanderlust, not a login wall — the deep-navy “dream” mood is set before a single task is asked of you."
+/>
+
 ### Discover
 
 Home opens with a personalised greeting, a prominent search, and curated rows — Explore, a limited-time offer, Top Rated — each destination a photo card with duration, price, and a save heart. From there you can find destinations by query and filter chips (flights, hotels, tours, packages), open a full filter sheet to narrow by budget, duration, travel style, and rating, switch to a map view to browse by place, and keep favourites in a dedicated saved grid. Destination details give a full-bleed hero, the numbers that matter (days, rating, bookings), an overview, what's included, and a sticky price with Book Now.
+
+<ScreenBeat
+  src="/images/work/voyager/map.png"
+  side="left"
+  label="Map view"
+  caption="A second way to browse for the traveller who thinks in places, not lists — switching to the map keeps discovery spatial without leaving the navy world."
+/>
 
 ### Booking
 
 The four-step stepper you can always orient in: pick dates and guests on a clean calendar with adult and child counts, customise the trip — flight class, travel insurance, guided tours, airport transfer — then pay, with an itemised breakdown (package, transfer, insurance, taxes) and saved cards, ending in a clear confirmation with a booking reference and ticket download.
 
+<ScreenBeat
+  src="/images/work/voyager/dates-guests.png"
+  side="right"
+  label="Dates & guests"
+  caption="Step one flips to a light surface and shows the stepper up top — the moment logistics begin, the app trades mood for legibility and tells you exactly how far you have to go."
+/>
+
 ### Travel
 
 This is where the plan lives once it's booked. A day-by-day itinerary lays the trip on a vertical timeline — flights, transfers, check-in, dinners — each with time, type, and detail, switchable by day. My Trips holds upcoming, active, and past trips as photo cards with quick actions, and Reviews shows an aggregate rating with a distribution breakdown and individual traveller reviews. The travel documents wallet keeps passport, licence, and insurance together — each with a validity status and a scannable QR — so the paperwork travels with the trip.
+
+<ScreenBeat
+  src="/images/work/voyager/itinerary.png"
+  side="left"
+  label="Itinerary"
+  caption="The day-by-day timeline answers the need that usually leaks into a notes doc — flights, transfers, and dinners held together, switchable by day, so the plan stays in the product."
+/>
 
 ### Profile & loyalty
 
@@ -143,6 +185,13 @@ A dual-theme system — deep navy with a topographic-map motif for the immersive
 ## Outcome
 
 An end-to-end product design: 24 screens spanning onboarding, authentication, discovery, search with a full filter sheet, map and saved places, destination details, a four-step booking flow with trip customisation, a day-by-day itinerary, trips, reviews, travel documents, profile and a rewards program, notifications, support, and settings — unified by one design system across two themes.
+
+<Stats>
+  <Stat value="24" label="screens" />
+  <Stat value="5" label="product flows" />
+  <Stat value="2" label="themes" />
+  <Stat value="1" label="design system" />
+</Stats>
 
 ## Reflection
 

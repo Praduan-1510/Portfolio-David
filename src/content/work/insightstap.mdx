@@ -22,28 +22,78 @@ featured: true
 order: 0
 ---
 
-InsightsTap is a live B2B SaaS platform that productises *intent signals* — helping go-to-market teams run enterprise sales with the speed of an e-commerce engine. I led the front-end development and visual overhaul of the public site, the one real, shipped product in this portfolio.
+## Overview
 
-## The problem
+InsightsTap is a live B2B SaaS platform that productises *intent signals* — helping go-to-market teams run enterprise sales with the speed of an e-commerce engine. I led the front-end development and visual overhaul of the public site, the one real, shipped product in this portfolio. I owned the interface that turns the data story into something people can read, trust, and act on — translating the team's go-to-market concepts into layout, motion, and a component system.
 
-Go-to-market is an abstract domain. Intent signals, the "dark funnel", account-based marketing, AI agents, CRM automation across HubSpot and Salesforce — the value is real, but it's invisible and easy to glaze over. The site had to make a dense, technical product instantly graspable and fast, on a high-contrast brand, without dumbing the ideas down.
+## Context
 
-## My role
+Go-to-market is an abstract domain. Intent signals, the "dark funnel", account-based marketing, AI agents, CRM automation across HubSpot and Salesforce — the value is real, but it's invisible and easy to glaze over. There's no tangible artifact a visitor can picture: the whole product lives in concepts. Most of the B2B buying journey now happens before a vendor is ever contacted — buyers research anonymously, in the dark funnel, and only surface late. Intent data is the attempt to read those signals early. The product's own pitch leans on a familiar comparison — *"Run your B2B enterprise like an e-commerce store"* — to give an otherwise abstract idea a fast mental model to borrow from. That framing became the anchor for the whole site.
 
-Front-end development and visual overhaul. I built the production marketing site and owned the interface that turns the data story into something people can read, trust, and act on — translating the team's go-to-market concepts into layout, motion, and a component system.
+<Shot
+  src="/images/work/insightstap/dark-funnel.png"
+  domain="insightstap.com"
+  caption="Making the invisible tangible — the live site turns the abstract 'dark funnel' and 'outdated playbooks' framing into a concrete before/after a visitor can read in seconds."
+/>
+
+## Problem
 
 > The brief, in one line: make an invisible, data-heavy product feel as concrete and quick as the e-commerce engines it's compared to.
 
-## What I built
+The site had to make a dense, technical product instantly graspable and fast, on a high-contrast brand, without dumbing the ideas down. For visitors, the risk is bouncing before the concept lands. For the business, an unclear front-end undersells a genuinely capable platform. The constraints were real too: a high-contrast brand to honour, heavy data-driven sections to keep legible, and a need to perform from phone to wide desktop.
 
-**The proposition.** A hero that states it plainly — *"Run your B2B enterprise like an e-commerce store"* — and frames intent signals as the engine underneath.
+## Research
 
-**The four-step engine.** The core narrative — capture signals → AI processing → smart automation → scale revenue — built as a legible, scannable sequence instead of a wall of copy.
+No primary user research was conducted — this is a shipped front-end build grounded in product and domain understanding rather than interviews or usability tests. What I did do was map the landscape: a close reading of what the live product actually claims, and a competitive teardown of the intent-data and ABM category it sits in.
 
-**A high-contrast system.** A consistent component language — the metrics band, the process diagram, the success-stories carousel, the integrations grid — so dense sections stay calm and readable.
+A few things from that mapping drove the design:
 
-**Built for speed and reach.** Responsive layouts from phone to wide desktop, with performance and legibility passes on the heaviest data sections.
+The category is sold as a chain of cause and effect — capture anonymous buyer signals, predict who is in-market, then act before competitors. The product's own pitch is structured the same way, as four explicit steps, and so is the category leader's: 6sense runs fit, engagement and intent signals through predictive models to classify accounts into buying stages. A linear, scannable sequence isn't just tidy — it mirrors how buyers in this category are already conditioned to evaluate these tools.
+
+The incumbents compete on density. 6sense, Demandbase, ZoomInfo and Bombora sell on huge signal-volume stats and full-stack capability, and their pages read that way — dense and stat-heavy. Against that backdrop, a calm, high-contrast system that keeps the heavy data sections legible is a deliberate differentiator. Here, clarity is the competitive move, not just an aesthetic preference.
+
+And the single most concrete hook the product offers is its own e-commerce framing. Anchoring the hero and the overall metaphor on that comparison gives an abstract data product a familiar shape to lean on.
+
+## Strategy
+
+The core challenge was making an invisible, data-heavy product feel concrete, so every decision served legibility over decoration. I anchored the site on the product's own e-commerce metaphor — the one tangible hook — and let the rest of the page pay it off. I structured the narrative as a single, scannable cause-and-effect sequence rather than a wall of copy, matching the mental model buyers in this category already use. And I committed to one calm, high-contrast component language so the densest sections — metrics, process, integrations — would stay readable instead of competing for attention.
+
+<Shot
+  src="/images/work/insightstap/team-mission.png"
+  domain="insightstap.com"
+  caption="The same high-contrast system carries the brand pages — a metrics band and a values grid built from one component vocabulary, so the About page reads as part of the product, not a detour."
+/>
+
+## Design
+
+This is a web build, so the flows live in the live site and the looping capture rather than a phone gallery. Each block below frames a decision behind a section of the page.
+
+### The proposition
+
+A hero that states it plainly — *"Run your B2B enterprise like an e-commerce store"* — and frames intent signals as the engine underneath. It leads with the one concrete metaphor the product owns, so the abstract idea lands before any jargon arrives.
+
+### The four-step engine
+
+The core narrative — capture signals → AI processing → smart automation → scale revenue — built as a legible, scannable sequence instead of a wall of copy. The linear shape mirrors how the category is already evaluated, so the page reads the way buyers expect to think.
+
+### A high-contrast system
+
+A consistent component language — the metrics band, the process diagram, the success-stories carousel, the integrations grid — so dense sections stay calm and readable. One system, reused everywhere, is what keeps the heavy data legible against a high-contrast brand.
+
+<Shot
+  src="/images/work/insightstap/care-values.png"
+  domain="insightstap.com"
+  caption="The C.A.R.E. values — same cards, orbital diagram, and teal accents as the product sections — show the component language holding a dense, decorative section without losing its calm."
+/>
+
+### Built for speed and reach
+
+Responsive layouts from phone to wide desktop, with performance and legibility passes on the heaviest data sections, so the site stays fast and graspable wherever it's opened.
 
 ## Outcome
 
 A shipped, live site that frames a complex GTM platform clearly and loads fast — it's the production site at insightstap.com today.
+
+## Reflection
+
+This was an exercise in restraint: in a category that competes on density, the harder and more useful move was to stay calm and let the structure carry the meaning. Anchoring everything to the product's own e-commerce metaphor was the decision I'd make again first — it gave an abstract product something tangible to hold onto. Given more time, I'd push the heaviest data sections further with motion that reveals the cause-and-effect chain step by step, and I'd want to validate the four-step framing against how real GTM buyers actually scan the page rather than how the category assumes they do.

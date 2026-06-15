@@ -51,6 +51,16 @@ interface BrowserMockupProps {
   boot?: boolean;
   /** Hero centerpiece at full width: a gentler, more frontal resting tilt. */
   big?: boolean;
+  /** Screen-well aspect ratio (CSS aspect-ratio). Default "64 / 35" — the crop
+   *  tuned to the hero video (which bakes in OS chrome). Clean screenshots that
+   *  are already just page content should pass their own ratio (e.g. "198 / 100"). */
+  aspect?: string;
+  /** object-position for the still/video inside the well. Default "50% 73%"
+   *  (drops the recording's chrome); a full screenshot wants "50% 50%". */
+  objectPosition?: string;
+  /** object-fit for the still image. Default "cover"; "contain" letterboxes a
+   *  whole screenshot when its ratio doesn't match the well. */
+  fit?: "cover" | "contain";
 }
 
 function Lock() {
@@ -76,6 +86,9 @@ export function BrowserMockup({
   wellClassName,
   boot = false,
   big = false,
+  aspect = "64 / 35",
+  objectPosition = "50% 73%",
+  fit = "cover",
 }: BrowserMockupProps) {
   const reduced = useReducedMotion();
   const hero = tilt === "hero";
@@ -178,7 +191,7 @@ export function BrowserMockup({
             the recording's OS menu bar / browser chrome / dock). */}
         <div
           className={cn("relative overflow-hidden rounded-b-[7px] bg-bezel", wellClassName)}
-          style={{ aspectRatio: "64 / 35" }}
+          style={{ aspectRatio: aspect }}
         >
           {showVideo ? (
             <video
@@ -190,7 +203,7 @@ export function BrowserMockup({
               poster={poster}
               aria-label={alt}
               className="h-full w-full object-cover"
-              style={{ objectPosition: "50% 73%" }}
+              style={{ objectPosition }}
             >
               {webm && <source src={webm} type="video/webm" />}
               {mp4 && <source src={mp4} type="video/mp4" />}
@@ -202,8 +215,8 @@ export function BrowserMockup({
               fill
               sizes={sizes}
               priority={priority}
-              className="object-cover"
-              style={{ objectPosition: "50% 73%" }}
+              className={fit === "contain" ? "object-contain" : "object-cover"}
+              style={{ objectPosition }}
             />
           )}
 

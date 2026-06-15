@@ -1,4 +1,4 @@
-import { Text, Link } from "@/components/primitives";
+import { Text, Link, BrowserMockup } from "@/components/primitives";
 import { slugify } from "@/lib/utils/slugify";
 
 // Flatten MDX children to plain text so an h2's id matches the slug the contents
@@ -111,5 +111,40 @@ export const mdxComponents = {
       className="rounded-[2px] border border-line bg-surface px-space-1 font-mono text-caption text-fg"
       {...props}
     />
+  ),
+  // Shot — an inline browser-framed screenshot for case-study bodies (the still
+  // counterpart to the hero's looping capture). Reuses BrowserMockup's window
+  // chrome so an embedded screen reads as a real browser window, then a caption
+  // that explains the *decision*, not the obvious (DESIGN_GUIDELINES §5 — captions
+  // are non-negotiable, and mirror the screen-gallery caption treatment).
+  Shot: ({
+    src,
+    caption,
+    alt,
+    domain,
+    aspect = "198 / 100",
+  }: {
+    src?: string;
+    caption?: string;
+    alt?: string;
+    domain?: string;
+    aspect?: string;
+  }) => (
+    <figure className="my-space-8">
+      <BrowserMockup
+        tilt="still"
+        poster={src ?? ""}
+        alt={alt ?? caption ?? "Screenshot"}
+        domain={domain}
+        aspect={aspect}
+        objectPosition="50% 50%"
+        sizes="(min-width: 1024px) 42rem, 92vw"
+      />
+      {caption && (
+        <figcaption className="mt-space-3 font-mono text-caption uppercase tracking-[0.14em] text-muted">
+          {caption}
+        </figcaption>
+      )}
+    </figure>
   ),
 };

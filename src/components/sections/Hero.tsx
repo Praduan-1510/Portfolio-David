@@ -6,12 +6,7 @@ import { gsap, registerGsap } from "@/lib/motion/gsap";
 import { durations } from "@/lib/motion/durations";
 import { useReducedMotion, prefersReducedMotion } from "@/hooks/useReducedMotion";
 import { Container, Text, Button } from "@/components/primitives";
-import {
-  Reveal,
-  AnimatedNoise,
-  SplitFlapAudioProvider,
-  SplitFlapMuteToggle,
-} from "@/components/motion";
+import { Reveal, AnimatedNoise } from "@/components/motion";
 import { HeroBackground } from "@/components/sections/hero-canvas/HeroBackground";
 import { HeroWordmark } from "@/components/sections/HeroWordmark";
 
@@ -68,7 +63,6 @@ export function Hero() {
   );
 
   return (
-    <SplitFlapAudioProvider>
     <section
       ref={heroRef}
       id="top"
@@ -169,8 +163,7 @@ export function Hero() {
         </Reveal>
       </Container>
 
-      {/* Scroll-indicator row + split-flap sound toggle (muted by default, with an
-          accessible label). Labels flank a full-width hairline with a centered
+      {/* Scroll-indicator row. Labels flank a full-width hairline with a centered
           mouse-scroll icon. */}
       <Container className="relative z-10">
         <Reveal
@@ -180,9 +173,6 @@ export function Hero() {
           duration={durations.base}
           className="flex flex-col gap-space-3 pb-space-5 pt-space-3"
         >
-          <div className="flex justify-end">
-            <SplitFlapMuteToggle />
-          </div>
           <div className="flex items-center gap-space-4 font-mono text-caption uppercase tracking-[0.18em] text-muted">
             <span className="shrink-0">Scroll</span>
             <span className="relative flex-1">
@@ -214,6 +204,5 @@ export function Hero() {
         </Reveal>
       </Container>
     </section>
-    </SplitFlapAudioProvider>
   );
 }

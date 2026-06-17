@@ -14,8 +14,4 @@ export { PageTransition } from "./PageTransition";
 export { Marquee } from "./Marquee";
 export { LogoMarquee } from "./LogoMarquee";
 export { AnimatedNoise } from "./AnimatedNoise";
-export {
-  SplitFlapText,
-  SplitFlapAudioProvider,
-  SplitFlapMuteToggle,
-} from "./SplitFlapText";
+export { SplitFlapText } from "./SplitFlapText";

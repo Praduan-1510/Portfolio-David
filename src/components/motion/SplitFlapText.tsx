@@ -1,17 +1,7 @@
 "use client";
 
-import type React from "react";
 import { motion } from "motion/react";
-import {
-  useMemo,
-  useState,
-  useCallback,
-  useEffect,
-  useRef,
-  createContext,
-  useContext,
-} from "react";
-import { Volume2, VolumeX } from "lucide-react";
+import { useMemo, useState, useCallback, useEffect, useRef } from "react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { SPECTRUM } from "@/lib/spectrum";
 
@@ -27,141 +17,12 @@ import { SPECTRUM } from "@/lib/spectrum";
  *     "counter" palette WHILE flipping — per-tile, keyed by index — then settles to
  *     the same monochrome --fg, so the resting wordmark stays on-brand;
  *   - typeface points at --font-display (Bricolage Grotesque) instead of --font-bebas;
- *   - sound is MUTED by default with an accessible toggle (no autoplaying audio, §13);
- *   - reduced motion renders the settled text instantly — no flipping, no audio;
+ *   - reduced motion renders the settled text instantly — no flipping;
  *   - an optional `fontSize` so it can sit at headline scale in the hero.
  *
  * Designed to live on a dark surface (e.g. the data-theme="dark" hero), where the
  * tokens resolve to near-black flaps / off-white type / a raised accent.
  */
-
-interface AudioContextType {
-  isMuted: boolean;
-  toggleMute: () => void;
-  playClick: () => void;
-}
-
-const SplitFlapAudioContext = createContext<AudioContextType | null>(null);
-
-function useSplitFlapAudio() {
-  return useContext(SplitFlapAudioContext);
-}
-
-export function SplitFlapAudioProvider({ children }: { children: React.ReactNode }) {
-  const [isMuted, setIsMuted] = useState(true); // muted by default — no autoplay
-  const audioContextRef = useRef<AudioContext | null>(null);
-
-  const getAudioContext = useCallback(() => {
-    if (typeof window === "undefined") return null;
-    if (!audioContextRef.current) {
-      const AudioContextClass =
-        window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-      if (AudioContextClass) {
-        audioContextRef.current = new AudioContextClass();
-      }
-    }
-    return audioContextRef.current;
-  }, []);
-
-  const triggerHaptic = useCallback(() => {
-    if (isMuted) return;
-    if (typeof navigator !== "undefined" && "vibrate" in navigator) {
-      navigator.vibrate(10);
-    }
-  }, [isMuted]);
-
-  const playClick = useCallback(() => {
-    if (isMuted) return;
-
-    triggerHaptic();
-
-    try {
-      const ctx = getAudioContext();
-      if (!ctx) return;
-
-      if (ctx.state === "suspended") {
-        ctx.resume();
-      }
-
-      const oscillator = ctx.createOscillator();
-      const gainNode = ctx.createGain();
-      const filter = ctx.createBiquadFilter();
-      const lowpass = ctx.createBiquadFilter();
-
-      oscillator.type = "square";
-      oscillator.frequency.setValueAtTime(800 + Math.random() * 400, ctx.currentTime);
-      oscillator.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.015);
-
-      filter.type = "bandpass";
-      filter.frequency.setValueAtTime(1200, ctx.currentTime);
-      filter.Q.setValueAtTime(0.8, ctx.currentTime);
-
-      lowpass.type = "lowpass";
-      lowpass.frequency.value = 2500;
-      lowpass.Q.value = 0.5;
-
-      gainNode.gain.setValueAtTime(0.05, ctx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.02);
-
-      oscillator.connect(filter);
-      filter.connect(gainNode);
-      gainNode.connect(lowpass);
-      lowpass.connect(ctx.destination);
-
-      oscillator.start(ctx.currentTime);
-      oscillator.stop(ctx.currentTime + 0.02);
-    } catch {
-      // Audio not supported
-    }
-  }, [isMuted, getAudioContext, triggerHaptic]);
-
-  const toggleMute = useCallback(() => {
-    setIsMuted((prev) => !prev);
-    if (isMuted) {
-      try {
-        const ctx = getAudioContext();
-        if (ctx && ctx.state === "suspended") {
-          ctx.resume();
-        }
-      } catch {
-        // Audio not supported
-      }
-    }
-  }, [isMuted, getAudioContext]);
-
-  const value = useMemo(() => ({ isMuted, toggleMute, playClick }), [isMuted, toggleMute, playClick]);
-
-  return <SplitFlapAudioContext.Provider value={value}>{children}</SplitFlapAudioContext.Provider>;
-}
-
-export function SplitFlapMuteToggle({ className = "" }: { className?: string }) {
-  const audio = useSplitFlapAudio();
-  if (!audio) return null;
-
-  return (
-    <button
-      type="button"
-      onClick={audio.toggleMute}
-      className={cnToggle(className)}
-      aria-label={audio.isMuted ? "Unmute sound effects" : "Mute sound effects"}
-      aria-pressed={!audio.isMuted}
-    >
-      {audio.isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-      <span>{audio.isMuted ? "Sound Off" : "Sound On"}</span>
-    </button>
-  );
-}
-
-// Toggle styling, on our tokens (font-mono label, muted → fg on hover).
-function cnToggle(className: string) {
-  return [
-    "inline-flex items-center gap-space-2 font-mono text-[10px] uppercase tracking-[0.18em]",
-    "text-muted transition-colors duration-fast ease-out-quad hover:text-fg",
-    className,
-  ]
-    .filter(Boolean)
-    .join(" ");
-}
 
 interface SplitFlapTextProps {
   text: string;
@@ -197,7 +58,6 @@ function SplitFlapTextInner({
   const [animationKey, setAnimationKey] = useState(0);
   const [hasInitialized, setHasInitialized] = useState(false);
   const reduced = useReducedMotion();
-  const audio = useSplitFlapAudio();
 
   const handleMouseEnter = useCallback(() => {
     if (reduced) return; // no re-flip under reduced motion
@@ -229,7 +89,6 @@ function SplitFlapTextInner({
             fontSize={fontSize}
             reduced={reduced}
             multicolor={multicolor}
-            playClick={audio?.playClick}
           />
         ))}
       </span>
@@ -250,7 +109,6 @@ interface SplitFlapCharProps {
   fontSize: string;
   reduced: boolean;
   multicolor: boolean;
-  playClick?: () => void;
 }
 
 function SplitFlapChar({
@@ -262,7 +120,6 @@ function SplitFlapChar({
   fontSize,
   reduced,
   multicolor,
-  playClick,
 }: SplitFlapCharProps) {
   const displayChar = CHARSET.includes(char) ? char : " ";
   const isSpace = char === " ";
@@ -316,11 +173,9 @@ function SplitFlapChar({
           if (intervalRef.current) clearInterval(intervalRef.current);
           setCurrentChar(displayChar);
           setIsSettled(true);
-          if (playClick) playClick();
           return;
         }
         setCurrentChar(CHARSET[Math.floor(Math.random() * CHARSET.length)]);
-        if (flipIndex % 2 === 0 && playClick) playClick();
         flipIndex++;
       }, speed);
     }, startDelay);
@@ -334,7 +189,7 @@ function SplitFlapChar({
     // mount and hover (animationKey) should. Its latest value is still read when
     // animationKey changes, since that re-runs the effect.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [displayChar, isSpace, tileDelay, animationKey, index, speed, reduced, playClick]);
+  }, [displayChar, isSpace, tileDelay, animationKey, index, speed, reduced]);
 
   if (isSpace) {
     return <div style={{ width: "0.3em", fontSize }} />;

@@ -1,10 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { useGSAP } from "@gsap/react";
-import { gsap, registerGsap } from "@/lib/motion/gsap";
 import { durations } from "@/lib/motion/durations";
-import { useReducedMotion, prefersReducedMotion } from "@/hooks/useReducedMotion";
 import { Container, Text, Button } from "@/components/primitives";
 import { Reveal, AnimatedNoise } from "@/components/motion";
 import { HeroBackground } from "@/components/sections/hero-canvas/HeroBackground";
@@ -38,33 +34,8 @@ const SEQ = {
 } as const;
 
 export function Hero() {
-  const heroRef = useRef<HTMLElement>(null);
-  const dotRef = useRef<SVGCircleElement>(null);
-  const reduced = useReducedMotion();
-
-  // Ambient loop: the mouse-scroll wheel dot drifts down and fades, on repeat —
-  // a subtle "you can scroll" hint. Transform/opacity only; static under reduced
-  // motion. Lives outside the load choreography (it's continuous, not a reveal).
-  useGSAP(
-    () => {
-      registerGsap();
-      const dot = dotRef.current;
-      if (!dot || prefersReducedMotion()) return; // static dot
-      gsap.to(dot, {
-        y: 7,
-        opacity: 0.2,
-        duration: durations.slow,
-        ease: "sine.inOut",
-        repeat: -1,
-        yoyo: true,
-      });
-    },
-    { scope: heroRef, dependencies: [reduced], revertOnUpdate: true },
-  );
-
   return (
     <section
-      ref={heroRef}
       id="top"
       data-theme="dark"
       aria-label="Introduction"
@@ -163,8 +134,7 @@ export function Hero() {
         </Reveal>
       </Container>
 
-      {/* Scroll-indicator row. Labels flank a full-width hairline with a centered
-          mouse-scroll icon. */}
+      {/* Scroll-indicator row. Labels flank a full-width hairline. */}
       <Container className="relative z-10">
         <Reveal
           as="div"
@@ -175,30 +145,7 @@ export function Hero() {
         >
           <div className="flex items-center gap-space-4 font-mono text-caption uppercase tracking-[0.18em] text-muted">
             <span className="shrink-0">Scroll</span>
-            <span className="relative flex-1">
-              <span aria-hidden="true" className="block h-px w-full bg-line" />
-              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-bg px-space-3">
-                <svg
-                  width="20"
-                  height="32"
-                  viewBox="0 0 20 32"
-                  fill="none"
-                  aria-hidden="true"
-                  className="block text-muted"
-                >
-                  <rect
-                    x="1"
-                    y="1"
-                    width="18"
-                    height="30"
-                    rx="9"
-                    stroke="currentColor"
-                    strokeWidth="1.25"
-                  />
-                  <circle ref={dotRef} cx="10" cy="9" r="2" fill="currentColor" />
-                </svg>
-              </span>
-            </span>
+            <span aria-hidden="true" className="h-px flex-1 bg-line" />
             <span className="shrink-0">to see work</span>
           </div>
         </Reveal>

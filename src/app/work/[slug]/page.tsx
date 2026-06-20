@@ -501,7 +501,17 @@ export default async function CaseStudy({
 
           <div className="mt-space-9 flex flex-col gap-space-10">
             {meta.flows.map((flow, fi) => (
-              <section key={flow.title} aria-labelledby={`flow-${fi}`}>
+              // content-visibility:auto lets the browser skip layout/paint for
+              // flows that are off-screen — the fix for case-study scroll jank,
+              // which is paint-bound (many large box-shadowed PhoneFrames), not JS.
+              // contain-intrinsic-size reserves a plausible height so the scrollbar
+              // and ScrollTrigger geometry stay stable; `auto` remembers the real
+              // size once a flow has rendered.
+              <section
+                key={flow.title}
+                aria-labelledby={`flow-${fi}`}
+                className="[content-visibility:auto] [contain-intrinsic-size:auto_1000px]"
+              >
                 {/* Flow header — index · title · count, over a hairline with a
                     leading accent tick so each flow reads as a marked chapter and
                     the gallery gains cadence as it scrolls (DESIGN brief #3). */}
@@ -535,17 +545,20 @@ export default async function CaseStudy({
                   stagger={0.07}
                   className="mt-space-6 grid grid-cols-2 gap-x-space-5 gap-y-space-7 lg:grid-cols-4"
                 >
-                  {flow.screens.map((screen, si) => (
+                  {flow.screens.map((screen) => (
                     <li key={screen.src} className="group/sc">
-                      <Parallax speed={0.04 + (si % 4) * 0.02}>
-                        <PhoneFrame
-                          src={screen.src}
-                          alt={`${meta.title} — ${screen.caption}`}
-                          sizes="(min-width: 1024px) 22vw, 45vw"
-                          imgClassName="object-top"
-                          className="transition-[transform,box-shadow] duration-base ease-out-quad group-hover/sc:-translate-y-1 group-hover/sc:shadow-neon"
-                        />
-                      </Parallax>
+                      {/* No per-phone scroll Parallax here: a long flow renders many
+                          shadowed PhoneFrames, and scrubbing a transform on each one
+                          re-rasterises its big box-shadow every scroll frame — the
+                          measured cause of case-study scroll jank. The hover lift
+                          (transform/box-shadow on interaction) stays. */}
+                      <PhoneFrame
+                        src={screen.src}
+                        alt={`${meta.title} — ${screen.caption}`}
+                        sizes="(min-width: 1024px) 22vw, 45vw"
+                        imgClassName="object-top"
+                        className="transition-[transform,box-shadow] duration-base ease-out-quad group-hover/sc:-translate-y-1 group-hover/sc:shadow-neon"
+                      />
                       <p className="mt-space-3 font-mono text-caption uppercase tracking-[0.14em] text-muted transition-colors duration-base ease-out-quad group-hover/sc:text-neon">
                         {screen.caption}
                       </p>

@@ -42,8 +42,8 @@ const VERT = /* glsl */ `
 
 // OCTAVES is the cost knob: each octave is one simplex sample, and the domain
 // warp evaluates FBM 5× per pixel (q.xy, r.xy, final). 4 octaves → 20 samples,
-// a comfortable 60fps budget for the gated audience (non-coarse-pointer, >4GB,
-// dpr capped at 2). Drop to 3, or to a single warp, if a weaker GPU slips the gate.
+// down from 4. Lighter on weaker/integrated GPUs, and the soft scrimmed aurora
+// looks essentially identical. Paired with the dpr 1.5 cap on the Canvas below.
 const FRAG = /* glsl */ `
   uniform float uTime;
   uniform vec2  uResolution;
@@ -80,7 +80,7 @@ const FRAG = /* glsl */ `
     return 130.0 * dot(m, g);
   }
 
-  #define OCTAVES 4
+  #define OCTAVES 3
   float fbm(vec2 p){
     float v = 0.0;
     float amp = 0.55;
@@ -283,7 +283,7 @@ export function HeroCanvas({
     <Canvas
       // Pause the RAF loop when offscreen/hidden — last frame is retained.
       frameloop={active ? "always" : "never"}
-      dpr={[1, 2]}
+      dpr={[1, 1.5]}
       // No geometry edges in a fullscreen shader, so MSAA buys nothing — skip it.
       gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
       style={{ width: "100%", height: "100%" }}

@@ -125,7 +125,12 @@ function SplitFlapChar({
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const tileDelay = 0.15 * index;
+  // Cascade step per tile. Kept tight (0.05s) so a 12-tile wordmark like the hero
+  // name "sets" left-to-right in ~0.5s of start-times rather than stretching the
+  // last letters ~1.6s out — the difference between a crisp departure-board set and
+  // a name that churns as gibberish for seconds. Drives both the motion entrance
+  // (fade/flap delay) and the character-flutter start delay below.
+  const tileDelay = 0.05 * index;
 
   // Transient colour while flipping, settling to our foreground on the near-black
   // bg. A `multicolor` board draws a fixed per-tile hue from the counter palette
@@ -155,14 +160,17 @@ function SplitFlapChar({
     setIsSettled(false);
     setCurrentChar(CHARSET[Math.floor(Math.random() * CHARSET.length)]);
 
-    const baseFlips = 8;
+    const baseFlips = 6;
     const startDelay = skipEntrance ? tileDelay * 400 : tileDelay * 800;
     let flipIndex = 0;
     let hasStartedSettling = false;
 
     timeoutRef.current = setTimeout(() => {
       intervalRef.current = setInterval(() => {
-        const settleThreshold = baseFlips + index * 3;
+        // Flutter count grows only +1 per tile (was +3): later letters flip a touch
+        // longer for an organic cascade, but the whole word still locks in ~1.3s.
+        // The previous +index*3 made the last tile flip ~41× (≈2s of gibberish).
+        const settleThreshold = baseFlips + index;
 
         if (flipIndex >= settleThreshold && !hasStartedSettling) {
           hasStartedSettling = true;

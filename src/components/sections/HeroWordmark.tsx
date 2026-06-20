@@ -15,7 +15,7 @@ import { prefersReducedMotion } from "@/hooks/useReducedMotion";
  * SplitFlapText sets those fills inline (and is outside this design pass, so we
  * don't edit it); we override them from this scope with a small scoped rule that
  * only bites once the `data-settled` marker is set. The marker is applied after
- * the entrance choreography finishes ("PRADUAN SAHA"'s longest tile settles ~3.4s
+ * the entrance choreography finishes ("PRADUAN SAHA"'s longest tile settles ~1.3s
  * in) — or immediately under reduced motion, where the flaps render settled from
  * frame one.
  */
@@ -28,10 +28,10 @@ export function HeroWordmark() {
       setSettled(true);
       return;
     }
-    // The last tile of "PRADUAN SAHA" settles ~3.4s in (startDelay 1320ms + 41
+    // The last tile of "PRADUAN SAHA" settles ~1.3s in (startDelay 440ms + 17
     // flips·50ms for the index-11 tile); add a small cushion so the dissolve never
     // clips a still-flipping tile.
-    const t = setTimeout(() => setSettled(true), 3700);
+    const t = setTimeout(() => setSettled(true), 1600);
     return () => clearTimeout(t);
   }, []);
 

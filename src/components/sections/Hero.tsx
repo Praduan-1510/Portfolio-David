@@ -39,7 +39,7 @@ export function Hero() {
       id="top"
       data-theme="dark"
       aria-label="Introduction"
-      className="relative isolate flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden bg-bg text-fg"
+      className="relative isolate flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden bg-bg text-fg [@media(max-height:600px)]:min-h-0"
     >
       {/* Layer 0 — WebGL smoke/liquid backdrop: lazy, isolated, reduced-motion
           safe (ARCHITECTURE.md §7.6). Never blocks first paint, pauses offscreen/
@@ -68,7 +68,7 @@ export function Hero() {
       <AnimatedNoise opacity={0.04} className="z-[1]" />
 
       {/* Centered stack — badge, headline, subhead, buttons. */}
-      <Container className="relative z-10 flex flex-1 flex-col items-center justify-center py-space-9 text-center">
+      <Container className="relative z-10 flex flex-1 flex-col items-center justify-center py-space-9 text-center [@media(max-height:600px)]:py-space-5">
         <Reveal trigger="load" delay={SEQ.badge} duration={durations.base}>
           <span className="inline-flex items-center gap-space-2 rounded-full border border-line bg-surface px-space-4 py-space-2 font-sans text-caption text-muted">
             <span
@@ -111,14 +111,14 @@ export function Hero() {
           trigger="load"
           delay={SEQ.cta}
           duration={durations.base}
-          className="mt-space-7 flex flex-wrap items-center justify-center gap-space-4"
+          className="mt-space-7 flex w-full flex-col items-stretch gap-space-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-space-4"
         >
           <Button
             href="/work"
             variant="invert"
             shape="pill"
             size="lg"
-            className="hover:-translate-y-px"
+            className="w-full sm:w-auto hover:-translate-y-px"
           >
             View work
           </Button>
@@ -127,7 +127,7 @@ export function Hero() {
             variant="secondary"
             shape="pill"
             size="lg"
-            className="hover:-translate-y-px hover:bg-surface"
+            className="w-full sm:w-auto hover:-translate-y-px hover:bg-surface"
           >
             Get in touch
           </Button>

@@ -67,7 +67,7 @@ export default function Contact() {
     <section
       data-theme="dark"
       aria-labelledby="contact-heading"
-      className="relative isolate flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden bg-bg text-fg"
+      className="relative isolate flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden bg-bg text-fg [@media(max-height:600px)]:min-h-0"
     >
       {/* Layer 0 — atmosphere: two soft monochrome radial glows give the dark
           depth and a diagonal balance (headline ↘ panel), beneath the grain. */}
@@ -102,7 +102,7 @@ export default function Contact() {
         />
       ))}
 
-      <Container className="relative z-10 flex flex-1 items-center py-space-10">
+      <Container className="relative z-10 flex flex-1 items-center py-space-10 [@media(max-height:600px)]:py-space-6">
         <div className="grid w-full grid-cols-1 items-center gap-space-9 md:grid-cols-12 md:gap-space-8">
           {/* Left — the focal statement. Oversized headline as the moment. */}
           <div className="md:col-span-7 lg:col-span-7">
@@ -168,7 +168,7 @@ export default function Contact() {
                             className={cn(
                               "mt-space-2 block text-body-l text-fg",
                               channel.href &&
-                                "truncate transition-colors duration-fast ease-out-quad group-hover:text-neon",
+                                "break-words transition-colors duration-fast ease-out-quad group-hover:text-neon",
                             )}
                           >
                             {channel.value}

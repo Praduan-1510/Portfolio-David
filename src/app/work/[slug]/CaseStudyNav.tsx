@@ -26,9 +26,14 @@ interface Section {
 export function CaseStudyNav({
   sections,
   className,
+  variant = "desktop",
 }: {
   sections: Section[];
   className?: string;
+  /** "desktop" = the sticky vertical sidebar (md+); "mobile" = a sticky
+   *  horizontally-scrollable chip rail for phones (the page is 11k–23k px tall,
+   *  so it needs in-page nav at every size). */
+  variant?: "desktop" | "mobile";
 }) {
   const [active, setActive] = useState(sections[0]?.id ?? "");
   const reduced = useReducedMotion();
@@ -58,6 +63,46 @@ export function CaseStudyNav({
     else el.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
   };
 
+  // Mobile: a full-bleed, sticky, horizontally-scrollable chip rail under the top
+  // nav. Full-bleed via -mx that cancels the Container gutter, re-inset with px so
+  // the chips align with the body column; bg-bg so content scrolls cleanly under.
+  if (variant === "mobile") {
+    return (
+      <nav
+        aria-label="On this page"
+        className={cn(
+          "sticky top-16 z-30 -mx-[clamp(1.25rem,5vw,6rem)] border-b border-line bg-bg px-[clamp(1.25rem,5vw,6rem)] py-space-3 md:hidden",
+          className,
+        )}
+      >
+        <ul className="flex gap-space-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {sections.map((s, i) => {
+            const on = active === s.id;
+            return (
+              <li
+                key={s.id}
+                className="shrink-0"
+                style={{ "--dot": spectrumAt(i) } as React.CSSProperties}
+              >
+                <button
+                  type="button"
+                  onClick={() => go(s.id)}
+                  aria-current={on ? "true" : undefined}
+                  className={cn(
+                    "flex min-h-[40px] items-center whitespace-nowrap rounded-full border px-space-4 font-mono text-caption uppercase tracking-[0.12em] transition-colors duration-base ease-out-quad",
+                    on ? "border-[var(--dot)] text-fg" : "border-line text-muted",
+                  )}
+                >
+                  {s.label}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+    );
+  }
+
   return (
     <nav
       aria-label="On this page"
@@ -75,7 +120,7 @@ export function CaseStudyNav({
                 type="button"
                 onClick={() => go(s.id)}
                 aria-current={on ? "true" : undefined}
-                className="group flex w-full items-center gap-space-3 text-left"
+                className="group flex w-full items-center gap-space-3 py-space-1 text-left"
               >
                 <span
                   aria-hidden="true"

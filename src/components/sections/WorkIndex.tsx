@@ -20,7 +20,10 @@ import type { ProjectMeta } from "@/types/project";
  */
 export function WorkIndex({ projects }: { projects: ProjectMeta[] }) {
   const reduced = useReducedMotion();
-  const isDesktop = useMediaQuery("(min-width: 1024px)");
+  // Require a fine pointer too: the pinned horizontal scroll driven by vertical
+  // scroll is awkward on touchscreens (incl. large tablets at ≥1024), so those
+  // get the static WorkStack instead.
+  const isDesktop = useMediaQuery("(min-width: 1024px) and (pointer: fine)");
 
   if (isDesktop && !reduced) {
     return <WorkScrollTrack projects={projects} />;
@@ -129,7 +132,7 @@ function WorkStackRow({
                 Lifts on hover. */}
             <div
               className={`transition-transform duration-base ease-out-quad will-change-transform group-hover:-translate-y-1 ${
-                isWeb ? "w-[82%]" : "w-[42%] translate-y-[8%]"
+                isWeb ? "w-[82%]" : "w-[52%] translate-y-[8%] md:w-[44%]"
               }`}
             >
               <ProjectCover

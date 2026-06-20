@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils/cn";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useLenis } from "@/lib/lenis/useLenis";
 import { spectrumAt } from "@/lib/spectrum";
 
@@ -30,6 +31,11 @@ export function SideNav() {
   const [activeSection, setActiveSection] = useState<string>("top");
   const reduced = useReducedMotion();
   const lenis = useLenis();
+  // Desktop, mouse-only affordance. It duplicates the top <Nav>, its labels only
+  // reveal on hover, and its fixed rail would otherwise paint over the left gutter
+  // of the content on tablets — so it's gated to a fine pointer at lg+ (touch
+  // tablets fall back to the top nav). SSR-false → it mounts after hydration.
+  const enabled = useMediaQuery("(min-width: 1024px) and (pointer: fine)");
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -62,10 +68,14 @@ export function SideNav() {
     }
   };
 
+  if (!enabled) return null;
+
   return (
     <nav
       aria-label="Sections"
-      className="fixed left-0 top-0 z-40 hidden h-screen w-16 flex-col justify-center border-r border-line backdrop-blur-sm md:flex md:w-20"
+      // w-12 keeps the fixed translucent rail inside the page's left gutter at
+      // lg+ (gutter ≥ ~51px there) so it never paints over the content's left edge.
+      className="fixed left-0 top-0 z-40 flex h-screen w-12 flex-col justify-center border-r border-line backdrop-blur-sm"
       // /opacity no-ops on our var() tokens, so the translucency is set explicitly.
       style={{ backgroundColor: "color-mix(in srgb, var(--bg) 75%, transparent)" }}
     >
@@ -83,7 +93,9 @@ export function SideNav() {
                 onClick={() => scrollToSection(id)}
                 aria-label={label}
                 aria-current={active ? "true" : undefined}
-                className="group relative flex items-center gap-space-3"
+                // The 6px dot is the only visible mark, so a ::before extends the
+                // pointer hit area to a comfortable box without moving the dot.
+                className="group relative flex items-center gap-space-3 before:absolute before:-inset-x-2 before:-inset-y-[9px] before:content-['']"
               >
                 <span
                   aria-hidden="true"

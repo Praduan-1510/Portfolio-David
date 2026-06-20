@@ -443,14 +443,19 @@ export default async function CaseStudy({
           measure keeps the column at a readable line length (§5). */}
       <Container as="section" className="py-space-10">
         {hasContents ? (
-          <div className="grid gap-space-7 lg:grid-cols-[12rem_minmax(0,1fr)] lg:gap-space-9">
-            <CaseStudyNav sections={sections} className="hidden lg:block" />
-            {/* Full-cell column: text self-clamps to --measure (in mdx-components)
-                while media (<Shot>) uses the full width and can alternate sides. */}
-            <Reveal className="min-w-0 [&>p:first-of-type]:mb-space-7 [&>p:first-of-type]:font-display [&>p:first-of-type]:text-body-l [&>p:first-of-type]:leading-[1.5] [&>p:first-of-type]:text-fg">
-              <MDXRemote source={content} components={mdxComponents} />
-            </Reveal>
-          </div>
+          <>
+            {/* Phones/small tablets get a sticky horizontal chip rail; md+ gets the
+                vertical sidebar — so the very tall page is navigable at every size. */}
+            <CaseStudyNav variant="mobile" sections={sections} />
+            <div className="grid gap-space-7 md:grid-cols-[11rem_minmax(0,1fr)] md:gap-space-9">
+              <CaseStudyNav variant="desktop" sections={sections} className="hidden md:block" />
+              {/* Full-cell column: text self-clamps to --measure (in mdx-components)
+                  while media (<Shot>) uses the full width and can alternate sides. */}
+              <Reveal className="min-w-0 [&>p:first-of-type]:mb-space-7 [&>p:first-of-type]:font-display [&>p:first-of-type]:text-body-l [&>p:first-of-type]:leading-[1.5] [&>p:first-of-type]:text-fg">
+                <MDXRemote source={content} components={mdxComponents} />
+              </Reveal>
+            </div>
+          </>
         ) : (
           <Reveal className="max-w-[var(--measure)] [&>p:first-of-type]:mb-space-7 [&>p:first-of-type]:font-display [&>p:first-of-type]:text-body-l [&>p:first-of-type]:leading-[1.5] [&>p:first-of-type]:text-fg">
             <MDXRemote source={content} components={mdxComponents} />

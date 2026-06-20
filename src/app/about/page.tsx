@@ -417,7 +417,7 @@ export default function About() {
         <StaggerGroup as="ul" className="mt-space-6" stagger={0.08} y={32}>
           {EXPERIENCE.map((job) => (
             <li key={job.company} className="card-neon-row group border-t border-line py-space-6">
-              <div className="flex flex-wrap items-baseline justify-between gap-space-3">
+              <div className="flex flex-col gap-space-1 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-space-3">
                 <Text
                   as="h2"
                   variant="heading"
@@ -434,7 +434,7 @@ export default function About() {
               <TimelineRail className="mt-space-4 space-y-space-5">
                 {job.roles.map((role) => (
                   <div key={role.title}>
-                    <div className="flex flex-wrap items-baseline justify-between gap-space-3">
+                    <div className="flex flex-col gap-space-1 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-space-3">
                       <Text variant="body-l" className="font-display font-medium">
                         {role.title}
                       </Text>
@@ -453,7 +453,7 @@ export default function About() {
           {EDUCATION.map((item) => (
             <li
               key={item.label}
-              className="card-neon-row flex flex-wrap items-baseline justify-between gap-space-3 border-t border-line py-space-5"
+              className="card-neon-row flex flex-col gap-space-1 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-space-3 border-t border-line py-space-5"
             >
               <span className="shrink-0 font-mono text-caption uppercase tracking-[0.14em] text-muted">
                 {item.label}
@@ -477,7 +477,7 @@ export default function About() {
           {CERTIFICATIONS.map((cert) => (
             <li
               key={cert.title}
-              className="card-neon-row group flex flex-wrap items-baseline justify-between gap-space-3 border-t border-line py-space-5"
+              className="card-neon-row group flex flex-col gap-space-1 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-space-3 border-t border-line py-space-5"
             >
               <span className="text-body transition-colors duration-base ease-out-quad group-hover:text-neon">
                 {cert.title}

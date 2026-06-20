@@ -82,7 +82,7 @@ export default function Home() {
           {stats.map((s, i) => (
             <div
               key={s.label}
-              className="group flex min-w-0 flex-col gap-space-3 py-space-7 pl-space-3 pr-space-2 first:pl-0 sm:pl-space-5 sm:pr-space-4 [&:not(:first-child)]:border-l [&:not(:first-child)]:border-line"
+              className="group flex min-w-0 flex-col gap-space-2 py-space-6 pl-space-2 pr-space-2 first:pl-0 sm:gap-space-3 sm:py-space-7 sm:pl-space-5 sm:pr-space-4 [&:not(:first-child)]:border-l [&:not(:first-child)]:border-line"
             >
               {/* Index ticks each carry their spectrum hue, so the gauge cluster
                   reads as a colour-coded instrument row (the figures stay mono). */}
@@ -214,7 +214,7 @@ export default function Home() {
           a flat surface. The Magnetic "Get in touch" button is preserved. */}
       <Container as="section" id="contact" className="scroll-mt-16 py-space-9">
         <Reveal>
-          <div className="card-neon relative isolate overflow-hidden rounded-[3px] border border-line bg-surface p-space-8 md:p-space-9">
+          <div className="card-neon relative isolate overflow-hidden rounded-[3px] border border-line bg-surface p-space-6 sm:p-space-8 md:p-space-9">
             {/* Top accent hairline — the spectrum lit across the crown of the
                 panel (faded ends), so the closing CTA carries the same signal as
                 the hero and footer. */}
@@ -258,7 +258,7 @@ export default function Home() {
             <TextReveal
               as="h2"
               by="words"
-              className="mt-space-4 max-w-[18ch] font-display text-display-xl"
+              className="mt-space-4 max-w-[18ch] font-display text-display-l sm:text-display-xl"
             >
               {"Let's build something worth remembering."}
             </TextReveal>

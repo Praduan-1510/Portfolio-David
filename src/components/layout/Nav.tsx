@@ -88,7 +88,7 @@ export function Nav() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-bg">
-      <Container as="div" className="flex h-16 items-center justify-between">
+      <Container as="div" className="flex h-16 items-center justify-between [@media(max-height:480px)]:h-12">
         <NextLink
           href="/"
           className="font-display text-body-l font-semibold tracking-[-0.02em]"
@@ -107,7 +107,7 @@ export function Nav() {
                     href={link.href}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "font-sans text-caption hover:text-accent",
+                      "flex h-11 items-center font-sans text-caption hover:text-accent",
                       active ? "text-fg" : "text-muted",
                     )}
                   >

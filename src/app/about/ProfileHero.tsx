@@ -62,7 +62,10 @@ export function ProfileHero() {
       data-theme="dark"
       aria-label="About — profile"
       className="relative isolate overflow-hidden bg-bg text-fg"
-      style={{ minHeight: "clamp(34rem, 82svh, 50rem)" }}
+      // Floor at 26rem (not 34rem) so the clamp can actually shrink on short
+      // landscape phones (82svh < 34rem there) instead of forcing a tall band;
+      // taller screens are unaffected (82svh wins).
+      style={{ minHeight: "clamp(26rem, 82svh, 50rem)" }}
     >
       {/* Layer 0 — full-bleed styled map texture: a static map screenshot inverted
           to a dark near-black schematic (see AboutHeroMap). Lazy, aria-hidden +
@@ -91,6 +94,17 @@ export function ProfileHero() {
             <Text variant="body-l" className="max-w-[44ch] text-muted">
               {SUPPORT}
             </Text>
+          </Reveal>
+          {/* The corner instrument-HUD is md+ only, so surface the live status +
+              location inline on phones (where it would otherwise be lost). */}
+          <Reveal trigger="inView" delay={0.36}>
+            <p className="mt-space-5 inline-flex items-center gap-space-2 font-mono text-caption uppercase tracking-[0.14em] text-muted md:hidden">
+              <span
+                aria-hidden="true"
+                className="inline-block h-[7px] w-[7px] rounded-full bg-neon motion-safe:animate-status-pulse"
+              />
+              Available · Kolkata, IN
+            </p>
           </Reveal>
           <Reveal
             as="div"

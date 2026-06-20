@@ -362,6 +362,21 @@ html.lenis body {
   }
 }
 
+/* Phones: the dimensional tilt reads as a crooked window whose corner is clipped
+   by the header's overflow-hidden inside the narrow gutter — it looks like a
+   glitch, not a flourish. Flatten the slab to an upright frame below md (the
+   `!important` overrides the boot keyframe's filled transform too, so the screen
+   still fades/reveals in but lands square). Desktop keeps the full 3D tilt. */
+@media (max-width: 767px) {
+  .browser-stage {
+    perspective: none;
+  }
+  .browser-slab,
+  .browser-slab[data-variant="big"] {
+    transform: none !important;
+  }
+}
+
 /* Cursor parallax — a wrapper between the perspective stage and the slab that
    rotates toward the pointer (vars set in JS), so the mockup reads as a physical
    3D object you can look around. It LAYERS on the slab's own tilt (preserve-3d),

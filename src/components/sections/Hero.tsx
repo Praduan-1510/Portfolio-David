@@ -1,8 +1,8 @@
 "use client";
 
 import { durations } from "@/lib/motion/durations";
-import { Container, Text, Button } from "@/components/primitives";
-import { Reveal, AnimatedNoise } from "@/components/motion";
+import { Container, Button } from "@/components/primitives";
+import { Reveal, TextReveal, StaggerGroup, AnimatedNoise } from "@/components/motion";
 import { HeroBackground } from "@/components/sections/hero-canvas/HeroBackground";
 import { HeroWordmark } from "@/components/sections/HeroWordmark";
 
@@ -23,14 +23,17 @@ import { HeroWordmark } from "@/components/sections/HeroWordmark";
  */
 
 // Choreography delays (seconds). The split-flap wordmark is the focal moment and
-// runs its own staggered entrance (no SEQ delay); the supporting beats step ~80ms
-// apart (within the §7.4 40–80ms band) and start once the wordmark is settling.
+// runs its own staggered entrance (no SEQ delay); the supporting beats now reveal
+// KINETICALLY too — the tagline rises word-by-word, the subhead line-by-line, and
+// the CTAs enter in sequence — so the whole stack animates in like the wordmark
+// rather than just fading. The delays cascade top-to-bottom (badge → tagline →
+// subhead → CTAs → scroll) while the wordmark keeps flipping underneath.
 const SEQ = {
   badge: 0.1,
-  tagline: 0.42,
-  sub: 0.5,
-  cta: 0.58,
-  scroll: 0.66,
+  tagline: 0.45,
+  sub: 0.72,
+  cta: 0.98,
+  scroll: 1.18,
 } as const;
 
 export function Hero() {
@@ -95,22 +98,38 @@ export function Hero() {
           <HeroWordmark />
         </div>
 
-        <Reveal trigger="load" delay={SEQ.tagline} duration={durations.base}>
-          <Text as="p" variant="heading" className="mt-space-6 max-w-[20ch] text-fg">
-            {"Design that's clear, usable, and unmistakably yours."}
-          </Text>
-        </Reveal>
+        {/* Tagline — rises word-by-word behind a clip mask (the site's kinetic
+            type primitive), so it arrives with the same energy as the wordmark. */}
+        <TextReveal
+          as="p"
+          by="words"
+          trigger="load"
+          delay={SEQ.tagline}
+          stagger={0.05}
+          className="mt-space-6 max-w-[20ch] font-display text-heading text-fg"
+        >
+          {"Design that's clear, usable, and unmistakably yours."}
+        </TextReveal>
 
-        <Reveal trigger="load" delay={SEQ.sub} duration={durations.base}>
-          <Text variant="body-l" className="mt-space-5 max-w-[48ch] text-muted">
-            {"I'm Praduan Saha, a UI/UX and graphic designer working since 2019 — turning complex ideas into clean interfaces and cohesive visual systems across web, mobile, and brand."}
-          </Text>
-        </Reveal>
+        {/* Subhead — masked line-by-line rise (lines, not words, so a paragraph
+            stays comfortable to read while still entering dynamically). */}
+        <TextReveal
+          as="p"
+          by="lines"
+          trigger="load"
+          delay={SEQ.sub}
+          className="mt-space-5 max-w-[48ch] font-sans text-body-l text-muted"
+        >
+          {"I'm Praduan Saha, a UI/UX and graphic designer working since 2019 — turning complex ideas into clean interfaces and cohesive visual systems across web, mobile, and brand."}
+        </TextReveal>
 
-        <Reveal
+        {/* CTAs — enter in sequence (each button rises in after the text), so the
+            cascade resolves on the primary actions. */}
+        <StaggerGroup
+          as="div"
           trigger="load"
           delay={SEQ.cta}
-          duration={durations.base}
+          stagger={0.1}
           className="mt-space-7 flex w-full flex-col items-stretch gap-space-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-space-4"
         >
           <Button
@@ -131,7 +150,7 @@ export function Hero() {
           >
             Get in touch
           </Button>
-        </Reveal>
+        </StaggerGroup>
       </Container>
 
       {/* Scroll-indicator row. Labels flank a full-width hairline. */}

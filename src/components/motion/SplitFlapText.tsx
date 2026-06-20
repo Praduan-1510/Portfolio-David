@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useMemo, useState, useCallback, useEffect, useRef } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { SPECTRUM } from "@/lib/spectrum";
 
@@ -55,14 +55,14 @@ function SplitFlapTextInner({
   multicolor = false,
 }: SplitFlapTextProps) {
   const chars = useMemo(() => text.split(""), [text]);
-  const [animationKey, setAnimationKey] = useState(0);
+  // The wordmark flips ONCE per mount — i.e. on page load/refresh and on
+  // navigating back to the home route (each remounts this component). It
+  // deliberately does NOT re-flip on hover: that re-ran the whole ~2.5s flip on
+  // every pointer-enter and read as a constant flicker. animationKey is fixed, so
+  // the flip is a one-time entrance, never an interaction.
+  const [animationKey] = useState(0);
   const [hasInitialized, setHasInitialized] = useState(false);
   const reduced = useReducedMotion();
-
-  const handleMouseEnter = useCallback(() => {
-    if (reduced) return; // no re-flip under reduced motion
-    setAnimationKey((prev) => prev + 1);
-  }, [reduced]);
 
   useEffect(() => {
     const timer = setTimeout(() => setHasInitialized(true), 1000);
@@ -73,11 +73,7 @@ function SplitFlapTextInner({
     <div className={`relative inline-flex items-center ${className}`} style={{ perspective: "1000px" }}>
       {/* Flaps are decorative; the word is announced once for assistive tech. */}
       <span className="sr-only">{text}</span>
-      <span
-        aria-hidden="true"
-        className={`inline-flex items-center gap-[0.08em] ${reduced ? "" : "cursor-pointer"}`}
-        onMouseEnter={handleMouseEnter}
-      >
+      <span aria-hidden="true" className="inline-flex items-center gap-[0.08em]">
         {chars.map((char, index) => (
           <SplitFlapChar
             key={index}
@@ -186,8 +182,8 @@ function SplitFlapChar({
     };
     // `skipEntrance` is read inside but intentionally NOT a dependency: it flips
     // true 1s after mount and must not re-trigger the flip — only the initial
-    // mount and hover (animationKey) should. Its latest value is still read when
-    // animationKey changes, since that re-runs the effect.
+    // mount drives it. (animationKey is now fixed; the hover re-flip was removed
+    // because re-running the flip on every pointer-enter read as a flicker.)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displayChar, isSpace, tileDelay, animationKey, index, speed, reduced]);
 

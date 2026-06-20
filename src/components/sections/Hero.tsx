@@ -2,7 +2,7 @@
 
 import { durations } from "@/lib/motion/durations";
 import { Container, Button } from "@/components/primitives";
-import { Reveal, TextReveal, StaggerGroup, AnimatedNoise } from "@/components/motion";
+import { Reveal, TextReveal, AnimatedNoise } from "@/components/motion";
 import { HeroBackground } from "@/components/sections/hero-canvas/HeroBackground";
 import { HeroWordmark } from "@/components/sections/HeroWordmark";
 
@@ -123,34 +123,40 @@ export function Hero() {
           {"I'm Praduan Saha, a UI/UX and graphic designer working since 2019 — turning complex ideas into clean interfaces and cohesive visual systems across web, mobile, and brand."}
         </TextReveal>
 
-        {/* CTAs — enter in sequence (each button rises in after the text), so the
-            cascade resolves on the primary actions. */}
-        <StaggerGroup
-          as="div"
-          trigger="load"
-          delay={SEQ.cta}
-          stagger={0.1}
-          className="mt-space-7 flex w-full flex-col items-stretch gap-space-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-space-4"
-        >
-          <Button
-            href="/work"
-            variant="invert"
-            shape="pill"
-            size="lg"
-            className="w-full sm:w-auto hover:-translate-y-px"
+        {/* CTAs — each button rises in on its own Reveal (load-triggered), so they
+            enter in sequence after the text. Per-button Reveal (animating each
+            wrapper) is used rather than a child-staggered group, which left the
+            anchors stuck at their start opacity here. The outer flex div is the
+            unanimated layout container. */}
+        <div className="mt-space-7 flex w-full flex-col items-stretch gap-space-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-space-4">
+          <Reveal as="div" trigger="load" delay={SEQ.cta} className="w-full sm:w-auto">
+            <Button
+              href="/work"
+              variant="invert"
+              shape="pill"
+              size="lg"
+              className="w-full sm:w-auto hover:-translate-y-px"
+            >
+              View work
+            </Button>
+          </Reveal>
+          <Reveal
+            as="div"
+            trigger="load"
+            delay={SEQ.cta + 0.12}
+            className="w-full sm:w-auto"
           >
-            View work
-          </Button>
-          <Button
-            href="/contact"
-            variant="secondary"
-            shape="pill"
-            size="lg"
-            className="w-full sm:w-auto hover:-translate-y-px hover:bg-surface"
-          >
-            Get in touch
-          </Button>
-        </StaggerGroup>
+            <Button
+              href="/contact"
+              variant="secondary"
+              shape="pill"
+              size="lg"
+              className="w-full sm:w-auto hover:-translate-y-px hover:bg-surface"
+            >
+              Get in touch
+            </Button>
+          </Reveal>
+        </div>
       </Container>
 
       {/* Scroll-indicator row. Labels flank a full-width hairline. */}

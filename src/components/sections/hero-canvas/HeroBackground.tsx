@@ -52,19 +52,28 @@ function isLowPower(): boolean {
   return false;
 }
 
-/* Static fallback — the shader's resting state as a still grayscale gradient.
-   Rendered under reduced-motion, on low-power devices, with no WebGL, or while
-   the chunk loads. Derived from the --bg token via color-mix (soft gray core →
-   base → slightly darker edge), so it tracks the theme and mirrors the live
-   shader's resting tone + vignette, keeping the two states visually continuous. */
+/* Static fallback — a still version of the colour aurora. Rendered under
+   reduced-motion, on low-power devices, with no WebGL, or while the chunk loads.
+   Soft spectrum blooms (violet / blue / lime / amber / rose, via color-mix so they
+   track the tokens) pool around an intentionally calmer centre over the --bg base,
+   then an elliptical vignette darkens the rim — mirroring the live shader's
+   composition so the two states read as one and mobile users still get colour. */
 function Fallback() {
   return (
     <div
       aria-hidden="true"
       className="absolute inset-0"
       style={{
-        background:
-          "radial-gradient(ellipse 120% 90% at 50% 46%, color-mix(in srgb, var(--bg), #fff 7%) 0%, var(--bg) 52%, color-mix(in srgb, var(--bg), #000 14%) 100%)",
+        background: [
+          // Colour blooms (kept off-centre, lower alpha behind the headline).
+          "radial-gradient(38% 44% at 16% 26%, color-mix(in srgb, var(--spectrum-violet) 26%, transparent), transparent 72%)",
+          "radial-gradient(40% 46% at 84% 22%, color-mix(in srgb, var(--spectrum-blue) 22%, transparent), transparent 72%)",
+          "radial-gradient(46% 50% at 78% 84%, color-mix(in srgb, var(--spectrum-amber) 20%, transparent), transparent 72%)",
+          "radial-gradient(42% 48% at 22% 82%, color-mix(in srgb, var(--spectrum-rose) 20%, transparent), transparent 72%)",
+          "radial-gradient(30% 34% at 50% 50%, color-mix(in srgb, var(--spectrum-lime) 12%, transparent), transparent 78%)",
+          // Dark ground + rim vignette beneath the blooms.
+          "radial-gradient(ellipse 120% 95% at 50% 46%, color-mix(in srgb, var(--bg), #fff 3%) 0%, var(--bg) 56%, color-mix(in srgb, var(--bg), #000 16%) 100%)",
+        ].join(", "),
       }}
     />
   );

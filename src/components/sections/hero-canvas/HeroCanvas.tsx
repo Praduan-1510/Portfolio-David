@@ -6,15 +6,22 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 /*
- * Hero backdrop — flowing grayscale "smoke / liquid" field.
+ * Hero backdrop — flowing "liquid aurora" field in the site spectrum.
  *
  * A single fullscreen triangle (drei <ScreenQuad>, no camera math, no overdraw)
  * driven by a custom fragment shader: domain-warped fractal noise (FBM) marbles
- * soft grayscale forms as lightness layered over the theme base (uBase = the
- * resolved --bg token, read in HeroBackground) — so it tracks the theme and
- * blends seamlessly with the section. The flow is a slow time uniform (ambient,
- * §7.8) with subtle reactivity to pointer position and scroll progress. No accent
- * colour — grayscale keeps the single-accent rule intact (DESIGN_GUIDELINES §2/§4).
+ * soft organic forms, tinted with the site's five signature hues (the spectrum,
+ * globals.css --spectrum-*) so the marbling reads as a slow, living aurora over
+ * the theme base (uBase = the resolved --bg token, read in HeroBackground). Colour
+ * concentrates in the bright crests and stays calmer dead-centre so the white
+ * wordmark over it remains legible (the Hero reading-scrim does the final pass).
+ * The flow is a slow time uniform (ambient, §7.8) with subtle reactivity to
+ * pointer position and scroll progress.
+ *
+ * The hero is the one DELIBERATE exception to the monochrome chrome / "colour
+ * belongs to the work" rule (DESIGN_GUIDELINES §2/§4): the backdrop paints the
+ * spectrum as a field rather than a thin signal mark — quiet atmosphere, not a
+ * spotlight — so the entrance still leads with type while feeling alive.
  *
  * This module is the heavy chunk; it is only ever loaded via next/dynamic
  * (ssr:false) from HeroBackground, so it never blocks first paint, and the Canvas
@@ -87,6 +94,26 @@ const FRAG = /* glsl */ `
     return v; // ~[-1, 1]
   }
 
+  // ── Site spectrum (globals.css --spectrum-*), normalised sRGB ───────────────
+  // The hero backdrop is the one deliberate place the five signature hues paint a
+  // FIELD rather than a thin signal mark — a living aurora behind the wordmark.
+  const vec3 C_VIOLET = vec3(0.663, 0.545, 1.000); // #a98bff
+  const vec3 C_BLUE   = vec3(0.275, 0.706, 0.941); // #46b4f0
+  const vec3 C_LIME   = vec3(0.788, 0.914, 0.294); // #c9e94b
+  const vec3 C_AMBER  = vec3(0.969, 0.647, 0.231); // #f7a53b
+  const vec3 C_ROSE   = vec3(1.000, 0.369, 0.561); // #ff5e8f
+
+  // Cyclic 5-stop spectrum. t wraps, so an animated hue flows
+  // violet→blue→lime→amber→rose→violet with no seam.
+  vec3 spectrumLoop(float t){
+    float x = fract(t) * 5.0;
+    if (x < 1.0) return mix(C_VIOLET, C_BLUE,   x);
+    if (x < 2.0) return mix(C_BLUE,   C_LIME,   x - 1.0);
+    if (x < 3.0) return mix(C_LIME,   C_AMBER,  x - 2.0);
+    if (x < 4.0) return mix(C_AMBER,  C_ROSE,   x - 3.0);
+    return            mix(C_ROSE,   C_VIOLET, x - 4.0);
+  }
+
   void main(){
     float aspect = uResolution.x / max(uResolution.y, 1.0);
 
@@ -117,30 +144,38 @@ const FRAG = /* glsl */ `
 
     // Shape contrast softly — premium, low-contrast, never harsh.
     float n = clamp(f * 0.5 + 0.5, 0.0, 1.0);
-    n = smoothstep(0.12, 0.92, n);
+    n = smoothstep(0.08, 0.95, n);
 
-    // The smoke is grayscale LIGHTNESS layered above the theme base (uBase = the
-    // resolved --bg) rather than absolute grays — so the field always blends
-    // seamlessly with the section and tracks the theme. Highlights top out at a
-    // soft gray, not white: atmosphere, not a spotlight. Amplitudes are kept
-    // deliberately low (~35% below the original) so the marbling reads as quiet
-    // depth behind the centred type rather than a high-contrast backdrop; the
-    // reading scrim in Hero.tsx handles the final legibility pass over the top.
-    float light = mix(0.0, 0.14, n);
-    light += smoothstep(0.58, 1.0, n) * 0.065;           // soft highlight crests
-    light += 0.03 * smoothstep(0.2, 1.45, length(r));    // marbled liquid veins
+    // HUE flows through the spectrum across space + slow time. It's driven by the
+    // warp field (so colour follows the marbling into smooth, large regions), with
+    // a gentle diagonal positional bias for a warm→cool sweep; uTime slowly cycles
+    // the whole field through the palette so the aurora keeps drifting.
+    float hue = 0.50 * r.x + 0.34 * q.y + 0.13 * (vUv.x + vUv.y) + uTime * 0.018;
+    vec3 chroma = spectrumLoop(hue);
 
-    // Soft highlight that follows the pointer (aspect-corrected screen space).
+    // Colour concentrates in the bright marbled crests and falls to the dark base
+    // in the troughs, so the field reads as luminous aurora/liquid, not a flat wash.
+    float glow = smoothstep(0.28, 1.0, n);
+    glow += 0.6 * smoothstep(0.60, 1.0, n);  // hotter cores in the brightest crests
+
+    // Keep the centre (behind the headline) calmer so white type stays legible;
+    // colour blooms in a halo around it. The Hero reading-scrim adds the final pass.
+    float dC = distance(vUv, vec2(0.5, 0.46));
+    float centerDamp = mix(0.40, 1.0, smoothstep(0.05, 0.60, dC));
+
+    // Elliptical vignette: fade the field + darken the base toward the edges for depth.
+    float vig = clamp(1.0 - smoothstep(0.34, 0.98, dC), 0.0, 1.0);
+
+    // Compose: dark theme base (darkened at the rim) + the colour aurora + a few
+    // faint white glints on the very brightest crests for a wet, liquid sheen.
+    vec3 col = uBase * mix(0.66, 1.0, vig);
+    col += chroma * glow * 0.62 * centerDamp * vig;
+    col += vec3(smoothstep(0.74, 1.0, n) * 0.05 * vig);
+
+    // Soft bloom following the pointer, tinted to the local hue (aspect-corrected).
     vec2 sc = (vUv - 0.5) * vec2(aspect, 1.0);
     vec2 pc = uPointer * 0.5 * vec2(aspect, 1.0);
-    light += 0.028 * smoothstep(0.40, 0.0, distance(sc, pc));
-
-    // Elliptical vignette: fade the smoke out and darken the base toward the
-    // edges for depth. Pulled in a touch (0.34→0.92) and deepened at the rim so
-    // the field settles into a quieter atmosphere, with the centre — behind the
-    // headline — still the calmest, brightest pocket.
-    float vig = clamp(1.0 - smoothstep(0.34, 0.92, distance(vUv, vec2(0.5, 0.46))), 0.0, 1.0);
-    vec3 col = uBase * mix(0.72, 1.0, vig) + vec3(light * vig);
+    col += chroma * smoothstep(0.42, 0.0, distance(sc, pc)) * 0.12 * vig;
 
     // Ordered-ish dither: near-black gradients band badly on 8-bit displays;
     // ±1/255 of hashed noise hides the steps without visible grain.

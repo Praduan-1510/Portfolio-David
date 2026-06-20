@@ -366,9 +366,12 @@ export default async function CaseStudy({
         </Container>
       </header>
 
-      {/* Signature showcase — a confident "big reveal" of the work: the cover
-          centred and lifted, flanked by two more screens, on an accent glow with
-          a woven parallax. Reduced-motion-safe (Parallax degrades to static). */}
+      {/* Signature showcase — a confident "big reveal" of the work. On sm+ the
+          cover is centred and lifted, flanked by two more screens (the designed
+          trio). On phones the cover is already the centrepiece of the hero just
+          above, so re-showing it here reads as a duplicate — instead mobile drops
+          the cover and reveals the two OTHER screens as a balanced pair, so the
+          beat shows fresh work at every size. Woven parallax; reduced-motion-safe. */}
       {meta.kind !== "web" && heroScreens.length === 3 && (
         <section className="relative isolate overflow-hidden border-b border-line py-space-10">
           <div
@@ -381,37 +384,41 @@ export default async function CaseStudy({
           />
           <Container>
             <Reveal>
-              <div className="mx-auto flex max-w-[42rem] items-end justify-center gap-space-4 sm:gap-space-7">
-                <div className="hidden w-[28%] -translate-y-2 sm:block">
+              <div className="mx-auto flex max-w-[42rem] items-end justify-center gap-space-5 sm:gap-space-7">
+                {/* Left — a flank on desktop; a full member of the mobile pair. */}
+                <div className="w-[45%] -translate-y-2 sm:w-[28%]">
                   <Parallax speed={0.05}>
                     <PhoneFrame
                       src={heroScreens[1]}
                       alt={`${meta.title} — screen`}
-                      sizes="14rem"
+                      sizes="(min-width: 640px) 14rem, 45vw"
                       imgClassName="object-top"
-                      className="opacity-80"
+                      className="opacity-100 sm:opacity-80"
                     />
                   </Parallax>
                 </div>
-                <div className="relative z-10 w-[62%] -translate-y-6 sm:w-[40%]">
+                {/* Centre — the cover. Hidden on phones (it leads the hero above);
+                    the lifted centrepiece from sm up. */}
+                <div className="relative z-10 hidden w-[40%] -translate-y-6 sm:block">
                   <Parallax speed={0.09}>
                     <PhoneFrame
                       src={heroScreens[0]}
                       alt={`${meta.title} — cover screen`}
-                      sizes="(min-width: 640px) 18rem, 62vw"
+                      sizes="18rem"
                       imgClassName="object-top"
                       className="shadow-[0_44px_100px_-32px_rgba(0,0,0,0.92)]"
                     />
                   </Parallax>
                 </div>
-                <div className="hidden w-[28%] -translate-y-2 sm:block">
+                {/* Right — a flank on desktop; the other half of the mobile pair. */}
+                <div className="w-[45%] -translate-y-2 sm:w-[28%]">
                   <Parallax speed={0.07}>
                     <PhoneFrame
                       src={heroScreens[2]}
                       alt={`${meta.title} — screen`}
-                      sizes="14rem"
+                      sizes="(min-width: 640px) 14rem, 45vw"
                       imgClassName="object-top"
-                      className="opacity-80"
+                      className="opacity-100 sm:opacity-80"
                     />
                   </Parallax>
                 </div>

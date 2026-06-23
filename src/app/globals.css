@@ -153,6 +153,46 @@
   .card-neon-row:focus-within {
     border-color: var(--neon);
   }
+
+  /*
+   * Spectrum text accent — the one place a colour gradient is allowed to touch
+   * type. An earned emphasis on the hero tagline's closing phrase ("unmistakably
+   * yours"): the site's signature violet→blue, clipped to the glyphs. Opacity is
+   * baked into the gradient stops (color-mix at definition time), never via a
+   * Tailwind /opacity modifier — those silently no-op on var() token colours.
+   * `-webkit-text-fill-color` inherits, so the fill survives GSAP SplitText
+   * wrapping each word in its own span. Falls back to a solid spectrum hue where
+   * background-clip:text is unsupported.
+   */
+  .text-spectrum {
+    color: var(--spectrum-violet);
+  }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .text-spectrum {
+      background-image: linear-gradient(
+        100deg,
+        var(--spectrum-violet) 0%,
+        var(--spectrum-blue) 100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+  }
+  /*
+   * Forced-colors / Windows High Contrast strips the gradient background-image
+   * but leaves `-webkit-text-fill-color: transparent` in force — which would
+   * knock the phrase out to invisible for the exact low-vision audience that
+   * enables High Contrast. Restore a solid, system-coloured, visible fill there.
+   */
+  @media (forced-colors: active) {
+    .text-spectrum {
+      background-image: none;
+      -webkit-text-fill-color: currentColor;
+      color: CanvasText;
+    }
+  }
 }
 
 @layer base {

@@ -55,13 +55,17 @@ export function Hero() {
       {/* Layer 2 — reading scrim between the WebGL (z-0) and the content (z-10):
           pools the near-black base behind the centre stack and fades to transparent
           at the edges, so the marbled field reads as quiet atmosphere behind the
-          type. Decorative; its own layer, so first paint is unaffected. */}
+          type. Tightened for cinematic contrast — the centre pool is darker and
+          falls off sooner so the type lifts cleanly off the field, and a gentle
+          outer vignette sinks the corners (no colour added; the aurora still
+          breathes around the edges). Decorative; its own layer, so first paint is
+          unaffected. */}
       <div
         aria-hidden="true"
         className="absolute inset-0 z-[2]"
         style={{
           background:
-            "radial-gradient(120% 90% at 50% 44%, color-mix(in srgb, var(--bg) 88%, transparent) 0%, color-mix(in srgb, var(--bg) 62%, transparent) 34%, transparent 70%), radial-gradient(64% 52% at 50% 46%, var(--bg) 0%, color-mix(in srgb, var(--bg) 70%, transparent) 46%, transparent 78%)",
+            "radial-gradient(116% 86% at 50% 44%, color-mix(in srgb, var(--bg) 94%, transparent) 0%, color-mix(in srgb, var(--bg) 70%, transparent) 28%, transparent 66%), radial-gradient(60% 50% at 50% 46%, var(--bg) 0%, color-mix(in srgb, var(--bg) 80%, transparent) 42%, transparent 68%), radial-gradient(125% 125% at 50% 42%, transparent 58%, color-mix(in srgb, var(--bg) 42%, transparent) 100%)",
         }}
       />
 
@@ -70,15 +74,30 @@ export function Hero() {
           frame under reduced motion (see AnimatedNoise). */}
       <AnimatedNoise opacity={0.04} className="z-[1]" />
 
+      {/* Bottom scrim — the centre reading scrim (Layer 2) fades to transparent
+          before it reaches the lower edge, so the scroll-cue row would otherwise
+          sit on the brightest, unscrimmed part of the aurora and wash out. A short
+          dark gradient anchored to the bottom gives the row a footing and reads as
+          a clean hand-off into the near-black section below. Decorative; z-[2] so
+          it's above the WebGL (z-0) and below the content (z-10). */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 z-[2] h-32"
+        style={{
+          background:
+            "linear-gradient(to top, var(--bg) 0%, color-mix(in srgb, var(--bg) 72%, transparent) 40%, transparent 100%)",
+        }}
+      />
+
       {/* Centered stack — badge, headline, subhead, buttons. */}
       <Container className="relative z-10 flex flex-1 flex-col items-center justify-center py-space-9 text-center [@media(max-height:600px)]:py-space-5">
         <Reveal trigger="load" delay={SEQ.badge} duration={durations.base}>
-          <span className="inline-flex items-center gap-space-2 rounded-full border border-line bg-surface px-space-4 py-space-2 font-sans text-caption text-muted">
+          <span className="inline-flex items-center gap-space-2 rounded-full border border-white/10 bg-[color-mix(in_srgb,var(--surface)_60%,transparent)] px-space-4 py-space-2 font-sans text-caption text-muted shadow-[0_4px_20px_-10px_rgba(0,0,0,0.7)] backdrop-blur-md">
             <span
               aria-hidden="true"
               className="h-[6px] w-[6px] rounded-full bg-neon motion-safe:animate-status-pulse"
             />
-            UI/UX &amp; Graphic Designer
+            Product Designer · Front-End
           </span>
         </Reveal>
 
@@ -94,22 +113,44 @@ export function Hero() {
             tiles. The override + its timing live in HeroWordmark (the flaps are
             settled instantly under reduced motion, so the dissolve is too). */}
         <div className="mt-space-6">
-          <h1 className="sr-only">Praduan Saha — UI/UX and graphic designer</h1>
+          <h1 className="sr-only">Praduan Saha — product designer and front-end developer</h1>
           <HeroWordmark />
         </div>
 
         {/* Tagline — rises word-by-word behind a clip mask (the site's kinetic
-            type primitive), so it arrives with the same energy as the wordmark. */}
-        <TextReveal
-          as="p"
-          by="words"
-          trigger="load"
-          delay={SEQ.tagline}
-          stagger={0.05}
-          className="mt-space-6 max-w-[20ch] font-display text-heading text-fg"
-        >
-          {"Design that's clear, usable, and unmistakably yours."}
-        </TextReveal>
+            type primitive), so it arrives with the same energy as the wordmark.
+            Split into two inline reveals so the closing phrase can carry the one
+            sanctioned colour moment: "unmistakably yours" rises a beat LAST and in
+            the signature spectrum gradient (.text-spectrum), landing as the
+            punchline. The wordmark stays monochrome; colour still belongs to the
+            work, earned here only by the line that literally means "your mark". */}
+        <p className="mt-space-6 max-w-[20ch] font-display text-heading text-fg">
+          <TextReveal
+            as="span"
+            by="words"
+            trigger="load"
+            delay={SEQ.tagline}
+            stagger={0.05}
+          >
+            {"Design that's clear, usable, and"}
+          </TextReveal>{" "}
+          {/* The punchline rises as a single unit via Reveal (not TextReveal):
+              background-clip:text only fills the element that directly holds the
+              text, so the gradient must sit on the same element that gets the
+              transform — SplitText's per-word inline-block wrappers would leave it
+              transparent. inline-block so the y-rise applies (transforms are
+              ignored on display:inline); it fits within max-w-[20ch] so it can't
+              overflow. */}
+          <Reveal
+            as="span"
+            trigger="load"
+            delay={SEQ.tagline + 0.18}
+            y={16}
+            className="text-spectrum inline-block"
+          >
+            {"unmistakably yours."}
+          </Reveal>
+        </p>
 
         {/* Subhead — masked line-by-line rise (lines, not words, so a paragraph
             stays comfortable to read while still entering dynamically). */}
@@ -120,7 +161,7 @@ export function Hero() {
           delay={SEQ.sub}
           className="mt-space-5 max-w-[48ch] font-sans text-body-l text-muted"
         >
-          {"I'm Praduan Saha, a UI/UX and graphic designer working since 2019 — turning complex ideas into clean interfaces and cohesive visual systems across web, mobile, and brand."}
+          {"I'm Praduan Saha, a product designer who also ships front-end — working since 2019, now inside a B2B AI go-to-market product. I turn complex, data-heavy ideas into clean interfaces and the systems that hold them together."}
         </TextReveal>
 
         {/* CTAs — each button rises in on its own Reveal (load-triggered), so they
@@ -135,7 +176,7 @@ export function Hero() {
               variant="invert"
               shape="pill"
               size="lg"
-              className="w-full sm:w-auto hover:-translate-y-px"
+              className="w-full shadow-[0_14px_40px_-16px_rgba(0,0,0,0.7)] hover:-translate-y-px sm:w-auto"
             >
               View work
             </Button>
@@ -151,7 +192,7 @@ export function Hero() {
               variant="secondary"
               shape="pill"
               size="lg"
-              className="w-full sm:w-auto hover:-translate-y-px hover:bg-surface"
+              className="w-full bg-white/[0.04] backdrop-blur-md hover:-translate-y-px hover:bg-white/[0.07] sm:w-auto"
             >
               Get in touch
             </Button>
@@ -168,9 +209,12 @@ export function Hero() {
           duration={durations.base}
           className="flex flex-col gap-space-3 pb-space-5 pt-space-3"
         >
-          <div className="flex items-center gap-space-4 font-mono text-caption uppercase tracking-[0.18em] text-muted">
+          <div className="flex items-center gap-space-4 font-mono text-caption uppercase tracking-[0.14em] text-white/75 [text-shadow:0_1px_10px_rgba(0,0,0,0.55)]">
             <span className="shrink-0">Scroll</span>
-            <span aria-hidden="true" className="h-px flex-1 bg-line" />
+            <span
+              aria-hidden="true"
+              className="h-px flex-1 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+            />
             <span className="shrink-0">to see work</span>
           </div>
         </Reveal>

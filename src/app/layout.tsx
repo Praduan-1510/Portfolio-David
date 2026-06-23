@@ -39,22 +39,22 @@ export const metadata: Metadata = {
   // inherit "/"). metadataBase resolves these relative paths to absolute URLs.
   alternates: { canonical: "/" },
   title: {
-    default: "Praduan Saha — UI/UX & Graphic Designer",
+    default: "Praduan Saha — Product Designer (Design + Front-End)",
     template: "%s — Praduan Saha",
   },
   description:
-    "Graphic and UI/UX designer based in Kolkata, crafting clear, usable interfaces and cohesive brand systems across web, mobile, and visual design.",
+    "Product designer and front-end developer based in Kolkata — turning complex, data-heavy products into clear, usable interfaces, and building the front-end that ships them.",
   openGraph: {
-    title: "Praduan Saha — UI/UX & Graphic Designer",
+    title: "Praduan Saha — Product Designer (Design + Front-End)",
     description:
-      "Portfolio of Praduan Saha — UI/UX and graphic designer focused on clarity, usability, and strong visual systems.",
+      "Portfolio of Praduan Saha — a product designer who designs and ships production front-end, focused on clarity, usable systems, and getting work into production.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Praduan Saha — UI/UX & Graphic Designer",
+    title: "Praduan Saha — Product Designer (Design + Front-End)",
     description:
-      "Portfolio of Praduan Saha — UI/UX and graphic designer focused on clarity, usability, and strong visual systems.",
+      "Portfolio of Praduan Saha — a product designer who designs and ships production front-end, focused on clarity, usable systems, and getting work into production.",
   },
 };
 
@@ -78,7 +78,14 @@ const personJsonLd = {
     addressRegion: site.location.addressRegion,
     addressCountry: site.location.addressCountry,
   },
-  knowsAbout: ["UI/UX design", "Graphic design", "Figma", "Branding"],
+  knowsAbout: [
+    "Product design",
+    "UI/UX design",
+    "Front-end development",
+    "Design systems",
+    "Figma",
+    "Graphic design",
+  ],
 };
 
 export default function RootLayout({

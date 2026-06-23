@@ -179,3 +179,80 @@ export function Stat({ value, label }: { value?: string; label?: string }) {
     </div>
   );
 }
+
+/* ── Lede ─ the executive deck. A short, confident thesis statement set at the
+   very top of a study (before the first section), under an accent rule. It frames
+   the whole case study in one line for a skimming reader — the "lead with the
+   punchline" move. Rendered as a <div> so it never steals the body's lead-paragraph
+   (:first-of-type) treatment from the Overview that follows. **bold** inside lifts
+   to the accent. ───────────────────────────────────────────────────────────── */
+export function Lede({ children }: { children?: React.ReactNode }) {
+  return (
+    <Reveal as="div" className="mb-space-9 border-l-2 border-accent pl-space-6">
+      <span className="mb-space-3 block font-mono text-caption uppercase tracking-[0.18em] text-accent">
+        In one line
+      </span>
+      <div className="max-w-[46ch] font-display text-[clamp(1.4rem,2.6vw,2rem)] font-medium leading-[1.18] tracking-[-0.01em] text-fg [&>p:last-child]:mb-0 [&_strong]:font-semibold [&_strong]:text-accent">
+        {children}
+      </div>
+    </Reveal>
+  );
+}
+
+/* ── Goals / Goal ─ a "goals & signals" instrument table. Each row pairs a design
+   GOAL with the SUCCESS SIGNAL it would be judged by — framed as a target/hypothesis,
+   never a claimed result — plus an optional honest status chip ("untested hypothesis",
+   "measured on the live site", "design intent"). This is how a concept earns a
+   credible goals→outcome arc without fabricating metrics. Same counter/accent/surface
+   language as <Finding> and <DecisionCard>. ──────────────────────────────────── */
+export function Goals({ children }: { children?: React.ReactNode }) {
+  return (
+    <StaggerGroup
+      as="ol"
+      stagger={0.08}
+      className="my-space-8 grid list-none gap-space-5 [counter-reset:goal]"
+    >
+      {children}
+    </StaggerGroup>
+  );
+}
+
+export function Goal({
+  goal,
+  signal,
+  status,
+}: {
+  goal?: string;
+  signal?: string;
+  status?: string;
+}) {
+  return (
+    <li className="grid gap-space-4 rounded-none border-t-2 border-[color:color-mix(in_srgb,var(--accent)_30%,var(--line))] bg-[color:color-mix(in_srgb,var(--surface)_55%,transparent)] p-space-5 [counter-increment:goal] sm:grid-cols-[1.25fr_1fr] sm:items-start sm:gap-space-6">
+      <div>
+        <span
+          aria-hidden="true"
+          className="font-mono text-caption tabular-nums text-accent before:content-[counter(goal,decimal-leading-zero)]"
+        />
+        {goal && (
+          <p className="mt-space-2 font-display text-body-l font-medium leading-snug text-fg">
+            {goal}
+          </p>
+        )}
+      </div>
+      {(signal || status) && (
+        <div className="border-t border-line pt-space-4 sm:border-l sm:border-t-0 sm:pl-space-6 sm:pt-0">
+          <span className="block font-mono text-caption uppercase tracking-[0.16em] text-accent">
+            Success signal
+          </span>
+          {signal && <p className="mt-space-2 text-body text-muted">{signal}</p>}
+          {status && (
+            <span className="mt-space-3 inline-flex items-center gap-space-2 rounded-full border border-line px-space-3 py-space-1 font-mono text-caption uppercase tracking-[0.1em] text-muted">
+              <span aria-hidden="true" className="h-[5px] w-[5px] rounded-full bg-muted" />
+              {status}
+            </span>
+          )}
+        </div>
+      )}
+    </li>
+  );
+}

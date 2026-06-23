@@ -172,11 +172,6 @@ const FRAG = /* glsl */ `
     col += chroma * glow * 0.62 * centerDamp * vig;
     col += vec3(smoothstep(0.74, 1.0, n) * 0.05 * vig);
 
-    // Soft bloom following the pointer, tinted to the local hue (aspect-corrected).
-    vec2 sc = (vUv - 0.5) * vec2(aspect, 1.0);
-    vec2 pc = uPointer * 0.5 * vec2(aspect, 1.0);
-    col += chroma * smoothstep(0.42, 0.0, distance(sc, pc)) * 0.12 * vig;
-
     // Ordered-ish dither: near-black gradients band badly on 8-bit displays;
     // ±1/255 of hashed noise hides the steps without visible grain.
     float dither = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453);

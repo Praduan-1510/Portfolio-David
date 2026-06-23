@@ -43,8 +43,8 @@ export function Footer() {
             Praduan Saha
           </p>
           <Text variant="body" className="mt-space-3 text-muted">
-            UI/UX &amp; graphic designer. Clarity, usability, and strong visual
-            systems.
+            Product designer &amp; front-end developer. Clarity, usable systems,
+            shipped to production.
           </Text>
         </div>
 

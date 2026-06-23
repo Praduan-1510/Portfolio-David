@@ -17,22 +17,22 @@ import { ProfileHero } from "./ProfileHero";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Graphic and UI/UX designer based in Kolkata — creating digital experiences through systematic design thinking and precise execution.",
+    "Product designer and front-end developer based in Kolkata — creating digital experiences through systematic design thinking and precise execution.",
   alternates: { canonical: "/about" },
   openGraph: {
     title: "About — Praduan Saha",
     description:
-      "Graphic and UI/UX designer based in Kolkata — creating digital experiences through systematic design thinking and precise execution.",
+      "Product designer and front-end developer based in Kolkata — creating digital experiences through systematic design thinking and precise execution.",
   },
   twitter: {
     title: "About — Praduan Saha",
     description:
-      "Graphic and UI/UX designer based in Kolkata — creating digital experiences through systematic design thinking and precise execution.",
+      "Product designer and front-end developer based in Kolkata — creating digital experiences through systematic design thinking and precise execution.",
   },
 };
 
 const BIO = [
-  "I'm Praduan Saha, a graphic and UI/UX designer born and raised in Asansol, West Bengal, and now based in Kolkata. Since 2019 I've worked across content development, learning design, and visual and product design — happiest at the point where a messy, complex idea turns into something clear, usable, and good-looking, whether that's a mobile flow, a landing page, or a full brand system.",
+  "I'm Praduan Saha, a product designer and front-end developer born and raised in Asansol, West Bengal, and now based in Kolkata. Since 2019 I've worked across content development, learning design, and visual and product design — happiest at the point where a messy, complex idea turns into something clear, usable, and good-looking, whether that's a mobile flow, a landing page, or a full brand system.",
   "My path ran from content and instructional design into graphic and UI/UX design, so I think as much about structure and information as I do about how something looks. I work primarily in Figma — wireframing, prototyping, and building reusable components — and I care about hierarchy, accessibility, and shipping work that actually supports the goal behind it.",
   "I studied English (Honours) at Amity University, Kolkata, which still shapes how I approach design: reading closely, structuring information, and communicating clearly. A creative mindset, a positive outlook, and strong communication are what I lean on to lead work and collaborate well across a team.",
 ];

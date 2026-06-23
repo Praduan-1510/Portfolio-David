@@ -8,9 +8,9 @@
 
 ## Metadata / SEO
 
-- **Site title:** Praduan Saha — UI/UX & Graphic Designer
-- **Meta description** (~155 chars): UI/UX and graphic designer crafting clear, usable interfaces and cohesive brand systems. 3+ years across web, mobile, and visual design.
-- **Social / OG description:** Portfolio of Praduan Saha — UI/UX and graphic designer focused on clarity, usability, and strong visual systems.
+- **Site title:** Praduan Saha — Product Designer (Design + Front-End)
+- **Meta description** (~155 chars): Product designer and front-end developer turning complex, data-heavy products into clear, usable interfaces — and building the front-end that ships them.
+- **Social / OG description:** Portfolio of Praduan Saha — a product designer who designs and ships production front-end, focused on clarity, usable systems, and getting work into production.
 - **Nav / logo mark:** "Praduan Saha" (or initials **PS** for a compact mark)
 
 ---
@@ -18,7 +18,7 @@
 ## Hero
 
 **Eyebrow / pill** (pick one):
-- UI/UX & Graphic Designer
+- Product Designer · Front-End
 - Designing clear, usable, on-brand work
 - `[confirm]` Available for work — *only if true*
 
@@ -29,7 +29,7 @@
 4. Clear design for complicated problems.
 
 **Subhead:**
-I'm Praduan Saha, a UI/UX and graphic designer with 3+ years turning complex ideas into clean interfaces and cohesive visual systems — across web, mobile, and brand.
+I'm Praduan Saha, a product designer who also ships front-end — working since 2019, now inside a B2B AI go-to-market product. I turn complex, data-heavy ideas into clean interfaces and the systems that hold them together.
 
 **Buttons:**
 - Primary: **View work** → `/work`
@@ -42,7 +42,7 @@ I'm Praduan Saha, a UI/UX and graphic designer with 3+ years turning complex ide
 ## About
 
 **One-liner** (teasers / meta):
-UI/UX and graphic designer based in West Bengal, India — focused on clarity, usability, and strong visual systems.
+Product designer and front-end developer based in West Bengal, India — focused on clarity, usable systems, and shipping work into production.
 
 **About — long (about page):**
 
@@ -119,7 +119,7 @@ Created infographics, blog visuals, and marketing assets, and partnered with SEO
 ## Footer
 
 - Mark: Praduan Saha
-- Line: UI/UX & graphic designer. Clarity, usability, and strong visual systems.
+- Line: Product designer & front-end developer. Clarity, usable systems, shipped to production.
 - Nav: Work · About · Contact
 - Social: LinkedIn · Email
 - `[confirm]` Availability line: "Open to freelance and full-time opportunities" — include if true

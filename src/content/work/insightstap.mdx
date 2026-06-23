@@ -2,13 +2,13 @@
 title: InsightsTap — Website
 slug: insightstap
 client: InsightsTap
-role: Front-End Development & Visual Overhaul
+role: Design & Front-End Development
 year: 2026
-services: [Front-End Development, User Interface Design]
+services: [UI Design, Front-End Development, Design Engineering]
 summary: >-
-  The live B2B SaaS site for an AI go-to-market platform — a front-end build and
-  visual overhaul that turns dense intent-signal and GTM-automation ideas into a
-  clean, fast, high-contrast interface.
+  The live site for a B2B AI go-to-market platform — I designed the interface and
+  shipped the production front-end, turning dense intent-signal and GTM-automation
+  ideas into a clean, fast, high-contrast experience.
 cover: /videos/insightstap-poster.jpg
 kind: web
 video:
@@ -22,9 +22,13 @@ featured: true
 order: 0
 ---
 
+<Lede>
+Designing **and** shipping the live front-end of a B2B AI go-to-market platform — turning an invisible, data-heavy product into something a cold visitor grasps in one scroll.
+</Lede>
+
 ## Overview
 
-InsightsTap is a live B2B SaaS platform that productises *intent signals* — helping go-to-market teams run enterprise sales with the speed of an e-commerce engine. I led the front-end development and visual overhaul of the public site, the one real, shipped product in this portfolio. I owned the interface that turns the data story into something people can read, trust, and act on — translating the team's go-to-market concepts into layout, motion, and a component system.
+InsightsTap is a live B2B SaaS platform that productises *intent signals* — helping go-to-market teams run enterprise sales with the speed of an e-commerce engine. I **designed the interface and shipped the production front-end** of the public site — the one real, shipped product in this portfolio. I owned it end to end: translating the team's go-to-market concepts into layout, motion, and a component system, then building and shipping the live front-end that turns the data story into something people can read, trust, and act on.
 
 ## Context
 
@@ -42,6 +46,28 @@ Go-to-market is an abstract domain. Intent signals, the "dark funnel", account-b
 > The brief, in one line: make an invisible, data-heavy product feel as concrete and quick as the e-commerce engines it's compared to.
 
 The site had to make a dense, technical product instantly graspable and fast, on a high-contrast brand, without dumbing the ideas down. For visitors, the risk is bouncing before the concept lands. For the business, an unclear front-end undersells a genuinely capable platform. The constraints were real too: a high-contrast brand to honour, heavy data-driven sections to keep legible, and a need to perform from phone to wide desktop.
+
+## Goals & signals
+
+Three goals shaped the build — each paired with the signal I'd judge it by, framed as a target rather than a number claimed after the fact.
+
+<Goals>
+  <Goal
+    goal="A first-time visitor can restate what the product does within one scroll."
+    signal="Comprehension in a 5-second test, and a low bounce on the hero of the live site."
+    status="Target — measurable on production"
+  />
+  <Goal
+    goal="The densest sections — metrics, process, integrations — stay legible on a high-contrast brand."
+    signal="AA contrast across text and accents, readable from a 320px phone to a wide desktop."
+    status="Verified in the design"
+  />
+  <Goal
+    goal="The site stays fast everywhere, despite heavy data-driven sections."
+    signal="Built against an LCP < 2.5s · CLS < 0.1 · INP < 200ms budget — lazy media, reserved space, capped work."
+    status="Budget targeted — measure on the live site"
+  />
+</Goals>
 
 ## Research
 
@@ -113,13 +139,18 @@ Responsive layouts from phone to wide desktop, with performance and legibility p
 
 ## Outcome
 
-A shipped, live site that frames a complex GTM platform clearly and loads fast — it's the production site at insightstap.com today.
+A shipped, live site that frames a complex GTM platform clearly and loads fast — the production site at insightstap.com today, owned front to back: interface design through to the shipped front-end, on a single component system.
+
+{/* TODO (Praduan): run Lighthouse on the live insightstap.com. If the numbers are
+    strong, swap one stat below for a real Core Web Vitals figure (e.g. the actual
+    LCP) — an honest, measurable, rare-in-a-design-portfolio metric. Don't publish
+    weak numbers; if they're not flattering, keep the scope-based stats as they are. */}
 
 <Stats>
   <Stat value="Live" label="in production" />
-  <Stat value="4" label="step engine" />
+  <Stat value="End-to-end" label="design + front-end" />
   <Stat value="1" label="component system" />
-  <Stat value="1" label="shipped site" />
+  <Stat value="AA" label="contrast · phone→desktop" />
 </Stats>
 
 ## Reflection

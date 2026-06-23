@@ -15,7 +15,7 @@ const SITE_HOST = new URL(SITE_URL).host;
  * no external font fetches to fail at build/edge time. Literal hex is required
  * here because ImageResponse takes raw CSS, not Tailwind tokens.
  */
-export const alt = "Praduan Saha — UI/UX & Graphic Designer";
+export const alt = "Praduan Saha — Product Designer (Design + Front-End)";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

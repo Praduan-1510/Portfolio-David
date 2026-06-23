@@ -11,6 +11,9 @@ import {
   StatusColourSystem,
   Stats,
   Stat,
+  Lede,
+  Goals,
+  Goal,
 } from "./CaseStudyBlocks";
 
 // Flatten MDX children to plain text so an h2's id matches the slug the contents
@@ -186,4 +189,7 @@ export const mdxComponents = {
   StatusColourSystem,
   Stats,
   Stat,
+  Lede,
+  Goals,
+  Goal,
 };

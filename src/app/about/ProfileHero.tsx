@@ -17,7 +17,7 @@ import { AboutHeroMap } from "./AboutHeroMap";
 
 const HEADLINE = "Turning complex problems into clean, usable products.";
 const SUPPORT =
-  "UI/UX & graphic designer based in Kolkata — from systems thinking through to precise execution.";
+  "Product designer & front-end developer based in Kolkata — from systems thinking through to precise execution.";
 
 function useKolkataClock() {
   const [time, setTime] = useState<string | null>(null);

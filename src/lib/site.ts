@@ -13,9 +13,9 @@ export const SITE_URL =
 /** Person / site facts. Kept verbatim from Content/Site.md — do not fabricate. */
 export const site = {
   name: "Praduan Saha",
-  jobTitle: "UI/UX & Graphic Designer",
+  jobTitle: "Product Designer (Design + Front-End)",
   description:
-    "Creating digital experiences through systematic design thinking and precise execution.",
+    "Product designer who also ships front-end — turning complex, data-heavy ideas into clear, usable interfaces and the systems that hold them together.",
   email: "spraduan@gmail.com",
   linkedIn: "https://www.linkedin.com/in/praduan-saha-9a8965172/",
   location: {

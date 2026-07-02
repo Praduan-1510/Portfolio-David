@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { Container, Eyebrow } from "@/components/primitives";
 import { cn } from "@/lib/utils/cn";
@@ -105,6 +106,9 @@ function ToolLogo({
 
 export function LogoMarquee({ className }: { className?: string }) {
   const reduced = useReducedMotion();
+  // WCAG 2.2.2 — the infinite loop needs an on-page pause mechanism (the CSS
+  // animation pauses via animation-play-state; hover-pause alone isn't a control).
+  const [userPaused, setUserPaused] = useState(false);
 
   return (
     <section
@@ -132,25 +136,45 @@ export function LogoMarquee({ className }: { className?: string }) {
         </Container>
       ) : (
         // Full-bleed seamless loop, paused on hover, edges faded.
-        <div
-          className="group relative w-full overflow-hidden"
-          style={{ maskImage: EDGE_MASK, WebkitMaskImage: EDGE_MASK }}
-        >
-          <ul className="flex w-max flex-nowrap items-center motion-safe:animate-marquee-x group-hover:[animation-play-state:paused]">
-            {TOOLS.map((tool, i) => (
-              <ToolLogo key={`a-${tool.src}`} tool={tool} gapClassName={GAP} index={i} />
-            ))}
-            {/* Duplicate half — hidden from assistive tech, completes the loop. */}
-            {TOOLS.map((tool, i) => (
-              <ToolLogo
-                key={`b-${tool.src}`}
-                tool={tool}
-                gapClassName={GAP}
-                decorative
-                index={i}
-              />
-            ))}
-          </ul>
+        <div className="relative">
+          <div
+            className="group relative w-full overflow-hidden"
+            style={{ maskImage: EDGE_MASK, WebkitMaskImage: EDGE_MASK }}
+          >
+            <ul
+              className={cn(
+                "flex w-max flex-nowrap items-center motion-safe:animate-marquee-x group-hover:[animation-play-state:paused]",
+                userPaused && "[animation-play-state:paused]",
+              )}
+            >
+              {TOOLS.map((tool, i) => (
+                <ToolLogo key={`a-${tool.src}`} tool={tool} gapClassName={GAP} index={i} />
+              ))}
+              {/* Duplicate half — hidden from assistive tech, completes the loop. */}
+              {TOOLS.map((tool, i) => (
+                <ToolLogo
+                  key={`b-${tool.src}`}
+                  tool={tool}
+                  gapClassName={GAP}
+                  decorative
+                  index={i}
+                />
+              ))}
+            </ul>
+          </div>
+          {/* Pause control — outside the masked container so the edge fade
+              doesn't wash it out; ::before extends the 44px hit area. */}
+          <button
+            type="button"
+            onClick={() => setUserPaused((p) => !p)}
+            className="absolute right-space-3 top-1/2 z-10 inline-flex -translate-y-1/2 items-center gap-[5px] rounded-full border border-line bg-black/45 px-space-2 py-[2px] font-mono text-[0.625rem] uppercase tracking-[0.14em] text-white/85 opacity-60 backdrop-blur-sm transition-opacity duration-fast ease-out-quad before:absolute before:-inset-3 before:content-[''] hover:opacity-100 focus-visible:opacity-100"
+          >
+            <span
+              aria-hidden="true"
+              className={cn("h-[5px] w-[5px] rounded-full", userPaused ? "bg-white/60" : "bg-neon")}
+            />
+            {userPaused ? "Play" : "Pause"}
+          </button>
         </div>
       )}
     </section>

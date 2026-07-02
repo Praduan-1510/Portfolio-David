@@ -99,6 +99,11 @@ export function BrowserMockup({
   const showVideo = hero && !!mp4 && !reduced;
   const runBoot = hero && boot;
   const videoRef = useRef<HTMLVideoElement>(null);
+  // WCAG 2.2.2: the looping capture needs an on-page pause mechanism. A user
+  // pause beats the IntersectionObserver auto-play (ref mirrors state so the IO
+  // callback reads it without resubscribing).
+  const [userPaused, setUserPaused] = useState(false);
+  const userPausedRef = useRef(false);
 
   // Cursor parallax — the slab rotates toward the pointer for a tangible 3D look.
   // Only wired on fine pointers (mouse) with motion allowed; touch/reduced-motion
@@ -137,7 +142,7 @@ export function BrowserMockup({
     if (!v) return;
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) v.play().catch(() => {});
+        if (entry.isIntersecting && !userPausedRef.current) v.play().catch(() => {});
         else v.pause();
       },
       { threshold: 0.5 },
@@ -145,6 +150,16 @@ export function BrowserMockup({
     io.observe(v);
     return () => io.disconnect();
   }, [showVideo]);
+
+  const togglePlayback = () => {
+    const v = videoRef.current;
+    const next = !userPausedRef.current;
+    userPausedRef.current = next;
+    setUserPaused(next);
+    if (!v) return;
+    if (next) v.pause();
+    else v.play().catch(() => {});
+  };
 
   return (
     <div className={cn(hero && "browser-stage", className)}>
@@ -262,6 +277,23 @@ export function BrowserMockup({
             </span>
           )}
 
+          {/* Pause/play — the WCAG 2.2.2 mechanism for the looping capture.
+              Mirrors the badge vocabulary at the opposite corner; ::before
+              extends the hit area to a comfortable 44px. Hero mode is always
+              standalone (never nested in a card link), so a button is safe. */}
+          {showVideo && (
+            <button
+              type="button"
+              onClick={togglePlayback}
+              className="absolute bottom-space-2 left-space-2 z-[2] inline-flex items-center gap-[5px] rounded-full bg-black/45 px-space-2 py-[2px] font-mono text-[0.625rem] uppercase tracking-[0.14em] text-white/85 backdrop-blur-sm transition-colors duration-fast ease-out-quad before:absolute before:-inset-3 before:content-[''] hover:text-neon"
+            >
+              <span
+                aria-hidden="true"
+                className={cn("h-[5px] w-[5px] rounded-full", userPaused ? "bg-white/60" : "bg-neon")}
+              />
+              {userPaused ? "Play capture" : "Pause capture"}
+            </button>
+          )}
           {/* Live-capture badge — signals this is a real screen recording (and reads
               "poster" honestly under reduced motion). Hero only. */}
           {hero && (

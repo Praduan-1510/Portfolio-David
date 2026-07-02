@@ -108,13 +108,6 @@ export function SignalTrace({
                 }}
               />
             </span>
-            {/* Ordinal below the line — the plot is numbered. */}
-            <span
-              aria-hidden="true"
-              className="absolute top-full mt-space-2 font-mono text-[0.625rem] tabular-nums tracking-[0.14em] text-muted transition-colors duration-fast ease-out-quad group-hover:text-fg"
-            >
-              {String(i + 1).padStart(2, "0")}
-            </span>
           </motion.span>
         </NextLink>
       ))}

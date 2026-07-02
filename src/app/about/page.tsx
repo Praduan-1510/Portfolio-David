@@ -9,6 +9,7 @@ import {
   FlapDigits,
   Magnetic,
   PortraitFrame,
+  ToolGrid,
 } from "@/components/motion";
 import { spectrumAt } from "@/lib/spectrum";
 import { TimelineRail } from "./TimelineRail";
@@ -395,12 +396,17 @@ export default function About() {
             </div>
           ))}
         </StaggerGroup>
-        <Reveal>
+        {/* Toolchain — the logo set that used to run as a marquee on home,
+            grounded here as a quiet static grid where a tools inventory is
+            defensible content rather than a first-scroll trope. */}
+        <Reveal className="mt-space-8">
+          <Eyebrow>Toolchain</Eyebrow>
+          <ToolGrid className="mt-space-5" />
           <Text
             variant="caption"
-            className="mt-space-6 font-mono uppercase tracking-[0.12em] text-muted"
+            className="mt-space-5 font-mono uppercase tracking-[0.12em] text-muted"
           >
-            Tools: {TOOLS}
+            Plus: {TOOLS}
           </Text>
         </Reveal>
       </Container>

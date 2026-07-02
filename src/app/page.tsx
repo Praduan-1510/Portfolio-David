@@ -1,43 +1,30 @@
 import Image from "next/image";
 import { Container, Eyebrow, Button, Link } from "@/components/primitives";
-import { spectrumAt } from "@/lib/spectrum";
 import { ProjectCard } from "@/components/work/ProjectCard";
 import { Hero } from "@/components/sections/Hero";
 import { HomeAtmosphere } from "@/components/sections/HomeAtmosphere";
+import { CurrentlyBoard } from "@/components/sections/CurrentlyBoard";
 import { SideNav } from "@/components/layout/SideNav";
 import {
-  LogoMarquee,
   Reveal,
   StaggerGroup,
   TextReveal,
-  FlapDigits,
   AnimatedDivider,
   Magnetic,
   PortraitFrame,
 } from "@/components/motion";
-import { getFeaturedProjectsMeta, getAllProjectsMeta } from "@/lib/content/work";
+import { getFeaturedProjectsMeta } from "@/lib/content/work";
 
 /*
- * Home (ARCHITECTURE.md §6): orchestrated signature <Hero/> + a content-derived
- * stats strip, curated work teaser, about teaser, and contact CTA. Below the hero,
- * every section is choreographed with the shared motion primitives — kinetic
- * section headings (TextReveal), figures that tick up (CountUp), work cards that
- * enter in concert (StaggerGroup), magnetic CTA, and hairlines that draw between
- * sections — all reduced-motion-safe and transform/opacity only.
+ * Home (ARCHITECTURE.md §6): the scroll BUILDS instead of decaying — hero, then
+ * straight to the proof (work grid), then the "Currently" departure board (real
+ * positioning data in the flap signature), the about teaser, and the closing
+ * CTA. The tools marquee moved to /about (a junior-portfolio trope this close
+ * to an "extremely high-end" hero); every section stays choreographed with the
+ * shared motion primitives, reduced-motion-safe, transform/opacity only.
  */
 export default function Home() {
   const featured = getFeaturedProjectsMeta();
-  const all = getAllProjectsMeta();
-
-  // Real, verifiable figures — proof-flavoured, not self-referential inventory.
-  // 41 = the hand-coded HTML/CSS app screens rendered for the case studies
-  // (scripts/render-mockups/manifest.mjs); 95 = Lighthouse accessibility on the
-  // live insightstap.com build (median of 5 runs, scripts/lighthouse-insightstap.mjs).
-  const stats = [
-    { value: new Date().getFullYear() - 2019, label: "years designing" },
-    { value: 41, label: "hand-coded app screens" },
-    { value: 95, label: "Lighthouse a11y · live build" },
-  ];
 
   return (
     <>
@@ -66,46 +53,8 @@ export default function Home() {
         />
         <HomeAtmosphere />
 
-      {/* Tools — logo marquee (dark band, self-contained theme). */}
-      <LogoMarquee />
-
-      {/* Stats strip — figures tick up as they enter view. Three figures read as
-          one instrument panel: a hairline frame top + bottom, a short vertical
-          rule between each cell, and a small mono index tick (01/02/03) over each
-          figure so the row scans like a gauge cluster rather than three floating
-          numbers. */}
-      <Container as="section" className="py-space-8">
-        <StaggerGroup
-          as="dl"
-          stagger={0.08}
-          className="grid grid-cols-1 border-y border-line sm:grid-cols-3"
-        >
-          {stats.map((s, i) => (
-            <div
-              key={s.label}
-              className="group flex min-w-0 flex-col gap-space-2 py-space-6 pl-space-2 pr-space-2 first:pl-0 sm:gap-space-3 sm:py-space-7 sm:pl-space-5 sm:pr-space-4 [&:not(:first-child)]:border-t [&:not(:first-child)]:border-line sm:[&:not(:first-child)]:border-t-0 sm:[&:not(:first-child)]:border-l"
-            >
-              {/* Index ticks each carry their spectrum hue, so the gauge cluster
-                  reads as a colour-coded instrument row (the figures stay mono). */}
-              <span
-                aria-hidden="true"
-                className="font-mono text-caption tabular-nums"
-                style={{ color: spectrumAt(i) }}
-              >
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <dt className="font-display text-display-l leading-none tabular-nums transition-colors duration-base ease-out-quad group-hover:text-neon">
-                <FlapDigits value={s.value} />
-              </dt>
-              <dd className="font-mono text-caption uppercase tracking-[0.06em] text-muted sm:tracking-[0.14em]">
-                {s.label}
-              </dd>
-            </div>
-          ))}
-        </StaggerGroup>
-      </Container>
-
-      {/* Selected work */}
+      {/* Selected work — FIRST beat after the hero: proof before anything
+          self-referential. */}
       <Container as="section" id="work" className="scroll-mt-16 py-space-9">
         <div className="mb-space-7 flex items-end justify-between gap-space-4">
           <div>
@@ -149,6 +98,14 @@ export default function Home() {
         </StaggerGroup>
       </Container>
 
+      {/* "Currently" board — the departure-board answer to a stats strip:
+          real positioning data (what's in design, what shipped and how it
+          measures, what's hand-coded, availability + live IST) fluttering in
+          on the flap signature. */}
+      <Container as="section" className="py-space-8">
+        <CurrentlyBoard />
+      </Container>
+
       <Container>
         <AnimatedDivider spectrum />
       </Container>
@@ -171,9 +128,9 @@ export default function Home() {
               as="h2"
               by="words"
               delay={0.08}
-              className="mt-space-3 font-display text-display-l"
+              className="mt-space-3 max-w-[16ch] font-display text-display-l"
             >
-              Creating digital experiences through systematic design thinking and precise execution.
+              I design the interface, then write the front-end that ships it.
             </TextReveal>
             <Reveal delay={0.12}>
               <Link href="/about" className="mt-space-6 inline-block">

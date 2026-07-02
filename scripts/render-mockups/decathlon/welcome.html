@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  /* Deep-navy → brand-blue → deep-navy gradient sampled from the original:
+     peak (15,150,218) at y≈430 of 852 (50.5%), linear on both sides. */
+  .screen {
+    height: 852px;
+    background: linear-gradient(180deg, #001f33 0%, #0f96da 50.5%, #002f47 100%);
+  }
+  .wordmark {
+    position: absolute;
+    top: 356px;
+    left: 0;
+    width: 393px;
+    height: 94px;
+  }
+  .tagline {
+    position: absolute;
+    top: 454px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+  .btn {
+    position: absolute;
+    left: 56px;
+    width: 280px;
+    height: 34px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn.get-started { top: 681px; background: var(--brand); color: #fff; }
+  .btn.sign-in { top: 728px; background: #fff; color: var(--brand); }
+</style>
+</head>
+<body>
+<div class="screen">
+  <img class="wordmark" src="../assets/decathlon/welcome-wordmark.png" alt="DECATHLON" />
+  <div class="tagline">Your sports. Your world.</div>
+  <div class="btn get-started">Get Started</div>
+  <div class="btn sign-in">Sign in</div>
+</div>
+</body>
+</html>

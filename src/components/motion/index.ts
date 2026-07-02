@@ -12,7 +12,7 @@ export { ScrollProgress } from "./ScrollProgress";
 export { RouteProgressAccent } from "./RouteProgressAccent";
 export { PageTransition } from "./PageTransition";
 export { Marquee } from "./Marquee";
-export { LogoMarquee } from "./LogoMarquee";
+export { LogoMarquee, ToolGrid } from "./LogoMarquee";
 export { AnimatedNoise } from "./AnimatedNoise";
 export { SplitFlapText } from "./SplitFlapText";
 export { FlapText } from "./FlapText";

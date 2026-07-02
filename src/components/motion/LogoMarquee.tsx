@@ -104,6 +104,23 @@ function ToolLogo({
   );
 }
 
+/* Compact static tool grid — the marquee's information without the trope.
+   Mounted on /about ("Toolchain"); the home page no longer carries the band. */
+export function ToolGrid({ className }: { className?: string }) {
+  return (
+    <ul
+      className={cn(
+        "grid grid-cols-5 place-items-center gap-x-space-6 gap-y-space-5 sm:grid-cols-7",
+        className,
+      )}
+    >
+      {TOOLS.map((tool, i) => (
+        <ToolLogo key={tool.src} tool={tool} index={i} />
+      ))}
+    </ul>
+  );
+}
+
 export function LogoMarquee({ className }: { className?: string }) {
   const reduced = useReducedMotion();
   // WCAG 2.2.2 — the infinite loop needs an on-page pause mechanism (the CSS

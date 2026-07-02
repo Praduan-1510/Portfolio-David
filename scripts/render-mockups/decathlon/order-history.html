@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 852px; }
+  .page-head { min-height: 0; }
+  .chips { display: flex; gap: 10px; padding: 0 24px; margin-top: 28px; flex-shrink: 0; }
+  .chips .chip { border-radius: 14px; height: 28px; padding: 0 15px; color: var(--navy); }
+  .chips .chip.active { color: #fff; }
+  .head-rule { margin-top: 12px; }
+  .orders { display: flex; flex-direction: column; gap: 9px; margin: 22px 28px 0; }
+  .order-card { padding: 13px 16px 12px; }
+  .oc-top { display: flex; align-items: center; }
+  .oc-id { font-size: 13px; font-weight: 600; letter-spacing: 0.01em; }
+  .badge {
+    margin-left: auto;
+    border-radius: 12px;
+    padding: 3px 14px 4px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .badge.delivered { background: #e5f7e7; color: #38ae2e; }
+  .badge.transit { background: #fff5ca; color: #efac03; }
+  .oc-mid { display: flex; align-items: center; gap: 6px; margin-top: 9px; }
+  .oc-mid .thumb { width: 44px; height: 44px; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
+  .oc-mid .thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .oc-info { margin-left: 12px; }
+  .oc-line { display: flex; gap: 14px; font-size: 14px; color: #111; }
+  .oc-line .n { font-weight: 500; }
+  .oc-total { font-size: 15px; font-weight: 700; margin-top: 3px; }
+  .oc-btns { display: flex; justify-content: space-between; padding: 0 30px; margin-top: 13px; }
+  .oc-btn {
+    height: 27px;
+    border: 1.5px solid var(--blue-text);
+    border-radius: 14px;
+    background: #fff;
+    color: var(--navy);
+    font-size: 13.5px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .oc-btn.full { width: 100%; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <!-- Header -->
+  <div class="page-head">
+    <span class="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></span>
+    <span class="title">My orders</span>
+  </div>
+
+  <!-- Filter chips -->
+  <div class="chips">
+    <span class="chip active">All</span>
+    <span class="chip">Active</span>
+    <span class="chip">Delivered</span>
+    <span class="chip">Returns</span>
+  </div>
+  <div class="head-rule"></div>
+
+  <!-- Orders -->
+  <div class="orders">
+    <div class="card order-card">
+      <div class="oc-top">
+        <span class="oc-id">#ORD-2025-1041</span>
+        <span class="badge delivered">Delivered</span>
+      </div>
+      <div class="oc-mid">
+        <div class="thumb"><img src="../assets/decathlon/oh-racket.png" alt="" /></div>
+        <div class="thumb"><img src="../assets/decathlon/oh-ball.png" alt="" /></div>
+        <div class="oc-info">
+          <div class="oc-line"><span class="n">2 items</span><span>3rd April, 2025</span></div>
+          <div class="oc-total">₹3,648</div>
+        </div>
+      </div>
+      <div class="oc-btns">
+        <div class="oc-btn" style="width:116px">Buy again</div>
+        <div class="oc-btn" style="width:118px">Write a review</div>
+      </div>
+    </div>
+
+    <div class="card order-card">
+      <div class="oc-top">
+        <span class="oc-id">#ORD-2025-1042</span>
+        <span class="badge delivered">Delivered</span>
+      </div>
+      <div class="oc-mid">
+        <div class="thumb"><img src="../assets/decathlon/oh-shoe-red.png" alt="" /></div>
+        <div class="thumb"><img src="../assets/decathlon/oh-shoe-black.png" alt="" /></div>
+        <div class="oc-info">
+          <div class="oc-line"><span class="n">2 items</span><span>19th April, 2025</span></div>
+          <div class="oc-total">₹6,798</div>
+        </div>
+      </div>
+      <div class="oc-btns">
+        <div class="oc-btn" style="width:116px">Buy again</div>
+        <div class="oc-btn" style="width:118px">Write a review</div>
+      </div>
+    </div>
+
+    <div class="card order-card">
+      <div class="oc-top">
+        <span class="oc-id">#ORD-2025-1043</span>
+        <span class="badge transit">In transit</span>
+      </div>
+      <div class="oc-mid">
+        <div class="thumb"><img src="../assets/decathlon/oh-bike.png" alt="" /></div>
+        <div class="oc-info">
+          <div class="oc-line"><span class="n">1 item</span><span>10th May, 2025</span></div>
+          <div class="oc-total">₹15,999</div>
+        </div>
+      </div>
+      <div class="oc-btns">
+        <div class="oc-btn full">Track order</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tabbar">
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-8 9 8v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 22v-6h6v6"/></svg>
+      Home
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="2.4"/><circle cx="17" cy="7" r="3.5"/><circle cx="7" cy="17" r="3.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="2.4"/></svg>
+      Categories
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19"/><path d="M12 2.5a14.5 14.5 0 0 1 0 19 14.5 14.5 0 0 1 0-19"/></svg>
+      Travel store
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1.2 13.2a1.6 1.6 0 0 1-1.6 1.8H6.4a1.6 1.6 0 0 1-1.6-1.8z"/><path d="M8.5 10V6.5a3.5 3.5 0 0 1 7 0V10"/></svg>
+      Bag
+    </div>
+    <div class="tab active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg>
+      Account
+    </div>
+  </div>
+</div>
+</body>
+</html>

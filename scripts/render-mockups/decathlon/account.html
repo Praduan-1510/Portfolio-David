@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 852px; }
+  .body { padding: 0 31px; }
+
+  /* Profile card */
+  .profile {
+    margin-top: 28px;
+    background: #ebfaff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    height: 124px;
+    display: flex;
+    align-items: center;
+    padding: 0 18px 0 14px;
+    gap: 18px;
+  }
+  .avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 999px;
+    background: #cfeaf4;
+    color: var(--brand);
+    font-size: 27px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .club { color: #34c30c; font-size: 13px; font-weight: 600; }
+  .pname { font-size: 18px; font-weight: 600; margin-top: 1px; }
+  .paddr { font-size: 12.5px; font-weight: 400; color: #222; line-height: 1.45; margin-top: 2px; white-space: nowrap; }
+  .profile .chev { margin-left: auto; }
+  .chev svg { width: 19px; height: 19px; }
+
+  /* Menu cards */
+  .menu { margin-top: 26px; padding: 0 16px; }
+  .menu + .menu { margin-top: 14px; }
+  .mrow { display: flex; align-items: center; height: 43px; }
+  .mrow + .mrow { border-top: 1px solid var(--line-soft); }
+  .mico {
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background: var(--brand);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .mico svg { width: 11px; height: 11px; }
+  .mlabel { font-size: 14.5px; font-weight: 500; color: var(--blue-text); margin-left: 12px; }
+  .mrow .chev { margin-left: auto; }
+  .logout { color: #dd5959; font-size: 14.5px; font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <!-- Header -->
+  <div class="page-head">
+    <span class="title">My account</span>
+  </div>
+  <div class="head-rule"></div>
+
+  <div class="body">
+    <!-- Profile card -->
+    <div class="profile">
+      <div class="avatar">PS</div>
+      <div>
+        <div class="club">Club member</div>
+        <div class="pname">Praduan Saha</div>
+        <div class="paddr">14/2 Jessore Road, Newtown,<br />Kolkata 700135</div>
+      </div>
+      <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+    </div>
+
+    <!-- Menu -->
+    <div class="card menu">
+      <div class="mrow">
+        <span class="mico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1 14H5z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg></span>
+        <span class="mlabel">My orders</span>
+        <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+      </div>
+      <div class="mrow">
+        <span class="mico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 12.57 12 20l-7.5-7.43A5 5 0 1 1 12 6.01a5 5 0 1 1 7.5 6.56"/></svg></span>
+        <span class="mlabel">Wishlist</span>
+        <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+      </div>
+      <div class="mrow">
+        <span class="mico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></span>
+        <span class="mlabel">Saved addresses</span>
+        <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+      </div>
+      <div class="mrow">
+        <span class="mico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span>
+        <span class="mlabel">Notifications</span>
+        <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+      </div>
+    </div>
+
+    <div class="card menu">
+      <div class="mrow">
+        <span class="mico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span>
+        <span class="mlabel">Help &amp; Support</span>
+        <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+      </div>
+      <div class="mrow">
+        <span class="logout">Log out</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tabbar">
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-8 9 8v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 22v-6h6v6"/></svg>
+      Home
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="2.4"/><circle cx="17" cy="7" r="3.5"/><circle cx="7" cy="17" r="3.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="2.4"/></svg>
+      Categories
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19"/><path d="M12 2.5a14.5 14.5 0 0 1 0 19 14.5 14.5 0 0 1 0-19"/></svg>
+      Travel store
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1.2 13.2a1.6 1.6 0 0 1-1.6 1.8H6.4a1.6 1.6 0 0 1-1.6-1.8z"/><path d="M8.5 10V6.5a3.5 3.5 0 0 1 7 0V10"/></svg>
+      Bag
+    </div>
+    <div class="tab active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg>
+      Account
+    </div>
+  </div>
+</div>
+</body>
+</html>

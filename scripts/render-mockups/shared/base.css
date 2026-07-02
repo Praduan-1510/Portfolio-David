@@ -1,0 +1,49 @@
+/*
+ * Shared base for all coded mockup screens. Each screen is a standalone HTML
+ * file laid out at exact device CSS pixels and rendered headlessly at DPR 2
+ * (scripts/render-mockups/render.mjs) to overwrite the PNG the site already
+ * consumes. The page background stays transparent — the .screen container owns
+ * the app background and the baked rounded-corner mask, exactly like the
+ * originals (their corners are alpha-transparent).
+ */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: transparent;
+}
+
+.screen {
+  position: relative;
+  overflow: hidden;
+  border-radius: 44px;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* iOS-style home indicator (the originals bake one at the very bottom). */
+.home-indicator {
+  position: absolute;
+  bottom: 7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 5px;
+  border-radius: 999px;
+  background: #fff;
+  z-index: 10;
+}
+
+img,
+svg {
+  display: block;
+}

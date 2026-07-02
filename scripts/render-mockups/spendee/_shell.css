@@ -1,0 +1,186 @@
+/*
+ * Spendee design system — sampled from the original renders: pure-black base,
+ * #262626 cards (#1a1a1a list rows), rounded sans (Quicksand display /
+ * Poppins text), and the three-colour status language (green in / red out /
+ * amber pending) the case study documents. 402px-wide screens.
+ */
+
+.screen {
+  width: 402px;
+  background: #000;
+  color: #fff;
+  font-family: "Poppins", system-ui, sans-serif;
+  padding: 28px 20px 0;
+}
+
+.display,
+.amount {
+  font-family: "Quicksand", "Poppins", sans-serif;
+  font-weight: 600;
+}
+
+:root {
+  --card: #262626;
+  --row: #1a1a1a;
+  --card-lift: #343434;
+  --text-dim: #9a9a9a;
+  --green: #8df15e;
+  --green-deep: #3b4f31;
+  --red: #f26d6d;
+  --red-deep: #4f3131;
+  --amber: #e8b23e;
+  --amber-deep: #4f4531;
+  --blue: #6db3e8;
+  --blue-deep: #2f485b;
+}
+
+/* ── Building blocks ── */
+.card {
+  background: var(--card);
+  border-radius: 24px;
+  padding: 18px;
+}
+.row-card {
+  background: var(--row);
+  border-radius: 18px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.label {
+  font-size: 14px;
+  color: #d9d9d9;
+  font-weight: 500;
+}
+.sub {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.chip.green { background: var(--green-deep); color: var(--green); }
+.chip.red { background: var(--red-deep); color: var(--red); }
+.chip.amber { background: var(--amber-deep); color: var(--amber); }
+
+.amount { font-size: 30px; letter-spacing: 0.5px; }
+.amount.green { color: var(--green); }
+.amount.red { color: var(--red); }
+
+/* Section heading ("Quick Actions", "Recent") */
+.h-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 16px 4px 10px;
+}
+.h-row .title { font-size: 17px; font-weight: 600; font-family: "Quicksand", sans-serif; }
+.h-row .link { font-size: 13px; color: var(--blue); }
+
+/* Avatar disc — an initials avatar (honest; no stock faces). */
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: "Quicksand", sans-serif;
+  flex-shrink: 0;
+}
+
+/* Icon disc (bell etc.) */
+.icon-disc {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: #2b2b2b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Tab bar ── */
+.tabbar {
+  margin-top: auto;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  padding: 8px 8px 22px;
+  background: #000;
+}
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #7d7d7d;
+  width: 64px;
+}
+.tab.active { color: #fff; }
+.tab svg { width: 22px; height: 22px; }
+.fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: #fff;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+  box-shadow: 0 0 0 6px #000;
+}
+.fab svg { width: 26px; height: 26px; }
+
+/* Bottom accent strip under the tab bar (the originals bake a green base
+   strip with the white home indicator riding on it). */
+.base-strip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 14px;
+  background: #57c04b;
+}
+
+/* ── Header pattern ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 4px 4px 16px;
+}
+.header .greet { font-size: 13px; color: var(--text-dim); }
+.header .name {
+  font-family: "Quicksand", sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.header-actions { display: flex; gap: 10px; }
+
+/* Page header for interior screens: back chevron + centered title */
+.page-head {
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
+  align-items: center;
+  margin: 6px 0 18px;
+}
+.page-head .title {
+  text-align: center;
+  font-family: "Quicksand", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+}

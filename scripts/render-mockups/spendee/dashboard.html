@@ -1,0 +1,222 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 1320px; padding-top: 18px; }
+  .quick-grid { display: flex; gap: 12px; }
+  .quick {
+    flex: 1;
+    height: 88px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 11px;
+    color: #e8e8e8;
+  }
+  .quick svg { width: 24px; height: 24px; }
+  .two-col { display: flex; gap: 12px; margin-top: 11px; }
+  .two-col .card { flex: 1; padding: 16px; border-radius: 20px; }
+  .gauge-badge {
+    background: var(--blue-deep);
+    color: var(--blue);
+    border-radius: 10px;
+    padding: 5px 12px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .recent-amt { margin-left: auto; text-align: right; }
+  .recent-amt .v { font-family: "Quicksand", sans-serif; font-weight: 700; font-size: 16px; }
+  .status-pill { border-radius: 6px; padding: 2px 8px; font-size: 11px; font-weight: 600; display: inline-block; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <div class="greet">Good Morning</div>
+      <div class="name">Jayanta Adhikari</div>
+    </div>
+    <div class="header-actions">
+      <div class="icon-disc">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e8b23e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+      </div>
+      <div class="avatar" style="background:#2f485b;color:#9fceef">JA</div>
+    </div>
+  </div>
+
+  <!-- Net position -->
+  <div class="card">
+    <div class="label">Net Position</div>
+    <div class="amount" style="font-size:34px;margin:8px 0 12px">₹ 2,96,800</div>
+    <span class="chip green">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+      14.2% this month
+    </span>
+  </div>
+
+  <!-- To get / to give -->
+  <div class="two-col">
+    <div class="card">
+      <div class="sub" style="margin-bottom:6px">To Get</div>
+      <div class="amount green" style="font-size:22px">₹ 4,15,200</div>
+      <div class="sub" style="margin-top:6px">+8.4% this month</div>
+    </div>
+    <div class="card">
+      <div class="sub" style="margin-bottom:6px">To Give</div>
+      <div class="amount red" style="font-size:22px">₹ 1,18,400</div>
+      <div class="sub" style="margin-top:6px">−2.1% this month</div>
+    </div>
+  </div>
+
+  <!-- Collect nudge -->
+  <div class="card" style="margin-top:11px;display:flex;align-items:center;gap:14px;padding:13px 18px">
+    <div class="icon-disc" style="background:#3a3a20">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c9e94b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    </div>
+    <div>
+      <div class="sub" style="color:var(--green);font-size:11px">Spendee</div>
+      <div class="label" style="font-size:15px">Collect from 3 clients</div>
+      <div class="amount green" style="font-size:15px">₹1.24L this week</div>
+    </div>
+    <span class="chip" style="margin-left:auto;background:var(--blue-deep);color:#cfe6f7">Act
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </span>
+  </div>
+
+  <!-- Quick actions -->
+  <div class="h-row"><span class="title">Quick Actions</span></div>
+  <div class="quick-grid">
+    <div class="quick" style="background:#48461a">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#e4e07a" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+      Add Entry
+    </div>
+    <div class="quick" style="background:#481a1a">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#f09a9a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+      Send Money
+    </div>
+    <div class="quick" style="background:#2a481c">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#a9e88e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+      Invoice
+    </div>
+    <div class="quick" style="background:#1d3548">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#8fc4ea" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-6 4 3 5-7"/></svg>
+      Reports
+    </div>
+  </div>
+
+  <!-- Cash velocity -->
+  <div class="card" style="margin-top:12px;background:linear-gradient(180deg,#343434,#262626)">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between">
+      <div>
+        <div class="label" style="font-size:16px">Cash Velocity</div>
+        <div class="sub" style="margin-top:3px">30-day momentum</div>
+      </div>
+      <span class="gauge-badge">78 / 100</span>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;margin-top:10px">
+      <svg width="182" height="101" viewBox="0 0 212 118">
+        <defs>
+          <linearGradient id="arc" x1="0" y1="1" x2="1" y2="1">
+            <stop offset="0" stop-color="#f26d6d"/>
+            <stop offset="0.35" stop-color="#e8b23e"/>
+            <stop offset="0.62" stop-color="#8df15e"/>
+            <stop offset="1" stop-color="#ffffff"/>
+          </linearGradient>
+        </defs>
+        <path d="M 18 110 A 88 88 0 0 1 194 110" fill="none" stroke="url(#arc)" stroke-width="9" stroke-linecap="round"/>
+        <line x1="106" y1="104" x2="106" y2="42" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+        <path d="M 106 34 l -7 12 h 14 z" fill="#fff"/>
+        <circle cx="106" cy="104" r="12" fill="#000" stroke="#fff" stroke-width="4"/>
+      </svg>
+      <span class="chip green" style="margin-top:6px">Strong Performance</span>
+    </div>
+  </div>
+
+  <!-- Recent -->
+  <div class="h-row"><span class="title">Recent</span><span class="link">See all</span></div>
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div class="row-card">
+      <div class="avatar" style="background:#2f485b;color:#9fceef;width:36px;height:36px;font-size:12px">DS</div>
+      <div>
+        <div class="label" style="font-size:15px">Dutta &amp; Sons</div>
+        <div class="sub">2h ago · Settled</div>
+      </div>
+      <div class="recent-amt">
+        <div class="v" style="color:var(--green)">₹45,000</div>
+        <span class="status-pill" style="background:var(--green-deep);color:var(--green)">Done</span>
+      </div>
+    </div>
+    <div class="row-card">
+      <div class="avatar" style="background:#4f4531;color:#eccf8f;width:36px;height:36px;font-size:12px">ST</div>
+      <div>
+        <div class="label" style="font-size:15px">Sharma Textiles</div>
+        <div class="sub">INV-1038 · Pending</div>
+      </div>
+      <div class="recent-amt">
+        <div class="v" style="color:var(--amber)">₹62,000</div>
+        <span class="status-pill" style="background:var(--amber-deep);color:var(--amber)">Pending</span>
+      </div>
+    </div>
+    <div class="row-card">
+      <div class="avatar" style="background:#4f3131;color:#f0a5a5;width:36px;height:36px;font-size:12px">BR</div>
+      <div>
+        <div class="label" style="font-size:15px">Bose Retail</div>
+        <div class="sub">Overdue 12 days</div>
+      </div>
+      <div class="recent-amt">
+        <div class="v" style="color:var(--red)">₹1,15,000</div>
+        <span class="status-pill" style="background:var(--red-deep);color:var(--red)">Overdue</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alert tiles -->
+  <div class="two-col" style="margin-top:12px">
+    <div class="card" style="border-radius:20px">
+      <div class="sub" style="letter-spacing:0.06em">GST DUE</div>
+      <div class="amount green" style="font-size:24px;margin:6px 0 4px">11d</div>
+      <div class="sub">₹24,560 payable</div>
+    </div>
+    <div class="card" style="border-radius:20px">
+      <div class="sub" style="letter-spacing:0.06em">LOW STOCK</div>
+      <div class="amount red" style="font-size:24px;margin:6px 0 4px">5 SKUs</div>
+      <div class="sub">Reorder needed</div>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tabbar">
+    <div class="tab active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+      Ledger
+    </div>
+    <div class="fab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+      Bank
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="19" cy="12" r="1.4" fill="currentColor"/></svg>
+      More
+    </div>
+    <div class="base-strip"></div>
+  </div>
+  <div class="home-indicator"></div>
+</div>
+</body>
+</html>

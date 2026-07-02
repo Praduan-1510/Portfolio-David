@@ -35,7 +35,12 @@ export function ScreenBeat({
   side?: "left" | "right";
 }) {
   return (
-    <figure className="cs-wide my-space-9 grid items-center gap-space-6 lg:grid-cols-[14rem_1fr] lg:gap-space-8">
+    <figure
+      className={cn(
+        "cs-wide my-space-9 grid items-center gap-space-6 lg:gap-space-8",
+        side === "right" ? "lg:grid-cols-[1fr_14rem]" : "lg:grid-cols-[14rem_1fr]",
+      )}
+    >
       <Reveal className={cn("mx-auto w-full max-w-[14rem]", side === "right" && "lg:order-2")}>
         <Parallax speed={0.05}>
           <PhoneFrame src={src} alt={alt ?? caption ?? "App screen"} sizes="14rem" imgClassName="object-top" />
@@ -175,11 +180,11 @@ export function Stat({ value, label }: { value?: string; label?: string }) {
   return (
     // justify-end packs the value row to the bottom of the cell (flex-col-reverse
     // main axis), so every dd shares one baseline no matter how the label wraps.
-    <div className="flex flex-col-reverse justify-end gap-space-2 border-t border-line pt-space-4">
+    <div className="flex min-w-0 flex-col-reverse justify-end gap-space-2 border-t border-line pt-space-4">
       <dt className="min-w-0 break-words font-mono text-caption uppercase tracking-[0.14em] text-muted">
         {label}
       </dt>
-      <dd className="whitespace-nowrap font-display text-display-l leading-none text-accent">
+      <dd className="whitespace-nowrap font-display text-heading-l leading-none text-accent">
         {/* Odometer flutter on scroll-in — the payoff band speaks the site's
             departure-board language (digits only; word values render static). */}
         <FlapDigits value={value ?? ""} />

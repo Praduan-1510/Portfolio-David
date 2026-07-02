@@ -74,7 +74,9 @@ export function Footer() {
                     className="inline-flex min-h-[44px] items-center font-sans text-caption text-muted transition-colors duration-fast ease-out-quad hover:text-fg"
                   >
                     {item.label}
-                    <span className="sr-only"> (opens in a new tab)</span>
+                    {item.href.startsWith("http") && (
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    )}
                   </a>
                 </li>
               ))}

@@ -383,7 +383,7 @@ export default async function CaseStudy({
                   <Parallax speed={0.05}>
                     <PhoneFrame
                       src={heroScreens[1]}
-                      alt={`${meta.title} — screen`}
+                      alt={`${meta.title} — second key screen`}
                       sizes="(min-width: 640px) 14rem, 45vw"
                       imgClassName="object-top"
                       className="opacity-100 sm:opacity-80"
@@ -408,7 +408,7 @@ export default async function CaseStudy({
                   <Parallax speed={0.07}>
                     <PhoneFrame
                       src={heroScreens[2]}
-                      alt={`${meta.title} — screen`}
+                      alt={`${meta.title} — third key screen`}
                       sizes="(min-width: 640px) 14rem, 45vw"
                       imgClassName="object-top"
                       className="opacity-100 sm:opacity-80"
@@ -607,7 +607,7 @@ export default async function CaseStudy({
       )}
 
       <Container className="pt-0 pb-space-8">
-        <Link href="/work">← Back to all work</Link>
+        <Link href="/work" className="inline-flex min-h-[44px] items-center">← Back to all work</Link>
       </Container>
     </article>
   );

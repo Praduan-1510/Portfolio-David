@@ -135,7 +135,7 @@ export default function Home() {
               I design the interface, then write the front-end that ships it.
             </TextReveal>
             <Reveal delay={0.12}>
-              <Link href="/about" className="mt-space-6 inline-block">
+              <Link href="/about" className="mt-space-6 inline-flex min-h-[44px] items-center">
                 More about me
               </Link>
             </Reveal>
@@ -156,6 +156,7 @@ export default function Home() {
               alt="Praduan Saha on a tree-lined path in Kolkata"
               fill
               sizes="(min-width: 768px) 46vw, 100vw"
+              loading="eager"
               placeholder="blur"
               blurDataURL="data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADwAQCdASoMAA8AA4BaJaQAArL079cHM0AA/oOGxqwDGhDz99VmzWx2x3nwOyeIDoqLoPgyN/J98JGfhrAyTXTP+UUuYx/qbFBrUg6wY9LOJ/yQAAA="
               className="about-portrait object-cover object-center transition-transform duration-slow ease-out-quad motion-safe:group-hover:scale-[1.03]"

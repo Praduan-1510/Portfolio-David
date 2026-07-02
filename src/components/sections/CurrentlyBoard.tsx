@@ -58,7 +58,7 @@ function BoardRow({
   children: React.ReactNode;
 }) {
   return (
-    <div className="grid grid-cols-[2rem_minmax(6rem,10rem)_1fr] items-baseline gap-x-space-4 border-t border-line py-space-5 first:border-t-0 sm:gap-x-space-6">
+    <div className="grid grid-cols-[2rem_1fr] items-baseline gap-x-space-4 gap-y-space-2 border-t border-line py-space-5 first:border-t-0 sm:grid-cols-[2rem_minmax(6rem,10rem)_1fr] sm:gap-x-space-6">
       <dt className="sr-only">{label}</dt>
       <span
         aria-hidden="true"
@@ -73,7 +73,7 @@ function BoardRow({
       >
         {label}
       </span>
-      <dd className="min-w-0 font-mono text-caption uppercase tracking-[0.1em] text-fg sm:tracking-[0.14em]">
+      <dd className="col-start-2 min-w-0 break-words font-mono text-caption uppercase tracking-[0.1em] text-fg sm:col-start-3 sm:tracking-[0.14em]">
         {children}
       </dd>
     </div>

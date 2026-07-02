@@ -125,31 +125,22 @@
 
 @layer components {
   /*
-   * Case-study reading grid (lg+): the measure column plus a live right rail
-   * for marginalia — the "research notebook" annotations that used to be a
-   * permanently empty column. grid-auto-flow:dense lets a .cs-margin (col 2)
-   * share its row with the paragraph that FOLLOWS it in the source, so notes
-   * sit beside the text they annotate. Below lg everything stacks normally.
+   * Case-study marginalia rail (lg+) — the classic float sidenote: prose
+   * self-clamps to the measure on the left, so a .cs-margin floated hard right
+   * lands in the otherwise-empty rail EXACTLY at its source position in the
+   * flow (a grid can't anchor rail items to their paragraphs; floats can).
+   * .cs-wide blocks clear the rail so media never wraps around a note.
+   * Below lg the notes render as quiet inline asides.
    */
   @media (min-width: 1024px) {
-    .prose-cs-grid {
-      display: grid;
-      grid-template-columns: minmax(0, var(--measure)) minmax(11rem, 1fr);
-      column-gap: clamp(2rem, 4vw, 4rem);
-      grid-auto-flow: dense;
-    }
-    .prose-cs-grid > * {
-      grid-column: 1;
-      min-width: 0;
+    .prose-cs-grid > .cs-margin {
+      float: right;
+      clear: right;
+      width: clamp(11rem, 16vw, 15rem);
+      margin: 0 0 var(--sp-6, 2rem) clamp(2rem, 4vw, 4rem);
     }
     .prose-cs-grid > .cs-wide {
-      grid-column: 1 / -1;
-    }
-    .prose-cs-grid > .cs-margin {
-      grid-column: 2;
-      align-self: start;
-      position: sticky;
-      top: 7rem;
+      clear: right;
     }
   }
   /* Full-viewport colour-field band — the case studies' set-piece moment.

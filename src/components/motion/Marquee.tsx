@@ -159,7 +159,7 @@ export function Marquee({
           type="button"
           onClick={togglePause}
           // ::before extends the 44px hit area past the small visual pill.
-          className="absolute right-space-2 top-1/2 z-10 inline-flex -translate-y-1/2 items-center gap-[5px] rounded-full border border-line bg-black/45 px-space-2 py-[2px] font-mono text-[0.625rem] uppercase tracking-[0.14em] text-white/85 opacity-60 backdrop-blur-sm transition-opacity duration-fast ease-out-quad before:absolute before:-inset-3 before:content-[''] hover:opacity-100 focus-visible:opacity-100"
+          className="absolute right-space-2 top-1/2 z-10 inline-flex -translate-y-1/2 items-center gap-[5px] rounded-full border border-line bg-black/45 px-space-2 py-[2px] font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-white/85 opacity-60 backdrop-blur-sm transition-opacity duration-fast ease-out-quad before:absolute before:-inset-3 before:content-[''] hover:opacity-100 focus-visible:opacity-100"
         >
           <span
             aria-hidden="true"

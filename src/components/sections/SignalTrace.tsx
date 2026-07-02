@@ -1,5 +1,6 @@
 "use client";
 
+import NextLink from "next/link";
 import { motion } from "motion/react";
 import { durations } from "@/lib/motion/durations";
 import { easings } from "@/lib/motion/easings";
@@ -7,24 +8,33 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { cn } from "@/lib/utils/cn";
 
 /*
- * Signal trace — the hero's one living element. A thin line whose gradient is
- * built from the FOUR PROJECT ACCENTS in project order (InsightsTap teal →
- * Spendee lime → Voyager amber → Decathlon blue): the spectrum literally made
- * from the work, not a generic rainbow. Four ticks mark the projects along it
- * — a quiet route-map of the 01–04 grid one scroll below.
+ * Signal trace — the hero's instrument, not an ornament. The line's gradient
+ * is the four project accents in project order, and each tick IS a project:
+ * a diamond seated on the line, its ordinal beneath, the project name
+ * revealing on hover/focus — and the whole marker is a real link into that
+ * case study. The hero ends with "SCROLL — TO SEE WORK"; this is the map of
+ * exactly what's coming, plotted 01–04.
  *
- * Draws in with scaleX on the expo token after the wordmark settles; the ticks
- * land in sequence and then breathe on the shared status-pulse keyframe.
- * Reduced motion renders the full line + ticks static. Decorative (aria-hidden
- * by the parent).
+ * Draw-in: the line scales in on the expo token after the wordmark settles,
+ * the markers land in sequence (outBack), then the diamonds breathe on the
+ * shared status-pulse. Layer discipline fixes the earlier transform clash:
+ * OUTER span owns static position/centring (CSS), a MIDDLE motion.span owns
+ * the entrance, the INNER diamond owns the pulse keyframe — nothing clobbers
+ * anything. Reduced motion renders everything settled and still.
  */
 
-// Project order — must track src/content/work order (insightstap, spendee,
-// voyager, decathlon) and their frontmatter accents.
-const PROJECT_ACCENTS = ["#2DD4BF", "#C9E94B", "#F7A53B", "#46B4F0"] as const;
-const TICKS = [0.08, 0.36, 0.64, 0.92] as const;
+// Must track src/content/work order + accents (same source of truth as the
+// flight board's ordinals).
+const PROJECTS = [
+  { slug: "insightstap", name: "InsightsTap", accent: "#2DD4BF", pos: 0.08 },
+  { slug: "spendee", name: "Spendee", accent: "#C9E94B", pos: 0.36 },
+  { slug: "voyager", name: "Voyager", accent: "#F7A53B", pos: 0.64 },
+  { slug: "decathlon", name: "Decathlon", accent: "#46B4F0", pos: 0.92 },
+] as const;
 
-const TRACE_GRADIENT = `linear-gradient(90deg, ${PROJECT_ACCENTS[0]} 0%, ${PROJECT_ACCENTS[1]} 34%, ${PROJECT_ACCENTS[2]} 66%, ${PROJECT_ACCENTS[3]} 100%)`;
+const TRACE_GRADIENT = `linear-gradient(90deg, ${PROJECTS.map(
+  (p, i) => `${p.accent} ${Math.round((i / (PROJECTS.length - 1)) * 100)}%`,
+).join(", ")})`;
 
 export function SignalTrace({
   delay = 0,
@@ -36,9 +46,13 @@ export function SignalTrace({
   const reduced = useReducedMotion();
 
   return (
-    <div className={cn("relative h-[2px] min-w-0 flex-1", className)}>
+    <nav
+      aria-label="Selected work, plotted 01–04"
+      className={cn("relative h-[2px] min-w-0 flex-1", className)}
+    >
       {/* The line — masked ends so it lands soft, drawn left-to-right. */}
       <motion.span
+        aria-hidden="true"
         className="absolute inset-0 origin-left"
         style={{
           background: TRACE_GRADIENT,
@@ -56,26 +70,54 @@ export function SignalTrace({
           ease: easings.outExpo,
         }}
       />
-      {/* Project ticks — land in sequence, then breathe. */}
-      {TICKS.map((pos, i) => (
-        <motion.span
-          key={pos}
-          className="absolute top-1/2 h-[7px] w-[7px] -translate-y-1/2 rotate-45 motion-safe:animate-status-pulse"
-          style={{
-            left: `${pos * 100}%`,
-            backgroundColor: PROJECT_ACCENTS[i],
-            boxShadow: `0 0 10px 0 color-mix(in srgb, ${PROJECT_ACCENTS[i]} 55%, transparent)`,
-            animationDelay: `${i * 0.6}s`,
-          }}
-          initial={reduced ? false : { opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{
-            delay: reduced ? 0 : delay + 0.25 + i * 0.1,
-            duration: durations.base,
-            ease: easings.outBack,
-          }}
-        />
+
+      {/* Project markers — each one a real link into its case study. */}
+      {PROJECTS.map((p, i) => (
+        <NextLink
+          key={p.slug}
+          href={`/work/${p.slug}`}
+          aria-label={`${String(i + 1).padStart(2, "0")} — ${p.name} case study`}
+          // OUTER: static centring + a 44px invisible hit area on the line.
+          className="group absolute top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+          style={{ left: `${p.pos * 100}%` }}
+        >
+          {/* MIDDLE: entrance only. */}
+          <motion.span
+            className="relative flex items-center justify-center"
+            initial={reduced ? false : { opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              delay: reduced ? 0 : delay + 0.25 + i * 0.1,
+              duration: durations.base,
+              ease: easings.outBack,
+            }}
+          >
+            {/* INNER: the node — round, breathing. Hover/focus swells the
+                wrapper; the pulse keyframe lives on the child so the two
+                transforms never clobber each other. */}
+            <span
+              aria-hidden="true"
+              className="block transition-transform duration-fast ease-out-quad group-hover:scale-150 group-focus-visible:scale-150"
+            >
+              <span
+                className="block h-[9px] w-[9px] rounded-full motion-safe:animate-status-pulse"
+                style={{
+                  backgroundColor: p.accent,
+                  boxShadow: `0 0 12px 1px color-mix(in srgb, ${p.accent} 60%, transparent)`,
+                  animationDelay: `${i * 0.6}s`,
+                }}
+              />
+            </span>
+            {/* Ordinal below the line — the plot is numbered. */}
+            <span
+              aria-hidden="true"
+              className="absolute top-full mt-space-2 font-mono text-[0.625rem] tabular-nums tracking-[0.14em] text-muted transition-colors duration-fast ease-out-quad group-hover:text-fg"
+            >
+              {String(i + 1).padStart(2, "0")}
+            </span>
+          </motion.span>
+        </NextLink>
       ))}
-    </div>
+    </nav>
   );
 }

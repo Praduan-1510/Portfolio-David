@@ -20,7 +20,9 @@ const FONT = "clamp(3rem, 13vw, 9.75rem)";
 
 export function HeroWordmark() {
   return (
-    <div aria-hidden="true">
+    // No aria-hidden here: the trace inside carries REAL links. The flap
+    // boards handle their own semantics (announce=false + aria-hidden tiles).
+    <div>
       <SplitFlapText
         announce={false}
         text="PRADUAN"

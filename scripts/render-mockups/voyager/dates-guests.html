@@ -15,10 +15,11 @@
     font-weight: 700;
     letter-spacing: -0.1px;
     color: var(--ink);
-    line-height: 1.2;
+    line-height: 20px;
   }
   .kicker {
     margin: 13px 21px 0;
+    line-height: 13px;
     font-size: 12.5px;
     font-weight: 600;
     letter-spacing: 0.06em;
@@ -29,13 +30,14 @@
   .date-labels {
     display: flex;
     gap: 25px;
-    margin: 16px 17px 0;
+    margin: 15px 17px 0;
   }
   .date-labels span {
     width: 157px;
     padding-left: 3px;
     font-size: 13px;
     font-weight: 500;
+    line-height: 13px;
     color: #9d9d9d;
   }
   .date-fields {
@@ -68,25 +70,27 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 22px 11px 0 2px;
+    padding: 21px 11px 0 2px;
   }
   .cal-head .m {
     font-size: 17px;
     font-weight: 700;
     letter-spacing: -0.1px;
+    line-height: 22px;
     color: #141414;
   }
   .cal-head .chev { display: flex; gap: 5px; }
   .cal-head .chev svg { width: 13px; height: 13px; }
   .wk {
     display: flex;
-    margin-top: 16px;
+    margin-top: 30px;
   }
   .wk span {
     width: 46px;
     text-align: center;
     font-size: 13.5px;
     font-weight: 600;
+    line-height: 20px;
     color: #7a7a7a;
   }
   .crow {
@@ -96,7 +100,7 @@
     border-top: 1px solid #fff;
     margin-top: 0;
   }
-  .crow:first-of-type { margin-top: 16px; }
+  .wk + .crow { margin-top: 13px; }
   .crow .d {
     position: relative;
     width: 46px;

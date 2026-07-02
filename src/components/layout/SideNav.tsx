@@ -111,13 +111,13 @@ export function SideNav() {
                     "h-1.5 w-1.5 rounded-full shadow-[0_0_0_3px_rgba(0,0,0,0.35)] transition-all duration-base ease-out-quad",
                     active
                       ? "scale-125 bg-[var(--dot)]"
-                      : "bg-muted opacity-40 group-hover:bg-[var(--dot)] group-hover:opacity-90",
+                      : "bg-muted opacity-40 group-hover:bg-[var(--dot)] group-hover:opacity-90 group-focus-visible:bg-[var(--dot)] group-focus-visible:opacity-90",
                   )}
                 />
                 <span
                   aria-hidden="true"
                   className={cn(
-                    "absolute left-space-5 whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.18em] opacity-0 transition-all duration-fast ease-out-quad group-hover:left-space-6 group-hover:opacity-100",
+                    "absolute left-space-5 whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.18em] opacity-0 transition-all duration-fast ease-out-quad group-hover:left-space-6 group-hover:opacity-100 group-focus-visible:left-space-6 group-focus-visible:opacity-100",
                     active ? "text-[var(--dot)]" : "text-muted",
                   )}
                 >

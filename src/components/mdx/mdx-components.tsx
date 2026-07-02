@@ -58,7 +58,7 @@ export const mdxComponents = {
       as="h2"
       variant="heading"
       id={slugify(toText(children))}
-      className="mt-space-9 mb-space-4 flex items-baseline gap-space-3 scroll-mt-space-9 first:mt-0"
+      className="mt-space-9 mb-space-4 flex items-baseline gap-space-3 scroll-mt-[8.75rem] first:mt-0 md:scroll-mt-space-9"
       {...props}
     >
       <span

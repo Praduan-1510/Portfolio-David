@@ -108,10 +108,10 @@ const EXPERIENCE = [
     ],
   },
   {
-    company: "Creative Designer",
+    company: "Freelance",
     roles: [
       {
-        title: "Freelance",
+        title: "Creative Designer",
         period: "Remote · Jan 2022 – Oct 2025",
         body: "Freelance work across content writing, photo and video editing, and instructional design, delivering creative assets for a range of clients.",
       },

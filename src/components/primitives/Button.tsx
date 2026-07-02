@@ -16,16 +16,20 @@ export type ButtonSize = "md" | "lg";
 const base =
   "inline-flex items-center justify-center gap-space-2 font-sans font-medium transition duration-fast ease-out-quad";
 
-// Hover resolves to the neon-green signal across every variant, matching the
-// site-wide card affordance: fills flip to neon (dark text stays AA-legible on
-// the bright green), outlined/ghost buttons take a neon border + text. The base
-// `transition` animates the colour change on the `fast` token.
+// One hover language site-wide, matching the card affordance (.card-neon in
+// globals.css): on hover an element keeps its fill and gains the neon ring +
+// soft glow (the `shadow-neon` token — the same box-shadow the cards use).
+// Filled buttons (primary/invert) add a 1px lift; outlined/ghost take a neon
+// border + text. The base `transition` animates box-shadow/border/transform on
+// the `fast` token. Earlier this flood-filled the fills to flat neon, which was
+// the one interaction that contradicted the card/secondary/ghost language.
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: "bg-accent text-on-accent hover:bg-neon hover:text-on-accent",
-  secondary: "border border-line text-fg hover:border-neon hover:text-neon",
+  primary: "bg-accent text-on-accent hover:shadow-neon hover:-translate-y-px",
+  secondary:
+    "border border-line text-fg hover:border-neon hover:text-neon hover:shadow-neon",
   ghost: "text-fg hover:text-neon",
   // High-contrast monochrome fill — white-on-dark (ink-on-paper in light).
-  invert: "bg-fg text-bg hover:bg-neon hover:text-bg",
+  invert: "bg-fg text-bg hover:shadow-neon hover:-translate-y-px",
 };
 
 const shapeClasses: Record<ButtonShape, string> = {

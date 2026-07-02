@@ -23,6 +23,17 @@ interface Section {
   label: string;
 }
 
+// Sticky overlay a section must clear when navigated to. On mobile BOTH the 64px
+// header and the ~65px "Contents" chip rail pin at the top, so the target has to
+// clear ~140px or it lands behind the rail. On md+ only the 64px header sits over
+// the reading column (the desktop contents rail is a side sidebar, not a top
+// overlay), so 96px is enough. Read at call time so it tracks viewport changes.
+const navOffset = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia("(min-width: 768px)").matches
+    ? 96
+    : 140;
+
 export function CaseStudyNav({
   sections,
   className,
@@ -50,7 +61,7 @@ export function CaseStudyNav({
     const t = setTimeout(() => {
       const el = document.getElementById(id);
       if (!el) return;
-      if (lenis) lenis.scrollTo(el, { offset: -96, immediate: true });
+      if (lenis) lenis.scrollTo(el, { offset: -navOffset(), immediate: true });
       else el.scrollIntoView();
     }, 120);
     return () => clearTimeout(t);
@@ -82,7 +93,7 @@ export function CaseStudyNav({
     if (!el) return;
     e.preventDefault();
     window.history.pushState(null, "", `#${id}`);
-    if (lenis) lenis.scrollTo(el, { offset: -96 }); // clear the sticky top nav
+    if (lenis) lenis.scrollTo(el, { offset: -navOffset() }); // clear header + rail
     else el.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
   };
 
@@ -94,7 +105,7 @@ export function CaseStudyNav({
       <nav
         aria-label="On this page"
         className={cn(
-          "sticky top-16 z-30 -mx-[clamp(1.25rem,5vw,6rem)] border-b border-line bg-bg px-[clamp(1.25rem,5vw,6rem)] py-space-3 md:hidden",
+          "sticky top-16 z-30 -mx-[clamp(1.25rem,5vw,6rem)] border-b border-line bg-bg px-[clamp(1.25rem,5vw,6rem)] py-space-3 [@media(max-height:480px)]:top-12 md:hidden",
           className,
         )}
       >

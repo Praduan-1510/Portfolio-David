@@ -148,7 +148,7 @@ export function WorkScrollTrack({ projects }: { projects: ProjectMeta[] }) {
     const st = stRef.current;
     if (!st) return;
     const target = st.start + e.currentTarget.offsetLeft - 96;
-    if (lenis) lenis.scrollTo(target, { duration: 0.6 });
+    if (lenis) lenis.scrollTo(target, { duration: durations.slow });
     else window.scrollTo({ top: target });
   };
 

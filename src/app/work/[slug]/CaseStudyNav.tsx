@@ -39,6 +39,24 @@ export function CaseStudyNav({
   const reduced = useReducedMotion();
   const lenis = useLenis();
 
+  // Cold-load hash restore: Lenis initializes at the top, swallowing the
+  // browser's native #hash landing — re-drive it through the engine once
+  // layout has settled. Runs in the desktop instance only (both variants
+  // mount; one restore is enough).
+  useEffect(() => {
+    if (variant !== "desktop") return;
+    const id = window.location.hash.slice(1);
+    if (!id || !sections.some((s) => s.id === id)) return;
+    const t = setTimeout(() => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (lenis) lenis.scrollTo(el, { offset: -96, immediate: true });
+      else el.scrollIntoView();
+    }, 120);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lenis, variant]);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -56,9 +74,14 @@ export function CaseStudyNav({
     return () => observer.disconnect();
   }, [sections]);
 
-  const go = (id: string) => {
+  // Anchor enhancement: the links are real <a href="#id"> (deep-linkable and
+  // functional without JS); this click handler keeps Lenis driving the scroll
+  // (native smooth jumps under Lenis) and records the hash without a jump.
+  const go = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     const el = document.getElementById(id);
     if (!el) return;
+    e.preventDefault();
+    window.history.pushState(null, "", `#${id}`);
     if (lenis) lenis.scrollTo(el, { offset: -96 }); // clear the sticky top nav
     else el.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
   };
@@ -84,9 +107,9 @@ export function CaseStudyNav({
                 className="shrink-0"
                 style={{ "--dot": spectrumAt(i) } as React.CSSProperties}
               >
-                <button
-                  type="button"
-                  onClick={() => go(s.id)}
+                <a
+                  href={`#${s.id}`}
+                  onClick={(e) => go(e, s.id)}
                   aria-current={on ? "true" : undefined}
                   className={cn(
                     "flex min-h-[40px] items-center whitespace-nowrap rounded-full border px-space-4 font-mono text-caption uppercase tracking-[0.12em] transition-colors duration-base ease-out-quad",
@@ -94,7 +117,7 @@ export function CaseStudyNav({
                   )}
                 >
                   {s.label}
-                </button>
+                </a>
               </li>
             );
           })}
@@ -116,9 +139,9 @@ export function CaseStudyNav({
           const on = active === s.id;
           return (
             <li key={s.id} style={{ "--dot": spectrumAt(i) } as React.CSSProperties}>
-              <button
-                type="button"
-                onClick={() => go(s.id)}
+              <a
+                href={`#${s.id}`}
+                onClick={(e) => go(e, s.id)}
                 aria-current={on ? "true" : undefined}
                 className="group flex w-full items-center gap-space-3 py-space-1 text-left"
               >
@@ -139,7 +162,7 @@ export function CaseStudyNav({
                 >
                   {s.label}
                 </span>
-              </button>
+              </a>
             </li>
           );
         })}

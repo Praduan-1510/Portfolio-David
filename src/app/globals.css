@@ -218,6 +218,13 @@
     outline-offset: 2px;
   }
 
+  /* Selection in the system's voice — accent-tinted instead of UA blue, and it
+     tracks per-project accent remaps automatically. */
+  ::selection {
+    background: color-mix(in srgb, var(--accent) 30%, var(--bg));
+    color: var(--fg);
+  }
+
   /* Rag control: balanced display headings (no single-word last lines on
      marquee statements), pretty-wrapped body text (no orphans). Progressive —
      engines without support simply ignore it. */
@@ -502,7 +509,7 @@ html.lenis body {
     font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
     font-size: 0.875rem;
     font-weight: 500;
-    /* Hidden off-screen; appears instantly on focus. Motion comes in Phase 2. */
+    /* Hidden off-screen; appears instantly on focus. */
     transform: translateY(-150%);
   }
 

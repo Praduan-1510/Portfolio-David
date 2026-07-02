@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Inter, JetBrains_Mono } from "next/font/google";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
@@ -30,6 +30,9 @@ const mono = JetBrains_Mono({
   variable: "--font-mono",
   display: "swap",
 });
+
+// Tint mobile browser chrome to the near-black base (address bar, overscroll).
+export const viewport: Viewport = { themeColor: "#0a0a0b" };
 
 export const metadata: Metadata = {
   // Base for resolving relative OG/twitter image paths to absolute URLs.

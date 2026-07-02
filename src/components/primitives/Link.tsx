@@ -3,8 +3,9 @@ import { cn } from "@/lib/utils/cn";
 
 /*
  * Text link. Internal hrefs route through next/link; external / mailto / tel
- * render a plain <a>. Underline appears on hover AND focus for affordance
- * (DESIGN_GUIDELINES.md §7.7 / §10). No transition — motion comes in Phase 2.
+ * render a plain <a>. Always underlined with a transparent decoration that
+ * inks in on hover/focus — zero layout shift, and the ink-in eases on the
+ * motion tokens (DESIGN_GUIDELINES.md §7.7 / §10).
  */
 interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string;
@@ -15,7 +16,7 @@ const isHttp = (href: string) => /^https?:/.test(href);
 
 export function Link({ href, className, children, ...props }: LinkProps) {
   const classes = cn(
-    "text-accent underline-offset-4 hover:underline focus-visible:underline",
+    "text-accent underline decoration-transparent underline-offset-4 transition-[color,text-decoration-color] duration-fast ease-out-quad hover:decoration-current focus-visible:decoration-current",
     className,
   );
 

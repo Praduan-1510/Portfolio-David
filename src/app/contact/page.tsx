@@ -191,7 +191,7 @@ export default function Contact() {
                         href={channel.href}
                         target={/^https?:/.test(channel.href) ? "_blank" : undefined}
                         rel={/^https?:/.test(channel.href) ? "noreferrer noopener" : undefined}
-                        aria-label={`${channel.label}: ${channel.value}`}
+                        aria-label={`${channel.label}: ${channel.value}${/^https?:/.test(channel.href) ? " (opens in a new tab)" : ""}`}
                         className={cn("card-neon-row group rounded-[2px]", rowClass)}
                       >
                         {body}

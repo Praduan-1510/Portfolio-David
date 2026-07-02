@@ -181,6 +181,7 @@ export function BrowserMockup({
               <Lock />
               <span className="truncate">{domain ?? liveUrl}</span>
               <span aria-hidden="true">↗</span>
+              <span className="sr-only"> (opens in a new tab)</span>
             </a>
           ) : (
             <span className="bm-url mx-auto inline-flex max-w-[62%] items-center gap-space-2 rounded-full border border-line bg-white/[0.04] px-space-3 py-[3px] font-mono text-caption text-muted">

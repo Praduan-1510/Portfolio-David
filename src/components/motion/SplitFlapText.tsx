@@ -35,6 +35,10 @@ interface SplitFlapTextProps {
    *  tile a fixed colour by index, settling to --fg regardless). Off → the flip
    *  uses the single --accent. Used by the hero wordmark. */
   multicolor?: boolean;
+  /** Announce the settled text via an sr-only span (default). Pass false when a
+   *  sibling heading already announces the same words — the hero and the 404
+   *  both carry their own sr-only h1, and a duplicate reads twice back-to-back. */
+  announce?: boolean;
 }
 
 const CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
@@ -53,6 +57,7 @@ function SplitFlapTextInner({
   speed = 50,
   fontSize = DEFAULT_FONT_SIZE,
   multicolor = false,
+  announce = true,
 }: SplitFlapTextProps) {
   const chars = useMemo(() => text.split(""), [text]);
   // The wordmark flips ONCE per mount — i.e. on page load/refresh and on
@@ -72,7 +77,7 @@ function SplitFlapTextInner({
   return (
     <div className={`relative inline-flex items-center ${className}`} style={{ perspective: "1000px" }}>
       {/* Flaps are decorative; the word is announced once for assistive tech. */}
-      <span className="sr-only">{text}</span>
+      {announce && <span className="sr-only">{text}</span>}
       <span aria-hidden="true" className="inline-flex items-center gap-[0.08em]">
         {chars.map((char, index) => (
           <SplitFlapChar

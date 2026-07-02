@@ -107,8 +107,8 @@ export function PortraitFrame({
 
       // 3 — POINTER DEPTH (desktop, fine pointer only). Tiny angles via quickTo.
       if (pointerDepth && window.matchMedia("(pointer: fine)").matches) {
-        const ry = gsap.quickTo(tilt, "rotationY", { duration: 0.6, ease: gsapEase.outQuad });
-        const rx = gsap.quickTo(tilt, "rotationX", { duration: 0.6, ease: gsapEase.outQuad });
+        const ry = gsap.quickTo(tilt, "rotationY", { duration: durations.slow, ease: gsapEase.outQuad });
+        const rx = gsap.quickTo(tilt, "rotationX", { duration: durations.slow, ease: gsapEase.outQuad });
         const onMove = (e: PointerEvent) => {
           const r = wrap.getBoundingClientRect();
           const px = (e.clientX - r.left) / r.width - 0.5;

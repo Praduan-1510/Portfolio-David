@@ -65,6 +65,7 @@ export function HeroWordmark() {
           flaps shrink to fit the gutter instead of overflowing. Desktop max (7rem)
           is unchanged, so the settled wordmark reads the same on wide screens. */}
       <SplitFlapText
+        announce={false}
         text="PRADUAN SAHA"
         fontSize="clamp(1.85rem, 9vw, 7rem)"
         className="font-semibold text-fg"

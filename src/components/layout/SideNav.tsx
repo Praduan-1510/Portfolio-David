@@ -55,9 +55,14 @@ export function SideNav() {
     return () => observer.disconnect();
   }, []);
 
-  const scrollToSection = (id: string) => {
+  // Anchor enhancement: the rail renders real <a href="#id"> links (deep-linkable,
+  // functional without JS); the handler keeps Lenis driving the scroll and records
+  // the hash without a native jump.
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     const el = document.getElementById(id);
     if (!el) return;
+    e.preventDefault();
+    window.history.pushState(null, "", `#${id}`);
     // Scroll through the single engine (Lenis) when it's active — Lenis forces
     // scroll-behavior:auto, so a native smooth scroll would jump. Offset clears
     // the 64px sticky top nav. Under reduced motion Lenis is null → native jump.
@@ -89,9 +94,9 @@ export function SideNav() {
           // while the base list stays monochrome.
           return (
             <li key={id} style={{ "--dot": spectrumAt(i) } as React.CSSProperties}>
-              <button
-                type="button"
-                onClick={() => scrollToSection(id)}
+              <a
+                href={`#${id}`}
+                onClick={(e) => scrollToSection(e, id)}
                 aria-label={label}
                 aria-current={active ? "true" : undefined}
                 // The 6px dot is the only visible mark, so a ::before extends the
@@ -118,7 +123,7 @@ export function SideNav() {
                 >
                   {label}
                 </span>
-              </button>
+              </a>
             </li>
           );
         })}

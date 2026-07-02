@@ -55,7 +55,7 @@ export function Footer() {
                 <li key={item.href}>
                   <NextLink
                     href={item.href}
-                    className="inline-flex min-h-[44px] items-center font-sans text-caption text-muted hover:text-fg"
+                    className="inline-flex min-h-[44px] items-center font-sans text-caption text-muted transition-colors duration-fast ease-out-quad hover:text-fg"
                   >
                     {item.label}
                   </NextLink>
@@ -71,9 +71,10 @@ export function Footer() {
                     href={item.href}
                     target={item.href.startsWith("http") ? "_blank" : undefined}
                     rel={item.href.startsWith("http") ? "noreferrer noopener" : undefined}
-                    className="inline-flex min-h-[44px] items-center font-sans text-caption text-muted hover:text-fg"
+                    className="inline-flex min-h-[44px] items-center font-sans text-caption text-muted transition-colors duration-fast ease-out-quad hover:text-fg"
                   >
                     {item.label}
+                    <span className="sr-only"> (opens in a new tab)</span>
                   </a>
                 </li>
               ))}

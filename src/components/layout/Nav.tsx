@@ -107,7 +107,7 @@ export function Nav() {
                     href={link.href}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "flex h-11 items-center font-sans text-caption hover:text-accent",
+                      "flex h-11 items-center font-sans text-caption transition-colors duration-fast ease-out-quad hover:text-accent",
                       active ? "text-fg" : "text-muted",
                     )}
                   >
@@ -125,7 +125,7 @@ export function Nav() {
           type="button"
           aria-label="Open menu"
           aria-expanded={open}
-          aria-controls="mobile-menu"
+          aria-controls={open ? "mobile-menu" : undefined}
           onClick={() => setOpen(true)}
           className="-mr-space-2 flex h-11 w-11 items-center justify-center rounded-[2px] text-fg md:hidden"
         >

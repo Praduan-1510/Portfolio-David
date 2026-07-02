@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Container, Text, Eyebrow, Button } from "@/components/primitives";
 import {
   Reveal,
@@ -27,6 +28,10 @@ import {
  * Reveal/StaggerGroup primitives render their content static and fully visible,
  * and nothing is trapped behind an animation — a clean, complete page.
  */
+
+// A dead URL should say so in the tab, not carry the home page title.
+export const metadata: Metadata = { title: "Page not found" };
+
 export default function NotFound() {
   return (
     <section
@@ -50,7 +55,7 @@ export default function NotFound() {
       {/* Centered stack — eyebrow → split-flap 404 → copy + links. */}
       <Container className="relative z-10 flex flex-1 flex-col items-center justify-center py-space-9 text-center">
         {/* Real heading for assistive tech / SEO; the board itself is decorative
-            (SplitFlapText announces "404" sr-only and marks the flaps aria-hidden). */}
+            (the sr-only h1 announces the state; the flaps stay decorative). */}
         <h1 id="notfound-heading" className="sr-only">
           404 — this page doesn&apos;t exist
         </h1>
@@ -63,6 +68,7 @@ export default function NotFound() {
             load, then settles. Reduced motion shows it settled instantly. */}
         <div className="mt-space-6">
           <SplitFlapText
+            announce={false}
             text="404"
             fontSize="clamp(4rem, 18vw, 12rem)"
             className="font-semibold text-fg"

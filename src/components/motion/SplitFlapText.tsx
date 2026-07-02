@@ -48,6 +48,10 @@ interface SplitFlapTextProps {
   /** "tiles" (default) keeps the settled board as tiles; "kern" crossfades the
    *  settled board into a real kerned span (hero wordmark). */
   settle?: "tiles" | "kern";
+  /** Horizontal alignment of the kerned settle twin within the board's width —
+   *  "start" for left-aligned compositions (the twin is narrower than the
+   *  monospaced tile row, so centering would shift the left edge). */
+  kernAlign?: "center" | "start";
   /** Extra classes for the kerned settle span (letter-spacing, weight). */
   kernClassName?: string;
 }
@@ -74,6 +78,7 @@ export function SplitFlapText({
   multicolor = false,
   announce = true,
   settle = "tiles",
+  kernAlign = "center",
   kernClassName = "",
 }: SplitFlapTextProps) {
   const chars = useMemo(() => text.split(""), [text]);
@@ -152,7 +157,7 @@ export function SplitFlapText({
       {kern && (
         <span
           aria-hidden="true"
-          className={`pointer-events-none absolute inset-0 flex items-center justify-center whitespace-nowrap font-display leading-none ${kernClassName}`}
+          className={`pointer-events-none absolute inset-0 flex items-center whitespace-nowrap font-display leading-none ${kernAlign === "start" ? "justify-start" : "justify-center"} ${kernClassName}`}
           style={{
             fontSize,
             opacity: allSettled ? 1 : 0,

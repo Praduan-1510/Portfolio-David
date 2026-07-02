@@ -1,29 +1,52 @@
 import { SplitFlapText } from "@/components/motion";
+import { SignalTrace } from "@/components/sections/SignalTrace";
 
 /*
- * Hero wordmark. The split-flap board flips the name in against solid tile
- * cards, then SplitFlapText's settle="kern" crossfades the board into a real
- * kerned span — so the entrance reads as a departure board and the resting
- * wordmark reads as set display type floating on the aurora (no tile fills, no
- * monospaced caps, no style-override hacks). Reduced motion renders the kerned
- * span from frame one.
+ * Instrument-hero wordmark: the name as a stacked two-line departure board —
+ * PRADUAN over SAHA, left-aligned at display scale. Both boards flip in with
+ * the multicolor entrance, then settle="kern" crossfades each into real kerned
+ * type anchored to the LEFT edge (kernAlign="start" — the composition is
+ * asymmetric now, not centered).
+ *
+ * The signal trace — the spectrum built from the four project accents — rides
+ * SAHA's baseline row and fills the remaining width (sm+); on phones it wraps
+ * to a full-width line under the block. Reduced motion renders kerned type +
+ * a static trace from frame one.
  */
+
+// PRADUAN is 7 tiles (~4.6em incl. gaps); 15vw keeps it huge on wide screens
+// while the 3.2rem floor holds the block inside a 320px gutter.
+const FONT = "clamp(3rem, 13vw, 9.75rem)";
+
 export function HeroWordmark() {
   return (
     <div aria-hidden="true">
-      {/* "PRADUAN SAHA" is 12 tiles wide (~8.3em incl. the inter-word gap), so the
-          clamp floor is lowered from 2.75rem to 1.85rem: below ~330px viewport the
-          flaps shrink to fit the gutter instead of overflowing. Desktop max (7rem)
-          is unchanged, so the settled wordmark reads the same on wide screens. */}
       <SplitFlapText
         announce={false}
-        text="PRADUAN SAHA"
-        fontSize="clamp(1.85rem, 9vw, 7rem)"
+        text="PRADUAN"
+        fontSize={FONT}
         className="font-semibold text-fg"
         kernClassName="font-semibold tracking-[-0.02em]"
         settle="kern"
+        kernAlign="start"
         multicolor
       />
+      <div className="flex items-center gap-x-space-6 sm:gap-x-space-7">
+        <SplitFlapText
+          announce={false}
+          text="SAHA"
+          fontSize={FONT}
+          className="font-semibold text-fg"
+          kernClassName="font-semibold tracking-[-0.02em]"
+          settle="kern"
+          kernAlign="start"
+          multicolor
+        />
+        {/* The trace fills SAHA's remaining baseline width on sm+. */}
+        <SignalTrace delay={1.35} className="hidden sm:block" />
+      </div>
+      {/* Phones: the trace becomes a full-width line under the block. */}
+      <SignalTrace delay={1.35} className="mt-space-5 sm:hidden" />
     </div>
   );
 }

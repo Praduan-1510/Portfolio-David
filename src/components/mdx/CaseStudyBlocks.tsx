@@ -344,3 +344,56 @@ export function Bleed({
     </div>
   );
 }
+
+
+/* ── BeforeAfter ─ REAL process evidence: the first-pass screen beside the
+   shipped one, with what revision caught. The V1s are the actual earlier
+   renders this project replaced — true iteration, not staged process theatre,
+   which is the only kind the honesty positioning can afford. ─────────────── */
+export function BeforeAfter({
+  before,
+  after,
+  note,
+  altBefore,
+  altAfter,
+}: {
+  before: string;
+  after: string;
+  note?: string;
+  altBefore?: string;
+  altAfter?: string;
+}) {
+  return (
+    <figure className="cs-wide my-space-9">
+      <StaggerGroup as="div" stagger={0.1} className="grid grid-cols-2 items-start gap-space-5 sm:gap-space-8 lg:max-w-[36rem]">
+        {[
+          { src: before, chip: "V1 — caught in revision", alt: altBefore ?? "First-pass screen", dim: true },
+          { src: after, chip: "Shipped", alt: altAfter ?? "Shipped screen", dim: false },
+        ].map((side) => (
+          <div key={side.chip} className="min-w-0">
+            <span
+              className={cn(
+                "mb-space-3 inline-flex items-center gap-space-2 rounded-full border px-space-3 py-[2px] font-mono text-[0.6875rem] uppercase tracking-[0.1em]",
+                side.dim ? "border-line text-muted" : "border-[color:color-mix(in_srgb,var(--accent)_45%,var(--line))] text-accent",
+              )}
+            >
+              <span
+                aria-hidden="true"
+                className={cn("h-[5px] w-[5px] rounded-full", side.dim ? "bg-muted" : "bg-accent")}
+              />
+              {side.chip}
+            </span>
+            <div className={side.dim ? "opacity-75" : undefined}>
+              <PhoneFrame src={side.src} alt={side.alt} sizes="(min-width: 640px) 17rem, 44vw" imgClassName="object-top" />
+            </div>
+          </div>
+        ))}
+      </StaggerGroup>
+      {note && (
+        <figcaption className="mt-space-4 max-w-[52ch] text-body text-muted">
+          {note}
+        </figcaption>
+      )}
+    </figure>
+  );
+}

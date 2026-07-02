@@ -17,6 +17,7 @@ import {
   Margin,
   Wide,
   Bleed,
+  BeforeAfter,
 } from "./CaseStudyBlocks";
 
 // Flatten MDX children to plain text so an h2's id matches the slug the contents
@@ -198,4 +199,5 @@ export const mdxComponents = {
   Margin,
   Wide,
   Bleed,
+  BeforeAfter,
 };

@@ -1,42 +1,62 @@
 /*
- * Hero flow field — living colour for the Instrument hero without the stock
- * shader: four huge, soft radial blooms in the site's hues (violet/blue from
- * the spectrum + two project accents) drifting on very slow CSS transform
- * loops (30-50s, alternating), so the backdrop breathes like slow signal
- * weather behind the type. GPU-cheap (transform/opacity only, no canvas, no
- * per-frame JS) and frozen to a composed still under prefers-reduced-motion
- * (keyframes live behind a motion-safe media query in globals.css).
- * Decorative: aria-hidden, -z, pointer-events-none.
+ * Hero atmosphere — colour with a REASON. Instead of free-floating gradient
+ * blobs (its own template smell), the hero's colour emanates from its one
+ * structural colour element: the signal trace. A soft band of the four
+ * project hues sits on the trace's latitude and FLOWS ALONG the line — an
+ * oversized gradient strip translated slowly on the compositor (transform
+ * only, no repaints, no canvas). One quiet violet ember up-right adds depth
+ * so the rest of the frame isn't dead. Reduced motion holds the still.
  */
 
-const BLOOMS = [
-  // colour, position, size, keyframe, duration, delay
-  { c: "#A98BFF", x: "16%", y: "22%", w: "52%", h: "46%", k: "ember-drift-a", d: "38s", del: "0s", a: 0.27 },
-  { c: "#46B4F0", x: "82%", y: "16%", w: "48%", h: "44%", k: "ember-drift-b", d: "46s", del: "-12s", a: 0.24 },
-  { c: "#F7A53B", x: "74%", y: "84%", w: "50%", h: "46%", k: "ember-drift-c", d: "42s", del: "-24s", a: 0.19 },
-  { c: "#2DD4BF", x: "22%", y: "84%", w: "46%", h: "42%", k: "ember-drift-b", d: "52s", del: "-30s", a: 0.17 },
-] as const;
+const TRACE_GRADIENT =
+  "linear-gradient(90deg, transparent 0%, #2DD4BF 12%, #C9E94B 32%, #F7A53B 52%, #46B4F0 72%, #A98BFF 88%, transparent 100%)";
 
 export function HeroFlow() {
   return (
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-      {BLOOMS.map((b) => (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+    >
+      {/* Trace glow — the light the signal line casts. Sits on the wordmark's
+          baseline latitude (~52% at desktop compositions), soft-masked so it
+          reads as glow, not a band. The inner strip is 3x wide and drifts on
+          a slow transform loop: the hues literally flow along the line. */}
+      <div
+        className="absolute inset-x-0"
+        style={{
+          top: "34%",
+          height: "38%",
+          maskImage:
+            "radial-gradient(60% 46% at 62% 50%, #000 0%, transparent 92%)",
+          WebkitMaskImage:
+            "radial-gradient(60% 46% at 62% 50%, #000 0%, transparent 92%)",
+        }}
+      >
         <div
-          key={`${b.c}-${b.x}`}
-          className="absolute"
+          className="absolute inset-y-0 w-[300%] motion-safe:animate-trace-flow"
           style={{
-            left: `calc(${b.x} - ${b.w} / 2)`,
-            top: `calc(${b.y} - ${b.h} / 2)`,
-            width: b.w,
-            height: b.h,
-            background: `radial-gradient(50% 50% at 50% 50%, color-mix(in srgb, ${b.c} ${Math.round(
-              b.a * 100,
-            )}%, transparent), transparent 70%)`,
-            animation: `${b.k} ${b.d} ease-in-out ${b.del} infinite alternate`,
+            left: "-100%",
+            background: `${TRACE_GRADIENT}, ${TRACE_GRADIENT}`,
+            backgroundSize: "50% 100%, 50% 100%",
+            backgroundPosition: "0% 0%, 50% 0%",
+            backgroundRepeat: "repeat-x",
+            opacity: 0.1,
             willChange: "transform",
           }}
         />
-      ))}
+      </div>
+      {/* One quiet ember for depth — a single cool pool, not a constellation. */}
+      <div
+        className="absolute"
+        style={{
+          left: "58%",
+          top: "-18%",
+          width: "56%",
+          height: "52%",
+          background:
+            "radial-gradient(50% 50% at 50% 50%, color-mix(in srgb, #A98BFF 14%, transparent), transparent 70%)",
+        }}
+      />
     </div>
   );
 }

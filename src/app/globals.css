@@ -317,20 +317,16 @@
   }
 }
 
-/* Hero flow blooms — slow ambient drift (HeroFlow.tsx). Transform-only, and
-   only when motion is welcome; reduced motion holds the composed still. */
+/* Hero trace-glow flow (HeroFlow.tsx): the oversized hue strip drifts one
+   gradient period laterally — colour flowing along the signal line. Transform
+   only (compositor), and only when motion is welcome. */
 @media (prefers-reduced-motion: no-preference) {
-  @keyframes ember-drift-a {
-    from { transform: translate3d(-5%, 4%, 0) scale(1); }
-    to   { transform: translate3d(9%, -7%, 0) scale(1.22); }
+  @keyframes trace-flow {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(16.666%, 0, 0); }
   }
-  @keyframes ember-drift-b {
-    from { transform: translate3d(6%, -4%, 0) scale(1.12); }
-    to   { transform: translate3d(-8%, 6%, 0) scale(0.94); }
-  }
-  @keyframes ember-drift-c {
-    from { transform: translate3d(-4%, -6%, 0) scale(0.96); }
-    to   { transform: translate3d(7%, 5%, 0) scale(1.18); }
+  .motion-safe\:animate-trace-flow {
+    animation: trace-flow 44s linear infinite alternate;
   }
 }
 

@@ -91,6 +91,17 @@ export default async function CaseStudy({
   });
   const hasContents = sections.length >= 2;
 
+  // Evidence before verdict: when a screens gallery exists, the MDX body is
+  // split at "## Outcome" so the flow gallery renders BETWEEN the narrative
+  // and the Outcome/Reflection — a skimmer meets the screens before the
+  // conclusions. Anchors/TOC are unaffected (ids live on the headings).
+  const hasGallery = Boolean(meta.flows && meta.flows.length > 0);
+  const outcomeAt = content.indexOf("\n## Outcome");
+  const contentMain =
+    hasGallery && outcomeAt >= 0 ? content.slice(0, outcomeAt) : content;
+  const contentOutcome =
+    hasGallery && outcomeAt >= 0 ? content.slice(outcomeAt + 1) : null;
+
   // Theme the route to the project accent (semantic remap, §4/§8) and run it on
   // the dark surface so any accent (lime/orange/blue) stays high-contrast (§3).
   const themeStyle = meta.accent
@@ -452,13 +463,13 @@ export default async function CaseStudy({
               {/* Full-cell column: text self-clamps to --measure (in mdx-components)
                   while media (<Shot>) uses the full width and can alternate sides. */}
               <Reveal className="prose-cs-grid min-w-0 [&>p:first-of-type]:mb-space-7 [&>p:first-of-type]:font-display [&>p:first-of-type]:text-body-l [&>p:first-of-type]:leading-[1.5] [&>p:first-of-type]:text-fg">
-                <MDXRemote source={content} components={mdxComponents} />
+                <MDXRemote source={contentMain} components={mdxComponents} />
               </Reveal>
             </div>
           </>
         ) : (
           <Reveal className="max-w-[var(--measure)] [&>p:first-of-type]:mb-space-7 [&>p:first-of-type]:font-display [&>p:first-of-type]:text-body-l [&>p:first-of-type]:leading-[1.5] [&>p:first-of-type]:text-fg">
-            <MDXRemote source={content} components={mdxComponents} />
+            <MDXRemote source={contentMain} components={mdxComponents} />
           </Reveal>
         )}
       </Container>
@@ -561,6 +572,25 @@ export default async function CaseStudy({
               </section>
             ))}
           </div>
+        </Container>
+      )}
+
+      {/* Outcome + Reflection — rendered AFTER the gallery so conclusions come
+          with the evidence already seen. Spacer column keeps rail alignment. */}
+      {contentOutcome && (
+        <Container as="section" className="pb-space-10 pt-space-8">
+          {hasContents ? (
+            <div className="grid gap-space-7 md:grid-cols-[11rem_minmax(0,1fr)] md:gap-space-9">
+              <div className="hidden md:block" aria-hidden="true" />
+              <Reveal className="prose-cs-grid min-w-0">
+                <MDXRemote source={contentOutcome} components={mdxComponents} />
+              </Reveal>
+            </div>
+          ) : (
+            <Reveal className="max-w-[var(--measure)]">
+              <MDXRemote source={contentOutcome} components={mdxComponents} />
+            </Reveal>
+          )}
         </Container>
       )}
 

@@ -265,7 +265,7 @@ export default function About() {
           {STATS.map((s) => (
             <div
               key={s.label}
-              className="card-neon-row group flex flex-col-reverse gap-space-2 border-t border-line pt-space-4"
+              className="card-neon-row group flex flex-col-reverse justify-end gap-space-2 border-t border-line pt-space-4"
             >
               <dt className="font-mono text-caption uppercase tracking-[0.14em] text-muted">
                 {s.label}

@@ -103,9 +103,12 @@ export default function Contact() {
       ))}
 
       <Container className="relative z-10 flex flex-1 items-center py-space-10 [@media(max-height:600px)]:py-space-6">
-        <div className="grid w-full grid-cols-1 items-center gap-space-9 md:grid-cols-12 md:gap-space-8">
+        {/* The two-column split waits for lg — at 768px the panel column is so
+            narrow the email address breaks mid-word. lg:items-start keeps the
+            panel's top aligned with the eyebrow instead of floating mid-column. */}
+        <div className="grid w-full grid-cols-1 gap-space-9 lg:grid-cols-12 lg:items-start lg:gap-space-8">
           {/* Left — the focal statement. Oversized headline as the moment. */}
-          <div className="md:col-span-7 lg:col-span-7">
+          <div className="lg:col-span-7">
             <Reveal as="div" y={12} trigger="load">
               <Eyebrow>Contact</Eyebrow>
             </Reveal>
@@ -128,7 +131,7 @@ export default function Contact() {
 
           {/* Right — the contact panel: channels + CTAs, framed so it balances
               the headline and fills the formerly-empty half. */}
-          <div className="md:col-span-5 lg:col-start-9 lg:col-span-4">
+          <div className="lg:col-start-9 lg:col-span-4">
             <Reveal as="div" trigger="load" delay={0.3}>
               {/* bg-surface (a var() token) can't take a /opacity modifier — it
                   silently no-ops — so the panel uses the solid raised surface. */}

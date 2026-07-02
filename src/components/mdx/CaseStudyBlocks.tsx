@@ -35,14 +35,14 @@ export function ScreenBeat({
   side?: "left" | "right";
 }) {
   return (
-    <figure className="my-space-9 grid items-center gap-space-6 sm:grid-cols-[14rem_1fr] sm:gap-space-8">
-      <Reveal className={cn("mx-auto w-full max-w-[14rem]", side === "right" && "sm:order-2")}>
+    <figure className="my-space-9 grid items-center gap-space-6 lg:grid-cols-[14rem_1fr] lg:gap-space-8">
+      <Reveal className={cn("mx-auto w-full max-w-[14rem]", side === "right" && "lg:order-2")}>
         <Parallax speed={0.05}>
           <PhoneFrame src={src} alt={alt ?? caption ?? "App screen"} sizes="14rem" imgClassName="object-top" />
         </Parallax>
       </Reveal>
       {(label || caption) && (
-        <Reveal delay={0.08} className={cn(side === "right" && "sm:order-1 sm:text-right")}>
+        <Reveal delay={0.08} className={cn(side === "right" && "lg:order-1")}>
           <figcaption>
             {label && (
               <span className="mb-space-2 block font-mono text-caption uppercase tracking-[0.18em] text-accent">
@@ -50,7 +50,7 @@ export function ScreenBeat({
               </span>
             )}
             {caption && (
-              <span className={cn("block max-w-[40ch] text-body-l text-fg", side === "right" && "sm:ml-auto")}>
+              <span className="block max-w-[40ch] text-body-l text-fg">
                 {caption}
               </span>
             )}
@@ -89,7 +89,7 @@ export function DecisionCards({ children }: { children?: React.ReactNode }) {
     <StaggerGroup
       as="ol"
       stagger={0.07}
-      className="my-space-8 grid list-none grid-cols-1 gap-space-5 [counter-reset:decision] sm:grid-cols-2"
+      className="my-space-8 grid list-none grid-cols-1 gap-space-5 [counter-reset:decision] lg:grid-cols-2 lg:[&>li:last-child:nth-child(odd)]:col-span-2"
     >
       {children}
     </StaggerGroup>
@@ -104,7 +104,7 @@ export function DecisionCard({ title, children }: { title?: string; children?: R
         className="font-mono text-caption tabular-nums text-accent before:content-[counter(decision,decimal-leading-zero)]"
       />
       {title && <p className="mt-space-3 font-display text-body-l font-medium text-fg">{title}</p>}
-      <div className="mt-space-2 text-body text-muted [&>p:last-child]:mb-0">{children}</div>
+      <div className="mt-space-2 max-w-[52ch] text-body text-muted [&>p:last-child]:mb-0">{children}</div>
     </li>
   );
 }
@@ -138,7 +138,7 @@ export function StatusColourSystem() {
   return (
     <Reveal
       as="ul"
-      className="my-space-8 grid grid-cols-1 gap-space-5 sm:grid-cols-3"
+      className="my-space-8 grid grid-cols-1 gap-space-5 lg:grid-cols-3"
       aria-label="Spendee status colour system"
     >
       {STATUS.map((s) => (
@@ -164,7 +164,7 @@ export function Stats({ children }: { children?: React.ReactNode }) {
     <StaggerGroup
       as="dl"
       stagger={0.08}
-      className="my-space-8 grid grid-cols-2 gap-x-space-6 gap-y-space-6 sm:grid-cols-4"
+      className="my-space-8 grid grid-cols-2 gap-x-space-6 gap-y-space-6 lg:grid-cols-4"
     >
       {children}
     </StaggerGroup>
@@ -173,9 +173,15 @@ export function Stats({ children }: { children?: React.ReactNode }) {
 
 export function Stat({ value, label }: { value?: string; label?: string }) {
   return (
-    <div className="flex flex-col-reverse gap-space-2 border-t border-line pt-space-4">
-      <dt className="font-mono text-caption uppercase tracking-[0.14em] text-muted">{label}</dt>
-      <dd className="font-display text-display-l leading-none text-accent">{value}</dd>
+    // justify-end packs the value row to the bottom of the cell (flex-col-reverse
+    // main axis), so every dd shares one baseline no matter how the label wraps.
+    <div className="flex flex-col-reverse justify-end gap-space-2 border-t border-line pt-space-4">
+      <dt className="min-w-0 break-words font-mono text-caption uppercase tracking-[0.14em] text-muted">
+        {label}
+      </dt>
+      <dd className="whitespace-nowrap font-display text-display-l leading-none text-accent">
+        {value}
+      </dd>
     </div>
   );
 }
@@ -227,7 +233,7 @@ export function Goal({
   status?: string;
 }) {
   return (
-    <li className="grid gap-space-4 rounded-none border-t-2 border-[color:color-mix(in_srgb,var(--accent)_30%,var(--line))] bg-[color:color-mix(in_srgb,var(--surface)_55%,transparent)] p-space-5 [counter-increment:goal] sm:grid-cols-[1.25fr_1fr] sm:items-start sm:gap-space-6">
+    <li className="grid gap-space-4 rounded-none border-t-2 border-[color:color-mix(in_srgb,var(--accent)_30%,var(--line))] bg-[color:color-mix(in_srgb,var(--surface)_55%,transparent)] p-space-5 [counter-increment:goal] lg:grid-cols-[1.25fr_1fr] lg:items-start lg:gap-space-6">
       <div>
         <span
           aria-hidden="true"
@@ -240,14 +246,16 @@ export function Goal({
         )}
       </div>
       {(signal || status) && (
-        <div className="border-t border-line pt-space-4 sm:border-l sm:border-t-0 sm:pl-space-6 sm:pt-0">
+        <div className="border-t border-line pt-space-4 lg:border-l lg:border-t-0 lg:pl-space-6 lg:pt-0">
           <span className="block font-mono text-caption uppercase tracking-[0.16em] text-accent">
             Success signal
           </span>
           {signal && <p className="mt-space-2 text-body text-muted">{signal}</p>}
           {status && (
-            <span className="mt-space-3 inline-flex items-center gap-space-2 rounded-full border border-line px-space-3 py-space-1 font-mono text-caption uppercase tracking-[0.1em] text-muted">
-              <span aria-hidden="true" className="h-[5px] w-[5px] rounded-full bg-muted" />
+            <span className="mt-space-3 inline-flex items-start gap-space-2 rounded-full border border-line px-space-3 py-space-1 font-mono text-caption uppercase tracking-[0.1em] text-muted">
+              {/* items-start + a small nudge keeps the dot on the FIRST line when
+                  the chip text wraps (centered, it floats between the lines). */}
+              <span aria-hidden="true" className="mt-[0.4em] h-[5px] w-[5px] shrink-0 rounded-full bg-muted" />
               {status}
             </span>
           )}

@@ -1,5 +1,9 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils/cn";
+import blurMap from "@/lib/content/blur-map.json";
+
+const blurFor = (src: string): string | undefined =>
+  (blurMap as Record<string, string>)[src];
 
 /*
  * Clean phone frame for mobile UI screens (these projects are phone apps). The
@@ -51,6 +55,8 @@ export function PhoneFrame({
           fill
           sizes={sizes}
           priority={priority}
+          placeholder={blurFor(src) ? "blur" : "empty"}
+          blurDataURL={blurFor(src)}
           className={cn("object-cover", imgClassName)}
         />
         {/* Screen overlay (above the image) — a crisp light hairline ring keeps

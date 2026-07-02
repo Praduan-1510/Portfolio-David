@@ -14,7 +14,10 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
  */
 const HeroCanvas = dynamic(
   () => import("./HeroCanvas").then((m) => m.HeroCanvas),
-  { ssr: false, loading: () => <Fallback /> },
+  // No loading component — the always-on base <Fallback /> already paints the
+  // hero while the chunk streams in (a loading fallback here would stack a
+  // second copy of the same gradients on top of it).
+  { ssr: false, loading: () => null },
 );
 
 function supportsWebGL(): boolean {
@@ -133,15 +136,18 @@ export function HeroBackground() {
   return (
     // Decorative layer — hidden from assistive tech across both branches (live
     // canvas + static fallback), so the isolation layer is self-contained.
+    // The Fallback always renders as the base layer: chunk load, context loss,
+    // or any canvas transparency sits on a painted spectrum field, never raw --bg.
     <div ref={containerRef} aria-hidden="true" className="absolute inset-0">
-      {enabled && !lost ? (
-        <HeroCanvas
-          active={onscreen && visible}
-          baseColor={baseColor}
-          onContextLost={() => setLost(true)}
-        />
-      ) : (
-        <Fallback />
+      <Fallback />
+      {enabled && !lost && (
+        <div className="absolute inset-0">
+          <HeroCanvas
+            active={onscreen && visible}
+            baseColor={baseColor}
+            onContextLost={() => setLost(true)}
+          />
+        </div>
       )}
     </div>
   );

@@ -5,6 +5,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type React from "react";
 import { cn } from "@/lib/utils/cn";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import blurMap from "@/lib/content/blur-map.json";
+
+const blurFor = (src: string): string | undefined =>
+  (blurMap as Record<string, string>)[src];
 
 /*
  * Landscape browser/window mockup — the web counterpart to PhoneFrame. Holds a
@@ -191,7 +195,14 @@ export function BrowserMockup({
             the recording's OS menu bar / browser chrome / dock). */}
         <div
           className={cn("relative overflow-hidden rounded-b-[7px] bg-bezel", wellClassName)}
-          style={{ aspectRatio: aspect }}
+          style={{
+            aspectRatio: aspect,
+            // Blurred poster behind both branches: the well is never a black
+            // hole while the video/still streams in.
+            backgroundImage: blurFor(poster) ? `url("${blurFor(poster)}")` : undefined,
+            backgroundSize: "cover",
+            backgroundPosition: objectPosition,
+          }}
         >
           {showVideo ? (
             <video
@@ -215,6 +226,8 @@ export function BrowserMockup({
               fill
               sizes={sizes}
               priority={priority}
+              placeholder={blurFor(poster) ? "blur" : "empty"}
+              blurDataURL={blurFor(poster)}
               className={fit === "contain" ? "object-contain" : "object-cover"}
               style={{ objectPosition }}
             />

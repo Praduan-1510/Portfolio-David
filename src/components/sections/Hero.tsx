@@ -174,7 +174,6 @@ export function Hero() {
             <Button
               href="/work"
               variant="invert"
-              shape="pill"
               size="lg"
               className="w-full shadow-[0_14px_40px_-16px_rgba(0,0,0,0.7)] hover:-translate-y-px sm:w-auto"
             >
@@ -190,7 +189,6 @@ export function Hero() {
             <Button
               href="/contact"
               variant="secondary"
-              shape="pill"
               size="lg"
               className="w-full bg-white/[0.04] backdrop-blur-md hover:-translate-y-px hover:bg-white/[0.07] sm:w-auto"
             >

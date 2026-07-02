@@ -196,11 +196,11 @@ function WorkStackRow({
           </Text>
 
           {/* Services — turns the old dead gutter into substance. */}
-          <ul className="mt-space-5 flex flex-wrap gap-x-space-3 gap-y-space-2">
+          <ul className="mt-space-5 flex flex-wrap gap-x-space-2 gap-y-space-2 sm:gap-x-space-3">
             {project.services.map((service) => (
               <li
                 key={service}
-                className="rounded-full border border-line px-space-4 py-space-1 font-mono text-caption uppercase tracking-[0.12em] text-muted transition-colors duration-fast ease-out-quad group-hover:border-neon group-hover:text-neon"
+                className="rounded-full border border-line px-space-3 py-[2px] font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-muted transition-colors duration-fast ease-out-quad group-hover:border-neon group-hover:text-neon sm:px-space-4 sm:py-space-1 sm:text-caption sm:tracking-[0.12em]"
               >
                 {service}
               </li>

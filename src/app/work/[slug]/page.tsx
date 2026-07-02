@@ -577,7 +577,7 @@ export default async function CaseStudy({
       {next && (
         <section className="relative isolate overflow-hidden border-t border-line">
           <NextLink href={`/work/${next.slug}`} className="group block">
-            <Container className="flex items-center justify-between gap-space-7 py-space-11">
+            <Container className="flex items-center justify-between gap-space-7 py-space-10">
               <Reveal className="min-w-0">
                 <Eyebrow>Next project</Eyebrow>
                 <Text
@@ -614,7 +614,7 @@ export default async function CaseStudy({
         </section>
       )}
 
-      <Container className="pb-space-10">
+      <Container className="pt-0 pb-space-8">
         <Link href="/work">← Back to all work</Link>
       </Container>
     </article>

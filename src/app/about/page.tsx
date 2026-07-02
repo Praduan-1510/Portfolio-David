@@ -466,12 +466,8 @@ export default function About() {
         </StaggerGroup>
       </Container>
 
-      <Container>
-        <AnimatedDivider spectrum />
-      </Container>
-
       {/* ── Certifications ──────────────────────────────────────────────── */}
-      <Container as="section" className="py-space-10">
+      <Container as="section" className="py-space-8">
         <Reveal as="div" y={12}>
           <Eyebrow>Certifications</Eyebrow>
         </Reveal>
@@ -493,7 +489,7 @@ export default function About() {
       </Container>
 
       {/* ── Languages ───────────────────────────────────────────────────── */}
-      <Container as="section" className="pb-space-10">
+      <Container as="section" className="pb-space-8">
         <Reveal as="div" y={12}>
           <Eyebrow>Languages</Eyebrow>
         </Reveal>

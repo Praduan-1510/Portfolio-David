@@ -21,7 +21,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative mt-space-11 border-t border-line">
+    <footer className="relative mt-space-9 border-t border-line">
       {/* Closing spectrum thread — the hero opens by resolving the spectrum into
           the wordmark; the footer lays it back out flat across the top edge as a
           bookend. Faded ends so it's a thread, not a bar. Decorative. */}

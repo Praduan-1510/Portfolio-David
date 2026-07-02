@@ -120,8 +120,22 @@ export function ProjectCard({
               }
             />
           </div>
+          {/* Bottom dissolve OVER the phone: the cover bleeds off the stage edge
+              by design, but a hard slice mid-module read as accidental cropping —
+              the fade makes the bleed look intentional. Phone cards only (web
+              covers are fully contained). */}
+          {!isWeb && (
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-16"
+              style={{
+                background:
+                  "linear-gradient(to top, color-mix(in srgb, var(--bg) 96%, #000) 12%, transparent 100%)",
+              }}
+            />
+          )}
           {/* Corner affordance. */}
-          <span className="absolute right-space-4 top-space-4 font-mono text-caption uppercase tracking-[0.16em] text-fg transition-colors duration-fast ease-out-quad group-hover:text-neon">
+          <span className="absolute right-space-4 top-space-4 z-[2] font-mono text-caption uppercase tracking-[0.16em] text-fg transition-colors duration-fast ease-out-quad group-hover:text-neon">
             View →
           </span>
         </div>

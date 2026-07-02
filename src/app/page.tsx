@@ -77,12 +77,12 @@ export default function Home() {
         <StaggerGroup
           as="dl"
           stagger={0.08}
-          className="grid grid-cols-3 border-y border-line"
+          className="grid grid-cols-1 border-y border-line sm:grid-cols-3"
         >
           {stats.map((s, i) => (
             <div
               key={s.label}
-              className="group flex min-w-0 flex-col gap-space-2 py-space-6 pl-space-2 pr-space-2 first:pl-0 sm:gap-space-3 sm:py-space-7 sm:pl-space-5 sm:pr-space-4 [&:not(:first-child)]:border-l [&:not(:first-child)]:border-line"
+              className="group flex min-w-0 flex-col gap-space-2 py-space-6 pl-space-2 pr-space-2 first:pl-0 sm:gap-space-3 sm:py-space-7 sm:pl-space-5 sm:pr-space-4 [&:not(:first-child)]:border-t [&:not(:first-child)]:border-line sm:[&:not(:first-child)]:border-t-0 sm:[&:not(:first-child)]:border-l"
             >
               {/* Index ticks each carry their spectrum hue, so the gauge cluster
                   reads as a colour-coded instrument row (the figures stay mono). */}
@@ -202,10 +202,6 @@ export default function Home() {
             />
           </PortraitFrame>
         </div>
-      </Container>
-
-      <Container>
-        <AnimatedDivider spectrum />
       </Container>
 
       {/* Contact CTA — a framed panel with real depth: a layered radial glow from

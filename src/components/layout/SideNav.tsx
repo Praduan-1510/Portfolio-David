@@ -75,9 +75,10 @@ export function SideNav() {
       aria-label="Sections"
       // w-12 keeps the fixed translucent rail inside the page's left gutter at
       // lg+ (gutter ≥ ~51px there) so it never paints over the content's left edge.
-      className="fixed left-0 top-0 z-40 flex h-screen w-12 flex-col justify-center border-r border-line backdrop-blur-sm"
-      // /opacity no-ops on our var() tokens, so the translucency is set explicitly.
-      style={{ backgroundColor: "color-mix(in srgb, var(--bg) 75%, transparent)" }}
+      // No full-height fill/border: a painted rail read as a hard seam over the
+      // hero aurora (review: "hairline at x≈48"). The dots float; each carries its
+      // own halo for contrast against bright backdrops.
+      className="fixed left-0 top-0 z-40 flex h-screen w-12 flex-col justify-center"
     >
       <ul className="flex flex-col gap-space-5 px-space-4">
         {navItems.map(({ id, label }, i) => {
@@ -99,8 +100,10 @@ export function SideNav() {
               >
                 <span
                   aria-hidden="true"
+                  // The dark halo replaces the removed rail fill: keeps each dot
+                  // legible when it floats directly over the bright aurora.
                   className={cn(
-                    "h-1.5 w-1.5 rounded-full transition-all duration-base ease-out-quad",
+                    "h-1.5 w-1.5 rounded-full shadow-[0_0_0_3px_rgba(0,0,0,0.35)] transition-all duration-base ease-out-quad",
                     active
                       ? "scale-125 bg-[var(--dot)]"
                       : "bg-muted opacity-40 group-hover:bg-[var(--dot)] group-hover:opacity-90",

@@ -122,7 +122,9 @@ export function LogoMarquee({ className }: { className?: string }) {
       {reduced ? (
         // Static, fully legible wrapped row — no animation, no duplicate.
         <Container>
-          <ul className="flex flex-wrap items-center justify-center gap-x-space-8 gap-y-space-5">
+          {/* An even grid (7-up, 5-up on phones) instead of flex-wrap, which
+              broke 14 logos as 13 + 1 centered orphan. */}
+          <ul className="grid grid-cols-5 place-items-center gap-x-space-6 gap-y-space-5 sm:grid-cols-7">
             {TOOLS.map((tool, i) => (
               <ToolLogo key={tool.src} tool={tool} index={i} />
             ))}

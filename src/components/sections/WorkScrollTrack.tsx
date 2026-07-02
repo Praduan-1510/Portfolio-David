@@ -311,7 +311,7 @@ export function WorkScrollTrack({ projects }: { projects: ProjectMeta[] }) {
                   ))}
                 </ul>
 
-                <span className="mt-space-6 inline-flex items-center gap-space-2 font-mono text-caption uppercase tracking-[0.16em] text-muted transition-colors duration-fast ease-out-quad group-hover:text-neon">
+                <span className="mt-space-6 inline-flex items-center gap-space-2 font-mono text-caption uppercase tracking-[0.16em] text-fg transition-colors duration-fast ease-out-quad group-hover:text-neon">
                   View case study
                   <span
                     aria-hidden="true"

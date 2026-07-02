@@ -6,6 +6,7 @@ import { StaggerGroup } from "@/components/motion";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { WorkScrollTrack } from "./WorkScrollTrack";
+import { displayTitle } from "@/lib/utils/typography";
 import type { ProjectMeta } from "@/types/project";
 
 /*
@@ -176,7 +177,7 @@ function WorkStackRow({
             variant="display-l"
             className="relative mt-space-4 inline-block group-hover:text-neon"
           >
-            {project.title}
+            {displayTitle(project.title)}
             <span
               aria-hidden="true"
               className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-neon transition-transform duration-base ease-out-quad group-hover:scale-x-100"
@@ -207,7 +208,7 @@ function WorkStackRow({
           </ul>
 
           {/* Explicit affordance — the arrow slides on hover (transform only). */}
-          <span className="mt-space-6 inline-flex items-center gap-space-2 font-mono text-caption uppercase tracking-[0.16em] text-muted transition-colors duration-fast ease-out-quad group-hover:text-neon">
+          <span className="mt-space-6 inline-flex items-center gap-space-2 font-mono text-caption uppercase tracking-[0.16em] text-fg transition-colors duration-fast ease-out-quad group-hover:text-neon">
             View case study
             <span
               aria-hidden="true"

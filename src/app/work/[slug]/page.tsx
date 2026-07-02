@@ -21,6 +21,7 @@ import {
   RouteProgressAccent,
 } from "@/components/motion";
 import { mdxComponents } from "@/components/mdx/mdx-components";
+import { displayTitle } from "@/lib/utils/typography";
 import {
   getProjectBySlug,
   getProjectSlugs,
@@ -164,7 +165,7 @@ export default async function CaseStudy({
                   delay={0.1}
                   className="max-w-[16ch] font-display text-display-l"
                 >
-                  {meta.title}
+                  {displayTitle(meta.title)}
                 </TextReveal>
                 {meta.liveUrl && (
                   <Reveal
@@ -282,7 +283,7 @@ export default async function CaseStudy({
                 delay={0.1}
                 className="mt-space-4 max-w-[14ch] font-display text-display-xl"
               >
-                {meta.title}
+                {displayTitle(meta.title)}
               </TextReveal>
               <Reveal trigger="load" delay={0.28} className="mt-space-5">
                 <Text variant="body-l" className="max-w-[46ch] text-muted">
@@ -520,7 +521,7 @@ export default async function CaseStudy({
                     <span className="font-mono text-caption text-accent">
                       {String(fi + 1).padStart(2, "0")}
                     </span>
-                    <Text as="h3" id={`flow-${fi}`} variant="body-l" className="font-display font-medium">
+                    <Text as="h3" id={`flow-${fi}`} variant="heading-s" className="font-medium">
                       {flow.title}
                     </Text>
                     <span className="ml-auto shrink-0 font-mono text-caption uppercase tracking-[0.14em] text-muted">
@@ -584,7 +585,7 @@ export default async function CaseStudy({
                   variant="display-xl"
                   className="mt-space-3 block font-display transition-colors duration-base ease-out-quad group-hover:text-neon"
                 >
-                  {next.title}
+                  {displayTitle(next.title)}
                 </Text>
                 <span className="mt-space-5 inline-flex items-center gap-space-2 font-mono text-caption uppercase tracking-[0.18em] text-muted transition-colors duration-base ease-out-quad group-hover:text-neon">
                   View case study

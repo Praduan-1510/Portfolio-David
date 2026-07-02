@@ -92,8 +92,10 @@
      base if that ever shifts. */
   --bezel: #0b0b0d;
 
-  /* Reading measure — line length 60–75ch (DESIGN_GUIDELINES.md §5) */
-  --measure: 68ch;
+  /* Reading measure — line length 60–75ch (DESIGN_GUIDELINES.md §5).
+     NOTE: ch is the width of "0", ~30% wider than Inter's average glyph, so
+     68ch rendered ~90 real characters per line; 58ch lands ~70–75. */
+  --measure: 58ch;
 
   /* ---- Motion tokens (DESIGN_GUIDELINES.md §7.2 / §7.3) ------------- */
   /* Easing — named curves; use these, not ad-hoc beziers. */
@@ -214,6 +216,21 @@
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
+  }
+
+  /* Rag control: balanced display headings (no single-word last lines on
+     marquee statements), pretty-wrapped body text (no orphans). Progressive —
+     engines without support simply ignore it. */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p,
+  li,
+  figcaption,
+  dt {
+    text-wrap: pretty;
   }
 
   /* Honor reduced-motion globally (DESIGN_GUIDELINES.md §10). */

@@ -435,7 +435,9 @@ export default function About() {
                 {job.roles.map((role) => (
                   <div key={role.title}>
                     <div className="flex flex-col gap-space-1 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-space-3">
-                      <Text variant="body-l" className="font-display font-medium">
+                      {/* Body face (not display) so the ROLE reads as a different
+                          voice from the employer heading above, not a sibling. */}
+                      <Text variant="body-l" className="font-medium">
                         {role.title}
                       </Text>
                       <span className="shrink-0 font-mono text-caption uppercase tracking-[0.14em] text-muted">

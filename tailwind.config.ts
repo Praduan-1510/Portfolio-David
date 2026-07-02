@@ -43,7 +43,9 @@ const config: Config = {
       fontSize: {
         "display-xl": ["clamp(2.75rem, 7vw, 7rem)", { lineHeight: "1.0", letterSpacing: "-0.03em" }],
         "display-l": ["clamp(2.25rem, 5vw, 4.5rem)", { lineHeight: "1.05", letterSpacing: "-0.02em" }],
+        "heading-l": ["clamp(1.75rem, 3.2vw, 3rem)", { lineHeight: "1.1", letterSpacing: "-0.02em" }],
         heading: ["clamp(1.5rem, 2.5vw, 2.25rem)", { lineHeight: "1.1", letterSpacing: "-0.02em" }],
+        "heading-s": ["clamp(1.25rem, 1.6vw, 1.5rem)", { lineHeight: "1.3", letterSpacing: "-0.01em" }],
         "body-l": ["clamp(1.125rem, 1.4vw, 1.375rem)", { lineHeight: "1.6" }],
         body: ["1.0625rem", { lineHeight: "1.6" }],
         caption: ["0.8125rem", { lineHeight: "1.4" }],

@@ -65,13 +65,13 @@ export const mdxComponents = {
       <span>{children}</span>
     </Text>
   ),
-  // h3 — subsection. Lighter than h2 but still display, with a small accent dot
-  // so the hierarchy reads at a glance without competing with h2.
+  // h3 — subsection. A real scale step below h2 (heading-s), not body-l with
+  // weight, so dense Design/Strategy sections keep a third articulated level.
   h3: ({ children, ...props }: Props & { children?: React.ReactNode }) => (
     <Text
       as="h3"
-      variant="body-l"
-      className="mt-space-7 mb-space-3 flex items-baseline gap-space-3 scroll-mt-space-8 font-display font-medium"
+      variant="heading-s"
+      className="mt-space-7 mb-space-3 flex items-baseline gap-space-3 scroll-mt-space-8 font-medium"
       {...props}
     >
       <span

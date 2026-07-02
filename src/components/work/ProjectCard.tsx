@@ -1,6 +1,7 @@
 import NextLink from "next/link";
 import { Text, ProjectCover } from "@/components/primitives";
 import { cn } from "@/lib/utils/cn";
+import { displayTitle } from "@/lib/utils/typography";
 import type { ProjectMeta } from "@/types/project";
 
 /*
@@ -120,7 +121,7 @@ export function ProjectCard({
             />
           </div>
           {/* Corner affordance. */}
-          <span className="absolute right-space-4 top-space-4 font-mono text-caption uppercase tracking-[0.16em] text-muted transition-colors duration-fast ease-out-quad group-hover:text-neon">
+          <span className="absolute right-space-4 top-space-4 font-mono text-caption uppercase tracking-[0.16em] text-fg transition-colors duration-fast ease-out-quad group-hover:text-neon">
             View →
           </span>
         </div>
@@ -143,7 +144,7 @@ export function ProjectCard({
               variant={wide ? "display-l" : "heading"}
               className="relative inline-block transition-colors duration-fast ease-out-quad group-hover:text-neon"
             >
-              {project.title}
+              {displayTitle(project.title)}
               {/* Neon underline draws in from the left on hover (transform only). */}
               <span
                 aria-hidden="true"

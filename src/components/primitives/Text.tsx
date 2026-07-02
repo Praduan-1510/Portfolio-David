@@ -9,7 +9,9 @@ import { cn } from "@/lib/utils/cn";
 export type TextVariant =
   | "display-xl"
   | "display-l"
+  | "heading-l"
   | "heading"
+  | "heading-s"
   | "body-l"
   | "body"
   | "caption";
@@ -19,7 +21,9 @@ type TextElement = "h1" | "h2" | "h3" | "h4" | "p" | "span" | "div" | "li";
 const variantClasses: Record<TextVariant, string> = {
   "display-xl": "font-display text-display-xl",
   "display-l": "font-display text-display-l",
+  "heading-l": "font-display text-heading-l",
   heading: "font-display text-heading",
+  "heading-s": "font-display text-heading-s",
   "body-l": "font-sans text-body-l",
   body: "font-sans text-body",
   caption: "font-sans text-caption",

@@ -56,8 +56,8 @@ export default function WorkPage() {
         {/* Supporting copy — quiet rise, no kinetic split. */}
         <Reveal trigger="load" delay={0.18} y={16}>
           <Text variant="body-l" className="mt-space-5 max-w-[var(--measure)] text-muted">
-            A few projects that show how I work across strategy, interface, and
-            motion. Scroll through them.
+            The full board — live work and labelled concepts, each with the
+            argument it makes. One is in production; three are honest studies.
           </Text>
         </Reveal>
 

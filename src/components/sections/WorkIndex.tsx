@@ -5,7 +5,7 @@ import { Container, Text, ProjectCover } from "@/components/primitives";
 import { StaggerGroup } from "@/components/motion";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { WorkScrollTrack } from "./WorkScrollTrack";
+import { FlightBoard } from "./FlightBoard";
 import { displayTitle } from "@/lib/utils/typography";
 import type { ProjectMeta } from "@/types/project";
 
@@ -27,7 +27,10 @@ export function WorkIndex({ projects }: { projects: ProjectMeta[] }) {
   const isDesktop = useMediaQuery("(min-width: 1024px) and (pointer: fine)");
 
   if (isDesktop && !reduced) {
-    return <WorkScrollTrack projects={projects} />;
+    // The departure board — the signature writ large. The old pinned
+    // horizontal gallery (WorkScrollTrack) was the awards-kit piece every
+    // jury has seen; the board is the ownable version.
+    return <FlightBoard projects={projects} />;
   }
   return <WorkStack projects={projects} />;
 }

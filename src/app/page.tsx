@@ -24,7 +24,9 @@ import { getFeaturedProjectsMeta } from "@/lib/content/work";
  * shared motion primitives, reduced-motion-safe, transform/opacity only.
  */
 export default function Home() {
-  const featured = getFeaturedProjectsMeta();
+  // Three features on home — /work carries the full inventory, so "All work"
+  // genuinely adds something instead of duplicating this grid.
+  const featured = getFeaturedProjectsMeta().slice(0, 3);
 
   return (
     <>

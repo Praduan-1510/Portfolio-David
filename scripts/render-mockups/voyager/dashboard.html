@@ -1,0 +1,231 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 1188px; }
+
+  /* Navy greeting header */
+  .head {
+    height: 144px;
+    padding: 42px 18px 0 27px;
+    display: flex;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .greet { font-size: 25px; font-weight: 700; line-height: 34px; letter-spacing: -0.2px; color: #fff; }
+  .greet .who { color: var(--orange); }
+  .ava {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    margin-top: -2px;
+  }
+  .ava::before {
+    content: "";
+    position: absolute;
+    inset: -26px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(252, 163, 17, 0.55) 0, rgba(252, 163, 17, 0.28) 42%, rgba(252, 163, 17, 0) 72%);
+  }
+  .ava .avatar { position: relative; width: 72px; height: 72px; }
+
+  /* Search bar */
+  .searchbar {
+    margin: 23px 35px 0 27px;
+    height: 54px;
+    border-radius: 27px;
+    background: #efefef;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 0 20px;
+    flex-shrink: 0;
+  }
+  .searchbar svg { width: 19px; height: 19px; }
+  .searchbar span { font-size: 13.5px; font-weight: 600; color: #10182b; }
+
+  /* Section head */
+  .shead {
+    margin: 27px 35px 0 27px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    line-height: 15px;
+    flex-shrink: 0;
+  }
+  .shead .eyebrow { line-height: 15px; }
+  .shead .all { font-size: 13px; font-weight: 600; color: var(--ink); }
+
+  /* Destination card */
+  .dcard {
+    width: 142px;
+    height: 168px;
+    border-radius: 14px;
+    background: var(--navy);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .dcard img { width: 142px; height: 92px; object-fit: cover; }
+  .dcard .info { padding: 10px 12px 0; }
+  .dcard .t { font-size: 15px; font-weight: 600; line-height: 1; color: #fff; }
+  .dcard .s { margin-top: 6px; font-size: 10.5px; font-weight: 500; line-height: 1; color: #97a1b0; }
+  .dcard .p { margin-top: 7px; font-size: 12px; font-weight: 700; line-height: 1; color: var(--orange); }
+
+  .grid { display: flex; gap: 28px; margin: 8px 0 0 27px; flex-shrink: 0; }
+  .grid2 { display: flex; flex-wrap: wrap; gap: 22px 28px; margin: 7px 0 0 27px; flex-shrink: 0; }
+
+  /* Limited-offer banner */
+  .banner {
+    margin: 22px 17px 0;
+    height: 203px;
+    border-radius: 18px;
+    background: linear-gradient(93deg, #7b8392 0%, #37415a 52%, #14213d 88%);
+    padding: 25px 0 0 16px;
+    flex-shrink: 0;
+  }
+  .banner .h1 { margin-top: 15px; font-size: 27px; font-weight: 700; line-height: 34px; letter-spacing: -0.2px; color: #fff; }
+  .banner .go {
+    margin-top: 25px;
+    width: 187px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #201402;
+  }
+  .banner .go svg { width: 20px; height: 20px; }
+
+  /* Tab bar (sheet-bottom variant with inset gray home indicator) */
+  .tabbar { padding: 28px 10px 0; margin-top: auto; }
+  .hi {
+    width: 136px;
+    height: 5px;
+    border-radius: 999px;
+    background: #b9c0c9;
+    margin: 20px auto 6px;
+  }
+</style>
+</head>
+<body>
+<div class="screen">
+  <!-- Greeting -->
+  <div class="head">
+    <div class="greet">Good Morning<br /><span class="who">Praduan</span></div>
+    <div class="ava">
+      <div class="avatar"><img src="../assets/voyager/avatar.png" alt="" /></div>
+    </div>
+  </div>
+
+  <!-- White sheet -->
+  <div class="sheet">
+    <div class="searchbar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#10182b" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <span>Where Do You Want To Go?</span>
+    </div>
+
+    <!-- Explore -->
+    <div class="shead"><span class="eyebrow">Explore</span><span class="all">See All</span></div>
+    <div class="grid">
+      <div class="dcard">
+        <img src="../assets/voyager/paris-thumb.png" alt="" />
+        <div class="info">
+          <div class="t">Paris</div>
+          <div class="s">France 7 Days</div>
+          <div class="p">From $1,240</div>
+        </div>
+      </div>
+      <div class="dcard">
+        <img src="../assets/voyager/bali-thumb.png" alt="" />
+        <div class="info">
+          <div class="t">Bali</div>
+          <div class="s">Indonesia 10 Days</div>
+          <div class="p">From $800</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Limited offer -->
+    <div class="banner">
+      <span class="eyebrow">Limited Offer</span>
+      <div class="h1">20%<br />Summer Escapes</div>
+      <div class="go">
+        Explore Details
+        <svg viewBox="0 0 24 24" fill="none" stroke="#201402" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </div>
+    </div>
+
+    <!-- Top rated -->
+    <div class="shead"><span class="eyebrow">Top Rated</span><span class="all">See All</span></div>
+    <div class="grid2">
+      <div class="dcard">
+        <img src="../assets/voyager/rome-thumb.png" alt="" />
+        <div class="info">
+          <div class="t">Rome</div>
+          <div class="s">Italy 5 Days</div>
+          <div class="p">From $1,100</div>
+        </div>
+      </div>
+      <div class="dcard">
+        <img src="../assets/voyager/prague-thumb.png" alt="" />
+        <div class="info">
+          <div class="t">Prague</div>
+          <div class="s">Czech Rep 5 Days</div>
+          <div class="p">From $800</div>
+        </div>
+      </div>
+      <div class="dcard">
+        <img src="../assets/voyager/sydney-thumb.png" alt="" />
+        <div class="info">
+          <div class="t">Sydney</div>
+          <div class="s">Australia 8 Days</div>
+          <div class="p">From $1,500</div>
+        </div>
+      </div>
+      <div class="dcard">
+        <img src="../assets/voyager/athens-thumb.png" alt="" />
+        <div class="info">
+          <div class="t">Athens</div>
+          <div class="s">Greece 10 Days</div>
+          <div class="p">From $2,000</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab bar -->
+    <div class="tabbar">
+      <div class="tab active">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+      </div>
+      <div class="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        Search
+      </div>
+      <div class="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.6" fill="#22262c" stroke="none"/></svg>
+        Explore
+      </div>
+      <div class="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        Trip
+      </div>
+      <div class="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg>
+        Profile
+      </div>
+    </div>
+    <div class="hi"></div>
+  </div>
+</div>
+</body>
+</html>

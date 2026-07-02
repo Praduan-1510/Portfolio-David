@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Container } from "@/components/primitives";
 import { cn } from "@/lib/utils/cn";
+import { FlapText } from "@/components/motion";
+import { routeLabel } from "@/lib/utils/routeLabel";
 import { spectrumAt } from "@/lib/spectrum";
 
 /*
@@ -89,12 +91,23 @@ export function Nav() {
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-bg">
       <Container as="div" className="flex h-16 items-center justify-between [@media(max-height:480px)]:h-12">
-        <NextLink
-          href="/"
-          className="font-display text-body-l font-semibold tracking-[-0.02em]"
-        >
-          Praduan Saha
-        </NextLink>
+        <div className="flex items-baseline gap-space-4">
+          <NextLink
+            href="/"
+            className="font-display text-body-l font-semibold tracking-[-0.02em]"
+          >
+            Praduan Saha
+          </NextLink>
+          {/* RouteFlap — a persistent departure-board chip reading the current
+              route; keyed by pathname so it re-flutters on every navigation
+              (the settled end-state of the transition readout). */}
+          <span
+            aria-hidden="true"
+            className="hidden font-mono text-[0.625rem] uppercase tracking-[0.2em] text-muted lg:inline-block"
+          >
+            <FlapText key={pathname} text={`→ ${routeLabel(pathname)}`} trigger="load" flips={3} colorMode="mono" />
+          </span>
+        </div>
 
         {/* Inline nav — md and up. */}
         <nav aria-label="Primary" className="hidden md:block">

@@ -9,6 +9,8 @@ import { transitions } from "@/lib/motion/tokens";
 import { ScrollTrigger } from "@/lib/motion/gsap";
 import { useLenis } from "@/lib/lenis/useLenis";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { FlapText } from "./FlapText";
+import { routeLabel } from "@/lib/utils/routeLabel";
 
 /*
  * Route-transition choreography (DESIGN_GUIDELINES.md §7.6, ARCHITECTURE.md §7.4).
@@ -69,6 +71,24 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
           animate={{ scaleY: 0 }}
           transition={{ duration: durations.slow, ease: easings.inOutQuart }}
         />
+      )}
+      {/* Destination readout — the departure board flips to where you're going
+          while the wipe covers the hand-off. A SIBLING of the wipe (the panel
+          scaleY-collapses; text inside it would squash), fading out just before
+          the panel finishes. Decorative: the page announces itself normally. */}
+      {!firstLoad && (
+        <motion.div
+          key={`readout-${pathname}`}
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 z-[91] flex items-center justify-center"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 0 }}
+          transition={{ delay: 0.3, duration: durations.fast, ease: easings.outQuad }}
+        >
+          <span className="font-mono text-caption uppercase tracking-[0.3em] text-muted">
+            <FlapText text={`→ ${routeLabel(pathname)}`} trigger="load" flips={3} />
+          </span>
+        </motion.div>
       )}
       <motion.div
         key={`content-${pathname}`}

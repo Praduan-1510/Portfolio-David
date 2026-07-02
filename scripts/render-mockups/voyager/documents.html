@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 932px; }
+
+  .sheet { overflow: hidden; }
+
+  /* ── Passport hero card ── */
+  .passport {
+    position: relative;
+    background: var(--navy);
+    border-radius: 16px;
+    margin: 18px 18px 0;
+    padding: 22px 22px 24px;
+  }
+  .passport .eyebrow { letter-spacing: 0.18em; font-size: 11.5px; }
+  .passport .pname { margin-top: 11px; font-size: 18px; font-weight: 700; color: #fff; }
+  .passport .pno {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 3.5px;
+    color: #aab1bd;
+  }
+  .passport .meta { display: flex; margin-top: 28px; }
+  .passport .meta > div:nth-child(1) { width: 108px; }
+  .passport .meta > div:nth-child(2) { width: 96px; }
+  .passport .ml { font-size: 12px; font-weight: 500; color: var(--dim-dark); }
+  .passport .mv { margin-top: 7px; font-size: 14px; font-weight: 700; color: #fff; }
+  .qrbox {
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    width: 84px;
+    height: 84px;
+    background: #fff;
+    border-radius: 6px;
+    padding: 7px;
+  }
+  .qrbox svg { width: 100%; height: 100%; }
+
+  /* ── Grey lower zone ── */
+  .zone {
+    flex: 1;
+    margin-top: 26px;
+    background: #f2f3f5;
+    display: flex;
+    flex-direction: column;
+  }
+  .zone .label {
+    margin: 28px 24px 0;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #6f6f6f;
+  }
+
+  .doclist {
+    background: #fff;
+    border-radius: 16px;
+    margin: 16px 18px 0;
+    padding: 2px 18px;
+  }
+  .doc {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 54px;
+  }
+  .doc + .doc { border-top: 1px solid #e8e8e8; }
+  .doc svg { width: 22px; height: 22px; flex-shrink: 0; }
+  .doc .dn { font-size: 15px; font-weight: 600; color: #16181c; }
+  .doc .pill {
+    margin-left: auto;
+    font-size: 11.5px;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 5px 13px;
+  }
+  .pill.ok { background: #dcf3dc; color: #3fa23f; }
+  .pill.warn { background: #fdeacb; color: #df8a00; }
+
+  .add-btn {
+    margin: auto 20px 24px;
+    height: 54px;
+    border-radius: 16px;
+    color: var(--ink);
+    font-size: 17px;
+  }
+  .add-btn svg { width: 20px; height: 20px; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="nav-head">
+    <div class="back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+    </div>
+    <div class="title">Travel Documents</div>
+  </div>
+
+  <div class="sheet">
+    <!-- Passport card -->
+    <div class="passport">
+      <div class="eyebrow">Passport</div>
+      <div class="pname">Praduan Saha</div>
+      <div class="pno">IND * Z4318209</div>
+      <div class="meta">
+        <div>
+          <div class="ml">Nationality</div>
+          <div class="mv">Indian</div>
+        </div>
+        <div>
+          <div class="ml">Expires</div>
+          <div class="mv">Mar 2030</div>
+        </div>
+        <div>
+          <div class="ml">DOB</div>
+          <div class="mv">14 Jun 1990</div>
+        </div>
+      </div>
+      <div class="qrbox">
+        <svg viewBox="0 0 21 21" shape-rendering="crispEdges" fill="#0d1526">
+        <rect x="0" y="0" width="7" height="1"/><rect x="9" y="0" width="3" height="1"/><rect x="14" y="0" width="7" height="1"/><rect x="0" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="10" y="1" width="3" height="1"/><rect x="14" y="1" width="1" height="1"/><rect x="20" y="1" width="1" height="1"/><rect x="0" y="2" width="1" height="1"/><rect x="2" y="2" width="3" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="8" y="2" width="1" height="1"/><rect x="10" y="2" width="2" height="1"/><rect x="14" y="2" width="1" height="1"/><rect x="16" y="2" width="3" height="1"/><rect x="20" y="2" width="1" height="1"/><rect x="0" y="3" width="1" height="1"/><rect x="2" y="3" width="3" height="1"/><rect x="6" y="3" width="1" height="1"/><rect x="9" y="3" width="1" height="1"/><rect x="12" y="3" width="1" height="1"/><rect x="14" y="3" width="1" height="1"/><rect x="16" y="3" width="3" height="1"/><rect x="20" y="3" width="1" height="1"/><rect x="0" y="4" width="1" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="6" y="4" width="1" height="1"/><rect x="10" y="4" width="2" height="1"/><rect x="14" y="4" width="1" height="1"/><rect x="16" y="4" width="3" height="1"/><rect x="20" y="4" width="1" height="1"/><rect x="0" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="8" y="5" width="3" height="1"/><rect x="14" y="5" width="1" height="1"/><rect x="20" y="5" width="1" height="1"/><rect x="0" y="6" width="7" height="1"/><rect x="8" y="6" width="1" height="1"/><rect x="10" y="6" width="1" height="1"/><rect x="12" y="6" width="1" height="1"/><rect x="14" y="6" width="7" height="1"/><rect x="12" y="7" width="1" height="1"/><rect x="6" y="8" width="8" height="1"/><rect x="15" y="8" width="4" height="1"/><rect x="1" y="9" width="1" height="1"/><rect x="3" y="9" width="2" height="1"/><rect x="12" y="9" width="5" height="1"/><rect x="19" y="9" width="1" height="1"/><rect x="0" y="10" width="1" height="1"/><rect x="2" y="10" width="3" height="1"/><rect x="6" y="10" width="2" height="1"/><rect x="10" y="10" width="2" height="1"/><rect x="14" y="10" width="3" height="1"/><rect x="19" y="10" width="2" height="1"/><rect x="0" y="11" width="1" height="1"/><rect x="5" y="11" width="1" height="1"/><rect x="10" y="11" width="1" height="1"/><rect x="12" y="11" width="3" height="1"/><rect x="17" y="11" width="1" height="1"/><rect x="19" y="11" width="1" height="1"/><rect x="1" y="12" width="1" height="1"/><rect x="4" y="12" width="1" height="1"/><rect x="6" y="12" width="1" height="1"/><rect x="10" y="12" width="3" height="1"/><rect x="16" y="12" width="2" height="1"/><rect x="20" y="12" width="1" height="1"/><rect x="9" y="13" width="1" height="1"/><rect x="12" y="13" width="1" height="1"/><rect x="15" y="13" width="1" height="1"/><rect x="17" y="13" width="2" height="1"/><rect x="0" y="14" width="7" height="1"/><rect x="8" y="14" width="2" height="1"/><rect x="12" y="14" width="1" height="1"/><rect x="14" y="14" width="3" height="1"/><rect x="18" y="14" width="3" height="1"/><rect x="0" y="15" width="1" height="1"/><rect x="6" y="15" width="1" height="1"/><rect x="9" y="15" width="1" height="1"/><rect x="12" y="15" width="2" height="1"/><rect x="15" y="15" width="2" height="1"/><rect x="0" y="16" width="1" height="1"/><rect x="2" y="16" width="3" height="1"/><rect x="6" y="16" width="1" height="1"/><rect x="9" y="16" width="5" height="1"/><rect x="17" y="16" width="3" height="1"/><rect x="0" y="17" width="1" height="1"/><rect x="2" y="17" width="3" height="1"/><rect x="6" y="17" width="1" height="1"/><rect x="8" y="17" width="6" height="1"/><rect x="15" y="17" width="1" height="1"/><rect x="18" y="17" width="1" height="1"/><rect x="0" y="18" width="1" height="1"/><rect x="2" y="18" width="3" height="1"/><rect x="6" y="18" width="1" height="1"/><rect x="11" y="18" width="1" height="1"/><rect x="13" y="18" width="4" height="1"/><rect x="18" y="18" width="1" height="1"/><rect x="20" y="18" width="1" height="1"/><rect x="0" y="19" width="1" height="1"/><rect x="6" y="19" width="1" height="1"/><rect x="8" y="19" width="1" height="1"/><rect x="13" y="19" width="2" height="1"/><rect x="19" y="19" width="1" height="1"/><rect x="0" y="20" width="7" height="1"/><rect x="10" y="20" width="1" height="1"/><rect x="12" y="20" width="2" height="1"/><rect x="16" y="20" width="2" height="1"/><rect x="19" y="20" width="1" height="1"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Grey document zone -->
+    <div class="zone">
+      <div class="label">ALL DOCUMENTS</div>
+
+      <div class="doclist">
+        <div class="doc">
+          <svg viewBox="0 0 24 24" fill="#14213d"><path d="M2 4.5c3.1-1.6 6.2-1.6 9.3 0v15.2c-3.1-1.6-6.2-1.6-9.3 0zM22 4.5c-3.1-1.6-6.2-1.6-9.3 0v15.2c3.1-1.6 6.2-1.6 9.3 0z"/></svg>
+          <div class="dn">Passport</div>
+          <div class="pill ok">Valid</div>
+        </div>
+        <div class="doc">
+          <svg viewBox="0 0 24 24" fill="#14213d"><path d="M2 7.5A2.5 2.5 0 0 1 4.5 5h15A2.5 2.5 0 0 1 22 7.5v9a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 16.5z"/><rect x="5" y="9" width="6" height="2" rx="1" fill="#fff"/><rect x="5" y="13" width="9" height="2" rx="1" fill="#fff"/></svg>
+          <div class="dn">Schengen Visa</div>
+          <div class="pill ok">Valid</div>
+        </div>
+        <div class="doc">
+          <svg viewBox="0 0 24 24" fill="#14213d"><path d="M12 2l8 3.1v5.6c0 5-3.4 8.7-8 10.3-4.6-1.6-8-5.3-8-10.3V5.1z"/><polyline points="8.6 11.8 11 14.2 15.6 9.6" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="dn">Travel Insurance</div>
+          <div class="pill warn">Expiring</div>
+        </div>
+      </div>
+
+      <div class="btn-primary add-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#14213d" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+        Add New Documents
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

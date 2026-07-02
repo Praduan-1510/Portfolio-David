@@ -33,7 +33,7 @@
     left: 13px;
     top: 74px;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--ink);
   }
 
@@ -44,7 +44,7 @@
     height: 190px;
     border-radius: 20px;
     background:
-      radial-gradient(110px circle at 85% 26%, rgba(252, 163, 17, 0.9), rgba(252, 163, 17, 0) 100%),
+      radial-gradient(100px circle at 85% 27%, rgba(252, 163, 17, 0.88) 0, rgba(252, 163, 17, 0.62) 15%, rgba(252, 163, 17, 0.42) 30%, rgba(252, 163, 17, 0.25) 45%, rgba(252, 163, 17, 0.12) 60%, rgba(252, 163, 17, 0.05) 75%, rgba(252, 163, 17, 0) 95%),
       var(--navy);
     padding: 20px 19px;
     overflow: hidden;
@@ -53,30 +53,34 @@
     position: absolute;
     left: 19px;
     top: 86px;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
     font-size: 15px;
     font-weight: 600;
     color: #fff;
-    letter-spacing: 4px;
-    word-spacing: 8px;
+    letter-spacing: 6px;
   }
+  .credit-card .number .digits { font-size: 16px; letter-spacing: 4px; }
   .credit-card .cols {
     position: absolute;
     left: 19px;
     right: 19px;
     top: 137px;
-    display: flex;
   }
-  .credit-card .cols > div:last-child { margin-left: 92px; }
+  .credit-card .cols > div:last-child { position: absolute; left: 148px; top: 0; }
   .credit-card .lbl {
     font-size: 12.5px;
     font-weight: 500;
+    line-height: 1;
     letter-spacing: 0.04em;
     color: var(--dim-dark);
   }
   .credit-card .val {
-    margin-top: 5px;
+    margin-top: 7px;
     font-size: 17px;
     font-weight: 700;
+    line-height: 1;
     color: #fff;
   }
 
@@ -134,7 +138,7 @@
         <rect x="0.5" y="0.5" width="35" height="25" rx="4.5" fill="#d9b30a" stroke="#b6950a"/>
         <path d="M12 0.5v25 M24 0.5v25 M0.5 9h35 M0.5 17h35" stroke="#b6950a" stroke-width="1" fill="none"/>
       </svg>
-      <div class="number">**** **** **** 4887</div>
+      <div class="number"><span>****</span><span>****</span><span>****</span><span class="digits">4887</span></div>
       <div class="cols">
         <div>
           <div class="lbl">CARD HOLDER</div>

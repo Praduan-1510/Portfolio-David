@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 852px; }
+  /* Reference places the header lower: rule lands at y≈150 */
+  .page-head { padding-top: 96px; }
+  .body { padding: 0 24px; display: flex; flex-direction: column; }
+
+  .stepper { margin-top: 31px; margin-bottom: 38px; }
+
+  .h2 { margin-bottom: 12px; }
+
+  /* Read-only info cards (address / chosen payment) */
+  .info-card {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+    padding: 11px 19px;
+  }
+  .info-card .tile {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #d9edf4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .info-card .tile svg { width: 22px; height: 22px; }
+  .info-title { font-size: 15px; font-weight: 600; color: #111; }
+  .info-sub { font-size: 12.5px; font-weight: 400; color: var(--ink-dim); line-height: 1.4; margin-top: 2px; }
+  .info-card .tick { margin-left: auto; flex-shrink: 0; }
+  .info-card .tick svg { width: 22px; height: 22px; }
+
+  .section-gap { height: 17px; }
+
+  .panel { display: flex; flex-direction: column; gap: 9px; padding: 14px 22px; }
+  .gst-note { font-size: 11px; color: var(--ink-dim); margin-top: -6px; }
+
+  .pay-btn { width: 279px; height: 34px; margin: 15px auto 0; border-radius: 17px; font-size: 15px; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <!-- Header -->
+  <div class="page-head">
+    <span class="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></span>
+    <span class="title">Checkout</span>
+  </div>
+  <div class="head-rule"></div>
+
+  <div class="body">
+    <!-- Stepper: Address done, Payment done, Confirm active -->
+    <div class="stepper">
+      <div class="step done"><div class="dot"></div><div class="slabel">Address</div></div>
+      <div class="step-line"></div>
+      <div class="step done"><div class="dot"></div><div class="slabel">Payment</div></div>
+      <div class="step-line" style="background:linear-gradient(90deg, var(--blue-text), var(--navy))"></div>
+      <div class="step current"><div class="dot"></div><div class="slabel">Confirm</div></div>
+    </div>
+
+    <!-- Delivery address (read-only) -->
+    <div class="h2">Delivery address</div>
+    <div class="card info-card">
+      <div class="tile">
+        <svg viewBox="0 0 24 24" fill="#0f96db"><path d="M12 2a8 8 0 0 0-8 8c0 5.4 7 11.5 7.35 11.8a1 1 0 0 0 1.3 0C13 21.5 20 15.4 20 10a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3.1" fill="#d9edf4"/></svg>
+      </div>
+      <div>
+        <div class="info-title">Praduan Saha</div>
+        <div class="info-sub">14/2 Jessore Road, Newtown,<br />Kolkata 700135</div>
+      </div>
+    </div>
+
+    <div class="section-gap"></div>
+
+    <!-- Chosen payment (read-only) -->
+    <div class="h2">Payment</div>
+    <div class="card info-card">
+      <div class="tile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0f96db" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12"/><path d="M6 8h12"/><path d="m6 13 8.5 8"/><path d="M6 13h3"/><path d="M9 13c6.667 0 6.667-10 0-10"/></svg>
+      </div>
+      <div>
+        <div class="info-title">UPI</div>
+        <div class="info-sub">praduan@upi</div>
+      </div>
+      <div class="tick">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#012a4a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+      </div>
+    </div>
+
+    <div class="section-gap"></div>
+
+    <!-- Order summary: 8,697 − 1,550 = 7,147 -->
+    <div class="h2">Order summary</div>
+    <div class="panel">
+      <div class="prow"><span>Subtotal</span><span class="val">₹8,697</span></div>
+      <div class="prow"><span>Discount</span><span class="val">−₹1,550</span></div>
+      <div class="prow"><span>Delivery</span><span class="val" style="color:var(--green);font-weight:600">Free</span></div>
+      <div class="rule"></div>
+      <div class="prow total"><span>Total</span><span class="val">₹7,147</span></div>
+      <div class="gst-note">Inclusive of GST ₹925 (12% equipment / 18% footwear)</div>
+    </div>
+
+    <div class="btn-primary pay-btn">Pay ₹7,147</div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tabbar">
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-8 9 8v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 22v-6h6v6"/></svg>
+      Home
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="2.4"/><circle cx="17" cy="7" r="3.5"/><circle cx="7" cy="17" r="3.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="2.4"/></svg>
+      Categories
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19"/><path d="M12 2.5a14.5 14.5 0 0 1 0 19 14.5 14.5 0 0 1 0-19"/></svg>
+      Travel store
+    </div>
+    <div class="tab active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1.2 13.2a1.6 1.6 0 0 1-1.6 1.8H6.4a1.6 1.6 0 0 1-1.6-1.8z"/><path d="M8.5 10V6.5a3.5 3.5 0 0 1 7 0V10"/></svg>
+      Bag
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg>
+      Account
+    </div>
+  </div>
+</div>
+</body>
+</html>

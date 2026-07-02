@@ -49,6 +49,7 @@ const FRAG = /* glsl */ `
   uniform vec2  uResolution;
   uniform vec2  uPointer;   // smoothed, NDC [-1,1]
   uniform float uScroll;    // smoothed hero scroll progress [0,1]
+  uniform float uSettle;    // 0 = entrance (lively edge-to-edge) -> 1 = composed rest
   uniform vec3  uBase;      // resolved theme --bg (sRGB 0..1); smoke adds light above it
   varying vec2  vUv;
 
@@ -120,7 +121,9 @@ const FRAG = /* glsl */ `
     // Aspect-corrected, centered coords so the forms stay isotropic on any ratio.
     vec2 p = (vUv - 0.5);
     p.x *= aspect;
-    p *= 2.6; // base scale of the marbled forms
+    // Narrow viewports get FEWER, LARGER forms (small scale = zoomed in) so the
+    // field reads as bold shapes instead of fine near-black noise.
+    p *= mix(1.7, 2.6, smoothstep(0.6, 1.3, aspect));
 
     // Subtle reactivity: the field drifts toward the pointer (parallax) and the
     // smoke shifts as the hero scrolls away. Both stay gentle (§7.7/§7.8).
@@ -158,18 +161,43 @@ const FRAG = /* glsl */ `
     float glow = smoothstep(0.28, 1.0, n);
     glow += 0.6 * smoothstep(0.60, 1.0, n);  // hotter cores in the brightest crests
 
-    // Keep the centre (behind the headline) calmer so white type stays legible;
-    // colour blooms in a halo around it. The Hero reading-scrim adds the final pass.
+    // Entrance damping: centre kept calmer so white type stays legible while the
+    // field is lively edge-to-edge.
     float dC = distance(vUv, vec2(0.5, 0.46));
-    float centerDamp = mix(0.40, 1.0, smoothstep(0.05, 0.60, dC));
+    float entranceDamp = mix(0.40, 1.0, smoothstep(0.05, 0.60, dC));
 
-    // Elliptical vignette: fade the field + darken the base toward the edges for depth.
-    float vig = clamp(1.0 - smoothstep(0.34, 0.98, dC), 0.0, 1.0);
+    // ── Settled composition (uSettle -> 1): the field PARTS around the type ──
+    // Superellipse focal void around the wordmark block: near-empty inside, a
+    // luminous rim at its edge, full field outside — a composed "eye" framing
+    // the name instead of uniform wallpaper that decays to smudges.
+    vec2 dv = vUv - vec2(0.5, 0.52);
+    dv.x /= mix(0.42, 0.36, smoothstep(0.6, 1.3, aspect)); // void width tracks aspect
+    dv.y /= 0.30;
+    float se = pow(abs(dv.x), 3.0) + pow(abs(dv.y), 3.0);  // <1 inside the void
+    float voidDamp = mix(0.08, 1.0, smoothstep(0.75, 1.45, se));
+    // Rim-light band riding the void edge — the eye's luminous ring.
+    float rim = smoothstep(0.80, 1.05, se) * (1.0 - smoothstep(1.15, 1.75, se));
 
-    // Compose: dark theme base (darkened at the rim) + the colour aurora + a few
-    // faint white glints on the very brightest crests for a wet, liquid sheen.
+    // Macro density falloff: one low-frequency noise sample carves whole regions
+    // near-empty while a warm diagonal band (lower-left -> upper-right) survives
+    // brightest — asymmetry instead of uniform texture.
+    float macroN = snoise(p * 0.30 + vec2(1.7, -4.2) + flow * 0.2) * 0.5 + 0.5;
+    float diag = smoothstep(-0.55, 0.45, (vUv.x - 0.5) * 0.8 + (vUv.y - 0.5) * 0.6);
+    float macroMask = clamp(max(smoothstep(0.18, 0.78, macroN), diag * 0.55), 0.0, 1.0);
+
+    float settle = uSettle * uSettle * (3.0 - 2.0 * uSettle);
+    float damp = mix(entranceDamp, voidDamp * mix(1.0, macroMask, 0.8), settle);
+
+    // Elliptical vignette: fade the field + darken the base toward the edges for
+    // depth. The settled state opens the vignette a touch so the surviving band
+    // can reach further out.
+    float vig = clamp(1.0 - smoothstep(mix(0.34, 0.42, settle), 0.98, dC), 0.0, 1.0);
+
+    // Compose: dark theme base (darkened at the rim) + the colour aurora + the
+    // settled rim-light + a few faint white glints for a wet, liquid sheen.
     vec3 col = uBase * mix(0.66, 1.0, vig);
-    col += chroma * glow * 0.62 * centerDamp * vig;
+    col += chroma * glow * 0.62 * damp * vig;
+    col += chroma * rim * 0.28 * settle * vig;
     col += vec3(smoothstep(0.74, 1.0, n) * 0.05 * vig);
 
     // Ordered-ish dither: near-black gradients band badly on 8-bit displays;
@@ -198,6 +226,7 @@ function SmokeField({ baseColor }: { baseColor?: [number, number, number] }) {
       uResolution: { value: new THREE.Vector2(1, 1) },
       uPointer: { value: new THREE.Vector2(0, 0) },
       uScroll: { value: 0 },
+      uSettle: { value: 0 },
       // Seeded near-black; HeroBackground passes the real resolved --bg below.
       uBase: { value: new THREE.Vector3(0.05, 0.05, 0.06) },
     }),
@@ -243,6 +272,9 @@ function SmokeField({ baseColor }: { baseColor?: [number, number, number] }) {
     // Frame-rate-independent smoothing — same settle time at 60Hz and 120Hz.
     const ease = (k: number) => 1 - Math.pow(1 - k, d * 60);
     u.uTime.value += d;
+    // Composed resting state: hold the lively entrance ~1.2s (the wordmark's
+    // flip window), then part the field around the type over ~2.2s.
+    u.uSettle.value = Math.min(1, Math.max(0, (u.uTime.value - 1.2) / 2.2));
     u.uPointer.value.lerp(pointerTarget.current, ease(0.05));
     const target =
       typeof window !== "undefined"

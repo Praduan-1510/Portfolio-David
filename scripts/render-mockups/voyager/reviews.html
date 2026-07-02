@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 932px; }
+
+  .sheet { padding-top: 30px; }
+
+  /* ── Rating summary ── */
+  .summary {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    margin: 12px 34px 0;
+  }
+  .score { text-align: center; flex-shrink: 0; }
+  .score .num {
+    font-size: 46px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: #111;
+    line-height: 1;
+  }
+  .score .stars { display: flex; gap: 3px; justify-content: center; margin-top: 9px; }
+  .score .stars svg { width: 19px; height: 19px; }
+  .score .count { margin-top: 8px; font-size: 12.5px; font-weight: 500; color: #6f6f6f; }
+
+  .bars { flex: 1; display: flex; flex-direction: column; gap: 9px; }
+  .bars .brow { display: flex; align-items: center; gap: 9px; }
+  .bars .n { width: 8px; font-size: 11.5px; font-weight: 600; color: #6f6f6f; text-align: right; }
+  .bars .track {
+    flex: 1;
+    height: 5px;
+    border-radius: 999px;
+    background: #c9c9c9;
+    overflow: hidden;
+  }
+  .bars .fill { height: 100%; border-radius: 999px; background: var(--orange); }
+
+  /* ── Review cards ── */
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 30px 20px 0;
+  }
+  .review {
+    position: relative;
+    background: #f5f5f5;
+    border-radius: 18px;
+    padding: 17px 18px 18px;
+  }
+  .review .time {
+    position: absolute;
+    top: 17px;
+    right: 18px;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: #8b8b8b;
+  }
+  .review .head { display: flex; align-items: center; gap: 14px; }
+  .ravatar {
+    width: 54px;
+    height: 54px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .review .rname { font-size: 15px; font-weight: 700; color: #111; }
+  .review .rstars { display: flex; gap: 2px; margin-top: 6px; }
+  .review .rstars svg { width: 13px; height: 13px; }
+  .review p {
+    margin-top: 13px;
+    font-size: 12.5px;
+    font-weight: 400;
+    line-height: 1.55;
+    color: #3d3d3d;
+  }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="nav-head">
+    <div class="back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+    </div>
+    <div class="title">Reviews</div>
+  </div>
+
+  <div class="sheet">
+    <div class="summary">
+      <div class="score">
+        <div class="num">4.9</div>
+        <div class="stars">
+          <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div class="count">2,418 Reviews</div>
+      </div>
+      <div class="bars">
+        <div class="brow"><span class="n">5</span><div class="track"><div class="fill" style="width:92%"></div></div></div>
+        <div class="brow"><span class="n">4</span><div class="track"><div class="fill" style="width:12%"></div></div></div>
+        <div class="brow"><span class="n">3</span><div class="track"><div class="fill" style="width:5%"></div></div></div>
+        <div class="brow"><span class="n">2</span><div class="track"><div class="fill" style="width:3%"></div></div></div>
+        <div class="brow"><span class="n">1</span><div class="track"><div class="fill" style="width:2%"></div></div></div>
+      </div>
+    </div>
+
+    <div class="list">
+      <div class="review">
+        <div class="time">2 days ago</div>
+        <div class="head">
+          <div class="ravatar" style="background:#fde3b8;color:#a36a00">SL</div>
+          <div>
+            <div class="rname">Sarah L.</div>
+            <div class="rstars">
+              <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+          </div>
+        </div>
+        <p>Every detail was handled before we even asked. The hotel was lovely and none of the guided tours ever felt rushed.</p>
+      </div>
+
+      <div class="review">
+        <div class="time">1 week ago</div>
+        <div class="head">
+          <div class="ravatar" style="background:#d7e6fc;color:#3a71c4">MK</div>
+          <div>
+            <div class="rname">Marcus K.</div>
+            <div class="rstars">
+              <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+          </div>
+        </div>
+        <p>Booking took five minutes and the whole itinerary synced straight to my calendar. Zero stress from start to finish.</p>
+      </div>
+
+      <div class="review">
+        <div class="time">3 weeks ago</div>
+        <div class="head">
+          <div class="ravatar" style="background:#dde3ee;color:#14213d">DG</div>
+          <div>
+            <div class="rname">Daniel G.</div>
+            <div class="rstars">
+              <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#d4d4d4"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+          </div>
+        </div>
+        <p>Great value for the Paris package. Our airport pickup ran a few minutes late, but everything else was seamless.</p>
+      </div>
+
+      <div class="review">
+        <div class="time">1 month ago</div>
+        <div class="head">
+          <div class="ravatar" style="background:#d9f2e3;color:#1f7a4d">FH</div>
+          <div>
+            <div class="rname">Frank H.</div>
+            <div class="rstars">
+              <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+          </div>
+        </div>
+        <p>Plans changed mid-trip and support rebooked our museum slot within minutes. That kind of service earns a repeat customer.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -46,7 +46,7 @@ export default function NotFound() {
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(60% 55% at 50% 42%, rgba(255,255,255,0.06), transparent 70%)",
+            "radial-gradient(60% 55% at 50% 42%, color-mix(in srgb, var(--spectrum-violet) 10%, rgba(255,255,255,0.04)), transparent 70%)",
         }}
       />
       {/* Layer 1 — faint film grain over the glow, beneath the content. */}

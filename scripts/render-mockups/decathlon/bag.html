@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 964px; }
+  .body { padding: 0 24px; display: flex; flex-direction: column; }
+  .items { display: flex; flex-direction: column; gap: 13px; margin-top: 19px; }
+  .promo { display: flex; gap: 11px; margin-top: 23px; }
+  .promo .input-pale { flex: 1; height: 34px; }
+  .promo .btn-primary { width: 88px; height: 34px; }
+  .panel { margin-top: 23px; display: flex; flex-direction: column; gap: 17px; }
+  .gst-note { font-size: 11px; color: var(--ink-dim); margin-top: -9px; }
+  .checkout-btn { width: 279px; height: 34px; margin: 12px auto 0; border-radius: 17px; font-size: 15px; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <!-- Header -->
+  <div class="page-head">
+    <span class="title">My Bag</span>
+    <span class="action">Edit</span>
+  </div>
+  <div class="head-rule"></div>
+
+  <div class="body">
+    <!-- Items -->
+    <div class="items">
+      <div class="card item-card">
+        <div class="thumb"><img src="../assets/decathlon/bag-racket.png" alt="" /></div>
+        <div>
+          <div class="item-name">Artengo TR160<br />Tennis Racket</div>
+          <div class="price-row"><span class="price">₹2,999</span><span class="mrp">₹3,599</span></div>
+        </div>
+        <div class="qty" style="margin-left:auto">
+          <span class="qbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M5 12h14"/></svg></span>
+          <span class="count">1</span>
+          <span class="qbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
+        </div>
+      </div>
+
+      <div class="card item-card">
+        <div class="thumb"><img src="../assets/decathlon/bag-balls.png" alt="" /></div>
+        <div>
+          <div class="item-name">Artengo TB160<br />Ball Pack (x3)</div>
+          <div class="price-row"><span class="price">₹649</span><span class="mrp">₹799</span></div>
+        </div>
+        <div class="qty" style="margin-left:auto">
+          <span class="qbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M5 12h14"/></svg></span>
+          <span class="count">1</span>
+          <span class="qbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
+        </div>
+      </div>
+
+      <div class="card item-card">
+        <div class="thumb"><img src="../assets/decathlon/bag-shoes.png" alt="" /></div>
+        <div>
+          <div class="item-name">Artengo BS160<br />Court Shoes</div>
+          <div class="price-row"><span class="price">₹3,499</span><span class="mrp">₹4,299</span></div>
+        </div>
+        <div class="qty" style="margin-left:auto">
+          <span class="qbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M5 12h14"/></svg></span>
+          <span class="count">1</span>
+          <span class="qbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Promo code -->
+    <div class="promo">
+      <div class="input-pale">Enter Promo code</div>
+      <div class="btn-primary">Apply</div>
+    </div>
+
+    <!-- Price panel: 3,599 + 799 + 4,299 = 8,697 − 1,550 = 7,147 -->
+    <div class="panel">
+      <div class="prow"><span>Artengo TR160 Racket</span><span class="val">₹3,599</span></div>
+      <div class="prow"><span>Artengo TB160 Ball Pack</span><span class="val">₹799</span></div>
+      <div class="prow"><span>Artengo BS160 Court Shoes</span><span class="val">₹4,299</span></div>
+      <div class="rule"></div>
+      <div class="prow"><span>Subtotal</span><span class="val">₹8,697</span></div>
+      <div class="prow"><span>Discount</span><span class="val">−₹1,550</span></div>
+      <div class="prow"><span>Delivery</span><span class="val" style="color:var(--green);font-weight:600">Free</span></div>
+      <div class="rule"></div>
+      <div class="prow total"><span>Total</span><span class="val">₹7,147</span></div>
+      <div class="gst-note">Inclusive of GST ₹925 (12% equipment / 18% footwear)</div>
+    </div>
+
+    <div class="btn-primary checkout-btn">Proceed to checkout</div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tabbar">
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-8 9 8v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 22v-6h6v6"/></svg>
+      Home
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="2.4"/><circle cx="17" cy="7" r="3.5"/><circle cx="7" cy="17" r="3.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="2.4"/></svg>
+      Categories
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19"/><path d="M12 2.5a14.5 14.5 0 0 1 0 19 14.5 14.5 0 0 1 0-19"/></svg>
+      Travel store
+    </div>
+    <div class="tab active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1.2 13.2a1.6 1.6 0 0 1-1.6 1.8H6.4a1.6 1.6 0 0 1-1.6-1.8z"/><path d="M8.5 10V6.5a3.5 3.5 0 0 1 7 0V10"/></svg>
+      Bag
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg>
+      Account
+    </div>
+  </div>
+</div>
+</body>
+</html>

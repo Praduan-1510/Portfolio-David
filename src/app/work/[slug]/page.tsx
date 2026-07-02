@@ -19,6 +19,7 @@ import {
   Parallax,
   Magnetic,
   RouteProgressAccent,
+  AuroraEmber,
 } from "@/components/motion";
 import { mdxComponents } from "@/components/mdx/mdx-components";
 import { displayTitle } from "@/lib/utils/typography";
@@ -125,14 +126,9 @@ export default async function CaseStudy({
           instrument spec strip, the cover screen lifted on an accent glow, and a
           hairline scroll cue that frames the reveal below. */}
       <header className="relative isolate overflow-hidden border-b border-line">
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 -z-10"
-          style={{
-            background:
-              "radial-gradient(64% 64% at 76% 14%, color-mix(in srgb, var(--accent) 24%, transparent), transparent 68%)",
-          }}
-        />
+        {/* The aurora, tuned to this project: the route accent blended with its
+            violet spectrum neighbour instead of a flat single-hue radial. */}
+        <AuroraEmber hues={["accent", "violet"]} position="top-right" intensity={0.24} />
         <div
           aria-hidden="true"
           className="absolute inset-0 -z-10 opacity-50"

@@ -53,19 +53,17 @@ export function Hero() {
       </div>
 
       {/* Layer 2 — reading scrim between the WebGL (z-0) and the content (z-10):
-          pools the near-black base behind the centre stack and fades to transparent
-          at the edges, so the marbled field reads as quiet atmosphere behind the
-          type. Tightened for cinematic contrast — the centre pool is darker and
-          falls off sooner so the type lifts cleanly off the field, and a gentle
-          outer vignette sinks the corners (no colour added; the aurora still
-          breathes around the edges). Decorative; its own layer, so first paint is
-          unaffected. */}
+          ONE gentle pass now — the shader's settled composition owns the focal
+          void (uSettle carves it and lights its rim), so the CSS layer only adds
+          a light reading assist behind the stack plus the outer corner vignette.
+          A heavy CSS pool here would double-darken the shader's void. Decorative;
+          its own layer, so first paint is unaffected. */}
       <div
         aria-hidden="true"
         className="absolute inset-0 z-[2]"
         style={{
           background:
-            "radial-gradient(116% 86% at 50% 44%, color-mix(in srgb, var(--bg) 94%, transparent) 0%, color-mix(in srgb, var(--bg) 70%, transparent) 28%, transparent 66%), radial-gradient(60% 50% at 50% 46%, var(--bg) 0%, color-mix(in srgb, var(--bg) 80%, transparent) 42%, transparent 68%), radial-gradient(125% 125% at 50% 42%, transparent 58%, color-mix(in srgb, var(--bg) 42%, transparent) 100%)",
+            "radial-gradient(112% 84% at 50% 46%, color-mix(in srgb, var(--bg) 62%, transparent) 0%, color-mix(in srgb, var(--bg) 34%, transparent) 34%, transparent 64%), radial-gradient(125% 125% at 50% 42%, transparent 58%, color-mix(in srgb, var(--bg) 42%, transparent) 100%)",
         }}
       />
 

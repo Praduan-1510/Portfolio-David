@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Container, Text, Eyebrow } from "@/components/primitives";
-import { Reveal, TextReveal, AnimatedDivider } from "@/components/motion";
+import { Reveal, TextReveal, AnimatedDivider, AuroraEmber } from "@/components/motion";
 import { WorkIndex } from "@/components/sections/WorkIndex";
 import { getAllProjectsMeta } from "@/lib/content/work";
 
@@ -29,7 +29,9 @@ export default function WorkPage() {
 
   return (
     <>
-      <Container as="header" className="py-space-10">
+      <Container as="header" className="relative isolate py-space-10">
+        {/* Spectrum ember — the identity's warm temperature on the index. */}
+        <AuroraEmber hues={["amber", "rose"]} position="top-right" intensity={0.12} />
         {/* Quiet eyebrow on load — supporting beat. The count makes the index
             read as a curated set rather than an open-ended list. */}
         <Reveal trigger="load" y={12} as="div">

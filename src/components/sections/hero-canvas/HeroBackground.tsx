@@ -55,12 +55,13 @@ function isLowPower(): boolean {
   return false;
 }
 
-/* Static fallback — a still version of the colour aurora. Rendered under
-   reduced-motion, on low-power devices, with no WebGL, or while the chunk loads.
-   Soft spectrum blooms (violet / blue / lime / amber / rose, via color-mix so they
-   track the tokens) pool around an intentionally calmer centre over the --bg base,
-   then an elliptical vignette darkens the rim — mirroring the live shader's
-   composition so the two states read as one and mobile users still get colour. */
+/* Static fallback — the SETTLED shader composition as pure CSS. Rendered under
+   reduced-motion, on low-power devices (ALL phones: isLowPower gates on
+   pointer:coarse), with no WebGL, while the chunk loads, and always as the
+   painted floor beneath the canvas. Mirrors the live shader's resting state:
+   a focal void behind the type block, a luminous rim at its edge, and a warm
+   diagonal band of BOLD blooms (alphas tuned so 390px phones get real colour,
+   not near-black smudges) over the --bg base with a corner vignette. */
 function Fallback() {
   return (
     <div
@@ -68,12 +69,18 @@ function Fallback() {
       className="absolute inset-0"
       style={{
         background: [
-          // Colour blooms (kept off-centre, lower alpha behind the headline).
-          "radial-gradient(38% 44% at 16% 26%, color-mix(in srgb, var(--spectrum-violet) 26%, transparent), transparent 72%)",
-          "radial-gradient(40% 46% at 84% 22%, color-mix(in srgb, var(--spectrum-blue) 22%, transparent), transparent 72%)",
-          "radial-gradient(46% 50% at 78% 84%, color-mix(in srgb, var(--spectrum-amber) 20%, transparent), transparent 72%)",
-          "radial-gradient(42% 48% at 22% 82%, color-mix(in srgb, var(--spectrum-rose) 20%, transparent), transparent 72%)",
-          "radial-gradient(30% 34% at 50% 50%, color-mix(in srgb, var(--spectrum-lime) 12%, transparent), transparent 78%)",
+          // Focal void — pools the base behind the centre type block.
+          "radial-gradient(58% 46% at 50% 48%, var(--bg) 0%, color-mix(in srgb, var(--bg) 78%, transparent) 52%, transparent 76%)",
+          // Rim light — a faint spectrum ring where the void meets the field.
+          "radial-gradient(72% 58% at 50% 48%, transparent 58%, color-mix(in srgb, var(--spectrum-violet) 20%, transparent) 66%, color-mix(in srgb, var(--spectrum-blue) 14%, transparent) 72%, transparent 82%)",
+          // The surviving diagonal band: bold blooms lower-left -> upper-right.
+          "radial-gradient(44% 50% at 14% 84%, color-mix(in srgb, var(--spectrum-rose) 52%, transparent), transparent 70%)",
+          "radial-gradient(40% 46% at 38% 66%, color-mix(in srgb, var(--spectrum-amber) 42%, transparent), transparent 72%)",
+          "radial-gradient(42% 46% at 86% 20%, color-mix(in srgb, var(--spectrum-blue) 50%, transparent), transparent 70%)",
+          "radial-gradient(34% 40% at 68% 38%, color-mix(in srgb, var(--spectrum-violet) 38%, transparent), transparent 74%)",
+          // Counterweight blooms so the off-band corners aren't dead.
+          "radial-gradient(36% 42% at 12% 18%, color-mix(in srgb, var(--spectrum-lime) 26%, transparent), transparent 74%)",
+          "radial-gradient(38% 44% at 88% 86%, color-mix(in srgb, var(--spectrum-lime) 32%, transparent), transparent 72%)",
           // Dark ground + rim vignette beneath the blooms.
           "radial-gradient(ellipse 120% 95% at 50% 46%, color-mix(in srgb, var(--bg), #fff 3%) 0%, var(--bg) 56%, color-mix(in srgb, var(--bg), #000 16%) 100%)",
         ].join(", "),

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ArrowUpRight } from "lucide-react";
 import { Container, Text, Eyebrow, Button } from "@/components/primitives";
-import { Reveal, StaggerGroup, TextReveal, AnimatedNoise } from "@/components/motion";
+import { Reveal, StaggerGroup, TextReveal, AnimatedNoise, AuroraEmber } from "@/components/motion";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils/cn";
 
@@ -79,6 +79,9 @@ export default function Contact() {
             "radial-gradient(60% 70% at 18% 28%, rgba(255,255,255,0.06), transparent 70%), radial-gradient(48% 60% at 88% 82%, rgba(255,255,255,0.035), transparent 72%)",
         }}
       />
+      {/* Spectrum ember — the closing page still speaks the aurora. */}
+      <AuroraEmber hues={["violet", "rose"]} position="top-left" intensity={0.1} />
+
       {/* Layer 1 — faint film grain over the glows, beneath the content. */}
       <AnimatedNoise opacity={0.035} className="-z-10" />
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Container, Text, Eyebrow, Button } from "@/components/primitives";
-import { Reveal, TextReveal, Magnetic } from "@/components/motion";
+import { Reveal, TextReveal, Magnetic, AuroraEmber } from "@/components/motion";
 import { AboutHeroMap } from "./AboutHeroMap";
 
 /*
@@ -72,6 +72,10 @@ export function ProfileHero() {
           pointer-events-none, dimmed + left-scrimmed so the headline/HUD stay
           legible, with the shared drift; reduced-motion-safe. No API key needed. */}
       <AboutHeroMap />
+
+      {/* Spectrum ember on the map horizon — the home aurora's coal carried to
+          this route, so the grayscale HUD map stops reading as a different site. */}
+      <AuroraEmber hues={["violet", "blue"]} position="top-right" intensity={0.14} className="z-[1]" />
 
       {/* Layer 10 — content. */}
       <Container className="relative z-10 flex min-h-[inherit] items-center py-space-9">

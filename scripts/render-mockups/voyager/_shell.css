@@ -119,7 +119,7 @@
 .panel {
   background: var(--panel);
   border-radius: 12px;
-  padding: 15px 16px;
+  padding: 13px 16px;
 }
 .panel .row {
   display: flex;
@@ -130,7 +130,7 @@
 }
 .panel .row .l { color: var(--body); font-weight: 500; }
 .panel .row .v { color: var(--body); font-weight: 500; }
-.panel .divider { border-top: 1px solid var(--line); margin: 10px 0 12px; }
+.panel .divider { border-top: 1px solid var(--line); margin: 9px 0 11px; }
 
 /* ── Section label on navy (letterspaced orange smallcaps) ── */
 .eyebrow {

@@ -17,3 +17,4 @@ export { AnimatedNoise } from "./AnimatedNoise";
 export { SplitFlapText } from "./SplitFlapText";
 export { FlapText } from "./FlapText";
 export { FlapDigits } from "./FlapDigits";
+export { AuroraEmber } from "./AuroraEmber";

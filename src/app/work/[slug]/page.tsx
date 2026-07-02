@@ -20,6 +20,7 @@ import {
   Magnetic,
   RouteProgressAccent,
   AuroraEmber,
+  FlapText,
 } from "@/components/motion";
 import { mdxComponents } from "@/components/mdx/mdx-components";
 import { displayTitle } from "@/lib/utils/typography";
@@ -114,7 +115,7 @@ export default async function CaseStudy({
   };
 
   return (
-    <article data-theme="dark" style={themeStyle} className="bg-bg text-fg">
+    <article data-theme="dark" data-motif={meta.motif ?? "blueprint"} style={themeStyle} className="overflow-x-clip bg-bg text-fg">
       {/* Case-study structured data (rendered as plain JSON, not user input). */}
       <script
         type="application/ld+json"
@@ -129,15 +130,10 @@ export default async function CaseStudy({
         {/* The aurora, tuned to this project: the route accent blended with its
             violet spectrum neighbour instead of a flat single-hue radial. */}
         <AuroraEmber hues={["accent", "violet"]} position="top-right" intensity={0.24} />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 -z-10 opacity-50"
-          style={{
-            backgroundImage: "radial-gradient(currentColor 0.5px, transparent 0.5px)",
-            backgroundSize: "22px 22px",
-            color: "rgba(255,255,255,0.04)",
-          }}
-        />
+        {/* Per-study decorative motif (data-motif on the article): blueprint
+            dots / ledger ruling / route dashes / athletic grid — so each study
+            screenshots differently beyond its accent. Recipes in globals.css. */}
+        <div aria-hidden="true" className="cs-motif" />
         {isWeb ? (
           <>
             {/* Compact web header — eyebrow + a title row that carries the live CTA,
@@ -455,7 +451,7 @@ export default async function CaseStudy({
               <CaseStudyNav variant="desktop" sections={sections} className="hidden md:block" />
               {/* Full-cell column: text self-clamps to --measure (in mdx-components)
                   while media (<Shot>) uses the full width and can alternate sides. */}
-              <Reveal className="min-w-0 [&>p:first-of-type]:mb-space-7 [&>p:first-of-type]:font-display [&>p:first-of-type]:text-body-l [&>p:first-of-type]:leading-[1.5] [&>p:first-of-type]:text-fg">
+              <Reveal className="prose-cs-grid min-w-0 [&>p:first-of-type]:mb-space-7 [&>p:first-of-type]:font-display [&>p:first-of-type]:text-body-l [&>p:first-of-type]:leading-[1.5] [&>p:first-of-type]:text-fg">
                 <MDXRemote source={content} components={mdxComponents} />
               </Reveal>
             </div>
@@ -515,7 +511,7 @@ export default async function CaseStudy({
                 <Reveal>
                   <div className="flex items-baseline gap-space-4 border-t-2 border-[color:color-mix(in_srgb,var(--accent)_28%,var(--line))] pt-space-5">
                     <span className="font-mono text-caption text-accent">
-                      {String(fi + 1).padStart(2, "0")}
+                      <FlapText text={String(fi + 1).padStart(2, "0")} trigger="inView" flips={4} colorMode="mono" />
                     </span>
                     <Text as="h3" id={`flow-${fi}`} variant="heading-s" className="font-medium">
                       {flow.title}
@@ -575,7 +571,7 @@ export default async function CaseStudy({
           <NextLink href={`/work/${next.slug}`} className="group block">
             <Container className="flex items-center justify-between gap-space-7 py-space-10">
               <Reveal className="min-w-0">
-                <Eyebrow flap>Next project</Eyebrow>
+                <Eyebrow flap>Next departure</Eyebrow>
                 <Text
                   as="span"
                   variant="display-xl"

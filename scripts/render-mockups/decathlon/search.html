@@ -1,0 +1,242 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 997px; }
+
+  /* Top: back chevron + search field */
+  .top { display: flex; align-items: center; gap: 8px; padding: 24px 15px 0 16px; flex-shrink: 0; }
+  .top .back svg { width: 24px; height: 24px; }
+  .search-field {
+    flex: 1; height: 43px; border-radius: 12px;
+    background: var(--mist); border: 1.5px solid var(--line);
+    display: flex; align-items: center; gap: 11px; padding: 0 15px;
+    font-size: 15px; font-weight: 500; color: #000;
+  }
+  .search-field svg { width: 19px; height: 19px; flex-shrink: 0; }
+  .search-field .mic { margin-left: auto; }
+
+  /* Filter chips */
+  .chips { display: flex; flex-wrap: wrap; gap: 12px 17px; padding: 17px 32px 0; }
+  .chip { height: 28px; padding: 0 15px; border-radius: 9px; border-width: 2px; font-size: 14px; }
+  .chip.active { font-weight: 500; }
+
+  .rule2 { height: 2px; background: var(--blue-text); margin-top: 14px; flex-shrink: 0; }
+
+  /* Results row */
+  .results { display: flex; align-items: center; padding: 13px 23px 0 33px; }
+  .results .count { font-size: 18px; font-weight: 600; color: var(--blue-text); }
+  .sort {
+    margin-left: auto; height: 28px; padding: 0 17px; border-radius: 9px;
+    border: 2px solid var(--blue-text); background: var(--mist);
+    display: flex; align-items: center;
+    font-size: 14.5px; font-weight: 500; color: var(--navy);
+  }
+
+  /* Product grid */
+  .grid {
+    display: grid; grid-template-columns: 167px 167px;
+    column-gap: 13px; row-gap: 15px; padding: 11px 23px 0;
+  }
+  .pcard {
+    height: 134px; border: 2px solid var(--blue-text); border-radius: 12px;
+    background: var(--mist); padding: 5px;
+  }
+  .pimg { position: relative; height: 83px; border-radius: 8px; overflow: hidden; }
+  .pimg img { width: 100%; height: 100%; object-fit: cover; }
+  .heart {
+    position: absolute; top: 2px; right: 2px; width: 20px; height: 20px;
+    border-radius: 50%; background: #fff;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .heart svg { width: 12px; height: 12px; }
+  .nrow { display: flex; align-items: center; justify-content: space-between; gap: 5px; margin-top: 6px; padding: 0 4px; }
+  .pname { font-size: 10.5px; font-weight: 500; letter-spacing: -0.1px; color: #111; white-space: nowrap; }
+  .stars { display: flex; gap: 1px; flex-shrink: 0; }
+  .stars svg { width: 9px; height: 9px; }
+  .prow2 { display: flex; align-items: baseline; gap: 6px; margin-top: 1px; padding: 0 4px; }
+  .pprice { font-size: 14px; font-weight: 700; color: #000; }
+  .pmrp { font-size: 10.5px; font-weight: 500; color: var(--red); text-decoration: line-through; }
+
+  .tabbar { position: absolute; left: 0; right: 0; bottom: 0; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="half"><stop offset="50%" stop-color="#f0a63a"/><stop offset="50%" stop-color="#c9d5db"/></linearGradient>
+  </defs>
+</svg>
+
+<div class="screen">
+  <!-- Search header -->
+  <div class="top">
+    <span class="back"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></span>
+    <div class="search-field">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      Sports gear
+      <svg class="mic" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1"/><path d="M12 18v3"/></svg>
+    </div>
+  </div>
+
+  <!-- Chips -->
+  <div class="chips">
+    <span class="chip active">Filters</span>
+    <span class="chip">Running</span>
+    <span class="chip">Under ₹3,000</span>
+    <span class="chip">Size M</span>
+    <span class="chip">Kalenji</span>
+    <span class="chip">Quechua</span>
+  </div>
+
+  <div class="rule2"></div>
+
+  <!-- Results -->
+  <div class="results">
+    <span class="count">48 results</span>
+    <span class="sort">Sort by</span>
+  </div>
+
+  <div class="grid">
+    <!-- Kalenji Run 100 -->
+    <div class="pcard">
+      <div class="pimg"><img src="../assets/decathlon/run100.png" alt="" />
+        <span class="heart"><svg viewBox="0 0 24 24" fill="#0f96db"><path d="M12 21s-7.5-4.9-9.5-9.2C1 8.3 3.2 5 6.5 5c2 0 3.6 1.1 5.5 3 1.9-1.9 3.5-3 5.5-3 3.3 0 5.5 3.3 4 6.8C19.5 16.1 12 21 12 21z"/></svg></span>
+      </div>
+      <div class="nrow"><span class="pname">Kalenji Run 100</span>
+        <span class="stars"><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#c9d5db" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+      </div>
+      <div class="prow2"><span class="pprice">₹1,999</span><span class="pmrp">₹2,499</span></div>
+    </div>
+
+    <!-- Kiprun KS500 -->
+    <div class="pcard">
+      <div class="pimg"><img src="../assets/decathlon/ks500.png" alt="" />
+        <span class="heart"><svg viewBox="0 0 24 24" fill="#0f96db"><path d="M12 21s-7.5-4.9-9.5-9.2C1 8.3 3.2 5 6.5 5c2 0 3.6 1.1 5.5 3 1.9-1.9 3.5-3 5.5-3 3.3 0 5.5 3.3 4 6.8C19.5 16.1 12 21 12 21z"/></svg></span>
+      </div>
+      <div class="nrow"><span class="pname">Kiprun KS500</span>
+        <span class="stars"><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+      </div>
+      <div class="prow2"><span class="pprice">₹4,299</span><span class="pmrp">₹4,999</span></div>
+    </div>
+
+    <!-- Artengo TR160 -->
+    <div class="pcard">
+      <div class="pimg"><img src="../assets/decathlon/tr160.png" alt="" />
+        <span class="heart"><svg viewBox="0 0 24 24" fill="#0f96db"><path d="M12 21s-7.5-4.9-9.5-9.2C1 8.3 3.2 5 6.5 5c2 0 3.6 1.1 5.5 3 1.9-1.9 3.5-3 5.5-3 3.3 0 5.5 3.3 4 6.8C19.5 16.1 12 21 12 21z"/></svg></span>
+      </div>
+      <div class="nrow"><span class="pname">Artengo TR160</span>
+        <span class="stars"><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="url(#half)" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+      </div>
+      <div class="prow2"><span class="pprice">₹2,999</span><span class="pmrp">₹3,599</span></div>
+    </div>
+
+    <!-- Quechua NH100 backpack -->
+    <div class="pcard">
+      <div class="pimg"><img src="../assets/decathlon/nh100.png" alt="" />
+        <span class="heart"><svg viewBox="0 0 24 24" fill="#0f96db"><path d="M12 21s-7.5-4.9-9.5-9.2C1 8.3 3.2 5 6.5 5c2 0 3.6 1.1 5.5 3 1.9-1.9 3.5-3 5.5-3 3.3 0 5.5 3.3 4 6.8C19.5 16.1 12 21 12 21z"/></svg></span>
+      </div>
+      <div class="nrow"><span class="pname">Quechua NH100</span>
+        <span class="stars"><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#c9d5db" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+      </div>
+      <div class="prow2"><span class="pprice">₹1,299</span><span class="pmrp">₹1,599</span></div>
+    </div>
+
+    <!-- Domyos Yoga Mat -->
+    <div class="pcard">
+      <div class="pimg"><img src="../assets/decathlon/yogamat.png" alt="" />
+        <span class="heart"><svg viewBox="0 0 24 24" fill="#0f96db"><path d="M12 21s-7.5-4.9-9.5-9.2C1 8.3 3.2 5 6.5 5c2 0 3.6 1.1 5.5 3 1.9-1.9 3.5-3 5.5-3 3.3 0 5.5 3.3 4 6.8C19.5 16.1 12 21 12 21z"/></svg></span>
+      </div>
+      <div class="nrow"><span class="pname">Domyos Yoga Mat</span>
+        <span class="stars"><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="url(#half)" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+      </div>
+      <div class="prow2"><span class="pprice">₹799</span><span class="pmrp">₹999</span></div>
+    </div>
+
+    <!-- BTwin Helmet 500 -->
+    <div class="pcard">
+      <div class="pimg"><img src="../assets/decathlon/helmet.png" alt="" />
+        <span class="heart"><svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><path d="M12 21s-7.5-4.9-9.5-9.2C1 8.3 3.2 5 6.5 5c2 0 3.6 1.1 5.5 3 1.9-1.9 3.5-3 5.5-3 3.3 0 5.5 3.3 4 6.8C19.5 16.1 12 21 12 21z"/></svg></span>
+      </div>
+      <div class="nrow"><span class="pname">BTwin Helmet</span>
+        <span class="stars"><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#c9d5db" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+      </div>
+      <div class="prow2"><span class="pprice">₹1,499</span><span class="pmrp">₹1,799</span></div>
+    </div>
+
+    <!-- Domyos Dumbbells -->
+    <div class="pcard">
+      <div class="pimg"><img src="../assets/decathlon/dumbbells.png" alt="" />
+        <span class="heart"><svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><path d="M12 21s-7.5-4.9-9.5-9.2C1 8.3 3.2 5 6.5 5c2 0 3.6 1.1 5.5 3 1.9-1.9 3.5-3 5.5-3 3.3 0 5.5 3.3 4 6.8C19.5 16.1 12 21 12 21z"/></svg></span>
+      </div>
+      <div class="nrow"><span class="pname">Domyos Dumbbell</span>
+        <span class="stars"><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="url(#half)" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+      </div>
+      <div class="prow2"><span class="pprice">₹1,199</span><span class="pmrp">₹1,499</span></div>
+    </div>
+
+    <!-- Quechua MH100 -->
+    <div class="pcard">
+      <div class="pimg"><img src="../assets/decathlon/mh100.png" alt="" />
+        <span class="heart"><svg viewBox="0 0 24 24" fill="#0f96db"><path d="M12 21s-7.5-4.9-9.5-9.2C1 8.3 3.2 5 6.5 5c2 0 3.6 1.1 5.5 3 1.9-1.9 3.5-3 5.5-3 3.3 0 5.5 3.3 4 6.8C19.5 16.1 12 21 12 21z"/></svg></span>
+      </div>
+      <div class="nrow"><span class="pname">Quechua MH100</span>
+        <span class="stars"><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="url(#half)" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+      </div>
+      <div class="prow2"><span class="pprice">₹2,499</span><span class="pmrp">₹2,999</span></div>
+    </div>
+
+    <!-- Artengo BS160 (clipped by tab bar, like the original) -->
+    <div class="pcard">
+      <div class="pimg"><img src="../assets/decathlon/bs160.png" alt="" />
+        <span class="heart"><svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><path d="M12 21s-7.5-4.9-9.5-9.2C1 8.3 3.2 5 6.5 5c2 0 3.6 1.1 5.5 3 1.9-1.9 3.5-3 5.5-3 3.3 0 5.5 3.3 4 6.8C19.5 16.1 12 21 12 21z"/></svg></span>
+      </div>
+      <div class="nrow"><span class="pname">Artengo BS160</span>
+        <span class="stars"><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="url(#half)" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+      </div>
+      <div class="prow2"><span class="pprice">₹3,499</span><span class="pmrp">₹4,299</span></div>
+    </div>
+
+    <!-- Kalenji Jogflow (clipped by tab bar, like the original) -->
+    <div class="pcard">
+      <div class="pimg"><img src="../assets/decathlon/jogflow.png" alt="" />
+        <span class="heart"><svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><path d="M12 21s-7.5-4.9-9.5-9.2C1 8.3 3.2 5 6.5 5c2 0 3.6 1.1 5.5 3 1.9-1.9 3.5-3 5.5-3 3.3 0 5.5 3.3 4 6.8C19.5 16.1 12 21 12 21z"/></svg></span>
+      </div>
+      <div class="nrow"><span class="pname">Kalenji Jogflow</span>
+        <span class="stars"><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#f0a63a" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path fill="#c9d5db" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+      </div>
+      <div class="prow2"><span class="pprice">₹3,499</span><span class="pmrp">₹3,999</span></div>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tabbar">
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-8 9 8v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 22v-6h6v6"/></svg>
+      Home
+    </div>
+    <div class="tab active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="2.4"/><circle cx="17" cy="7" r="3.5"/><circle cx="7" cy="17" r="3.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="2.4"/></svg>
+      Categories
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19"/><path d="M12 2.5a14.5 14.5 0 0 1 0 19 14.5 14.5 0 0 1 0-19"/></svg>
+      Travel store
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1.2 13.2a1.6 1.6 0 0 1-1.6 1.8H6.4a1.6 1.6 0 0 1-1.6-1.8z"/><path d="M8.5 10V6.5a3.5 3.5 0 0 1 7 0V10"/></svg>
+      Bag
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg>
+      Account
+    </div>
+  </div>
+</div>
+</body>
+</html>

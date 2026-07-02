@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 864px; }
+  .head-rule { height: 2px; }
+
+  .fh { font-size: 18px; font-weight: 600; color: var(--navy); line-height: 25px; margin: 20px 0 6px 30px; }
+  .fcard { width: 312px; margin-left: 30px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+
+  /* Price range slider */
+  .price-card { height: 53px; position: relative; }
+  .track { position: absolute; left: 20px; right: 20px; top: 12px; height: 8px; border-radius: 4px; background: var(--pale); }
+  .track .fill { position: absolute; top: 0; bottom: 0; left: 78px; right: 70px; background: var(--navy); }
+  .handle { position: absolute; top: -4.5px; width: 17px; height: 17px; border-radius: 50%; background: var(--blue-text); }
+  .handle.h1 { left: 70px; }
+  .handle.h2 { left: 194px; }
+  .slabel2 { position: absolute; top: 27px; transform: translateX(-50%); font-size: 13px; font-weight: 500; color: var(--navy); white-space: nowrap; }
+
+  /* Check lists (Category / Brands) */
+  .cklist { padding: 8px 0; }
+  .ckrow { display: flex; align-items: center; gap: 13px; height: 41px; padding: 0 14px; }
+  .ckrow svg { width: 20px; height: 20px; flex-shrink: 0; }
+  .ckrow .lbl { font-size: 15px; font-weight: 500; color: var(--blue-text); }
+  .ckrow .cnt { font-size: 14px; font-weight: 500; color: var(--blue-text); margin-left: 6px; }
+  .brands .ckrow { height: 42px; }
+  .brands .lbl { font-weight: 600; }
+
+  /* Size chips */
+  .sizes { display: flex; gap: 15px; margin: 11px 0 0 32px; }
+  .schip {
+    height: 28px; padding: 0 12px; border-radius: 9px;
+    border: 2px solid var(--blue-text); background: var(--mist);
+    display: flex; align-items: center;
+    font-size: 13px; font-weight: 600; color: var(--navy);
+  }
+  .schip.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+
+  .tabbar { position: absolute; left: 0; right: 0; bottom: 0; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <!-- Header -->
+  <div class="page-head">
+    <span class="title">Filters</span>
+    <span class="action">Reset all</span>
+  </div>
+  <div class="head-rule"></div>
+
+  <!-- Price range: matches the "Under ₹3,000" quick filter -->
+  <div class="fh">Price range</div>
+  <div class="fcard price-card">
+    <div class="track">
+      <div class="fill"></div>
+      <div class="handle h1"></div>
+      <div class="handle h2"></div>
+    </div>
+    <span class="slabel2" style="left:98px">₹500</span>
+    <span class="slabel2" style="left:222px">₹3,000</span>
+  </div>
+
+  <!-- Category -->
+  <div class="fh" style="margin-top:24px; margin-bottom:9px;">Category</div>
+  <div class="fcard cklist">
+    <div class="ckrow">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#000"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="lbl">Running</span><span class="cnt">(42)</span>
+    </div>
+    <div class="ckrow">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10.6" stroke="#000" stroke-width="1.8"/><path d="M7.4 12.5l3 3 6.2-6.1" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="lbl">Cycling</span><span class="cnt">(28)</span>
+    </div>
+    <div class="ckrow">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#000"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="lbl">Tennis</span><span class="cnt">(19)</span>
+    </div>
+    <div class="ckrow">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10.6" stroke="#000" stroke-width="1.8"/><path d="M7.4 12.5l3 3 6.2-6.1" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="lbl">Swimming</span><span class="cnt">(14)</span>
+    </div>
+  </div>
+
+  <!-- Size -->
+  <div class="fh" style="margin-top:24px; margin-bottom:0;">Size</div>
+  <div class="sizes">
+    <span class="schip active">XS</span>
+    <span class="schip">S</span>
+    <span class="schip active">M</span>
+    <span class="schip">L</span>
+    <span class="schip">XL</span>
+    <span class="schip">XXL</span>
+  </div>
+
+  <!-- Brands -->
+  <div class="fh" style="margin-top:27px; margin-bottom:8px;">Brands</div>
+  <div class="fcard cklist brands">
+    <div class="ckrow">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#000"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="lbl">Quechua</span><span class="cnt">(42)</span>
+    </div>
+    <div class="ckrow">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10.6" stroke="#000" stroke-width="1.8"/><path d="M7.4 12.5l3 3 6.2-6.1" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="lbl">Kalenji</span><span class="cnt">(28)</span>
+    </div>
+    <div class="ckrow">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#000"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="lbl">Artengo</span><span class="cnt">(19)</span>
+    </div>
+    <div class="ckrow">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10.6" stroke="#000" stroke-width="1.8"/><path d="M7.4 12.5l3 3 6.2-6.1" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="lbl">Domyos</span><span class="cnt">(14)</span>
+    </div>
+    <div class="ckrow">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10.6" stroke="#000" stroke-width="1.8"/><path d="M7.4 12.5l3 3 6.2-6.1" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="lbl">BTwin</span><span class="cnt">(11)</span>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tabbar">
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-8 9 8v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 22v-6h6v6"/></svg>
+      Home
+    </div>
+    <div class="tab active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="2.4"/><circle cx="17" cy="7" r="3.5"/><circle cx="7" cy="17" r="3.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="2.4"/></svg>
+      Categories
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19"/><path d="M12 2.5a14.5 14.5 0 0 1 0 19 14.5 14.5 0 0 1 0-19"/></svg>
+      Travel store
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1.2 13.2a1.6 1.6 0 0 1-1.6 1.8H6.4a1.6 1.6 0 0 1-1.6-1.8z"/><path d="M8.5 10V6.5a3.5 3.5 0 0 1 7 0V10"/></svg>
+      Bag
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg>
+      Account
+    </div>
+  </div>
+</div>
+</body>
+</html>

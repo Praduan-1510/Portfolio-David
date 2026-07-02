@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 986px; }
+
+  /* Warm glow behind the avatar */
+  .halo {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 240px;
+    height: 210px;
+    background: radial-gradient(122px circle at 185px 72px,
+      rgba(252, 163, 17, 0.95) 0,
+      rgba(252, 163, 17, 0.65) 35%,
+      rgba(252, 163, 17, 0.32) 65%,
+      rgba(252, 163, 17, 0.1) 85%,
+      rgba(252, 163, 17, 0) 100%);
+  }
+
+  .head { position: relative; padding: 46px 28px 0; }
+  .head h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    line-height: 34px;
+    color: #fff;
+  }
+  .head .sub {
+    margin-top: 9px;
+    font-size: 16.5px;
+    font-weight: 400;
+    line-height: 22px;
+    color: #dfe3ea;
+  }
+  .head .avatar {
+    position: absolute;
+    top: 38px;
+    right: 25px;
+    width: 64px;
+    height: 64px;
+  }
+
+  .sheet { margin: 0 14px 15px; position: relative; overflow: hidden; }
+
+  /* Upcoming / Active / Past segmented pills */
+  .pills { margin: 23px 0 0 26px; display: flex; gap: 11px; }
+  .pill {
+    width: 97px;
+    height: 33px;
+    border-radius: 17px;
+    background: #ececec;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+  }
+  .pill.on { background: var(--orange); color: #1a1a1a; font-weight: 600; }
+
+  /* Trip cards */
+  .tcard {
+    margin: 30px 0 0 26px;
+    width: 309px;
+    border-radius: 16px;
+    background: var(--navy);
+    overflow: hidden;
+  }
+  .tcard + .tcard { margin-top: 12px; }
+  .tcard img.ph { width: 309px; display: block; }
+  .tcard .cbody { padding: 13px 14px 6px; }
+  .tcard .ct { font-size: 17px; font-weight: 500; line-height: 22px; color: #fff; }
+  .tcard .cs { margin-top: 2px; font-size: 12px; font-weight: 400; line-height: 16px; color: #8a92a4; }
+  .tcard .cp { margin-top: 1px; font-size: 14px; font-weight: 700; line-height: 18px; color: var(--orange); }
+  .tcard .btns { margin: 12px 0 9px; display: flex; align-items: center; }
+  .tcard .b1 {
+    width: 127px;
+    height: 32px;
+    border-radius: 16px;
+    border: 1.5px solid var(--orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--orange);
+  }
+  .tcard .b2 {
+    margin-left: auto;
+    margin-right: 13px;
+    width: 128px;
+    height: 32px;
+    border-radius: 16px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .tcard .b2 svg { width: 18px; height: 18px; }
+
+  /* Fade + light tab bar over the clipped third card */
+  .fade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 76px;
+    height: 46px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.96) 100%);
+  }
+  .tabs {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 76px;
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    padding: 7px 22px 0;
+  }
+  .titem {
+    width: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--tab-label);
+  }
+  .titem svg { width: 26px; height: 26px; stroke: var(--tab-ink); }
+  .titem.active { color: var(--tab-active); }
+  .titem.active svg { stroke: var(--tab-active); }
+
+  .home-indicator.dim { bottom: 20px; width: 134px; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="halo"></div>
+
+  <div class="head">
+    <h1>My Trips</h1>
+    <div class="sub">3 Upcoming Adventures</div>
+    <div class="avatar"><img src="../assets/voyager/avatar.png" alt="" /></div>
+  </div>
+
+  <div class="sheet">
+    <div class="pills">
+      <div class="pill on">Upcoming</div>
+      <div class="pill">Active</div>
+      <div class="pill">Past</div>
+    </div>
+
+    <div class="tcard">
+      <img class="ph" src="../assets/voyager/trip-paris.png" alt="" />
+      <div class="cbody">
+        <div class="ct">Paris</div>
+        <div class="cs">France &middot; Aug 12&ndash;19, 2025</div>
+        <div class="cp">From $ 1240</div>
+        <div class="btns">
+          <div class="b1">Itinerary</div>
+          <div class="b2">
+            Details
+            <svg viewBox="0 0 24 24" fill="none" stroke="#14213d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tcard">
+      <img class="ph" src="../assets/voyager/trip-prague.png" alt="" />
+      <div class="cbody">
+        <div class="ct">Prague</div>
+        <div class="cs">Czech Rep 5 Days</div>
+        <div class="cp">From $ 800</div>
+        <div class="btns">
+          <div class="b1">Itinerary</div>
+          <div class="b2">
+            Details
+            <svg viewBox="0 0 24 24" fill="none" stroke="#14213d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tcard">
+      <img class="ph" src="../assets/voyager/trip-sydney.png" alt="" />
+      <div class="cbody">
+        <div class="ct">Sydney</div>
+        <div class="cs">Australia 8 Days</div>
+        <div class="cp">From $ 1500</div>
+      </div>
+    </div>
+
+    <div class="fade"></div>
+    <div class="tabs">
+      <div class="titem">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+        Home
+      </div>
+      <div class="titem">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        Search
+      </div>
+      <div class="titem">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        Explore
+      </div>
+      <div class="titem active">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>
+        Trip
+      </div>
+      <div class="titem">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Profile
+      </div>
+    </div>
+  </div>
+
+  <div class="home-indicator dim"></div>
+</div>
+</body>
+</html>

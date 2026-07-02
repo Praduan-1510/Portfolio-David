@@ -14,6 +14,9 @@ import {
   Lede,
   Goals,
   Goal,
+  Margin,
+  Wide,
+  Bleed,
 } from "./CaseStudyBlocks";
 
 // Flatten MDX children to plain text so an h2's id matches the slug the contents
@@ -153,7 +156,7 @@ export const mdxComponents = {
     aspect?: string;
     align?: "left" | "right";
   }) => (
-    <figure className="my-space-9 w-full">
+    <figure className="cs-wide my-space-9 w-full">
       <div
         className={cn(
           "w-full lg:max-w-[42rem]",
@@ -192,4 +195,7 @@ export const mdxComponents = {
   Lede,
   Goals,
   Goal,
+  Margin,
+  Wide,
+  Bleed,
 };

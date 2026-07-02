@@ -68,6 +68,9 @@ export interface ProjectMeta {
   /** /work-specific framing line — a different angle from `summary`, so the
    *  index adds information the home cards don't already carry. Optional. */
   indexNote?: string;
+  /** Case-hero decorative texture: blueprint | ledger | route | grid — so each
+   *  study screenshots differently beyond its accent (recipes in globals.css). */
+  motif?: "blueprint" | "ledger" | "route" | "grid";
   /** Hero image path (a phone cover for apps; the video poster for web). */
   cover: string;
   /** Medium. "app" (default) → portrait phone frames; "web" → landscape browser

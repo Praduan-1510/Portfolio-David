@@ -1,0 +1,211 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 932px; }
+
+  /* Navy identity header: glowing avatar + name + stats */
+  .top { position: relative; height: 390px; flex-shrink: 0; }
+  .glow {
+    position: absolute;
+    left: 81px;
+    top: 37px;
+    width: 240px;
+    height: 240px;
+    border-radius: 999px;
+    background: radial-gradient(circle,
+      rgba(252, 163, 17, 0.25) 42%,
+      rgba(252, 163, 17, 0.13) 56%,
+      rgba(252, 163, 17, 0) 78%);
+  }
+  .avatar-xl {
+    position: absolute;
+    left: 146px;
+    top: 102px;
+    width: 110px;
+    height: 110px;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .avatar-xl img { width: 100%; height: 100%; object-fit: cover; }
+  .name {
+    position: absolute;
+    top: 229px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 23px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    color: #fff;
+  }
+  .mail {
+    position: absolute;
+    top: 262px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 13.5px;
+    font-weight: 400;
+    color: #a9b0bc;
+  }
+  .stats {
+    position: absolute;
+    top: 293px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 38px;
+    text-align: center;
+  }
+  .stats .n { font-size: 23px; font-weight: 700; color: var(--orange); }
+  .stats .l { margin-top: 6px; font-size: 14px; font-weight: 500; color: #99a2b0; }
+
+  /* Light settings sheet */
+  .paper {
+    background: #f4f4f4;
+    border-radius: 0 0 28px 28px;
+    margin: 0 14px 14px;
+    flex: 1;
+    padding: 24px 18px 0 17px;
+    overflow: hidden;
+  }
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 6px 18px rgba(20, 33, 61, 0.06);
+  }
+  .card + .card { margin-top: 20px; }
+  .card.pad { padding: 12px 0; }
+  .card1 { padding-bottom: 14px; }
+
+  .gold {
+    margin: 16px 11px 11px 24px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 0 13px 0 16px;
+  }
+  .gold svg.crown { width: 24px; height: 24px; flex-shrink: 0; }
+  .gold .gm { font-size: 13px; font-weight: 700; letter-spacing: 0.045em; color: var(--orange); }
+  .gold .gs { margin-top: 3px; font-size: 12px; font-weight: 600; color: #d5d5d5; white-space: nowrap; }
+  .gold .chev { margin-left: auto; }
+
+  .mrow {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0 28px 0 40px;
+  }
+  .mrow .ic { width: 30px; display: flex; justify-content: center; }
+  .mrow .ic svg { width: 26px; height: 26px; }
+  .mrow .lb { font-size: 17px; font-weight: 700; letter-spacing: 0.1px; color: #111; }
+  .mrow .chev { margin-left: auto; }
+  .chev svg { width: 20px; height: 20px; }
+  .div { border-top: 1px solid #e6e6e6; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="top">
+    <div class="glow"></div>
+    <div class="avatar-xl"><img src="../assets/voyager/avatar.png" alt="" /></div>
+    <div class="name">Praduan Saha</div>
+    <div class="mail">praduan.s@gmail.com</div>
+    <div class="stats">
+      <div><div class="n">12</div><div class="l">Trips</div></div>
+      <div><div class="n">8</div><div class="l">Saved</div></div>
+      <div><div class="n">4.9</div><div class="l">Rating</div></div>
+    </div>
+  </div>
+
+  <div class="paper">
+    <div class="card card1">
+      <div class="gold">
+        <svg class="crown" viewBox="0 0 24 24" fill="#fca311"><path d="M5 16 3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm0 2h14a1 1 0 0 1 1 1v.5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V19a1 1 0 0 1 1-1z"/></svg>
+        <div>
+          <div class="gm">GOLD MEMBER</div>
+          <div class="gs">4,820 Points &middot; Upgrade To Platinum</div>
+        </div>
+        <div class="chev">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fca311" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+      </div>
+
+      <div class="mrow">
+        <div class="ic">
+          <svg viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="16.5" rx="3" fill="#0b0b0b"/><rect x="6.6" y="2" width="3" height="5" rx="1.5" fill="#0b0b0b"/><rect x="14.4" y="2" width="3" height="5" rx="1.5" fill="#0b0b0b"/><rect x="5.5" y="10.2" width="13" height="4.2" rx="1" fill="#fff"/></svg>
+        </div>
+        <div class="lb">My Bookings</div>
+        <div class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#16181d" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
+      </div>
+      <div class="div"></div>
+
+      <div class="mrow">
+        <div class="ic">
+          <svg viewBox="0 0 24 24" fill="#ee1c1c"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        </div>
+        <div class="lb">Saved Places</div>
+        <div class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#16181d" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
+      </div>
+      <div class="div"></div>
+
+      <div class="mrow">
+        <div class="ic">
+          <svg viewBox="0 0 24 24"><rect x="2" y="4.5" width="20" height="15" rx="3" fill="#0b0b0b"/><rect x="2" y="8.2" width="20" height="3.2" fill="#fff"/><circle cx="6.6" cy="15.6" r="1.35" fill="#fff"/><circle cx="10.4" cy="15.6" r="1.35" fill="#fff"/></svg>
+        </div>
+        <div class="lb">Payment Methods</div>
+        <div class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#16181d" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
+      </div>
+      <div class="div"></div>
+
+      <div class="mrow">
+        <div class="ic">
+          <svg viewBox="0 0 24 24" fill="#a3a7ad"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58s1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.22-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
+        </div>
+        <div class="lb">Promo Codes</div>
+        <div class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#16181d" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
+      </div>
+    </div>
+
+    <div class="card pad">
+      <div class="mrow">
+        <div class="ic">
+          <svg viewBox="0 0 24 24" fill="#0b0b0b"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+        </div>
+        <div class="lb">Settings</div>
+        <div class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#16181d" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
+      </div>
+      <div class="div"></div>
+
+      <div class="mrow">
+        <div class="ic">
+          <svg viewBox="0 0 24 24" fill="#fca311"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+        </div>
+        <div class="lb">Notifications</div>
+        <div class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#16181d" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
+      </div>
+      <div class="div"></div>
+
+      <div class="mrow">
+        <div class="ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#e01b1b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-5"/><path d="m9 8-4 4 4 4"/><path d="M5 12h11"/></svg>
+        </div>
+        <div class="lb">Sign Out</div>
+        <div class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#16181d" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

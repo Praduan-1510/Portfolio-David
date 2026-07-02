@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 932px; }
+
+  /* Dark chat header: back chevron + two-line title block */
+  .head {
+    height: 104px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 16px 24px 0 20px;
+  }
+  .head .back svg { width: 25px; height: 25px; }
+  .head .t { font-size: 24px; font-weight: 700; letter-spacing: 0.1px; color: #fff; }
+  .head .status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 4px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #9aa0ab;
+  }
+  .head .dot { width: 7px; height: 7px; border-radius: 999px; background: #55f000; }
+  .head .on { color: #d9dee6; }
+  .head .sep { color: #5a647a; font-weight: 400; padding: 0 2px; }
+
+  /* Chat sheet: square top corners, rounded bottom (matches the original) */
+  .chat {
+    background: #fff;
+    border-radius: 0 0 28px 28px;
+    margin: 0 14px 14px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .bub {
+    max-width: 250px;
+    border-radius: 20px;
+    font-size: 12.5px;
+    line-height: 15px;
+    font-weight: 500;
+  }
+  .bub.bot {
+    align-self: flex-start;
+    margin: 27px 0 0 18px;
+    padding: 12px 16px;
+    background: #f6f6f6;
+    color: #2b2b2b;
+  }
+  .bub.user {
+    align-self: flex-end;
+    margin: 16px 18px 0 0;
+    padding: 19px 18px;
+    background: var(--navy);
+    color: #fff;
+  }
+  .stamp { font-size: 11.5px; font-weight: 500; color: #8b8b8b; }
+  .stamp.l { align-self: flex-start; margin: 10px 0 0 24px; }
+  .stamp.r { align-self: flex-end; margin: 12px 25px 0 0; }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 17px;
+    margin: 18px 17px 0;
+  }
+  .chip {
+    height: 31px;
+    display: flex;
+    align-items: center;
+    padding: 0 19px;
+    border: 2px solid var(--orange);
+    border-radius: 999px;
+    color: var(--orange);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .inputbar {
+    margin-top: auto;
+    height: 80px;
+    border-top: 1px solid #cdcbcb;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 0 26px 0 24px;
+  }
+  .inputbar .clip svg { width: 22px; height: 22px; }
+  .field {
+    flex: 1;
+    height: 34px;
+    border: 1.5px solid #d2d2d2;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #7e8894;
+  }
+  .send {
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    background: var(--orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .send svg { width: 20px; height: 20px; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="head">
+    <div class="back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+    </div>
+    <div>
+      <div class="t">Voyager Support</div>
+      <div class="status"><span class="dot"></span><span class="on">Online</span><span class="sep">|</span><span>Responds Instantly</span></div>
+    </div>
+  </div>
+
+  <div class="chat">
+    <div class="bub bot">Hello Praduan! &#128075; Welcome To Voyager Support. How Can I Help You Today?</div>
+    <div class="stamp l">9:30 AM</div>
+
+    <div class="bub user">Hi! I'd Like To Know About Visa Requirements For Paris.</div>
+    <div class="stamp r">9:32 AM</div>
+
+    <div class="bub bot">Great Question! As An Indian Passport Holder, You'll Need A Schengen Short-Stay Visa For France. Apply Via VFS Global &mdash; Processing Takes Around 15 Days. Want Me To Send A Full Checklist?</div>
+    <div class="stamp l">9:32 AM</div>
+
+    <div class="chips">
+      <div class="chip">Yes, send checklist</div>
+      <div class="chip">VFS info</div>
+      <div class="chip">Travel insurance</div>
+    </div>
+
+    <div class="inputbar">
+      <div class="clip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#8a8a8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+      </div>
+      <div class="field">Type a message...</div>
+      <div class="send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

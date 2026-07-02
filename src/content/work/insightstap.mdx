@@ -19,6 +19,7 @@ video:
 liveUrl: https://insightstap.com
 indexNote: 'The live one. Designed, then built: the production front-end for a B2B AI GTM platform — with the measured numbers to show for it.'
 accent: "#2DD4BF"
+motif: blueprint
 featured: true
 order: 0
 ---
@@ -33,6 +34,10 @@ InsightsTap is a live B2B SaaS platform that productises *intent signals* — he
 
 ## Context
 
+<Margin label="Dark funnel">
+  Most of the B2B buying journey happens before a vendor is ever contacted — the site is often the only touchpoint that gets a vote.
+</Margin>
+
 Go-to-market is an abstract domain. Intent signals, the "dark funnel", account-based marketing, AI agents, CRM automation across HubSpot and Salesforce — the value is real, but it's invisible and easy to glaze over. There's no tangible artifact a visitor can picture: the whole product lives in concepts. Most of the B2B buying journey now happens before a vendor is ever contacted — buyers research anonymously, in the dark funnel, and only surface late. Intent data is the attempt to read those signals early. The product's own pitch leans on a familiar comparison — *"Run your B2B enterprise like an e-commerce store"* — to give an otherwise abstract idea a fast mental model to borrow from. That framing became the anchor for the whole site.
 
 <Shot
@@ -44,7 +49,10 @@ Go-to-market is an abstract domain. Intent signals, the "dark funnel", account-b
 
 ## Problem
 
-> The brief, in one line: make an invisible, data-heavy product feel as concrete and quick as the e-commerce engines it's compared to.
+<Bleed
+  quote="Make an invisible, data-heavy product feel as concrete and quick as the e-commerce engines it's compared to."
+  attribution="The brief, in one line"
+/>
 
 The site had to make a dense, technical product instantly graspable and fast, on a high-contrast brand, without dumbing the ideas down. For visitors, the risk is bouncing before the concept lands. For the business, an unclear front-end undersells a genuinely capable platform. The constraints were real too: a high-contrast brand to honour, heavy data-driven sections to keep legible, and a need to perform from phone to wide desktop.
 
@@ -139,6 +147,10 @@ A consistent component language — the metrics band, the process diagram, the s
 Responsive layouts from phone to wide desktop, with performance and legibility passes on the heaviest data sections, so the site stays fast and graspable wherever it's opened.
 
 ## Outcome
+
+<Margin label="LCP culprit">
+  The hero video is the LCP element; poster-first loading is the queued fix. The number stays published until it moves.
+</Margin>
 
 The production site at insightstap.com, owned front to back — interface design through to the shipped front-end, on a single component system. And because it's live, it gets measured like live things do:
 

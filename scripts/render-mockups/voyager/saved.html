@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 932px; }
+
+  /* Dark header: page title + saved shortcut */
+  .head {
+    height: 104px;
+    padding: 46px 17px 0 28px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .head .title {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    line-height: 33px;
+    color: #fff;
+  }
+  .head .hbtn {
+    margin-top: 1px;
+    width: 35px;
+    height: 34px;
+    border-radius: 12px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .head .hbtn svg { width: 18px; height: 18px; }
+
+  /* Two-column saved grid */
+  .grid {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 142px 142px;
+    gap: 10px 28px;
+    justify-content: center;
+  }
+  .card {
+    position: relative;
+    width: 142px;
+    height: 168px;
+    border-radius: 14px;
+    background: var(--navy);
+    overflow: hidden;
+  }
+  .card img.ph {
+    width: 142px;
+    height: 92px;
+    border-radius: 14px 14px 10px 10px;
+  }
+  .card .hb {
+    position: absolute;
+    top: 8px;
+    right: 7px;
+    width: 26px;
+    height: 26px;
+    border-radius: 9px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card .hb svg { width: 14px; height: 14px; }
+  .card .ct {
+    margin: 8px 12px 0;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #fff;
+  }
+  .card .cs {
+    margin: 2px 12px 0;
+    font-size: 11.5px;
+    font-weight: 400;
+    line-height: 15px;
+    color: #8b93a5;
+  }
+  .card .cp {
+    margin: 2px 12px 0;
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 18px;
+    color: var(--orange);
+  }
+
+  .see-all {
+    margin: auto 23px 24px;
+    height: 34px;
+    border-radius: 17px;
+    font-size: 16px;
+  }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="head">
+    <div class="title">Saved</div>
+    <div class="hbtn">
+      <svg viewBox="0 0 24 24" fill="#fca311"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.51 4.04 3 5.5l7 7Z"/></svg>
+    </div>
+  </div>
+
+  <div class="sheet">
+    <div class="grid">
+      <div class="card">
+        <img class="ph" src="../assets/voyager/paris-thumb.png" alt="" />
+        <div class="hb"><svg viewBox="0 0 24 24" fill="#fca311"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.51 4.04 3 5.5l7 7Z"/></svg></div>
+        <div class="ct">Paris</div>
+        <div class="cs">France 8 Days</div>
+        <div class="cp">From $ 1240</div>
+      </div>
+      <div class="card">
+        <img class="ph" src="../assets/voyager/bali-thumb.png" alt="" />
+        <div class="hb"><svg viewBox="0 0 24 24" fill="#fca311"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.51 4.04 3 5.5l7 7Z"/></svg></div>
+        <div class="ct">Bali</div>
+        <div class="cs">Indonesia 10 Days</div>
+        <div class="cp">From $ 800</div>
+      </div>
+      <div class="card">
+        <img class="ph" src="../assets/voyager/rome-thumb.png" alt="" />
+        <div class="hb"><svg viewBox="0 0 24 24" fill="#fca311"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.51 4.04 3 5.5l7 7Z"/></svg></div>
+        <div class="ct">Rome</div>
+        <div class="cs">Italy 5 Days</div>
+        <div class="cp">From $ 1100</div>
+      </div>
+      <div class="card">
+        <img class="ph" src="../assets/voyager/prague-thumb.png" alt="" />
+        <div class="hb"><svg viewBox="0 0 24 24" fill="#fca311"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.51 4.04 3 5.5l7 7Z"/></svg></div>
+        <div class="ct">Prague</div>
+        <div class="cs">Czech Rep 5 Days</div>
+        <div class="cp">From $ 800</div>
+      </div>
+      <div class="card">
+        <img class="ph" src="../assets/voyager/sydney-thumb.png" alt="" />
+        <div class="hb"><svg viewBox="0 0 24 24" fill="#fca311"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.51 4.04 3 5.5l7 7Z"/></svg></div>
+        <div class="ct">Sydney</div>
+        <div class="cs">Australia 8 Days</div>
+        <div class="cp">From $ 1500</div>
+      </div>
+      <div class="card">
+        <img class="ph" src="../assets/voyager/athens-thumb.png" alt="" />
+        <div class="hb"><svg viewBox="0 0 24 24" fill="#fca311"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.51 4.04 3 5.5l7 7Z"/></svg></div>
+        <div class="ct">Athens</div>
+        <div class="cs">Greece 10 Days</div>
+        <div class="cp">From $ 2000</div>
+      </div>
+      <div class="card">
+        <img class="ph" src="../assets/voyager/jaipur-thumb.png" alt="" />
+        <div class="hb"><svg viewBox="0 0 24 24" fill="#fca311"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.51 4.04 3 5.5l7 7Z"/></svg></div>
+        <div class="ct">Jaipur</div>
+        <div class="cs">India 8 Days</div>
+        <div class="cp">From $ 1500</div>
+      </div>
+      <div class="card">
+        <img class="ph" src="../assets/voyager/toronto-thumb.png" alt="" />
+        <div class="hb"><svg viewBox="0 0 24 24" fill="#fca311"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.51 4.04 3 5.5l7 7Z"/></svg></div>
+        <div class="ct">Toronto</div>
+        <div class="cs">Canada 10 Days</div>
+        <div class="cp">From $ 2000</div>
+      </div>
+    </div>
+
+    <div class="btn-primary see-all">See All</div>
+  </div>
+</div>
+</body>
+</html>

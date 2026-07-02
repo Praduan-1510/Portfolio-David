@@ -9,6 +9,7 @@ summary: A travel app that carries you from inspiration to a booked, day-by-day 
 indexNote: 'The pacing study. Dream-mood navy to task-mode light and back, without ever losing where you are in the booking.'
 cover: /images/work/voyager/dashboard.png
 accent: "#F7A53B" # TODO: confirm — AA-tuned Voyager orange (was #F5A623); confirm exact brand hex
+motif: route
 featured: true
 order: 2
 flows:
@@ -91,11 +92,18 @@ Travel today is one of the most fragmented things people do on a phone. Inspirat
 
 ## Problem
 
-> Booking a trip means juggling a dozen tabs, and the excitement of travel drowns in logistics.
+<Bleed
+  quote="Booking a trip means juggling a dozen tabs — and the excitement of travel drowns in logistics."
+  attribution="The problem, in one line"
+/>
 
 Booking a trip usually means bouncing between an inspiration source, a flight site, a hotel site, a maps app, and a notes doc for the day-to-day plan. The cost lands on both sides: travellers lose the joy of the trip in tab-juggling and admin, and no single product owns the full journey, so each tool only captures a slice of the intent and a slice of the value. The design challenge: hold the entire journey — discover, plan, book, and travel — in one app, and keep it feeling like an adventure rather than admin.
 
 ## Research
+
+<Margin label="38 → 277">
+  Sites visited per trip, 2013 versus now. The fragmentation isn't nostalgia bait — it's still compounding.
+</Margin>
 
 The evidence base here is a competitive teardown of real travel apps plus published path-to-purchase data — not travellers. Nobody was interviewed or tested, and that gap is exactly what the Reflection owns. What the landscape itself says is still substantial:
 
@@ -181,6 +189,10 @@ Home opens with a personalised greeting, a prominent search, and curated rows �
 
 ### Booking
 
+<Margin label="The seam">
+  The theme flips exactly at the stepper's first screen — the one place a mode change reads as "now we're booking" instead of a glitch.
+</Margin>
+
 The four-step stepper you can always orient in: pick dates and guests on a clean calendar with adult and child counts, customise the trip — flight class, travel insurance, guided tours, airport transfer — then pay, with an itemised breakdown (package, transfer, insurance, taxes) and saved cards, ending in a clear confirmation with a booking reference and ticket download.
 
 <ScreenBeat
@@ -191,6 +203,10 @@ The four-step stepper you can always orient in: pick dates and guests on a clean
 />
 
 ### Travel
+
+<Margin label="Offline first">
+  TripIt's most-loved feature is the offline master itinerary. The documents wallet exists because airports are where connectivity dies.
+</Margin>
 
 This is where the plan lives once it's booked. A day-by-day itinerary lays the trip on a vertical timeline — flights, transfers, check-in, dinners — each with time, type, and detail, switchable by day. My Trips holds upcoming, active, and past trips as photo cards with quick actions, and Reviews shows an aggregate rating with a distribution breakdown and individual traveller reviews. The travel documents wallet keeps passport, licence, and insurance together — each with a validity status and a scannable QR — so the paperwork travels with the trip.
 

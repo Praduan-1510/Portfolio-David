@@ -125,6 +125,78 @@
 
 @layer components {
   /*
+   * Case-study reading grid (lg+): the measure column plus a live right rail
+   * for marginalia — the "research notebook" annotations that used to be a
+   * permanently empty column. grid-auto-flow:dense lets a .cs-margin (col 2)
+   * share its row with the paragraph that FOLLOWS it in the source, so notes
+   * sit beside the text they annotate. Below lg everything stacks normally.
+   */
+  @media (min-width: 1024px) {
+    .prose-cs-grid {
+      display: grid;
+      grid-template-columns: minmax(0, var(--measure)) minmax(11rem, 1fr);
+      column-gap: clamp(2rem, 4vw, 4rem);
+      grid-auto-flow: dense;
+    }
+    .prose-cs-grid > * {
+      grid-column: 1;
+      min-width: 0;
+    }
+    .prose-cs-grid > .cs-wide {
+      grid-column: 1 / -1;
+    }
+    .prose-cs-grid > .cs-margin {
+      grid-column: 2;
+      align-self: start;
+      position: sticky;
+      top: 7rem;
+    }
+  }
+  /* Full-viewport colour-field band — the case studies' set-piece moment.
+     Static negative margins ignore ancestor transforms, so this works inside
+     Reveal; the article carries overflow-x:clip as the scrollbar guard. */
+  .cs-bleed {
+    margin-inline: calc(50% - 50vw);
+  }
+
+  /* Per-study decorative motif on the case hero (data-motif on the article).
+     Thin structural texture only — never a fill behind content. */
+  .cs-motif {
+    position: absolute;
+    inset: 0;
+    z-index: -10;
+    opacity: 0.5;
+    color: rgba(255, 255, 255, 0.05);
+  }
+  [data-motif="blueprint"] .cs-motif {
+    background-image: radial-gradient(currentColor 0.5px, transparent 0.5px);
+    background-size: 22px 22px;
+  }
+  [data-motif="ledger"] .cs-motif {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      currentColor 0 1px,
+      transparent 1px 34px
+    );
+  }
+  [data-motif="route"] .cs-motif {
+    background-image: repeating-linear-gradient(
+      45deg,
+      currentColor 0 6px,
+      transparent 6px 22px
+    );
+    opacity: 0.28;
+    -webkit-mask-image: radial-gradient(70% 90% at 70% 20%, #000 0%, transparent 75%);
+    mask-image: radial-gradient(70% 90% at 70% 20%, #000 0%, transparent 75%);
+  }
+  [data-motif="grid"] .cs-motif {
+    background-image:
+      linear-gradient(currentColor 1px, transparent 1px),
+      linear-gradient(90deg, currentColor 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  /*
    * Site-wide card hover — the neon-green affordance.
    * `.card-neon` on any bordered panel: on hover OR keyboard focus-within, its
    * border lifts to neon green and it gains a soft neon glow. Pair with

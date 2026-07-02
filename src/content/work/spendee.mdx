@@ -9,6 +9,7 @@ summary: A dark-mode finance super-app for Indian small businesses — ledger, G
 indexNote: 'The domain study. GST filing mechanics and khata conventions, turned into a ledger whose numbers actually add up — every screen hand-coded.'
 cover: /images/work/spendee/dashboard.png
 accent: "#C9E94B" # TODO: confirm — AA-tuned Spendee lime (was #C2E000); confirm exact brand hex
+motif: ledger
 featured: true
 order: 1
 flows:
@@ -80,11 +81,18 @@ Start with the object this app replaces: a paper khata — a bound ledger of who
 
 ## The domain
 
+<Margin label="Why dark mode">
+  Shop counters are bright; back rooms at 11pm aren't. The owner reconciling after close gets a surface that doesn't glare — and a colour system that still reads.
+</Margin>
+
 A small-business owner in India usually keeps their books in a paper khata or a basic ledger app, files GST through a separate portal or an accountant, raises invoices somewhere else, collects over UPI, and chases working capital from banks that never see their real cash position. India has over 63 million MSMEs, the overwhelming majority of them informal, and the day-to-day reality is one person stitching together half a dozen tools to run the money side of the business. Spendee lives in that world — the gap between how much these businesses transact and how little of that activity is captured, connected, and usable.
 
 ## Problem
 
-> The data that proves a business is healthy never gets used to unlock the credit it qualifies for.
+<Bleed
+  quote="The data that proves a business is healthy never gets used to unlock the credit it qualifies for."
+  attribution="The problem, in one line"
+/>
 
 The information lives in silos, compliance deadlines sneak up, and a healthy business stays invisible to the lenders who could fund it. The owner loses time reconciling tools that don't talk to each other, GST obligations become a recurring source of stress, and the cash position that would qualify them for a loan is trapped in a paper ledger no bank will ever read.
 
@@ -172,6 +180,10 @@ Every customer and vendor with their outstanding balance and status, filterable 
 
 ### GST Center
 
+<Margin label="Late fees">
+  ₹50 a day once you miss (₹20 for nil returns) — small numbers that read as punishment. That's why the countdown leads with days left, not dates.
+</Margin>
+
 The compliance hub, and the screen I'm most proud of: GSTR-3B and GSTR-1 summaries, tax liability against available input tax credit, deadline countdowns, and one-tap file-and-pay. GST filing carries real, recurring pressure — GSTR-1 by the 11th and GSTR-3B by the 20th, filed in sequence, with input-tax-credit reconciliation and per-day late fees on top. The GST Center turns that stressful, easy-to-miss obligation into a guided task.
 
 <ScreenBeat
@@ -190,6 +202,10 @@ A P&L summary, a six-month cash-flow chart, and the metrics owners actually act 
 A built-in account with card, balance, a virtual account for UPI collections, and a shareable payment link, alongside transaction history. Designing collection around UPI reflects where Indian SMB payments actually are — overwhelmingly QR and UPI-first, driven by exactly these small and micro merchants.
 
 ### Credit & Growth
+
+<Margin label="Why /900">
+  The ledger-health score reads as CIBIL because owners already know what a 782 means there — borrowed familiarity, the same move as the khata toggle.
+</Margin>
 
 The payoff of keeping good books: a ledger-health score built from on-time payments, inflow, and GST compliance, used to pre-approve working capital and let owners discount specific invoices for cash. This is the thread that ties the whole product together — good data in the ledger becomes real financial leverage.
 

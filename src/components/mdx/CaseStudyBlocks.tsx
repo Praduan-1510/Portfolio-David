@@ -35,7 +35,7 @@ export function ScreenBeat({
   side?: "left" | "right";
 }) {
   return (
-    <figure className="my-space-9 grid items-center gap-space-6 lg:grid-cols-[14rem_1fr] lg:gap-space-8">
+    <figure className="cs-wide my-space-9 grid items-center gap-space-6 lg:grid-cols-[14rem_1fr] lg:gap-space-8">
       <Reveal className={cn("mx-auto w-full max-w-[14rem]", side === "right" && "lg:order-2")}>
         <Parallax speed={0.05}>
           <PhoneFrame src={src} alt={alt ?? caption ?? "App screen"} sizes="14rem" imgClassName="object-top" />
@@ -89,7 +89,7 @@ export function DecisionCards({ children }: { children?: React.ReactNode }) {
     <StaggerGroup
       as="ol"
       stagger={0.07}
-      className="my-space-8 grid list-none grid-cols-1 gap-space-5 [counter-reset:decision] lg:grid-cols-2 lg:[&>li:last-child:nth-child(odd)]:col-span-2"
+      className="cs-wide my-space-8 grid list-none grid-cols-1 gap-space-5 [counter-reset:decision] lg:grid-cols-2 lg:[&>li:last-child:nth-child(odd)]:col-span-2"
     >
       {children}
     </StaggerGroup>
@@ -138,7 +138,7 @@ export function StatusColourSystem() {
   return (
     <Reveal
       as="ul"
-      className="my-space-8 grid grid-cols-1 gap-space-5 lg:grid-cols-3"
+      className="cs-wide my-space-8 grid grid-cols-1 gap-space-5 lg:grid-cols-3"
       aria-label="Spendee status colour system"
     >
       {STATUS.map((s) => (
@@ -164,7 +164,7 @@ export function Stats({ children }: { children?: React.ReactNode }) {
     <StaggerGroup
       as="dl"
       stagger={0.08}
-      className="my-space-8 grid grid-cols-2 gap-x-space-6 gap-y-space-6 lg:grid-cols-4"
+      className="cs-wide my-space-8 grid grid-cols-2 gap-x-space-6 gap-y-space-6 lg:grid-cols-4"
     >
       {children}
     </StaggerGroup>
@@ -218,7 +218,7 @@ export function Goals({ children }: { children?: React.ReactNode }) {
     <StaggerGroup
       as="ol"
       stagger={0.08}
-      className="my-space-8 grid list-none gap-space-5 [counter-reset:goal]"
+      className="cs-wide my-space-8 grid list-none gap-space-5 [counter-reset:goal]"
     >
       {children}
     </StaggerGroup>
@@ -264,5 +264,78 @@ export function Goal({
         </div>
       )}
     </li>
+  );
+}
+
+
+/* ── Margin ─ a marginalia note for the case-study right rail (lg+). Place it
+   directly BEFORE the paragraph it annotates: the reading grid's dense flow
+   sets it beside that paragraph in the rail. Below lg it renders as a quiet
+   inline aside. The "research notebook" voice — mono label, caption text. ── */
+export function Margin({ label = "Why", children }: { label?: string; children?: React.ReactNode }) {
+  return (
+    <aside className="cs-margin my-space-5 border-l border-line pl-space-4 lg:my-0 lg:border-l-0 lg:border-t lg:border-line lg:pl-0 lg:pt-space-3">
+      <span className="block font-mono text-[0.625rem] uppercase tracking-[0.2em] text-accent">
+        {label}
+      </span>
+      <div className="mt-space-2 text-caption leading-relaxed text-muted [&>p]:mb-0">
+        {children}
+      </div>
+    </aside>
+  );
+}
+
+/* ── Wide ─ spans the full reading grid (measure column + rail) for media or
+   blocks that should break the measure deliberately. ───────────────────── */
+export function Wide({ children }: { children?: React.ReactNode }) {
+  return <div className="cs-wide">{children}</div>;
+}
+
+/* ── Bleed ─ the set-piece: a full-viewport colour-field band in the project
+   accent, holding a display pull-quote or an oversized artifact. One or two
+   per study — the moment the page stops being a column. ────────────────── */
+export function Bleed({
+  quote,
+  attribution,
+  children,
+}: {
+  /** Display pull-quote (the common case). */
+  quote?: string;
+  attribution?: string;
+  children?: React.ReactNode;
+}) {
+  return (
+    <div className="cs-wide">
+      <Reveal
+        as="div"
+        className="cs-bleed relative isolate my-space-10 overflow-hidden py-space-10"
+      >
+        {/* Accent colour-field + hairline frame. */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10"
+          style={{
+            background:
+              "radial-gradient(90% 120% at 18% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 64%), radial-gradient(80% 100% at 88% 100%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 66%), color-mix(in srgb, var(--surface) 45%, transparent)",
+          }}
+        />
+        <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-[color:color-mix(in_srgb,var(--accent)_35%,var(--line))]" />
+        <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-[color:color-mix(in_srgb,var(--accent)_35%,var(--line))]" />
+        <div className="mx-auto w-full max-w-[90rem] px-[clamp(1.25rem,5vw,6rem)]">
+          {quote ? (
+            <blockquote className="max-w-[24ch] font-display text-display-l leading-[1.1] tracking-[-0.01em] text-fg">
+              {quote}
+              {attribution && (
+                <footer className="mt-space-5 font-mono text-caption uppercase tracking-[0.16em] text-muted">
+                  {attribution}
+                </footer>
+              )}
+            </blockquote>
+          ) : (
+            children
+          )}
+        </div>
+      </Reveal>
+    </div>
   );
 }

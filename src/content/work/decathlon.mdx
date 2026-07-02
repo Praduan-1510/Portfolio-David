@@ -10,6 +10,7 @@ indexNote: 'The constraint study. A 60-sport catalogue survives a phone screen o
 cover: /images/work/decathlon/home.png
 accent: "#46B4F0" # TODO: confirm — AA-tuned Decathlon blue (was #0082C3, which failed/was borderline on dark); confirm exact brand hex
 disclaimer: Unofficial concept redesign — not affiliated with Decathlon.
+motif: grid
 featured: true
 order: 3
 flows:
@@ -71,7 +72,10 @@ That scale is the whole design problem. A catalogue this wide is a gift on the s
 
 ## Problem
 
-> The hard part isn't showing the range — it's helping one person cut through it quickly.
+<Bleed
+  quote="The hard part isn't showing the range — it's helping one person cut through it quickly."
+  attribution="The problem, in one line"
+/>
 
 A sports retailer's catalogue spans dozens of sports and thousands of products. For the user, all that breadth turns into friction: too many paths, slow narrowing, and product lists that don't reliably get you to the right item. Reviews of the live app echo this — people praise the range but report navigation and filtering complaints and product-listing errors, with filter suggestions flagged often enough to reach the product team. For the business, every extra tap between intent and checkout is a place to lose the sale.
 
@@ -100,6 +104,10 @@ Each goal names the published research signal I'd test it against.
 </Goals>
 
 ## What the published research says
+
+<Margin label="~16%">
+  Baymard's figure for sites that get faceted search right. Counts-on-options is far rarer than it looks.
+</Margin>
 
 This concept leans on published e-commerce research and a teardown of the live app; nobody was tested. Where a claim has a Baymard number behind it, I cite it — and where it doesn't, it's labelled design intent. Four things drove the direction.
 
@@ -165,6 +173,10 @@ Categories present the full catalogue as a scannable image grid spanning every s
 />
 
 ### Bag & checkout
+
+<Margin label="~39%">
+  Share of abandoners citing unexpected extra costs — why the bag shows GST-inclusive totals before checkout ever starts.
+</Margin>
 
 The bag shows line items with quantity steppers and savings, a promo-code field, and a price breakdown — subtotal, discount, GST, delivery — into checkout. From there, a three-step address → payment → confirm flow with multiple payment methods ends in a clean order-confirmed screen with continue-shopping and order tracking.
 

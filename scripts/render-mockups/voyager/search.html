@@ -1,0 +1,184 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 986px; }
+
+  .pagetitle {
+    padding: 40px 24px 0;
+    font-size: 23px;
+    font-weight: 700;
+    line-height: 28px;
+    letter-spacing: -0.2px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  /* Query summary bar */
+  .sbar {
+    margin: 32px 0 0 16px;
+    width: 313px;
+    height: 54px;
+    border-radius: 27px;
+    background: #f2f2f2;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 0 19px;
+    flex-shrink: 0;
+  }
+  .sbar svg { width: 19px; height: 19px; }
+  .sbar span { font-size: 13.5px; font-weight: 600; color: #10182b; }
+
+  /* Filter chips */
+  .chips { display: flex; gap: 11px; margin: 11px 0 0 16px; flex-shrink: 0; }
+  .chips.r2 { margin-top: 12px; }
+  .chip {
+    height: 34px;
+    border-radius: 17px;
+    padding: 0 17px;
+    display: flex;
+    align-items: center;
+    background: #e8e7e7;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1c2431;
+  }
+  .chip.on { background: var(--orange); font-weight: 700; color: #14213d; padding: 0 18px; }
+
+  /* Results sheet */
+  .rsheet {
+    background: #fff;
+    border-radius: 28px;
+    margin: 25px 14px 14px;
+    flex: 1;
+    overflow: hidden;
+  }
+  .res {
+    margin: 17px 31px 0;
+    font-size: 12.5px;
+    font-weight: 400;
+    line-height: 15px;
+    color: #565656;
+  }
+  .res b { font-weight: 700; color: var(--ink); }
+
+  .rgrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 28px;
+    margin: 14px 31px 0;
+  }
+
+  /* Destination card */
+  .dcard {
+    width: 142px;
+    height: 168px;
+    border-radius: 14px;
+    background: var(--navy);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .dcard img { width: 142px; height: 92px; object-fit: cover; }
+  .dcard .info { padding: 10px 12px 0; }
+  .dcard .t { font-size: 15px; font-weight: 600; line-height: 1; color: #fff; }
+  .dcard .s { margin-top: 6px; font-size: 10.5px; font-weight: 500; line-height: 1; color: #97a1b0; }
+  .dcard .p { margin-top: 7px; font-size: 12px; font-weight: 700; line-height: 1; color: var(--orange); }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="pagetitle">Find Destinations</div>
+
+  <div class="sbar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#10182b" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    <span>Anywhere &middot; Aug &middot; 2 Guests</span>
+  </div>
+
+  <div class="chips">
+    <div class="chip on">All</div>
+    <div class="chip">Flights</div>
+    <div class="chip">Hotels</div>
+    <div class="chip">Tours</div>
+  </div>
+  <div class="chips r2">
+    <div class="chip">Package</div>
+  </div>
+
+  <div class="rsheet">
+    <div class="res">148 results for <b>Anywhere</b></div>
+    <div class="rgrid">
+      <div class="dcard">
+        <img src="../assets/voyager/paris-thumb.png" alt="" />
+        <div class="info">
+          <div class="t">Paris</div>
+          <div class="s">France 7 Days</div>
+          <div class="p">From $1,240</div>
+        </div>
+      </div>
+      <div class="dcard">
+        <img src="../assets/voyager/bali-thumb.png" alt="" />
+        <div class="info">
+          <div class="t">Bali</div>
+          <div class="s">Indonesia 10 Days</div>
+          <div class="p">From $800</div>
+        </div>
+      </div>
+      <div class="dcard">
+        <img src="../assets/voyager/rome-thumb.png" alt="" />
+        <div class="info">
+          <div class="t">Rome</div>
+          <div class="s">Italy 5 Days</div>
+          <div class="p">From $1,100</div>
+        </div>
+      </div>
+      <div class="dcard">
+        <img src="../assets/voyager/prague-thumb.png" alt="" />
+        <div class="info">
+          <div class="t">Prague</div>
+          <div class="s">Czech Rep 5 Days</div>
+          <div class="p">From $800</div>
+        </div>
+      </div>
+      <div class="dcard">
+        <img src="../assets/voyager/sydney-thumb.png" alt="" />
+        <div class="info">
+          <div class="t">Sydney</div>
+          <div class="s">Australia 8 Days</div>
+          <div class="p">From $1,500</div>
+        </div>
+      </div>
+      <div class="dcard">
+        <img src="../assets/voyager/athens-thumb.png" alt="" />
+        <div class="info">
+          <div class="t">Athens</div>
+          <div class="s">Greece 10 Days</div>
+          <div class="p">From $2,000</div>
+        </div>
+      </div>
+      <div class="dcard">
+        <img src="../assets/voyager/jaipur-thumb.png" alt="" />
+        <div class="info">
+          <div class="t">Jaipur</div>
+          <div class="s">India 5 Days</div>
+          <div class="p">From $650</div>
+        </div>
+      </div>
+      <div class="dcard">
+        <img src="../assets/voyager/toronto-thumb.png" alt="" />
+        <div class="info">
+          <div class="t">Toronto</div>
+          <div class="s">Canada 6 Days</div>
+          <div class="p">From $950</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

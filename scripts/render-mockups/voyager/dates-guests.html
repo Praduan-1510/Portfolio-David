@@ -1,0 +1,252 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 932px; }
+
+  .h1 {
+    margin: 36px 21px 0;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.1px;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .kicker {
+    margin: 13px 21px 0;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: #6b6b6b;
+  }
+
+  /* Departure / Return date fields */
+  .date-labels {
+    display: flex;
+    gap: 25px;
+    margin: 16px 17px 0;
+  }
+  .date-labels span {
+    width: 157px;
+    padding-left: 3px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #9d9d9d;
+  }
+  .date-fields {
+    display: flex;
+    gap: 25px;
+    margin: 6px 17px 0;
+  }
+  .date-fields .field {
+    width: 157px;
+    height: 42px;
+    background: #ffe7c1;
+    border: 1.5px solid var(--orange);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding-left: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* Calendar — real August 2025, Monday-start grid */
+  .cal {
+    margin: 23px 17px 0;
+    background: #e7e7e7;
+    border-radius: 14px;
+    padding: 0 9px 9px;
+  }
+  .cal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 11px 0 2px;
+  }
+  .cal-head .m {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.1px;
+    color: #141414;
+  }
+  .cal-head .chev { display: flex; gap: 5px; }
+  .cal-head .chev svg { width: 13px; height: 13px; }
+  .wk {
+    display: flex;
+    margin-top: 16px;
+  }
+  .wk span {
+    width: 46px;
+    text-align: center;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #7a7a7a;
+  }
+  .crow {
+    position: relative;
+    display: flex;
+    height: 51px;
+    border-top: 1px solid #fff;
+    margin-top: 0;
+  }
+  .crow:first-of-type { margin-top: 16px; }
+  .crow .d {
+    position: relative;
+    width: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 7px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #1a1a1a;
+    z-index: 2;
+  }
+  .band, .sq {
+    position: absolute;
+    top: 6px;
+    height: 45px;
+    z-index: 0;
+  }
+  .band { background: #ffe7c1; }
+  .sq {
+    width: 46px;
+    border-radius: 12px;
+    background: var(--orange);
+    z-index: 1;
+  }
+
+  /* Guests stepper */
+  .guests {
+    margin: 39px 29px 0;
+    background: #717171;
+    border-radius: 14px;
+    padding: 11px 15px 12px 17px;
+  }
+  .grow {
+    display: flex;
+    align-items: center;
+    height: 26px;
+  }
+  .grow + .grow { margin-top: 2px; }
+  .grow .l {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .grow .ctrl {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .grow .ctrl .n {
+    min-width: 18px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .grow .ctrl svg { width: 16px; height: 16px; }
+
+  .continue { margin: auto 23px 23px; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <!-- Dark header -->
+  <div class="nav-head">
+    <div class="back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+    </div>
+    <div class="title">Book Your Trip</div>
+  </div>
+
+  <!-- White task sheet -->
+  <div class="sheet">
+    <!-- Step 1 of 4 -->
+    <div class="steps">
+      <div class="step active">1</div>
+      <div class="bar"></div>
+      <div class="step idle">2</div>
+      <div class="bar"></div>
+      <div class="step idle">3</div>
+      <div class="bar"></div>
+      <div class="step idle">4</div>
+    </div>
+
+    <div class="h1">Select Dates &amp; Guests</div>
+    <div class="kicker">TRAVEL DATES</div>
+
+    <div class="date-labels"><span>Departure</span><span>Return</span></div>
+    <div class="date-fields">
+      <div class="field">Aug 12, 2025</div>
+      <div class="field">Aug 19, 2025</div>
+    </div>
+
+    <!-- Calendar: August 2025 (Aug 1 = Friday, Monday-start) -->
+    <div class="cal">
+      <div class="cal-head">
+        <div class="m">August 2025</div>
+        <div class="chev">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+      </div>
+      <div class="wk"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+      <div class="crow">
+        <span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d">1</span><span class="d">2</span><span class="d">3</span>
+      </div>
+      <div class="crow">
+        <span class="d">4</span><span class="d">5</span><span class="d">6</span><span class="d">7</span><span class="d">8</span><span class="d">9</span><span class="d">10</span>
+      </div>
+      <div class="crow">
+        <div class="band" style="left:92px;right:0"></div>
+        <div class="sq" style="left:46px"></div>
+        <span class="d">11</span><span class="d">12</span><span class="d">13</span><span class="d">14</span><span class="d">15</span><span class="d">16</span><span class="d">17</span>
+      </div>
+      <div class="crow">
+        <div class="band" style="left:0;width:49px"></div>
+        <div class="sq" style="left:46px"></div>
+        <span class="d">18</span><span class="d">19</span><span class="d">20</span><span class="d">21</span><span class="d">22</span><span class="d">23</span><span class="d">24</span>
+      </div>
+      <div class="crow">
+        <span class="d">25</span><span class="d">26</span><span class="d">27</span><span class="d">28</span><span class="d">29</span><span class="d">30</span><span class="d">31</span>
+      </div>
+    </div>
+
+    <!-- Guests -->
+    <div class="guests">
+      <div class="grow">
+        <span class="l">Adults</span>
+        <div class="ctrl">
+          <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="8" fill="#fff"/><path d="M4.6 8h6.8" stroke="#5c5c5c" stroke-width="1.9" stroke-linecap="round"/></svg>
+          <span class="n">2</span>
+          <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="8" fill="#fff"/><path d="M4.6 8h6.8M8 4.6v6.8" stroke="#5c5c5c" stroke-width="1.9" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+      <div class="grow">
+        <span class="l">Children</span>
+        <div class="ctrl">
+          <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="8" fill="#fff"/><path d="M4.6 8h6.8" stroke="#5c5c5c" stroke-width="1.9" stroke-linecap="round"/></svg>
+          <span class="n">0</span>
+          <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="8" fill="#fff"/><path d="M4.6 8h6.8M8 4.6v6.8" stroke="#5c5c5c" stroke-width="1.9" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-primary continue">
+      Continue
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0b0b0b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </div>
+  </div>
+</div>
+</body>
+</html>

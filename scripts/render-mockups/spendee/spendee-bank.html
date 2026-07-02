@@ -1,0 +1,212 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 1145px; }
+
+  /* Page head (no back disc on this hub screen) */
+  .bank-head { display: flex; align-items: center; margin: 4px 4px 20px; }
+  .eyebrow { font-size: 11px; letter-spacing: 0.2em; color: var(--text-dim); font-weight: 500; }
+  .page-title { font-family: "Quicksand", sans-serif; font-size: 24px; font-weight: 700; margin-top: 4px; }
+  .cta-btn {
+    margin-left: auto; display: inline-flex; align-items: center;
+    background: #16293b; border: 1px solid #2f485b; color: #7dbcf0;
+    border-radius: 12px; padding: 9px 16px; font-size: 15px; font-weight: 600;
+  }
+
+  /* Debit card */
+  .debit-card {
+    position: relative; height: 196px; border-radius: 22px; padding: 20px;
+    background:
+      radial-gradient(150px 150px at 84% 28%, rgba(232, 212, 74, 0.95) 0%, rgba(216, 190, 60, 0.35) 45%, transparent 72%),
+      linear-gradient(135deg, #131f36, #0a1120);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .card-num {
+    margin-top: 26px; color: #f2f2f2; font-size: 16px; font-weight: 500;
+    letter-spacing: 5px; font-family: "Quicksand", sans-serif;
+  }
+  .card-num .mask { position: relative; top: 3px; font-size: 15px; }
+  .card-foot { margin-top: auto; display: flex; align-items: flex-end; gap: 34px; }
+  .cf-label { font-size: 10px; letter-spacing: 0.14em; color: #9aa4b5; }
+  .cf-val { font-size: 16px; font-weight: 600; color: #fff; margin-top: 4px; }
+  .rupay {
+    margin-left: auto; display: inline-flex; align-items: center;
+    font-style: italic; font-weight: 700; font-size: 19px; color: #fff;
+    font-family: "Poppins", sans-serif; letter-spacing: 0.01em;
+  }
+  .rupay .rp { width: 5px; height: 13px; transform: skewX(-22deg); margin-left: 4px; border-radius: 1px; }
+
+  /* Balance */
+  .balance-card { background: #2e2e2e; border-radius: 22px; padding: 18px 20px; margin-top: 18px; }
+  .balance-card .l { font-size: 13px; letter-spacing: 0.14em; color: var(--text-dim); font-weight: 500; }
+  .balance-card .v { font-family: "Quicksand", sans-serif; font-size: 34px; font-weight: 600; margin-top: 8px; letter-spacing: 0.5px; }
+
+  /* Quick tiles */
+  .qtiles { display: flex; gap: 12px; margin-top: 18px; }
+  .qtile {
+    flex: 1; height: 84px; border-radius: 20px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px;
+    font-size: 11px;
+  }
+  .qtile svg { width: 22px; height: 22px; }
+
+  /* Virtual account */
+  .virtual-card { background: #1f1f1f; border-radius: 24px; padding: 18px; margin-top: 18px; }
+  .virtual-card .eyebrow { letter-spacing: 0.14em; font-size: 11px; }
+  .field-grid { display: flex; gap: 10px; margin-top: 14px; }
+  .field { flex: 1; background: #2c2c2c; border-radius: 12px; padding: 12px 14px; }
+  .field .fl { font-size: 11px; color: var(--text-dim); }
+  .field .fv { font-size: 15px; font-weight: 600; margin-top: 5px; font-family: "Quicksand", sans-serif; letter-spacing: 0.03em; }
+  .field.upi { margin-top: 10px; background: #22303d; }
+  .share-btn {
+    margin-top: 14px; height: 54px; border-radius: 16px; background: #bfe0fa; color: #0d2233;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    font-family: "Quicksand", sans-serif; font-size: 17px; font-weight: 700;
+  }
+
+  /* Transactions */
+  .txns { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
+  .txn-amt { margin-left: auto; font-family: "Quicksand", sans-serif; font-size: 16px; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <!-- Page head -->
+  <div class="bank-head">
+    <div>
+      <div class="eyebrow">SPENDEE BANK</div>
+      <div class="page-title">Cards &amp; Banking</div>
+    </div>
+    <div class="cta-btn">Send Money</div>
+  </div>
+
+  <!-- Debit card -->
+  <div class="debit-card">
+    <svg width="36" height="27" viewBox="0 0 36 27">
+      <rect x="0.5" y="0.5" width="35" height="26" rx="5" fill="#e8d44a" stroke="#b8a52e"/>
+      <path d="M12 0.5v26 M24 0.5v26 M0.5 9h35 M0.5 18h35" stroke="#b8a52e" stroke-width="1" fill="none"/>
+    </svg>
+    <div class="card-num"><span class="mask">**** **** ****</span> 4887</div>
+    <div class="card-foot">
+      <div>
+        <div class="cf-label">CARD HOLDER</div>
+        <div class="cf-val">Jayanta Adhikari</div>
+      </div>
+      <div>
+        <div class="cf-label">EXPIRES</div>
+        <div class="cf-val">09/28</div>
+      </div>
+      <div class="rupay">RuPay<span class="rp" style="background:#f6a623"></span><span class="rp" style="background:#2e9e46"></span></div>
+    </div>
+  </div>
+
+  <!-- Balance -->
+  <div class="balance-card">
+    <div class="l">AVAILABLE BALANCE</div>
+    <div class="v">₹ 3,42,890</div>
+  </div>
+
+  <!-- Quick tiles -->
+  <div class="qtiles">
+    <div class="qtile" style="background:#46411d;color:#e3d55a">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#e3d55a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="5" height="5" rx="1"/><rect x="16" y="3" width="5" height="5" rx="1"/><rect x="3" y="16" width="5" height="5" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>
+      UPI
+    </div>
+    <div class="qtile" style="background:#4a2020;color:#f09a9a">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#f09a9a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Limits
+    </div>
+    <div class="qtile" style="background:#1f3d1f;color:#a9e88e">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#a9e88e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+      Statement
+    </div>
+    <div class="qtile" style="background:#1d3548;color:#8fc4ea">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#8fc4ea" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+      Transfer
+    </div>
+  </div>
+
+  <!-- Virtual account -->
+  <div class="virtual-card">
+    <div class="eyebrow">VIRTUAL ACCOUNT · UPI COLLECTIONS</div>
+    <div class="field-grid">
+      <div class="field">
+        <div class="fl">Account No.</div>
+        <div class="fv">921005087643</div>
+      </div>
+      <div class="field">
+        <div class="fl">IFSC</div>
+        <div class="fv">YESB0000123</div>
+      </div>
+    </div>
+    <div class="field upi">
+      <div class="fl">UPI ID</div>
+      <div class="fv" style="color:#7dbcf0">jayanta.a@spendee</div>
+    </div>
+    <div class="share-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d2233" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      Share Payment Link
+    </div>
+  </div>
+
+  <!-- Recent transactions -->
+  <div class="txns">
+    <div class="row-card">
+      <div class="avatar" style="background:#2f485b;color:#9fceef;width:38px;height:38px;font-size:13px">DS</div>
+      <div>
+        <div class="label" style="font-size:16px;color:#fff">Dutta &amp; Sons</div>
+        <div class="sub" style="margin-top:2px">UPI Transfer</div>
+      </div>
+      <div class="txn-amt" style="color:var(--green)">+₹45,000</div>
+    </div>
+    <div class="row-card">
+      <div class="avatar" style="background:#4f4531;color:#eccf8f;width:38px;height:38px;font-size:13px">MK</div>
+      <div>
+        <div class="label" style="font-size:16px;color:#fff">MK Suppliers</div>
+        <div class="sub" style="margin-top:2px">NEFT</div>
+      </div>
+      <div class="txn-amt" style="color:var(--red)">−₹28,900</div>
+    </div>
+    <div class="row-card">
+      <div class="avatar" style="background:#4f3131;color:#f0a5a5;width:38px;height:38px;font-size:13px">GT</div>
+      <div>
+        <div class="label" style="font-size:16px;color:#fff">Ghosh Traders</div>
+        <div class="sub" style="margin-top:2px">Net Banking</div>
+      </div>
+      <div class="txn-amt" style="color:var(--red)">−₹15,000</div>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tabbar">
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+      Ledger
+    </div>
+    <div class="fab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+    </div>
+    <div class="tab active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+      Bank
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="19" cy="12" r="1.4" fill="currentColor"/></svg>
+      More
+    </div>
+  </div>
+  <div class="home-indicator"></div>
+</div>
+</body>
+</html>

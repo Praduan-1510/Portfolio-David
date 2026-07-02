@@ -1,0 +1,201 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 967px; }
+
+  /* Interior header: back disc + left title + action pill */
+  .note-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 4px 0 20px;
+  }
+  .back-disc {
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    background: #fff;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .back-disc svg { width: 20px; height: 20px; }
+  .note-head .title {
+    font-family: "Quicksand", sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .mark-read {
+    margin-left: auto;
+    background: var(--blue-deep);
+    color: var(--blue);
+    border: 1px solid rgba(109, 179, 232, 0.5);
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .section-label {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #7d7d7d;
+    margin: 2px 4px 10px;
+  }
+
+  /* Grouped notification card: rows divided by hairlines */
+  .group {
+    background: #232323;
+    border-radius: 22px;
+    padding: 4px 0;
+    margin-bottom: 18px;
+  }
+  .note-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 18px;
+  }
+  .note-row + .note-row { border-top: 1px solid rgba(255, 255, 255, 0.07); }
+  .note-row svg { width: 22px; height: 22px; flex-shrink: 0; margin-top: 2px; }
+  .note-row .t {
+    font-size: 15px;
+    font-weight: 500;
+    color: #ececec;
+    line-height: 1.35;
+  }
+  .note-row .s {
+    font-size: 12px;
+    color: #8f8f8f;
+    margin-top: 3px;
+  }
+</style>
+</head>
+<body>
+<div class="screen">
+  <!-- Header -->
+  <div class="note-head">
+    <div class="back-disc">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+    </div>
+    <span class="title">Notifications</span>
+    <span class="mark-read">Mark all read</span>
+  </div>
+
+  <!-- Urgent -->
+  <div class="section-label">Urgent · 3 New</div>
+  <div class="group">
+    <div class="note-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+      <div>
+        <div class="t">Bose Retail overdue 12 days</div>
+        <div class="s">INV-1019 · ₹1,15,000 · 2 hours ago</div>
+      </div>
+    </div>
+    <div class="note-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <div>
+        <div class="t">GSTR-3B due in 11 days</div>
+        <div class="s">₹24,560 payable · 4 hours ago</div>
+      </div>
+    </div>
+    <div class="note-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.3 7 12 12l8.7-5"/><path d="M12 22V12"/></svg>
+      <div>
+        <div class="t">Dye Chemical — Critical stock</div>
+        <div class="s">Stockout in 3 days · 6 hours ago</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Earlier -->
+  <div class="section-label">Earlier</div>
+  <div class="group">
+    <div class="note-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><g transform="translate(12 12.4) scale(0.45) translate(-12 -12)" stroke-width="4"><path d="M6 3h12"/><path d="M6 8h12"/><path d="m6 13 8.5 8"/><path d="M6 13h3"/><path d="M9 13c6.667 0 6.667-10 0-10"/></g></svg>
+      <div>
+        <div class="t">Payment from Dutta &amp; Sons</div>
+        <div class="s">₹45,000 via UPI · Today</div>
+      </div>
+    </div>
+    <div class="note-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+      <div>
+        <div class="t">INV-1038 sent to Sharma Textiles</div>
+        <div class="s">₹62,000 due Jul 22 · Yesterday</div>
+      </div>
+    </div>
+    <div class="note-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+      <div>
+        <div class="t">Reminder sent to Ghosh Traders</div>
+        <div class="s">Payment follow-up · Yesterday</div>
+      </div>
+    </div>
+    <div class="note-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+      <div>
+        <div class="t">GSTR-1 filing due on the 11th</div>
+        <div class="s">47 invoices this period · Yesterday</div>
+      </div>
+    </div>
+    <div class="note-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 17v-2"/><path d="M12 17v-4"/><path d="M16 17v-3"/></svg>
+      <div>
+        <div class="t">Monthly report is ready</div>
+        <div class="s">June 2025 P&amp;L · 2 days ago</div>
+      </div>
+    </div>
+    <div class="note-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      <div>
+        <div class="t">Loan offer: ₹15L pre-approved</div>
+        <div class="s">Ledger health: 782 · 2 days ago</div>
+      </div>
+    </div>
+    <div class="note-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+      <div>
+        <div class="t">Bank account synced</div>
+        <div class="s">Balance ₹3,42,890 · 3 days ago</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tabbar">
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </div>
+    <div class="tab active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+      Ledger
+    </div>
+    <div class="fab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+      Bank
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="19" cy="12" r="1.4" fill="currentColor"/></svg>
+      More
+    </div>
+    <div class="base-strip"></div>
+  </div>
+  <div class="home-indicator"></div>
+</div>
+</body>
+</html>

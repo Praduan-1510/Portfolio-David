@@ -5,7 +5,8 @@ client: Concept project
 role: UI/UX & Product Design
 year: 2025
 services: [UX Design, UI Design, Design System, Prototyping]
-summary: A dark-mode finance super-app for Indian small businesses — ledger, GST, invoicing, payments, and credit in one calm interface.
+summary: A dark-mode finance super-app for Indian small businesses — ledger, GST, invoicing, payments, and credit in one legible interface.
+indexNote: 'The domain study. GST filing mechanics and khata conventions, turned into a ledger whose numbers actually add up — every screen hand-coded.'
 cover: /images/work/spendee/dashboard.png
 accent: "#C9E94B" # TODO: confirm — AA-tuned Spendee lime (was #C2E000); confirm exact brand hex
 featured: true
@@ -70,14 +71,14 @@ flows:
 ---
 
 <Lede>
-Pulling an Indian small business's whole money life — ledger, GST, invoicing, payments, credit — into one calm, dark-mode app, so **good books become real working capital** instead of paper a bank will never read.
+A ledger that earns its keep: GST mechanics, khata conventions, and cash-flow lending, compressed into an app one Kolkata trader could run — so **good books become real working capital** instead of paper a bank will never read.
 </Lede>
 
 ## Overview
 
-I designed Spendee end to end — a dark-mode finance super-app for Indian small businesses that pulls everything an owner juggles — their ledger, GST filing, invoicing, payments, and access to credit — into one calm interface. It's a concept exploring how to make Indian SMB finance feel manageable instead of scattered across a paper khata, a tax portal, an invoicing tool, and three banking apps. I owned the information architecture, the user flows, the UI across every screen, and the design system that holds it together.
+Start with the object this app replaces: a paper khata — a bound ledger of who gave and who got, updated nightly, understood perfectly by its owner and legible to absolutely no one else. Spendee is a concept that takes everything orbiting that book — GST filing, invoicing, UPI collection, the loan application the bank keeps refusing — and folds it into one dark-mode app where the khata's own logic still runs the show. I owned the information architecture, the flows, the UI across every screen, and the design system that holds it together.
 
-## Context
+## The domain
 
 A small-business owner in India usually keeps their books in a paper khata or a basic ledger app, files GST through a separate portal or an accountant, raises invoices somewhere else, collects over UPI, and chases working capital from banks that never see their real cash position. India has over 63 million MSMEs, the overwhelming majority of them informal, and the day-to-day reality is one person stitching together half a dozen tools to run the money side of the business. Spendee lives in that world — the gap between how much these businesses transact and how little of that activity is captured, connected, and usable.
 
@@ -87,11 +88,9 @@ A small-business owner in India usually keeps their books in a paper khata or a 
 
 The information lives in silos, compliance deadlines sneak up, and a healthy business stays invisible to the lenders who could fund it. The owner loses time reconciling tools that don't talk to each other, GST obligations become a recurring source of stress, and the cash position that would qualify them for a loan is trapped in a paper ledger no bank will ever read.
 
-The design challenge: bring all of it into one place — and make a dense, high-stakes, deadline-driven domain feel calm and in control rather than overwhelming.
+The design challenge: bring all of it into one place, and make a dense, high-stakes, deadline-driven domain feel steady and in control rather than overwhelming.
 
 ## Goals & signals
-
-What the design is built to do, and the signal I'd judge each by — targets, not results, since this is a concept.
 
 <Goals>
   <Goal
@@ -113,7 +112,7 @@ What the design is built to do, and the signal I'd judge each by — targets, no
 
 ## Research
 
-No primary user research was conducted — this is a concept grounded in competitive and domain analysis rather than interviews, surveys, or usability tests. What I did do was map the landscape: a teardown of India's real SMB bookkeeping and fintech tools, plus desk research into how GST filing, UPI collection, and MSME credit actually work. Three things came out of it.
+No owners were interviewed for this concept. What's real here is the systems research: GSTR-1 and GSTR-3B filing mechanics, khata conventions, Account Aggregator and OCEN lending — read from the sources and from teardowns of the tools Indian SMBs actually use, not from users. Three things came out of that reading.
 
 <FindingStack>
   <Finding title="The workflow is genuinely fragmented across separate categories of product.">
@@ -126,10 +125,6 @@ No primary user research was conducted — this is a concept grounded in competi
     The MSME credit gap is enormous and only a small fraction of these businesses can access formal credit, largely because they lack the financial records and collateral banks ask for. But underwriting is moving toward cash-flow and GST-data-based models — through the consent-driven Account Aggregator framework and OCEN — that assess repayment capacity from invoices and bank flows instead of paperwork. A ledger-health score built from on-time payments, inflow, and GST compliance is plausible precisely because that lending model already exists.
   </Finding>
 </FindingStack>
-
-<Aside label="The honest caveat">
-  The category is crowded, cheap or free, and hard to monetize — competitors are mature and some have struggled toward profitability. That tempers the concept's claims and points the differentiation at the credit thread and GST-as-a-guided-flow rather than parity features.
-</Aside>
 
 ## Strategy
 
@@ -154,7 +149,7 @@ A few decisions shaped the whole product.
 
 ### Onboarding & sign-in
 
-A short, four-step intro frames the value — a smart ledger, AI that watches your cash flow, and credit built on your books — over a blue-to-lime gradient, before handing off to the calm, near-black product. Auth is mobile-first: a four-digit PIN, biometrics, and Google, plus GSTIN capture at registration — built for how Indian small businesses actually onboard.
+A short, four-step intro frames the value (a smart ledger, AI that watches your cash flow, credit built on your books) over a blue-to-lime gradient, before handing off to the quiet, near-black product. Auth is mobile-first: a four-digit PIN, biometrics, and Google, plus GSTIN capture at registration — built for how Indian small businesses actually onboard.
 
 ### Dashboard
 
@@ -164,7 +159,7 @@ The home screen answers one question: *how is my business right now?* Net positi
   src="/images/work/spendee/dashboard.png"
   side="right"
   label="Dashboard"
-  caption="One glance answers “how is my business right now?” — net position and trend, money to get versus give, a cash-velocity gauge, and the alerts that actually need action, all above the fold."
+  caption="The cash-velocity gauge is the one invented metric on the screen: 30-day momentum scored out of 100, so a slowing month shows up before it becomes a crunch. Everything else is the owner's own numbers, ranked by urgency."
 />
 
 ### Ledger
@@ -183,7 +178,7 @@ The compliance hub, and the screen I'm most proud of: GSTR-3B and GSTR-1 summari
   src="/images/work/spendee/gst-center.png"
   side="left"
   label="GST Center"
-  caption="Liability against available input-tax credit, deadline countdowns, and one-tap file-and-pay turn a stressful, easy-to-miss obligation into a guided task."
+  caption="The detail that matters: the headline figure is ₹24,560 — liability after input-tax credit, not the gross ₹42,800 — and the countdown chip tracks the nearer of the two filing dates. The screen does the accountant's subtraction for you."
 />
 
 ### Reports
@@ -202,7 +197,7 @@ The payoff of keeping good books: a ledger-health score built from on-time payme
   src="/images/work/spendee/credit-growth.png"
   side="right"
   label="Credit & Growth"
-  caption="The payoff of good books: a ledger-health score from on-time payments, inflow, and GST compliance pre-approves working capital — data in the ledger becomes real leverage."
+  caption="Zoom on the middle card: the Get-₹62,000-today action is pinned to one specific overdue invoice (INV-1038), not a generic offer — discounting a receivable you can see is an easier decision than borrowing in the abstract."
 />
 
 ### Notifications & settings
@@ -215,17 +210,27 @@ One dark surface; a status colour system (green / red / amber) that encodes mean
 
 <StatusColourSystem />
 
+<Aside label="Colophon">
+  Every screen in this study is hand-coded HTML/CSS rendered at device resolution — the status colour system above isn't a style tile, it's running code.
+</Aside>
+
 ## Outcome
 
-An end-to-end product design: 19 screens spanning onboarding, authentication, ledger, contacts, invoicing, GST, reporting, banking, credit, and settings — held together by a single design system and one consistent navigation model.
+A concept has no launch metrics, so these are the constraints the design answers — the fixed points every screen had to respect.
 
 <Stats>
-  <Stat value="19" label="screens" />
-  <Stat value="6" label="product flows" />
-  <Stat value="10" label="feature areas" />
-  <Stat value="1" label="design system" />
+  <Stat value="2" label="filing deadlines built around — the 11th and the 20th" />
+  <Stat value="₹24,560" label="one tax spine, coherent across five screens" />
+  <Stat value="782" label="ledger-health score, CIBIL-style, out of 900" />
+  <Stat value="3" label="status colours carrying all the meaning" />
 </Stats>
 
 ## Reflection
 
-As a concept, Spendee explores how an intimidating, compliance-heavy domain can be made to feel calm and actionable. Given more time, I'd validate the ledger flow with real owners, build a clickable prototype of the core loops, and pressure-test the GST flow against real filing data.
+The honest question for this product isn't whether the screens work — it's what would kill it. The khata-app category is crowded, cheap or free, and brutal to monetize; mature competitors have struggled toward profitability doing exactly the parity features Spendee also carries.
+
+<Aside label="The bet">
+  The design's answer is the credit thread: the ledger-health score and invoice discounting are the two screens a free competitor can't copy without becoming a lender, and they're the reason the rest of the app earns its data. If that bet is wrong, this is a nicer Khatabook — which is not a business.
+</Aside>
+
+What I'd do next with real access: watch five owners record a day of entries against their paper khata and count where the app's model diverges from theirs, then pressure-test the GST Center against a real filing month — deadlines, credit reconciliation, late fees — with an accountant in the room.

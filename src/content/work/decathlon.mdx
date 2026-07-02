@@ -6,6 +6,7 @@ role: UI/UX & Product Design
 year: 2025
 services: [UX Design, UI Design, Design System, Prototyping]
 summary: A clean redesign concept for a sports-retail app — browse a huge multi-sport catalogue, filter fast, and check out in a few taps.
+indexNote: 'The constraint study. A 60-sport catalogue survives a phone screen only if narrowing leads — filters with counts, three checkout steps, no dead ends.'
 cover: /images/work/decathlon/home.png
 accent: "#46B4F0" # TODO: confirm — AA-tuned Decathlon blue (was #0082C3, which failed/was borderline on dark); confirm exact brand hex
 disclaimer: Unofficial concept redesign — not affiliated with Decathlon.
@@ -53,12 +54,12 @@ flows:
 ---
 
 <Lede>
-Helping one person cut through a 60-sport, thousands-of-products catalogue to the **right item in a tap or two** — and out through a short, confident checkout.
+Sixty sports, thousands of SKUs, one buyer: a redesign where **narrowing — not browsing — carries the whole experience**, from a broad query to a checkout that never surprises on price.
 </Lede>
 
 ## Overview
 
-A redesign concept for a sports-retail experience: a huge, multi-sport catalogue made fast to browse, filter, and buy. I designed it end to end — information architecture, user flows, UI across every screen, and the design system — with one goal: take someone from "I need running shoes" to a confirmed order without drowning them in options.
+A catalogue this wide is a gift on the shelf and a liability on a phone screen. Decathlon sells sixty-plus sports and thousands of product lines; the person opening the app wants one pair of running shoes. This redesign concept treats that mismatch as the entire brief — I designed it end to end (information architecture, flows, UI, design system) so that narrowing, not browsing, carries the experience from "I need shoes" to a confirmed order.
 
 > *Unofficial concept redesign. "Decathlon" and its logo are trademarks of their owner; this project is not affiliated with or endorsed by Decathlon.*
 
@@ -78,7 +79,7 @@ So this redesign focuses on three things: fast discovery (categories, search, fi
 
 ## Goals & signals
 
-What the design is built to do, and the signal I'd judge each by — targets, not results, since this is a concept.
+Each goal names the published research signal I'd test it against.
 
 <Goals>
   <Goal
@@ -92,15 +93,15 @@ What the design is built to do, and the signal I'd judge each by — targets, no
     status="Verified in the design"
   />
   <Goal
-    goal="Checkout stays calm at the moment most carts are abandoned."
+    goal="Checkout stays short and unambiguous at the moment most carts are abandoned."
     signal="Three steps, one primary action each, and the full cost shown before commit."
     status="Baymard-aligned · untested"
   />
 </Goals>
 
-## Research
+## What the published research says
 
-No primary user research was conducted — this is a concept grounded in competitive and domain analysis rather than interviews, surveys, or usability tests. I mapped the landscape instead: a teardown of the live Decathlon app plus large multi-category retailers, against published e-commerce UX research. Four things came out of it.
+This concept leans on published e-commerce research and a teardown of the live app; nobody was tested. Where a claim has a Baymard number behind it, I cite it — and where it doesn't, it's labelled design intent. Four things drove the direction.
 
 <FindingStack>
   <Finding title="The catalogue's scale is the core constraint, so narrowing has to lead.">
@@ -129,7 +130,7 @@ A few decisions shaped the product.
     Search pairs prominent filter chips with a full filter sheet — price range, category counts, size, brand — so a broad query like "running shoes" (48 results) narrows to the right pair in a tap or two. The chips live above the grid so applied filters stay visible, and option counts keep the user off dead-end zero-result pages.
   </DecisionCard>
   <DecisionCard title="A short, legible checkout.">
-    A three-step flow — address → payment → confirm — with a clear bag summary, promo code, and one primary action per screen keeps a high-stakes moment calm. The full price breakdown — subtotal, discount, GST, delivery — surfaces in the bag before checkout, so cost is never a late surprise.
+    A three-step flow (address, payment, confirm) with a clear bag summary, promo code, and one primary action per screen keeps a high-stakes moment simple. The full price breakdown — subtotal, discount, GST, delivery — surfaces in the bag before checkout, so cost is never a late surprise.
   </DecisionCard>
   <DecisionCard title="One brand colour, used with restraint.">
     Decathlon's blue anchors actions and brand moments against a clean white interface, so the products and photography stay the focus. I tuned the live brand blue to a lighter shade for AA contrast on dark surfaces — an accessibility-driven adjustment I'd confirm against brand guidelines.
@@ -189,17 +190,21 @@ A profile with club membership, orders, wishlist, saved addresses, and support. 
 
 A clean, light interface anchored by Decathlon's blue; photo-led category and product cards; a consistent header and a five-tab bottom nav with a clear active state; a rating-plus-strikethrough-price pattern for products; and a bold sans for headings paired with a clean UI sans.
 
+<Aside label="Colophon">
+  The screens are built in code, not a mockup tool — each one rendered from a hand-written HTML/CSS source at device size, photography excepted.
+</Aside>
+
 ## Outcome
 
-An end-to-end e-commerce design: 13 screens spanning onboarding, home, categories, search and filtering, product detail, bag, a three-step checkout, confirmation, account, orders, wishlist, and store locator — unified by one design system.
+A concept ships no conversion numbers, so these are the research constraints the design answers.
 
 <Stats>
-  <Stat value="13" label="screens" />
-  <Stat value="4" label="product flows" />
-  <Stat value="3" label="step checkout" />
-  <Stat value="1" label="design system" />
+  <Stat value="~70%" label="documented cart abandonment, designed against" />
+  <Stat value="3" label="checkout steps, one action each" />
+  <Stat value="16%" label="of sites get faceted search right (Baymard) — this one does" />
+  <Stat value="0" label="zero-result dead ends" />
 </Stats>
 
 ## Reflection
 
-As a concept, this explores how a large, multi-sport catalogue can stay fast and uncluttered from first tap to checkout. Given more time, I'd prototype the search → filter → product → checkout path and test the filter sheet for friction.
+The hardest problem here is still open: the filter sheet at true 60-sport depth. Counts-on-options works beautifully at "running shoes" scale, but a facet tree spanning tennis racket grips, bike frame sizes, and tent capacities is a different beast — the sheet either fragments per sport (consistency dies) or unifies (relevance dies). This concept shows the unified sheet at one sport's depth and doesn't pretend to have solved the general case. That's the prototype I'd build first, and I'd test it on the messiest query I could find — "camping" — not the cleanest.

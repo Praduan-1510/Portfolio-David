@@ -29,13 +29,14 @@ export default function Home() {
   const featured = getFeaturedProjectsMeta();
   const all = getAllProjectsMeta();
 
-  // Real, content-derived figures — nothing fabricated.
-  const screenCount = all.reduce((n, p) => n + p.gallery.length, 0);
-  const disciplineCount = new Set(all.flatMap((p) => p.services)).size;
+  // Real, verifiable figures — proof-flavoured, not self-referential inventory.
+  // 41 = the hand-coded HTML/CSS app screens rendered for the case studies
+  // (scripts/render-mockups/manifest.mjs); 95 = Lighthouse accessibility on the
+  // live insightstap.com build (median of 5 runs, scripts/lighthouse-insightstap.mjs).
   const stats = [
-    { value: all.length, label: "case studies" },
-    { value: screenCount, label: "screens designed" },
-    { value: disciplineCount, label: "core disciplines" },
+    { value: new Date().getFullYear() - 2019, label: "years designing" },
+    { value: 41, label: "hand-coded app screens" },
+    { value: 95, label: "Lighthouse a11y · live build" },
   ];
 
   return (

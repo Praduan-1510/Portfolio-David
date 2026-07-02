@@ -1,0 +1,181 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 874px; }
+
+  /* Billing page head: back disc + eyebrow/title + Create CTA */
+  .bill-head { display: flex; align-items: center; gap: 14px; margin: 2px 0 16px; }
+  .back-disc {
+    width: 40px; height: 40px; border-radius: 999px; background: #fff;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .eyebrow { font-size: 11px; letter-spacing: 0.2em; color: var(--text-dim); font-weight: 500; }
+  .page-title { font-family: "Quicksand", sans-serif; font-size: 24px; font-weight: 700; margin-top: 2px; }
+  .cta-btn {
+    margin-left: auto; display: inline-flex; align-items: center; gap: 6px;
+    background: #16293b; border: 1px solid #2f485b; color: #7dbcf0;
+    border-radius: 12px; padding: 9px 16px; font-size: 15px; font-weight: 600;
+  }
+
+  /* Summary tiles */
+  .tiles { display: flex; gap: 12px; }
+  .tile {
+    flex: 1; background: linear-gradient(180deg, #3d3d3d, #2c2c2c);
+    border-radius: 16px; padding: 11px 8px; text-align: center;
+  }
+  .tile .t-label { font-size: 11px; color: #c4c4c4; }
+  .tile .t-num { font-family: "Quicksand", sans-serif; font-size: 26px; font-weight: 700; margin: 3px 0 2px; }
+  .tile .t-sub { font-size: 11px; color: var(--text-dim); }
+
+  /* Filter chips */
+  .filters { display: flex; gap: 7px; margin: 14px 0; }
+  .f-chip {
+    border-radius: 10px; padding: 8px 12px; font-size: 13px; font-weight: 600;
+    background: #d9d9d9; color: #1c1c1c;
+  }
+  .f-chip.active { background: #4da3e8; color: #0d2233; }
+
+  /* Invoice cards */
+  .inv-card { background: #212121; border-radius: 22px; padding: 15px 18px; margin-bottom: 12px; }
+  .inv-top { display: flex; align-items: center; justify-content: space-between; }
+  .inv-id { color: var(--blue); font-size: 14px; letter-spacing: 0.08em; font-weight: 500; }
+  .inv-name { font-family: "Quicksand", sans-serif; font-size: 20px; font-weight: 700; margin-top: 3px; }
+  .inv-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: 11px; }
+  .inv-date { font-size: 14px; color: var(--text-dim); }
+  .inv-date.red { color: var(--red); }
+  .inv-amt { font-family: "Quicksand", sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
+  .btn-row { display: flex; gap: 12px; margin-top: 12px; }
+  .btn {
+    flex: 1; border-radius: 10px; padding: 10px 8px; text-align: center;
+    font-size: 13px; font-weight: 600;
+  }
+  .btn.blue { background: #24405a; color: #8fc4ea; }
+  .btn.red { background: #4a2323; color: #f09a9a; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <!-- Page head -->
+  <div class="bill-head">
+    <div class="back-disc">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+    </div>
+    <div>
+      <div class="eyebrow">BILLING</div>
+      <div class="page-title">Invoices</div>
+    </div>
+    <div class="cta-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+      Create
+    </div>
+  </div>
+
+  <!-- Summary tiles -->
+  <div class="tiles">
+    <div class="tile">
+      <div class="t-label">Total</div>
+      <div class="t-num">47</div>
+      <div class="t-sub">This month</div>
+    </div>
+    <div class="tile">
+      <div class="t-label">Unpaid</div>
+      <div class="t-num" style="color:var(--amber)">19</div>
+      <div class="t-sub">₹8.4L</div>
+    </div>
+    <div class="tile">
+      <div class="t-label">Paid</div>
+      <div class="t-num" style="color:var(--green)">28</div>
+      <div class="t-sub">₹7.8L</div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <span class="f-chip active">All</span>
+    <span class="f-chip">Unpaid</span>
+    <span class="f-chip">Paid</span>
+    <span class="f-chip">Overdue</span>
+    <span class="f-chip">Draft</span>
+  </div>
+
+  <!-- INV-1042 · paid -->
+  <div class="inv-card">
+    <div class="inv-top">
+      <span class="inv-id">INV-1042</span>
+      <span class="chip green" style="font-size:14px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Paid
+      </span>
+    </div>
+    <div class="inv-name">Dutta &amp; Sons</div>
+    <div class="inv-bottom">
+      <span class="inv-date">Jun 4, 2025</span>
+      <span class="inv-amt" style="color:var(--green)">₹45,000</span>
+    </div>
+  </div>
+
+  <!-- INV-1038 · pending -->
+  <div class="inv-card">
+    <div class="inv-top">
+      <span class="inv-id">INV-1038</span>
+      <span class="chip amber" style="font-size:14px">Pending</span>
+    </div>
+    <div class="inv-name">Sharma Textiles</div>
+    <div class="inv-bottom">
+      <span class="inv-date red">Due: Jun 10</span>
+      <span class="inv-amt" style="color:var(--amber)">₹ 62,000</span>
+    </div>
+    <div class="btn-row">
+      <div class="btn blue">Share PDF</div>
+      <div class="btn red">Reminder</div>
+    </div>
+  </div>
+
+  <!-- INV-1019 · overdue -->
+  <div class="inv-card">
+    <div class="inv-top">
+      <span class="inv-id">INV-1019</span>
+      <span class="chip red" style="font-size:14px">Overdue</span>
+    </div>
+    <div class="inv-name">Bose Retail</div>
+    <div class="inv-bottom">
+      <span class="inv-date red">Overdue: 12 days</span>
+      <span class="inv-amt" style="color:var(--red)">₹ 1,15,000</span>
+    </div>
+    <div class="btn-row">
+      <div class="btn red" style="flex:1">Discount Invoice for Instant Cash</div>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tabbar">
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </div>
+    <div class="tab active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+      Ledger
+    </div>
+    <div class="fab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+      Bank
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="19" cy="12" r="1.4" fill="currentColor"/></svg>
+      More
+    </div>
+  </div>
+  <div class="home-indicator"></div>
+</div>
+</body>
+</html>

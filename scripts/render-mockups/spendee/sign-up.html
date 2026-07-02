@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 874px; padding-top: 28px; }
+
+  /* ── Top bar: back disc + stacked titles ── */
+  .top { display: flex; align-items: center; gap: 16px; margin: 8px 0 60px; }
+  .back-disc {
+    width: 44px; height: 44px; border-radius: 999px; background: #fff;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .top .kicker { font-size: 14px; color: #bdbdbd; }
+  .top .big { font-family: "Quicksand", sans-serif; font-size: 26px; font-weight: 700; margin-top: 2px; }
+
+  /* ── Form ── */
+  .field { margin-bottom: 26px; }
+  .flabel { font-size: 15px; color: #e2e2e2; margin: 0 0 10px 10px; }
+  .input {
+    background: #fff; color: #161616; border-radius: 999px; height: 58px;
+    display: flex; align-items: center; padding: 0 22px;
+    font-size: 16px; font-weight: 500;
+  }
+  .input.placeholder { color: #9aa0a6; }
+  .input .chev { margin-left: auto; }
+
+  /* ── Bottom chrome ── */
+  .bottom { margin-top: auto; padding-bottom: 30px; }
+  .cta {
+    height: 58px; border-radius: 999px; background: #c9e5fa; color: #0d1b26;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    font-family: "Quicksand", sans-serif; font-size: 17px; font-weight: 700;
+  }
+  .privacy {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    color: #9a9a9a; font-size: 11.5px; margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+<div class="screen">
+  <!-- Top bar -->
+  <div class="top">
+    <div class="back-disc">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+    </div>
+    <div>
+      <div class="kicker">New Account</div>
+      <div class="big">Register</div>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="field">
+    <div class="flabel">Full Name</div>
+    <div class="input">Jayanta Adhikari</div>
+  </div>
+  <div class="field">
+    <div class="flabel">Business Name</div>
+    <div class="input">JA Trading Co.</div>
+  </div>
+  <div class="field">
+    <div class="flabel">GSTIN (Optional)</div>
+    <div class="input">19AEYPA4821F1Z5</div>
+  </div>
+  <div class="field">
+    <div class="flabel">Business Type</div>
+    <div class="input placeholder">Select type&hellip;
+      <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </div>
+  </div>
+  <div class="field">
+    <div class="flabel">City</div>
+    <div class="input">Kolkata, WB</div>
+  </div>
+
+  <!-- Bottom chrome -->
+  <div class="bottom">
+    <div class="cta">Continue
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d1b26" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </div>
+    <div class="privacy">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Your data is encrypted &amp; never sold
+    </div>
+  </div>
+  <div class="home-indicator"></div>
+</div>
+</body>
+</html>

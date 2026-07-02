@@ -17,13 +17,14 @@ video:
   poster: /videos/insightstap-poster.jpg
   aspect: "64/35"
 liveUrl: https://insightstap.com
+indexNote: 'The live one. Designed, then built: the production front-end for a B2B AI GTM platform — with the measured numbers to show for it.'
 accent: "#2DD4BF"
 featured: true
 order: 0
 ---
 
 <Lede>
-Designing **and** shipping the live front-end of a B2B AI go-to-market platform — turning an invisible, data-heavy product into something a cold visitor grasps in one scroll.
+The one that shipped: I designed the site **and wrote the front-end that's in production** — so this study ends in measurements, not intentions.
 </Lede>
 
 ## Overview
@@ -65,13 +66,13 @@ Three goals shaped the build — each paired with the signal I'd judge it by, fr
   <Goal
     goal="The site stays fast everywhere, despite heavy data-driven sections."
     signal="Built against an LCP < 2.5s · CLS < 0.1 · INP < 200ms budget — lazy media, reserved space, capped work."
-    status={"Budget targeted — measure on the live site"}
+    status={"Measured Jul 2026 — CLS 0.00 passes; LCP misses, fix queued"}
   />
 </Goals>
 
 ## Research
 
-No primary user research was conducted — this is a shipped front-end build grounded in product and domain understanding rather than interviews or usability tests. What I did do was map the landscape: a close reading of what the live product actually claims, and a competitive teardown of the intent-data and ABM category it sits in.
+This was a build, not a study — no interviews or usability tests, and the research that exists is the kind a front-end lead actually does: a close reading of what the live product claims, and a competitive teardown of the intent-data and ABM category it sits in.
 
 A few things from that mapping drove the design:
 
@@ -93,13 +94,13 @@ The core challenge was making an invisible, data-heavy product feel concrete, so
 
 <DecisionCards>
   <DecisionCard title="Anchor on the product's own e-commerce metaphor.">
-    I anchored the site on the product's own e-commerce metaphor — the one tangible hook — and let the rest of the page pay it off.
+    Buyers in this category research anonymously and decide fast; the store comparison gives them a mental model to borrow in the first five seconds, and every section after the hero pays it off instead of introducing a new frame.
   </DecisionCard>
   <DecisionCard title="Structure the narrative as a scannable cause-and-effect sequence.">
-    I structured the narrative as a single, scannable cause-and-effect sequence rather than a wall of copy, matching the mental model buyers in this category already use.
+    The incumbents sell with density — walls of stats and capability lists. A single visible chain (capture → process → automate → scale) reads in one pass and matches how the category leader already teaches buyers to evaluate.
   </DecisionCard>
-  <DecisionCard title="Commit to one calm, high-contrast component language.">
-    And I committed to one calm, high-contrast component language so the densest sections — metrics, process, integrations — would stay readable instead of competing for attention.
+  <DecisionCard title="Commit to one high-contrast component language.">
+    Restraint was the risk worth taking: one vocabulary of cards, bands, and diagrams means the heaviest sections cost the reader nothing new, and the site stays credible when the claims get big.
   </DecisionCard>
 </DecisionCards>
 
@@ -124,13 +125,13 @@ The core narrative — capture signals → AI processing → smart automation �
 
 ### A high-contrast system
 
-A consistent component language — the metrics band, the process diagram, the success-stories carousel, the integrations grid — so dense sections stay calm and readable. One system, reused everywhere, is what keeps the heavy data legible against a high-contrast brand.
+A consistent component language — the metrics band, the process diagram, the success-stories carousel, the integrations grid — so dense sections stay readable. One system, reused everywhere, is what keeps the heavy data legible against a high-contrast brand.
 
 <Shot
   src="/images/work/insightstap/care-values.png"
   domain="insightstap.com"
   align="left"
-  caption="The C.A.R.E. values — same cards, orbital diagram, and teal accents as the product sections — show the component language holding a dense, decorative section without losing its calm."
+  caption="The C.A.R.E. values — same cards, orbital diagram, and teal accents as the product sections — show the component language holding a dense, decorative section without breaking its register."
 />
 
 ### Built for speed and reach
@@ -139,20 +140,19 @@ Responsive layouts from phone to wide desktop, with performance and legibility p
 
 ## Outcome
 
-A shipped, live site that frames a complex GTM platform clearly and loads fast — the production site at insightstap.com today, owned front to back: interface design through to the shipped front-end, on a single component system.
-
-{/* TODO (Praduan): run Lighthouse on the live insightstap.com. If the numbers are
-    strong, swap one stat below for a real Core Web Vitals figure (e.g. the actual
-    LCP) — an honest, measurable, rare-in-a-design-portfolio metric. Don't publish
-    weak numbers; if they're not flattering, keep the scope-based stats as they are. */}
+The production site at insightstap.com, owned front to back — interface design through to the shipped front-end, on a single component system. And because it's live, it gets measured like live things do:
 
 <Stats>
+  <Stat value="0.00" label="CLS — median of five Lighthouse runs" />
+  <Stat value="95" label="Lighthouse accessibility, mobile" />
   <Stat value="Live" label="in production" />
   <Stat value="Solo" label="design + front-end, end to end" />
-  <Stat value="1" label="component system" />
-  <Stat value="AA" label="contrast, phone to desktop" />
 </Stats>
+
+<Aside label="How measured — and what's not good yet">
+  Median of 5 Lighthouse runs per mode against the live site, July 2026 (mobile = emulated Moto G on 4G). The honest half: mobile LCP currently lands around 14s because the hero video is the LCP element — a poster-first loading fix is queued, and this number stays published until it's fixed. Layout stability and accessibility are already where the budget said they should be.
+</Aside>
 
 ## Reflection
 
-This was an exercise in restraint: in a category that competes on density, the harder and more useful move was to stay calm and let the structure carry the meaning. Anchoring everything to the product's own e-commerce metaphor was the decision I'd make again first — it gave an abstract product something tangible to hold onto. Given more time, I'd push the heaviest data sections further with motion that reveals the cause-and-effect chain step by step, and I'd want to validate the four-step framing against how real GTM buyers actually scan the page rather than how the category assumes they do.
+This was an exercise in restraint: in a category that competes on density, the harder and more useful move was to hold one register and let the structure carry the meaning. Anchoring everything to the product's own e-commerce metaphor was the decision I'd make again first — it gave an abstract product something tangible to hold onto. Given more time, I'd push the heaviest data sections further with motion that reveals the cause-and-effect chain step by step, and I'd want to validate the four-step framing against how real GTM buyers actually scan the page rather than how the category assumes they do.

@@ -65,6 +65,9 @@ export interface ProjectMeta {
   services: string[];
   /** 1–2 sentence teaser for the index. */
   summary: string;
+  /** /work-specific framing line — a different angle from `summary`, so the
+   *  index adds information the home cards don't already carry. Optional. */
+  indexNote?: string;
   /** Hero image path (a phone cover for apps; the video poster for web). */
   cover: string;
   /** Medium. "app" (default) → portrait phone frames; "web" → landscape browser

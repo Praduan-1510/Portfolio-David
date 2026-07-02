@@ -1,0 +1,184 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 874px; }
+  /* Interior screens have no green base strip — grey home indicator instead. */
+  .home-indicator { background: #b9c0c9; width: 135px; }
+  .tabbar { padding: 10px 8px 26px; }
+
+  .page-title { font-family: "Quicksand", sans-serif; font-size: 26px; font-weight: 700; margin: 4px 4px 0; }
+  .page-sub { font-size: 14px; color: #9a9a9a; margin: 6px 4px 0; }
+
+  .search {
+    margin-top: 22px; background: #fff; border-radius: 27px; height: 54px;
+    display: flex; align-items: center; gap: 13px; padding: 0 22px;
+    color: #8a8a8a; font-size: 16px;
+  }
+
+  .chip-row { display: flex; gap: 10px; margin: 16px 0 0; }
+  .filter-chip {
+    border-radius: 13px; padding: 7px 17px; background: #d2d2d2; color: #0a0a0a;
+    font-family: "Quicksand", sans-serif; font-size: 15px; font-weight: 700;
+  }
+  .filter-chip.active { background: #60b2f1; }
+
+  .list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+  .row-card { padding: 8px 14px; border-radius: 20px; }
+  .row-card .name { font-size: 17px; font-weight: 600; color: #f0f0f0; }
+  .row-card .when { font-size: 12.5px; color: #9a9a9a; margin-top: 1px; }
+  .amt-col { margin-left: auto; text-align: right; }
+  .amt-col .v { font-family: "Quicksand", sans-serif; font-weight: 700; font-size: 17px; }
+  .status-pill { border-radius: 7px; padding: 2px 9px; font-size: 11px; font-weight: 600; display: inline-block; margin-top: 3px; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <!-- Header -->
+  <div class="page-title">Contact</div>
+  <div class="page-sub">42 total · ₹6.5L outstanding</div>
+
+  <!-- Search -->
+  <div class="search">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a8a8a" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    Search customers, vendors...
+  </div>
+
+  <!-- Filters -->
+  <div class="chip-row">
+    <span class="filter-chip active">All</span>
+    <span class="filter-chip">Overdue</span>
+    <span class="filter-chip">Pending</span>
+    <span class="filter-chip">Settled</span>
+  </div>
+
+  <!-- Contacts -->
+  <div class="list">
+    <div class="row-card">
+      <div class="avatar" style="background:#4f3131;color:#f0a5a5">BR</div>
+      <div>
+        <div class="name">Bose Retail</div>
+        <div class="when">Overdue 12 days</div>
+      </div>
+      <div class="amt-col">
+        <div class="v" style="color:var(--red)">₹1,15,000</div>
+        <span class="status-pill" style="background:var(--red-deep);color:var(--red)">Overdue</span>
+      </div>
+    </div>
+
+    <div class="row-card">
+      <div class="avatar" style="background:#2f485b;color:#9fceef">DS</div>
+      <div>
+        <div class="name">Dutta &amp; Sons</div>
+        <div class="when">2h ago · Settled</div>
+      </div>
+      <div class="amt-col">
+        <div class="v" style="color:var(--green)">₹45,000</div>
+        <span class="status-pill" style="background:var(--green-deep);color:var(--green)">Done</span>
+      </div>
+    </div>
+
+    <div class="row-card">
+      <div class="avatar" style="background:#4f4531;color:#eccf8f">ST</div>
+      <div>
+        <div class="name">Sharma Textiles</div>
+        <div class="when">Due Jun 10 · Invoice sent</div>
+      </div>
+      <div class="amt-col">
+        <div class="v" style="color:var(--amber)">₹62,000</div>
+        <span class="status-pill" style="background:var(--amber-deep);color:var(--amber)">Pending</span>
+      </div>
+    </div>
+
+    <div class="row-card">
+      <div class="avatar" style="background:#2f485b;color:#9fceef">MK</div>
+      <div>
+        <div class="name">MK Suppliers</div>
+        <div class="when">8h ago · Settled</div>
+      </div>
+      <div class="amt-col">
+        <div class="v" style="color:var(--green)">₹18,500</div>
+        <span class="status-pill" style="background:var(--green-deep);color:var(--green)">Done</span>
+      </div>
+    </div>
+
+    <div class="row-card">
+      <div class="avatar" style="background:#4f3131;color:#f0a5a5">GT</div>
+      <div>
+        <div class="name">Ghosh Traders</div>
+        <div class="when">Overdue 1 month</div>
+      </div>
+      <div class="amt-col">
+        <div class="v" style="color:var(--red)">₹38,000</div>
+        <span class="status-pill" style="background:var(--red-deep);color:var(--red)">Overdue</span>
+      </div>
+    </div>
+
+    <div class="row-card">
+      <div class="avatar" style="background:#4f4531;color:#eccf8f">RF</div>
+      <div>
+        <div class="name">Roy Fabrics</div>
+        <div class="when">Due Jun 15</div>
+      </div>
+      <div class="amt-col">
+        <div class="v" style="color:var(--amber)">₹24,000</div>
+        <span class="status-pill" style="background:var(--amber-deep);color:var(--amber)">Pending</span>
+      </div>
+    </div>
+
+    <div class="row-card">
+      <div class="avatar" style="background:#2f485b;color:#9fceef">SC</div>
+      <div>
+        <div class="name">Saha &amp; Co.</div>
+        <div class="when">Jun 2 · Settled</div>
+      </div>
+      <div class="amt-col">
+        <div class="v" style="color:var(--green)">₹28,000</div>
+        <span class="status-pill" style="background:var(--green-deep);color:var(--green)">Done</span>
+      </div>
+    </div>
+
+    <div class="row-card">
+      <div class="avatar" style="background:#4f4531;color:#eccf8f">MT</div>
+      <div>
+        <div class="name">Mitra Textiles</div>
+        <div class="when">Due Jun 18</div>
+      </div>
+      <div class="amt-col">
+        <div class="v" style="color:var(--amber)">₹52,500</div>
+        <span class="status-pill" style="background:var(--amber-deep);color:var(--amber)">Pending</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tabbar">
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </div>
+    <div class="tab active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+      Ledger
+    </div>
+    <div class="fab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+      Bank
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="19" cy="12" r="1.4" fill="currentColor"/></svg>
+      More
+    </div>
+  </div>
+  <div class="home-indicator"></div>
+</div>
+</body>
+</html>

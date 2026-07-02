@@ -192,7 +192,7 @@ function WorkStackRow({
           </div>
 
           <Text variant="body-l" className="mt-space-4 max-w-[46ch] text-muted">
-            {project.summary}
+            {project.indexNote ?? project.summary}
           </Text>
 
           {/* Services — turns the old dead gutter into substance. */}

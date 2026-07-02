@@ -1,0 +1,170 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 874px; }
+  /* Interior screens have no green base strip — grey home indicator instead. */
+  .home-indicator { background: #b9c0c9; width: 135px; }
+  .tabbar { padding: 10px 8px 26px; }
+
+  /* Left-aligned header: back disc + eyebrow/title stack */
+  .lede-head { display: flex; align-items: center; gap: 16px; margin: 2px 0 26px; }
+  .back-disc {
+    width: 44px; height: 44px; border-radius: 999px; background: #fff;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .eyebrow {
+    font-family: "Quicksand", sans-serif; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.18em; color: #b3b3b3; text-transform: uppercase;
+  }
+  .lede-head .title { font-family: "Quicksand", sans-serif; font-size: 24px; font-weight: 700; margin-top: 3px; }
+
+  .amount-card { background: #132430; border-radius: 28px; padding: 24px 20px 22px; text-align: center; }
+  .amount-card .ea { font-size: 16px; color: #d5dde3; }
+  .amount-card .amt {
+    font-family: "Quicksand", sans-serif; font-weight: 700; font-size: 40px;
+    color: #5ba7ee; margin: 8px 0 6px; letter-spacing: 0.5px;
+  }
+  .amount-card .bal { font-size: 14px; color: #c2ccd4; }
+
+  .field-label {
+    font-family: "Quicksand", sans-serif; font-size: 14px; font-weight: 600;
+    letter-spacing: 0.16em; color: #ececec; text-transform: uppercase;
+    margin: 24px 6px 12px;
+  }
+  .field {
+    background: #fff; border-radius: 27px; height: 54px;
+    display: flex; align-items: center; padding: 0 26px;
+    color: #141414; font-size: 18px; font-weight: 500;
+  }
+
+  .method-row { display: flex; gap: 12px; }
+  .method {
+    width: 101px; height: 76px; border-radius: 22px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px;
+  }
+  .method svg { width: 26px; height: 26px; }
+  .method .m-label {
+    font-family: "Quicksand", sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.14em;
+  }
+
+  .link-row {
+    margin-top: 20px; background: #fff; border-radius: 22px; padding: 11px 14px;
+    display: flex; align-items: center; gap: 13px;
+  }
+  .link-ico {
+    width: 46px; height: 46px; border-radius: 14px; background: #d7e5f2;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .link-row .t { font-size: 17px; font-weight: 600; color: #111; }
+  .link-row .s { font-size: 13px; color: #9a9a9a; margin-top: 1px; }
+  .toggle {
+    margin-left: auto; width: 50px; height: 30px; border-radius: 999px; background: #60b2f1;
+    position: relative; flex-shrink: 0;
+  }
+  .toggle::after {
+    content: ""; position: absolute; top: 3px; right: 3px;
+    width: 24px; height: 24px; border-radius: 999px; background: #fff;
+  }
+
+  .send-btn {
+    margin-top: 16px; height: 62px; border-radius: 31px; background: #c8e7ff;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    font-family: "Quicksand", sans-serif; font-size: 20px; font-weight: 700; color: #0a0a0a;
+  }
+</style>
+</head>
+<body>
+<div class="screen">
+  <!-- Header -->
+  <div class="lede-head">
+    <div class="back-disc">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+    </div>
+    <div>
+      <div class="eyebrow">Ledger</div>
+      <div class="title">Send Money</div>
+    </div>
+  </div>
+
+  <!-- Amount -->
+  <div class="amount-card">
+    <div class="ea">Enter Amount</div>
+    <div class="amt">₹ 28,900</div>
+    <div class="bal">Balance: ₹ 3,42,890</div>
+  </div>
+
+  <!-- Contact -->
+  <div class="field-label">Contact Name</div>
+  <div class="field">MK Suppliers</div>
+
+  <!-- Payment method -->
+  <div class="field-label">Payment Method</div>
+  <div class="method-row">
+    <div class="method" style="background:#48461a">
+      <svg viewBox="0 0 24 24" fill="#e4df5f"><path d="M4 4h6v6H4zm2 2v2h2V6zM4 14h6v6H4zm2 2v2h2v-2zM14 4h6v6h-6zm2 2v2h2V6zM14 14h3v3h-3zM18 15h2v2h-2zM15 18h2v2h-2zM19 19h1.5v1.5H19z"/></svg>
+      <span class="m-label" style="color:#e4df5f">UPI</span>
+    </div>
+    <div class="method" style="background:#1d3548">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#6db3e8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="20" y2="21"/><line x1="7" y1="17.5" x2="7" y2="11"/><line x1="12" y1="17.5" x2="12" y2="11"/><line x1="17" y1="17.5" x2="17" y2="11"/><path d="m12 2.5 8 5H4z"/></svg>
+      <span class="m-label" style="color:#a9cdeb">NEFT</span>
+    </div>
+    <div class="method" style="background:#2a481c">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#7ee060" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><text x="12" y="16.4" text-anchor="middle" font-family="Poppins, sans-serif" font-size="12" font-weight="600" fill="#7ee060" stroke="none">₹</text></svg>
+      <span class="m-label" style="color:#b4e4a0">IMPS</span>
+    </div>
+  </div>
+
+  <!-- Note -->
+  <div class="field-label">Note</div>
+  <div class="field">Bill payment – June order</div>
+
+  <!-- Link to ledger -->
+  <div class="link-row">
+    <div class="link-ico">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4a90d9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+    </div>
+    <div>
+      <div class="t">Link to Ledger Entry</div>
+      <div class="s">Auto-match open payable</div>
+    </div>
+    <div class="toggle"></div>
+  </div>
+
+  <!-- Send -->
+  <div class="send-btn">
+    Send Payment
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tabbar">
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </div>
+    <div class="tab active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+      Ledger
+    </div>
+    <div class="fab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+      Bank
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="19" cy="12" r="1.4" fill="currentColor"/></svg>
+      More
+    </div>
+  </div>
+  <div class="home-indicator"></div>
+</div>
+</body>
+</html>

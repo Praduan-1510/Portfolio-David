@@ -297,7 +297,7 @@ export function WorkScrollTrack({ projects }: { projects: ProjectMeta[] }) {
                 </div>
 
                 <Text variant="body-l" className="mt-space-4 max-w-[44ch] text-muted">
-                  {project.summary}
+                  {project.indexNote ?? project.summary}
                 </Text>
 
                 <ul className="mt-space-5 flex flex-wrap gap-x-space-3 gap-y-space-2">

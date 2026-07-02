@@ -317,6 +317,23 @@
   }
 }
 
+/* Hero flow blooms — slow ambient drift (HeroFlow.tsx). Transform-only, and
+   only when motion is welcome; reduced motion holds the composed still. */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes ember-drift-a {
+    from { transform: translate3d(-5%, 4%, 0) scale(1); }
+    to   { transform: translate3d(9%, -7%, 0) scale(1.22); }
+  }
+  @keyframes ember-drift-b {
+    from { transform: translate3d(6%, -4%, 0) scale(1.12); }
+    to   { transform: translate3d(-8%, 6%, 0) scale(0.94); }
+  }
+  @keyframes ember-drift-c {
+    from { transform: translate3d(-4%, -6%, 0) scale(0.96); }
+    to   { transform: translate3d(7%, 5%, 0) scale(1.18); }
+  }
+}
+
 /* Lenis smooth scroll base styles (ARCHITECTURE.md §7.3). */
 html.lenis,
 html.lenis body {

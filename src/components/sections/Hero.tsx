@@ -2,8 +2,9 @@
 
 import { durations } from "@/lib/motion/durations";
 import { Container, Button } from "@/components/primitives";
-import { Reveal, TextReveal, AnimatedNoise, AuroraEmber } from "@/components/motion";
+import { Reveal, TextReveal, AnimatedNoise } from "@/components/motion";
 import { HeroWordmark } from "@/components/sections/HeroWordmark";
+import { HeroFlow } from "@/components/sections/HeroFlow";
 
 /*
  * Home hero — the INSTRUMENT hero. No shader wallpaper, no centered template:
@@ -56,7 +57,7 @@ export function Hero() {
             "radial-gradient(120% 100% at 30% 40%, #000 0%, transparent 78%)",
         }}
       />
-      <AuroraEmber hues={["violet", "blue"]} position="top-right" intensity={0.11} />
+      <HeroFlow />
 
       {/* Film grain — above the ember, below the content. */}
       <AnimatedNoise opacity={0.04} className="z-[1]" />

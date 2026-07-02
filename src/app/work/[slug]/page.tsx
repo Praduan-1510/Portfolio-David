@@ -489,7 +489,7 @@ export default async function CaseStudy({
             }}
           />
           <Reveal>
-            <Eyebrow>Screens</Eyebrow>
+            <Eyebrow flap>Screens</Eyebrow>
           </Reveal>
           <div className="mt-space-3 flex flex-wrap items-baseline justify-between gap-x-space-6 gap-y-space-2">
             <TextReveal as="h2" by="words" className="font-display text-heading">
@@ -579,7 +579,7 @@ export default async function CaseStudy({
           <NextLink href={`/work/${next.slug}`} className="group block">
             <Container className="flex items-center justify-between gap-space-7 py-space-10">
               <Reveal className="min-w-0">
-                <Eyebrow>Next project</Eyebrow>
+                <Eyebrow flap>Next project</Eyebrow>
                 <Text
                   as="span"
                   variant="display-xl"

@@ -110,7 +110,7 @@ export default function Contact() {
           {/* Left — the focal statement. Oversized headline as the moment. */}
           <div className="lg:col-span-7">
             <Reveal as="div" y={12} trigger="load">
-              <Eyebrow>Contact</Eyebrow>
+              <Eyebrow flap>Contact</Eyebrow>
             </Reveal>
             <TextReveal
               id="contact-heading"

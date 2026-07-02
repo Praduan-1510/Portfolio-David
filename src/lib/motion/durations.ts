@@ -9,6 +9,8 @@
 
 /** Seconds — for Motion (`motion/react`) and GSAP. */
 export const durations = {
+  /** Split-flap character cadence — the departure-board tick. */
+  tick: 0.05,
   /** Micro hover feedback. */
   instant: 0.1,
   /** Buttons, small state changes. */
@@ -25,6 +27,7 @@ export const durations = {
 
 /** Milliseconds — identical values, matching the `--dur-*` CSS variables. */
 export const durationsMs = {
+  tick: 50,
   instant: 100,
   fast: 200,
   base: 350,

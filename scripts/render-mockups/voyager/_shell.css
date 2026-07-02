@@ -1,0 +1,176 @@
+/*
+ * Voyager design system — sampled from the original renders: dark navy
+ * "dream mode" chrome (#14213d) wrapping white task sheets, one orange
+ * accent (#fca311) for CTAs/progress/prices, and a light tab bar whose
+ * active tab goes blue (#539df3). Type is a clean grotesque (Inter).
+ * 402px-wide screens.
+ */
+
+.screen {
+  width: 402px;
+  background: var(--navy);
+  color: #fff;
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+:root {
+  --navy: #14213d;
+  --orange: #fca311;
+  --panel: #f7f7f7;         /* light grouped panel on white sheets */
+  --ink: #14213d;           /* headings on light surfaces */
+  --body: #565656;          /* body text on light surfaces */
+  --dim-dark: #9aa0ab;      /* muted labels on navy surfaces */
+  --line: #c4c4c4;          /* hairline dividers on light panels */
+  --step-idle: #bcbcbc;     /* upcoming step disc */
+  --step-idle-ink: #818080;
+  --connector-idle: #939393;
+  --tab-active: #539df3;    /* tab bar active blue */
+  --tab-ink: #22262c;       /* tab bar inactive icon */
+  --tab-label: #3f444b;     /* tab bar inactive label */
+}
+
+/* ── White task sheet (light content panel inset in the navy frame) ── */
+.sheet {
+  background: #fff;
+  border-radius: 28px;
+  margin: 0 14px 14px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  color: var(--body);
+}
+
+/* ── Dark page header: back chevron + title with orange underline ── */
+.nav-head {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 46px 24px 0;
+  height: 104px;
+}
+.nav-head .back svg { width: 27px; height: 27px; }
+.nav-head .title {
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+  color: #fff;
+  padding: 0 30px 6px 0; /* underline overshoots the text ~30px */
+  border-bottom: 3px solid var(--orange);
+}
+
+/* ── Step progress (checkout flow) ── */
+.steps {
+  display: flex;
+  align-items: center;
+  margin: 27px 17px 0;
+}
+.step {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+}
+.step.done { background: var(--orange); color: #fff; }
+.step.done svg { width: 14px; height: 14px; }
+.step.active { background: var(--navy); color: #fff; }
+.step.idle { background: var(--step-idle); color: var(--step-idle-ink); }
+.steps .bar {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  margin: 0 8px;
+  background: var(--connector-idle);
+}
+.steps .bar.done { background: var(--orange); }
+
+/* ── Buttons ── */
+.btn-primary {
+  height: 50px;
+  border-radius: 14px;
+  background: var(--orange);
+  color: #0b0b0b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 700;
+}
+.btn-primary svg { width: 21px; height: 21px; }
+.btn-outline {
+  height: 50px;
+  border-radius: 12px;
+  background: #fff;
+  border: 2px solid var(--orange);
+  color: var(--orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* ── Light grouped panel (price breakdowns, settings groups) ── */
+.panel {
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 15px 16px;
+}
+.panel .row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  height: 20px;
+  font-size: 13.5px;
+}
+.panel .row .l { color: var(--body); font-weight: 500; }
+.panel .row .v { color: var(--body); font-weight: 500; }
+.panel .divider { border-top: 1px solid var(--line); margin: 10px 0 12px; }
+
+/* ── Section label on navy (letterspaced orange smallcaps) ── */
+.eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  color: var(--orange);
+  text-transform: uppercase;
+}
+
+/* ── Avatar (real headshot: ../assets/voyager/avatar.png) ── */
+.avatar {
+  border-radius: 999px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.avatar img { width: 100%; height: 100%; }
+
+/* ── Tab bar (light screens; dashboard-style) ── */
+.tabbar {
+  margin-top: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  padding: 16px 10px 34px;
+  background: #fff;
+}
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--tab-label);
+  width: 66px;
+}
+.tab svg { width: 24px; height: 24px; stroke: var(--tab-ink); }
+.tab.active { color: var(--tab-active); }
+.tab.active svg { stroke: var(--tab-active); }
+
+/* Home indicator variant for light bottoms (base one is white). */
+.home-indicator.dim { background: #c3c9d1; }

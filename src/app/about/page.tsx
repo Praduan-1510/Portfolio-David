@@ -6,7 +6,7 @@ import {
   StaggerGroup,
   AnimatedDivider,
   Marquee,
-  CountUp,
+  FlapDigits,
   Magnetic,
   PortraitFrame,
 } from "@/components/motion";
@@ -271,7 +271,7 @@ export default function About() {
                 {s.label}
               </dt>
               <dd className="font-display text-display-l leading-none text-fg transition-colors duration-base ease-out-quad group-hover:text-neon">
-                <CountUp value={s.value} suffix={s.suffix} />
+                <FlapDigits value={`${s.value}${s.suffix}`} />
               </dd>
             </div>
           ))}
@@ -320,7 +320,7 @@ export default function About() {
       {/* ── Approach ─ numbered principles ──────────────────────────────── */}
       <Container as="section" className="py-space-10">
         <Reveal as="div" y={12}>
-          <Eyebrow>Approach</Eyebrow>
+          <Eyebrow flap>Approach</Eyebrow>
         </Reveal>
         <StaggerGroup className="mt-space-6 grid grid-cols-1 gap-space-6 md:grid-cols-3">
           {APPROACH.map((item, i) => (
@@ -359,7 +359,7 @@ export default function About() {
       {/* ── Capabilities ─ glyph cards ──────────────────────────────────── */}
       <Container as="section" className="pb-space-10">
         <Reveal as="div" y={12}>
-          <Eyebrow>Capabilities</Eyebrow>
+          <Eyebrow flap>Capabilities</Eyebrow>
         </Reveal>
         <StaggerGroup className="mt-space-6 grid grid-cols-1 gap-space-5 sm:grid-cols-2">
           {CAPABILITIES.map((item, i) => (
@@ -412,7 +412,7 @@ export default function About() {
       {/* ── Experience ─ the timeline draws on scroll ───────────────────── */}
       <Container as="section" className="py-space-10">
         <Reveal as="div" y={12}>
-          <Eyebrow>Experience</Eyebrow>
+          <Eyebrow flap>Experience</Eyebrow>
         </Reveal>
         <StaggerGroup as="ul" className="mt-space-6" stagger={0.08} y={32}>
           {EXPERIENCE.map((job) => (
@@ -469,7 +469,7 @@ export default function About() {
       {/* ── Certifications ──────────────────────────────────────────────── */}
       <Container as="section" className="py-space-8">
         <Reveal as="div" y={12}>
-          <Eyebrow>Certifications</Eyebrow>
+          <Eyebrow flap>Certifications</Eyebrow>
         </Reveal>
         <StaggerGroup as="ul" className="mt-space-6" stagger={0.06}>
           {CERTIFICATIONS.map((cert) => (

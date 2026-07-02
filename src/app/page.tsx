@@ -10,7 +10,7 @@ import {
   Reveal,
   StaggerGroup,
   TextReveal,
-  CountUp,
+  FlapDigits,
   AnimatedDivider,
   Magnetic,
   PortraitFrame,
@@ -95,7 +95,7 @@ export default function Home() {
                 {String(i + 1).padStart(2, "0")}
               </span>
               <dt className="font-display text-display-l leading-none tabular-nums transition-colors duration-base ease-out-quad group-hover:text-neon">
-                <CountUp value={s.value} />
+                <FlapDigits value={s.value} />
               </dt>
               <dd className="font-mono text-caption uppercase tracking-[0.06em] text-muted sm:tracking-[0.14em]">
                 {s.label}
@@ -110,7 +110,7 @@ export default function Home() {
         <div className="mb-space-7 flex items-end justify-between gap-space-4">
           <div>
             <Reveal>
-              <Eyebrow>Selected work</Eyebrow>
+              <Eyebrow flap>Selected work</Eyebrow>
             </Reveal>
             <TextReveal
               as="h2"
@@ -165,7 +165,7 @@ export default function Home() {
           {/* Left — the statement. */}
           <div className="min-w-0">
             <Reveal>
-              <Eyebrow>About</Eyebrow>
+              <Eyebrow flap>About</Eyebrow>
             </Reveal>
             <TextReveal
               as="h2"

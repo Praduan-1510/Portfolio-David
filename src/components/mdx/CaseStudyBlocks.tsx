@@ -1,6 +1,6 @@
 import type React from "react";
 import { PhoneFrame } from "@/components/primitives";
-import { Reveal, StaggerGroup, Parallax } from "@/components/motion";
+import { Reveal, StaggerGroup, Parallax, FlapDigits } from "@/components/motion";
 import { cn } from "@/lib/utils/cn";
 
 /*
@@ -180,7 +180,9 @@ export function Stat({ value, label }: { value?: string; label?: string }) {
         {label}
       </dt>
       <dd className="whitespace-nowrap font-display text-display-l leading-none text-accent">
-        {value}
+        {/* Odometer flutter on scroll-in — the payoff band speaks the site's
+            departure-board language (digits only; word values render static). */}
+        <FlapDigits value={value ?? ""} />
       </dd>
     </div>
   );

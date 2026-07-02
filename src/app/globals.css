@@ -106,6 +106,7 @@
   --ease-linear: linear; /* scroll-linked / scrubbed motion only */
 
   /* Duration scale */
+  --dur-tick: 50ms; /* split-flap character cadence */
   --dur-instant: 100ms; /* micro hover feedback */
   --dur-fast: 200ms; /* buttons, small state changes */
   --dur-base: 350ms; /* most enter/exit, default */

@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 932px; }
+
+  /* Trip summary card — photo crop with inpainted text zone */
+  .trip-card {
+    position: relative;
+    margin: 27px 10px 0;
+    height: 129px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 18px rgba(20, 33, 61, 0.10);
+  }
+  .trip-card img { width: 100%; height: 100%; }
+  .trip-card .t {
+    position: absolute;
+    left: 13px;
+    top: 39px;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    color: var(--ink);
+  }
+  .trip-card .s {
+    position: absolute;
+    left: 13px;
+    top: 74px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* Credit card */
+  .credit-card {
+    position: relative;
+    margin: 25px 19px 0;
+    height: 190px;
+    border-radius: 20px;
+    background:
+      radial-gradient(110px circle at 85% 26%, rgba(252, 163, 17, 0.9), rgba(252, 163, 17, 0) 100%),
+      var(--navy);
+    padding: 20px 19px;
+    overflow: hidden;
+  }
+  .credit-card .number {
+    position: absolute;
+    left: 19px;
+    top: 86px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 4px;
+    word-spacing: 8px;
+  }
+  .credit-card .cols {
+    position: absolute;
+    left: 19px;
+    right: 19px;
+    top: 137px;
+    display: flex;
+  }
+  .credit-card .cols > div:last-child { margin-left: 92px; }
+  .credit-card .lbl {
+    font-size: 12.5px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--dim-dark);
+  }
+  .credit-card .val {
+    margin-top: 5px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .add-card { margin: 17px 24px 0; }
+
+  .price { margin: 16px 19px 0; }
+  .price .total {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+  .price .total .l { font-size: 16px; font-weight: 700; color: var(--body); }
+  .price .total .v { font-size: 17px; font-weight: 700; color: var(--orange); }
+
+  .continue { margin: auto 23px 25px; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <!-- Dark header -->
+  <div class="nav-head">
+    <div class="back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+    </div>
+    <div class="title">Payment</div>
+  </div>
+
+  <!-- White task sheet -->
+  <div class="sheet">
+    <!-- Step 3 of 4 -->
+    <div class="steps">
+      <div class="step done">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="bar done"></div>
+      <div class="step done">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="bar done"></div>
+      <div class="step active">3</div>
+      <div class="bar"></div>
+      <div class="step idle">4</div>
+    </div>
+
+    <!-- Trip summary -->
+    <div class="trip-card">
+      <img src="../assets/voyager/paris-card.png" alt="" />
+      <div class="t">Paris City Break</div>
+      <div class="s">Aug 12&ndash;19 &middot; 2 Adults &middot; Economy</div>
+    </div>
+
+    <!-- Card on file -->
+    <div class="credit-card">
+      <svg width="36" height="26" viewBox="0 0 36 26">
+        <rect x="0.5" y="0.5" width="35" height="25" rx="4.5" fill="#d9b30a" stroke="#b6950a"/>
+        <path d="M12 0.5v25 M24 0.5v25 M0.5 9h35 M0.5 17h35" stroke="#b6950a" stroke-width="1" fill="none"/>
+      </svg>
+      <div class="number">**** **** **** 4887</div>
+      <div class="cols">
+        <div>
+          <div class="lbl">CARD HOLDER</div>
+          <div class="val">Praduan Saha</div>
+        </div>
+        <div>
+          <div class="lbl">EXPIRES</div>
+          <div class="val">09/28</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-outline add-card">+ Add New Card</div>
+
+    <!-- Itemised total -->
+    <div class="panel price">
+      <div class="row"><span class="l">Paris City Break &times; 2</span><span class="v">$2,480</span></div>
+      <div class="row"><span class="l">Airport Transfer</span><span class="v">$60</span></div>
+      <div class="row"><span class="l">Travel Insurance</span><span class="v">$45</span></div>
+      <div class="row"><span class="l">Taxes &amp; Fees</span><span class="v">$124</span></div>
+      <div class="divider"></div>
+      <div class="total">
+        <span class="l">Total</span>
+        <span class="v">$2,709</span>
+      </div>
+    </div>
+
+    <div class="btn-primary continue">
+      Continue
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0b0b0b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </div>
+  </div>
+</div>
+</body>
+</html>

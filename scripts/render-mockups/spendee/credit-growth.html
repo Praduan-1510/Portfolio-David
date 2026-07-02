@@ -1,0 +1,202 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/base.css" />
+<link rel="stylesheet" href="_shell.css" />
+<style>
+  .screen { height: 1189px; }
+  .body { display: flex; flex-direction: column; padding: 0 16px; }
+
+  /* Interior page header: back disc + eyebrow + title */
+  .lede-head { display: flex; align-items: center; gap: 12px; margin: 4px 0 18px; }
+  .back-disc {
+    width: 38px; height: 38px; border-radius: 999px; background: #fff; color: #000;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .eyebrow { font-size: 11px; letter-spacing: 0.16em; color: #cfcfcf; font-weight: 500; }
+  .pg-title { font-family: "Quicksand", sans-serif; font-size: 23px; font-weight: 700; margin-top: 3px; }
+
+  /* Ledger health score */
+  .health { background: var(--card); border-radius: 24px; padding: 18px 18px 8px; }
+  .health .hd { text-align: center; font-family: "Quicksand", sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 0.14em; color: #b9b9b9; }
+  .donut-wrap { position: relative; width: 128px; margin: 14px auto 0; }
+  .donut-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .donut-center .score { font-family: "Quicksand", sans-serif; font-size: 32px; font-weight: 700; line-height: 1.1; }
+  .donut-center .of { font-size: 15px; color: #9a9a9a; margin-top: 1px; }
+  .health-chip {
+    display: block; width: fit-content; margin: 14px auto 2px;
+    background: #33424f; border: 1px solid #46586a; color: #5b9fd0;
+    border-radius: 10px; padding: 7px 17px; font-size: 14px; font-weight: 600;
+  }
+  .frow { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; }
+  .frow + .frow { border-top: 1px solid #3b3b3b; }
+  .frow .f-label { font-size: 16px; color: #e3e3e3; }
+  .frow .f-val { font-family: "Quicksand", sans-serif; font-size: 17px; font-weight: 700; }
+
+  /* Working capital */
+  .wc { background: var(--card); border-radius: 24px; padding: 16px; margin-top: 20px; }
+  .wc-head { display: flex; align-items: flex-start; justify-content: space-between; }
+  .wc-head .w-label { font-family: "Quicksand", sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 0.12em; color: #b9b9b9; }
+  .wc-head .w-amt { font-family: "Quicksand", sans-serif; font-size: 28px; font-weight: 700; color: #5fadea; margin-top: 3px; }
+  .wc-chip {
+    background: #324350; border: 1.5px solid #547690; color: #5ca9e4;
+    border-radius: 12px; padding: 7px 13px; font-size: 15px; font-weight: 600;
+  }
+  .stat-tiles { display: flex; gap: 10px; margin-top: 14px; }
+  .stat { flex: 1; background: #515151; border-radius: 14px; padding: 10px 8px; text-align: center; }
+  .stat .s-label { font-size: 12px; color: #d6d6d6; }
+  .stat .s-val { font-family: "Quicksand", sans-serif; font-size: 16px; font-weight: 700; margin-top: 4px; }
+  .apply-btn {
+    margin-top: 14px; height: 50px; border-radius: 999px; background: #c9e4fb; color: #0c0c0c;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    font-family: "Quicksand", sans-serif; font-size: 19px; font-weight: 700;
+  }
+  .apply-btn svg { width: 21px; height: 21px; }
+
+  /* Invoice offer cards */
+  .inv { background: var(--card); border-radius: 24px; padding: 15px 18px; margin-top: 20px; }
+  .inv-head { display: flex; align-items: center; justify-content: space-between; }
+  .inv-head .i-title { font-family: "Quicksand", sans-serif; font-size: 18px; font-weight: 600; color: #5fadea; }
+  .inv-chip { border-radius: 11px; padding: 5px 14px; font-size: 13px; font-weight: 600; }
+  .inv-mid { display: flex; align-items: center; justify-content: space-between; margin-top: 7px; }
+  .inv-mid .i-sub { font-size: 13px; white-space: nowrap; }
+  .inv-mid .i-amt { font-family: "Quicksand", sans-serif; font-size: 22px; font-weight: 600; white-space: nowrap; }
+  .inv-btn {
+    margin-top: 11px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600;
+  }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="body">
+    <!-- Header -->
+    <div class="lede-head">
+      <div class="back-disc">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+      </div>
+      <div>
+        <div class="eyebrow">FINANCING</div>
+        <div class="pg-title">Credit &amp; Growth</div>
+      </div>
+    </div>
+
+    <!-- Ledger health score -->
+    <div class="health">
+      <div class="hd">LEDGER HEALTH SCORE</div>
+      <div class="donut-wrap">
+        <svg width="128" height="128" viewBox="0 0 128 128">
+          <circle cx="64" cy="64" r="58" fill="none" stroke="#cfcfcf" stroke-width="12"/>
+          <circle cx="64" cy="64" r="58" fill="none" stroke="#5fadea" stroke-width="12"
+                  stroke-linecap="round" stroke-dasharray="316.7 47.7"
+                  transform="rotate(-90 64 64)"/>
+        </svg>
+        <div class="donut-center">
+          <div class="score">782</div>
+          <div class="of">/ 900</div>
+        </div>
+      </div>
+      <span class="health-chip">Excellent Credit Profile</span>
+      <div style="margin-top:10px">
+        <div class="frow">
+          <span class="f-label">On-time payments</span>
+          <span class="f-val" style="color:#4cd63d">92%</span>
+        </div>
+        <div class="frow">
+          <span class="f-label">Monthly inflow</span>
+          <span class="f-val">₹3.6L</span>
+        </div>
+        <div class="frow">
+          <span class="f-label">GST compliance</span>
+          <span class="f-val" style="color:#4cd63d">100%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Working capital -->
+    <div class="wc">
+      <div class="wc-head">
+        <div>
+          <div class="w-label">WORKING CAPITAL</div>
+          <div class="w-amt">₹15,00,000</div>
+        </div>
+        <span class="wc-chip">Pre-approved</span>
+      </div>
+      <div class="stat-tiles">
+        <div class="stat">
+          <div class="s-label">Rate p.a</div>
+          <div class="s-val" style="color:#4cd63d">11.5%</div>
+        </div>
+        <div class="stat">
+          <div class="s-label">Tenure</div>
+          <div class="s-val" style="color:#e8dd5d">36m</div>
+        </div>
+        <div class="stat">
+          <div class="s-label">Disbursal</div>
+          <div class="s-val" style="color:#5fadea">48h</div>
+        </div>
+      </div>
+      <div class="apply-btn">
+        Apply in 2 Minutes
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </div>
+    </div>
+
+    <!-- INV-1038 · early collect -->
+    <div class="inv">
+      <div class="inv-head">
+        <span class="i-title">INV-1038</span>
+        <span class="inv-chip" style="background:#4f4d30;color:#efe75c">Pending</span>
+      </div>
+      <div class="inv-mid">
+        <span class="i-sub" style="color:#c7a44b">Sharma Textiles · Due Jun 10</span>
+        <span class="i-amt" style="color:#efe75c">₹62,000</span>
+      </div>
+      <div class="inv-btn" style="background:#324250;color:#5b9fd0">Get ₹62,000 Today</div>
+    </div>
+
+    <!-- INV-1019 · overdue -->
+    <div class="inv">
+      <div class="inv-head">
+        <span class="i-title">INV-1019</span>
+        <span class="inv-chip" style="background:#4b2f2f;color:#e06767">Overdue</span>
+      </div>
+      <div class="inv-mid">
+        <span class="i-sub" style="color:#c05f5f">Bose Retail · Overdue 12 days</span>
+        <span class="i-amt" style="color:#f15858">₹1,15,000</span>
+      </div>
+      <div class="inv-btn" style="background:#6d3737;color:#f07575">Urgent – Discount Now</div>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tabbar">
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </div>
+    <div class="tab active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+      Ledger
+    </div>
+    <div class="fab" style="box-shadow:0 0 0 5px #202020">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+      Bank
+    </div>
+    <div class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="19" cy="12" r="1.4" fill="currentColor"/></svg>
+      More
+    </div>
+    <div class="base-strip"></div>
+  </div>
+  <div class="home-indicator"></div>
+</div>
+</body>
+</html>

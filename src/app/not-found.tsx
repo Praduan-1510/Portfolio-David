@@ -61,7 +61,7 @@ export default function NotFound() {
         </h1>
 
         <Reveal as="div" y={12} trigger="load">
-          <Eyebrow>Error 404</Eyebrow>
+          <Eyebrow flap>Error 404</Eyebrow>
         </Reveal>
 
         {/* Signature beat — departure-board "404": flips through the charset on

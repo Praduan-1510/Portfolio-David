@@ -1,4 +1,5 @@
 import NextLink from "next/link";
+import Image from "next/image";
 import { Container, Text } from "@/components/primitives";
 import { site } from "@/lib/site";
 
@@ -39,7 +40,14 @@ export function Footer() {
       />
       <Container as="div" className="flex flex-col gap-space-8 py-space-9 md:flex-row md:items-start md:justify-between">
         <div className="max-w-[40ch]">
-          <p className="font-display text-body-l font-semibold tracking-[-0.02em]">
+          <p className="flex items-center gap-space-2 font-display text-body-l font-semibold tracking-[-0.02em]">
+            <Image
+              src="/Favicon/icon-512.png"
+              alt=""
+              width={28}
+              height={28}
+              className="h-7 w-7 rounded-[6px]"
+            />
             Praduan Saha
           </p>
           <Text variant="body" className="mt-space-3 text-muted">

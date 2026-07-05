@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
 import { Container, Text, Eyebrow, Button } from "@/components/primitives";
 import {
   Reveal,
@@ -145,7 +146,24 @@ const EXPERIENCE = [
   },
 ];
 
-const CERTIFICATIONS = [
+type Certification = {
+  title: string;
+  issuer: string;
+  year: string;
+  /** Public "verify credential" URL (e.g. Coursera). When present, the row's
+   *  meta becomes a link so the certificate can be independently verified. */
+  href?: string;
+};
+
+// Newest first. The `certifications` stat gauge counts this array, so it stays
+// in sync automatically.
+const CERTIFICATIONS: Certification[] = [
+  {
+    title: "Vibe Coding Fundamentals",
+    issuer: "University of Colorado",
+    year: "2026",
+    href: "https://www.coursera.org/account/accomplishments/verify/CGUSF9S3PSC8",
+  },
   { title: "Graphic Design", issuer: "Adobe", year: "2026" },
   { title: "SEO", issuer: "HubSpot Academy", year: "2026" },
   {
@@ -491,9 +509,28 @@ export default function About() {
               <span className="text-body transition-colors duration-base ease-out-quad group-hover:text-neon">
                 {cert.title}
               </span>
-              <span className="shrink-0 font-mono text-caption uppercase tracking-[0.14em] text-muted">
-                {cert.issuer} · {cert.year}
-              </span>
+              {cert.href ? (
+                // Verifiable credential: the meta becomes an external link with
+                // the site's ↗ + neon-hover affordance (matching the contact
+                // channels), so the certificate can be independently checked.
+                <a
+                  href={cert.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Verify ${cert.title} credential (opens in a new tab)`}
+                  className="group/verify inline-flex shrink-0 items-center gap-space-2 font-mono text-caption uppercase tracking-[0.14em] text-muted transition-colors duration-fast ease-out-quad hover:text-neon"
+                >
+                  {cert.issuer} · {cert.year}
+                  <ArrowUpRight
+                    aria-hidden="true"
+                    className="h-[13px] w-[13px] shrink-0 transition-transform duration-fast ease-out-quad group-hover/verify:-translate-y-0.5 group-hover/verify:translate-x-0.5"
+                  />
+                </a>
+              ) : (
+                <span className="shrink-0 font-mono text-caption uppercase tracking-[0.14em] text-muted">
+                  {cert.issuer} · {cert.year}
+                </span>
+              )}
             </li>
           ))}
         </StaggerGroup>

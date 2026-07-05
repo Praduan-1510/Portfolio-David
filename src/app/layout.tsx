@@ -41,6 +41,15 @@ export const metadata: Metadata = {
   // path (metadata merges per-field, so an un-overridden page would otherwise
   // inherit "/"). metadataBase resolves these relative paths to absolute URLs.
   alternates: { canonical: "/" },
+  // Flame icon set (static assets in public/Favicon), replacing the generated
+  // "PS" monogram routes. Next emits the <link rel="icon"> / apple-touch tags.
+  icons: {
+    icon: [
+      { url: "/Favicon/favicon-32.png", type: "image/png", sizes: "32x32" },
+      { url: "/Favicon/favicon-16.png", type: "image/png", sizes: "16x16" },
+    ],
+    apple: { url: "/Favicon/apple-touch-icon.png", sizes: "180x180" },
+  },
   title: {
     default: "Praduan Saha — Product Designer (Design + Front-End)",
     template: "%s — Praduan Saha",

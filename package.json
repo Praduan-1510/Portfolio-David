@@ -32,8 +32,6 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^9",
     "eslint-config-next": "^16.2.9",
-    "ffmpeg-static": "^5.3.0",
-    "ffprobe-static": "^3.1.0",
     "postcss": "^8.4.49",
     "puppeteer-core": "^25.1.0",
     "tailwindcss": "^3.4.19",

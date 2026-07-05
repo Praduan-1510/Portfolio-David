@@ -41,8 +41,9 @@ export const metadata: Metadata = {
   // path (metadata merges per-field, so an un-overridden page would otherwise
   // inherit "/"). metadataBase resolves these relative paths to absolute URLs.
   alternates: { canonical: "/" },
-  // Flame icon set (static assets in public/Favicon), replacing the generated
-  // "PS" monogram routes. Next emits the <link rel="icon"> / apple-touch tags.
+  // Neon "PS" monogram icon set — static PNGs in public/Favicon (16/32/180/512,
+  // #39FF6A on #0A0A0B). These override the generated icon.tsx/apple-icon.tsx
+  // routes; Next emits the <link rel="icon"> / apple-touch tags for them.
   icons: {
     icon: [
       { url: "/Favicon/favicon-32.png", type: "image/png", sizes: "32x32" },

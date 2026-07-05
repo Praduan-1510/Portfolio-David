@@ -157,7 +157,7 @@ export function Hero() {
                 href="/work"
                 variant="invert"
                 size="lg"
-                className="w-full shadow-[0_14px_40px_-16px_rgba(0,0,0,0.7)] hover:-translate-y-px sm:w-auto"
+                className="w-full shadow-[0_14px_40px_-16px_rgba(0,0,0,0.7)] sm:w-auto"
               >
                 View work
               </Button>
@@ -172,7 +172,7 @@ export function Hero() {
                 href="/contact"
                 variant="secondary"
                 size="lg"
-                className="w-full bg-white/[0.04] hover:-translate-y-px hover:bg-white/[0.07] sm:w-auto"
+                className="w-full bg-white/[0.04] hover:bg-white/[0.07] sm:w-auto"
               >
                 Get in touch
               </Button>

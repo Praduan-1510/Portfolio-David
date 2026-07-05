@@ -85,14 +85,14 @@ export default function NotFound() {
             {"This page may have moved or never existed. Let's get you back on course."}
           </Text>
           <div className="mt-space-7 flex flex-wrap items-center justify-center gap-space-4">
-            <Button href="/" variant="invert" size="lg" className="hover:-translate-y-px">
+            <Button href="/" variant="invert" size="lg">
               Back home
             </Button>
             <Button
               href="/work"
               variant="secondary"
               size="lg"
-              className="hover:-translate-y-px hover:bg-surface"
+              className="hover:bg-surface"
             >
               View work
             </Button>

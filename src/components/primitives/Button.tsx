@@ -16,20 +16,22 @@ export type ButtonSize = "md" | "lg";
 const base =
   "inline-flex items-center justify-center gap-space-2 font-sans font-medium transition duration-fast ease-out-quad";
 
-// One hover language site-wide, matching the card affordance (.card-neon in
-// globals.css): on hover an element keeps its fill and gains the neon ring +
-// soft glow (the `shadow-neon` token — the same box-shadow the cards use).
-// Filled buttons (primary/invert) add a 1px lift; outlined/ghost take a neon
-// border + text. The base `transition` animates box-shadow/border/transform on
-// the `fast` token. Earlier this flood-filled the fills to flat neon, which was
-// the one interaction that contradicted the card/secondary/ghost language.
+// One CALM hover language site-wide — no cursor-chase (the magnetic drift was
+// removed): on hover a button lifts a gentle 2px and gains a SOFT neon glow, the
+// `shadow-neon-soft` token (a low, ringless bloom) rather than the hard 1px ring
+// + wide flare the cards use. Outlined adds the neon border/label; ghost stays a
+// quiet label-to-neon. A tiny `active` press settles the lift on click. The base
+// `transition` animates transform + box-shadow on the `fast` button token, so the
+// settle reads soft and smooth, never bouncy.
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: "bg-accent text-on-accent hover:shadow-neon hover:-translate-y-px",
+  primary:
+    "bg-accent text-on-accent hover:-translate-y-0.5 hover:shadow-neon-soft active:translate-y-0",
   secondary:
-    "border border-line text-fg hover:border-neon hover:text-neon hover:shadow-neon",
+    "border border-line text-fg hover:border-neon hover:text-neon hover:-translate-y-0.5 hover:shadow-neon-soft active:translate-y-0",
   ghost: "text-fg hover:text-neon",
   // High-contrast monochrome fill — white-on-dark (ink-on-paper in light).
-  invert: "bg-fg text-bg hover:shadow-neon hover:-translate-y-px",
+  invert:
+    "bg-fg text-bg hover:-translate-y-0.5 hover:shadow-neon-soft active:translate-y-0",
 };
 
 const shapeClasses: Record<ButtonShape, string> = {

@@ -1,75 +1,31 @@
-"use client";
-
-import { useRef } from "react";
-import { useGSAP } from "@gsap/react";
-import { gsap, registerGsap, gsapEase } from "@/lib/motion/gsap";
-import { durations } from "@/lib/motion/durations";
-import { useReducedMotion, prefersReducedMotion } from "@/hooks/useReducedMotion";
 import { cn } from "@/lib/utils/cn";
 
 /*
- * Magnetic target (DESIGN_GUIDELINES.md §7.7) — the wrapped element drifts toward
- * the cursor. Pointer updates are batched onto GSAP's ticker via quickTo (one RAF,
- * not per-mousemove — §7.5). Disabled on touch / coarse pointers and under reduced
- * motion, where it renders static. Use on 1–3 elements max.
+ * Static layout wrapper — formerly a magnetic/cursor-follow target (§7.7).
+ *
+ * The magnetic drift was removed site-wide by design: buttons now use a CALM
+ * lift + soft glow on hover (see Button.tsx) instead of chasing the pointer,
+ * which read as buttons that "jump"/"bounce". This wrapper is kept so existing
+ * call sites and their layout classes (e.g. `mt-space-7`, `inline-block`) are
+ * untouched — it simply renders its children in an inline-block span. `strength`
+ * and `max` are accepted for API compatibility but no longer do anything.
  */
 interface MagneticButtonProps extends React.HTMLAttributes<HTMLSpanElement> {
-  /** Pull factor toward the cursor (0–1). */
+  /** @deprecated no-op — retained so existing call sites don't break. */
   strength?: number;
-  /** Max drift in px on each axis. The pull is `distance-from-centre × strength`,
-   *  which grows with the element's width — so this cap keeps a magnetic button a
-   *  subtle nudge instead of a wide slide (esp. on large/full-width buttons). Kept
-   *  very small (3px) with a gentle pull so the button reads as a soft, smooth
-   *  response — not a button that "jumps" or "bounces" as it chases the cursor. */
+  /** @deprecated no-op — retained so existing call sites don't break. */
   max?: number;
 }
 
 export function MagneticButton({
   className,
-  strength = 0.12,
-  max = 3,
+  strength: _strength,
+  max: _max,
   children,
   ...rest
 }: MagneticButtonProps) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const reduced = useReducedMotion();
-
-  useGSAP(
-    () => {
-      registerGsap();
-      const el = ref.current;
-      if (!el) return;
-
-      const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-      if (prefersReducedMotion() || !fine) return; // static on touch / reduced motion
-
-      const xTo = gsap.quickTo(el, "x", { duration: durations.base, ease: gsapEase.outQuad });
-      const yTo = gsap.quickTo(el, "y", { duration: durations.base, ease: gsapEase.outQuad });
-
-      const clamp = (v: number) => (v < -max ? -max : v > max ? max : v);
-
-      const onMove = (e: PointerEvent) => {
-        const r = el.getBoundingClientRect();
-        xTo(clamp((e.clientX - (r.left + r.width / 2)) * strength));
-        yTo(clamp((e.clientY - (r.top + r.height / 2)) * strength));
-      };
-      const onLeave = () => {
-        xTo(0);
-        yTo(0);
-      };
-
-      el.addEventListener("pointermove", onMove);
-      el.addEventListener("pointerleave", onLeave);
-      return () => {
-        el.removeEventListener("pointermove", onMove);
-        el.removeEventListener("pointerleave", onLeave);
-      };
-    },
-    { scope: ref, dependencies: [reduced, strength, max], revertOnUpdate: true },
-  );
-
   return (
-    <span ref={ref} className={cn("inline-block", className)} {...rest}>
+    <span className={cn("inline-block", className)} {...rest}>
       {children}
     </span>
   );

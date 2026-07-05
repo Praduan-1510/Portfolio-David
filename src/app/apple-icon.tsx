@@ -1,15 +1,16 @@
 import { ImageResponse } from "next/og";
 
 /*
- * Apple touch icon (180×180) — the favicon's "PS" monogram scaled for a home
- * screen. iOS squares the corners itself, so the tile is a full-bleed dark
- * square (no baked radius). Literal hex (ImageResponse takes raw CSS, not tokens).
+ * Apple touch icon (180×180) — the favicon's neon-green "PS" monogram scaled for
+ * a home screen. iOS squares the corners itself, so the tile is a full-bleed dark
+ * square (no baked radius). Literal hex (ImageResponse takes raw CSS, not tokens;
+ * keep in sync with --neon-green).
  */
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
 const BG = "#0A0A0B";
-const FG = "#F3F3F1";
+const FG = "#39FF6A"; // --neon-green (site signal colour)
 
 export default function AppleIcon() {
   return new ImageResponse(

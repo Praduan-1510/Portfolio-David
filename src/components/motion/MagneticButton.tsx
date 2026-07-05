@@ -19,15 +19,15 @@ interface MagneticButtonProps extends React.HTMLAttributes<HTMLSpanElement> {
   /** Max drift in px on each axis. The pull is `distance-from-centre × strength`,
    *  which grows with the element's width — so this cap keeps a magnetic button a
    *  subtle nudge instead of a wide slide (esp. on large/full-width buttons). Kept
-   *  small (6px) so the button reads as a gentle response, not a button that
-   *  "jumps" and chases the cursor. */
+   *  very small (3px) with a gentle pull so the button reads as a soft, smooth
+   *  response — not a button that "jumps" or "bounces" as it chases the cursor. */
   max?: number;
 }
 
 export function MagneticButton({
   className,
-  strength = 0.2,
-  max = 6,
+  strength = 0.12,
+  max = 3,
   children,
   ...rest
 }: MagneticButtonProps) {

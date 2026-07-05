@@ -38,6 +38,16 @@ export function Nav() {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
 
+  // The route readout is derived from usePathname(), which is stable on every
+  // real route (server prerender === client) — EXCEPT the not-found page. It is
+  // statically prerendered as the internal `/_not-found` route (baking "→ _not-
+  // found"), but the client hydrates on the actual unknown URL, so the label —
+  // and its per-character flap-tile count — differ, causing a hydration mismatch
+  // (React #418). Since the readout is decorative and flutters in on mount
+  // anyway, gate it on mount: identical (empty) first render on both sides.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   // Close the menu whenever the route changes (covers link taps + back/forward).
   useEffect(() => {
     setOpen(false);
@@ -105,7 +115,9 @@ export function Nav() {
             aria-hidden="true"
             className="hidden font-mono text-[0.625rem] uppercase tracking-[0.2em] text-muted lg:inline-block"
           >
-            <FlapText key={pathname} text={`→ ${routeLabel(pathname)}`} trigger="load" flips={3} colorMode="mono" />
+            {mounted && (
+              <FlapText key={pathname} text={`→ ${routeLabel(pathname)}`} trigger="load" flips={3} colorMode="mono" />
+            )}
           </span>
         </div>
 

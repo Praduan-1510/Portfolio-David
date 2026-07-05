@@ -149,12 +149,20 @@ export function BrowserMockup({
     if (!showVideo) return;
     const v = videoRef.current;
     if (!v) return;
+    // React doesn't reliably set the `muted` DOM property from the JSX attribute,
+    // and browsers (Safari especially) block autoplay on a video they consider
+    // unmuted — so the in-view .play() silently rejects. Force the property.
+    v.muted = true;
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !userPausedRef.current) v.play().catch(() => {});
-        else v.pause();
+        if (entry.isIntersecting && !userPausedRef.current) {
+          v.muted = true;
+          v.play().catch(() => {});
+        } else {
+          v.pause();
+        }
       },
-      { threshold: 0.5 },
+      { threshold: 0.4 },
     );
     io.observe(v);
     return () => io.disconnect();

@@ -1,6 +1,7 @@
 "use client";
 
 import NextLink from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Container } from "@/components/primitives";
@@ -101,11 +102,20 @@ export function Nav() {
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-bg">
       <Container as="div" className="flex h-16 items-center justify-between [@media(max-height:480px)]:h-12">
-        <div className="flex items-baseline gap-space-4">
+        <div className="flex items-center gap-space-4">
           <NextLink
             href="/"
-            className="font-display text-body-l font-semibold tracking-[-0.02em]"
+            aria-label="Praduan Saha — home"
+            className="flex items-center gap-space-2 font-display text-body-l font-semibold tracking-[-0.02em]"
           >
+            <Image
+              src="/Favicon/icon-512.png"
+              alt=""
+              width={28}
+              height={28}
+              priority
+              className="h-7 w-7 rounded-[6px]"
+            />
             Praduan Saha
           </NextLink>
           {/* RouteFlap — a persistent departure-board chip reading the current
@@ -172,7 +182,14 @@ export function Nav() {
           className="fixed inset-0 z-[70] flex flex-col bg-bg md:hidden"
         >
           <Container as="div" className="flex h-16 shrink-0 items-center justify-between border-b border-line">
-            <span className="font-display text-body-l font-semibold tracking-[-0.02em]">
+            <span className="flex items-center gap-space-2 font-display text-body-l font-semibold tracking-[-0.02em]">
+              <Image
+                src="/Favicon/icon-512.png"
+                alt=""
+                width={28}
+                height={28}
+                className="h-7 w-7 rounded-[6px]"
+              />
               Praduan Saha
             </span>
             <button

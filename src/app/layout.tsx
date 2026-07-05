@@ -42,14 +42,18 @@ export const metadata: Metadata = {
   // inherit "/"). metadataBase resolves these relative paths to absolute URLs.
   alternates: { canonical: "/" },
   // Neon "PS" monogram icon set — static PNGs in public/Favicon (16/32/180/512,
-  // #39FF6A on #0A0A0B). These override the generated icon.tsx/apple-icon.tsx
-  // routes; Next emits the <link rel="icon"> / apple-touch tags for them.
+  // #39FF6A on #0A0A0B) + a real public/favicon.ico. The .ico is listed first
+  // with sizes:"any" as the universal fallback: Safari is unreliable with
+  // PNG-only favicons and wants a classic /favicon.ico. These override the
+  // generated icon.tsx/apple-icon.tsx routes; Next emits the <link rel="icon"> /
+  // apple-touch tags for them.
   icons: {
     icon: [
-      { url: "/Favicon/favicon-32.png", type: "image/png", sizes: "32x32" },
-      { url: "/Favicon/favicon-16.png", type: "image/png", sizes: "16x16" },
+      { url: "/favicon.ico?v=2", sizes: "any" },
+      { url: "/Favicon/favicon-32.png?v=2", type: "image/png", sizes: "32x32" },
+      { url: "/Favicon/favicon-16.png?v=2", type: "image/png", sizes: "16x16" },
     ],
-    apple: { url: "/Favicon/apple-touch-icon.png", sizes: "180x180" },
+    apple: { url: "/Favicon/apple-touch-icon.png?v=2", sizes: "180x180" },
   },
   title: {
     default: "Praduan Saha — Product Designer (Design + Front-End)",

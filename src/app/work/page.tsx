@@ -11,10 +11,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Work — Praduan Saha",
     description: "Selected case studies in product design and front-end development.",
+    // This page has no co-located opengraph-image, and the root card isn't
+    // inherited once this openGraph object is declared — so point at it explicitly.
+    images: ["/opengraph-image"],
   },
   twitter: {
+    card: "summary_large_image",
     title: "Work — Praduan Saha",
     description: "Selected case studies in product design and front-end development.",
+    images: ["/twitter-image"],
   },
 };
 

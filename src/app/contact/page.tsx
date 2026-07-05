@@ -14,11 +14,16 @@ export const metadata: Metadata = {
     title: "Contact — Praduan Saha",
     description:
       "Have a project in mind, or just want to say hello? Email is the fastest way to reach Praduan Saha.",
+    // No co-located image here; the root card isn't inherited once this
+    // openGraph object is declared, so reference it explicitly.
+    images: ["/opengraph-image"],
   },
   twitter: {
+    card: "summary_large_image",
     title: "Contact — Praduan Saha",
     description:
       "Have a project in mind, or just want to say hello? Email is the fastest way to reach Praduan Saha.",
+    images: ["/twitter-image"],
   },
 };
 
@@ -138,7 +143,7 @@ export default function Contact() {
             <Reveal as="div" trigger="load" delay={0.3}>
               {/* bg-surface (a var() token) can't take a /opacity modifier — it
                   silently no-ops — so the panel uses the solid raised surface. */}
-              <div className="card-neon relative overflow-hidden rounded-[3px] border border-line bg-surface p-space-7">
+              <div className="card-neon relative overflow-hidden rounded-[3px] border border-line bg-surface p-space-5 sm:p-space-7">
                 {/* Spectrum thread across the panel crown — the wayfinding signal,
                     consistent with the home CTA and footer (faded ends). */}
                 <span

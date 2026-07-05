@@ -47,7 +47,7 @@ export function SignalTrace({
 
   return (
     <nav
-      aria-label="Selected work, plotted 01–04"
+      aria-label="Selected work"
       className={cn("relative h-[2px] min-w-0 flex-1", className)}
     >
       {/* The line — masked ends so it lands soft, drawn left-to-right. */}

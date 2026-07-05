@@ -76,7 +76,9 @@ export function FlightBoard({ projects }: { projects: ProjectMeta[] }) {
                     <span
                       className={
                         "inline-flex shrink-0 items-center gap-space-2 rounded-full border px-space-3 py-[2px] text-[0.625rem] tracking-[0.12em] " +
-                        (live ? "border-neon/40 text-neon" : "border-line text-muted")
+                        (live
+                          ? "border-[color:color-mix(in_srgb,var(--neon)_40%,transparent)] text-neon"
+                          : "border-line text-muted")
                       }
                     >
                       <span

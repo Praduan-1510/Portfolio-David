@@ -72,7 +72,7 @@ export function Hero() {
         }}
       />
 
-      <Container className="relative z-10 flex flex-1 flex-col justify-center py-space-7 [@media(max-height:600px)]:py-space-5">
+      <Container className="relative z-10 flex flex-1 flex-col justify-center py-space-7 [@media(max-height:600px)]:py-space-5 short-land:justify-start">
         {/* Top row — mono-caps eyebrow left (the one label that used to break
             the site's label voice), HUD status readout right. */}
         <Reveal
@@ -87,7 +87,13 @@ export function Hero() {
               aria-hidden="true"
               className="h-[6px] w-[6px] rounded-full bg-neon motion-safe:animate-status-pulse"
             />
-            Product Designer · Front-End
+            {/* One wrapping label (not sibling flex items) so at 320 it breaks
+                cleanly to "Product Designer ·" / "Front-End" instead of orphaning
+                "End" or floating the second word to the right. */}
+            <span>
+              Product Designer ·{" "}
+              <span className="whitespace-nowrap">Front-End</span>
+            </span>
           </span>
           <span className="hidden flex-col items-end gap-[2px] md:flex">
             <span className="font-mono text-[0.625rem] uppercase tracking-[0.2em] text-muted">
@@ -100,7 +106,7 @@ export function Hero() {
         </Reveal>
 
         {/* The wordmark — stacked boards + the signal trace. */}
-        <div className="mt-space-6">
+        <div className="mt-space-6 short-land:mt-space-4">
           <h1 className="sr-only">
             Praduan Saha — product designer and front-end developer
           </h1>
@@ -108,7 +114,7 @@ export function Hero() {
         </div>
 
         {/* Supporting row — statement + subhead left, CTAs anchored right. */}
-        <div className="mt-space-7 grid items-end gap-x-space-9 gap-y-space-6 lg:grid-cols-[minmax(0,1fr)_auto]">
+        <div className="mt-space-7 grid items-end gap-x-space-9 gap-y-space-6 short-land:mt-space-5 short-land:grid-cols-[minmax(0,1fr)_auto] short-land:items-start short-land:gap-x-space-5 lg:grid-cols-[minmax(0,1fr)_auto]">
           <div className="min-w-0">
             {/* Tagline — word-by-word rise; the closing phrase carries the one
                 sanctioned colour moment (.text-spectrum) and lands last. */}

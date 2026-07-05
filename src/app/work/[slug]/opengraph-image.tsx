@@ -9,9 +9,24 @@ import { site } from "@/lib/site";
  * Falls back to a sensible card if the slug is missing (route is static, but
  * keep it robust). Literal hex required by ImageResponse (no Tailwind tokens).
  */
-export const alt = "Case study — Praduan Saha";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+
+// Per-image metadata so each card's og:image:alt names its own project instead
+// of a single generic "Case study — Praduan Saha" for all four. The default
+// export below renders the one image this returns (id "card").
+export async function generateImageMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const project = getProjectBySlug(slug);
+  const alt = project
+    ? `${project.meta.title} — case study`
+    : "Case study — Praduan Saha";
+  return [{ id: "card", alt, size, contentType }];
+}
 
 const BG = "#0A0A0B";
 const FG = "#F3F3F1";

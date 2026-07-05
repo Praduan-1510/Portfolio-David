@@ -55,7 +55,15 @@ export async function generateMetadata({
     description: project.meta.summary,
     alternates: { canonical: `/work/${slug}` },
     openGraph: { title: project.meta.title, description: project.meta.summary },
-    twitter: { title: project.meta.title, description: project.meta.summary },
+    // card must be re-declared: metadata merging is shallow, so this per-page
+    // twitter object replaces the layout's — dropping its summary_large_image
+    // and falling back to the small "summary" card. The image itself comes from
+    // the co-located opengraph-image.tsx (used for twitter too, no twitter-image).
+    twitter: {
+      card: "summary_large_image",
+      title: project.meta.title,
+      description: project.meta.summary,
+    },
   };
 }
 
@@ -150,7 +158,7 @@ export default async function CaseStudy({
             {/* Compact web header — eyebrow + a title row that carries the live CTA,
                 then a short summary. Kept deliberately tight so the full-width
                 capture below dominates the intro instead of being pushed off-screen. */}
-            <Container className="pt-space-10 pb-space-6">
+            <Container className="pt-space-10 pb-space-6 short-land:pt-space-6">
               <Reveal trigger="load">
                 <Eyebrow>
                   <span
@@ -200,11 +208,11 @@ export default async function CaseStudy({
                 <Reveal trigger="load" delay={0.34} className="mt-space-4">
                   <p
                     role="note"
-                    className="inline-flex items-center gap-space-2 rounded-[2px] border border-line px-space-3 py-space-2 font-mono text-caption uppercase tracking-[0.1em] text-muted"
+                    className="inline-flex items-start gap-space-2 rounded-[2px] border border-line px-space-3 py-space-2 font-mono text-caption uppercase tracking-[0.1em] text-muted"
                   >
                     <span
                       aria-hidden="true"
-                      className="inline-block h-[6px] w-[6px] shrink-0 rounded-full bg-muted"
+                      className="mt-[0.35em] inline-block h-[6px] w-[6px] shrink-0 rounded-full bg-muted"
                     />
                     {meta.disclaimer}
                   </p>
@@ -268,7 +276,7 @@ export default async function CaseStudy({
             </Container>
           </>
         ) : (
-          <Container className="grid items-center gap-space-9 pt-space-11 pb-space-9 md:grid-cols-[1.12fr_0.88fr]">
+          <Container className="grid items-center gap-space-9 pt-space-11 pb-space-9 short-land:items-start short-land:gap-space-6 short-land:pt-space-6 md:grid-cols-[1.12fr_0.88fr]">
             <div>
               <Reveal trigger="load">
                 <Eyebrow>
@@ -284,7 +292,7 @@ export default async function CaseStudy({
                 by="lines"
                 trigger="load"
                 delay={0.1}
-                className="mt-space-4 max-w-[14ch] font-display text-display-xl"
+                className="mt-space-4 max-w-[14ch] font-display text-display-xl short-land:text-display-l"
               >
                 {displayTitle(meta.title)}
               </TextReveal>
@@ -298,11 +306,11 @@ export default async function CaseStudy({
                 <Reveal trigger="load" delay={0.36} className="mt-space-5">
                   <p
                     role="note"
-                    className="inline-flex items-center gap-space-2 rounded-[2px] border border-line px-space-3 py-space-2 font-mono text-caption uppercase tracking-[0.1em] text-muted"
+                    className="inline-flex items-start gap-space-2 rounded-[2px] border border-line px-space-3 py-space-2 font-mono text-caption uppercase tracking-[0.1em] text-muted"
                   >
                     <span
                       aria-hidden="true"
-                      className="inline-block h-[6px] w-[6px] shrink-0 rounded-full bg-muted"
+                      className="mt-[0.35em] inline-block h-[6px] w-[6px] shrink-0 rounded-full bg-muted"
                     />
                     {meta.disclaimer}
                   </p>

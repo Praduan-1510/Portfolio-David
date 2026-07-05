@@ -24,11 +24,16 @@ export const metadata: Metadata = {
     title: "About — Praduan Saha",
     description:
       "Product designer and front-end developer based in Kolkata — creating digital experiences through systematic design thinking and precise execution.",
+    // No co-located image here; the root card isn't inherited once this
+    // openGraph object is declared, so reference it explicitly.
+    images: ["/opengraph-image"],
   },
   twitter: {
+    card: "summary_large_image",
     title: "About — Praduan Saha",
     description:
       "Product designer and front-end developer based in Kolkata — creating digital experiences through systematic design thinking and precise execution.",
+    images: ["/twitter-image"],
   },
 };
 

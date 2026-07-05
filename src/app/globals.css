@@ -594,3 +594,14 @@ html.lenis body {
     transform: translateY(0);
   }
 }
+
+/* Landscape phones are wide but very short: the hero wordmark's width-based
+   clamp (13vw) renders ~110px type that fills the whole viewport, pushing the
+   value-prop and both CTAs below the fold on first paint. Cap the wordmark by
+   viewport HEIGHT in that case only, so the supporting copy + a CTA are visible.
+   (Set as a variable the inline fontSize reads via var() — see HeroWordmark.) */
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero-wordmark {
+    --hero-wordmark-size: clamp(2.25rem, 12vh, 3.75rem);
+  }
+}

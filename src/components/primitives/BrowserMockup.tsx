@@ -285,7 +285,7 @@ export function BrowserMockup({
             <button
               type="button"
               onClick={togglePlayback}
-              className="absolute bottom-space-2 left-space-2 z-[2] inline-flex items-center gap-[5px] rounded-full bg-black/45 px-space-2 py-[2px] font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-white/85 backdrop-blur-sm transition-colors duration-fast ease-out-quad before:absolute before:-inset-3 before:content-[''] hover:text-neon"
+              className="absolute bottom-space-2 left-space-2 z-[2] inline-flex items-center gap-[5px] rounded-full bg-black/65 px-space-2 py-[2px] font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-white backdrop-blur-sm transition-colors duration-fast ease-out-quad before:absolute before:-inset-3 before:content-[''] hover:text-neon"
             >
               <span
                 aria-hidden="true"
@@ -297,7 +297,7 @@ export function BrowserMockup({
           {/* Live-capture badge — signals this is a real screen recording (and reads
               "poster" honestly under reduced motion). Hero only. */}
           {hero && (
-            <span className="bm-badge pointer-events-none absolute bottom-space-2 right-space-2 z-[2] inline-flex items-center gap-[5px] rounded-full bg-black/45 px-space-2 py-[2px] font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-white/85 backdrop-blur-sm">
+            <span className="bm-badge pointer-events-none absolute bottom-space-2 right-space-2 z-[2] inline-flex items-center gap-[5px] rounded-full bg-black/65 px-space-2 py-[2px] font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-white backdrop-blur-sm">
               <span
                 className={cn(
                   "h-[5px] w-[5px] rounded-full",

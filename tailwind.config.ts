@@ -15,6 +15,14 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      // Custom breakpoint — landscape phones are WIDE but very SHORT, exactly
+      // where the width-based type clamps (13vw / 7vw) render huge type that
+      // eats the viewport and pushes content below the fold. `short-land:` lets
+      // the hero + case-study headers dial themselves down for that case only.
+      screens: {
+        "short-land": { raw: "(max-height: 520px) and (orientation: landscape)" },
+      },
+
       // ---- Semantic colors (DESIGN_GUIDELINES.md §4) ----
       colors: {
         bg: "var(--bg)",

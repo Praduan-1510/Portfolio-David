@@ -14,15 +14,17 @@ import { SignalTrace } from "@/components/sections/SignalTrace";
  * a static trace from frame one.
  */
 
-// PRADUAN is 7 tiles (~4.6em incl. gaps); 15vw keeps it huge on wide screens
-// while the 3.2rem floor holds the block inside a 320px gutter.
-const FONT = "clamp(3rem, 13vw, 9.75rem)";
+// PRADUAN is 7 tiles (~4.6em incl. gaps); 13vw keeps it huge on wide screens
+// while the 3rem floor holds the block inside a 320px gutter. The var() lets the
+// short-landscape rule in globals.css (.hero-wordmark) cap it by viewport HEIGHT
+// so it doesn't fill a 390px-tall landscape phone; falls back to the clamp.
+const FONT = "var(--hero-wordmark-size, clamp(3rem, 13vw, 9.75rem))";
 
 export function HeroWordmark() {
   return (
     // No aria-hidden here: the trace inside carries REAL links. The flap
     // boards handle their own semantics (announce=false + aria-hidden tiles).
-    <div>
+    <div className="hero-wordmark">
       <SplitFlapText
         announce={false}
         text="PRADUAN"

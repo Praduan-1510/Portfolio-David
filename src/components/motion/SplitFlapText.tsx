@@ -161,7 +161,15 @@ export function SplitFlapText({
           style={{
             fontSize,
             opacity: allSettled ? 1 : 0,
-            transition: `opacity ${durations.slow}s ${cssEasings.outExpo}`,
+            // Settle beat: as the board resolves, the kerned twin rises a hair
+            // and crisps from a near-imperceptible under-scale into exact type —
+            // the wordmark "lands" rather than merely crossfading in. Reduced
+            // motion is settled from frame one (allSettled) and the global rule
+            // zeroes the transition, so it appears instantly.
+            transform: allSettled
+              ? "translateY(0) scale(1)"
+              : "translateY(0.06em) scale(0.994)",
+            transition: `opacity ${durations.slow}s ${cssEasings.outExpo}, transform ${durations.slow}s ${cssEasings.outExpo}`,
           }}
         >
           {text}

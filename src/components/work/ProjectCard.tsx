@@ -106,6 +106,7 @@ export function ProjectCard({
           >
             <ProjectCover
               project={project}
+              playVideo={isWeb}
               sizes={
                 isWeb
                   ? "(min-width: 768px) 30rem, 82vw"

@@ -20,6 +20,7 @@ export function ProjectCover({
   priority = false,
   className,
   imgClassName,
+  playVideo = false,
 }: {
   project: Pick<ProjectMeta, "kind" | "cover" | "title" | "liveUrl" | "video">;
   sizes?: string;
@@ -28,12 +29,18 @@ export function ProjectCover({
   className?: string;
   /** PhoneFrame: classes on the <Image>. BrowserMockup: classes on the screen well. */
   imgClassName?: string;
+  /** Web covers only: play the looping capture in the still mockup instead of the
+   *  poster (used on the home work grid so the shipped product reads as live). */
+  playVideo?: boolean;
 }) {
   if (project.kind === "web") {
     return (
       <BrowserMockup
         tilt="still"
         poster={project.video?.poster ?? project.cover}
+        mp4={project.video?.src}
+        webm={project.video?.webm}
+        playInStill={playVideo}
         domain={hostOf(project.liveUrl)}
         alt={`${project.title} — website`}
         sizes={sizes}

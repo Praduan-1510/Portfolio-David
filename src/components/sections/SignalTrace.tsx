@@ -71,6 +71,28 @@ export function SignalTrace({
         }}
       />
 
+      {/* Travelling highlight — a soft comet of light that runs the length of
+          the trace and fades at each end, so the signal line reads as live. It
+          sits UNDER the markers (declared before them) so it appears to pass
+          beneath each station. Pure CSS + compositor transform; the base node is
+          invisible, so reduced motion shows nothing. */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 motion-safe:animate-trace-scan"
+        style={{ opacity: 0, willChange: "transform, opacity" }}
+      >
+        {/* The comet: a soft point of light centred on the 2px line (it extends
+            above/below it — no clipping ancestor), riding the track's translateX. */}
+        <span
+          className="absolute left-0 top-1/2 block h-[11px] w-[11px] -translate-y-1/2 rounded-full"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.32) 52%, transparent 72%)",
+            boxShadow: "0 0 13px 2px rgba(255,255,255,0.32)",
+          }}
+        />
+      </span>
+
       {/* Project markers — each one a real link into its case study. */}
       {PROJECTS.map((p, i) => (
         <NextLink

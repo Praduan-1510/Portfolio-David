@@ -65,6 +65,14 @@ interface BrowserMockupProps {
   /** object-fit for the still image. Default "cover"; "contain" letterboxes a
    *  whole screenshot when its ratio doesn't match the well. */
   fit?: "cover" | "contain";
+  /** Play the looping capture even in `tilt="still"` (cards / work grid) instead
+   *  of showing the poster — so the flagship reads as the live product in motion.
+   *  Same guardrails as hero (muted, in-view only, preload="none", reduced-motion
+   *  → poster). No pause button is rendered in still mode, so it stays valid HTML
+   *  when the frame is nested inside a card's link — the site treats this small
+   *  muted loop as ambient motion, opted out of via prefers-reduced-motion like
+   *  the marquee and status pulses. */
+  playInStill?: boolean;
 }
 
 function Lock() {
@@ -93,10 +101,11 @@ export function BrowserMockup({
   aspect = "64 / 35",
   objectPosition = "50% 73%",
   fit = "cover",
+  playInStill = false,
 }: BrowserMockupProps) {
   const reduced = useReducedMotion();
   const hero = tilt === "hero";
-  const showVideo = hero && !!mp4 && !reduced;
+  const showVideo = (hero || playInStill) && !!mp4 && !reduced;
   const runBoot = hero && boot;
   const videoRef = useRef<HTMLVideoElement>(null);
   // WCAG 2.2.2: the looping capture needs an on-page pause mechanism. A user
@@ -280,8 +289,10 @@ export function BrowserMockup({
           {/* Pause/play — the WCAG 2.2.2 mechanism for the looping capture.
               Mirrors the badge vocabulary at the opposite corner; ::before
               extends the hit area to a comfortable 44px. Hero mode is always
-              standalone (never nested in a card link), so a button is safe. */}
-          {showVideo && (
+              standalone (never nested in a card link), so a button is safe; still
+              mode is nested inside a card link, so it renders no button (the loop
+              is muted/ambient and stops under prefers-reduced-motion). */}
+          {showVideo && hero && (
             <button
               type="button"
               onClick={togglePlayback}

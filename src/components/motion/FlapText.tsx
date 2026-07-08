@@ -24,8 +24,12 @@ import { SPECTRUM } from "@/lib/spectrum";
 interface FlapTextProps {
   text: string;
   /** "inView" (default) flutters once when scrolled into view; "load" on mount;
-   *  "hover" re-flutters on pointer-enter of the wrapping element. */
-  trigger?: "inView" | "load" | "hover";
+   *  "hover" re-flutters on pointer-enter of the wrapping element; "manual"
+   *  flutters once on the first rising edge of `active` (never re-fires) — for
+   *  scroll-choreographed hosts like the home reel board. */
+  trigger?: "inView" | "load" | "hover" | "manual";
+  /** trigger="manual" only: flips the flutter on when it first becomes true. */
+  active?: boolean;
   /** Flutter steps per character before it locks (small = restrained). */
   flips?: number;
   /** Transient colour while fluttering: the 5-hue spectrum sweep, the current
@@ -46,6 +50,7 @@ const flutterChar = (step: number, index: number, target: string) => {
 export function FlapText({
   text,
   trigger = "inView",
+  active = false,
   flips = 4,
   colorMode = "spectrum",
   className = "",
@@ -58,9 +63,16 @@ export function FlapText({
   const chars = text.split("");
   const totalSteps = flips + chars.length; // cascade: char i settles at flips + i
 
+  // Manual trigger: one-shot on the first rising edge of `active`. `run` never
+  // resets, so a scrub reversing over the host can't re-fire the flutter.
+  useEffect(() => {
+    if (reduced || trigger !== "manual" || !active) return;
+    setRun((r) => (r === 0 ? 1 : r));
+  }, [active, trigger, reduced]);
+
   // Trigger wiring.
   useEffect(() => {
-    if (reduced) return;
+    if (reduced || trigger === "manual") return;
     const el = hostRef.current;
     if (!el) return;
     if (trigger === "load") {

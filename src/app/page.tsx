@@ -3,7 +3,7 @@ import { Container, Button, Link } from "@/components/primitives";
 import { ProjectCard } from "@/components/work/ProjectCard";
 import { Hero } from "@/components/sections/Hero";
 import { HomeAtmosphere } from "@/components/sections/HomeAtmosphere";
-import { CurrentlyBoard } from "@/components/sections/CurrentlyBoard";
+import { CinematicReel } from "@/components/sections/reel/CinematicReel";
 import { SideNav } from "@/components/layout/SideNav";
 import {
   Reveal,
@@ -17,8 +17,9 @@ import { getFeaturedProjectsMeta } from "@/lib/content/work";
 
 /*
  * Home (ARCHITECTURE.md §6): the scroll BUILDS instead of decaying — hero, then
- * straight to the proof (work grid), then the "Currently" departure board (real
- * positioning data in the flap signature), the about teaser, and the closing
+ * the cinematic reel (a scroll-scrubbed film clip that starts with the first
+ * scroll tick and carries the "Currently" departure board, its rows synced to
+ * the frames), then the proof (work grid), the about teaser, and the closing
  * CTA. The tools marquee moved to /about (a junior-portfolio trope this close
  * to an "extremely high-end" hero); every section stays choreographed with the
  * shared motion primitives, reduced-motion-safe, transform/opacity only.
@@ -55,8 +56,12 @@ export default function Home() {
         />
         <HomeAtmosphere />
 
-      {/* Selected work — FIRST beat after the hero: proof before anything
-          self-referential. */}
+      {/* Cinematic reel + "Currently" board — the second beat. The clip scrubs
+          from the very first scroll of the hero, holds while the board rows
+          flutter in (synced to the frames), then dims back into the page. */}
+      <CinematicReel />
+
+      {/* Selected work — proof right after the reel. */}
       <Container as="section" id="work" className="scroll-mt-16 py-space-9">
         <div className="mb-space-7 flex items-end justify-between gap-space-4">
           <div>
@@ -94,14 +99,6 @@ export default function Home() {
             );
           })}
         </StaggerGroup>
-      </Container>
-
-      {/* "Currently" board — the departure-board answer to a stats strip:
-          real positioning data (what's in design, what shipped and how it
-          measures, what's hand-coded, availability + live IST) fluttering in
-          on the flap signature. */}
-      <Container as="section" className="py-space-8">
-        <CurrentlyBoard />
       </Container>
 
       <Container>

@@ -13,6 +13,7 @@ export { Marquee } from "./Marquee";
 export { ToolGrid } from "./LogoMarquee";
 export { AnimatedNoise } from "./AnimatedNoise";
 export { SplitFlapText } from "./SplitFlapText";
+export { Signature } from "./Signature";
 export { FlapText } from "./FlapText";
 export { FlapDigits } from "./FlapDigits";
 export { AuroraEmber } from "./AuroraEmber";

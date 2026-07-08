@@ -25,10 +25,13 @@ const browser = await puppeteer.launch({
 async function scrollToProgress(page, p) {
   await page.evaluate((p) => {
     const el = document.getElementById("currently");
-    // offsetTop is relative to the positioned home wrapper — use document space.
+    // Mirror the ScrollTrigger config: start "top 64px", end "bottom bottom".
+    // (getBoundingClientRect, not offsetTop — the section may sit in a
+    // positioned wrapper.)
     const top = el.getBoundingClientRect().top + window.scrollY;
-    const y = top - window.innerHeight + p * el.offsetHeight;
-    window.scrollTo(0, Math.max(0, y));
+    const startY = top - 64;
+    const endY = top + el.offsetHeight - window.innerHeight;
+    window.scrollTo(0, Math.max(0, startY + p * (endY - startY)));
   }, p);
   await sleep(700); // Lenis lerp + scrub settle + flutter
 }
@@ -79,7 +82,7 @@ const DESKTOP = { width: 1440, height: 900, deviceScaleFactor: 1 };
 const MOBILE = { width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true };
 const SHORTLAND = { width: 844, height: 390, deviceScaleFactor: 2, isMobile: true, hasTouch: true };
 
-await run("desktop", DESKTOP, [0.05, 0.2, 0.35, 0.55, 0.75, 0.95]);
+await run("desktop", DESKTOP, [0, 0.05, 0.2, 0.35, 0.55, 0.75, 0.95]);
 await run("mobile", MOBILE, [0.5, 0.8]);
 await run("shortland", SHORTLAND, [0.6]);
 await run("reduced", DESKTOP, [0.5], { reduced: true });

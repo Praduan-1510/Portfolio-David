@@ -106,7 +106,7 @@ export function Nav() {
           <NextLink
             href="/"
             aria-label="Praduan Saha — home"
-            className="flex items-center gap-space-2 font-display text-body-l font-semibold tracking-[-0.02em]"
+            className="flex min-h-[44px] items-center gap-space-2 font-display text-body-l font-semibold tracking-[-0.02em]"
           >
             <Image
               src="/Favicon/icon-512.png"

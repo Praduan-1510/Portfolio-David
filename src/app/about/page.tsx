@@ -90,9 +90,6 @@ const CAPABILITIES = [
   },
 ];
 
-const TOOLS =
-  "Figma, Adobe Creative Suite, Canva, WordPress, HubSpot, Microsoft Office, plus audio/multimedia editing tools.";
-
 // Each entry is a company that holds one or more roles. Single-role companies
 // have a one-item `roles` array; multi-role companies (e.g. InsightsTap) group
 // their positions under one company header.
@@ -413,12 +410,6 @@ export default function About() {
             defensible content rather than a first-scroll trope. */}
         <Reveal className="mt-space-8">
           <ToolGrid />
-          <Text
-            variant="caption"
-            className="mt-space-5 font-mono uppercase tracking-[0.12em] text-muted"
-          >
-            Plus: {TOOLS}
-          </Text>
         </Reveal>
       </Container>
 

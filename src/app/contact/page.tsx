@@ -72,7 +72,7 @@ export default function Contact() {
     <section
       data-theme="dark"
       aria-labelledby="contact-heading"
-      className="relative isolate flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden bg-bg text-fg [@media(max-height:600px)]:min-h-0"
+      className="relative isolate flex min-h-[calc(80svh-4rem)] flex-col overflow-hidden bg-bg text-fg [@media(max-height:600px)]:min-h-0"
     >
       {/* Layer 0 — atmosphere: two soft monochrome radial glows give the dark
           depth and a diagonal balance (headline ↘ panel), beneath the grain. */}
@@ -131,6 +131,31 @@ export default function Contact() {
               <Text variant="body-l" className="mt-space-6 max-w-[46ch] text-muted">
                 {"Have a project in mind, or just want to say hello? Email is the fastest way to reach me — I'll get back to you."}
               </Text>
+            </Reveal>
+            {/* Instrument detail — anchors the lower-left of the frame so the
+                headline doesn't float over a void, and speaks the same
+                departure-board readout language as the rest of the site. */}
+            <Reveal trigger="load" delay={0.55}>
+              <dl className="mt-space-9 flex max-w-[30rem] flex-wrap gap-x-space-9 gap-y-space-5 border-t border-line pt-space-6">
+                <div>
+                  <dt className="font-mono text-caption uppercase tracking-[0.16em] text-muted">
+                    Availability
+                  </dt>
+                  <dd className="mt-space-2 inline-flex items-center gap-space-2 text-body-l text-fg">
+                    <span
+                      aria-hidden="true"
+                      className="h-[6px] w-[6px] rounded-full bg-neon motion-safe:animate-status-pulse"
+                    />
+                    Open to new work
+                  </dd>
+                </div>
+                <div>
+                  <dt className="font-mono text-caption uppercase tracking-[0.16em] text-muted">
+                    Working hours
+                  </dt>
+                  <dd className="mt-space-2 text-body-l text-fg">IST · UTC+5:30</dd>
+                </div>
+              </dl>
             </Reveal>
           </div>
 

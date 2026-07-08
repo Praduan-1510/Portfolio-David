@@ -54,6 +54,11 @@ interface SplitFlapTextProps {
   kernAlign?: "center" | "start";
   /** Extra classes for the kerned settle span (letter-spacing, weight). */
   kernClassName?: string;
+  /** Contract the board to the kerned twin's width once settled (animated
+   *  negative right margin), so inline compositions ("PRADUAN SAHA" on one
+   *  baseline) close up to true word spacing instead of keeping the wider
+   *  tile-row footprint. Only meaningful with settle="kern" + kernAlign="start". */
+  fitKern?: boolean;
 }
 
 const CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
@@ -80,6 +85,7 @@ export function SplitFlapText({
   settle = "tiles",
   kernAlign = "center",
   kernClassName = "",
+  fitKern = false,
 }: SplitFlapTextProps) {
   const chars = useMemo(() => text.split(""), [text]);
   const reduced = useReducedMotion();
@@ -120,10 +126,46 @@ export function SplitFlapText({
   const allSettled = step >= totalSteps;
   const kern = settle === "kern";
 
+  // fitKern: the tile row is wider than the kerned twin (0.65em tiles + gaps vs
+  // real glyph advances), so once settled the board gives the slack back via an
+  // animated negative right margin — inline siblings glide in to true word
+  // spacing. Measured live (ResizeObserver) so vw-based font sizes stay exact.
+  const rootRef = useRef<HTMLDivElement>(null);
+  const kernTextRef = useRef<HTMLSpanElement>(null);
+  const [kernSlack, setKernSlack] = useState(0);
+  useEffect(() => {
+    if (!kern || !fitKern) return;
+    const root = rootRef.current;
+    const twin = kernTextRef.current;
+    if (!root || !twin) return;
+    const measure = () =>
+      setKernSlack(
+        Math.max(
+          0,
+          root.getBoundingClientRect().width -
+            twin.getBoundingClientRect().width,
+        ),
+      );
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(root);
+    ro.observe(twin);
+    return () => ro.disconnect();
+  }, [kern, fitKern]);
+
   return (
     <div
+      ref={rootRef}
       className={`relative inline-flex items-center ${className}`}
-      style={{ perspective: "1000px" }}
+      style={{
+        perspective: "1000px",
+        ...(fitKern
+          ? {
+              marginRight: allSettled && kernSlack ? -kernSlack : 0,
+              transition: `margin-right ${durations.slow}s ${cssEasings.outExpo}`,
+            }
+          : undefined),
+      }}
     >
       {/* Flaps are decorative; the word is announced once for assistive tech. */}
       {announce && <span className="sr-only">{text}</span>}
@@ -172,7 +214,10 @@ export function SplitFlapText({
             transition: `opacity ${durations.slow}s ${cssEasings.outExpo}, transform ${durations.slow}s ${cssEasings.outExpo}`,
           }}
         >
-          {text}
+          {/* Inner span = the twin's true glyph advance, measured by fitKern. */}
+          <span ref={kernTextRef} className="whitespace-nowrap">
+            {text}
+          </span>
         </span>
       )}
     </div>

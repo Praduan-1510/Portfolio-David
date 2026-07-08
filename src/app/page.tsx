@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Container, Button, Link } from "@/components/primitives";
 import { ProjectCard } from "@/components/work/ProjectCard";
 import { Hero } from "@/components/sections/Hero";
@@ -11,7 +10,7 @@ import {
   TextReveal,
   AnimatedDivider,
   Magnetic,
-  PortraitFrame,
+  FlapText,
 } from "@/components/motion";
 import { getFeaturedProjectsMeta } from "@/lib/content/work";
 
@@ -38,6 +37,14 @@ export default function Home() {
       {/* Hero — primary signature, orchestrated load sequence. id="top". */}
       <Hero />
 
+      {/* Cinematic reel + "Currently" board — the second beat. The section
+          overlaps the hero (negative top margin), so the clip crossfades in
+          OVER the departing hero type from the very first scroll tick, holds
+          while the board rows flutter in (synced to the frames), then dims
+          back into the page. Sits OUTSIDE the atmosphere wrapper so the
+          wrapper's decorative pools never paint over the hero. */}
+      <CinematicReel />
+
       {/* Below-hero atmosphere wrapper. The home base is near-black; left flat it
           reads as empty voids between sections. This `relative isolate` shell
           carries restrained depth behind ALL the content below the hero — faint,
@@ -56,11 +63,6 @@ export default function Home() {
         />
         <HomeAtmosphere />
 
-      {/* Cinematic reel + "Currently" board — the second beat. The clip scrubs
-          from the very first scroll of the hero, holds while the board rows
-          flutter in (synced to the frames), then dims back into the page. */}
-      <CinematicReel />
-
       {/* Selected work — proof right after the reel. */}
       <Container as="section" id="work" className="scroll-mt-16 py-space-9">
         <div className="mb-space-7 flex items-end justify-between gap-space-4">
@@ -74,7 +76,7 @@ export default function Home() {
             </TextReveal>
           </div>
           <Reveal delay={0.1} className="shrink-0">
-            <Link href="/work">All work</Link>
+            <Link href="/work" className="inline-flex min-h-[44px] items-center">All work</Link>
           </Reveal>
         </div>
         {/* 2-up grid; if the count is odd, the trailing project becomes a
@@ -105,52 +107,29 @@ export default function Home() {
         <AnimatedDivider spectrum />
       </Container>
 
-      {/* About teaser — the statement on the left, a full monochrome portrait
-          holding the right side. The image has NO frame: it dissolves into the
-          page on its inner (left) edge + bottom via a soft mask, so it blends
-          with the statement instead of sitting in a box. Subject sits right, so
-          only the receding path/trees fade. Grayscale webp keeps colour reserved
-          for the spectrum accents; parallax + hover give it life (reduced-motion
-          → static, fully visible). */}
+      {/* About teaser — a quiet, type-led editorial beat. The portrait that
+          used to hold the right column moved on: the hero now opens the page
+          with a full-viewport film of the same face, and a second portrait
+          here read as a repeated note. The statement carries the beat alone at
+          display scale; one mono-caps instrument line + the link sign it off.
+          (The portrait + PortraitFrame still live on /about.) */}
       <Container as="section" id="about" className="scroll-mt-16 py-space-9">
-        <div className="grid items-center gap-space-7 md:grid-cols-2 md:gap-space-9">
-          {/* Left — the statement. */}
-          <div className="min-w-0">
-            <TextReveal
-              as="h2"
-              by="words"
-              className="max-w-[16ch] font-display text-display-l"
-            >
-              I design the interface, then write the front-end that ships it.
-            </TextReveal>
-            <Reveal delay={0.12}>
-              <Link href="/about" className="mt-space-6 inline-flex min-h-[44px] items-center">
-                More about me
-              </Link>
-            </Reveal>
-          </div>
-
-          {/* Right — the portrait. All four edges feather into the page
-              (.about-portrait) so it floats with no hard border, dissolving into
-              the statement beside it. PortraitFrame layers a cinematic clip-wipe
-              entrance + a linear scroll "breath" + a desktop pointer-tilt — all
-              reduced-motion-safe, the mask untouched. Grayscale keeps colour for
-              the accents. */}
-          <PortraitFrame
-            delay={0.18}
-            className="portrait-frame group relative mx-auto aspect-[4/5] w-full min-w-0 max-w-[24rem] overflow-hidden md:max-w-none"
-          >
-            <Image
-              src="/images/about/portrait.webp"
-              alt="Praduan Saha on a tree-lined path in Kolkata"
-              fill
-              sizes="(min-width: 768px) 46vw, 100vw"
-              loading="eager"
-              placeholder="blur"
-              blurDataURL="data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADwAQCdASoMAA8AA4BaJaQAArL079cHM0AA/oOGxqwDGhDz99VmzWx2x3nwOyeIDoqLoPgyN/J98JGfhrAyTXTP+UUuYx/qbFBrUg6wY9LOJ/yQAAA="
-              className="about-portrait object-cover object-center transition-transform duration-slow ease-out-quad motion-safe:group-hover:scale-[1.03]"
-            />
-          </PortraitFrame>
+        <TextReveal
+          as="h2"
+          by="words"
+          className="max-w-[24ch] font-display text-display-l sm:text-display-xl"
+        >
+          I design the interface, then write the front-end that ships it.
+        </TextReveal>
+        <div className="mt-space-7 flex flex-wrap items-baseline justify-between gap-x-space-6 gap-y-space-4">
+          <Reveal delay={0.1} as="p" className="font-mono text-caption uppercase tracking-[0.18em] text-muted">
+            <FlapText text="DESIGN → BUILD · ONE PAIR OF HANDS" trigger="inView" flips={3} />
+          </Reveal>
+          <Reveal delay={0.18}>
+            <Link href="/about" className="inline-flex min-h-[44px] items-center">
+              More about me
+            </Link>
+          </Reveal>
         </div>
       </Container>
 

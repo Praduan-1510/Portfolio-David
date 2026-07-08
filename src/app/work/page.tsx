@@ -34,7 +34,7 @@ export default function WorkPage() {
 
   return (
     <>
-      <Container as="header" className="relative isolate py-space-10">
+      <Container as="header" className="relative isolate pt-space-10 pb-space-6">
         {/* Spectrum ember — the identity's warm temperature on the index. */}
         <AuroraEmber hues={["amber", "rose"]} position="top-right" intensity={0.12} />
         {/* Signature header beat — the page title reveals word by word. */}
@@ -57,7 +57,7 @@ export default function WorkPage() {
         </Reveal>
 
         {/* Hairline draws across to separate the header from the sequence. */}
-        <AnimatedDivider from="left" spectrum className="mt-space-8" />
+        <AnimatedDivider from="left" spectrum className="mt-space-7" />
       </Container>
 
       <WorkIndex projects={projects} />

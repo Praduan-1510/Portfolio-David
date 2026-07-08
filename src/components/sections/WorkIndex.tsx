@@ -99,7 +99,7 @@ function WorkStackRow({
       <NextLink
         href={`/work/${project.slug}`}
         aria-label={`View case study: ${project.title}`}
-        className="group grid grid-cols-1 items-center gap-x-space-8 gap-y-space-6 rounded-[3px] py-space-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg sm:py-space-9 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"
+        className={`group grid grid-cols-1 items-center gap-x-space-8 gap-y-space-6 rounded-[3px] ${index === 0 ? "pt-space-3 pb-space-8 sm:pt-space-4 sm:pb-space-9" : "py-space-8 sm:py-space-9"} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]`}
       >
         {/* Media stage — a large accent-washed panel with the cover screen rising
             from it, anchored to the row's accent. Order swaps each row so the

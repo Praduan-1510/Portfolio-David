@@ -101,7 +101,7 @@ export function SideNav() {
                 aria-current={active ? "true" : undefined}
                 // The 6px dot is the only visible mark, so a ::before extends the
                 // pointer hit area to a comfortable box without moving the dot.
-                className="group relative flex items-center gap-space-3 before:absolute before:-inset-x-2 before:-inset-y-[9px] before:content-['']"
+                className="group relative flex items-center gap-space-3 before:absolute before:-inset-x-3 before:-inset-y-[13px] before:content-['']"
               >
                 <span
                   aria-hidden="true"

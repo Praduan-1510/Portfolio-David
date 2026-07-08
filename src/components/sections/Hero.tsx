@@ -2,7 +2,7 @@
 
 import { durations } from "@/lib/motion/durations";
 import { Container, Button } from "@/components/primitives";
-import { Reveal, TextReveal, AnimatedNoise } from "@/components/motion";
+import { Reveal, TextReveal, AnimatedNoise, Signature } from "@/components/motion";
 import { HeroWordmark } from "@/components/sections/HeroWordmark";
 import { HeroFlow } from "@/components/sections/HeroFlow";
 
@@ -34,12 +34,16 @@ const SEQ = {
 } as const;
 
 export function Hero() {
+  // z-10 + transparent bg (no bg-bg): the cinematic reel's sticky stage sits
+  // BENEATH this section (CinematicReel overlaps it with a negative margin), so
+  // the live film shows through as the hero's backdrop from first paint while
+  // the type + HUD keep painting above it. Body carries bg-bg behind both.
   return (
     <section
       id="top"
       data-theme="dark"
       aria-label="Introduction"
-      className="relative isolate flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden bg-bg text-fg [@media(max-height:600px)]:min-h-0"
+      className="relative isolate z-10 flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden text-fg [@media(max-height:600px)]:min-h-0"
     >
       {/* Backdrop — blueprint dot grid (the case-hero motif language) under one
           quiet ember. Both -z, both decorative; no WebGL on the LCP path. */}
@@ -61,17 +65,16 @@ export function Hero() {
       {/* Film grain — above the ember, below the content. */}
       <AnimatedNoise opacity={0.04} className="z-[1]" />
 
-      {/* Bottom hand-off scrim into the near-black section below. */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 z-[2] h-24"
-        style={{
-          background:
-            "linear-gradient(to top, var(--bg) 0%, transparent 100%)",
-        }}
-      />
+      {/* (The old bottom hand-off scrim is gone: the cinematic reel's film now
+          runs continuously beneath this section and past its bottom edge — a
+          fade-to-bg band here would cut a visible seam across the frames.) */}
 
-      <Container className="relative z-10 flex flex-1 flex-col justify-center py-space-7 [@media(max-height:600px)]:py-space-5 short-land:justify-start">
+      {/* Title-card composition: the top row pins to the top corners (framing
+          the film's subject), a flexible spacer protects the face in the upper
+          half, and the wordmark + supporting rows anchor to the lower third —
+          over the subject's dark jacket and the reel's bottom scrim, where
+          white type actually reads. */}
+      <Container className="relative z-10 flex flex-1 flex-col justify-between py-space-7 [@media(max-height:600px)]:py-space-5 short-land:justify-start">
         {/* Top row — mono-caps eyebrow left (the one label that used to break
             the site's label voice), HUD status readout right. */}
         <Reveal
@@ -104,16 +107,16 @@ export function Hero() {
           </span>
         </Reveal>
 
-        {/* The wordmark — stacked boards + the signal trace. */}
+        {/* Lower-third block — wordmark + supporting row travel together so the
+            justify-between spacer above them keeps the film's subject clear. */}
         <div className="mt-space-6 short-land:mt-space-4">
           <h1 className="sr-only">
             Praduan Saha — product designer and front-end developer
           </h1>
           <HeroWordmark />
-        </div>
 
         {/* Supporting row — statement + subhead left, CTAs anchored right. */}
-        <div className="mt-space-7 grid items-end gap-x-space-9 gap-y-space-6 short-land:mt-space-5 short-land:grid-cols-[minmax(0,1fr)_auto] short-land:items-start short-land:gap-x-space-5 lg:grid-cols-[minmax(0,1fr)_auto]">
+        <div className="mt-space-5 grid items-end gap-x-space-9 gap-y-space-5 short-land:mt-space-5 short-land:grid-cols-[minmax(0,1fr)_auto] short-land:items-start short-land:gap-x-space-5 lg:mt-space-7 lg:gap-y-space-6 lg:grid-cols-[minmax(0,1fr)_auto]">
           <div className="min-w-0">
             {/* Tagline — word-by-word rise; the closing phrase carries the one
                 sanctioned colour moment (.text-spectrum) and lands last. */}
@@ -137,17 +140,26 @@ export function Hero() {
                 {"unmistakably yours."}
               </Reveal>
             </p>
-            {/* Subhead — the dash is bound to "front-end" so it can never open
-                a line (the rag foul the review caught). */}
+            {/* Subhead — closed em-dash ("front-end—working") so the dash can
+                never open a line: an NBSP does NOT survive TextReveal's line
+                splitter (SplitText tokenizes on \s+, which matches U+00A0), so
+                the closed dash is the only binding that holds. */}
             <TextReveal
               as="p"
               by="lines"
               trigger="load"
               delay={SEQ.sub}
-              className="mt-space-4 max-w-[58ch] font-sans text-body-l text-muted"
+              className="mt-space-3 max-w-[48ch] font-sans text-body text-muted lg:mt-space-4 lg:max-w-[58ch] lg:text-body-l"
             >
-              {"I'm Praduan Saha, a product designer who also ships front-end — working since 2019, now inside a B2B AI go-to-market product. I turn complex, data-heavy ideas into clean interfaces and the systems that hold them together."}
+              {"I'm Praduan Saha, a product designer who also ships front-end—working since 2019, now inside a B2B AI go-to-market product. I turn complex, data-heavy ideas into clean interfaces and the systems that hold them together."}
             </TextReveal>
+            {/* The signature — the hand-signed counter-mark to the machine-set
+                split-flap wordmark; writes itself in after the subhead. Sized
+                by font-size (it's real script type now, not a fixed-width SVG). */}
+            <Signature
+              delay={SEQ.sub + 0.45}
+              className="mt-space-5 text-[2.75rem] text-fg opacity-90 [filter:drop-shadow(0_2px_10px_rgba(0,0,0,0.65))] sm:text-[3rem] [@media(max-height:600px)]:hidden"
+            />
           </div>
 
           <div className="flex w-full flex-col items-stretch gap-space-3 sm:w-auto sm:flex-row sm:items-center sm:gap-space-4">
@@ -177,6 +189,7 @@ export function Hero() {
               </Button>
             </Reveal>
           </div>
+        </div>
         </div>
       </Container>
     </section>

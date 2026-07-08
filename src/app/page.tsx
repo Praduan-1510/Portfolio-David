@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Container, Eyebrow, Button, Link } from "@/components/primitives";
+import { Container, Button, Link } from "@/components/primitives";
 import { ProjectCard } from "@/components/work/ProjectCard";
 import { Hero } from "@/components/sections/Hero";
 import { HomeAtmosphere } from "@/components/sections/HomeAtmosphere";
@@ -60,14 +60,10 @@ export default function Home() {
       <Container as="section" id="work" className="scroll-mt-16 py-space-9">
         <div className="mb-space-7 flex items-end justify-between gap-space-4">
           <div>
-            <Reveal>
-              <Eyebrow flap>Selected work</Eyebrow>
-            </Reveal>
             <TextReveal
               as="h2"
               by="words"
-              delay={0.08}
-              className="mt-space-3 font-display text-display-l"
+              className="font-display text-display-l"
             >
               Recent projects
             </TextReveal>
@@ -123,14 +119,10 @@ export default function Home() {
         <div className="grid items-center gap-space-7 md:grid-cols-2 md:gap-space-9">
           {/* Left — the statement. */}
           <div className="min-w-0">
-            <Reveal>
-              <Eyebrow flap>About</Eyebrow>
-            </Reveal>
             <TextReveal
               as="h2"
               by="words"
-              delay={0.08}
-              className="mt-space-3 max-w-[16ch] font-display text-display-l"
+              className="max-w-[16ch] font-display text-display-l"
             >
               I design the interface, then write the front-end that ships it.
             </TextReveal>
@@ -211,11 +203,10 @@ export default function Home() {
                   "radial-gradient(120% 120% at 100% 100%, #000 0%, transparent 70%)",
               }}
             />
-            <Eyebrow>Let&rsquo;s talk</Eyebrow>
             <TextReveal
               as="h2"
               by="words"
-              className="mt-space-4 max-w-[18ch] font-display text-display-l sm:text-display-xl"
+              className="max-w-[18ch] font-display text-display-l sm:text-display-xl"
             >
               {"Let's build something worth remembering."}
             </TextReveal>

@@ -13,7 +13,7 @@ export default function Loading() {
       </span>
 
       <div aria-hidden="true" className="animate-pulse">
-        {/* Mono "Loading" label, mirroring an Eyebrow. */}
+        {/* Mono "Loading" label in the site's small-caps label voice. */}
         <span className="inline-block font-mono text-caption uppercase tracking-[0.18em] text-muted">
           Loading
         </span>

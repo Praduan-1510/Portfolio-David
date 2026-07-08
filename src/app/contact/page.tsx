@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ArrowUpRight } from "lucide-react";
-import { Container, Text, Eyebrow, Button } from "@/components/primitives";
+import { Container, Text, Button } from "@/components/primitives";
 import { Reveal, StaggerGroup, TextReveal, AnimatedNoise, AuroraEmber } from "@/components/motion";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils/cn";
@@ -117,16 +117,13 @@ export default function Contact() {
         <div className="grid w-full grid-cols-1 gap-space-9 lg:grid-cols-12 lg:items-start lg:gap-space-8">
           {/* Left — the focal statement. Oversized headline as the moment. */}
           <div className="lg:col-span-7">
-            <Reveal as="div" y={12} trigger="load">
-              <Eyebrow flap>Contact</Eyebrow>
-            </Reveal>
             <TextReveal
               id="contact-heading"
               as="h1"
               by="words"
               trigger="load"
               delay={0.1}
-              className="font-display text-display-xl mt-space-4 max-w-[14ch]"
+              className="font-display text-display-xl max-w-[14ch]"
             >
               {"Let's work together"}
             </TextReveal>
@@ -158,14 +155,13 @@ export default function Contact() {
                       "linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent)",
                   }}
                 />
-                <Eyebrow>Channels</Eyebrow>
                 {/* Each channel is a full-width row: a mono label tag over a clean
                     value, with a trailing arrow on the links. The whole row is the
                     target (lights to neon + the arrow drifts on hover); the static
                     Location row carries no arrow, so interactive vs. info reads at a
                     glance. Replaces the old stacked dt/dd where the raw LinkedIn URL
                     wrapped into two broken lines. */}
-                <StaggerGroup as="div" className="mt-space-5" trigger="load" delay={0.5} stagger={0.08}>
+                <StaggerGroup as="div" trigger="load" delay={0.5} stagger={0.08}>
                   {CHANNELS.map((channel) => {
                     const rowClass =
                       "flex items-start justify-between gap-space-4 border-t border-line py-space-4 first:border-t-0 first:pt-0";

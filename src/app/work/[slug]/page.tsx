@@ -5,7 +5,6 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import {
   Container,
   Text,
-  Eyebrow,
   Link,
   Button,
   PhoneFrame,
@@ -159,16 +158,7 @@ export default async function CaseStudy({
                 then a short summary. Kept deliberately tight so the full-width
                 capture below dominates the intro instead of being pushed off-screen. */}
             <Container className="pt-space-10 pb-space-6 short-land:pt-space-6">
-              <Reveal trigger="load">
-                <Eyebrow>
-                  <span
-                    aria-hidden="true"
-                    className="mr-space-2 inline-block h-[8px] w-[8px] rounded-full bg-accent align-middle"
-                  />
-                  {meta.client} · {meta.year}
-                </Eyebrow>
-              </Reveal>
-              <div className="mt-space-4 flex flex-col gap-space-5 md:flex-row md:items-end md:justify-between md:gap-space-9">
+              <div className="flex flex-col gap-space-5 md:flex-row md:items-end md:justify-between md:gap-space-9">
                 <TextReveal
                   as="h1"
                   by="lines"
@@ -278,21 +268,12 @@ export default async function CaseStudy({
         ) : (
           <Container className="grid items-center gap-space-9 pt-space-11 pb-space-9 short-land:items-start short-land:gap-space-6 short-land:pt-space-6 md:grid-cols-[1.12fr_0.88fr]">
             <div>
-              <Reveal trigger="load">
-                <Eyebrow>
-                  <span
-                    aria-hidden="true"
-                    className="mr-space-2 inline-block h-[8px] w-[8px] rounded-full bg-accent align-middle"
-                  />
-                  {meta.client} · {meta.year}
-                </Eyebrow>
-              </Reveal>
               <TextReveal
                 as="h1"
                 by="lines"
                 trigger="load"
                 delay={0.1}
-                className="mt-space-4 max-w-[14ch] font-display text-display-xl short-land:text-display-l"
+                className="max-w-[14ch] font-display text-display-xl short-land:text-display-l"
               >
                 {displayTitle(meta.title)}
               </TextReveal>
@@ -365,17 +346,6 @@ export default async function CaseStudy({
           </Container>
         )}
 
-        {/* Scroll cue — instrument hairline framing the reveal below. */}
-        <Container className="relative z-10 pb-space-7">
-          <div className="flex items-center gap-space-4 font-mono text-caption uppercase tracking-[0.18em] text-muted">
-            <span className="shrink-0">Case study</span>
-            <span aria-hidden="true" className="h-px flex-1 bg-line" />
-            <span className="shrink-0">
-              {meta.services.length} services ·{" "}
-              {isWeb ? "live site" : `${meta.gallery.length} screens`}
-            </span>
-          </div>
-        </Container>
       </header>
 
       {/* Signature showcase — a confident "big reveal" of the work. On sm+ the
@@ -499,10 +469,7 @@ export default async function CaseStudy({
                 "radial-gradient(60% 100% at 28% 0%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 72%)",
             }}
           />
-          <Reveal>
-            <Eyebrow flap>Screens</Eyebrow>
-          </Reveal>
-          <div className="mt-space-3 flex flex-wrap items-baseline justify-between gap-x-space-6 gap-y-space-2">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-space-6 gap-y-space-2">
             <TextReveal as="h2" by="words" className="font-display text-heading">
               A walk through the experience
             </TextReveal>
@@ -609,11 +576,10 @@ export default async function CaseStudy({
           <NextLink href={`/work/${next.slug}`} className="group block">
             <Container className="flex items-center justify-between gap-space-7 py-space-10">
               <Reveal className="min-w-0">
-                <Eyebrow flap>Next departure</Eyebrow>
                 <Text
                   as="span"
                   variant="display-xl"
-                  className="mt-space-3 block font-display transition-colors duration-base ease-out-quad group-hover:text-neon"
+                  className="block font-display transition-colors duration-base ease-out-quad group-hover:text-neon"
                 >
                   {displayTitle(next.title)}
                 </Text>

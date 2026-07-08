@@ -31,7 +31,6 @@ const SEQ = {
   tagline: 0.75,
   sub: 1.0,
   cta: 1.2,
-  scroll: 1.35,
 } as const;
 
 export function Hero() {
@@ -179,26 +178,6 @@ export function Hero() {
             </Reveal>
           </div>
         </div>
-      </Container>
-
-      {/* Scroll-indicator row. Labels flank a full-width hairline. */}
-      <Container className="relative z-10">
-        <Reveal
-          as="div"
-          trigger="load"
-          delay={SEQ.scroll}
-          duration={durations.base}
-          className="flex flex-col gap-space-3 pb-space-5 pt-space-3"
-        >
-          <div className="flex items-center gap-space-4 font-mono text-caption uppercase tracking-[0.14em] text-muted">
-            <span className="shrink-0">Scroll</span>
-            <span
-              aria-hidden="true"
-              className="h-px flex-1 bg-gradient-to-r from-transparent via-white/25 to-transparent"
-            />
-            <span className="shrink-0">to see work</span>
-          </div>
-        </Reveal>
       </Container>
     </section>
   );

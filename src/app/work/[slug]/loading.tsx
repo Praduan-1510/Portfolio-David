@@ -17,10 +17,8 @@ export default function Loading() {
       <header className="border-b border-line" aria-hidden="true">
         <Container className="grid animate-pulse items-center gap-space-9 py-space-11 md:grid-cols-[1.15fr_0.85fr]">
           <div>
-            {/* Eyebrow bar. */}
-            <div className="h-[0.875rem] w-[10rem] rounded-[2px] bg-surface" />
             {/* Big title bars. */}
-            <div className="mt-space-4 h-[3rem] w-[90%] max-w-[18ch] rounded-[2px] bg-surface" />
+            <div className="h-[3rem] w-[90%] max-w-[18ch] rounded-[2px] bg-surface" />
             <div className="mt-space-3 h-[3rem] w-[60%] max-w-[18ch] rounded-[2px] bg-surface" />
             {/* Summary bars. */}
             <div className="mt-space-5 h-[1rem] w-[85%] max-w-[46ch] rounded-[2px] bg-surface" />
@@ -48,9 +46,8 @@ export default function Loading() {
       {/* Screens — grid of phone placeholders. */}
       <Container as="section" className="border-t border-line py-space-10" aria-hidden="true">
         <div className="animate-pulse">
-          {/* "Screens" eyebrow + heading. */}
-          <div className="h-[0.875rem] w-[6rem] rounded-[2px] bg-surface" />
-          <div className="mt-space-3 h-[2rem] w-[60%] max-w-[24ch] rounded-[2px] bg-surface" />
+          {/* Section heading bar. */}
+          <div className="h-[2rem] w-[60%] max-w-[24ch] rounded-[2px] bg-surface" />
 
           <ul className="mt-space-9 grid grid-cols-2 gap-x-space-5 gap-y-space-7 sm:grid-cols-3 lg:grid-cols-4">
             {Array.from({ length: 8 }).map((_, i) => (

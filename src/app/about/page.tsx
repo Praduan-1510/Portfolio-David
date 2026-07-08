@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
-import { Container, Text, Eyebrow, Button } from "@/components/primitives";
+import { Container, Text, Button } from "@/components/primitives";
 import {
   Reveal,
   StaggerGroup,
@@ -304,11 +304,7 @@ export default function About() {
 
       {/* ── Bio ─────────────────────────────────────────────────────────── */}
       <Container as="section" className="pb-space-9">
-        <div className="grid gap-space-6 md:grid-cols-[auto_1fr] md:gap-space-9">
-          <Reveal as="div" y={12} className="md:pt-space-2">
-            <Eyebrow>Bio</Eyebrow>
-          </Reveal>
-          <div className="grid items-start gap-space-8 lg:grid-cols-[1fr_auto] lg:gap-space-9">
+        <div className="grid items-start gap-space-8 lg:grid-cols-[1fr_auto] lg:gap-space-9">
             <StaggerGroup className="max-w-[var(--measure)] space-y-space-4" stagger={0.08}>
               {BIO.map((para, i) => (
                 <Text key={i} variant={i === 0 ? "body-l" : "body"} className="text-muted">
@@ -334,7 +330,6 @@ export default function About() {
               />
             </PortraitFrame>
           </div>
-        </div>
       </Container>
 
       <Container>
@@ -343,10 +338,7 @@ export default function About() {
 
       {/* ── Approach ─ numbered principles ──────────────────────────────── */}
       <Container as="section" className="py-space-10">
-        <Reveal as="div" y={12}>
-          <Eyebrow flap>Approach</Eyebrow>
-        </Reveal>
-        <StaggerGroup className="mt-space-6 grid grid-cols-1 gap-space-6 md:grid-cols-3">
+        <StaggerGroup className="grid grid-cols-1 gap-space-6 md:grid-cols-3">
           {APPROACH.map((item, i) => (
             <div
               key={item.title}
@@ -382,10 +374,7 @@ export default function About() {
 
       {/* ── Capabilities ─ glyph cards ──────────────────────────────────── */}
       <Container as="section" className="pb-space-10">
-        <Reveal as="div" y={12}>
-          <Eyebrow flap>Capabilities</Eyebrow>
-        </Reveal>
-        <StaggerGroup className="mt-space-6 grid grid-cols-1 gap-space-5 sm:grid-cols-2">
+        <StaggerGroup className="grid grid-cols-1 gap-space-5 sm:grid-cols-2">
           {CAPABILITIES.map((item, i) => (
             <div
               key={item.title}
@@ -423,8 +412,7 @@ export default function About() {
             grounded here as a quiet static grid where a tools inventory is
             defensible content rather than a first-scroll trope. */}
         <Reveal className="mt-space-8">
-          <Eyebrow>Toolchain</Eyebrow>
-          <ToolGrid className="mt-space-5" />
+          <ToolGrid />
           <Text
             variant="caption"
             className="mt-space-5 font-mono uppercase tracking-[0.12em] text-muted"
@@ -440,10 +428,7 @@ export default function About() {
 
       {/* ── Experience ─ the timeline draws on scroll ───────────────────── */}
       <Container as="section" className="py-space-10">
-        <Reveal as="div" y={12}>
-          <Eyebrow flap>Experience</Eyebrow>
-        </Reveal>
-        <StaggerGroup as="ul" className="mt-space-6" stagger={0.08} y={32}>
+        <StaggerGroup as="ul" stagger={0.08} y={32}>
           {EXPERIENCE.map((job) => (
             <li key={job.company} className="card-neon-row group border-t border-line py-space-6">
               <div className="flex flex-col gap-space-1 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-space-3">
@@ -497,10 +482,7 @@ export default function About() {
 
       {/* ── Certifications ──────────────────────────────────────────────── */}
       <Container as="section" className="py-space-8">
-        <Reveal as="div" y={12}>
-          <Eyebrow flap>Certifications</Eyebrow>
-        </Reveal>
-        <StaggerGroup as="ul" className="mt-space-6" stagger={0.06}>
+        <StaggerGroup as="ul" stagger={0.06}>
           {CERTIFICATIONS.map((cert) => (
             <li
               key={cert.title}
@@ -538,11 +520,8 @@ export default function About() {
 
       {/* ── Languages ───────────────────────────────────────────────────── */}
       <Container as="section" className="pb-space-8">
-        <Reveal as="div" y={12}>
-          <Eyebrow>Languages</Eyebrow>
-        </Reveal>
         <Reveal>
-          <Text variant="body-l" className="mt-space-4">
+          <Text variant="body-l">
             {LANGUAGES}
           </Text>
         </Reveal>

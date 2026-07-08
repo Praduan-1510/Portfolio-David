@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { Container, Text, Eyebrow, Button } from "@/components/primitives";
+import { Container, Text, Button } from "@/components/primitives";
 import {
-  Reveal,
   StaggerGroup,
   AnimatedNoise,
   SplitFlapText,
@@ -60,13 +59,9 @@ export default function NotFound() {
           404 — this page doesn&apos;t exist
         </h1>
 
-        <Reveal as="div" y={12} trigger="load">
-          <Eyebrow flap>Error 404</Eyebrow>
-        </Reveal>
-
         {/* Signature beat — departure-board "404": flips through the charset on
             load, then settles. Reduced motion shows it settled instantly. */}
-        <div className="mt-space-6">
+        <div>
           <SplitFlapText
             announce={false}
             text="404"

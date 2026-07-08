@@ -12,8 +12,8 @@ import { cn } from "@/lib/utils/cn";
  * is the four project accents in project order, and each tick IS a project:
  * a diamond seated on the line, its ordinal beneath, the project name
  * revealing on hover/focus — and the whole marker is a real link into that
- * case study. The hero ends with "SCROLL — TO SEE WORK"; this is the map of
- * exactly what's coming, plotted 01–04.
+ * case study. It closes the hero as the map of exactly what's coming,
+ * plotted 01–04.
  *
  * Draw-in: the line scales in on the expo token after the wordmark settles,
  * the markers land in sequence (outBack), then the diamonds breathe on the

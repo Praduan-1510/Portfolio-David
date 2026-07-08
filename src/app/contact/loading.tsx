@@ -1,9 +1,9 @@
 import { Container } from "@/components/primitives";
 
 /*
- * Contact loading skeleton — mirrors src/app/contact/page.tsx: eyebrow +
- * heading + the bordered channel rows (Email / LinkedIn / Location), on the
- * page's section rhythm (DESIGN_GUIDELINES §11).
+ * Contact loading skeleton — mirrors src/app/contact/page.tsx: heading + the
+ * bordered channel rows (Email / LinkedIn / Location), on the page's section
+ * rhythm (DESIGN_GUIDELINES §11).
  */
 export default function Loading() {
   return (
@@ -13,10 +13,8 @@ export default function Loading() {
       </span>
 
       <div aria-hidden="true" className="animate-pulse">
-        {/* Eyebrow bar. */}
-        <div className="h-[0.875rem] w-[5.5rem] rounded-[2px] bg-surface" />
         {/* Heading bar. */}
-        <div className="mt-space-3 h-[2.5rem] w-[55%] max-w-[18ch] rounded-[2px] bg-surface" />
+        <div className="h-[2.5rem] w-[55%] max-w-[18ch] rounded-[2px] bg-surface" />
         {/* Lead bar. */}
         <div className="mt-space-5 h-[1rem] w-[80%] max-w-[var(--measure)] rounded-[2px] bg-surface" />
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Container, Text, Eyebrow } from "@/components/primitives";
+import { Container, Text } from "@/components/primitives";
 import { Reveal, TextReveal, AnimatedDivider, AuroraEmber } from "@/components/motion";
 import { WorkIndex } from "@/components/sections/WorkIndex";
 import { getAllProjectsMeta } from "@/lib/content/work";
@@ -37,23 +37,13 @@ export default function WorkPage() {
       <Container as="header" className="relative isolate py-space-10">
         {/* Spectrum ember — the identity's warm temperature on the index. */}
         <AuroraEmber hues={["amber", "rose"]} position="top-right" intensity={0.12} />
-        {/* Quiet eyebrow on load — supporting beat. The count makes the index
-            read as a curated set rather than an open-ended list. */}
-        <Reveal trigger="load" y={12} as="div">
-          <Eyebrow className="flex items-center gap-space-3">
-            <span>Work</span>
-            <span aria-hidden="true" className="h-px w-space-6 bg-line" />
-            <span>{String(projects.length).padStart(2, "0")} projects</span>
-          </Eyebrow>
-        </Reveal>
-
         {/* Signature header beat — the page title reveals word by word. */}
         <TextReveal
           as="h1"
           by="words"
           trigger="load"
           delay={0.08}
-          className="font-display text-display-l mt-space-3 max-w-[20ch]"
+          className="font-display text-display-l max-w-[20ch]"
         >
           Selected projects
         </TextReveal>

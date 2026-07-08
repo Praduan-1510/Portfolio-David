@@ -4,7 +4,6 @@ export type { TextVariant } from "./Text";
 export { Link } from "./Link";
 export { Button } from "./Button";
 export type { ButtonVariant, ButtonShape, ButtonSize } from "./Button";
-export { Eyebrow } from "./Eyebrow";
 export { PhoneFrame } from "./PhoneFrame";
 export { BrowserMockup } from "./BrowserMockup";
 export { ProjectCover } from "./ProjectCover";

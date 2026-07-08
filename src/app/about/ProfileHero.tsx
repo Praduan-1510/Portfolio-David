@@ -1,6 +1,6 @@
 "use client";
 
-import { Container, Text, Eyebrow, Button } from "@/components/primitives";
+import { Container, Text, Button } from "@/components/primitives";
 import { Reveal, TextReveal, Magnetic, AuroraEmber } from "@/components/motion";
 import { useKolkataClock } from "@/hooks/useKolkataClock";
 import { AboutHeroMap } from "./AboutHeroMap";
@@ -63,17 +63,11 @@ export function ProfileHero() {
       {/* Layer 10 — content. */}
       <Container className="relative z-10 flex min-h-[inherit] items-center py-space-9">
         <div className="max-w-[40rem]">
-          <Reveal as="div" trigger="load" y={12}>
-            <Eyebrow>
-              <span className="mr-space-2 font-mono text-muted">00</span>
-              About — Profile
-            </Eyebrow>
-          </Reveal>
           <TextReveal
             as="h1"
             by="lines"
             trigger="inView"
-            className="mt-space-4 max-w-[18ch] font-display text-display-l"
+            className="max-w-[18ch] font-display text-display-l"
           >
             {HEADLINE}
           </TextReveal>

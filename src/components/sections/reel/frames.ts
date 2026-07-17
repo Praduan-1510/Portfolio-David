@@ -23,8 +23,6 @@ export interface FrameLoader {
   start: (onFirst?: () => void) => void;
   /** Closest decoded frame to `target` (prefers already-passed frames), or -1. */
   nearestReady: (target: number) => number;
-  /** Whether frame `i` is decoded — the crossfade scrub needs exact pairs. */
-  isReady: (i: number) => boolean;
   img: (i: number) => HTMLImageElement | undefined;
   dispose: () => void;
 }
@@ -73,7 +71,6 @@ export function createFrameLoader(): FrameLoader {
       }
       return -1;
     },
-    isReady: (i) => !!ready[i],
     img: (i) => imgs[i],
     dispose() {
       disposed = true;

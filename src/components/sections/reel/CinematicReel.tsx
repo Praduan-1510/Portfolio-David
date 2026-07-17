@@ -38,8 +38,8 @@ import { drawImageCover } from "@/lib/canvas/drawCover";
  *
  * Choreography (one timeline, duration normalized to 1 == scroll progress):
  *   at rest    film visible behind the hero, dimmed by the veil (VEIL_REST)
- *   0.00–0.87  frames 1→40 scrub — FRACTIONAL index, neighbours crossfaded on
- *              the canvas so the clip reads continuous, not stepped
+ *   0.00–0.87  frames 1→40 scrub (nearest-frame mapping; crisp, draw only on
+ *              index change — Lenis lerp carries the smoothness)
  *   0.06–0.24  veil lifts VEIL_REST→0 — the film owns the frame as type leaves
  *   0.24       frame counter fades in (instrument voice, film now foreground)
  *   0.36/0.49/0.62/0.75  board rows rise in (scrubbed → reverse cleanly);
@@ -103,41 +103,23 @@ export function CinematicReel() {
     if (!canvas || !ctx) return;
 
     const loader = createFrameLoader();
-    let lastKey = -1;
-    let current = 0; // fractional frame position
+    let lastDrawn = -1;
+    let current = 0; // frame position (fractional in, drawn to nearest)
     let shown = false;
 
-    // Fractional-position draw: frame floor(t) opaque, frame ceil(t) alpha'd
-    // on top — the scrub CROSSFADES between neighbours instead of stepping,
-    // so the 40-frame sequence reads as a continuous clip under the Lenis
-    // lerp. Falls back to nearest-decoded stepping while the reel streams in.
-    // Anchor slightly above centre — keeps the face in frame as crops change.
+    // Crisp single-frame draw: snap to the nearest decoded frame and paint it
+    // sharp. (An earlier alpha crossfade "tweened" between neighbours, but
+    // blending two frames of a MOVING subject double-exposes them into visible
+    // motion blur while scrolling — and doubled the per-tick canvas cost, which
+    // itself stuttered the scroll. One sharp frame is clearer AND cheaper; the
+    // Lenis lerp carries the smoothness.) Anchor slightly above centre keeps
+    // the face in frame as crops change. Draws only on frame-index change.
     const draw = (target: number) => {
-      const i0 = Math.min(Math.floor(target), FRAME_COUNT - 1);
-      const i1 = Math.min(i0 + 1, FRAME_COUNT - 1);
-      const frac = Math.min(Math.max(target - i0, 0), 1);
-      const w = canvas.clientWidth;
-      const h = canvas.clientHeight;
-      if (loader.isReady(i0) && loader.isReady(i1)) {
-        // Quantized blend key (24 alpha steps per pair): the Lenis lerp emits
-        // many sub-pixel progress ticks — skip redraws below one step.
-        const key = i0 * 32 + Math.round(frac * 24);
-        if (key === lastKey) return;
-        lastKey = key;
-        drawImageCover(ctx, loader.img(i0)!, w, h, 0.5, 0.42);
-        if (i1 !== i0 && frac > 0.02) {
-          ctx.globalAlpha = frac;
-          drawImageCover(ctx, loader.img(i1)!, w, h, 0.5, 0.42);
-          ctx.globalAlpha = 1;
-        }
-      } else {
-        const i = loader.nearestReady(Math.round(target)); // never blank
-        const img = i >= 0 ? loader.img(i) : undefined;
-        const key = i * 32; // same key-space as a frac=0 crossfade draw
-        if (!img || key === lastKey) return;
-        lastKey = key;
-        drawImageCover(ctx, img, w, h, 0.5, 0.42);
-      }
+      const i = loader.nearestReady(Math.round(target)); // closest decoded, never blank
+      const img = i >= 0 ? loader.img(i) : undefined;
+      if (!img || i === lastDrawn) return;
+      lastDrawn = i;
+      drawImageCover(ctx, img, canvas.clientWidth, canvas.clientHeight, 0.5, 0.42);
       if (!shown) {
         shown = true;
         canvas.style.opacity = "1"; // fade in on first draw (AboutHeroMap pattern)
@@ -154,7 +136,7 @@ export function CinematicReel() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = "high"; // 720p → full-bleed upscale
-      lastKey = -1; // force redraw at the new size
+      lastDrawn = -1; // force redraw at the new size
       draw(current);
     };
 
@@ -205,7 +187,6 @@ export function CinematicReel() {
           end: "bottom bottom",
           scrub: true, // Lenis lerp 0.1 already smooths — don't double-lag
           onUpdate(self) {
-            // Fractional index — draw() crossfades between the neighbours.
             drawRef.current(
               Math.min(self.progress / FRAME_SPAN, 1) * (FRAME_COUNT - 1),
             );

@@ -177,8 +177,12 @@ export function SplitFlapText({
         style={
           kern
             ? {
+                // Fast fade-out: the monospace tile row and the narrower kerned
+                // twin sit at different letter positions, so a slow crossfade
+                // shows them as a doubled/ghosted image mid-settle. Snapping the
+                // opacity swap to `fast` keeps the overlap too brief to read.
                 opacity: allSettled ? 0 : 1,
-                transition: `opacity ${durations.slow}s ${cssEasings.outExpo}`,
+                transition: `opacity ${durations.fast}s ${cssEasings.outExpo}`,
               }
             : undefined
         }
@@ -211,7 +215,10 @@ export function SplitFlapText({
             transform: allSettled
               ? "translateY(0) scale(1)"
               : "translateY(0.06em) scale(0.994)",
-            transition: `opacity ${durations.slow}s ${cssEasings.outExpo}, transform ${durations.slow}s ${cssEasings.outExpo}`,
+            // Opacity snaps in fast (matches the tile fade-out — no ghosted
+            // overlap); the subtle rise/scale "land" keeps the slow easing so
+            // the settled wordmark still arrives rather than merely popping.
+            transition: `opacity ${durations.fast}s ${cssEasings.outExpo}, transform ${durations.slow}s ${cssEasings.outExpo}`,
           }}
         >
           {/* Inner span = the twin's true glyph advance, measured by fitKern. */}

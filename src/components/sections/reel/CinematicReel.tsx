@@ -28,7 +28,7 @@ import { drawImageCover } from "@/lib/canvas/drawCover";
  * the frames) and the veil returns before the work grid.
  *
  * Geometry — the 50/50 split (lg+): the film layer (canvas + scrim + grain +
- * counter + veil) is confined to the RIGHT half of the sticky stage and
+ * veil) is confined to the RIGHT half of the sticky stage and
  * FEATHERS into the dark via a seam-blend gradient (no hard edge); the LEFT
  * half is the content panel, carrying the hero's atmosphere set (dot grid +
  * blooms + grain) so the backdrop never scrolls with the hero. The hero's
@@ -41,7 +41,6 @@ import { drawImageCover } from "@/lib/canvas/drawCover";
  *   0.00–0.87  frames 1→40 scrub (nearest-frame mapping; crisp, draw only on
  *              index change — Lenis lerp carries the smoothness)
  *   0.06–0.24  veil lifts VEIL_REST→0 — the film owns the frame as type leaves
- *   0.24       frame counter fades in (instrument voice, film now foreground)
  *   0.36/0.49/0.62/0.75  board rows rise in (scrubbed → reverse cleanly);
  *                        FlapText flutter fires ONCE per row via a monotonic
  *                        threshold gate (trigger="manual"), never re-fires
@@ -89,7 +88,6 @@ export function CinematicReel() {
   const dlRef = useRef<HTMLDListElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const veilRef = useRef<HTMLDivElement>(null);
-  const counterRef = useRef<HTMLSpanElement>(null);
   // Bridge from the ScrollTrigger (below) into the canvas effect's closure.
   const drawRef = useRef<(i: number) => void>(() => {});
   const activeRef = useRef(0); // ref mirror of activeRows — no setState per tick
@@ -144,9 +142,6 @@ export function CinematicReel() {
 
     drawRef.current = (t) => {
       current = t;
-      if (counterRef.current) {
-        counterRef.current.textContent = `FR ${String(Math.round(t) + 1).padStart(3, "0")} / ${String(FRAME_COUNT).padStart(3, "0")}`;
-      }
       draw(t);
     };
 
@@ -167,9 +162,8 @@ export function CinematicReel() {
       registerGsap();
       const section = sectionRef.current;
       const veil = veilRef.current;
-      const counter = counterRef.current;
       const dl = dlRef.current;
-      if (prefersReducedMotion() || !section || !veil || !counter || !dl) return;
+      if (prefersReducedMotion() || !section || !veil || !dl) return;
 
       const rows = Array.from(dl.children) as HTMLElement[];
       // Title parts (eyebrow / headline / subline) — the lg+ split's framing.
@@ -182,7 +176,6 @@ export function CinematicReel() {
         : VEIL_REST_PORTRAIT;
       // Hidden ONLY here (never in markup) — SSR/no-JS keeps everything readable.
       gsap.set(veil, { opacity: rest }); // film rests dimmed under the hero type
-      gsap.set(counter, { autoAlpha: 0 }); // instrument readout waits for the film
       gsap.set(dl, { autoAlpha: 0 }); // board rails ride in with the first row
       gsap.set(rows, { autoAlpha: 0, y: distance.md });
       gsap.set(titleParts, { autoAlpha: 0, y: distance.md }); // title waits for the hero to clear
@@ -212,7 +205,6 @@ export function CinematicReel() {
       // Lift: the veil clears as the hero type departs — the film brightens
       // from backdrop to foreground.
       tl.to(veil, { opacity: 0, duration: LIFT[1], ease: "power1.out" }, LIFT[0]);
-      tl.to(counter, { autoAlpha: 1, duration: 0.06 }, LIFT[0] + LIFT[1]);
       // Title card rises in as the hero clears the stage, ahead of the rows —
       // it's the board's headline, so it lands first.
       tl.to(
@@ -257,8 +249,8 @@ export function CinematicReel() {
           decoding="async"
           className="block w-full object-cover motion-safe:invisible motion-safe:absolute motion-safe:inset-0 motion-safe:h-full"
         />
-        {/* Film layer — canvas frames, reading scrim, grain, frame counter,
-            veil. Visible from load (the hero paints above it). At lg+ it is
+        {/* Film layer — canvas frames, reading scrim, grain, veil. Visible
+            from load (the hero paints above it). At lg+ it is
             confined to the RIGHT half of the stage (the 50/50 split):
             left-1/2 overrides inset-0's left edge, and the seam-blend
             gradient inside feathers the film into the dark panel — no hard
@@ -295,18 +287,10 @@ export function CinematicReel() {
             }}
           />
           <AnimatedNoise opacity={0.05} />
-          {/* Frame counter — instrument voice, updated via ref (no re-renders). */}
-          <span
-            ref={counterRef}
-            className="absolute right-space-5 top-space-5 font-mono text-caption tabular-nums tracking-[0.18em] text-muted"
-          >
-            FR 001 / 040
-          </span>
           {/* Veil — rests at VEIL_REST, lifts to 0 as the hero type departs,
               then rises to 0.85 over the last beat so the clip recedes into
               the page. Lives INSIDE the film wrapper so at lg it can only ever
-              dim the film half, never the left panel; still above the counter
-              and below the board, exactly as before. Markup opacity 0
+              dim the film half, never the left panel. Markup opacity 0
               (decorative) — the effect owns it. */}
           <div
             ref={veilRef}

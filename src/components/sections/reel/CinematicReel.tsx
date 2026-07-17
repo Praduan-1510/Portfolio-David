@@ -11,7 +11,7 @@ import {
 import { Container } from "@/components/primitives";
 import { AnimatedNoise, FlapText } from "@/components/motion";
 import { HeroFlow } from "@/components/sections/HeroFlow";
-import { ROWS, BoardRow, StatusValue } from "../CurrentlyBoard";
+import { ROWS, BoardRow, StatusValue, BoardTitle } from "../CurrentlyBoard";
 import { FRAME_COUNT, framePath, createFrameLoader } from "./frames";
 import { drawImageCover } from "@/lib/canvas/drawCover";
 
@@ -81,11 +81,13 @@ const VEIL_REST = 0.35;
 const VEIL_REST_PORTRAIT = 0.5;
 const LIFT: [number, number] = [0.06, 0.18]; // veil lift [start, duration] — spans the hero's exit
 const DIM_AT = 0.88; // where the imagery starts receding into --bg
+const TITLE_AT = 0.31; // board title lands as the hero clears the stage (lg+ split)
 
 export function CinematicReel() {
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const dlRef = useRef<HTMLDListElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
   const veilRef = useRef<HTMLDivElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
   // Bridge from the ScrollTrigger (below) into the canvas effect's closure.
@@ -170,6 +172,11 @@ export function CinematicReel() {
       if (prefersReducedMotion() || !section || !veil || !counter || !dl) return;
 
       const rows = Array.from(dl.children) as HTMLElement[];
+      // Title parts (eyebrow / headline / subline) — the lg+ split's framing.
+      // Empty below lg (the title is display:none there) — set/tween no-op.
+      const titleParts = titleRef.current
+        ? (Array.from(titleRef.current.children) as HTMLElement[])
+        : [];
       const rest = window.matchMedia("(min-width: 1024px)").matches
         ? VEIL_REST
         : VEIL_REST_PORTRAIT;
@@ -178,6 +185,7 @@ export function CinematicReel() {
       gsap.set(counter, { autoAlpha: 0 }); // instrument readout waits for the film
       gsap.set(dl, { autoAlpha: 0 }); // board rails ride in with the first row
       gsap.set(rows, { autoAlpha: 0, y: distance.md });
+      gsap.set(titleParts, { autoAlpha: 0, y: distance.md }); // title waits for the hero to clear
 
       const tl = gsap.timeline({
         defaults: { ease: "none" },
@@ -205,6 +213,13 @@ export function CinematicReel() {
       // from backdrop to foreground.
       tl.to(veil, { opacity: 0, duration: LIFT[1], ease: "power1.out" }, LIFT[0]);
       tl.to(counter, { autoAlpha: 1, duration: 0.06 }, LIFT[0] + LIFT[1]);
+      // Title card rises in as the hero clears the stage, ahead of the rows —
+      // it's the board's headline, so it lands first.
+      tl.to(
+        titleParts,
+        { autoAlpha: 1, y: 0, duration: 0.09, stagger: 0.03, ease: "expo.out" },
+        TITLE_AT,
+      );
       tl.to(dl, { autoAlpha: 1, duration: ROW_LEN }, ROW_AT[0]);
       rows.forEach((row, i) => {
         tl.to(row, { autoAlpha: 1, y: 0, duration: ROW_LEN, ease: "expo.out" }, ROW_AT[i]);
@@ -327,6 +342,18 @@ export function CinematicReel() {
           <HeroFlow />
           <AnimatedNoise opacity={0.04} />
         </div>
+
+        {/* Board title card (lg+ split only) — fills the content half's upper
+            band, framing the rows below as a live readout. Anchored to the top
+            of the stage, aligned to the same left-half column + seam inset as
+            the board. Its parts rise in on the timeline (titleRef.children).
+            Hidden below lg and under reduced motion, where there is no empty
+            panel to fill. */}
+        <Container className="pointer-events-none absolute inset-x-0 top-0 hidden pt-[12vh] motion-safe:lg:block [@media(max-height:600px)]:!hidden">
+          <div ref={titleRef} className="lg:w-1/2 lg:pr-space-7">
+            <BoardTitle />
+          </div>
+        </Container>
 
         {/* The board — dl/dt/dd semantics preserved (BoardRow unchanged). At
             lg+ (motion-safe) it rides the LEFT half over the solid panel: the

@@ -23,6 +23,34 @@ export const ROWS: { label: string; value: string }[] = [
   // The STATUS row is rendered separately — it carries the live clock.
 ];
 
+/*
+ * Board title card — the human voice above the instrument rows. It frames the
+ * status board as a live readout and fills the split's upper-left band (which
+ * otherwise sat empty on lg). Each child animates in on its own (the reel's
+ * timeline staggers `.children`), so keep them as three direct children.
+ * Purely the lg+ split's framing — the reel renders it only there.
+ */
+export function BoardTitle() {
+  return (
+    <>
+      <span className="inline-flex items-center gap-space-3 font-mono text-caption uppercase tracking-[0.2em] text-muted">
+        <span
+          aria-hidden="true"
+          className="h-[6px] w-[6px] rounded-full bg-neon motion-safe:animate-status-pulse"
+        />
+        Status · Live
+      </span>
+      <h2 className="mt-space-4 font-display text-[clamp(1.9rem,3.1vw,3rem)] leading-[1.06] text-fg">
+        A live snapshot of the work{" "}
+        <span className="text-spectrum">in motion.</span>
+      </h2>
+      <p className="mt-space-4 max-w-[36ch] font-sans text-body text-muted [@media(max-height:820px)]:hidden">
+        {"What I'm building, what shipped, and where to reach me — read straight off the board."}
+      </p>
+    </>
+  );
+}
+
 /* Status value — pulse dot + availability flap + live IST clock. A leaf
  * component so the 1s clock tick re-renders nothing but this span. */
 export function StatusValue({

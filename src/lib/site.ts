@@ -10,7 +10,7 @@
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://praduansaha.com";
 
-/** Person / site facts. Kept verbatim from Content/Site.md — do not fabricate. */
+/** Person / site facts. Kept verbatim from docs/reference/Site.md — do not fabricate. */
 export const site = {
   name: "Praduan Saha",
   jobTitle: "Product Designer (Design + Front-End)",

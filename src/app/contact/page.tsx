@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   },
 };
 
-// Email + LinkedIn + location (phone intentionally left off — Content/Site.md).
+// Email + LinkedIn + location (phone intentionally left off — docs/reference/Site.md).
 // Values are the human-readable display; the raw URL lives in `href`. The old
 // LinkedIn row printed the full URL (linkedin.com/in/praduan-saha-9a8965172),
 // which wrapped to two broken lines — the display is a clean vanity handle instead.

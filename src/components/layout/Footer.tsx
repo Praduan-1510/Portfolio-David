@@ -5,7 +5,7 @@ import { site } from "@/lib/site";
 
 /*
  * Site footer. Static server component — mark, one-line descriptor, nav, social,
- * copyright. Copy is verbatim from Content/Site.md.
+ * copyright. Copy is verbatim from docs/reference/Site.md.
  */
 const nav = [
   { href: "/work", label: "Work" },

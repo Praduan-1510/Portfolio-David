@@ -359,7 +359,11 @@ export function CinematicReel() {
             and pr-space-7 matches the hero column's inset off it. */}
         <Container className="relative py-space-7 motion-safe:absolute motion-safe:inset-x-0 motion-safe:bottom-0 motion-safe:py-0 motion-safe:pb-space-7 short-land:pb-space-4">
           <div className="motion-safe:lg:w-1/2 motion-safe:lg:pr-space-7">
-            <dl ref={dlRef} className="border-y border-line">
+            {/* motion-safe:opacity-0 pre-empts GSAP's at-rest autoAlpha:0 so the
+                board never flashes over the hero in the window before the
+                choreography effect runs. Reduced motion keeps it visible (the
+                static board in normal flow). */}
+            <dl ref={dlRef} className="border-y border-line motion-safe:opacity-0">
               {ROWS.map((row, i) => (
                 <BoardRow key={row.label} index={i} label={row.label}>
                   <FlapText

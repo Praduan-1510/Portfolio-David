@@ -1,19 +1,19 @@
 /*
  * Frame manifest + loader for the home cinematic reel (CinematicReel.tsx).
  *
- * 36 WebP frames, 1280×720 (native clip resolution), ~888KB TOTAL — re-encoded
- * from the source clip at every 2nd frame (WebP q74 beats the 1.8MB source
- * JPGs on both size and quality). They are fetched as plain HTMLImageElements
- * (browser keeps only the encoded bytes in JS reach; decoded bitmaps live in
- * the evictable decode cache — we deliberately do NOT retain 36 ImageBitmaps
- * ≈ 130MB of pinned RGBA).
+ * 40 WebP frames, 1280×720 (native clip resolution), ~1.0MB TOTAL — the v2
+ * clip (subject before the dark grid backdrop), watermark-cleaned and
+ * re-encoded at WebP q74 from the source JPGs. They are fetched as plain
+ * HTMLImageElements (browser keeps only the encoded bytes in JS reach;
+ * decoded bitmaps live in the evictable decode cache — we deliberately do NOT
+ * retain 40 ImageBitmaps ≈ 145MB of pinned RGBA).
  *
  * fetchPriority "low" + post-mount start keep the sequence from ever competing
  * with above-the-fold assets; img.decode() pre-warms the decode cache so the
  * scrub never hits a synchronous decode longer than a 0.4MP WebP (~1-3ms).
  */
 
-export const FRAME_COUNT = 36;
+export const FRAME_COUNT = 40;
 
 export const framePath = (i: number) =>
   `/images/home/reel/frame-${String(i + 1).padStart(3, "0")}.webp`;
@@ -23,6 +23,8 @@ export interface FrameLoader {
   start: (onFirst?: () => void) => void;
   /** Closest decoded frame to `target` (prefers already-passed frames), or -1. */
   nearestReady: (target: number) => number;
+  /** Whether frame `i` is decoded — the crossfade scrub needs exact pairs. */
+  isReady: (i: number) => boolean;
   img: (i: number) => HTMLImageElement | undefined;
   dispose: () => void;
 }
@@ -71,6 +73,7 @@ export function createFrameLoader(): FrameLoader {
       }
       return -1;
     },
+    isReady: (i) => !!ready[i],
     img: (i) => imgs[i],
     dispose() {
       disposed = true;

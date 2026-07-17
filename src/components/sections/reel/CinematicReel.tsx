@@ -38,7 +38,8 @@ import { drawImageCover } from "@/lib/canvas/drawCover";
  *
  * Choreography (one timeline, duration normalized to 1 == scroll progress):
  *   at rest    film visible behind the hero, dimmed by the veil (VEIL_REST)
- *   0.00–0.87  frames 1→36 scrub (Math.round mapping; draw only on index change)
+ *   0.00–0.87  frames 1→40 scrub — FRACTIONAL index, neighbours crossfaded on
+ *              the canvas so the clip reads continuous, not stepped
  *   0.06–0.24  veil lifts VEIL_REST→0 — the film owns the frame as type leaves
  *   0.24       frame counter fades in (instrument voice, film now foreground)
  *   0.36/0.49/0.62/0.75  board rows rise in (scrubbed → reverse cleanly);
@@ -96,23 +97,47 @@ export function CinematicReel() {
   // Frame loading + drawing. Lives in its own effect (not useGSAP) because it
   // owns network/decode lifecycle, not tweens.
   useEffect(() => {
-    if (reduced) return; // CSS hides the canvas; skip the ~0.9MB fetch entirely
+    if (reduced) return; // CSS hides the canvas; skip the ~1MB fetch entirely
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx) return;
 
     const loader = createFrameLoader();
-    let lastDrawn = -1;
-    let current = 0;
+    let lastKey = -1;
+    let current = 0; // fractional frame position
     let shown = false;
 
+    // Fractional-position draw: frame floor(t) opaque, frame ceil(t) alpha'd
+    // on top — the scrub CROSSFADES between neighbours instead of stepping,
+    // so the 40-frame sequence reads as a continuous clip under the Lenis
+    // lerp. Falls back to nearest-decoded stepping while the reel streams in.
+    // Anchor slightly above centre — keeps the face in frame as crops change.
     const draw = (target: number) => {
-      const i = loader.nearestReady(target); // closest decoded frame, never blank
-      const img = i >= 0 ? loader.img(i) : undefined;
-      if (!img || i === lastDrawn) return;
-      lastDrawn = i;
-      // Anchor slightly above centre — keeps the face in frame as crops change.
-      drawImageCover(ctx, img, canvas.clientWidth, canvas.clientHeight, 0.5, 0.42);
+      const i0 = Math.min(Math.floor(target), FRAME_COUNT - 1);
+      const i1 = Math.min(i0 + 1, FRAME_COUNT - 1);
+      const frac = Math.min(Math.max(target - i0, 0), 1);
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      if (loader.isReady(i0) && loader.isReady(i1)) {
+        // Quantized blend key (24 alpha steps per pair): the Lenis lerp emits
+        // many sub-pixel progress ticks — skip redraws below one step.
+        const key = i0 * 32 + Math.round(frac * 24);
+        if (key === lastKey) return;
+        lastKey = key;
+        drawImageCover(ctx, loader.img(i0)!, w, h, 0.5, 0.42);
+        if (i1 !== i0 && frac > 0.02) {
+          ctx.globalAlpha = frac;
+          drawImageCover(ctx, loader.img(i1)!, w, h, 0.5, 0.42);
+          ctx.globalAlpha = 1;
+        }
+      } else {
+        const i = loader.nearestReady(Math.round(target)); // never blank
+        const img = i >= 0 ? loader.img(i) : undefined;
+        const key = i * 32; // same key-space as a frac=0 crossfade draw
+        if (!img || key === lastKey) return;
+        lastKey = key;
+        drawImageCover(ctx, img, w, h, 0.5, 0.42);
+      }
       if (!shown) {
         shown = true;
         canvas.style.opacity = "1"; // fade in on first draw (AboutHeroMap pattern)
@@ -129,16 +154,16 @@ export function CinematicReel() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = "high"; // 720p → full-bleed upscale
-      lastDrawn = -1; // force redraw at the new size
+      lastKey = -1; // force redraw at the new size
       draw(current);
     };
 
-    drawRef.current = (i) => {
-      current = i;
+    drawRef.current = (t) => {
+      current = t;
       if (counterRef.current) {
-        counterRef.current.textContent = `FR ${String(i + 1).padStart(3, "0")} / ${String(FRAME_COUNT).padStart(3, "0")}`;
+        counterRef.current.textContent = `FR ${String(Math.round(t) + 1).padStart(3, "0")} / ${String(FRAME_COUNT).padStart(3, "0")}`;
       }
-      draw(i);
+      draw(t);
     };
 
     const ro = new ResizeObserver(size);
@@ -180,10 +205,9 @@ export function CinematicReel() {
           end: "bottom bottom",
           scrub: true, // Lenis lerp 0.1 already smooths — don't double-lag
           onUpdate(self) {
+            // Fractional index — draw() crossfades between the neighbours.
             drawRef.current(
-              Math.round(
-                Math.min(self.progress / FRAME_SPAN, 1) * (FRAME_COUNT - 1),
-              ),
+              Math.min(self.progress / FRAME_SPAN, 1) * (FRAME_COUNT - 1),
             );
             // Monotonic flutter gate: activates each row's one-shot flap the
             // first time its window is crossed; reversing never resets it.
@@ -232,7 +256,7 @@ export function CinematicReel() {
           src={framePath(0)}
           width={1280}
           height={720}
-          alt="Praduan turning from the camera and walking away down a tree-lined path"
+          alt="Praduan facing the camera, then turning away, in front of a dark gridded backdrop"
           loading="lazy"
           decoding="async"
           className="block w-full object-cover motion-safe:invisible motion-safe:absolute motion-safe:inset-0 motion-safe:h-full"
@@ -280,7 +304,7 @@ export function CinematicReel() {
             ref={counterRef}
             className="absolute right-space-5 top-space-5 font-mono text-caption tabular-nums tracking-[0.18em] text-muted"
           >
-            FR 001 / 036
+            FR 001 / 040
           </span>
           {/* Veil — rests at VEIL_REST, lifts to 0 as the hero type departs,
               then rises to 0.85 over the last beat so the clip recedes into

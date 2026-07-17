@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils/cn";
+
 /*
  * Hero atmosphere — colour with a REASON. Instead of free-floating gradient
  * blobs (its own template smell), the hero's colour emanates from its one
@@ -11,11 +13,14 @@
 const TRACE_GRADIENT =
   "linear-gradient(90deg, transparent 0%, #2DD4BF 12%, #C9E94B 32%, #F7A53B 52%, #46B4F0 72%, #A98BFF 88%, transparent 100%)";
 
-export function HeroFlow() {
+export function HeroFlow({ className }: { className?: string }) {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 -z-10 overflow-hidden motion-safe:lg:right-1/2"
+      className={cn(
+        "pointer-events-none absolute inset-0 -z-10 overflow-hidden",
+        className,
+      )}
     >
       {/* Trace glow — the light the signal line casts. Sits on the wordmark's
           baseline latitude (~52% at desktop compositions), soft-masked so it

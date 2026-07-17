@@ -47,10 +47,14 @@ export function Hero() {
       className="relative isolate z-10 flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden text-fg [@media(max-height:600px)]:min-h-0"
     >
       {/* Backdrop — blueprint dot grid (the case-hero motif language) under one
-          quiet ember. Both -z, both decorative; no WebGL on the LCP path. */}
+          quiet ember. Both -z, both decorative; no WebGL on the LCP path.
+          At lg+ (motion-safe) the WHOLE atmosphere set (grid + flow + grain)
+          is hidden here and lives on the reel's LEFT PANEL instead: it must
+          not scroll away with the hero, or the hero's bottom edge drags a
+          visible shade-step across the panel during the handoff. */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 opacity-60 motion-safe:lg:right-1/2"
+        className="absolute inset-0 -z-10 opacity-60 motion-safe:lg:hidden"
         style={{
           backgroundImage: "radial-gradient(currentColor 0.5px, transparent 0.5px)",
           backgroundSize: "22px 22px",
@@ -61,10 +65,10 @@ export function Hero() {
             "radial-gradient(120% 100% at 30% 40%, #000 0%, transparent 78%)",
         }}
       />
-      <HeroFlow />
+      <HeroFlow className="motion-safe:lg:hidden" />
 
       {/* Film grain — above the ember, below the content. */}
-      <AnimatedNoise opacity={0.04} className="z-[1]" />
+      <AnimatedNoise opacity={0.04} className="z-[1] motion-safe:lg:hidden" />
 
       {/* (The old bottom hand-off scrim is gone: the cinematic reel's film now
           runs continuously beneath this section and past its bottom edge — a

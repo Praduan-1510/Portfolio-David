@@ -10,6 +10,7 @@ import {
 } from "@/hooks/useReducedMotion";
 import { Container } from "@/components/primitives";
 import { AnimatedNoise, FlapText } from "@/components/motion";
+import { HeroFlow } from "@/components/sections/HeroFlow";
 import { ROWS, BoardRow, StatusValue } from "../CurrentlyBoard";
 import { FRAME_COUNT, framePath, createFrameLoader } from "./frames";
 import { drawImageCover } from "@/lib/canvas/drawCover";
@@ -27,11 +28,13 @@ import { drawImageCover } from "@/lib/canvas/drawCover";
  * the frames) and the veil returns before the work grid.
  *
  * Geometry — the 50/50 split (lg+): the film layer (canvas + scrim + grain +
- * counter + veil) is confined to the RIGHT half of the sticky stage behind a
- * 1px border-line seam; a solid --bg panel holds the LEFT half, where the
- * hero's content column (Hero.tsx, w-1/2 of the same centered Container) and
- * the board ride. Below lg everything is full-bleed exactly as before — the
- * film behind the type, dimmed by the portrait veil.
+ * counter + veil) is confined to the RIGHT half of the sticky stage and
+ * FEATHERS into the dark via a seam-blend gradient (no hard edge); the LEFT
+ * half is the content panel, carrying the hero's atmosphere set (dot grid +
+ * blooms + grain) so the backdrop never scrolls with the hero. The hero's
+ * content column (Hero.tsx, w-1/2 of the same centered Container) and the
+ * board ride that panel. Below lg everything is full-bleed exactly as before
+ * — the film behind the type, dimmed by the portrait veil.
  *
  * Choreography (one timeline, duration normalized to 1 == scroll progress):
  *   at rest    film visible behind the hero, dimmed by the veil (VEIL_REST)
@@ -236,13 +239,14 @@ export function CinematicReel() {
         />
         {/* Film layer — canvas frames, reading scrim, grain, frame counter,
             veil. Visible from load (the hero paints above it). At lg+ it is
-            confined to the RIGHT half of the stage (the 50/50 split): left-1/2
-            overrides inset-0's left edge, and the border-l draws the 1px seam
-            OUTSIDE the canvas (the canvas is inset-0 within this border-box).
-            Below lg it stays full-bleed — the portrait design is untouched. */}
+            confined to the RIGHT half of the stage (the 50/50 split):
+            left-1/2 overrides inset-0's left edge, and the seam-blend
+            gradient inside feathers the film into the dark panel — no hard
+            cut. Below lg it stays full-bleed — the portrait design is
+            untouched. */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 motion-reduce:hidden lg:left-1/2 lg:border-l lg:border-line"
+          className="absolute inset-0 motion-reduce:hidden lg:left-1/2"
         >
           <canvas
             ref={canvasRef}
@@ -258,6 +262,16 @@ export function CinematicReel() {
             style={{
               background:
                 "linear-gradient(to top, var(--bg) 0%, color-mix(in srgb, var(--bg) 62%, transparent) 45%, transparent 100%)",
+            }}
+          />
+          {/* Seam blend (lg+) — a wide feather of --bg pooled over the film's
+              left band, so the clip emerges from the dark panel like a
+              projection instead of cutting at a hard edge. */}
+          <div
+            className="absolute inset-y-0 left-0 hidden w-[26%] lg:block"
+            style={{
+              background:
+                "linear-gradient(to right, var(--bg) 0%, color-mix(in srgb, var(--bg) 72%, transparent) 40%, transparent 100%)",
             }}
           />
           <AnimatedNoise opacity={0.05} />
@@ -280,13 +294,34 @@ export function CinematicReel() {
             className="absolute inset-0 bg-bg opacity-0 motion-reduce:hidden"
           />
         </div>
-        {/* Left panel (lg+, motion-safe) — solid --bg under the content half
-            of the split, so the left side stays composed after the hero
-            scrolls off the stage. */}
+        {/* Left panel (lg+, motion-safe) — the content half of the split. It
+            owns the hero's whole atmosphere set (blueprint dot grid +
+            trace-flow blooms + film grain), which is hidden inside Hero.tsx
+            at lg: the backdrop must belong to the STAGE, not the hero, so the
+            hero's type departs over an unchanging surface (no shade-step
+            dragging across the panel at its bottom edge) and the board later
+            rides the very same panel. isolate keeps the -z atmosphere layers
+            above this div's own bg. */}
         <div
           aria-hidden="true"
-          className="absolute inset-y-0 left-0 hidden w-1/2 bg-bg motion-safe:lg:block"
-        />
+          className="isolate absolute inset-y-0 left-0 hidden w-1/2 overflow-hidden bg-bg motion-safe:lg:block"
+        >
+          <div
+            className="absolute inset-0 -z-10 opacity-60"
+            style={{
+              backgroundImage:
+                "radial-gradient(currentColor 0.5px, transparent 0.5px)",
+              backgroundSize: "22px 22px",
+              color: "rgba(255,255,255,0.045)",
+              maskImage:
+                "radial-gradient(120% 100% at 30% 40%, #000 0%, transparent 78%)",
+              WebkitMaskImage:
+                "radial-gradient(120% 100% at 30% 40%, #000 0%, transparent 78%)",
+            }}
+          />
+          <HeroFlow />
+          <AnimatedNoise opacity={0.04} />
+        </div>
 
         {/* The board — dl/dt/dd semantics preserved (BoardRow unchanged). At
             lg+ (motion-safe) it rides the LEFT half over the solid panel: the

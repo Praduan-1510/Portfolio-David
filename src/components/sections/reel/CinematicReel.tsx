@@ -276,14 +276,28 @@ export function CinematicReel() {
                 "linear-gradient(to top, var(--bg) 0%, color-mix(in srgb, var(--bg) 62%, transparent) 45%, transparent 100%)",
             }}
           />
-          {/* Seam blend (lg+) — a wide feather of --bg pooled over the film's
-              left band, so the clip emerges from the dark panel like a
-              projection instead of cutting at a hard edge. */}
+          {/* Seam blend (lg+) — the film DISSOLVES into the dark panel over a
+              wide, eased band: --bg is fully opaque at the seam (matching the
+              panel exactly) and rolls off through a long smootherstep ramp, so
+              the eye can't find where the clip's grid/subject emerges. Nearly
+              half the film width, but the subject sits centre-right and stays
+              clear. */}
           <div
-            className="absolute inset-y-0 left-0 hidden w-[26%] lg:block"
+            className="absolute inset-y-0 left-0 hidden w-[52%] lg:block"
             style={{
               background:
-                "linear-gradient(to right, var(--bg) 0%, color-mix(in srgb, var(--bg) 72%, transparent) 40%, transparent 100%)",
+                "linear-gradient(to right, var(--bg) 0%, color-mix(in srgb, var(--bg) 96%, transparent) 12%, color-mix(in srgb, var(--bg) 82%, transparent) 24%, color-mix(in srgb, var(--bg) 55%, transparent) 40%, color-mix(in srgb, var(--bg) 26%, transparent) 60%, color-mix(in srgb, var(--bg) 8%, transparent) 80%, transparent 100%)",
+            }}
+          />
+          {/* Corner vignette (lg+) — the grid backdrop is brightest at the
+              film's top-left, right where it hugs the seam; a soft --bg pool
+              anchored to that corner keeps it from popping against the flat
+              panel, so the clip reads as lit from within, not pasted on. */}
+          <div
+            className="absolute inset-0 hidden lg:block"
+            style={{
+              background:
+                "radial-gradient(78% 62% at 0% 0%, var(--bg) 0%, color-mix(in srgb, var(--bg) 50%, transparent) 26%, transparent 58%)",
             }}
           />
           <AnimatedNoise opacity={0.05} />

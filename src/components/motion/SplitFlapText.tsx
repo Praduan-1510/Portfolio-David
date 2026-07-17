@@ -54,16 +54,26 @@ interface SplitFlapTextProps {
   kernAlign?: "center" | "start";
   /** Extra classes for the kerned settle span (letter-spacing, weight). */
   kernClassName?: string;
-  /** Contract the board to the kerned twin's width once settled (animated
-   *  negative right margin), so inline compositions ("PRADUAN SAHA" on one
-   *  baseline) close up to true word spacing instead of keeping the wider
-   *  tile-row footprint. Only meaningful with settle="kern" + kernAlign="start". */
+  /** Close the monospace tile-row's extra width with a STATIC negative right
+   *  margin (KERN_PULL_EM), so inline compositions ("PRADUAN SAHA" on one
+   *  baseline) sit at natural word spacing without the next word ever sliding
+   *  on settle or font swap. Only meaningful with settle="kern". */
   fitKern?: boolean;
 }
 
 const CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
 const DEFAULT_FONT_SIZE = "clamp(4rem, 15vw, 14rem)";
 const FLAP_PALETTE = SPECTRUM;
+
+// fitKern gap-close, in em. The monospace tile row (0.65em tiles + 0.08em gaps)
+// is wider than the kerned twin, so inline boards close the slack with a
+// negative right margin. A STATIC em value (not a live measurement of the
+// kerned twin) is deliberate: the twin's width depends on the display font,
+// which loads async (display:swap) — measuring it made the next word reflow
+// when the font swapped in. A fixed em is in place from first paint and never
+// moves. Tuned so tiles just meet during the flap (no overlap) and the settled
+// word gap reads natural. Applies to any fitKern board (hero wordmark, 404).
+const KERN_PULL_EM = 0.28;
 
 /** Deterministic flutter glyph — stable across renders, chaotic to the eye. */
 const flutterChar = (step: number, index: number) =>
@@ -126,45 +136,14 @@ export function SplitFlapText({
   const allSettled = step >= totalSteps;
   const kern = settle === "kern";
 
-  // fitKern: the tile row is wider than the kerned twin (0.65em tiles + gaps vs
-  // real glyph advances), so once settled the board gives the slack back via an
-  // animated negative right margin — inline siblings glide in to true word
-  // spacing. Measured live (ResizeObserver) so vw-based font sizes stay exact.
-  const rootRef = useRef<HTMLDivElement>(null);
-  const kernTextRef = useRef<HTMLSpanElement>(null);
-  const [kernSlack, setKernSlack] = useState(0);
-  useEffect(() => {
-    if (!kern || !fitKern) return;
-    const root = rootRef.current;
-    const twin = kernTextRef.current;
-    if (!root || !twin) return;
-    const measure = () =>
-      setKernSlack(
-        Math.max(
-          0,
-          root.getBoundingClientRect().width -
-            twin.getBoundingClientRect().width,
-        ),
-      );
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(root);
-    ro.observe(twin);
-    return () => ro.disconnect();
-  }, [kern, fitKern]);
-
   return (
     <div
-      ref={rootRef}
       className={`relative inline-flex items-center ${className}`}
       style={{
         perspective: "1000px",
-        ...(fitKern
-          ? {
-              marginRight: allSettled && kernSlack ? -kernSlack : 0,
-              transition: `margin-right ${durations.slow}s ${cssEasings.outExpo}`,
-            }
-          : undefined),
+        // Static gap-close (see KERN_PULL_EM): in place from first paint, never
+        // recomputed, so the next word never slides on settle OR font swap.
+        ...(fitKern ? { marginRight: `-${KERN_PULL_EM}em` } : undefined),
       }}
     >
       {/* Flaps are decorative; the word is announced once for assistive tech. */}
@@ -221,10 +200,7 @@ export function SplitFlapText({
             transition: `opacity ${durations.fast}s ${cssEasings.outExpo}, transform ${durations.slow}s ${cssEasings.outExpo}`,
           }}
         >
-          {/* Inner span = the twin's true glyph advance, measured by fitKern. */}
-          <span ref={kernTextRef} className="whitespace-nowrap">
-            {text}
-          </span>
+          <span className="whitespace-nowrap">{text}</span>
         </span>
       )}
     </div>

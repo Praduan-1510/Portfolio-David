@@ -342,24 +342,6 @@
   }
 }
 
-/* Hero signal-trace scan (SignalTrace.tsx): a single soft highlight glides the
-   full length of the trace and fades out at either end, so the loop reset is
-   never seen — reads as "the signal" travelling down the line, past each
-   station. Transform + opacity only (compositor). The node's base opacity is 0,
-   so under prefers-reduced-motion (animation withheld) it stays invisible — no
-   distracting static dot. */
-@media (prefers-reduced-motion: no-preference) {
-  @keyframes trace-scan {
-    0%   { transform: translate3d(0, 0, 0); opacity: 0; }
-    14%  { opacity: 1; }
-    86%  { opacity: 1; }
-    100% { transform: translate3d(100%, 0, 0); opacity: 0; }
-  }
-  .motion-safe\:animate-trace-scan {
-    animation: trace-scan 7s var(--ease-in-out-quart) infinite;
-  }
-}
-
 /* Lenis smooth scroll base styles (ARCHITECTURE.md §7.3). */
 html.lenis,
 html.lenis body {

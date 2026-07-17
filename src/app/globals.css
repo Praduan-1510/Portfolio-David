@@ -259,6 +259,18 @@
       color: CanvasText;
     }
   }
+  
+  /*
+   * Tagline alignment fix — aligns the GSAP SplitText generated inline-block
+   * word divs with the `.text-spectrum` inline-block span. Since the split divs
+   * have `overflow: clip` / `hidden`, they align to their bottom margin edge
+   * rather than the text baseline, causing a vertical misalignment with normal
+   * inline-blocks. Aligns both to the bottom to restore matching baselines.
+   */
+  .font-display.text-heading div,
+  .font-display.text-heading .text-spectrum {
+    vertical-align: bottom;
+  }
 }
 
 @layer base {

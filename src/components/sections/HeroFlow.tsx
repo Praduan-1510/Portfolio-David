@@ -15,7 +15,7 @@ export function HeroFlow() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+      className="pointer-events-none absolute inset-0 -z-10 overflow-hidden motion-safe:lg:right-1/2"
     >
       {/* Trace glow — the light the signal line casts. Sits on the wordmark's
           baseline latitude (~52% at desktop compositions), soft-masked so it

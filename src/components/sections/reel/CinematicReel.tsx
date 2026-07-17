@@ -20,11 +20,18 @@ import { drawImageCover } from "@/lib/canvas/drawCover";
  *
  * The section OVERLAPS the hero (motion-safe negative top margin = the hero's
  * height) and the hero paints ABOVE it (Hero.tsx is z-10 with a transparent
- * background), so the film is alive behind the type from first paint: frame 1
- * fades up under a resting --bg veil the moment it decodes. Scrolling scrubs
- * the frames from the very first tick while the veil lifts — the film
- * brightens to full as the type departs — then the "Currently" board rows
- * flutter in (synced to the frames) and the veil returns before the work grid.
+ * background), so the film is alive from first paint: frame 1 fades up under
+ * a resting --bg veil the moment it decodes. Scrolling scrubs the frames from
+ * the very first tick while the veil lifts — the film brightens to full as
+ * the type departs — then the "Currently" board rows flutter in (synced to
+ * the frames) and the veil returns before the work grid.
+ *
+ * Geometry — the 50/50 split (lg+): the film layer (canvas + scrim + grain +
+ * counter + veil) is confined to the RIGHT half of the sticky stage behind a
+ * 1px border-line seam; a solid --bg panel holds the LEFT half, where the
+ * hero's content column (Hero.tsx, w-1/2 of the same centered Container) and
+ * the board ride. Below lg everything is full-bleed exactly as before — the
+ * film behind the type, dimmed by the portrait veil.
  *
  * Choreography (one timeline, duration normalized to 1 == scroll progress):
  *   at rest    film visible behind the hero, dimmed by the veil (VEIL_REST)
@@ -59,7 +66,10 @@ import { drawImageCover } from "@/lib/canvas/drawCover";
 const ROW_AT = [0.36, 0.49, 0.62, 0.75] as const;
 const ROW_LEN = 0.07; // scrub length of each row's rise
 const FRAME_SPAN = 0.87; // frames map over [0, 0.87]; the last frame holds
-const VEIL_REST = 0.62; // film dim while the hero type sits over it (lg+)
+// lg+ runs the 50/50 split — the film sits BESIDE the type, not under it, so
+// the rest dim is a light cinematic grade (brightens to full on scroll), not
+// a legibility veil.
+const VEIL_REST = 0.35;
 // Below lg the 16:9 clip cover-crops to a portrait viewport and the face fills
 // the frame. The film stays BRIGHT (poster-style — it should read as a
 // portrait, not murk); legibility comes from the taller bottom scrim under the
@@ -224,19 +234,27 @@ export function CinematicReel() {
           decoding="async"
           className="block w-full object-cover motion-safe:invisible motion-safe:absolute motion-safe:inset-0 motion-safe:h-full"
         />
-        {/* Film layer — canvas frames, reading scrim, grain, frame counter.
-            Visible from load (the hero paints above it); the veil below owns
-            the dimming. */}
-        <div aria-hidden="true" className="absolute inset-0 motion-reduce:hidden">
+        {/* Film layer — canvas frames, reading scrim, grain, frame counter,
+            veil. Visible from load (the hero paints above it). At lg+ it is
+            confined to the RIGHT half of the stage (the 50/50 split): left-1/2
+            overrides inset-0's left edge, and the border-l draws the 1px seam
+            OUTSIDE the canvas (the canvas is inset-0 within this border-box).
+            Below lg it stays full-bleed — the portrait design is untouched. */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 motion-reduce:hidden lg:left-1/2 lg:border-l lg:border-line"
+        >
           <canvas
             ref={canvasRef}
             className="absolute inset-0 h-full w-full opacity-0 transition-opacity duration-slower ease-out-expo"
           />
-          {/* Reading scrim — pools --bg over the lower band where the board
-              (and, on portrait, the hero's title block) sits. Taller below lg:
-              portrait keeps the film bright and leans on this gradient alone. */}
+          {/* Reading scrim — below lg it pools --bg over the lower band where
+              the type block sits (portrait keeps the film bright and leans on
+              this gradient alone). At lg+ no text rides the film anymore, so
+              it shrinks to a slim, faded floor that softens the stage's bottom
+              edge for the #work handoff. */}
           <div
-            className="absolute inset-x-0 bottom-0 h-[78%] lg:h-[62%]"
+            className="absolute inset-x-0 bottom-0 h-[78%] lg:h-[26%] lg:opacity-60"
             style={{
               background:
                 "linear-gradient(to top, var(--bg) 0%, color-mix(in srgb, var(--bg) 62%, transparent) 45%, transparent 100%)",
@@ -250,34 +268,48 @@ export function CinematicReel() {
           >
             FR 001 / 036
           </span>
+          {/* Veil — rests at VEIL_REST, lifts to 0 as the hero type departs,
+              then rises to 0.85 over the last beat so the clip recedes into
+              the page. Lives INSIDE the film wrapper so at lg it can only ever
+              dim the film half, never the left panel; still above the counter
+              and below the board, exactly as before. Markup opacity 0
+              (decorative) — the effect owns it. */}
+          <div
+            ref={veilRef}
+            aria-hidden="true"
+            className="absolute inset-0 bg-bg opacity-0 motion-reduce:hidden"
+          />
         </div>
-        {/* Veil — rests at VEIL_REST while the hero type sits over the film,
-            lifts to 0 as the type departs, then rises to 0.85 over the last
-            beat so the clip recedes into the page. Sits BELOW the board so the
-            rows stay crisp. Markup opacity 0 (decorative) — the effect owns it. */}
+        {/* Left panel (lg+, motion-safe) — solid --bg under the content half
+            of the split, so the left side stays composed after the hero
+            scrolls off the stage. */}
         <div
-          ref={veilRef}
           aria-hidden="true"
-          className="absolute inset-0 bg-bg opacity-0 motion-reduce:hidden"
+          className="absolute inset-y-0 left-0 hidden w-1/2 bg-bg motion-safe:lg:block"
         />
 
-        {/* The board — dl/dt/dd semantics preserved (BoardRow unchanged). */}
+        {/* The board — dl/dt/dd semantics preserved (BoardRow unchanged). At
+            lg+ (motion-safe) it rides the LEFT half over the solid panel: the
+            centered Container makes the w-1/2 wrapper end exactly at the seam,
+            and pr-space-7 matches the hero column's inset off it. */}
         <Container className="relative py-space-7 motion-safe:absolute motion-safe:inset-x-0 motion-safe:bottom-0 motion-safe:py-0 motion-safe:pb-space-7 short-land:pb-space-4">
-          <dl ref={dlRef} className="border-y border-line">
-            {ROWS.map((row, i) => (
-              <BoardRow key={row.label} index={i} label={row.label}>
-                <FlapText
-                  text={row.value.toUpperCase()}
-                  trigger="manual"
-                  active={activeRows > i}
-                  flips={3}
-                />
+          <div className="motion-safe:lg:w-1/2 motion-safe:lg:pr-space-7">
+            <dl ref={dlRef} className="border-y border-line">
+              {ROWS.map((row, i) => (
+                <BoardRow key={row.label} index={i} label={row.label}>
+                  <FlapText
+                    text={row.value.toUpperCase()}
+                    trigger="manual"
+                    active={activeRows > i}
+                    flips={3}
+                  />
+                </BoardRow>
+              ))}
+              <BoardRow index={ROWS.length} label="Status">
+                <StatusValue flapTrigger="manual" active={activeRows > ROWS.length} />
               </BoardRow>
-            ))}
-            <BoardRow index={ROWS.length} label="Status">
-              <StatusValue flapTrigger="manual" active={activeRows > ROWS.length} />
-            </BoardRow>
-          </dl>
+            </dl>
+          </div>
         </Container>
       </div>
     </section>

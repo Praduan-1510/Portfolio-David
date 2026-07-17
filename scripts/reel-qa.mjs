@@ -66,23 +66,47 @@ async function run(name, viewport, progressPoints, { reduced = false } = {}) {
     const el = document.getElementById("currently");
     const canvas = el.querySelector("canvas");
     const dl = el.querySelector("dl");
+    const stage = el.querySelector(":scope > div");
+    const cRect = canvas ? canvas.getBoundingClientRect() : null;
     return {
       trackH: el.offsetHeight,
       canvasOpacity: canvas ? getComputedStyle(canvas).opacity : null,
       canvasSize: canvas ? `${canvas.width}x${canvas.height}` : null,
       dlOpacity: dl ? getComputedStyle(dl).opacity : null,
       counter: el.querySelector("span[aria-hidden]")?.textContent ?? null,
+      stageW: stage ? stage.clientWidth : null,
+      canvasCssW: cRect ? Math.round(cRect.width) : null,
+      canvasLeft: cRect ? Math.round(cRect.left) : null,
     };
   });
   console.log(name, JSON.stringify(state), errors.length ? `PAGE ERRORS: ${errors.join(" | ")}` : "no page errors");
+
+  // Split geometry check: at lg+ the film canvas must occupy the right half of
+  // the sticky stage (±2px for the seam border); below lg it must stay
+  // full-bleed. Reduced motion hides the canvas entirely — skip.
+  if (!reduced && state.stageW && state.canvasCssW != null) {
+    const half = viewport.width >= 1024;
+    const wantW = half ? state.stageW / 2 : state.stageW;
+    const okW = Math.abs(state.canvasCssW - wantW) <= 2;
+    const okL = half
+      ? Math.abs(state.canvasLeft - state.stageW / 2) <= 2
+      : state.canvasLeft <= 2;
+    console.log(
+      `${name} split-check: ${okW && okL ? "OK" : "FAIL"} (canvas ${state.canvasCssW}px @x=${state.canvasLeft}, stage ${state.stageW}px, expected ${half ? "right half" : "full-bleed"})`,
+    );
+  }
   await page.close();
 }
 
 const DESKTOP = { width: 1440, height: 900, deviceScaleFactor: 1 };
+const TABLET = { width: 1024, height: 768, deviceScaleFactor: 1 };
+const ULTRAWIDE = { width: 1920, height: 1080, deviceScaleFactor: 1 };
 const MOBILE = { width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true };
 const SHORTLAND = { width: 844, height: 390, deviceScaleFactor: 2, isMobile: true, hasTouch: true };
 
 await run("desktop", DESKTOP, [0, 0.05, 0.2, 0.35, 0.55, 0.75, 0.95]);
+await run("tablet", TABLET, [0, 0.35, 0.75]);
+await run("ultrawide", ULTRAWIDE, [0, 0.5, 0.95]);
 await run("mobile", MOBILE, [0.5, 0.8]);
 await run("shortland", SHORTLAND, [0.6]);
 await run("reduced", DESKTOP, [0.5], { reduced: true });

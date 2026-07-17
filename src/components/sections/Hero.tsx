@@ -8,22 +8,23 @@ import { HeroFlow } from "@/components/sections/HeroFlow";
 
 /*
  * Home hero — the INSTRUMENT hero. No shader wallpaper, no centered template:
- * a type-led, asymmetric composition in the site's own departure-board /
- * instrument language (DESIGN_GUIDELINES §3 dark base, §7 motion).
+ * a type-led composition in the site's own departure-board / instrument
+ * language (DESIGN_GUIDELINES §3 dark base, §7 motion).
  *
- *   - The stacked split-flap wordmark (PRADUAN / SAHA) is the one big moment,
- *     left-aligned at display scale, settling into kerned type.
- *   - The signal trace on SAHA's baseline is the one living element: a thin
- *     line whose gradient IS the four project accents, ticked 01–04 — the
- *     spectrum literally built from the work, foreshadowing the grid below.
+ *   - Split-screen cut at lg+: ALL content lives in the LEFT half of the
+ *     frame; the cinematic reel's film owns the RIGHT half (the reel's sticky
+ *     stage confines its film layer to the right of the 50vw seam). Below lg
+ *     the content runs full width over the full-bleed film, as before.
+ *   - The split-flap wordmark is the one big moment, left-aligned at display
+ *     scale, settling into kerned type.
  *   - HUD readouts carry the instrument voice (the About hero's language),
- *     and the eyebrow finally speaks mono-caps like every other label.
- *   - Backdrop: near-black, a faint blueprint dot grid, ONE quiet ember, film
- *     grain. Quiet, composed, and unmistakably this site.
+ *     and the eyebrow speaks mono-caps like every other label.
+ *   - Backdrop (left half at lg+): near-black, a faint blueprint dot grid,
+ *     ONE quiet ember, film grain. Quiet, composed, unmistakably this site.
  *
- * Load choreography cascades top-to-bottom (eyebrow → boards → trace →
- * tagline → subhead → CTAs → scroll row), transform/opacity only, tokens only,
- * and fully reduced-motion safe (every primitive renders settled/static).
+ * Load choreography cascades top-to-bottom (eyebrow → boards → tagline →
+ * subhead → CTAs), transform/opacity only, tokens only, and fully
+ * reduced-motion safe (every primitive renders settled/static).
  */
 
 const SEQ = {
@@ -49,7 +50,7 @@ export function Hero() {
           quiet ember. Both -z, both decorative; no WebGL on the LCP path. */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 opacity-60"
+        className="absolute inset-0 -z-10 opacity-60 motion-safe:lg:right-1/2"
         style={{
           backgroundImage: "radial-gradient(currentColor 0.5px, transparent 0.5px)",
           backgroundSize: "22px 22px",
@@ -74,9 +75,16 @@ export function Hero() {
           half, and the wordmark + supporting rows anchor to the lower third —
           over the subject's dark jacket and the reel's bottom scrim, where
           white type actually reads. */}
-      <Container className="relative z-10 flex flex-1 flex-col justify-between py-space-7 [@media(max-height:600px)]:py-space-5 short-land:justify-start">
+      <Container className="relative z-10 flex flex-1 py-space-7 [@media(max-height:600px)]:py-space-5">
+        {/* Left column (lg+): everything the hero says lives left of the 50vw
+            seam — the film owns the right half. Container is centered, so a
+            w-1/2 child ends exactly at the seam; pr-space-7 is the shared
+            inset off it (the reel's board uses the same). Below lg this is
+            simply the old full-width column. */}
+        <div className="flex w-full flex-col justify-between short-land:justify-start motion-safe:lg:w-1/2 motion-safe:lg:pr-space-7">
         {/* Top row — mono-caps eyebrow left (the one label that used to break
-            the site's label voice), HUD status readout right. */}
+            the site's label voice), HUD status readout right (at lg+ its right
+            edge sits just off the seam). */}
         <Reveal
           as="div"
           trigger="load"
@@ -115,8 +123,10 @@ export function Hero() {
           </h1>
           <HeroWordmark />
 
-        {/* Supporting row — statement + subhead left, CTAs anchored right. */}
-        <div className="mt-space-5 grid items-end gap-x-space-9 gap-y-space-5 short-land:mt-space-5 short-land:grid-cols-[minmax(0,1fr)_auto] short-land:items-start short-land:gap-x-space-5 lg:mt-space-7 lg:gap-y-space-6 lg:grid-cols-[minmax(0,1fr)_auto]">
+        {/* Supporting row — statement + subhead, then CTAs. Single column at
+            lg too: the split's ~half-width column can't seat a 26ch heading
+            beside two lg buttons (short-land keeps its own two-col shape). */}
+        <div className="mt-space-5 grid items-end gap-x-space-9 gap-y-space-5 short-land:mt-space-5 short-land:grid-cols-[minmax(0,1fr)_auto] short-land:items-start short-land:gap-x-space-5 lg:mt-space-6">
           <div className="min-w-0">
             {/* Tagline — word-by-word rise; the closing phrase carries the one
                 sanctioned colour moment (.text-spectrum) and lands last. */}
@@ -189,6 +199,7 @@ export function Hero() {
               </Button>
             </Reveal>
           </div>
+        </div>
         </div>
         </div>
       </Container>

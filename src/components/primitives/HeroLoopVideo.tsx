@@ -15,25 +15,27 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
  *   1. object-cover on a portrait aperture drops the dark side-margins, and a
  *      radial mask feathers the fanned side-screens so the crop never shows an
  *      edge.
- *   2. a gentle contrast() maps that near-black surround *exactly* onto the page
- *      black: contrast(1.12) sends rgb(~17) → rgb(~5) while whites stay white and
- *      mid-tones stay put, so the surround dissolves without dulling the UI.
+ *   2. a *gentle* contrast() pulls that near-black surround down toward the page
+ *      black — contrast(1.06) sends rgb(~17)→rgb(~10) while whites stay white and
+ *      mids hold. It's deliberately restrained: pushing harder (e.g. 1.12) crushes
+ *      the montage's genuinely-dark top screens *below* the page black, which then
+ *      read as a dark block where they overlap the bright aurora glow. The mask,
+ *      not the filter, is what erases the box; the filter only narrows the delta.
  *
  * "Lazyload" here is preload="none" + an IntersectionObserver play-gate: the
  * file never touches the LCP path and only decodes while the hero is on screen.
  * Reduced motion renders the static `fallback` (the phone still) instead.
  */
 
-// Feathered aperture — a tall ellipse that keeps the montage's centre column
-// crisp while its fanned side-screens melt into the hero, so the object-cover
-// crop never shows a hard edge. Tuned against the live Spendee hero.
+// Feathered aperture — an ellipse nudged DOWN (centre at 56%) with a short
+// vertical radius, so the montage's dark top screens dissolve well before the
+// box edge (otherwise they form a hard block against the aurora), the side
+// screens melt away, and the crop never shows an edge. Tuned on the live hero.
 const EDGE_MASK =
-  "radial-gradient(58% 86% at 50% 49%, #000 34%, transparent 92%)";
+  "radial-gradient(58% 74% at 50% 56%, #000 26%, transparent 88%)";
 
-// Maps the baked-in near-black surround (~rgb(17)) onto the page black (~rgb(5)).
-// contrast(1.12): output = (in-0.5)*1.12 + 0.5 → 0.067 → ~0.019; whites clamp to
-// white, mids stay put. brightness(0.98) nudges the last hair of lift out.
-const SURROUND_KNOCKOUT = "contrast(1.12) brightness(0.98)";
+// Narrows the surround-vs-page delta without crushing darks (see note above).
+const SURROUND_KNOCKOUT = "contrast(1.06) brightness(0.99)";
 
 interface HeroLoopVideoProps {
   /** H.264 MP4 source — plays in every browser, including Safari. */

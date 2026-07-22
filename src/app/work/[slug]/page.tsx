@@ -8,6 +8,7 @@ import {
   Link,
   Button,
   PhoneFrame,
+  HeroLoopVideo,
   BrowserMockup,
   ProjectCover,
 } from "@/components/primitives";
@@ -29,6 +30,7 @@ import {
   getAllProjectsMeta,
 } from "@/lib/content/work";
 import { slugify } from "@/lib/utils/slugify";
+import { cn } from "@/lib/utils/cn";
 import { SITE_URL, site } from "@/lib/site";
 import { CaseStudyNav } from "./CaseStudyNav";
 
@@ -326,7 +328,16 @@ export default async function CaseStudy({
               </StaggerGroup>
             </div>
 
-            <Reveal trigger="load" delay={0.2} className="relative mx-auto w-full max-w-[17rem]">
+            <Reveal
+              trigger="load"
+              delay={0.2}
+              className={cn(
+                "relative mx-auto w-full",
+                // The looping reel is a landscape montage cropped to a portrait
+                // aperture, so it wants a touch more width than the phone still.
+                meta.video?.src ? "max-w-[20rem]" : "max-w-[17rem]",
+              )}
+            >
               <div
                 aria-hidden="true"
                 className="absolute -inset-10 -z-10"
@@ -335,13 +346,31 @@ export default async function CaseStudy({
                     "radial-gradient(closest-side, color-mix(in srgb, var(--accent) 20%, transparent), transparent)",
                 }}
               />
-              <PhoneFrame
-                src={meta.cover}
-                alt={`${meta.title} — cover screen`}
-                priority
-                sizes="17rem"
-                imgClassName="object-top"
-              />
+              {meta.video?.src ? (
+                <HeroLoopVideo
+                  mp4={meta.video.src}
+                  alt={`${meta.title} — looping product reel`}
+                  fallback={
+                    <div className="mx-auto max-w-[17rem]">
+                      <PhoneFrame
+                        src={meta.cover}
+                        alt={`${meta.title} — cover screen`}
+                        priority
+                        sizes="17rem"
+                        imgClassName="object-top"
+                      />
+                    </div>
+                  }
+                />
+              ) : (
+                <PhoneFrame
+                  src={meta.cover}
+                  alt={`${meta.title} — cover screen`}
+                  priority
+                  sizes="17rem"
+                  imgClassName="object-top"
+                />
+              )}
             </Reveal>
           </Container>
         )}

@@ -139,8 +139,12 @@ export default async function CaseStudy({
   // title keeps its proportion. Portrait (Spendee) keeps the phone-era ratio.
   // Class strings are literal so Tailwind's JIT generates them.
   const reelIsLandscape = hasReel && reelAspect !== "9/16";
+  // Landscape reels go two-column only from lg up. Below that (phones + tablet
+  // portrait) the hero STACKS so the wide reel spans full width instead of being
+  // squeezed into a tiny half-column (a 2-col landscape reel at 768px is ~300px
+  // — too small, with dead space). Portrait/phone heroes keep the md split.
   const heroGridCols = reelIsLandscape
-    ? "md:grid-cols-[1fr_1fr]"
+    ? "lg:grid-cols-[1fr_1fr]"
     : "md:grid-cols-[1.12fr_0.88fr]";
 
   // CreativeWork structured data for the case study — describes the project and
@@ -371,12 +375,15 @@ export default async function CaseStudy({
               trigger="load"
               delay={0.2}
               className={cn(
-                "relative mx-auto w-full",
-                // The reel sizes itself from its aperture (style below); the
-                // phone still keeps its fixed portrait cap.
+                "relative",
+                // Landscape reels break out toward the right viewport edge so
+                // they grow wide and lead the hero on large monitors instead of
+                // staying locked to the ~600px container column (.hlv-bleed).
+                // Portrait (Spendee) + the phone still stay centred + capped.
+                reelIsLandscape ? "hlv-bleed" : "mx-auto w-full",
                 !hasReel && "max-w-[17rem]",
               )}
-              style={hasReel ? { maxWidth: reelMaxWidth } : undefined}
+              style={hasReel && !reelIsLandscape ? { maxWidth: reelMaxWidth } : undefined}
             >
               <div
                 aria-hidden="true"

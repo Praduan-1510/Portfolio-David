@@ -610,6 +610,29 @@ html.lenis body {
     will-change: transform, opacity;
   }
 }
+/* Landscape reel bleed — the container caps content at 90rem, which locks the
+   reel to a ~600px column and leaves it small on wide monitors. This breaks the
+   reel wrapper out of that cap toward the right viewport edge (~2rem inset), so
+   it grows wide and leads the hero, and scales with the screen. Mobile keeps it
+   contained + centred. Capped so the tallest aspect (4/3) can't get absurd on
+   ultra-wide. The `- 2rem` lands its right edge ~2rem from the viewport. */
+.hlv-bleed {
+  width: 100%;
+  max-width: 36rem;
+  margin-inline: auto;
+}
+/* Two-column bleed only from lg up — matches the hero's lg stack→split (page).
+   Below lg the reel is full-width in the stacked layout. */
+@media (min-width: 1024px) {
+  .hlv-bleed {
+    width: auto;
+    max-width: 60rem;
+    margin-left: 0;
+    margin-right: calc(
+      2rem - max(0px, (100vw - 90rem) / 2) - clamp(1.25rem, 5vw, 6rem)
+    );
+  }
+}
 @keyframes hlv-float {
   from { transform: translate3d(0, -0.6%, 0); }
   to { transform: translate3d(0, 1%, 0); }

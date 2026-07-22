@@ -334,8 +334,9 @@ export default async function CaseStudy({
               className={cn(
                 "relative mx-auto w-full",
                 // The looping reel is a landscape montage cropped to a portrait
-                // aperture, so it wants a touch more width than the phone still.
-                meta.video?.src ? "max-w-[20rem]" : "max-w-[17rem]",
+                // aperture, so it wants noticeably more width than the phone still
+                // to read as the hero's centrepiece.
+                meta.video?.src ? "max-w-[26rem]" : "max-w-[17rem]",
               )}
             >
               <div

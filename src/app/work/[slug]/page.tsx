@@ -147,6 +147,17 @@ export default async function CaseStudy({
     ? "lg:grid-cols-[1fr_1fr]"
     : "md:grid-cols-[1.12fr_0.88fr]";
 
+  // Landscape reels are vertically centred on the (tall) left column by the
+  // grid, which drops them low against the title. Lift each at lg so its centre
+  // lands on the title's eye-line — per-aspect, since a 4/3 ring stands taller
+  // than a 16/9 flow and needs a bigger lift. lg-only (below lg the hero stacks,
+  // so there's no left column to centre against). Aspects with no entry keep the
+  // plain grid centring.
+  const REEL_YSHIFT: Record<string, string> = {
+    "4/3": "lg:self-start lg:-mt-[6rem]",
+  };
+  const reelYShift = reelIsLandscape ? REEL_YSHIFT[reelAspect] ?? "" : "";
+
   // CreativeWork structured data for the case study — describes the project and
   // credits it to the Person declared in the layout (referenced by name + url).
   const creativeWorkJsonLd = {
@@ -381,6 +392,8 @@ export default async function CaseStudy({
                 // staying locked to the ~600px container column (.hlv-bleed).
                 // Portrait (Spendee) + the phone still stay centred + capped.
                 reelIsLandscape ? "hlv-bleed" : "mx-auto w-full",
+                // Per-aspect vertical lift so the reel centres on the title.
+                reelYShift,
                 !hasReel && "max-w-[17rem]",
               )}
               style={hasReel && !reelIsLandscape ? { maxWidth: reelMaxWidth } : undefined}

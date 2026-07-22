@@ -584,6 +584,41 @@ html.lenis body {
   to { opacity: 1; transform: scale(1); }
 }
 
+/* Reel hero (HeroLoopVideo) — the floating product capture. Shares BrowserMockup's
+   motion vocabulary: a perspective stage, a cursor-parallax wrapper (vars set in
+   JS on fine pointers only; rest at 0 for touch/reduced), and a slow idle
+   levitation so the reel reads as a living object, not a placed rectangle.
+   Transform/opacity only. */
+.hlv-stage {
+  perspective: 1100px;
+}
+.hlv-tilt {
+  transform: rotateX(var(--hlv-rx, 0deg)) rotateY(var(--hlv-ry, 0deg));
+  transform-style: preserve-3d;
+  transition: transform var(--dur-base) var(--ease-out-quad);
+  will-change: transform;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hlv-float {
+    animation: hlv-float 8.5s var(--ease-in-out-quart) infinite alternate;
+  }
+  /* Aurora drift — on reel heroes the ember slowly wanders and breathes, so the
+     backdrop feels alive behind the moving capture. One ember per viewport,
+     still subtle (§ ember dosage); transform/opacity only. */
+  .cs-ember-drift {
+    animation: ember-drift 16s ease-in-out infinite alternate;
+    will-change: transform, opacity;
+  }
+}
+@keyframes hlv-float {
+  from { transform: translate3d(0, -0.6%, 0); }
+  to { transform: translate3d(0, 1%, 0); }
+}
+@keyframes ember-drift {
+  from { transform: translate3d(-1.5%, -1%, 0) scale(1); opacity: 0.78; }
+  to { transform: translate3d(1.5%, 1%, 0) scale(1.07); opacity: 1; }
+}
+
 @layer components {
   /* Skip-to-content link — visually hidden until focused (DESIGN_GUIDELINES.md §10). */
   .skip-link {

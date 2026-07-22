@@ -79,6 +79,10 @@ export default async function CaseStudy({
 
   const { meta, content } = project;
   const isWeb = meta.kind === "web";
+  // A "reel hero" is an APP study with a hero video (the floating HeroLoopVideo
+  // montage). Web studies also carry meta.video (for the BrowserMockup screen),
+  // so gate on kind too — insightstap must keep the standard hero treatment.
+  const hasReel = !isWeb && !!meta.video?.src;
   const liveHost = meta.liveUrl
     ? meta.liveUrl.replace(/^https?:\/\//, "").replace(/\/+$/, "")
     : undefined;
@@ -117,6 +121,21 @@ export default async function CaseStudy({
     ? ({ "--accent": meta.accent } as React.CSSProperties)
     : undefined;
 
+  // Hero reel aperture — each capture declares its composition's aspect in
+  // frontmatter (video.aspect) so nothing meaningful gets cropped: Spendee's
+  // centre-column montage crops to a 9/16 portrait, Decathlon's carousel ring
+  // wants 4/3, Voyager's edge-to-edge isometric flow needs the full 16/9 frame.
+  // Wider apertures earn more column so the screens stay legible.
+  const REEL_WIDTHS: Record<string, string> = {
+    "9/16": "26rem",
+    "1/1": "30rem",
+    "4/3": "32rem",
+    "16/10": "34rem",
+    "16/9": "36rem",
+  };
+  const reelAspect = meta.video?.aspect ?? "9/16";
+  const reelMaxWidth = REEL_WIDTHS[reelAspect.replace(/\s/g, "")] ?? "26rem";
+
   // CreativeWork structured data for the case study — describes the project and
   // credits it to the Person declared in the layout (referenced by name + url).
   const creativeWorkJsonLd = {
@@ -154,8 +173,11 @@ export default async function CaseStudy({
             keep the standard top-right ember. */}
         <AuroraEmber
           hues={["accent", "violet"]}
-          position={meta.video?.src ? "top-left" : "top-right"}
-          intensity={meta.video?.src ? 0.14 : 0.24}
+          position={hasReel ? "top-left" : "top-right"}
+          intensity={hasReel ? 0.14 : 0.24}
+          // Reel heroes get a slow drift/breathe so the backdrop feels alive
+          // behind the moving capture (motion-safe only; recipe in globals.css).
+          className={hasReel ? "cs-ember-drift" : undefined}
         />
         {/* Per-study decorative motif (data-motif on the article): blueprint
             dots / ledger ruling / route dashes / athletic grid — so each study
@@ -340,11 +362,11 @@ export default async function CaseStudy({
               delay={0.2}
               className={cn(
                 "relative mx-auto w-full",
-                // The looping reel is a landscape montage cropped to a portrait
-                // aperture, so it wants noticeably more width than the phone still
-                // to read as the hero's centrepiece.
-                meta.video?.src ? "max-w-[26rem]" : "max-w-[17rem]",
+                // The reel sizes itself from its aperture (style below); the
+                // phone still keeps its fixed portrait cap.
+                !hasReel && "max-w-[17rem]",
               )}
+              style={hasReel ? { maxWidth: reelMaxWidth } : undefined}
             >
               <div
                 aria-hidden="true"
@@ -354,13 +376,14 @@ export default async function CaseStudy({
                   // dialled right down — it should float in near-darkness, not
                   // sit in a green halo. The phone still keeps the fuller lift.
                   background: `radial-gradient(closest-side, color-mix(in srgb, var(--accent) ${
-                    meta.video?.src ? 9 : 20
+                    hasReel ? 9 : 20
                   }%, transparent), transparent)`,
                 }}
               />
-              {meta.video?.src ? (
+              {hasReel && meta.video?.src ? (
                 <HeroLoopVideo
                   mp4={meta.video.src}
+                  aspect={reelAspect}
                   alt={`${meta.title} — looping product reel`}
                   fallback={
                     <div className="mx-auto max-w-[17rem]">

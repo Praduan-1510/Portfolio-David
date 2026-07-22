@@ -125,23 +125,16 @@ export default async function CaseStudy({
   // frontmatter (video.aspect) so nothing meaningful gets cropped: Spendee's
   // centre-column montage crops to a 9/16 portrait, Decathlon's carousel ring
   // wants 4/3, Voyager's edge-to-edge isometric flow needs the full 16/9 frame.
-  // A landscape reel is the hero's centrepiece, so it claims a reel-favouring
-  // grid split (below) AND a wide cap; portrait keeps the phone-era footprint.
+  // Wider apertures earn more column so the screens stay legible.
   const REEL_WIDTHS: Record<string, string> = {
     "9/16": "26rem",
-    "1/1": "40rem",
-    "4/3": "46rem",
-    "16/10": "50rem",
-    "16/9": "52rem",
+    "1/1": "30rem",
+    "4/3": "32rem",
+    "16/10": "34rem",
+    "16/9": "36rem",
   };
-  const reelAspect = (meta.video?.aspect ?? "9/16").replace(/\s/g, "");
-  const reelMaxWidth = REEL_WIDTHS[reelAspect] ?? "26rem";
-  // Landscape reels (everything but the 9/16 portrait) get the wide split so
-  // the montage leads; class strings are literal for Tailwind's JIT.
-  const reelIsLandscape = hasReel && reelAspect !== "9/16";
-  const heroGridCols = reelIsLandscape
-    ? "md:grid-cols-[0.85fr_1.15fr]"
-    : "md:grid-cols-[1.12fr_0.88fr]";
+  const reelAspect = meta.video?.aspect ?? "9/16";
+  const reelMaxWidth = REEL_WIDTHS[reelAspect.replace(/\s/g, "")] ?? "26rem";
 
   // CreativeWork structured data for the case study — describes the project and
   // credits it to the Person declared in the layout (referenced by name + url).
@@ -304,10 +297,7 @@ export default async function CaseStudy({
             </Container>
           </>
         ) : (
-          <Container className={cn(
-            "grid items-center gap-space-9 pt-space-11 pb-space-9 short-land:items-start short-land:gap-space-6 short-land:pt-space-6",
-            heroGridCols,
-          )}>
+          <Container className="grid items-center gap-space-9 pt-space-11 pb-space-9 short-land:items-start short-land:gap-space-6 short-land:pt-space-6 md:grid-cols-[1.12fr_0.88fr]">
             <div>
               <TextReveal
                 as="h1"

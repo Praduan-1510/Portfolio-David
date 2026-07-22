@@ -148,8 +148,15 @@ export default async function CaseStudy({
           hairline scroll cue that frames the reveal below. */}
       <header className="relative isolate overflow-hidden border-b border-line">
         {/* The aurora, tuned to this project: the route accent blended with its
-            violet spectrum neighbour instead of a flat single-hue radial. */}
-        <AuroraEmber hues={["accent", "violet"]} position="top-right" intensity={0.24} />
+            violet spectrum neighbour instead of a flat single-hue radial. On a
+            reel hero it's calmed and moved to the title side, so the moving
+            montage leads instead of fighting a bloom behind it; other studies
+            keep the standard top-right ember. */}
+        <AuroraEmber
+          hues={["accent", "violet"]}
+          position={meta.video?.src ? "top-left" : "top-right"}
+          intensity={meta.video?.src ? 0.14 : 0.24}
+        />
         {/* Per-study decorative motif (data-motif on the article): blueprint
             dots / ledger ruling / route dashes / athletic grid — so each study
             screenshots differently beyond its accent. Recipes in globals.css. */}
@@ -343,8 +350,12 @@ export default async function CaseStudy({
                 aria-hidden="true"
                 className="absolute -inset-10 -z-10"
                 style={{
-                  background:
-                    "radial-gradient(closest-side, color-mix(in srgb, var(--accent) 20%, transparent), transparent)",
+                  // The reel carries its own presence, so its lift-bloom is
+                  // dialled right down — it should float in near-darkness, not
+                  // sit in a green halo. The phone still keeps the fuller lift.
+                  background: `radial-gradient(closest-side, color-mix(in srgb, var(--accent) ${
+                    meta.video?.src ? 9 : 20
+                  }%, transparent), transparent)`,
                 }}
               />
               {meta.video?.src ? (

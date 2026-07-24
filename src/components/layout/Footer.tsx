@@ -15,8 +15,7 @@ const nav = [
 
 const socials = [
   { href: site.linkedIn, label: "LinkedIn" },
-  // TODO(Praduan): PLACEHOLDER GitHub URL — replace with the real handle (Task 10).
-  { href: "https://github.com/PRADUAN-HANDLE", label: "GitHub" },
+  { href: "https://github.com/Praduan-1510", label: "GitHub" },
   { href: `mailto:${site.email}`, label: "Email" },
 ];
 

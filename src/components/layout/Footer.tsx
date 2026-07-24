@@ -15,6 +15,8 @@ const nav = [
 
 const socials = [
   { href: site.linkedIn, label: "LinkedIn" },
+  // TODO(Praduan): PLACEHOLDER GitHub URL — replace with the real handle (Task 10).
+  { href: "https://github.com/PRADUAN-HANDLE", label: "GitHub" },
   { href: `mailto:${site.email}`, label: "Email" },
 ];
 
@@ -51,7 +53,7 @@ export function Footer() {
             Praduan Saha
           </p>
           <Text variant="body" className="mt-space-3 text-muted">
-            Product designer &amp; front-end developer. Clarity, usable systems,
+            Product designer &amp; front-end designer. Clarity, usable systems,
             shipped to production.
           </Text>
         </div>

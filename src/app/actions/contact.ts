@@ -75,13 +75,16 @@ export async function sendContactMessage(
     };
   }
 
-  // Delivery. Missing config fails cleanly (and points the visitor to email)
-  // rather than throwing — so the form is safe to ship before the Resend keys
-  // are set in the environment.
+  // Delivery. ONLY RESEND_API_KEY is required — the recipient defaults to the
+  // portfolio inbox and the sender to Resend's no-setup address, so turning the
+  // form on is a single env var. Both can be overridden once a custom domain is
+  // verified in Resend. A missing key fails cleanly (points the visitor to
+  // email) rather than throwing — safe to ship before the key exists.
   const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_TO_EMAIL;
-  const from = process.env.CONTACT_FROM_EMAIL;
-  if (!apiKey || !to || !from) {
+  const to = process.env.CONTACT_TO_EMAIL ?? "hey@praduansaha.com";
+  const from =
+    process.env.CONTACT_FROM_EMAIL ?? "Portfolio <onboarding@resend.dev>";
+  if (!apiKey) {
     return {
       status: "error",
       message:

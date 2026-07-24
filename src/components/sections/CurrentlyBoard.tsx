@@ -7,7 +7,7 @@ import { spectrumAt } from "@/lib/spectrum";
 /*
  * "Currently" board primitives — the departure-board answer to a stats strip.
  * Four instrument rows of REAL positioning data (what's being designed, what
- * shipped and how it measures, what's hand-coded, availability + live IST
+ * shipped and how it measures, how each claim is labelled, availability + live IST
  * clock). All mono-caps (the flap-safe voice), hairline-framed.
  *
  * The board now lives inside the home cinematic reel (reel/CinematicReel.tsx),
@@ -19,7 +19,7 @@ import { spectrumAt } from "@/lib/spectrum";
 export const ROWS: { label: string; value: string }[] = [
   { label: "Currently", value: "Designing InsightsTap · B2B AI GTM" },
   { label: "Shipped", value: "insightstap.com · Lighthouse a11y 95" },
-  { label: "Screens", value: "41 hand-coded for the case studies" },
+  { label: "Method", value: "Every claim labelled: tested, intent, or hypothesis" },
   // The STATUS row is rendered separately — it carries the live clock.
 ];
 

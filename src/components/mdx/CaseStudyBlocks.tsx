@@ -356,19 +356,23 @@ export function BeforeAfter({
   note,
   altBefore,
   altAfter,
+  afterChip = "Shipped",
 }: {
   before: string;
   after: string;
   note?: string;
   altBefore?: string;
   altAfter?: string;
+  /** Label on the final-state (right) image. Defaults to "Shipped" for the real
+   *  shipped work; concept studies pass "Final" — nothing shipped. */
+  afterChip?: string;
 }) {
   return (
     <figure className="cs-wide my-space-9">
       <StaggerGroup as="div" stagger={0.1} className="grid grid-cols-2 items-start gap-space-5 sm:gap-space-8 lg:max-w-[36rem]">
         {[
           { src: before, chip: "V1 — caught in revision", alt: altBefore ?? "First-pass screen", dim: true },
-          { src: after, chip: "Shipped", alt: altAfter ?? "Shipped screen", dim: false },
+          { src: after, chip: afterChip, alt: altAfter ?? `${afterChip} screen`, dim: false },
         ].map((side) => (
           <div key={side.chip} className="min-w-0">
             <span

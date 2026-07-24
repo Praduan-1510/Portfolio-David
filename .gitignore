@@ -30,3 +30,6 @@ next-env.d.ts
 
 # vercel
 .vercel
+
+# local QA artifacts (Lighthouse reports are large + regenerated on demand)
+/scripts/lighthouse/reports/

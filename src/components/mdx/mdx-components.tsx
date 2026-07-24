@@ -1,4 +1,5 @@
 import { Text, Link, BrowserMockup } from "@/components/primitives";
+import { FigmaPrototype } from "@/components/FigmaPrototype";
 import { slugify } from "@/lib/utils/slugify";
 import { cn } from "@/lib/utils/cn";
 import {
@@ -200,4 +201,5 @@ export const mdxComponents = {
   Wide,
   Bleed,
   BeforeAfter,
+  FigmaPrototype,
 };

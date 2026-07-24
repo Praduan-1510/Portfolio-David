@@ -143,7 +143,7 @@ function WorkStackRow({
                 project={project}
                 sizes={
                   isWeb
-                    ? "(min-width: 768px) 30rem, 86vw"
+                    ? "(min-width: 768px) 19rem, 86vw"
                     : "(min-width: 768px) 14rem, 42vw"
                 }
                 imgClassName={

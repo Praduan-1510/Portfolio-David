@@ -628,7 +628,7 @@ export default async function CaseStudy({
                       <PhoneFrame
                         src={screen.src}
                         alt={`${meta.title} — ${screen.caption}`}
-                        sizes="(min-width: 1024px) 22vw, 45vw"
+                        sizes="(min-width: 1024px) 19rem, 45vw"
                         imgClassName="object-top"
                         className="transition-[transform,box-shadow] duration-base ease-out-quad group-hover/sc:-translate-y-1 group-hover/sc:shadow-neon"
                       />

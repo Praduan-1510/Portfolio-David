@@ -8,6 +8,12 @@ const nextConfig: NextConfig = {
     // these UI screenshots) so modern browsers get the lighter file, with WebP and
     // then the source format as fallbacks. Encoding is cached after first request.
     formats: ["image/avif", "image/webp"],
+    // Cap the generated variants at 1920. No slot on the site needs more: the
+    // widest image is the case-study hero (~1248px) and the widest still is the
+    // InsightsTap wide shot (~658px → 1316px @2×), both under 1920. Dropping the
+    // default 2048 + 3840 tiers guarantees we never ship a 3840px file into a
+    // few-hundred-px slot on a wide/retina screen.
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
   },
 };
 

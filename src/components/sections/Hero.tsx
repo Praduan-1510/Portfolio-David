@@ -123,7 +123,7 @@ export function Hero() {
             justify-between spacer above them keeps the film's subject clear. */}
         <div className="mt-space-6 short-land:mt-space-4">
           <h1 className="sr-only">
-            Praduan Saha — product designer and front-end developer
+            Praduan Saha — product designer and front-end designer
           </h1>
           <HeroWordmark />
 

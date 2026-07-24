@@ -16,7 +16,7 @@ export const site = {
   jobTitle: "Product Designer (Design + Front-End)",
   description:
     "Product designer who also ships front-end — turning complex, data-heavy ideas into clear, usable interfaces and the systems that hold them together.",
-  email: "spraduan@gmail.com",
+  email: "hey@praduansaha.com",
   linkedIn: "https://www.linkedin.com/in/praduan-saha-9a8965172/",
   location: {
     addressLocality: "Kolkata",

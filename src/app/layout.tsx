@@ -75,7 +75,7 @@ export const metadata: Metadata = {
     template: "%s — Praduan Saha",
   },
   description:
-    "Product designer and front-end developer based in Kolkata — turning complex, data-heavy products into clear, usable interfaces, and building the front-end that ships them.",
+    "Product designer and front-end designer based in Kolkata — turning complex, data-heavy products into clear, usable interfaces, and building the front-end that ships them.",
   openGraph: {
     title: "Praduan Saha — Product Designer (Design + Front-End)",
     description:

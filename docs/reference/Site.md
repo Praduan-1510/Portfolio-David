@@ -9,7 +9,7 @@
 ## Metadata / SEO
 
 - **Site title:** Praduan Saha — Product Designer (Design + Front-End)
-- **Meta description** (~155 chars): Product designer and front-end developer turning complex, data-heavy products into clear, usable interfaces — and building the front-end that ships them.
+- **Meta description** (~155 chars): Product designer and front-end designer turning complex, data-heavy products into clear, usable interfaces — and building the front-end that ships them.
 - **Social / OG description:** Portfolio of Praduan Saha — a product designer who designs and ships production front-end, focused on clarity, usable systems, and getting work into production.
 - **Nav / logo mark:** "Praduan Saha" (or initials **PS** for a compact mark)
 
@@ -42,7 +42,7 @@ I'm Praduan Saha, a product designer who also ships front-end — working since 
 ## About
 
 **One-liner** (teasers / meta):
-Product designer and front-end developer based in West Bengal, India — focused on clarity, usable systems, and shipping work into production.
+Product designer and front-end designer based in West Bengal, India — focused on clarity, usable systems, and shipping work into production.
 
 **About — long (about page):**
 
@@ -108,18 +108,18 @@ Created infographics, blog visuals, and marketing assets, and partnered with SEO
 - **Heading:** Let's work together
 - **Body:** Have a project in mind, or just want to say hello? Email is the fastest way to reach me — I'll get back to you.
 - **Details:**
-  - Email: spraduan@gmail.com
+  - Email: hey@praduansaha.com
   - LinkedIn: linkedin.com/in/praduan-saha-9a8965172
   - Location: Kolkata, West Bengal, India
   - Phone: [redacted — RESOLVED: omitted from the public site by default. Email + LinkedIn are the contact path. TODO: confirm — add a public phone number only if you want it shown.]
-- **Buttons:** **Email me** → `mailto:spraduan@gmail.com` · **Connect on LinkedIn** → (your URL)
+- **Buttons:** **Email me** → `mailto:hey@praduansaha.com` · **Connect on LinkedIn** → (your URL)
 
 ---
 
 ## Footer
 
 - Mark: Praduan Saha
-- Line: Product designer & front-end developer. Clarity, usable systems, shipped to production.
+- Line: Product designer & front-end designer. Clarity, usable systems, shipped to production.
 - Nav: Work · About · Contact
 - Social: LinkedIn · Email
 - `[confirm]` Availability line: "Open to freelance and full-time opportunities" — include if true

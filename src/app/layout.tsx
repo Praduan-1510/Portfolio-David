@@ -9,6 +9,8 @@ import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
 import { ScrollProgress } from "@/components/motion";
 import { LenisProvider } from "@/lib/lenis/lenis-provider";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SITE_URL, site } from "@/lib/site";
 import "./globals.css";
 
@@ -144,6 +146,8 @@ export default function RootLayout({
           <main id="main-content">{children}</main>
           <Footer />
         </LenisProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

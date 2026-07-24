@@ -87,6 +87,7 @@ export function CinematicReel() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const dlRef = useRef<HTMLDListElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
+  const mobileTitleRef = useRef<HTMLDivElement>(null);
   const veilRef = useRef<HTMLDivElement>(null);
   // Bridge from the ScrollTrigger (below) into the canvas effect's closure.
   const drawRef = useRef<(i: number) => void>(() => {});
@@ -171,6 +172,13 @@ export function CinematicReel() {
       const titleParts = titleRef.current
         ? (Array.from(titleRef.current.children) as HTMLElement[])
         : [];
+      // Below lg (and under reduced motion) the split's absolute title is
+      // display:none; a second copy rides ABOVE the board rows so the headline
+      // is never desktop-only. Revealed on the same beat; display:none in the
+      // lg+ split, where set/tween on it is a harmless no-op.
+      const mobileTitleParts = mobileTitleRef.current
+        ? (Array.from(mobileTitleRef.current.children) as HTMLElement[])
+        : [];
       const rest = window.matchMedia("(min-width: 1024px)").matches
         ? VEIL_REST
         : VEIL_REST_PORTRAIT;
@@ -179,6 +187,7 @@ export function CinematicReel() {
       gsap.set(dl, { autoAlpha: 0 }); // board rails ride in with the first row
       gsap.set(rows, { autoAlpha: 0, y: distance.md });
       gsap.set(titleParts, { autoAlpha: 0, y: distance.md }); // title waits for the hero to clear
+      gsap.set(mobileTitleParts, { autoAlpha: 0, y: distance.md });
 
       const tl = gsap.timeline({
         defaults: { ease: "none" },
@@ -209,6 +218,11 @@ export function CinematicReel() {
       // it's the board's headline, so it lands first.
       tl.to(
         titleParts,
+        { autoAlpha: 1, y: 0, duration: 0.09, stagger: 0.03, ease: "expo.out" },
+        TITLE_AT,
+      );
+      tl.to(
+        mobileTitleParts,
         { autoAlpha: 1, y: 0, duration: 0.09, stagger: 0.03, ease: "expo.out" },
         TITLE_AT,
       );
@@ -359,6 +373,23 @@ export function CinematicReel() {
             and pr-space-7 matches the hero column's inset off it. */}
         <Container className="relative py-space-7 motion-safe:absolute motion-safe:inset-x-0 motion-safe:bottom-0 motion-safe:py-0 motion-safe:pb-space-7 short-land:pb-space-4">
           <div className="motion-safe:lg:w-1/2 motion-safe:lg:pr-space-7">
+            {/* Board headline for every context that ISN'T the lg+ motion split
+                — mobile, narrow desktop windows, and reduced motion. The split
+                shows its own absolute copy up in the left panel (above); this
+                one rides directly above the rows so the headline is never
+                desktop-only. `motion-safe:lg:hidden` is the exact complement of
+                that copy's `motion-safe:lg:block`, so precisely one shows per
+                context. Its parts carry the same motion-safe:opacity-0 as the
+                rows (revealed by the timeline via mobileTitleRef) so they never
+                bleed over the transparent hero at scroll 0; reduced motion
+                leaves them visible in normal flow. Dropped on very short
+                viewports where the film scrim can't seat the extra block. */}
+            <div
+              ref={mobileTitleRef}
+              className="mb-space-6 motion-safe:lg:hidden [@media(max-height:600px)]:hidden"
+            >
+              <BoardTitle />
+            </div>
             {/* motion-safe:opacity-0 pre-empts GSAP's at-rest autoAlpha:0 so the
                 board never flashes over the hero in the window before the
                 choreography effect runs. Reduced motion keeps it visible (the

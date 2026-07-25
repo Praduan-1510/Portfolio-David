@@ -23,6 +23,12 @@
 :root[data-theme="light"]{--ink-1:#FBF7F4;--ink-2:#FFFFFF;--ink-3:#FFFFFF;--ink-4:#F4EEEA;--line:#ECE3DC;--line-2:#DCD1C8;--hi:#211A2E;--tx:#4A4360;--mut:#847C97;--faint:#B3A9BE;--card:#FFFFFF;--glass:rgba(251,247,244,.85);--grain:.03;--info:#0E8FB0;--warning:#C77A0A;--danger:#E23A54;--success:#0FA968;--shadow:0 24px 60px -26px rgba(20,10,40,.35)}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
+/* Scrollbars hidden throughout. This prototype is presented inside a device
+   mockup, where a desktop scrollbar track breaks the illusion — and at phone /
+   tablet widths the shell becomes a document-scroll page, where every mobile
+   platform hides them natively anyway. Scrolling itself is untouched. */
+html,body{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 body{font-family:var(--fu);background:var(--ink-1);color:var(--tx);-webkit-font-smoothing:antialiased;overflow:hidden;transition:background .4s var(--ease),color .4s var(--ease)}
 body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;opacity:var(--grain);mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 ::selection{background:rgba(251,46,126,.35);color:#fff}
@@ -156,8 +162,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .icobtn{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:var(--mut);border:1px solid transparent;transition:color .2s,background .2s}
 .icobtn:hover{color:var(--hi);background:var(--card)}.icobtn svg{width:18px;height:18px}
 .top-av{width:32px;height:32px;font-size:12px;cursor:pointer}
-.body{flex:1;overflow-y:auto;min-height:0}
-.body::-webkit-scrollbar{width:10px}.body::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:8px;border:3px solid var(--ink-1)}
+.body{flex:1;overflow-y:auto;min-height:0;scrollbar-width:none;-ms-overflow-style:none}
+.body::-webkit-scrollbar{width:0;height:0;display:none}
 .page{padding:26px 32px 64px;width:100%}
 .ph{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:6px}
 .ph h1{font-size:30px}.ph .sub{font-size:14px;color:var(--mut);margin-top:4px}

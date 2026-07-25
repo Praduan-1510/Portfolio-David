@@ -98,6 +98,10 @@
 
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
+/* Scrollbars hidden — this page is shown inside a device mockup on the case
+   study, where a scrollbar track breaks the illusion. Scrolling is untouched. */
+html,body{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 body{
   font-family:var(--font-ui);
   background:var(--ink-1);

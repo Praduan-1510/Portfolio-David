@@ -24,9 +24,11 @@ import { getFeaturedProjectsMeta } from "@/lib/content/work";
  * shared motion primitives, reduced-motion-safe, transform/opacity only.
  */
 export default function Home() {
-  // Three features on home — /work carries the full inventory, so "All work"
-  // genuinely adds something instead of duplicating this grid.
-  const featured = getFeaturedProjectsMeta().slice(0, 3);
+  // Four features on home — Meridian, InsightsTap, Spendee, Voyager. An even
+  // count also means the grid closes as a clean 2×2 with no trailing full-width
+  // row. /work still carries the full inventory, so "All work" genuinely adds
+  // something (Decathlon) instead of duplicating this grid.
+  const featured = getFeaturedProjectsMeta().slice(0, 4);
 
   return (
     <>

@@ -52,7 +52,8 @@ export default function WorkPage() {
         <Reveal trigger="load" delay={0.18} y={16}>
           <Text variant="body-l" className="mt-space-5 max-w-[var(--measure)] text-muted">
             The full board — live work and labelled concepts, each with the
-            argument it makes. One is in production; three are honest studies.
+            argument it makes. One is in production, one you can use right here,
+            and the rest are honest studies.
           </Text>
         </Reveal>
 

@@ -22,7 +22,7 @@ export function ProjectCover({
   imgClassName,
   playVideo = false,
 }: {
-  project: Pick<ProjectMeta, "kind" | "cover" | "title" | "liveUrl" | "video">;
+  project: Pick<ProjectMeta, "kind" | "cover" | "title" | "liveUrl" | "video" | "prototype">;
   sizes?: string;
   priority?: boolean;
   /** Classes on the frame root (e.g. hover lift / transition). */
@@ -41,7 +41,9 @@ export function ProjectCover({
         mp4={project.video?.src}
         webm={project.video?.webm}
         playInStill={playVideo}
-        domain={hostOf(project.liveUrl)}
+        // A prototype has no live host, so it falls back to the product domain
+        // its own chrome shows — an empty URL pill reads as a broken frame.
+        domain={hostOf(project.liveUrl) ?? project.prototype?.surfaces[0]?.domain}
         alt={`${project.title} — website`}
         sizes={sizes}
         priority={priority}

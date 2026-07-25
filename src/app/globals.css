@@ -359,6 +359,20 @@ html.lenis body {
 .lenis.lenis-smooth iframe {
   pointer-events: none;
 }
+/* …but interactive embeds opt back in. The rule above is Lenis's own (copied
+   from lenis/dist/lenis.css) and it's right for decorative frames: it lets a
+   flick-scroll pass OVER an embed instead of being captured by it. `lenis-smooth`
+   is transient in v1.3 — see `get className()` in lenis/dist/lenis.mjs, it's only
+   set while isScrolling === "smooth" — but with lerp 0.1 the animation isn't
+   "done" until it rounds to the target, i.e. ~0.3–1s of coast after the last
+   wheel tick, during which a click on a LIVE embed is silently eaten. A swallowed
+   click on a working demo is a silent failure; a diverted flick is visible and
+   recoverable, so interactive frames take the trade.
+   Do NOT rescope the rule above to .lenis-scrolling: that class is also set for
+   NATIVE scrolling (lenis.mjs:589,637), which would make iframes dead MORE often. */
+.lenis.lenis-smooth iframe[data-live-frame] {
+  pointer-events: auto;
+}
 
 /* Mobile-menu link reveal. `both` fill + the global reduced-motion rule means
    it jumps straight to the visible end state under prefers-reduced-motion. */
@@ -582,6 +596,120 @@ html.lenis body {
   45% { opacity: 1; }
   62% { opacity: 0.4; }
   to { opacity: 1; transform: scale(1); }
+}
+
+/* ── Live prototype (LivePrototype.tsx) ──────────────────────────────────────
+   The playable case study. Deliberately speaks BrowserMockup's language — same
+   window radius, same layered shadow, same resting tilt — but owns its own
+   recipe because it has one behaviour the mockup doesn't: it goes FLAT when the
+   visitor launches the demo. A tilted slab is right for a picture of a product
+   and wrong for a product, so the tilt is the dormant state and square-on is the
+   working state, with one eased transition between them.
+
+   Geometry is pure CSS so the frame reserves its exact space server-side (no
+   CLS, no measurement race): --lp-ratio is the chosen device's aspect, and the
+   width takes whichever of the column, 78vh, or --lp-maxh binds first. The 76px
+   subtracted from the viewport cap is the two chrome rows + the slab's padding,
+   so the *whole* frame — not just its screen — clears the fold with page left
+   above and below to scroll on. */
+.lp-slab {
+  position: relative;
+  width: min(
+    100%,
+    calc((78vh - 76px) * var(--lp-ratio, 1.6)),
+    calc(var(--lp-maxh, 760px) * var(--lp-ratio, 1.6))
+  );
+  margin-inline: auto;
+  overflow: hidden;
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: var(--surface);
+  transform: rotateX(7deg) rotateY(-9deg) rotateZ(0.4deg);
+  transform-origin: 50% 60%;
+  transition:
+    width var(--dur-base) var(--ease-out-quad),
+    transform var(--dur-slow) var(--ease-out-expo),
+    box-shadow var(--dur-slow) var(--ease-out-quad);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.5),
+    0 18px 40px -12px rgba(0, 0, 0, 0.7),
+    0 60px 120px -30px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 0 70px -16px color-mix(in srgb, var(--accent) 38%, transparent);
+}
+/* Dormant only: the slab invites a click, so it lifts toward the pointer like
+   the rest of the site's cards. Once live, hover belongs to the app inside. */
+@media (hover: hover) {
+  .lp-slab:not([data-live]):hover,
+  .lp-slab:not([data-live]):focus-within {
+    transform: rotateX(3deg) rotateY(-4deg) translateZ(24px) scale(1.015);
+    box-shadow:
+      0 2px 6px rgba(0, 0, 0, 0.5),
+      0 18px 40px -12px rgba(0, 0, 0, 0.7),
+      0 60px 120px -30px rgba(0, 0, 0, 0.85),
+      0 0 0 1px var(--neon),
+      0 0 80px -14px var(--neon-glow);
+  }
+}
+/* Live: square-on to the reader. Pointer coordinates through a rotated ancestor
+   are technically fine but feel wrong, and every pixel of a working UI should be
+   undistorted. The accent glow stays so the frame still reads as the page's
+   centre of gravity. */
+.lp-slab[data-live] {
+  transform: none;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.5),
+    0 30px 70px -22px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 0 90px -20px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+/* Phones: same reasoning as .browser-slab — a 3D tilt inside a narrow gutter
+   reads as a clipped glitch, not a flourish. */
+@media (max-width: 767px) {
+  .lp-slab {
+    transform: none !important;
+  }
+}
+
+.lp-well {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: var(--lp-ratio, 1.6);
+  border-radius: 0 0 7px 7px;
+  background: var(--bezel);
+  transition: aspect-ratio var(--dur-base) var(--ease-out-quad);
+}
+
+/* The launch control gets a slow breath at rest so the dormant frame reads as
+   armed rather than as a static screenshot. Motion-safe only. */
+@media (prefers-reduced-motion: no-preference) {
+  .lp-launch {
+    animation: lp-armed 3.2s var(--ease-in-out-quart) infinite;
+  }
+}
+@keyframes lp-armed {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 40%, transparent);
+  }
+  55% {
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--accent) 0%, transparent);
+  }
+}
+
+/* ── Figma prototype frame (FigmaPrototype.tsx) ──────────────────────────────
+   Same height-first idiom as .lp-slab, one storey down. This frame sits under
+   the hero, so it is the first thing a reader scrolls into and must CLEAR the
+   fold rather than fill it: a 390×844 phone at full column width is ~760px tall,
+   which plus the section padding is a whole screen for one object. --fp-ratio
+   (set inline from the artboard's aspect) turns a height budget back into a
+   width, so the frame shrinks on short viewports — the landscape-phone case
+   this site has repeatedly had to defend. Pure CSS, so the box is reserved
+   server-side: no measurement race, no CLS. */
+.fp-frame {
+  width: min(100%, calc(76vh * var(--fp-ratio, 0.462)));
+  margin-inline: auto;
 }
 
 /* Reel hero (HeroLoopVideo) — the floating product capture. Shares BrowserMockup's

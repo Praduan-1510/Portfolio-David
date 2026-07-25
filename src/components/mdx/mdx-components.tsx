@@ -1,4 +1,4 @@
-import { Text, Link, BrowserMockup } from "@/components/primitives";
+import { Text, Link, BrowserMockup, LivePrototype } from "@/components/primitives";
 import { FigmaPrototype } from "@/components/FigmaPrototype";
 import { slugify } from "@/lib/utils/slugify";
 import { cn } from "@/lib/utils/cn";
@@ -202,4 +202,7 @@ export const mdxComponents = {
   Bleed,
   BeforeAfter,
   FigmaPrototype,
+  // A real, playable HTML prototype in the reading column — the interactive
+  // counterpart to <Shot>. Carries its own figure + caption, so no wrapper here.
+  LivePrototype,
 };

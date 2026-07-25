@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Meridian — UI/UX Build Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700;800;900&family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --amber:#FFB43D; --coral:#FF6F55; --magenta:#FB2E7E; --iris:#6D48F0; --aqua:#14D3C4; --sky:#2FA4FF;
+  --grad-solar:linear-gradient(120deg,#FFC24B 0%,#FF7A4D 34%,#FB2E7E 70%,#7C4DFF 100%);
+  --grad-dusk:linear-gradient(135deg,#FF6F55 0%,#FB2E7E 45%,#6D48F0 100%);
+  --grad-aurora:linear-gradient(120deg,#14D3C4 0%,#2FA4FF 40%,#6D48F0 100%);
+  --grad-zenith:linear-gradient(90deg,#FFB43D 0%,#FF6F55 25%,#FB2E7E 50%,#6D48F0 75%,#14D3C4 100%);
+  --grad-ember:linear-gradient(135deg,#FFB43D 0%,#FF6F55 60%,#FB2E7E 100%);
+  --grad-iris:linear-gradient(135deg,#8A6BFF 0%,#6D48F0 55%,#4B2ED0 100%);
+  --radius-sm:8px; --radius-md:14px; --radius-lg:22px; --radius-xl:32px; --radius-full:999px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --font-display:"Gabarito",system-ui,sans-serif; --font-ui:"Figtree",system-ui,sans-serif; --font-mono:"IBM Plex Mono",monospace;
+}
+:root[data-theme="dark"]{
+  --ink-1:#12101E; --ink-2:#191634; --ink-3:#221E42; --ink-4:#2C2752;
+  --line:rgba(255,255,255,.09); --line-strong:rgba(255,255,255,.16);
+  --text-hi:#F4F1FF; --text:#C9C3E6; --text-mut:#8E88B4; --text-faint:#615C86;
+  --surface-card:rgba(255,255,255,.035); --surface-glass:rgba(20,17,42,.72); --grain:.05;
+  --p0:#FF5C77; --p1:#FFC24B; --p2:#3FC6E8;
+  --done:#2FE0A6;
+}
+:root[data-theme="light"]{
+  --ink-1:#FBF7F4; --ink-2:#FFFFFF; --ink-3:#FFFFFF; --ink-4:#F4EEEA;
+  --line:#ECE3DC; --line-strong:#DCD1C8;
+  --text-hi:#211A2E; --text:#4A4360; --text-mut:#847C97; --text-faint:#B3A9BE;
+  --surface-card:#FFFFFF; --surface-glass:rgba(251,247,244,.82); --grain:.03;
+  --p0:#E23A54; --p1:#C77A0A; --p2:#0E8FB0;
+  --done:#0FA968;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-ui);background:var(--ink-1);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .5s var(--ease),color .5s var(--ease)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:var(--grain);mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+::selection{background:rgba(251,46,126,.35);color:#fff}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:800;color:var(--text-hi);letter-spacing:-.02em;line-height:1.08}
+.mono{font-family:var(--font-mono)}
+.tabnum{font-variant-numeric:tabular-nums}
+.grad-text{background:var(--grad-zenith);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+a{color:inherit;text-decoration:none}
+
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+section{padding:84px 0;position:relative}
+.eyebrow{font-weight:700;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--text-mut);display:inline-flex;align-items:center;gap:10px;margin-bottom:18px}
+.eyebrow::before{content:"";width:26px;height:2px;border-radius:2px;background:var(--grad-ember)}
+.sec-title{font-size:clamp(30px,4.4vw,50px);margin-bottom:14px}
+.sec-lead{font-size:18px;max-width:70ch;color:var(--text-mut)}
+
+/* nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:var(--surface-glass);backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid var(--line)}
+.nav-logo{display:flex;align-items:center;gap:11px;font-family:var(--font-display);font-weight:800;font-size:19px;color:var(--text-hi)}
+.nav-logo small{font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--text-mut);letter-spacing:.02em}
+.nav-links{display:flex;gap:2px}
+.nav-links a{font-size:13.5px;font-weight:600;color:var(--text-mut);padding:8px 12px;border-radius:var(--radius-full);transition:color .2s,background .2s}
+.nav-links a:hover{color:var(--text-hi);background:var(--surface-card)}
+.theme-toggle{display:flex;align-items:center;gap:8px;cursor:pointer;border:1px solid var(--line);background:var(--surface-card);padding:8px 13px;border-radius:var(--radius-full);color:var(--text);font-weight:600;font-size:13px;font-family:var(--font-ui)}
+@media(max-width:1080px){.nav-links{display:none}}
+
+/* hero */
+.hero{min-height:88vh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;padding-top:90px}
+.mesh{position:absolute;inset:-20%;z-index:0;filter:blur(76px);opacity:.85}
+.mesh span{position:absolute;border-radius:50%;mix-blend-mode:screen}
+:root[data-theme="light"] .mesh span{mix-blend-mode:multiply;opacity:.5}
+.b1{width:48vw;height:48vw;left:-6%;top:-8%;background:radial-gradient(circle,#FF6F55,transparent 62%);animation:drift 22s var(--ease) infinite alternate}
+.b2{width:44vw;height:44vw;right:-6%;top:0;background:radial-gradient(circle,#6D48F0,transparent 62%);animation:drift 26s var(--ease) infinite alternate-reverse}
+.b3{width:40vw;height:40vw;left:26%;bottom:-16%;background:radial-gradient(circle,#14D3C4,transparent 64%);animation:drift 20s var(--ease) infinite alternate}
+@keyframes drift{to{transform:translate(6%,8%) scale(1.15)}}
+.hero-inner{position:relative;z-index:2}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;padding:7px 16px;border-radius:var(--radius-full);color:var(--text-hi);border:1px solid var(--line-strong);background:var(--surface-glass);margin-bottom:26px}
+.hero-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--grad-ember);box-shadow:0 0 12px 2px rgba(251,46,126,.7)}
+.hero h1{font-size:clamp(46px,8vw,104px);font-weight:900;letter-spacing:-.04em;line-height:.92;margin-bottom:20px}
+.hero p.sub{font-size:clamp(17px,2vw,22px);color:var(--text);max-width:60ch;line-height:1.5}
+.hero p.sub b{color:var(--text-hi);font-weight:700}
+.stat-chips{display:flex;gap:14px;flex-wrap:wrap;margin-top:40px}
+.stat-chip{background:var(--surface-card);border:1px solid var(--line);border-radius:var(--radius-md);padding:16px 22px;min-width:120px}
+.stat-chip .n{font-family:var(--font-display);font-weight:800;font-size:34px;color:var(--text-hi);line-height:1}
+.stat-chip .l{font-size:12.5px;color:var(--text-mut);font-weight:600;margin-top:6px}
+
+/* generic */
+.panel{background:var(--ink-2);border:1px solid var(--line);border-radius:var(--radius-lg);padding:26px}
+:root[data-theme="light"] .panel{box-shadow:0 2px 4px rgba(20,10,40,.03),0 14px 40px -24px rgba(20,10,40,.16)}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.grid{display:grid;gap:18px}
+.two{grid-template-columns:1fr 1fr}.three{grid-template-columns:repeat(3,1fr)}.four{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.two,.three,.four{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.two,.three,.four{grid-template-columns:1fr}}
+
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:var(--radius-full);letter-spacing:.02em}
+.ph{background:var(--surface-card);border:1px solid var(--line);color:var(--text-mut)}
+.pri-p0{background:color-mix(in srgb,var(--p0) 16%,transparent);color:var(--p0)}
+.pri-p1{background:color-mix(in srgb,var(--p1) 16%,transparent);color:var(--p1)}
+.pri-p2{background:color-mix(in srgb,var(--p2) 16%,transparent);color:var(--p2)}
+
+/* overview cards */
+.ov-card h3{font-size:19px;margin-bottom:8px}
+.ov-card p{font-size:14.5px;color:var(--text-mut)}
+.ov-card .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;margin-bottom:14px;font-size:20px}
+
+/* fleet */
+.fleet-tier{margin-top:22px}
+.tier-label{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-faint);margin:26px 0 14px;display:flex;align-items:center;gap:12px}
+.tier-label::after{content:"";flex:1;height:1px;background:var(--line)}
+.agent-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:900px){.agent-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.agent-grid{grid-template-columns:1fr}}
+.agent{background:var(--ink-2);border:1px solid var(--line);border-radius:var(--radius-md);padding:18px;position:relative;overflow:hidden;transition:transform .3s var(--ease),border-color .2s}
+.agent:hover{transform:translateY(-4px);border-color:var(--line-strong)}
+.agent::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ag,var(--grad-dusk))}
+.agent .code{font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--iris);letter-spacing:.04em}
+.agent h4{font-size:16px;margin:4px 0 8px;font-family:var(--font-display)}
+.agent .role{font-size:13px;color:var(--text-mut);margin-bottom:12px}
+.agent .subs{display:flex;flex-wrap:wrap;gap:6px}
+.agent .sub{font-family:var(--font-mono);font-size:10.5px;background:var(--surface-card);border:1px solid var(--line);color:var(--text-mut);padding:3px 8px;border-radius:var(--radius-full)}
+.agent.wide{grid-column:1/-1;background:var(--grad-iris);border:none;color:#fff}
+.agent.wide .code{color:rgba(255,255,255,.85)}
+.agent.wide h4{color:#fff}
+.agent.wide .role{color:rgba(255,255,255,.85)}
+.agent.wide .sub{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.25);color:#fff}
+
+/* phase timeline */
+.timeline{margin-top:36px;position:relative;padding-left:38px}
+.timeline::before{content:"";position:absolute;left:11px;top:8px;bottom:8px;width:2px;background:var(--grad-zenith);opacity:.5}
+.phase{position:relative;margin-bottom:20px}
+.phase::before{content:"";position:absolute;left:-33px;top:24px;width:16px;height:16px;border-radius:50%;background:var(--ink-1);border:3px solid var(--iris);box-shadow:0 0 0 4px color-mix(in srgb,var(--iris) 20%,transparent)}
+.phase-card{background:var(--ink-2);border:1px solid var(--line);border-radius:var(--radius-md);padding:22px}
+.phase-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.phase-head h3{font-size:21px}
+.phase-head .num{font-family:var(--font-display);font-weight:900;font-size:15px;background:var(--grad-dusk);color:#fff;width:34px;height:34px;border-radius:10px;display:inline-grid;place-items:center;margin-right:12px}
+.phase-sprints{font-family:var(--font-mono);font-size:12px;color:var(--text-mut);background:var(--surface-card);border:1px solid var(--line);padding:4px 11px;border-radius:var(--radius-full)}
+.phase-agents{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.phase-agents .a{font-family:var(--font-mono);font-size:10.5px;font-weight:600;color:var(--coral);background:color-mix(in srgb,var(--coral) 12%,transparent);padding:3px 9px;border-radius:var(--radius-full)}
+.phase-card .contents{font-size:14px;color:var(--text);margin-bottom:12px}
+.exit{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;background:var(--surface-card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:11px 14px}
+.exit .chk{color:var(--done);font-weight:800;flex:none}
+.exit b{color:var(--text-hi)}
+
+/* tables */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius-md);margin-top:22px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:640px}
+th{text-align:left;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-mut);padding:13px 14px;border-bottom:1px solid var(--line);background:var(--surface-card);position:sticky;top:0}
+td{padding:13px 14px;border-bottom:1px solid var(--line);color:var(--text);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--surface-card)}
+td b,.mname{color:var(--text-hi);font-weight:700}
+.mid{font-family:var(--font-mono);font-size:11px;color:var(--iris);font-weight:600}
+.num-cell{font-variant-numeric:tabular-nums;font-weight:700;color:var(--text-hi)}
+.sprint-goal{font-size:13px;color:var(--text-mut)}
+.frtag{font-family:var(--font-mono);font-size:10.5px;color:var(--text-mut);background:var(--surface-card);border:1px solid var(--line);padding:1px 7px;border-radius:5px;display:inline-block;margin:1px 2px 1px 0}
+
+/* arch */
+.arch-flow{display:flex;align-items:stretch;gap:14px;margin-top:24px;flex-wrap:wrap}
+.arch-col{flex:1;min-width:220px;background:var(--ink-2);border:1px solid var(--line);border-radius:var(--radius-md);padding:18px}
+.arch-col h4{font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-mut);font-family:var(--font-ui);font-weight:700;margin-bottom:12px}
+.arch-col ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.arch-col li{font-size:13.5px;display:flex;gap:9px;align-items:flex-start}
+.arch-col li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--iris);margin-top:6px;flex:none}
+.arch-col li b{color:var(--text-hi)}
+.arch-col.hi{background:var(--grad-dusk);border:none;color:#fff}
+.arch-col.hi h4{color:rgba(255,255,255,.8)}
+.arch-col.hi li b{color:#fff}
+.arch-col.hi li::before{background:#fff}
+
+/* foundation chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.chip{font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:var(--radius-full);background:var(--surface-card);border:1px solid var(--line);color:var(--text)}
+.fcard h4{font-size:16px;margin-bottom:4px;display:flex;align-items:center;gap:9px}
+.fcard .fic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--surface-card);border:1px solid var(--line);font-size:15px}
+
+/* DoD */
+.dod-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+@media(max-width:700px){.dod-list{grid-template-columns:1fr}}
+.dod-list li{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+.dod-list .chk{color:var(--done);font-weight:800;flex:none}
+
+.callout{background:color-mix(in srgb,var(--p1) 10%,transparent);border:1px solid color-mix(in srgb,var(--p1) 35%,transparent);border-radius:var(--radius-md);padding:16px 20px;margin-top:20px;font-size:14px}
+.callout b{color:var(--text-hi)}
+
+/* risk */
+.risk{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--line)}
+.risk:last-child{border-bottom:none}
+.risk .tag{font-family:var(--font-mono);font-size:11px;font-weight:700;color:#fff;background:var(--grad-ember);padding:4px 10px;border-radius:var(--radius-full);flex:none;margin-top:2px}
+.risk .rt b{color:var(--text-hi)}
+.risk .rt{font-size:14px;color:var(--text-mut)}
+
+.footer{padding:60px 0 80px;border-top:1px solid var(--line);text-align:center;margin-top:40px}
+.footer .fl{display:flex;align-items:center;justify-content:center;gap:12px;font-family:var(--font-display);font-weight:800;font-size:20px;color:var(--text-hi);margin-bottom:12px}
+.footer p{color:var(--text-mut);font-size:14px;max-width:56ch;margin:0 auto}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="mark" viewBox="0 0 120 120">
+  <path d="M26 90 A34 34 0 0 1 94 90" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round"/>
+  <line x1="60" y1="42" x2="60" y2="70" stroke="currentColor" stroke-width="9" stroke-linecap="round"/>
+  <circle cx="60" cy="26" r="12" fill="currentColor"/>
+</symbol></defs></svg>
+
+<nav class="nav">
+  <div class="nav-logo"><svg width="24" height="24" style="color:var(--iris)"><use href="#mark"/></svg> Meridian <small>Build Plan</small></div>
+  <div class="nav-links">
+    <a href="#overview">Overview</a><a href="#fleet">Fleet</a><a href="#phases">Phases</a>
+    <a href="#sprints">Sprints</a><a href="#modules">Modules</a><a href="#architecture">Architecture</a>
+    <a href="#foundation">Foundation</a><a href="#quality">Quality</a>
+  </div>
+  <div class="theme-toggle" id="themeToggle"><span id="ti">◐</span><span id="tl">Dark</span></div>
+</nav>
+
+<header class="hero wrap">
+  <div class="mesh"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
+  <div class="hero-inner">
+    <div class="hero-badge"><span class="dot"></span> Meridian · UI/UX + Functional Prototype · from FSD v1.1</div>
+    <h1>The <span class="grad-text">Build Plan</span>.</h1>
+    <p class="sub">A complete UI/UX system and a <b>fully-functional clickable prototype</b> — real interactions on mock data — delivered by a fleet of specialised agents across <b>6 phases and 17 sprints</b>, grounded in every one of the FSD's 18 modules.</p>
+    <div class="stat-chips">
+      <div class="stat-chip"><div class="n tabnum">18</div><div class="l">Modules</div></div>
+      <div class="stat-chip"><div class="n tabnum">106</div><div class="l">Screens</div></div>
+      <div class="stat-chip"><div class="n tabnum">170</div><div class="l">Modals / sheets</div></div>
+      <div class="stat-chip"><div class="n tabnum">~355</div><div class="l">Screen states</div></div>
+      <div class="stat-chip"><div class="n tabnum">11</div><div class="l">Agents</div></div>
+      <div class="stat-chip"><div class="n tabnum">60+</div><div class="l">Components</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- OVERVIEW -->
+<section id="overview" class="wrap reveal">
+  <span class="eyebrow">Overview</span>
+  <h2 class="sec-title">What we're building, and the rules.</h2>
+  <p class="sec-lead">Frontend only. The FSD's server &amp; sync concerns are represented by a mock data/sync layer so the prototype behaves like the real thing — loading, errors, permissions, paywalls, undo — without a production backend.</p>
+  <div class="grid three" style="margin-top:34px">
+    <div class="panel ov-card"><div class="ic" style="background:var(--grad-ember)">◑</div><h3>Complete UI/UX</h3><p>Every screen, modal, and state from the FSD — 106 screens, 170 sheets, ~355 states — built on one token-driven design system with light, dark &amp; high-contrast themes.</p></div>
+    <div class="panel ov-card"><div class="ic" style="background:var(--grad-aurora)">⚡</div><h3>Fully functional</h3><p>A mock API with real latency &amp; error injection, a permissions engine, an entitlements engine, optimistic updates + global undo, and URL-restorable state. It clicks, gates, and persists for real.</p></div>
+    <div class="panel ov-card"><div class="ic" style="background:var(--grad-iris)">◇</div><h3>The signature</h3><p>The FSD flags its own gap (G-10 / Q-08: "no signature"). Already answered — the Day-Arc identity: warm→cool spectrum, arc/orb logo, gradient-forward surfaces. Locked before the component library.</p></div>
+  </div>
+  <div class="callout">🧭 <b>Guiding rule (FSD §17):</b> "Adjust durations, not order — the dependencies are real." Entitlement checks are built <b>with</b> the features they gate; audit logging is added <b>with</b> each module; and every screen ships with its <b>empty, error, and permission</b> states — never deferred.</div>
+</section>
+
+<!-- FLEET -->
+<section id="fleet" class="wrap reveal">
+  <span class="eyebrow">The Agent Fleet</span>
+  <h2 class="sec-title">A delivery org, <span class="grad-text">not a to-do list</span>.</h2>
+  <p class="sec-lead">Eleven specialised agents, each owning a workstream and directing its own subagents. The Orchestrator gates every phase; QA verifies adversarially at each exit.</p>
+
+  <div class="tier-label">L0 · Orchestration</div>
+  <div class="agent-grid">
+    <div class="agent wide"><div class="code">ORCH-0</div><h4>Orchestrator · Delivery Lead</h4><div class="role">Owns this plan, sequencing, cross-agent integration, phase gates, and final review. Runs the QA gate before each phase exit and reconciles the state-coverage checklist.</div></div>
+  </div>
+
+  <div class="tier-label">L1 · Foundation &amp; platform — cross-cutting, start Phase 0</div>
+  <div class="agent-grid">
+    <div class="agent" style="--ag:var(--grad-ember)"><div class="code">DS-1</div><h4>Design System</h4><div class="role">3-tier tokens, theming (light/dark/HC), ~60-component library, icons, motion, the signature.</div><div class="subs"><span class="sub">token-smith</span><span class="sub">primitive-smith</span><span class="sub">dataviz-smith</span><span class="sub">a11y-smith</span></div></div>
+    <div class="agent" style="--ag:var(--grad-ember)"><div class="code">SHELL-1</div><h4>App Shell &amp; Nav</h4><div class="role">Top bar, collapsible rail (240↔64), breadcrumbs, org switcher, footer slot, responsive, route transitions.</div><div class="subs"><span class="sub">nav-rail</span><span class="sub">top-bar</span><span class="sub">responsive-shell</span></div></div>
+    <div class="agent" style="--ag:var(--grad-ember)"><div class="code">DATA-1</div><h4>Prototype Data &amp; State</h4><div class="role">The "fake backend": seed factory, mock API (latency+errors), store, URL-sync, optimistic + global undo, perms &amp; entitlements engines.</div><div class="subs"><span class="sub">seed-factory</span><span class="sub">mock-api</span><span class="sub">store-router</span><span class="sub">perms-entitlements-engine</span></div></div>
+  </div>
+
+  <div class="tier-label">L2 · Feature agents — phased</div>
+  <div class="agent-grid">
+    <div class="agent"><div class="code">AUTH-1</div><h4>Identity &amp; Access</h4><div class="role">M1 auth, MFA, reset, SSO stub, session &amp; deep-link rules.</div><div class="subs"><span class="sub">auth-flows</span><span class="sub">mfa-recovery</span><span class="sub">session-guard</span></div></div>
+    <div class="agent"><div class="code">TEN-1</div><h4>Tenancy &amp; Access Control</h4><div class="role">M2 orgs/workspaces/members, M3 roles &amp; permissions, audit spine.</div><div class="subs"><span class="sub">org-workspace</span><span class="sub">members-roles</span><span class="sub">audit-spine</span></div></div>
+    <div class="agent" style="--ag:var(--grad-dusk)"><div class="code">WORK-1</div><h4>Core Work Surface ★</h4><div class="role">M5 records, views (list/board/cal/timeline), detail sheet, bulk, trash, workflow — the core work surface.</div><div class="subs"><span class="sub">records-grid</span><span class="sub">views-engine</span><span class="sub">record-detail-sheet</span><span class="sub">bulk-and-trash</span></div></div>
+    <div class="agent"><div class="code">COLLAB-1</div><h4>Collab, Search &amp; Onboarding</h4><div class="role">M6 comments/mentions/activity, M7 search + ⌘K palette, M4 onboarding.</div><div class="subs"><span class="sub">comments-mentions</span><span class="sub">activity-feed</span><span class="sub">command-palette</span><span class="sub">onboarding-wizard</span></div></div>
+    <div class="agent"><div class="code">COMM-1</div><h4>Commercial</h4><div class="role">M9 billing/usage, M10 entitlements &amp; gating, M18 lifecycle, M8 notifications.</div><div class="subs"><span class="sub">billing-checkout</span><span class="sub">plans-usage-invoices</span><span class="sub">entitlements-gate</span><span class="sub">notifications-center</span><span class="sub">lifecycle-dunning</span></div></div>
+    <div class="agent"><div class="code">OPS-1</div><h4>Settings &amp; Operability</h4><div class="role">M11 settings, M13 admin console, M15 audit, M16 help, M17 import/export (+ M12/M14 in P1).</div><div class="subs"><span class="sub">settings-suite</span><span class="sub">admin-console</span><span class="sub">api-webhooks</span><span class="sub">reporting-charts</span><span class="sub">help-changelog</span><span class="sub">data-import-export</span></div></div>
+  </div>
+
+  <div class="tier-label">L3 · Quality &amp; prototype — cross-cutting + Phase 5</div>
+  <div class="agent-grid">
+    <div class="agent" style="--ag:var(--grad-aurora)"><div class="code">QA-1</div><h4>Quality · A11y · Perf</h4><div class="role">Runs every phase. State-matrix completeness, WCAG 2.2 AA, keyboard paths, perf budgets, responsive. Adversarially verifies each agent's output.</div><div class="subs"><span class="sub">a11y-auditor</span><span class="sub">state-matrix-checker</span><span class="sub">perf-budget-checker</span><span class="sub">keyboard-path-tester</span></div></div>
+    <div class="agent" style="--ag:var(--grad-aurora)"><div class="code">PROTO-1</div><h4>Prototype &amp; Motion</h4><div class="role">Wires the end-to-end clickable journeys (§16.3), empty-state illustration family, page transitions, and the demo script.</div><div class="subs"><span class="sub">journey-wiring</span><span class="sub">motion-polish</span><span class="sub">illustration-family</span></div></div>
+  </div>
+</section>
+
+<!-- PHASES -->
+<section id="phases" class="wrap reveal">
+  <span class="eyebrow">Phases</span>
+  <h2 class="sec-title">Seven phases, <span class="grad-text">real dependencies</span>.</h2>
+  <p class="sec-lead">Order mirrors FSD §17 exactly. Durations assume ~2-week sprints; a fleet compresses wall-clock, but the sequence holds.</p>
+
+  <div class="timeline">
+    <div class="phase"><div class="phase-card">
+      <div class="phase-head"><h3><span class="num">0</span>Foundations</h3><span class="phase-sprints">Sprints 1–2</span></div>
+      <div class="phase-agents"><span class="a">DS-1</span><span class="a">SHELL-1</span><span class="a">DATA-1</span><span class="a">QA-1</span></div>
+      <div class="contents">Tokens + theming, the ~60-component library with full state matrix, app shell + routing skeleton, mock-data store + permissions/entitlements engines, and the locked design signature.</div>
+      <div class="exit"><span class="chk">✓</span><div><b>Exit:</b> a themed, accessible, deployable shell · 10+ documented components · a working mock store with seed data.</div></div>
+    </div></div>
+
+    <div class="phase"><div class="phase-card">
+      <div class="phase-head"><h3><span class="num">1</span>Identity &amp; Tenancy</h3><span class="phase-sprints">Sprints 3–5</span></div>
+      <div class="phase-agents"><span class="a">AUTH-1</span><span class="a">TEN-1</span><span class="a">OPS-1</span></div>
+      <div class="contents">M1 (excl. SSO), M2, M3, audit spine, and the Settings shell (profile · preferences · security). Permissions engine wired to nav &amp; every action.</div>
+      <div class="exit"><span class="chk">✓</span><div><b>Exit:</b> a user can sign up → create an org → invite → and be correctly permissioned, end-to-end.</div></div>
+    </div></div>
+
+    <div class="phase"><div class="phase-card">
+      <div class="phase-head"><h3><span class="num">2</span>Core Product</h3><span class="phase-sprints">Sprints 6–9</span></div>
+      <div class="phase-agents"><span class="a">WORK-1</span><span class="a">COLLAB-1</span></div>
+      <div class="contents">M5 records, views, detail sheet, bulk, trash, workflow · M6 collaboration · M7 search + ⌘K · M4 onboarding · the role-aware Home dashboard. <b>This is the surface everything else supports.</b></div>
+      <div class="exit"><span class="chk">✓</span><div><b>Exit:</b> the primary job can be done end-to-end by a real team.</div></div>
+    </div></div>
+
+    <div class="phase"><div class="phase-card">
+      <div class="phase-head"><h3><span class="num">3</span>Commercial</h3><span class="phase-sprints">Sprints 10–12</span></div>
+      <div class="phase-agents"><span class="a">COMM-1</span></div>
+      <div class="contents">M9 billing/checkout/usage/invoices · M10 entitlements &amp; gating · M18 lifecycle (trial→past_due→restricted→cancelled) · M8 notifications.</div>
+      <div class="exit"><span class="chk">✓</span><div><b>Exit:</b> an org can trial, pay, hit limits, upgrade, and cancel — unaided.</div></div>
+    </div></div>
+
+    <div class="phase"><div class="phase-card">
+      <div class="phase-head"><h3><span class="num">4</span>Operability</h3><span class="phase-sprints">Sprints 13–14</span></div>
+      <div class="phase-agents"><span class="a">OPS-1</span></div>
+      <div class="contents">M13 admin console (impersonation, flags) · M15 audit surfaces · M16 help/support/changelog · M17 import/export/DSAR.</div>
+      <div class="exit"><span class="chk">✓</span><div><b>Exit:</b> support can resolve issues without engineering; customers can import and export.</div></div>
+    </div></div>
+
+    <div class="phase"><div class="phase-card">
+      <div class="phase-head"><h3><span class="num">5</span>Hardening → Prototype</h3><span class="phase-sprints">Sprints 15–16</span></div>
+      <div class="phase-agents"><span class="a">QA-1</span><span class="a">PROTO-1</span></div>
+      <div class="contents">A11y audit (WCAG AA), perf budgets §11.1, responsive sweep to 375px, per-screen state-matrix completion, motion/signature polish, and the clickable golden journeys + demo.</div>
+      <div class="exit"><span class="chk">✓</span><div><b>Exit:</b> §11.1 budgets met · WCAG AA · every §16.3 journey green as a clickable prototype.</div></div>
+    </div></div>
+
+    <div class="phase"><div class="phase-card" style="opacity:.9">
+      <div class="phase-head"><h3><span class="num">6</span>Post-GA <span class="badge pri-p1" style="vertical-align:middle">P1</span></h3><span class="phase-sprints">Sprints 17+</span></div>
+      <div class="phase-agents"><span class="a">AUTH-1</span><span class="a">OPS-1</span><span class="a">WORK-1</span></div>
+      <div class="contents">SSO/SCIM (M1) · M12 public API, webhooks &amp; integrations · M14 full reporting/builder · Board &amp; Calendar views · email digests. <em>(Per §17 these are explicitly P1/Post-GA.)</em></div>
+      <div class="exit"><span class="chk">✓</span><div><b>Exit:</b> enterprise + extensibility surfaces shipped.</div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- SPRINTS -->
+<section id="sprints" class="wrap reveal">
+  <span class="eyebrow">Sprint Breakdown</span>
+  <h2 class="sec-title">Seventeen sprints, <span class="grad-text">each with a goal</span>.</h2>
+  <p class="sec-lead">Every sprint has one demoable outcome and traces to FSD requirement IDs. Sample tickets shown per sprint.</p>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th style="width:64px">Sprint</th><th style="width:120px">Phase</th><th>Sprint goal (demoable)</th><th style="width:220px">Sample tickets</th></tr></thead>
+      <tbody>
+        <tr><td class="num-cell">S1</td><td><span class="badge ph">0 · Found.</span></td><td><span class="mname">Tokens, theming &amp; the signature</span><div class="sprint-goal">3-tier tokens, light/dark/HC, primitives batch 1 (Button, Input, Select, Checkbox, Switch, Badge, Avatar, Tooltip) with full state matrix.</div></td><td><span class="frtag">FR-DS-001</span><span class="frtag">FR-DS-006</span><span class="frtag">FR-DS-016</span></td></tr>
+        <tr><td class="num-cell">S2</td><td><span class="badge ph">0 · Found.</span></td><td><span class="mname">Shell, data grid &amp; mock store</span><div class="sprint-goal">App shell + responsive, primitives batch 2 (Modal, Sheet, Toast, Data table, Command palette shell, Chart set), DATA-1 store + seed + perms/entitlements + URL-sync.</div></td><td><span class="frtag">FR-NAV-001</span><span class="frtag">FR-ARCH-004</span><span class="frtag">FR-XC-001</span></td></tr>
+        <tr><td class="num-cell">S3</td><td><span class="badge ph">1 · Identity</span></td><td><span class="mname">Auth core</span><div class="sprint-goal">Sign up, sign in, verify, forgot, reset · generic non-enumerating errors · progressive delay + lockout · input preservation.</div></td><td><span class="frtag">FR-AUTH-001</span><span class="frtag">FR-AUTH-013</span><span class="frtag">FR-XC-009</span></td></tr>
+        <tr><td class="num-cell">S4</td><td><span class="badge ph">1 · Identity</span></td><td><span class="mname">MFA, sessions &amp; profile</span><div class="sprint-goal">MFA challenge + enrolment + recovery codes, active sessions/device mgmt, in-place re-auth, Settings profile/security shell.</div></td><td><span class="frtag">FR-AUTH-010</span><span class="frtag">FR-AUTH-022</span><span class="frtag">FR-SET-001</span></td></tr>
+        <tr><td class="num-cell">S5</td><td><span class="badge ph">1 · Identity</span></td><td><span class="mname">Tenancy &amp; permissions</span><div class="sprint-goal">Orgs, workspaces, members, invites (single+bulk), role matrix, custom roles, record sharing, audit spine. Nav/actions gate by role.</div></td><td><span class="frtag">FR-TEN-001</span><span class="frtag">FR-RBAC-001</span><span class="frtag">FR-NAV-003</span></td></tr>
+        <tr><td class="num-cell">S6</td><td><span class="badge ph">2 · Core</span></td><td><span class="mname">Records list &amp; views</span><div class="sprint-goal">Virtualized table, filter builder (AND/OR nested), saved views + URL state, column mgmt, row selection incl. select-all-matching.</div></td><td><span class="frtag">FR-REC-006</span><span class="frtag">FR-REC-011</span><span class="frtag">FR-ARCH-004</span></td></tr>
+        <tr><td class="num-cell">S7</td><td><span class="badge ph">2 · Core</span></td><td><span class="mname">Record detail &amp; inline edit</span><div class="sprint-goal">Side sheet + full page + tabs, inline edit (optimistic + rollback), concurrent-conflict resolver, J/K nav, deep-linking.</div></td><td><span class="frtag">FR-REC-016</span><span class="frtag">FR-XC-003</span><span class="frtag">FR-REC-025</span></td></tr>
+        <tr><td class="num-cell">S8</td><td><span class="badge ph">2 · Core</span></td><td><span class="mname">Bulk, trash, workflow &amp; onboarding</span><div class="sprint-goal">Bulk edit (async>50, undo 30s, typed>500), trash/restore, state-machine + automation editors, import wizard, M4 wizard + checklist + sample data.</div></td><td><span class="frtag">FR-REC-021</span><span class="frtag">FR-REC-027</span><span class="frtag">FR-ONB-001</span></td></tr>
+        <tr><td class="num-cell">S9</td><td><span class="badge ph">2 · Core</span></td><td><span class="mname">Collaboration, search &amp; home</span><div class="sprint-goal">Comments/mentions/activity/presence, mention-without-access flow, ⌘K palette + global search + results, role-aware Home dashboard.</div></td><td><span class="frtag">FR-COL-001</span><span class="frtag">FR-SRCH-001</span><span class="frtag">FR-RPT-008</span></td></tr>
+        <tr><td class="num-cell">S10</td><td><span class="badge ph">3 · Comm.</span></td><td><span class="mname">Plans, checkout &amp; gating</span><div class="sprint-goal">Plan cards + interval toggle, single-screen checkout w/ live total+tax, payment methods, entitlements engine gating (paywalls + limits).</div></td><td><span class="frtag">FR-BIL-005</span><span class="frtag">FR-BIL-006</span><span class="frtag">FR-ENT-001</span></td></tr>
+        <tr><td class="num-cell">S11</td><td><span class="badge ph">3 · Comm.</span></td><td><span class="mname">Billing ops &amp; notifications</span><div class="sprint-goal">Billing overview, invoices, usage bars, seat update + proration, M8 notifications centre + prefs matrix + bell + digests.</div></td><td><span class="frtag">FR-BIL-011</span><span class="frtag">FR-BIL-013</span><span class="frtag">FR-NOT-001</span></td></tr>
+        <tr><td class="num-cell">S12</td><td><span class="badge ph">3 · Comm.</span></td><td><span class="mname">Lifecycle &amp; dunning</span><div class="sprint-goal">Cancel/retention/reactivate, dunning banners, org state machine (trial→past_due→restricted→cancelled→pending_deletion), restricted-state gate.</div></td><td><span class="frtag">FR-BIL-016</span><span class="frtag">FR-LIF-001</span><span class="frtag">FR-LIF-005</span></td></tr>
+        <tr><td class="num-cell">S13</td><td><span class="badge ph">4 · Ops</span></td><td><span class="mname">Admin console &amp; audit</span><div class="sprint-goal">Staff login (MFA), global search, org/user detail + timeline, feature flags + kill switch, impersonation w/ banner, audit log surfaces.</div></td><td><span class="frtag">FR-ADM-001</span><span class="frtag">FR-ADM-005</span><span class="frtag">FR-AUD-001</span></td></tr>
+        <tr><td class="num-cell">S14</td><td><span class="badge ph">4 · Ops</span></td><td><span class="mname">Help, support &amp; data lifecycle</span><div class="sprint-goal">Help panel + article search, contact w/ diagnostics, ? shortcuts, changelog, status; import/export, background export links, DSAR.</div></td><td><span class="frtag">FR-HLP-001</span><span class="frtag">FR-DAT-001</span><span class="frtag">FR-DAT-006</span></td></tr>
+        <tr><td class="num-cell">S15</td><td><span class="badge ph">5 · Harden</span></td><td><span class="mname">A11y &amp; state completeness</span><div class="sprint-goal">WCAG 2.2 AA audit, keyboard-path coverage, apply the universal-state matrix to every screen (closes the ~165-state gap), responsive to 375px.</div></td><td><span class="frtag">FR-XC-013</span><span class="frtag">FR-XC-010</span><span class="frtag">FR-XC-023</span></td></tr>
+        <tr><td class="num-cell">S16</td><td><span class="badge ph">5 · Harden</span></td><td><span class="mname">Perf &amp; prototype wiring</span><div class="sprint-goal">Budgets §11.1 (virtualization, code-split, ≤250KB routes, CLS≤0.1), motion/signature polish, empty-state illustrations, clickable golden journeys + demo.</div></td><td><span class="frtag">FR-PERF (§11.1)</span><span class="frtag">FR-DS-018</span></td></tr>
+        <tr><td class="num-cell">S17+</td><td><span class="badge ph">6 · Post-GA</span></td><td><span class="mname">SSO, API, reporting &amp; alt views</span><div class="sprint-goal">SSO/SCIM screens, M12 API keys/webhooks/integrations + OpenAPI explorer, M14 report builder/dashboards, Board &amp; Calendar views, email digests.</div></td><td><span class="frtag">FR-AUTH-019</span><span class="frtag">FR-API-001</span><span class="frtag">FR-RPT-002</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- MODULES -->
+<section id="modules" class="wrap reveal">
+  <span class="eyebrow">Module Inventory</span>
+  <h2 class="sec-title">All 18 modules, <span class="grad-text">mapped &amp; counted</span>.</h2>
+  <p class="sec-lead">Screen/modal counts are the authoritative FSD-mined inventory. ★ marks the core work surface — the core work surface.</p>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th style="width:56px">ID</th><th>Module</th><th style="width:96px">Phase</th><th style="width:64px">Pri</th><th style="width:70px">Screens</th><th style="width:70px">Modals</th><th>Signature surfaces</th></tr></thead>
+      <tbody>
+        <tr><td class="mid">M1</td><td class="mname">Identity &amp; access</td><td><span class="badge ph">1</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">12</td><td class="num-cell">10</td><td>Signup · login · verify · MFA challenge/enrol · sessions · SSO</td></tr>
+        <tr><td class="mid">M2</td><td class="mname">Orgs, workspaces &amp; membership</td><td><span class="badge ph">1</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">9</td><td class="num-cell">14</td><td>Create org · members table · invite (bulk) · workspaces · domain verify</td></tr>
+        <tr><td class="mid">M3</td><td class="mname">Roles, permissions &amp; access</td><td><span class="badge ph">1</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">3</td><td class="num-cell">4</td><td>Permission matrix · custom role editor · record sharing</td></tr>
+        <tr><td class="mid">M11</td><td class="mname">Settings</td><td><span class="badge ph">1→</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">15*</td><td class="num-cell">15</td><td>Profile · preferences · org · security · data · trash (split per §20.3)</td></tr>
+        <tr><td class="mid">M4</td><td class="mname">Onboarding &amp; activation</td><td><span class="badge ph">2</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">7</td><td class="num-cell">7</td><td>Welcome · wizard · personalisation · sample data · activation checklist</td></tr>
+        <tr style="background:color-mix(in srgb,var(--iris) 8%,transparent)"><td class="mid">M5 ★</td><td class="mname">Core work surface</td><td><span class="badge ph">2</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">9</td><td class="num-cell">18</td><td>Records list · detail sheet/page · bulk · trash · workflow · automation</td></tr>
+        <tr><td class="mid">M6</td><td class="mname">Collaboration</td><td><span class="badge ph">2</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">2†</td><td class="num-cell">9</td><td>Comments · @mentions · activity/history · presence · watch · share</td></tr>
+        <tr><td class="mid">M7</td><td class="mname">Search &amp; command palette</td><td><span class="badge ph">2</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">1</td><td class="num-cell">4</td><td>⌘K palette · global search dropdown · results page · zero-result</td></tr>
+        <tr><td class="mid">M14</td><td class="mname">Dashboards &amp; reporting</td><td><span class="badge ph">2 / 6</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">6</td><td class="num-cell">9</td><td>Role-aware home (P0) · report builder · dashboards (builder P1)</td></tr>
+        <tr><td class="mid">M17</td><td class="mname">Data import, export &amp; lifecycle</td><td><span class="badge ph">2 / 4</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">8</td><td class="num-cell">12</td><td>Import wizard · export jobs · org export · retention · DSAR</td></tr>
+        <tr><td class="mid">M8</td><td class="mname">Notifications</td><td><span class="badge ph">3</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">3</td><td class="num-cell">6</td><td>Notification centre · preferences matrix · bell · digests</td></tr>
+        <tr><td class="mid">M9</td><td class="mname">Billing &amp; subscriptions</td><td><span class="badge ph">3</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">10</td><td class="num-cell">18</td><td>Plans · checkout · invoices · usage · seats · cancel · dunning gate</td></tr>
+        <tr><td class="mid">M10</td><td class="mname">Entitlements &amp; gating</td><td><span class="badge ph">3</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">—‡</td><td class="num-cell">4</td><td>Contextual paywalls · limit-reached prompts · locked-feature detail</td></tr>
+        <tr><td class="mid">M18</td><td class="mname">Account &amp; org lifecycle</td><td><span class="badge ph">3 / 5</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">8</td><td class="num-cell">7</td><td>Lifecycle state banners · delete account/org · retention · reactivate</td></tr>
+        <tr><td class="mid">M13</td><td class="mname">Internal admin console</td><td><span class="badge ph">4</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">8</td><td class="num-cell">13</td><td>Staff search · org/user detail · flags · impersonation · staff audit</td></tr>
+        <tr><td class="mid">M15</td><td class="mname">Audit log &amp; compliance</td><td><span class="badge ph">4</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">2</td><td class="num-cell">4</td><td>Audit log table · before/after diff · export · SIEM (Ent.)</td></tr>
+        <tr><td class="mid">M16</td><td class="mname">Help &amp; support</td><td><span class="badge ph">4</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">3</td><td class="num-cell">6</td><td>Help panel · contact + diagnostics · changelog · shortcuts · status</td></tr>
+        <tr><td class="mid">M12</td><td class="mname">Public API, webhooks, integrations</td><td><span class="badge ph">6</span></td><td><span class="badge pri-p1">P1</span></td><td class="num-cell">6</td><td class="num-cell">10</td><td>API keys · OpenAPI explorer · webhooks + delivery log · integrations</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout" style="background:color-mix(in srgb,var(--iris) 8%,transparent);border-color:color-mix(in srgb,var(--iris) 30%,transparent)">
+    <b>Notes:</b> <b>*</b> M11 is split from 8 collapsed pages into 15 discrete screens per §20.3 (Profile → identity/password-MFA/sessions/connected/delete; Security → MFA-enforce/SSO/domains/session-policy/IP/public-link). &nbsp;<b>†</b> M6 is embedded in record detail (tabs), not standalone routes. &nbsp;<b>‡</b> M10 is a cross-cutting gating layer — surfaces live inside every other module, not a standalone page.
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture" class="wrap reveal">
+  <span class="eyebrow">Prototype Architecture</span>
+  <h2 class="sec-title">Why it's <span class="grad-text">fully functional</span>, not a mockup.</h2>
+  <p class="sec-lead">A mock data + sync layer stands in for the backend so every interaction — loading, errors, permissions, paywalls, undo, deep links — behaves for real.</p>
+  <div class="arch-flow">
+    <div class="arch-col"><h4>Stack</h4><ul>
+      <li><b>React 18 + TypeScript + Vite</b></li>
+      <li><b>React Router</b> — URL is the source of truth for view state</li>
+      <li><b>Motion</b> (Framer) for animation</li>
+      <li><b>TanStack Table</b> — virtualized data grid</li>
+      <li>Design tokens as <b>CSS custom properties</b> (Day-Arc)</li>
+      <li>Charts wired to the <b>§8.14.1 categorical ramp</b></li>
+    </ul></div>
+    <div class="arch-col hi"><h4>The mock "backend" — DATA-1</h4><ul>
+      <li><b>Seed factory</b> — deterministic orgs, members, records, invoices</li>
+      <li><b>Mock API</b> — in-memory, <b>real latency + error injection</b></li>
+      <li><b>Optimistic updates</b> + a <b>global undo</b> stack (G-06)</li>
+      <li><b>Permissions engine</b> — the §20.1 role matrix</li>
+      <li><b>Entitlements engine</b> — plan limits + usage metering</li>
+      <li><b>URL-state sync</b> + refresh-safe persistence</li>
+    </ul></div>
+    <div class="arch-col"><h4>Data entities mocked</h4><ul>
+      <li>Org · Workspace · Member · Role</li>
+      <li>Record · View · Comment · Activity</li>
+      <li>Notification · Subscription · Invoice · Usage</li>
+      <li>Entitlement · ApiKey · Webhook · AuditEvent</li>
+      <li>Org <b>state machine</b>: trialing→active→past_due→restricted→cancelled</li>
+      <li>Switchable in a demo panel to show every commercial state</li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- FOUNDATION -->
+<section id="foundation" class="wrap reveal">
+  <span class="eyebrow">Shared Foundation</span>
+  <h2 class="sec-title">Built once, <span class="grad-text">consumed by everything</span>.</h2>
+  <p class="sec-lead">Delivered in Phase 0. A feature isn't complete without its cross-cutting UX — every component ships with docs, live examples, and every state rendered.</p>
+  <div class="grid two" style="margin-top:30px">
+    <div class="panel fcard"><h4><span class="fic">◱</span> Component library (~60)</h4><div class="chips">
+      <span class="chip">Button</span><span class="chip">Input</span><span class="chip">Select</span><span class="chip">Combobox</span><span class="chip">Date picker</span><span class="chip">File upload</span><span class="chip">Data table</span><span class="chip">Board</span><span class="chip">Calendar</span><span class="chip">Card</span><span class="chip">Badge</span><span class="chip">Avatar</span><span class="chip">Stat tile</span><span class="chip">Chart set</span><span class="chip">Empty state</span><span class="chip">Modal</span><span class="chip">Side sheet</span><span class="chip">Toast</span><span class="chip">Command palette</span><span class="chip">Filter bar</span><span class="chip">Split view</span>
+    </div></div>
+    <div class="panel fcard"><h4><span class="fic">⌘</span> Global keyboard model</h4><div class="chips">
+      <span class="chip mono">⌘K palette</span><span class="chip mono">/ search</span><span class="chip mono">? shortcuts</span><span class="chip mono">⌘, settings</span><span class="chip mono">C create</span><span class="chip mono">E edit</span><span class="chip mono">J/K next/prev</span><span class="chip mono">X select</span><span class="chip mono">⌘↵ submit</span><span class="chip mono">Esc close</span><span class="chip mono">G→H/R/S go to</span>
+    </div><p style="font-size:13px;color:var(--text-mut);margin-top:12px">Single-key shortcuts disabled in text inputs; never override browser/AT combos; globally disableable in Preferences.</p></div>
+  </div>
+  <div class="grid two" style="margin-top:18px">
+    <div class="panel fcard"><h4><span class="fic">◐</span> Universal states — every screen</h4><div class="chips">
+      <span class="chip">Loading</span><span class="chip">Skeleton</span><span class="chip">Optimistic</span><span class="chip">Empty · first-use</span><span class="chip">Empty · no-results</span><span class="chip">Empty · done</span><span class="chip">Empty · error-caused</span><span class="chip">Error + retry</span><span class="chip">Field validation</span><span class="chip">Permission-denied</span><span class="chip">404 vs 403</span><span class="chip">Offline</span><span class="chip">Reconnect</span><span class="chip">Version mismatch</span><span class="chip">Input preserved</span>
+    </div><p style="font-size:13px;color:var(--text-mut);margin-top:12px">~21 cross-cutting states × ~79 screens is what produces the ~355 total — applied as a per-screen checklist at build.</p></div>
+    <div class="panel fcard"><h4><span class="fic">⚡</span> Performance budgets §11.1</h4>
+      <div class="tbl-wrap" style="margin-top:6px;border:none">
+        <table style="min-width:0;font-size:12.5px">
+          <tbody>
+            <tr><td>List render (50 rows)</td><td class="num-cell">≤ 800 ms</td></tr>
+            <tr><td>Record sheet open</td><td class="num-cell">≤ 400 ms</td></tr>
+            <tr><td>Search first results</td><td class="num-cell">≤ 500 ms</td></tr>
+            <tr><td>⌘K open → interactive</td><td class="num-cell">≤ 100 ms</td></tr>
+            <tr><td>Inline field save</td><td class="num-cell">≤ 300 ms</td></tr>
+            <tr><td>Initial route JS</td><td class="num-cell">≤ 250 KB gz</td></tr>
+            <tr><td>LCP · INP · CLS</td><td class="num-cell">2.5s · 200ms · 0.1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="grid three" style="margin-top:18px">
+    <div class="panel fcard"><h4><span class="fic">♿</span> Accessibility</h4><p style="font-size:13.5px;color:var(--text-mut)">WCAG 2.2 AA on every screen · full keyboard operability · visible focus into/out of modals · live-region announcements · reflow at 320px / 200% zoom · touch ≥24px · automated a11y blocks CI merge.</p></div>
+    <div class="panel fcard"><h4><span class="fic">◆</span> Motion</h4><p style="font-size:13.5px;color:var(--text-mut)">instant 80ms · fast 150ms · base 240ms · slow 400ms. Nothing >400ms in a task path. <code class="mono" style="font-size:12px">prefers-reduced-motion</code> → ≤100ms opacity, no parallax/loop. No layout shift after load.</p></div>
+    <div class="panel fcard"><h4><span class="fic">✍</span> Content &amp; voice</h4><p style="font-size:13.5px;color:var(--text-mut)">Single string catalogue (no inline copy) · verbs on controls · sentence case · directive errors, never "something went wrong" · specific numbers · unambiguous dates · +40% expansion &amp; RTL-ready.</p></div>
+  </div>
+</section>
+
+<!-- QUALITY -->
+<section id="quality" class="wrap reveal">
+  <span class="eyebrow">Quality &amp; Definition of Done</span>
+  <h2 class="sec-title">A screen isn't done <span class="grad-text">until it's all done</span>.</h2>
+  <p class="sec-lead">QA-1 gates every phase. No "we'll add the states later" — that's how a release slips (FSD §17).</p>
+  <div class="panel" style="margin-top:26px">
+    <h4 style="font-size:16px;margin-bottom:10px">Definition of Done — every screen</h4>
+    <ul class="dod-list">
+      <li><span class="chk">✓</span> All applicable states (default → skeleton → error → empty → permission-denied)</li>
+      <li><span class="chk">✓</span> Keyboard-operable end-to-end with visible focus</li>
+      <li><span class="chk">✓</span> WCAG 2.2 AA — contrast, labels, roles, live regions</li>
+      <li><span class="chk">✓</span> Responsive to 375px; modals become full-screen sheets &lt;768px</li>
+      <li><span class="chk">✓</span> Motion respects <code class="mono" style="font-size:12px">prefers-reduced-motion</code></li>
+      <li><span class="chk">✓</span> Consumes semantic tokens only — no hard-coded hex/px</li>
+      <li><span class="chk">✓</span> Mock-data happy path + at least one error path</li>
+      <li><span class="chk">✓</span> Deep-link / URL state restores exactly</li>
+    </ul>
+  </div>
+  <div class="callout" style="margin-top:20px">
+    🔍 <b>The one gap the mining flagged:</b> "states" are the thin dimension (~190 enumerated vs ~355 target). Root cause — the universal-state matrix is defined <b>once</b> in the foundation but the official count multiplies it <b>per screen</b>. Remediation is built into <b>Sprint 15</b>: <code class="mono" style="font-size:12px">state-matrix-checker</code> walks every screen and asserts its applicable universal states, reconciling 190 → ~355. M11 Settings and M5 get priority (largest gaps).
+  </div>
+
+  <h3 style="font-size:22px;margin:44px 0 6px">Risks &amp; the Sprint-0 decisions <span style="font-size:14px;color:var(--text-mut);font-weight:600">(FSD §19.4)</span></h3>
+  <div class="panel">
+    <div class="risk"><span class="tag">G-10</span><div class="rt"><b>Design signature — resolved.</b> The Day-Arc identity (spectrum + arc/orb logo + gradient surfaces) answers Q-08. Locked before the component library — restyling 60+ components post-launch is a quarter of work.</div></div>
+    <div class="risk"><span class="tag">G-02</span><div class="rt"><b>Mock-sync contract.</b> The optimistic-update + global-undo model is decided in Phase 0 — every data path depends on it, so it can't be retrofitted.</div></div>
+    <div class="risk"><span class="tag">RBAC</span><div class="rt"><b>Permissions &amp; entitlements as data.</b> Both engines land in Phase 0 so features gate consistently and checks are built <b>with</b> the features, never bolted on.</div></div>
+    <div class="risk"><span class="tag">§11.1</span><div class="rt"><b>Performance from day one.</b> QA-1 enforces budgets from Phase 0 — virtualization beyond 100 rows, module-boundary code-splitting, ≤250KB initial route JS.</div></div>
+    <div class="risk"><span class="tag">A-06</span><div class="rt"><b>Billing is the highest-risk late change.</b> M9 pricing/packaging is frozen before Phase 3; state completeness on dunning/restricted/declined paths is non-negotiable.</div></div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="fl"><svg width="28" height="28" style="color:var(--iris)"><use href="#mark"/></svg> Meridian Build Plan</div>
+  <p>18 modules · 106 screens · 170 sheets · ~355 states · 11 agents · 6 phases · 17 sprints. Grounded in FSD v1.1, built in the Day-Arc design language.</p>
+</footer>
+
+<script>
+const root=document.documentElement,tt=document.getElementById('themeToggle'),ti=document.getElementById('ti'),tl=document.getElementById('tl');
+tt.addEventListener('click',()=>{const d=root.getAttribute('data-theme')==='dark';root.setAttribute('data-theme',d?'light':'dark');ti.textContent=d?'☀':'◐';tl.textContent=d?'Light':'Dark';});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelector(a.getAttribute('href')).scrollIntoView({behavior:'smooth'})}));
+</script>
+</body>
+</html>

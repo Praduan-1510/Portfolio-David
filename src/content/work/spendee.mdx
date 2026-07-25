@@ -14,10 +14,21 @@ cover: /images/work/spendee/dashboard.png
 # falls back to the static cover phone.
 video:
   src: /videos/Spendee.mp4
+# Clickable Figma prototype. Lives in frontmatter, not the body, because it takes
+# over the signature-showcase slot directly under the hero — the strongest spot on
+# the page — instead of waiting at the bottom of the read. The embed is mounted on
+# click, not on load: as an always-present iframe it cost this route 197 requests
+# to figma.com, the first at +199ms and the last still arriving at +10.4s.
+figma:
+  embedUrl: "https://embed.figma.com/proto/m2IfTGGgJiAhWbMGBgl3Dn/E-Commerce-V1?node-id=250-378&p=f&viewport=-4383%2C-11241%2C0.33&scaling=scale-down&content-scaling=fixed&starting-point-node-id=250%3A378&page-id=20%3A102&embed-host=share"
+  poster: /images/work/spendee/welcome.png
+  alt: Spendee's welcome screen — the prototype's first frame
+  aspect: "390 / 844"
+  caption: The real Figma prototype — nineteen screens, clickable end to end
 accent: "#C9E94B" # AA-tuned Spendee lime for the dark bg (brand ref #C2E000)
 motif: ledger
 featured: true
-order: 1
+order: 2
 flows:
   - title: Onboarding & sign-in
     note: "A four-step intro frames the value, then mobile-first auth with a PIN, biometrics, and GSTIN capture."
@@ -248,13 +259,6 @@ One dark surface; a status colour system (green / red / amber) that encodes mean
 <Aside label="Colophon">
   Designed in Figma — one component set, one status colour system, nineteen screens. The tool isn't the claim; the arithmetic is. Every figure here reconciles against a single spine: ₹4,15,200 to get, ₹1,18,400 to give, ₹2,96,800 net — and a GST liability of ₹24,560 that holds across all five screens that reference it.
 </Aside>
-
-## Live prototype
-
-<FigmaPrototype
-  embedUrl="https://embed.figma.com/proto/m2IfTGGgJiAhWbMGBgl3Dn/E-Commerce-V1?node-id=250-378&p=f&viewport=-4383%2C-11241%2C0.33&scaling=scale-down&content-scaling=fixed&starting-point-node-id=250%3A378&page-id=20%3A102&embed-host=share"
-  aspectRatio="390 / 844"
-/>
 
 ## Outcome
 

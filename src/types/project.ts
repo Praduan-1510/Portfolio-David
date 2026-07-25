@@ -28,6 +28,56 @@ export interface ProjectVideo {
   aspect?: string;
 }
 
+/** One surface of a self-contained HTML prototype, shown as a tab in the
+ *  live-prototype frame. */
+export interface PrototypeSurface {
+  /** Stable id, also the tab id. */
+  id: string;
+  /** Tab label. */
+  label: string;
+  /** Shorter label used when the chrome is narrow. */
+  shortLabel?: string;
+  /** Same-origin path under /public, e.g. /prototype/meridian/app.html. */
+  src: string;
+  /** Text for the address pill — a fiction of the product's own domain, since
+   *  the prototype has no live host. */
+  domain: string;
+}
+
+/** A playable prototype embedded in the case study — the alternative
+ *  centerpiece to `video` for a `kind: "web"` study, used when the work IS a
+ *  working artefact rather than a shipped site to record. */
+export interface ProjectPrototype {
+  /** Screenshot shown before the visitor launches the demo. */
+  poster: string;
+  /** Alt text for that screenshot. */
+  alt?: string;
+  /** Frame aspect (w/h) for the desktop viewport. Default 1.6. */
+  aspect?: number;
+  /** One line under the frame: how to actually use the demo. */
+  hint?: string;
+  surfaces: PrototypeSurface[];
+}
+
+/** A clickable Figma prototype for an app study. Present in frontmatter rather
+ *  than the MDX body because it takes over the signature-showcase slot directly
+ *  under the hero — the strongest position on the page — instead of waiting at
+ *  the bottom of the read. */
+export interface ProjectFigma {
+  /** Figma embed URL (embed.figma.com/proto/…&embed-host=share). */
+  embedUrl: string;
+  /** Still of the prototype's FIRST screen — a bare screen render, no device
+   *  art, since it sits inside a PhoneFrame while dormant. Also excluded from
+   *  the flanking stills so nothing is shown twice. */
+  poster: string;
+  /** Alt text for that still. */
+  alt?: string;
+  /** CSS aspect-ratio string for the live frame. Default "390 / 844". */
+  aspect?: string;
+  /** Caption under the composition. */
+  caption?: string;
+}
+
 /** A single app screen in a case-study gallery. */
 export interface Screen {
   /** Image path under /public. */
@@ -74,10 +124,17 @@ export interface ProjectMeta {
   /** Hero image path (a phone cover for apps; the video poster for web). */
   cover: string;
   /** Medium. "app" (default) → portrait phone frames; "web" → landscape browser
-   *  mockup driven by `video`. */
+   *  mockup driven by `video` (a shipped site) or `prototype` (a playable one). */
   kind?: "app" | "web";
-  /** Looping site video shown in the browser mockup (required when kind: "web"). */
+  /** Looping site video shown in the browser mockup. A web project needs this
+   *  OR `prototype`. */
   video?: ProjectVideo;
+  /** A real, playable HTML prototype embedded in the browser mockup — the
+   *  centerpiece when the deliverable is a working artefact, not a live site. */
+  prototype?: ProjectPrototype;
+  /** A clickable Figma prototype. When present it leads the signature-showcase
+   *  slot under the hero, flanked by two key screens, instead of the static trio. */
+  figma?: ProjectFigma;
   /** Live site URL — surfaced prominently for shipped/real work. */
   liveUrl?: string;
   /** Screens grouped by product flow — the source of truth for the gallery.

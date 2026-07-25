@@ -15,6 +15,18 @@ const nextConfig: NextConfig = {
     // few-hundred-px slot on a wide/retina screen.
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
   },
+  async headers() {
+    return [
+      {
+        // The Meridian prototype ships as raw static HTML under /prototype so it
+        // can be framed same-origin by the case study. It carries its own titles,
+        // nav, and landing page — left crawlable it would read as a second site
+        // and compete with /work/meridian, which is the piece meant to be found.
+        source: "/prototype/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex" }],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

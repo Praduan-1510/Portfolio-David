@@ -10,6 +10,7 @@ import {
   PhoneFrame,
   HeroLoopVideo,
   BrowserMockup,
+  LivePrototype,
   ProjectCover,
 } from "@/components/primitives";
 import {
@@ -23,6 +24,7 @@ import {
   FlapText,
 } from "@/components/motion";
 import { mdxComponents } from "@/components/mdx/mdx-components";
+import { FigmaPrototype } from "@/components/FigmaPrototype";
 import { displayTitle } from "@/lib/utils/typography";
 import {
   getProjectBySlug,
@@ -95,6 +97,14 @@ export default async function CaseStudy({
   // Three key screens for the signature showcase — the cover centred, flanked by
   // the next two distinct screens (a confident "big reveal" of the actual work).
   const heroScreens = Array.from(new Set([meta.cover, ...meta.gallery])).slice(0, 3);
+
+  // When a study ships a clickable prototype, the signature slot under the hero
+  // holds the prototype itself instead of the static trio — the strongest
+  // position on the page goes to the one thing a reader can operate. Studies
+  // without one (Voyager, Decathlon) keep the trio exactly as before.
+  const showFigmaShowcase = Boolean(meta.figma);
+  const showScreenTrio =
+    !showFigmaShowcase && meta.kind !== "web" && heroScreens.length === 3;
 
   // Narrative sections (the MDX h2s) for the sticky "Contents" rail — extracted
   // from the raw MDX so the ids match the slugs the heading renderer sets.
@@ -276,19 +286,38 @@ export default async function CaseStudy({
                     "radial-gradient(58% 64% at 50% 46%, color-mix(in srgb, var(--accent) 15%, transparent), transparent 76%)",
                 }}
               />
-              <BrowserMockup
-                tilt="hero"
-                boot
-                big
-                priority
-                mp4={meta.video?.src}
-                webm={meta.video?.webm}
-                poster={meta.video?.poster ?? meta.cover}
-                liveUrl={meta.liveUrl}
-                domain={liveHost}
-                alt={`${meta.title} — homepage, looping screen recording`}
-                sizes="(min-width: 768px) 78rem, 92vw"
-              />
+              {meta.prototype ? (
+                /* When the deliverable IS a working artefact, the showpiece slot
+                   holds the artefact itself rather than a recording of one — the
+                   reader can launch it and use it in place. Same slot, same glow,
+                   same spec strip below. */
+                <LivePrototype
+                  tabs={meta.prototype.surfaces}
+                  poster={meta.prototype.poster}
+                  alt={
+                    meta.prototype.alt ??
+                    `${meta.title} — the prototype, before launching it`
+                  }
+                  title={meta.title}
+                  desktopAspect={meta.prototype.aspect}
+                  hint={meta.prototype.hint}
+                  priority
+                />
+              ) : (
+                <BrowserMockup
+                  tilt="hero"
+                  boot
+                  big
+                  priority
+                  mp4={meta.video?.src}
+                  webm={meta.video?.webm}
+                  poster={meta.video?.poster ?? meta.cover}
+                  liveUrl={meta.liveUrl}
+                  domain={liveHost}
+                  alt={`${meta.title} — homepage, looping screen recording`}
+                  sizes="(min-width: 768px) 78rem, 92vw"
+                />
+              )}
             </Container>
 
             {/* Spec strip below the capture — instrument fact sheet. */}
@@ -448,7 +477,7 @@ export default async function CaseStudy({
           above, so re-showing it here reads as a duplicate — instead mobile drops
           the cover and reveals the two OTHER screens as a balanced pair, so the
           beat shows fresh work at every size. Woven parallax; reduced-motion-safe. */}
-      {meta.kind !== "web" && heroScreens.length === 3 && (
+      {(showFigmaShowcase || showScreenTrio) && (
         <section className="relative isolate overflow-hidden border-b border-line py-space-10">
           <div
             aria-hidden="true"
@@ -459,6 +488,29 @@ export default async function CaseStudy({
             }}
           />
           <Container>
+            {showFigmaShowcase ? (
+              /* Prototype-led variant: the slot holds the real, clickable thing
+                 instead of three pictures of it. Nothing is lost by dropping the
+                 trio — the flows gallery further down renders every screen, and
+                 the hero above already runs a montage of them, so the trio was
+                 this study's most redundant beat. It earns the slot by being the
+                 one thing on the page a reader can actually operate.
+                 No Parallax here, unlike the trio: a target you're meant to click
+                 shouldn't drift under the cursor as you reach for it. */
+              <Reveal>
+                <FigmaPrototype
+                  embedUrl={meta.figma!.embedUrl}
+                  poster={meta.figma!.poster}
+                  posterAlt={
+                    meta.figma!.alt ??
+                    `${meta.title} — the prototype's first screen`
+                  }
+                  title={`${meta.title} — interactive Figma prototype`}
+                  aspectRatio={meta.figma!.aspect ?? "390 / 844"}
+                  caption={meta.figma!.caption}
+                />
+              </Reveal>
+            ) : (
             <Reveal>
               <div className="mx-auto flex max-w-[42rem] items-end justify-center gap-space-5 sm:gap-space-7">
                 {/* Left — a flank on desktop; a full member of the mobile pair. */}
@@ -500,6 +552,7 @@ export default async function CaseStudy({
                 </div>
               </div>
             </Reveal>
+            )}
           </Container>
         </section>
       )}

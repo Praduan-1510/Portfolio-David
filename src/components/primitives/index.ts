@@ -7,4 +7,6 @@ export type { ButtonVariant, ButtonShape, ButtonSize } from "./Button";
 export { PhoneFrame } from "./PhoneFrame";
 export { HeroLoopVideo } from "./HeroLoopVideo";
 export { BrowserMockup } from "./BrowserMockup";
+export { LivePrototype } from "./LivePrototype";
+export type { PrototypeTab } from "./LivePrototype";
 export { ProjectCover } from "./ProjectCover";

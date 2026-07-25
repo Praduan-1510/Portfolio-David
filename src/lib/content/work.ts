@@ -57,11 +57,39 @@ function assertProjectMeta(
     throw new Error(`[content] ${slug}.mdx: "kind" must be "app" or "web"`);
 
   if (kind === "web") {
+    // A web study's centerpiece is either a recording of a shipped site
+    // (`video`) or a playable prototype (`prototype`) — one or the other.
     const v = data.video as Record<string, unknown> | undefined;
-    if (!v || typeof v.src !== "string" || typeof v.poster !== "string")
+    const p = data.prototype as Record<string, unknown> | undefined;
+    const hasVideo = !!v && typeof v.src === "string" && typeof v.poster === "string";
+    if (!hasVideo && !p)
       throw new Error(
-        `[content] ${slug}.mdx: web projects need a "video" with string "src" and "poster"`,
+        `[content] ${slug}.mdx: web projects need a "video" with string "src" and "poster", or a "prototype"`,
       );
+    if (v && !hasVideo)
+      throw new Error(
+        `[content] ${slug}.mdx: "video" needs string "src" and "poster"`,
+      );
+    if (p) {
+      if (typeof p.poster !== "string")
+        throw new Error(`[content] ${slug}.mdx: "prototype.poster" must be a string`);
+      if (!Array.isArray(p.surfaces) || p.surfaces.length === 0)
+        throw new Error(
+          `[content] ${slug}.mdx: "prototype" needs a non-empty "surfaces" array`,
+        );
+      for (const [si, surface] of (p.surfaces as unknown[]).entries()) {
+        const s = surface as Record<string, unknown>;
+        if (
+          typeof s?.id !== "string" ||
+          typeof s?.label !== "string" ||
+          typeof s?.src !== "string" ||
+          typeof s?.domain !== "string"
+        )
+          throw new Error(
+            `[content] ${slug}.mdx: prototype.surfaces[${si}] needs string "id", "label", "src" and "domain"`,
+          );
+      }
+    }
     if (data.liveUrl !== undefined && typeof data.liveUrl !== "string")
       throw new Error(`[content] ${slug}.mdx: "liveUrl" must be a string`);
   }
@@ -89,6 +117,16 @@ function assertProjectMeta(
       }
     }
   }
+  // Optional Figma prototype — takes over the signature-showcase slot, so a
+  // typo here would silently blank the strongest beat on the page.
+  if (data.figma !== undefined) {
+    const f = data.figma as Record<string, unknown>;
+    if (typeof f?.embedUrl !== "string" || typeof f?.poster !== "string")
+      throw new Error(
+        `[content] ${slug}.mdx: "figma" needs string "embedUrl" and "poster"`,
+      );
+  }
+
   // Optional accent themes the route — if present it must be a usable hex.
   if (
     data.accent !== undefined &&

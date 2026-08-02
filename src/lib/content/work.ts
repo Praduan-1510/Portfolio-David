@@ -73,6 +73,10 @@ function assertProjectMeta(
     if (p) {
       if (typeof p.poster !== "string")
         throw new Error(`[content] ${slug}.mdx: "prototype.poster" must be a string`);
+      // Optional, but it renders as a factual claim on the case-study hero, so a
+      // wrong type here should fail the build rather than print quietly.
+      if (p.launchNote !== undefined && typeof p.launchNote !== "string")
+        throw new Error(`[content] ${slug}.mdx: "prototype.launchNote" must be a string`);
       if (!Array.isArray(p.surfaces) || p.surfaces.length === 0)
         throw new Error(
           `[content] ${slug}.mdx: "prototype" needs a non-empty "surfaces" array`,

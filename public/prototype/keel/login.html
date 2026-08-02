@@ -37,24 +37,29 @@
     history in it, so anything you decide is real and the next visitor sees it.</div>
 
     <div class="card">
-      <!-- POST, not GET: a credential must never travel in a URL, where it
-           lands in history, logs and referrers. The design reference models
-           the correct markup even though this static copy has no server to
-           receive it — the working sign-in is in the server build. -->
-      <form action="index.html" method="post">
+      <!-- A credential must never travel in a URL, where it lands in history,
+           logs and referrers. That rule is why this form carries no `name`
+           attributes: with nothing named, the browser serialises nothing, so
+           the GET below navigates to a bare app.html and the password never
+           leaves the page. (POST would be the server-build markup, but this
+           copy is hosted statically — Vercel answers POST to a .html with 405,
+           which would break the demo at the sign-in step. The prototype is
+           deliberately script-free, so a JS submit handler is out too.)
+           `required` is kept, so the fields still have to be filled in. -->
+      <form action="app.html" method="get">
         <div class="field">
           <label for="email">Email <span class="req">*</span></label>
-          <input class="input" type="email" id="email" name="email" autocomplete="email" required>
+          <input class="input" type="email" id="email" autocomplete="email" required>
         </div>
 
         <div class="field">
           <label for="password">Password <span class="req">*</span></label>
-          <input class="input" type="password" id="password" name="password" autocomplete="current-password" required>
+          <input class="input" type="password" id="password" autocomplete="current-password" required>
           <p class="field-help">Pick anything — but pick something you will remember, because it is the key to that ledger. Your password is never stored — only a salted scrypt hash of it. Keel never sees your bank credentials either; connections go through a regulated aggregator.</p>
         </div>
 
         <div class="checkbox-row">
-          <input type="checkbox" id="remember" name="remember">
+          <input type="checkbox" id="remember">
           <label for="remember">Remember this device for <span class="num">30</span> days</label>
         </div>
 

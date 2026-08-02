@@ -126,7 +126,9 @@ const EXPERIENCE = [
     roles: [
       {
         title: "Learning Designer · Full-time",
-        period: "Nov 2021 – Oct 2022",
+        // Sep, not Oct — the résumé PDF is the record of employment dates, and
+        // /resume reads from it. Keep the two in step.
+        period: "Nov 2021 – Sep 2022",
         body: "Designed end-to-end digital learning flows for professional certification courses — modular content, clear navigation, and multimedia — alongside subject-matter experts. Restructured course layouts to improve usability and completion.",
       },
     ],
@@ -155,6 +157,7 @@ type Certification = {
 // Newest first. The `certifications` stat gauge counts this array, so it stays
 // in sync automatically.
 const CERTIFICATIONS: Certification[] = [
+  { title: "Claude Code in Action", issuer: "Anthropic", year: "2026" },
   {
     title: "Vibe Coding Fundamentals",
     issuer: "University of Colorado",
@@ -168,7 +171,7 @@ const CERTIFICATIONS: Certification[] = [
     issuer: "Udemy",
     year: "2026",
   },
-  { title: "Figma UX/UI Design Essentials", issuer: "Udemy", year: "2025" },
+  { title: "Figma UI/UX Design Essentials", issuer: "Udemy", year: "2025" },
   {
     title: "Complete Web & Mobile Designer: UI/UX, Figma & more",
     issuer: "Udemy",

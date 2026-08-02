@@ -56,6 +56,12 @@ export interface ProjectPrototype {
   aspect?: number;
   /** One line under the frame: how to actually use the demo. */
   hint?: string;
+  /** What this specific prototype does when it opens — the middle sentence of
+   *  the launch scrim, between "The real prototype, not a recording." and
+   *  "Runs entirely in your browser." Per-project because it is a claim about
+   *  THIS artefact: Meridian opens on a sign-in screen, Keel opens straight
+   *  onto the ledger. Omit it and the scrim just states the invariants. */
+  launchNote?: string;
   surfaces: PrototypeSurface[];
 }
 

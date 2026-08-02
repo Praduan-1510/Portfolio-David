@@ -97,6 +97,11 @@ interface LivePrototypeProps {
   maxHeight?: number;
   /** One line under the frame: how to actually use the demo. */
   hint?: string;
+  /** What THIS prototype does on open, e.g. "It opens on the sign-in screen…".
+   *  Sits between the two invariant sentences of the launch scrim. Left out,
+   *  the scrim promises nothing project-specific — which is the only safe
+   *  default, since the component is shared by every prototype study. */
+  launchNote?: string;
   /** Eager-load the poster — set only where the frame is the LCP element (hero). */
   priority?: boolean;
   className?: string;
@@ -152,6 +157,7 @@ export function LivePrototype({
   desktopAspect = 1.6,
   maxHeight = 760,
   hint,
+  launchNote,
   priority = false,
   className,
 }: LivePrototypeProps) {
@@ -415,10 +421,17 @@ export function LivePrototype({
                       Launch the live demo
                     </button>
                     <p className="max-w-[48ch] font-mono text-caption text-white/70">
+                      {/* Only the two invariants are hardcoded — they hold for
+                          every prototype study. What happens on open is a claim
+                          about ONE artefact, so it comes from that project's
+                          frontmatter (`prototype.launchNote`). This sentence
+                          used to describe Meridian's sign-in screen for every
+                          study, which made it false the moment a second
+                          prototype shipped. */}
                       <span className="hidden sm:inline">
-                        The real prototype, not a recording. It opens on the sign-in
-                        screen — the fields are pre-filled, any password and any
-                        6-digit code will do. Runs entirely in your browser.
+                        The real prototype, not a recording.{" "}
+                        {launchNote ? `${launchNote} ` : ""}Runs entirely in your
+                        browser.
                       </span>
                       <span className="sm:hidden">
                         The real prototype runs in your browser, but it needs a wider

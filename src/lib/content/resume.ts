@@ -6,6 +6,10 @@
  * bullets into one result-led sentence each. Nothing is invented: no metrics,
  * employers, dates, or claims that aren't in the document itself.
  *
+ * One entry is NOT from the PDF: the Freelance / Creative Designer role, carried
+ * over verbatim from the About timeline so the two pages stop contradicting each
+ * other (see the note on it below). Everything else is the PDF.
+ *
  * Two deliberate departures from the PDF, both for the web context:
  *   1. The headline title uses site.jobTitle ("Product Designer (Design +
  *      Front-End)") so the site speaks with one voice. Employer titles below
@@ -110,6 +114,26 @@ export const EXPERIENCE: Position[] = [
         bullets: [
           "Produced on-brand creative for a B2B SaaS team launching GTM and AI-focused marketing — LinkedIn carousels, ad visuals, banners, pitch decks, and landing-page layouts in Canva and Figma, plus early UI concepts for marketing microsites.",
           "Delivered 20+ creatives and wireframes that improved visual consistency and readability across GTM assets — earning a full-time conversion.",
+        ],
+      },
+    ],
+  },
+  {
+    // NOT in the PDF — this entry is carried over verbatim from the About
+    // timeline, which has listed it since long before this page existed. Without
+    // it the résumé shows a silent three-year gap (Sep 2022 → Sep 2025) that
+    // About visibly fills, and a reader comparing the two pages can't tell which
+    // is true. The PDF should gain it on its next export.
+    company: "Freelance",
+    meta: "Remote",
+    period: "Jan 2022 – Oct 2025",
+    roles: [
+      {
+        title: "Creative Designer",
+        mode: "Freelance · Remote",
+        period: "Jan 2022 – Oct 2025",
+        bullets: [
+          "Freelance work across content writing, photo and video editing, and instructional design, delivering creative assets for a range of clients.",
         ],
       },
     ],

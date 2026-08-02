@@ -19,11 +19,17 @@ prototype:
   poster: /images/work/keel/app-home.png
   alt: Keel's morning ledger — cream paper, stat tiles, and two approval cards each showing Keel's reasoning
   aspect: 1.6
+  launchNote: >-
+    It opens on the sign-in screen — any email and any password get you in, or
+    take the two-minute tour instead.
   surfaces:
     - id: app
       label: App
       shortLabel: App
-      src: /prototype/keel/app.html
+      # Entry point is the sign-in screen, not the logged-in ledger: signing in
+      # is part of the product's argument about trust, and login.html was
+      # otherwise unreachable — nothing inside the demo linked to it.
+      src: /prototype/keel/login.html
       domain: keel.app
     - id: system
       label: Design system

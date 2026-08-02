@@ -301,6 +301,7 @@ export default async function CaseStudy({
                   title={meta.title}
                   desktopAspect={meta.prototype.aspect}
                   hint={meta.prototype.hint}
+                  launchNote={meta.prototype.launchNote}
                   priority
                 />
               ) : (

@@ -63,6 +63,11 @@ const isHttp = (href: string) => /^https?:/.test(href);
 
 export function Button(props: AsButton | AsLink) {
   const { variant = "primary", shape = "sharp", size = "md", className, children } = props;
+  // A `download` href points at a FILE in public/, not a route. Routing it
+  // through NextLink makes the router prefetch it as an RSC payload, which 404s
+  // on every render of the page (e.g. /pdf/… ?_rsc=…) — so render a plain <a>.
+  const isDownload =
+    "download" in props && props.download !== undefined && props.download !== false;
   const classes = cn(
     base,
     variantClasses[variant],
@@ -81,7 +86,7 @@ export function Button(props: AsButton | AsLink) {
       children: _ch,
       ...rest
     } = props;
-    if (isExternal(href)) {
+    if (isExternal(href) || isDownload) {
       // Off-origin links get rel="noopener noreferrer" by default (overridable
       // via props); mailto:/tel: don't need it.
       const rel = isHttp(href)

@@ -128,6 +128,8 @@ main.container { padding-top: var(--s-7); padding-bottom: var(--s-8); }
 
 .section-head {
   display: flex;
+  flex-wrap: wrap;
+  row-gap: var(--s-1);
   align-items: baseline;
   justify-content: space-between;
   gap: var(--s-4);
@@ -154,7 +156,7 @@ main.container { padding-top: var(--s-7); padding-bottom: var(--s-8); }
 
 .stat-strip {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
   gap: var(--s-5);
 }
 
@@ -440,6 +442,7 @@ main.container { padding-top: var(--s-7); padding-bottom: var(--s-8); }
 
 /* ---------- Reasoning trace ---------- */
 .trace {
+  max-width: 78ch;
   border-left: 3px solid var(--teal);
   background: var(--teal-wash);
   padding: var(--s-3) var(--s-4);
@@ -469,6 +472,7 @@ main.container { padding-top: var(--s-7); padding-bottom: var(--s-8); }
   margin-bottom: var(--s-5);
   font-size: 15px;
 }
+.stat-strip + .banner { margin-top: var(--s-5); }
 .banner-warn   { border-left-color: var(--amber-text); background: var(--amber-wash); }
 .banner-danger { border-left-color: var(--red); background: var(--red-wash); }
 
@@ -633,12 +637,12 @@ main.container { padding-top: var(--s-7); padding-bottom: var(--s-8); }
   position: absolute;
   right: 0;
   bottom: 4px;
+  text-shadow: 0 0 4px var(--card), 0 0 4px var(--card), 0 0 4px var(--card);
   font-family: var(--font-data);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.1em;
   color: var(--red);
-  background: var(--card);
   padding: 0 4px;
 }
 
@@ -757,11 +761,12 @@ textarea.input { min-height: 96px; resize: vertical; }
 }
 .checkbox-row input[type="checkbox"] {
   accent-color: var(--teal);
-  width: 18px;
-  height: 18px;
-  margin-top: 4px;
+  width: 24px;
+  height: 24px;
+  margin-top: 2px;
   cursor: pointer;
 }
+.checkbox-row label { display: inline-block; min-height: 44px; padding-top: 10px; }
 .checkbox-row label { cursor: pointer; }
 
 fieldset {
@@ -792,7 +797,10 @@ fieldset legend {
   accent-color: var(--teal);
   margin: var(--s-3) 0 var(--s-1);
   cursor: pointer;
-  min-height: 24px;
+  /* 24px was under the 44px touch minimum — on a control that sets a
+     money ceiling, a mis-grab is expensive. The track stays visually
+     thin; only the hit box grows. */
+  min-height: 44px;
 }
 
 .range-scale {
@@ -853,7 +861,7 @@ fieldset legend {
 .chip-row {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s-2);
+  gap: 10px;
   margin-bottom: var(--s-5);
 }
 
@@ -868,7 +876,7 @@ fieldset legend {
   background: var(--card);
   border: 1.5px solid var(--ink);
   padding: 7px 12px;
-  min-height: 36px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   gap: var(--s-2);
@@ -1089,6 +1097,9 @@ fieldset legend {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 
 .text-center { text-align: center; }
@@ -1099,15 +1110,46 @@ fieldset legend {
   margin: var(--s-5) 0;
 }
 
-/* ---------- Responsive ---------- */
+/* ============================================================
+   Responsive
+   Verified against a device matrix from 320px to 2560px, both
+   orientations, and 200%/400% browser zoom.
+
+   The rule that matters most is the minmax(0, …) below. A grid
+   track written as `1fr` takes an automatic min-content floor,
+   so a nowrap Courier table header nested inside it can push the
+   track — and the whole page — wider than the screen. Ledger
+   tables and the forecast chart are meant to scroll inside their
+   own container; the page itself must never scroll sideways.
+   ============================================================ */
+
+/* Grid children must be allowed to be narrower than their content. */
+.grid-2 > *, .setting > *, .specimen > * { min-width: 0; }
+
+/* Prose that happens to contain Courier figures may wrap. Ledger cells,
+   stat values and entry amounts keep their tabular nowrap. */
+p > .num, .specimen > .num { white-space: normal; overflow-wrap: anywhere; }
+
+/* Inside a scroll container a table should keep readable columns and let the
+   container scroll, rather than collapsing every column to its longest word. */
+.table-scroll .ledger { min-width: 480px; }
+@media (min-width: 561px) {
+  .table-scroll .ledger { min-width: 640px; }
+}
+
+/* The Recent-entries column is unreadable in a 379px track at iPad landscape,
+   so .grid-2 collapses earlier than .setting / .specimen do. */
+@media (max-width: 1024px) {
+  .grid-2 { grid-template-columns: minmax(0, 1fr); }
+}
+
 @media (max-width: 880px) {
-  .grid-2, .setting, .specimen { grid-template-columns: 1fr; }
+  .setting, .specimen { grid-template-columns: minmax(0, 1fr); }
   .entry-body { padding-left: var(--s-2); }
 }
 
 @media (max-width: 560px) {
   .container { padding: 0 var(--s-4); }
-  .brand { font-size: 38px; }
   .page-title { font-size: 28px; }
   .stat-value { font-size: 28px; }
   .jumbo { font-size: 80px; }
@@ -1119,6 +1161,49 @@ fieldset legend {
   .masthead-kicker { justify-content: center; }
   .masthead-kicker .mk-right { display: none; }
   .toolbar .input { width: 100%; }
+
+  /* A term and its definition stack; side by side leaves an 87px ribbon. */
+  .deflist { grid-template-columns: 1fr; }
+  .deflist dt { padding-top: var(--s-2); }
+
+  /* The masthead was taking 92% of a 320×568 screen before any content. */
+  .masthead { padding-top: var(--s-4); }
+  .brand-mark { margin-top: var(--s-3); }
+  .brand { font-size: 34px; margin-top: var(--s-2); }
+  .brand-sub { margin-bottom: var(--s-2); letter-spacing: 0.16em; }
+  .tabs { gap: 6px; padding: var(--s-2) 0 var(--s-3); }
+  .tab { padding: 10px 9px; font-size: 12px; letter-spacing: 0.04em; }
+}
+
+/* Very small phones (SE-class). The eight tabs are the app's whole structure
+   and stay visible rather than scrolling out of reach, so the decorative
+   chrome around them gives way instead: the tagline goes, the kicker and
+   wordmark shrink. Identity still reads from the mark plus KEEL. */
+@media (max-width: 400px) {
+  .masthead-kicker { font-size: 10px; letter-spacing: 0.06em; }
+  .brand-sub { display: none; }
+  .brand { font-size: 28px; margin-bottom: var(--s-3); }
+  .brand-mark { width: 36px; height: 36px; margin-top: var(--s-2); }
+  .tab { padding: 10px 7px; font-size: 11px; letter-spacing: 0.02em; }
+  .tabs { gap: 5px; }
+}
+
+/* Landscape phones: the masthead alone was taller than the whole viewport. */
+@media (max-height: 480px) and (orientation: landscape) {
+  .masthead { padding-top: var(--s-3); }
+  .brand-mark { display: none; }
+  .brand { font-size: 26px; margin: var(--s-2) 0 0; }
+  .brand-sub { margin-bottom: var(--s-2); }
+  .tabs { padding: var(--s-2) 0; }
+  main.container { padding-top: var(--s-5); }
+}
+
+/* Short desktop and tablet-landscape viewports (13" laptops, iPad landscape):
+   reclaim vertical space without touching portrait phones. */
+@media (min-height: 481px) and (max-height: 850px) {
+  .masthead { padding-top: var(--s-4); }
+  .brand { font-size: 40px; }
+  .brand-mark { margin-top: var(--s-3); }
 }
 
 /* ---------- Motion preferences ---------- */

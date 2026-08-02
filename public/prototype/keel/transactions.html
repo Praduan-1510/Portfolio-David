@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Every transaction, its category, confidence, and who filed it.">
+<title>Keel — Transactions</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20fill%3D%22%232B2416%22%2F%3E%3Cg%20fill%3D%22%23F6EFE0%22%20transform%3D%22translate(5.5%2C5.5)%20scale(0.77)%22%3E%3Cpath%20d%3D%22M4%2012h40v2l-12%204-8%205-8-5-12-4z%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2221%22%20width%3D%2214%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2221%22%20width%3D%2214%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2227%22%20width%3D%2240%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2233%22%20width%3D%2240%22%20height%3D%223%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="masthead">
+  <div class="container masthead-inner">
+    <p class="masthead-kicker">
+      <span>Est. 2026 · Autonomous Bookkeeping</span>
+      <span class="mk-right">Sunday · August 2, 2026</span>
+    </p>
+    <div class="brand-mark" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="currentColor" d="M4 12h40v2l-12 4-8 5-8-5-12-4z"/><rect fill="currentColor" x="4" y="21" width="14" height="3"/><rect fill="currentColor" x="30" y="21" width="14" height="3"/><rect fill="currentColor" x="4" y="27" width="40" height="3"/><rect fill="currentColor" x="4" y="33" width="40" height="3"/></svg></div>
+    <p class="brand"><a href="app.html">KEEL</a></p>
+    <p class="brand-sub">Keeps the books · Shows its work</p>
+    <nav class="tabs" aria-label="Primary">
+      <a class="tab" href="app.html">Overview</a>
+      <a class="tab" href="approvals.html">Approvals <span class="tab-count">6</span></a>
+      <a class="tab" href="activity.html">Activity</a>
+      <a class="tab" href="transactions.html" aria-current="page">Transactions</a>
+      <a class="tab" href="invoices.html">Invoices</a>
+      <a class="tab" href="bills.html">Bills</a>
+      <a class="tab" href="cashflow.html">Forecast</a>
+      <a class="tab" href="settings.html">Autonomy</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="container">
+
+  <div class="page-head">
+    <p class="kicker">Transactions · Aug 2 – Jul 28 · 14 entries shown</p>
+    <h1 class="page-title">Every dollar, filed and signed.</h1>
+    <hr class="rule">
+    <p class="page-lede">Each transaction below carries its category, Keel&rsquo;s confidence in that call, and who filed it. Anything under the <span class="num">90%</span> threshold came to you first — nothing was guessed at quietly.</p>
+  </div>
+
+  <div class="toolbar">
+    <div class="toolbar-group">
+      <label class="kicker" for="tx-search">Search</label>
+      <input class="input" id="tx-search" type="search" placeholder="Vendor or amount…">
+      <label class="kicker" for="tx-month">Month</label>
+      <select class="input" id="tx-month">
+        <option selected>All · Jul – Aug 2026</option>
+        <option>July 2026</option>
+        <option>August 2026</option>
+      </select>
+    </div>
+    <div class="toolbar-group">
+      <a class="btn" href="transactions.html">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
+        Export CSV
+      </a>
+    </div>
+  </div>
+
+  <nav class="chip-row" aria-label="Filter by category">
+    <a class="chip chip-on" aria-current="true" href="transactions.html">All <span class="tab-count">14</span></a>
+    <a class="chip" href="transactions.html">Supplies</a>
+    <a class="chip" href="transactions.html">Utilities</a>
+    <a class="chip" href="transactions.html">Software</a>
+    <a class="chip" href="transactions.html">Insurance</a>
+    <a class="chip" href="transactions.html">Rent</a>
+    <a class="chip" href="transactions.html">Client income</a>
+    <a class="chip" href="transactions.html">Office</a>
+    <a class="chip" href="transactions.html">Uncategorized <span class="tab-count">1</span></a>
+  </nav>
+
+  <p class="prose-note mb-4">This page is the static design reference: the search box, month filter,
+  category chips, column sort, page numbers, and Export CSV are here to show how the controls are
+  drawn, and they do not change the ledger below. The working versions of all of them run in the
+  server build.</p>
+
+  <div class="card">
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Ledger of recent transactions, scrollable">
+      <table class="ledger">
+        <caption class="kicker">Ledger of recent transactions · newest first</caption>
+        <thead>
+          <tr>
+            <th scope="col" aria-sort="descending"><a href="transactions.html">Date ▾</a></th>
+            <th scope="col">Vendor</th>
+            <th scope="col">Category</th>
+            <th scope="col">Confidence</th>
+            <th scope="col">Filed by</th>
+            <th scope="col" class="col-amount">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="num">Aug 2</span></td>
+            <td>Blue Bottle Wholesale</td>
+            <td>Supplies</td>
+            <td><span class="num">94%</span></td>
+            <td><span class="stamp stamp-auto">Auto</span></td>
+            <td class="col-amount"><span class="num amount-debit">&minus;$312.40</span></td>
+          </tr>
+          <tr>
+            <td><span class="num">Aug 2</span></td>
+            <td>Cascade Utilities</td>
+            <td>Utilities</td>
+            <td><span class="num">96%</span></td>
+            <td><span class="stamp stamp-auto">Auto</span></td>
+            <td class="col-amount"><span class="num amount-debit">&minus;$187.20</span></td>
+          </tr>
+          <tr>
+            <td><span class="num">Aug 2</span></td>
+            <td>Fern &amp; Field</td>
+            <td>Client income<br><span class="prose-note">Invoice <span class="num">#219</span> · auto-matched</span></td>
+            <td><span class="num">&mdash;</span></td>
+            <td><span class="stamp stamp-auto">Auto</span></td>
+            <td class="col-amount"><span class="num amount-credit">+$2,850.00</span></td>
+          </tr>
+          <tr class="row-urgent">
+            <td><span class="num">Aug 1</span></td>
+            <td>Bridge City Holdings</td>
+            <td><a href="approvals.html">Needs a human eye &rarr;</a></td>
+            <td><span class="num">31%</span></td>
+            <td><span class="stamp stamp-urgent">Uncategorized</span></td>
+            <td class="col-amount"><span class="num amount-credit">+$2,300.00</span></td>
+          </tr>
+          <tr>
+            <td><span class="num">Aug 1</span></td>
+            <td>Meridian Insurance</td>
+            <td>Insurance</td>
+            <td><span class="num">97%</span></td>
+            <td><span class="stamp stamp-auto">Auto</span></td>
+            <td class="col-amount"><span class="num amount-debit">&minus;$410.00</span></td>
+          </tr>
+          <tr>
+            <td><span class="num">Aug 1</span></td>
+            <td>Petrichor Web Services</td>
+            <td>Software<br><span class="prose-note">Keel proposed Software at <span class="num">71%</span>; you confirmed</span></td>
+            <td><span class="num">&mdash;</span></td>
+            <td><span class="stamp">Owner</span></td>
+            <td class="col-amount"><span class="num amount-debit">&minus;$240.00</span></td>
+          </tr>
+          <tr>
+            <td><span class="num">Aug 1</span></td>
+            <td>Golden Hour Prints</td>
+            <td>Office &amp; Admin<br><span class="prose-note">Correction — refiled from Marketing by you</span></td>
+            <td><span class="num">&mdash;</span></td>
+            <td><span class="stamp">Owner</span></td>
+            <td class="col-amount"><span class="num amount-debit">&minus;$96.00</span></td>
+          </tr>
+          <tr>
+            <td><span class="num">Jul 31</span></td>
+            <td>Roastery Supply Co.</td>
+            <td>Held<br><span class="prose-note">Duplicate pair · in Approvals</span></td>
+            <td><span class="num">&mdash;</span></td>
+            <td><span class="stamp stamp-approval">In Approvals</span></td>
+            <td class="col-amount"><span class="num amount-debit">&minus;$890.00</span></td>
+          </tr>
+          <tr>
+            <td><span class="num">Jul 31</span></td>
+            <td>Roastery Supply Co.</td>
+            <td>Held<br><span class="prose-note">Duplicate pair · in Approvals</span></td>
+            <td><span class="num">&mdash;</span></td>
+            <td><span class="stamp stamp-approval">In Approvals</span></td>
+            <td class="col-amount"><span class="num amount-debit">&minus;$890.00</span></td>
+          </tr>
+          <tr>
+            <td><span class="num">Jul 30</span></td>
+            <td>Riverside Supper Club</td>
+            <td>Awaiting your call<br><span class="prose-note">Meals &amp; Entertainment vs. Marketing</span></td>
+            <td><span class="num">62%</span></td>
+            <td><span class="stamp stamp-approval">In Approvals</span></td>
+            <td class="col-amount"><span class="num amount-debit">&minus;$148.32</span></td>
+          </tr>
+          <tr>
+            <td><span class="num">Jul 30</span></td>
+            <td>Harbor Street Studio</td>
+            <td>Rent<br><span class="prose-note">Approved by you — rent is always manual</span></td>
+            <td><span class="num">&mdash;</span></td>
+            <td><span class="stamp">Owner</span></td>
+            <td class="col-amount"><span class="num amount-debit">&minus;$2,400.00</span></td>
+          </tr>
+          <tr>
+            <td><span class="num">Jul 29</span></td>
+            <td>Peak Courier</td>
+            <td>Shipping</td>
+            <td><span class="num">93%</span></td>
+            <td><span class="stamp stamp-auto">Auto</span></td>
+            <td class="col-amount"><span class="num amount-debit">&minus;$95.00</span></td>
+          </tr>
+          <tr>
+            <td><span class="num">Jul 28</span></td>
+            <td>Golden Meadow Florists</td>
+            <td>Client income<br><span class="prose-note">Invoice <span class="num">#215</span> · paid</span></td>
+            <td><span class="num">&mdash;</span></td>
+            <td><span class="stamp stamp-auto">Auto</span></td>
+            <td class="col-amount"><span class="num amount-credit">+$920.00</span></td>
+          </tr>
+          <tr>
+            <td><span class="num">Jul 28</span></td>
+            <td>Blue Bottle Wholesale</td>
+            <td>Supplies</td>
+            <td><span class="num">94%</span></td>
+            <td><span class="stamp stamp-auto">Auto</span></td>
+            <td class="col-amount"><span class="num amount-debit">&minus;$308.10</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <nav class="pager" aria-label="Pagination">
+    <span class="pager-gap">&laquo; Newer</span>
+    <span class="pager-current" aria-current="page">1</span>
+    <a href="transactions.html">2</a>
+    <a href="transactions.html">3</a>
+    <a href="transactions.html">4</a>
+    <a href="transactions.html">Older &raquo;</a>
+  </nav>
+
+  <p class="prose-note mt-5">A note on how this ledger is kept: transactions below the <span class="num">40%</span> confidence floor are never guessed at — they escalate straight to the urgent queue for your call. And corrections are never silent edits; a refiled transaction appears as a new entry in the <a href="activity.html">activity log</a>, with the original left untouched.</p>
+
+</main>
+
+<footer class="colophon">
+  <div class="container colophon-inner">
+    <span>Form K-06 · Rev 08/26</span>
+    <span>All actions logged · Nothing hidden</span>
+    <span>Keel Ledger Systems · <a href="design-system.html">Styleguide</a></span>
+  </div>
+</footer>
+</body>
+</html>

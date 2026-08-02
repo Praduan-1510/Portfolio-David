@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="The Passbook design system, rendered live: tokens, type, components.">
+<title>Keel — Styleguide</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20fill%3D%22%232B2416%22%2F%3E%3Cg%20fill%3D%22%23F6EFE0%22%20transform%3D%22translate(5.5%2C5.5)%20scale(0.77)%22%3E%3Cpath%20d%3D%22M4%2012h40v2l-12%204-8%205-8-5-12-4z%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2221%22%20width%3D%2214%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2221%22%20width%3D%2214%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2227%22%20width%3D%2240%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2233%22%20width%3D%2240%22%20height%3D%223%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="masthead">
+  <div class="container masthead-inner">
+    <p class="masthead-kicker">
+      <span>Est. 2026 · Autonomous Bookkeeping</span>
+      <span class="mk-right">Sunday · August 2, 2026</span>
+    </p>
+    <div class="brand-mark" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="currentColor" d="M4 12h40v2l-12 4-8 5-8-5-12-4z"/><rect fill="currentColor" x="4" y="21" width="14" height="3"/><rect fill="currentColor" x="30" y="21" width="14" height="3"/><rect fill="currentColor" x="4" y="27" width="40" height="3"/><rect fill="currentColor" x="4" y="33" width="40" height="3"/></svg></div>
+    <p class="brand"><a href="app.html">KEEL</a></p>
+    <p class="brand-sub">Keeps the books · Shows its work</p>
+    <nav class="tabs" aria-label="Primary">
+      <a class="tab" href="app.html">Overview</a>
+      <a class="tab" href="approvals.html">Approvals <span class="tab-count">6</span></a>
+      <a class="tab" href="activity.html">Activity</a>
+      <a class="tab" href="transactions.html">Transactions</a>
+      <a class="tab" href="invoices.html">Invoices</a>
+      <a class="tab" href="bills.html">Bills</a>
+      <a class="tab" href="cashflow.html">Forecast</a>
+      <a class="tab" href="settings.html">Autonomy</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="container">
+
+  <div class="page-head">
+    <p class="kicker">Internal · The Passbook design system v1</p>
+    <h1 class="page-title">How Keel is made.</h1>
+    <hr class="rule">
+    <p class="page-lede">This is the living reference for the retro print-ledger system — cream paper, typewriter data, letterpress shadows. Everything Keel shows on screen is built from the pieces on this page. If a screen and this page disagree, this page wins.</p>
+  </div>
+
+  <!-- ============ 1 · The mark ============ -->
+  <section class="section" aria-labelledby="sg-mark">
+    <div class="section-head">
+      <h2 class="kicker" id="sg-mark">The mark · Ledger-keel device</h2>
+      <span class="kicker num">§ 1 of 9</span>
+    </div>
+    <div class="card">
+      <div class="logo-row">
+        <div><span class="mark logo-96"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" aria-hidden="true"><path fill="currentColor" d="M4 12h40v2l-12 4-8 5-8-5-12-4z"/><rect fill="currentColor" x="4" y="21" width="14" height="3"/><rect fill="currentColor" x="30" y="21" width="14" height="3"/><rect fill="currentColor" x="4" y="27" width="40" height="3"/><rect fill="currentColor" x="4" y="33" width="40" height="3"/></svg></span><p class="logo-caption">96px</p></div>
+        <div><span class="mark logo-44"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" aria-hidden="true"><path fill="currentColor" d="M4 12h40v2l-12 4-8 5-8-5-12-4z"/><rect fill="currentColor" x="4" y="21" width="14" height="3"/><rect fill="currentColor" x="30" y="21" width="14" height="3"/><rect fill="currentColor" x="4" y="27" width="40" height="3"/><rect fill="currentColor" x="4" y="33" width="40" height="3"/></svg></span><p class="logo-caption">44 · masthead</p></div>
+        <div><span class="mark logo-24"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" aria-hidden="true"><path fill="currentColor" d="M4 12h40v2l-12 4-8 5-8-5-12-4z"/><rect fill="currentColor" x="4" y="21" width="14" height="3"/><rect fill="currentColor" x="30" y="21" width="14" height="3"/><rect fill="currentColor" x="4" y="27" width="40" height="3"/><rect fill="currentColor" x="4" y="33" width="40" height="3"/></svg></span><p class="logo-caption">24</p></div>
+        <div><span class="mark logo-16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" aria-hidden="true"><path fill="currentColor" d="M4 12h40v2l-12 4-8 5-8-5-12-4z"/><rect fill="currentColor" x="4" y="21" width="14" height="3"/><rect fill="currentColor" x="30" y="21" width="14" height="3"/><rect fill="currentColor" x="4" y="27" width="40" height="3"/><rect fill="currentColor" x="4" y="33" width="40" height="3"/></svg></span><p class="logo-caption">16</p></div>
+        <div><span class="logo-tile"><span class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" aria-hidden="true"><path fill="currentColor" d="M4 12h40v2l-12 4-8 5-8-5-12-4z"/><rect fill="currentColor" x="4" y="21" width="14" height="3"/><rect fill="currentColor" x="30" y="21" width="14" height="3"/><rect fill="currentColor" x="4" y="27" width="40" height="3"/><rect fill="currentColor" x="4" y="33" width="40" height="3"/></svg></span></span><p class="logo-caption">favicon</p></div>
+        <div><span class="mark logo-44"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" aria-hidden="true"><path fill="#2B2416" d="M4 12h40v2l-12 4-8 5-8-5-12-4z"/><rect fill="#3E6E70" x="4" y="21" width="14" height="3"/><rect fill="#3E6E70" x="30" y="21" width="14" height="3"/><rect fill="#3E6E70" x="4" y="27" width="40" height="3"/><rect fill="#3E6E70" x="4" y="33" width="40" height="3"/></svg></span><p class="logo-caption">two-tone</p></div>
+      </div>
+      <p class="mt-5">A hull rides three ruled ledger lines, its keel — the V of the hull itself —
+      dipping through a break in the top rule. The rules read twice: they are the waterline and they
+      are ledger paper. The two unbroken rules beneath the keel are the even keel made literal, and
+      the accountant&rsquo;s double rule under a closed total.</p>
+      <dl class="deflist mt-4">
+        <dt>One color</dt><dd>Ships as ink on paper (currentColor). On dark surfaces: cream on ink, as in the favicon tile.</dd>
+        <dt>Two-tone</dt><dd>Teal rules permitted on special surfaces only; the hull stays ink.</dd>
+        <dt>Clearspace</dt><dd>One rule-height (3 units of the 48 grid) on all sides, minimum.</dd>
+        <dt>Never</dt><dd>No recoloring beyond ink / teal / cream, no rotation, no strokes, no soft corners, no drop shadows.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============ 2 · Color tokens ============ -->
+  <section class="section" aria-labelledby="sg-color">
+    <div class="section-head">
+      <h2 class="kicker" id="sg-color">Color tokens</h2>
+      <span class="kicker num">§ 2 of 9</span>
+    </div>
+    <div class="card">
+      <div class="grid-3">
+        <div class="swatch">
+          <div class="swatch-chip swatch-paper"></div>
+          <p class="swatch-meta"><strong>Paper</strong><span class="num">--paper · #F6EFE0</span></p>
+        </div>
+        <div class="swatch">
+          <div class="swatch-chip swatch-card"></div>
+          <p class="swatch-meta"><strong>Card</strong><span class="num">--card · #FDF9EE</span></p>
+        </div>
+        <div class="swatch">
+          <div class="swatch-chip swatch-ink"></div>
+          <p class="swatch-meta"><strong>Ink</strong><span class="num">--ink · #2B2416</span></p>
+        </div>
+        <div class="swatch">
+          <div class="swatch-chip swatch-ink-soft"></div>
+          <p class="swatch-meta"><strong>Ink soft</strong><span class="num">--ink-soft · #6C6047</span></p>
+        </div>
+        <div class="swatch">
+          <div class="swatch-chip swatch-teal"></div>
+          <p class="swatch-meta"><strong>Teal</strong><span class="num">--teal · #3E6E70</span></p>
+        </div>
+        <div class="swatch">
+          <div class="swatch-chip swatch-teal-deep"></div>
+          <p class="swatch-meta"><strong>Teal deep</strong><span class="num">--teal-deep · #2E5456</span></p>
+        </div>
+        <div class="swatch">
+          <div class="swatch-chip swatch-green"></div>
+          <p class="swatch-meta"><strong>Green</strong><span class="num">--green · #3D6B47</span></p>
+        </div>
+        <div class="swatch">
+          <div class="swatch-chip swatch-red"></div>
+          <p class="swatch-meta"><strong>Red</strong><span class="num">--red · #9E3B2F</span></p>
+        </div>
+        <div class="swatch">
+          <div class="swatch-chip swatch-amber-text"></div>
+          <p class="swatch-meta"><strong>Amber text</strong><span class="num">--amber-text · #7A5410</span></p>
+        </div>
+        <div class="swatch">
+          <div class="swatch-chip swatch-amber-wash"></div>
+          <p class="swatch-meta"><strong>Amber wash</strong><span class="num">--amber-wash · #F3E3BC</span></p>
+        </div>
+        <div class="swatch">
+          <div class="swatch-chip swatch-rule-dark"></div>
+          <p class="swatch-meta"><strong>Rule dark</strong><span class="num">--rule-dark · #B8A87F</span></p>
+        </div>
+      </div>
+      <p class="prose-note mt-4">Specimens above, measurements below — the hex is printed under every chip, so the swatch is never the only way to read a color.</p>
+    </div>
+    <div class="card">
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Color tokens table, scrollable">
+        <table class="ledger">
+          <caption class="kicker">Every color in the system, its job, and its measured contrast</caption>
+          <thead>
+            <tr>
+              <th scope="col">Token</th>
+              <th scope="col">Hex</th>
+              <th scope="col">Role</th>
+              <th scope="col">Contrast on paper</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="num">--paper</td>
+              <td class="num">#F6EFE0</td>
+              <td>App background — warm aged cream.</td>
+              <td>Surface — carries ink text</td>
+            </tr>
+            <tr>
+              <td class="num">--card</td>
+              <td class="num">#FDF9EE</td>
+              <td>Cards and table surfaces — a lighter sheet laid on the paper.</td>
+              <td>Surface — carries ink text</td>
+            </tr>
+            <tr>
+              <td class="num">--ink</td>
+              <td class="num">#2B2416</td>
+              <td>Primary text, borders, and rules — warm near-black ink.</td>
+              <td><span class="num">13.42:1</span></td>
+            </tr>
+            <tr>
+              <td class="num">--ink-soft</td>
+              <td class="num">#6C6047</td>
+              <td>Secondary text and captions.</td>
+              <td><span class="num">5.39:1</span></td>
+            </tr>
+            <tr>
+              <td class="num">--teal</td>
+              <td class="num">#3E6E70</td>
+              <td>Primary actions, links, and filled meter ticks.</td>
+              <td><span class="num">5.00:1</span> — the same reading for cream text on a teal fill, since contrast is symmetric</td>
+            </tr>
+            <tr>
+              <td class="num">--teal-deep</td>
+              <td class="num">#2E5456</td>
+              <td>Teal hover state; teal used as text on paper.</td>
+              <td><span class="num">7.28:1</span></td>
+            </tr>
+            <tr>
+              <td class="num">--green</td>
+              <td class="num">#3D6B47</td>
+              <td>Credits, AUTO stamps, and success states.</td>
+              <td><span class="num">5.41:1</span></td>
+            </tr>
+            <tr>
+              <td class="num">--red</td>
+              <td class="num">#9E3B2F</td>
+              <td>Debits, NEEDS APPROVAL, and the forecast floor line.</td>
+              <td><span class="num">5.88:1</span></td>
+            </tr>
+            <tr>
+              <td class="num">--amber-text</td>
+              <td class="num">#7A5410</td>
+              <td>Flag and warning text.</td>
+              <td><span class="num">5.91:1</span></td>
+            </tr>
+            <tr>
+              <td class="num">--amber-wash</td>
+              <td class="num">#F3E3BC</td>
+              <td>Flag wash and highlight, always behind amber text.</td>
+              <td>Wash — never a text color</td>
+            </tr>
+            <tr>
+              <td class="num">--rule-dark</td>
+              <td class="num">#B8A87F</td>
+              <td>Table rules and stronger dividers.</td>
+              <td>Decorative only — never text</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose-note mt-4">Debits are red and credits are green, but color is never the only signal — every amount carries its sign, and every state carries a stamped word.</p>
+    </div>
+  </section>
+
+  <!-- ============ 3 · Typography ============ -->
+  <section class="section" aria-labelledby="sg-type">
+    <div class="section-head">
+      <h2 class="kicker" id="sg-type">Typography</h2>
+      <span class="kicker num">§ 3 of 9</span>
+    </div>
+    <div class="card">
+      <div class="specimen">
+        <span class="kicker">Display · Abril Fatface</span>
+        <div class="page-title">Waiting on your judgment.</div>
+      </div>
+      <div class="specimen">
+        <span class="kicker">Body · Merriweather</span>
+        <p>Keel pays the bills it recognizes and files what it is sure of. Anything uncertain waits in the queue for your judgment.</p>
+      </div>
+      <div class="specimen">
+        <span class="kicker">Data · Courier Prime</span>
+        <span class="num">$24,180.00 · 62% · No. 0876</span>
+      </div>
+      <div class="specimen">
+        <span class="kicker">Label</span>
+        <span class="kicker">Approval queue · 6 open items</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Scale and rules</h3>
+      <p>The type scale runs <span class="num">12 / 14 / 16 / 18 / 21 / 28 / 36 / 52</span> pixels. Body text sits at a line-height of <span class="num">1.65</span>. Capital letters appear only ever in Courier — Merriweather is never letter-spaced, never set in caps — and every number, date, and amount is set in Courier as well.</p>
+    </div>
+  </section>
+
+  <!-- ============ 4 · Stamps ============ -->
+  <section class="section" aria-labelledby="sg-stamps">
+    <div class="section-head">
+      <h2 class="kicker" id="sg-stamps">Stamps</h2>
+      <span class="kicker num">§ 4 of 9</span>
+    </div>
+    <div class="card">
+      <div class="chip-row">
+        <div><span class="stamp">Owner</span> <span class="kicker">.stamp</span></div>
+        <div><span class="stamp stamp-auto">Auto</span> <span class="kicker">.stamp-auto</span></div>
+        <div><span class="stamp stamp-approval">Needs approval</span> <span class="kicker">.stamp-approval</span></div>
+        <div><span class="stamp stamp-flag">Flagged</span> <span class="kicker">.stamp-flag</span></div>
+        <div><span class="stamp stamp-locked">Always ask</span> <span class="kicker">.stamp-locked</span></div>
+        <div><span class="stamp stamp-urgent">Uncategorized</span> <span class="kicker">.stamp-urgent</span></div>
+        <div><span class="stamp stamp-teal">Current</span> <span class="kicker">.stamp-teal</span></div>
+        <div><span class="stamp stamp-paid">Paid</span> <span class="kicker">.stamp-paid</span></div>
+      </div>
+      <p class="prose-note">A decorative corner stamp may tilt two degrees with <span class="num">.stamp-tilt</span>; inline stamps always sit level. A stamp is a word, never just a color.</p>
+    </div>
+  </section>
+
+  <!-- ============ 5 · Buttons ============ -->
+  <section class="section" aria-labelledby="sg-buttons">
+    <div class="section-head">
+      <h2 class="kicker" id="sg-buttons">Buttons</h2>
+      <span class="kicker num">§ 5 of 9</span>
+    </div>
+    <div class="card">
+      <div class="btn-row">
+        <button class="btn" type="button">Quiet action</button>
+        <button class="btn btn-primary" type="button">Primary action</button>
+        <button class="btn btn-approve" type="button">Approve</button>
+        <button class="btn btn-danger" type="button">Danger</button>
+        <button class="btn" type="button" disabled>Disabled</button>
+      </div>
+      <p class="prose-note mt-4">Buttons lift on hover and press on click, like type striking paper. Every target is at least <span class="num">44px</span> tall, and adjacent decision buttons keep at least <span class="num">8px</span> between them.</p>
+    </div>
+  </section>
+
+  <!-- ============ 6 · Confidence meter ============ -->
+  <section class="section" aria-labelledby="sg-meter">
+    <div class="section-head">
+      <h2 class="kicker" id="sg-meter">Confidence meter</h2>
+      <span class="kicker num">§ 6 of 9</span>
+    </div>
+    <div class="card">
+      <div class="meter" role="img" aria-label="Confidence: 94 percent — at or above the 90 percent threshold, filed automatically">
+        <span class="meter-ticks" aria-hidden="true">
+          <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i>
+        </span>
+        <span class="meter-label num">94%</span>
+        <span class="meter-caption">Blue Bottle Wholesale · filed automatically</span>
+      </div>
+      <div class="meter" role="img" aria-label="Confidence: 62 percent — below the 90 percent threshold, routed to approval">
+        <span class="meter-ticks" aria-hidden="true">
+          <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i>
+        </span>
+        <span class="meter-label low num">62%</span>
+        <span class="meter-caption">Riverside Supper Club · routed to approval</span>
+      </div>
+      <p class="prose-note">The tick meter never appears without its numeric label — filled boxes alone are not a reading.</p>
+    </div>
+  </section>
+
+  <!-- ============ 7 · Traces & banners ============ -->
+  <section class="section" aria-labelledby="sg-traces">
+    <div class="section-head">
+      <h2 class="kicker" id="sg-traces">Traces &amp; banners</h2>
+      <span class="kicker num">§ 7 of 9</span>
+    </div>
+    <div class="card">
+      <div class="trace">
+        <span class="trace-label">Keel's reasoning</span>
+        This is the 14th consecutive charge from Blue Bottle Wholesale filed under Supplies. Today's <span class="num amount-debit">−$312.40</span> was categorized at <span class="num">94%</span> confidence — above your <span class="num">90%</span> threshold — so it was filed automatically and logged to Activity.
+      </div>
+      <div class="banner">
+        Payment received: Fern &amp; Field paid invoice <span class="num">#219</span> (<span class="num amount-credit">+$2,850.00</span>) this morning, and it was matched to the invoice automatically.
+      </div>
+      <div class="banner banner-warn">
+        Looking ahead: the week of <span class="num">Aug 31</span> is projected at <span class="num">$8,400</span>, below your <span class="num">$10,000</span> floor — a flag for your attention, not an action.
+      </div>
+      <div class="banner banner-danger">
+        One urgent item is waiting: a wire from Bridge City Holdings (<span class="num amount-credit">+$2,300.00</span>) could not be categorized and needs your judgment in <a href="approvals.html">Approvals</a>.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 8 · Forms ============ -->
+  <section class="section" aria-labelledby="sg-forms">
+    <div class="section-head">
+      <h2 class="kicker" id="sg-forms">Forms</h2>
+      <span class="kicker num">§ 8 of 9</span>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label for="sg-vendor">Vendor name</label>
+        <input class="input" type="text" id="sg-vendor" name="sg-vendor" placeholder="e.g. Blue Bottle Wholesale">
+        <p class="field-help">Labels sit above the field in Courier caps — a placeholder is never the only label.</p>
+      </div>
+      <div class="field field-invalid">
+        <label for="sg-amount">Amount</label>
+        <input class="input" type="text" id="sg-amount" name="sg-amount" value="twelve dollars" aria-invalid="true" aria-describedby="sg-amount-error">
+        <p class="field-error" id="sg-amount-error">Enter a number, like <span class="num">1200.00</span> — letters can't be filed.</p>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="sg-same-way" name="sg-same-way" checked>
+        <label for="sg-same-way">File future charges from this vendor the same way.</label>
+      </div>
+      <div class="field">
+        <label for="sg-threshold">Categorization threshold</label>
+        <div class="setting-control">
+          <input type="range" id="sg-threshold" name="sg-threshold" min="50" max="99" value="90" aria-describedby="sg-threshold-current">
+          <div class="range-scale">
+            <span class="num">50%</span>
+            <span class="num">99%</span>
+          </div>
+          <p class="setting-current" id="sg-threshold-current">Set to <span class="num">90%</span> — Keel files anything at or above this on its own.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 9 · Voice ============ -->
+  <section class="section" aria-labelledby="sg-voice">
+    <div class="section-head">
+      <h2 class="kicker" id="sg-voice">Voice</h2>
+      <span class="kicker num">§ 9 of 9</span>
+    </div>
+    <div class="card">
+      <dl class="deflist">
+        <dt>Plain language</dt>
+        <dd>No accounting jargon — an owner who is not an accountant must understand every sentence.</dd>
+        <dt>Reasons attached</dt>
+        <dd>Every autonomous action states its why — the reasoning is stored and shown, never implied.</dd>
+        <dt>Signs and words</dt>
+        <dd>Debits read <span class="num amount-debit">−$312.40</span> in red; credits read <span class="num amount-credit">+$2,850.00</span> in green — the sign carries the meaning, never color alone.</dd>
+        <dt>Calm</dt>
+        <dd>No exclamation marks and no urgency theater — even an urgent item is stated plainly.</dd>
+      </dl>
+    </div>
+  </section>
+
+</main>
+
+<footer class="colophon">
+  <div class="container colophon-inner">
+    <span>Form K-11 · Rev 08/26</span>
+    <span>All actions logged · Nothing hidden</span>
+    <span>Keel Ledger Systems · <a href="design-system.html">Styleguide</a></span>
+  </div>
+</footer>
+</body>
+</html>

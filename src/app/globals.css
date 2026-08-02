@@ -804,3 +804,224 @@ html.lenis body {
     --hero-wordmark-size: clamp(2.25rem, 12vh, 3.75rem);
   }
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * PRINT — ink on paper.
+ *
+ * The whole site consumes SEMANTIC tokens, never raw values, so flipping the
+ * semantic layer here re-sets every page as a black-on-white document for free:
+ * no per-component print overrides, no second stylesheet to keep in sync.
+ *
+ * This matters most on /resume, which is designed to be printed (its "Print"
+ * button calls window.print()) — the rules below strip the site chrome, collapse
+ * the sticky ledger rail into a normal document flow, and keep rows from
+ * splitting across a page break. Everything decorative opts out with
+ * [data-noprint] or aria-hidden.
+ * ──────────────────────────────────────────────────────────────────────────── */
+@media print {
+  :root {
+    color-scheme: light;
+
+    --bg: #ffffff;
+    --fg: #101012;
+    --muted: #4a4a52;
+    --surface: #ffffff;
+    --bezel: #ffffff;
+    --line: rgba(0, 0, 0, 0.22);
+    --accent: #101012;
+    --accent-hover: #101012;
+    --on-accent: #ffffff;
+    /* The neon interaction signal is a screen affordance — on paper it becomes
+       ink, so hover-coloured headings don't print as highlighter green. */
+    --neon: #101012;
+    --neon-glow: transparent;
+
+    --measure: 100%;
+  }
+
+  @page {
+    margin: 14mm 12mm;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: var(--fg) !important;
+  }
+
+  /* Case-study routes set --accent INLINE on the <article> (the per-project hue),
+     which outranks the :root remap above and would print project colour as a pale
+     screen tint on white. A stylesheet declaration carrying !important beats an
+     inline style that doesn't, so force it back to ink everywhere. */
+  * {
+    --accent: #101012 !important;
+    --accent-hover: #101012 !important;
+  }
+
+  /* Site chrome + anything explicitly marked as screen-only.
+     `body >` is load-bearing: <header> and <footer> are ALSO used as in-content
+     landmarks (the /work index header, each case study's cover hero with its h1
+     and disclaimer, pull-quote attributions in CaseStudyBlocks), so a bare type
+     selector here would silently delete real content from every printed case
+     study. Nav and Footer are direct children of <body> — LenisProvider is a
+     context provider and renders no element of its own. */
+  body > header,
+  body > footer,
+  .skip-link,
+  [data-noprint] {
+    display: none !important;
+  }
+
+  /* Atmosphere layers: grain, maps, embedded prototypes, the fixed scroll-
+     progress bar, the ruled case-study motif.
+     Two traps to respect, both learned the hard way — aria-hidden does NOT mean
+     "decorative" in this codebase, it means "the accessible copy lives on an
+     ancestor":
+       · GSAP SplitText marks the split units of a <TextReveal> headline
+         aria-hidden, so blanket-hiding [aria-hidden] prints headlines blank.
+       · SplitFlapText's glyph layer is aria-hidden AND pointer-events-none
+         (the sr-only <h1> carries the name), so hiding that pair globally
+         prints the home wordmark blank.
+     Hence: only `fixed` overlays and blend-mode grain are hidden site-wide here;
+     the pointer-events-none sweep is scoped to .resume-doc below, and everything
+     else opts out with Tailwind's `print:hidden`. */
+  [aria-hidden="true"][class*="fixed"],
+  [aria-hidden="true"][style*="mix-blend-mode"],
+  .cs-motif,
+  canvas,
+  video,
+  iframe {
+    display: none !important;
+  }
+
+  /* Kill every shadow/animation and let content break naturally. */
+  *,
+  *::before,
+  *::after {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* ---- Résumé document ---- */
+  .resume-doc {
+    font-size: 9.5pt;
+    line-height: 1.42;
+  }
+  /* GSAP reveals can leave inline opacity/transform mid-flight; force-settle so
+     nothing prints half-faded or offset. Scoped to the résumé ON PURPOSE — as a
+     global rule it flattens transform-composed type elsewhere (the home hero's
+     split-flap positions each glyph's two halves with translate inside an
+     overflow-hidden tile, so `transform: none` prints the wordmark scrambled). */
+  .resume-doc *,
+  .resume-doc *::before,
+  .resume-doc *::after {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  /* The résumé's own decorative overlays (corner crosshair ticks, spectrum
+     threads). Safe to sweep by this pair HERE because nothing inside
+     .resume-doc composes readable type out of a pointer-events-none layer. */
+  .resume-doc [aria-hidden="true"][class*="pointer-events-none"] {
+    display: none !important;
+  }
+  /* The masthead is a full-bleed dark band on screen; on paper it's a letterhead. */
+  .resume-doc .resume-masthead {
+    min-height: 0 !important;
+    padding-block: 0 !important;
+    border-bottom: 1px solid var(--line);
+  }
+  .resume-doc .resume-masthead > div {
+    padding-top: 0 !important;
+    padding-bottom: 6pt !important;
+  }
+
+  /* The screen rhythm is built for a scrolled page — 2–4rem between blocks. On
+     paper that's a wasted page, so every spacing stack collapses to a document
+     scale. Bullets tighten further (they're one list, not separate blocks). */
+  .resume-doc [class*="space-y-space-"] > * + * {
+    margin-top: 6pt !important;
+  }
+  .resume-doc ul > .resume-bullet + .resume-bullet {
+    margin-top: 3pt !important;
+  }
+  .resume-doc .mt-space-4 {
+    margin-top: 5pt !important;
+  }
+  .resume-doc .mt-space-5,
+  .resume-doc .mt-space-6 {
+    margin-top: 7pt !important;
+  }
+  .resume-doc .mt-space-7,
+  .resume-doc .mt-space-8,
+  .resume-doc .mt-space-9,
+  .resume-doc .mt-space-10 {
+    margin-top: 10pt !important;
+  }
+  .resume-doc [class*="gap-space-"] {
+    gap: 8pt !important;
+  }
+  .resume-doc [class*="py-space-"] {
+    padding-block: 6pt !important;
+  }
+  /* Container gutters are viewport-fluid (up to 6rem) — pointless inside a
+     printed page that already has @page margins. */
+  .resume-doc .mx-auto {
+    max-width: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  /* Collapse the two-column ledger: the sticky mono rail becomes a run-in
+     section heading above its content. */
+  .resume-doc .resume-section {
+    display: block !important;
+    position: static !important;
+    padding-block: 7pt !important;
+    break-inside: auto;
+  }
+  .resume-doc .resume-section-label {
+    position: static !important;
+    margin-bottom: 6pt;
+  }
+  /* The section index carries a spectrum hue inline — pale on white. Beat the
+     inline style so every label prints as ink. */
+  .resume-doc .resume-section-label span {
+    color: var(--fg) !important;
+  }
+  /* Achievement lines use a hairline dash on screen (a background, which most
+     print paths drop). On paper they become real list markers instead. */
+  .resume-doc .resume-bullet {
+    display: list-item !important;
+    list-style: square outside;
+    margin-left: 11pt;
+  }
+  .resume-doc .resume-bullet > span:first-child {
+    display: none !important;
+  }
+  /* Rows, roles and cards are the atoms — never split one across pages. */
+  .resume-doc .resume-entry,
+  .resume-doc li {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .resume-doc h1 {
+    font-size: 22pt !important;
+    line-height: 1.1 !important;
+  }
+  .resume-doc h2 {
+    font-size: 9pt !important;
+  }
+  .resume-doc h3 {
+    font-size: 12pt !important;
+  }
+  /* Screen padding on bordered panels is generous by design; tighten for paper. */
+  .resume-doc .resume-panel {
+    padding: 8pt !important;
+  }
+}

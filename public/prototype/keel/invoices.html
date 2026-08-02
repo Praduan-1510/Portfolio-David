@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Receivables, reminder status, and what is waiting on your approval.">
+<title>Keel — Invoices</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20fill%3D%22%232B2416%22%2F%3E%3Cg%20fill%3D%22%23F6EFE0%22%20transform%3D%22translate(5.5%2C5.5)%20scale(0.77)%22%3E%3Cpath%20d%3D%22M4%2012h40v2l-12%204-8%205-8-5-12-4z%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2221%22%20width%3D%2214%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2221%22%20width%3D%2214%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2227%22%20width%3D%2240%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2233%22%20width%3D%2240%22%20height%3D%223%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="masthead">
+  <div class="container masthead-inner">
+    <p class="masthead-kicker">
+      <span>Est. 2026 · Autonomous Bookkeeping</span>
+      <span class="mk-right">Sunday · August 2, 2026</span>
+    </p>
+    <div class="brand-mark" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="currentColor" d="M4 12h40v2l-12 4-8 5-8-5-12-4z"/><rect fill="currentColor" x="4" y="21" width="14" height="3"/><rect fill="currentColor" x="30" y="21" width="14" height="3"/><rect fill="currentColor" x="4" y="27" width="40" height="3"/><rect fill="currentColor" x="4" y="33" width="40" height="3"/></svg></div>
+    <p class="brand"><a href="app.html">KEEL</a></p>
+    <p class="brand-sub">Keeps the books · Shows its work</p>
+    <nav class="tabs" aria-label="Primary">
+      <a class="tab" href="app.html">Overview</a>
+      <a class="tab" href="approvals.html">Approvals <span class="tab-count">6</span></a>
+      <a class="tab" href="activity.html">Activity</a>
+      <a class="tab" href="transactions.html">Transactions</a>
+      <a class="tab" href="invoices.html" aria-current="page">Invoices</a>
+      <a class="tab" href="bills.html">Bills</a>
+      <a class="tab" href="cashflow.html">Forecast</a>
+      <a class="tab" href="settings.html">Autonomy</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="container">
+
+  <div class="page-head">
+    <p class="kicker">Receivables · 6 invoices · 2 with you</p>
+    <h1 class="page-title">Who owes you, and where it stands.</h1>
+    <hr class="rule">
+    <p class="page-lede">Keel sends the first nudge on its own and never escalates without you.</p>
+  </div>
+
+  <section class="section stat-strip" aria-label="Receivables at a glance">
+    <div class="stat">
+      <span class="kicker">Outstanding</span>
+      <p class="stat-value"><span class="num">$10,925</span></p>
+      <p class="stat-note">4 open invoices</p>
+    </div>
+    <div class="stat">
+      <span class="kicker">Overdue</span>
+      <p class="stat-value"><span class="num">$6,175</span></p>
+      <p class="stat-note">2 invoices</p>
+    </div>
+    <div class="stat">
+      <span class="kicker">Disputed</span>
+      <p class="stat-value"><span class="num">$1,150</span></p>
+      <p class="stat-note">reminders paused</p>
+    </div>
+    <div class="stat">
+      <span class="kicker">Avg days to pay</span>
+      <p class="stat-value"><span class="num">11</span></p>
+      <p class="stat-note">last 90 days</p>
+    </div>
+  </section>
+
+  <p class="banner banner-warn">Two receivables are waiting on your call — the Marlow &amp; Vine second reminder and the Cobalt &amp; Pine dispute are in <a href="approvals.html">Approvals</a>.</p>
+
+  <section class="section">
+    <div class="card">
+      <div class="table-scroll" tabindex="0" role="region" aria-label="All invoices table, scrollable">
+        <table class="ledger">
+          <caption class="kicker">All invoices · newest due first</caption>
+          <thead>
+            <tr>
+              <th scope="col">Invoice</th>
+              <th scope="col">Client</th>
+              <th scope="col">Issued</th>
+              <th scope="col">Due</th>
+              <th scope="col">Status</th>
+              <th scope="col" class="col-amount">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="num">#221</span></td>
+              <td>Alder &amp; Ash</td>
+              <td><span class="num">Jul 21</span></td>
+              <td><span class="num">Aug 20</span></td>
+              <td><span class="stamp stamp-teal">Current</span></td>
+              <td class="col-amount"><span class="num">$3,600.00</span></td>
+            </tr>
+            <tr>
+              <td><span class="num">#212</span></td>
+              <td>Hearthside Events</td>
+              <td><span class="num">—</span></td>
+              <td><span class="num">Jul 26</span></td>
+              <td>
+                <span class="stamp stamp-auto">Reminded</span>
+                <p class="stat-note">first reminder sent <span class="num">Aug 2</span> · auto</p>
+              </td>
+              <td class="col-amount"><span class="num">$1,975.00</span></td>
+            </tr>
+            <tr>
+              <td><span class="num">#204</span></td>
+              <td>Marlow &amp; Vine</td>
+              <td><span class="num">—</span></td>
+              <td><span class="num">Jul 18</span></td>
+              <td>
+                <span class="stamp stamp-approval">In Approvals</span>
+                <p class="stat-note"><span class="num">2nd</span> reminder awaits you</p>
+              </td>
+              <td class="col-amount"><span class="num">$4,200.00</span></td>
+            </tr>
+            <tr>
+              <td><span class="num">#209</span></td>
+              <td>Cobalt &amp; Pine</td>
+              <td><span class="num">—</span></td>
+              <td><span class="num">—</span></td>
+              <td>
+                <span class="stamp stamp-flag">Disputed</span>
+                <p class="stat-note">sequence paused <span class="num">Jul 29</span></p>
+              </td>
+              <td class="col-amount"><span class="num">$1,150.00</span></td>
+            </tr>
+            <tr>
+              <td><span class="num">#219</span></td>
+              <td>Fern &amp; Field</td>
+              <td><span class="num">—</span></td>
+              <td><span class="num">—</span></td>
+              <td>
+                <span class="stamp stamp-paid">Paid</span>
+                <p class="stat-note"><span class="num">Aug 2</span> · auto-matched</p>
+              </td>
+              <td class="col-amount"><span class="num">$2,850.00</span></td>
+            </tr>
+            <tr>
+              <td><span class="num">#215</span></td>
+              <td>Golden Meadow Florists</td>
+              <td><span class="num">—</span></td>
+              <td><span class="num">—</span></td>
+              <td>
+                <span class="stamp stamp-paid">Paid</span>
+                <p class="stat-note"><span class="num">Jul 28</span></p>
+              </td>
+              <td class="col-amount"><span class="num">$920.00</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div class="section grid-2">
+    <section>
+      <div class="section-head">
+        <h2 class="kicker">How reminders escalate</h2>
+      </div>
+      <div class="card">
+        <div class="trace">
+          <span class="trace-label">Automatic</span>
+          The first reminder sends on its own once an invoice crosses <span class="num">7+</span> days overdue, in your standard friendly tone.
+        </div>
+        <div class="trace">
+          <span class="trace-label">Always yours</span>
+          Every reminder after the first, or any firmer tone, requires your approval before it goes anywhere.
+        </div>
+        <div class="trace">
+          <span class="trace-label">Dispute = full stop</span>
+          A disputed invoice pauses the entire sequence and routes to <a href="approvals.html">Approvals</a> — Keel never keeps escalating on schedule into a dispute.
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="section-head">
+        <h2 class="kicker">Drafts</h2>
+      </div>
+      <div class="empty">
+        <p class="empty-title">No draft invoices.</p>
+        <p>When you draft an invoice, Keel tracks it here and watches its due date for you.</p>
+        <a class="btn btn-primary" href="invoices.html">New invoice</a>
+      </div>
+    </section>
+  </div>
+
+  <p class="prose-note">Every amount and due date on this page flows straight into the <a href="cashflow.html"><span class="num">90</span>-day forecast</a> — what you are owed is always part of what is ahead.</p>
+
+</main>
+
+<footer class="colophon">
+  <div class="container colophon-inner">
+    <span>Form K-07 · Rev 08/26</span>
+    <span>All actions logged · Nothing hidden</span>
+    <span>Keel Ledger Systems · <a href="design-system.html">Styleguide</a></span>
+  </div>
+</footer>
+</body>
+</html>

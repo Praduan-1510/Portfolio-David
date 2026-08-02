@@ -162,12 +162,20 @@ export function getProjectBySlug(slug: string): Project | null {
   return { meta, content };
 }
 
-/** All case studies, sorted by `order` ascending. */
+/**
+ * All case studies, sorted by `order` ascending, ties broken by slug.
+ *
+ * The slug tiebreaker is not cosmetic: two studies can be authored with the same
+ * `order` (nothing in the schema forbids it), and without it the tie falls
+ * through to `fs.readdirSync` order — so which project leads the work index, and
+ * which one falls off the end of the home grid, would be decided by the
+ * filesystem and could differ between machines or builds.
+ */
 export function getAllProjects(): Project[] {
   return getProjectSlugs()
     .map(getProjectBySlug)
     .filter((project): project is Project => project !== null)
-    .sort((a, b) => a.meta.order - b.meta.order);
+    .sort((a, b) => a.meta.order - b.meta.order || a.meta.slug.localeCompare(b.meta.slug));
 }
 
 /** Just the frontmatter for every project — for index/listing views. */

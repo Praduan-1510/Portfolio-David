@@ -11,9 +11,9 @@ import {
   Magnetic,
   PortraitFrame,
   ToolGrid,
+  TimelineRail,
 } from "@/components/motion";
 import { spectrumAt } from "@/lib/spectrum";
-import { TimelineRail } from "./TimelineRail";
 import { ProfileHero } from "./ProfileHero";
 
 export const metadata: Metadata = {
@@ -546,6 +546,13 @@ export default function About() {
             <Magnetic className="inline-block">
               <Button href="/work" variant="secondary">
                 View work
+              </Button>
+            </Magnetic>
+            {/* The full record — everything this page summarises, set as a
+                document and downloadable as a PDF. */}
+            <Magnetic className="inline-block">
+              <Button href="/resume" variant="ghost">
+                Read the résumé
               </Button>
             </Magnetic>
           </div>

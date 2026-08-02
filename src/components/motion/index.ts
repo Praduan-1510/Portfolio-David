@@ -4,6 +4,7 @@ export { TextReveal } from "./TextReveal";
 export { Parallax } from "./Parallax";
 export { PortraitFrame } from "./PortraitFrame";
 export { AnimatedDivider } from "./AnimatedDivider";
+export { TimelineRail } from "./TimelineRail";
 // MagneticButton is the canonical magnetic wrapper; `Magnetic` is its shared-language alias.
 export { MagneticButton, MagneticButton as Magnetic } from "./MagneticButton";
 export { ScrollProgress } from "./ScrollProgress";

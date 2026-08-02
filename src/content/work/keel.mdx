@@ -1,0 +1,118 @@
+---
+title: Keel
+slug: keel
+client: Self-directed
+role: Product Design, Design System & Full-Stack Build
+year: 2026
+services: [Product Design, Design System, Brand Identity, Full-Stack Prototyping]
+summary: >-
+  An autonomous bookkeeping agent for small businesses, where the real subject
+  isn't bookkeeping — it's trust: how much authority an owner hands a system that
+  moves their money. Built from a functional spec that marks every requirement
+  Tested, Intent or Hypothesis, so its guesses are labelled as guesses. The
+  working build enforces its own rules in the database rather than the interface
+  — an append-only ledger, and two safety rails no setting can reach. You can
+  open the books and use it on this page.
+cover: /images/work/keel/cover.png
+kind: web
+prototype:
+  poster: /images/work/keel/app-home.png
+  alt: Keel's morning ledger — cream paper, stat tiles, and two approval cards each showing Keel's reasoning
+  aspect: 1.6
+  surfaces:
+    - id: app
+      label: App
+      shortLabel: App
+      src: /prototype/keel/app.html
+      domain: keel.app
+    - id: system
+      label: Design system
+      shortLabel: System
+      src: /prototype/keel/design-system.html
+      domain: keel.app/design-system
+    - id: plan
+      label: Build plan
+      shortLabel: Plan
+      src: /prototype/keel/build-plan.html
+      domain: keel.app/build-plan
+indexNote: 'The honest one. An autonomous bookkeeping agent whose ledger cannot be rewritten — append-only by database trigger, with two rails no setting can reach.'
+accent: "#7FB3B5" # AA-tuned Passbook teal (brand #3E6E70 fails at 3.46:1 on the dark bg; this clears 8.5:1)
+motif: route
+disclaimer: A design and functional prototype on mock data — not a production system.
+featured: true
+order: 0
+---
+
+<Lede>
+The hard problem in an agent that handles your money isn't the bookkeeping. It's **how much you'll let it do without asking** — and that has to be earned by the product, not assumed on day one.
+</Lede>
+
+## The live prototype
+
+Launch it and you land on the morning ledger: cash on hand, what Keel handled overnight, what it stopped for. From there the whole product is walkable. **Approvals** opens with an urgent item — a $2,300 wire from Bridge City Holdings at 31% confidence, below the 40% floor where Keel stops guessing entirely. Every card states the proposed action, the reasoning in plain language, a confidence meter that ticks *and* prints the number, and the options. Never a bare yes/no.
+
+<Margin label="Try this">
+  Open **Autonomy** and scroll past the sliders. The last two rows — new vendor payments, disputes and anomalies — have no control to move. Just a lock and an *Always ask* stamp.
+</Margin>
+
+**Activity** is the other half of the argument. Every entry expands to the full reasoning trace and the attribution — `KEEL · AUTO` or `OWNER` — including a correction that points back at the entry it supersedes rather than editing it. Nothing in the log has ever been changed after the fact, and further down this page there's a reason that's a claim I can make rather than a promise I'm asking you to take.
+
+Three surfaces sit in the window chrome: the **App**, the **Design system** it's built from, and the **Build plan** that sequenced it.
+
+<Stats>
+  <Stat value="12" label="Pages, clickable end to end" />
+  <Stat value="61" label="Tests passing on the working build" />
+  <Stat value="0" label="npm dependencies" />
+  <Stat value="0" label="Lines of client-side JavaScript" />
+</Stats>
+
+## Why it exists
+
+Keel started from a functional specification for an autonomous bookkeeping agent — the genre of document that states requirements with equal confidence whether they've been proven or invented that morning. This one refuses to. Every requirement is marked **Tested**, **Intent** or **Hypothesis**, so the 90% categorization threshold and the flat $10,000 cash-flow floor are both filed openly as guesses that need real usage data before anyone defends them. And the spec is clear about what it's actually for:
+
+<Bleed
+  quote="The core design problem is not bookkeeping. It's trust."
+  attribution="Keel's functional spec, §1"
+/>
+
+QuickBooks does bookkeeping. The opening the spec identifies is being the first bookkeeper you can watch think — so every screen answers one of three questions. What did you do without me? What do you need from me? What are you allowed to do?
+
+<Aside label="Why build it, not draw it">
+  A mockup can say a ledger is append-only. Only a database can refuse to edit it. The interesting requirements here are the ones that are either enforced or not, and there's no way to find out which by drawing them.
+</Aside>
+
+## The design — The Passbook
+
+The design borrows from the financial artifacts people already trust without being asked to: the bank passbook, the ruled ledger, the typewritten statement, the rubber stamp. Cream paper, warm near-black ink, a muted banking teal. Abril Fatface for the crest, Merriweather for prose, and Courier Prime for every number, date and label — monospace gives aligned ledger columns for free. Square corners, hard letterpress shadows, double rules. No gradients, no blur, no dark mode.
+
+<Shot
+  src="/images/work/keel/design-system.png"
+  domain="keel.app/design-system"
+  align="left"
+  aspect="8 / 5"
+  caption="The Passbook tokens — cream paper, warm ink, banking teal, and the three-typeface split that puts every number in Courier. Retro lives in the type, the rules and the stamps; never in noise or animation."
+/>
+
+Paper is the right metaphor because the product's whole claim is *you can check my work*, and a bound ledger is the most legible image of a record that can't be quietly rewritten. The mark follows the same logic: a hull riding three ruled lines, its keel dipping through a break in the top rule. The rules read twice — waterline and ledger paper — and the two unbroken ones beneath are both "on an even keel" and the accountant's double rule under a closed total.
+
+## What's under it
+
+Alongside the static reference is a working build: Node 24, server-rendered from SQLite, no framework, no `node_modules`, and no client-side JavaScript in either build. Three of its ideas are the point of the whole thing.
+
+<Shot
+  src="/images/work/keel/app-approvals.png"
+  domain="keel.app"
+  align="right"
+  aspect="8 / 5"
+  caption="The approval queue. The urgent section at the top is for items below the 40% confidence floor — the case where Keel's answer is not a guess with a caveat but a refusal to guess."
+/>
+
+**Append-only is a database property, not a promise.** The `events` table carries `BEFORE UPDATE` and `BEFORE DELETE` triggers that `RAISE(ABORT)`. No code path, careless or deliberate, can rewrite history. A correction is a new row pointing at the one it supersedes, and a test re-reads the superseded row afterwards to prove it's untouched, word for word.
+
+**"No silent actions" is a `NOT NULL` constraint.** Every event requires a non-empty, human-readable reason. An action without one can't be recorded, which means it can't happen.
+
+**The locked rails aren't settings.** First payment to a new vendor, and anything touching a dispute or an anomaly, always stop for a human. Those live as constants in the rules engine, checked before configuration is read. The test suite cranks every dial to its most permissive legal value and asserts the rails hold — and a `$99,999` auto-pay ceiling POSTed straight past the interface still clamps to `$2,000`, because the clamp runs on the server, not in the slider.
+
+<Aside label="Scope, honestly">
+  What's embedded above is the frozen design reference: twelve hand-authored pages that show the system used well. The working build — rules engine, event store, 61 tests — runs separately and computes its own figures from live data, so the two disagree on numbers by design. Deliberately not built: real bank connection (the Plaid adapter is a stub that throws with an explanation), real outbound email (reminders land in an inspectable outbox), calibration measurement, and TLS. Proving a stated 90% confidence means roughly 90% real accuracy needs real outcomes over real time, which a prototype cannot supply.
+</Aside>

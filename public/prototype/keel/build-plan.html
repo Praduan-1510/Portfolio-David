@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Keel — Build Plan. World-class bookkeeping app: one design system, three artifacts. Version 1.0, August 2026.">
+<title>Keel — Build Plan</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20fill%3D%22%232B2416%22%2F%3E%3Cg%20fill%3D%22%23F6EFE0%22%20transform%3D%22translate(5.5%2C5.5)%20scale(0.77)%22%3E%3Cpath%20d%3D%22M4%2012h40v2l-12%204-8%205-8-5-12-4z%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2221%22%20width%3D%2214%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2221%22%20width%3D%2214%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2227%22%20width%3D%2240%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2233%22%20width%3D%2240%22%20height%3D%223%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Courier+Prime:wght@400;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   KEEL — "The Passbook" · Build Plan document
+   Self-contained restatement of app/style.css tokens + the
+   components this document uses. No external CSS.
+   ============================================================ */
+
+:root {
+  --paper:      #F6EFE0;
+  --card:       #FDF9EE;
+  --ink:        #2B2416;
+  --ink-soft:   #6C6047;
+  --rule:       #D9CCAC;
+  --rule-dark:  #B8A87F;
+
+  --teal:       #3E6E70;
+  --teal-deep:  #2E5456;
+  --teal-wash:  #E2EAE4;
+
+  --green:      #3D6B47;
+  --green-wash: #E4EBDD;
+
+  --red:        #9E3B2F;
+  --red-wash:   #F3E0D8;
+
+  --amber-text: #7A5410;
+  --amber-wash: #F3E3BC;
+
+  --shadow:     rgba(43, 36, 22, 0.16);
+
+  --font-display: 'Abril Fatface', 'Georgia', serif;
+  --font-body:    'Merriweather', 'Georgia', serif;
+  --font-data:    'Courier Prime', 'Courier New', monospace;
+
+  --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
+  --s-5: 24px; --s-6: 32px; --s-7: 48px; --s-8: 64px;
+}
+
+/* ---------- Reset & base ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Paper grain — subtle, fixed, non-interactive */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/><feColorMatrix type='saturate' values='0'/></filter><rect width='140' height='140' filter='url(%23n)'/></svg>");
+}
+
+img, svg { display: block; max-width: 100%; }
+
+a { color: var(--teal-deep); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--ink); }
+
+::selection { background: var(--amber-wash); color: var(--ink); }
+
+:focus-visible { outline: 2px dashed var(--ink); outline-offset: 2px; }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-data);
+  padding: var(--s-3) var(--s-4);
+  z-index: 3000;
+}
+.skip-link:focus { left: 0; }
+
+/* ---------- Type helpers ---------- */
+h1, h2, h3, h4 { font-weight: 700; line-height: 1.2; }
+
+.kicker {
+  font-family: var(--font-data);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.num {
+  font-family: var(--font-data);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+code, .mono {
+  font-family: var(--font-data);
+  font-size: 0.92em;
+  background: var(--teal-wash);
+  padding: 0 4px;
+  white-space: nowrap;
+}
+
+.prose-note { font-size: 14px; color: var(--ink-soft); font-style: italic; }
+
+p + p { margin-top: var(--s-3); }
+
+/* ---------- Layout ---------- */
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 var(--s-5);
+}
+
+main.container { padding-top: var(--s-7); padding-bottom: var(--s-8); }
+
+.section { margin-bottom: var(--s-7); }
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-4);
+  border-top: 1px solid var(--ink);
+  border-bottom: 3px double var(--ink);
+  padding: var(--s-2) 0;
+  margin-bottom: var(--s-5);
+}
+.section-head .kicker { color: var(--ink); }
+.section-head h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.15;
+}
+.section-no {
+  font-family: var(--font-data);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: var(--s-5);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--s-5);
+}
+
+.grid-phases {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-5);
+  align-items: stretch;
+}
+.grid-phases .card,
+.grid-phases .card + .card { margin-top: 0; }
+
+/* ---------- Masthead ---------- */
+.masthead {
+  border-bottom: 3px double var(--ink);
+  background: var(--paper);
+  padding-top: var(--s-6);
+}
+
+.masthead-inner { text-align: center; }
+
+.masthead-kicker {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-4);
+  font-family: var(--font-data);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--rule-dark);
+  padding-bottom: var(--s-2);
+}
+
+.brand-mark { width: 44px; height: 44px; margin: var(--s-5) auto 0; color: var(--ink); }
+.brand-mark svg { width: 100%; height: 100%; display: block; }
+
+.brand {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 52px;
+  letter-spacing: 0.08em;
+  margin: var(--s-3) 0 var(--s-1);
+}
+
+.brand-sub {
+  font-family: var(--font-data);
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: var(--s-4);
+}
+
+.doc-line {
+  border-top: 1px solid var(--rule-dark);
+  padding: var(--s-3) 0 var(--s-5);
+  font-family: var(--font-data);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.doc-line .sep { color: var(--rule-dark); padding: 0 var(--s-1); }
+
+/* ---------- Page head ---------- */
+.page-head { margin-bottom: var(--s-6); }
+
+.page-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 1.05;
+  margin: var(--s-2) 0 var(--s-3);
+}
+
+.page-lede { max-width: 62ch; color: var(--ink-soft); }
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--shadow);
+  padding: var(--s-5);
+}
+.card + .card { margin-top: var(--s-5); }
+
+.card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-2) var(--s-4);
+  font-family: var(--font-data);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  border-bottom: 1px dotted var(--rule-dark);
+  padding-bottom: var(--s-2);
+  margin-bottom: var(--s-4);
+}
+
+.card h3 { font-size: 18px; margin-bottom: var(--s-2); }
+.card h4 { font-size: 15px; margin-bottom: var(--s-2); }
+
+/* ---------- Stat tiles ---------- */
+.stat {
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--shadow);
+  padding: 20px;
+}
+.stat .kicker { display: block; margin-bottom: var(--s-2); }
+.stat-value { font-family: var(--font-display); font-weight: 400; font-size: 34px; line-height: 1.1; }
+.stat-note { font-family: var(--font-data); font-size: 13px; color: var(--ink-soft); margin-top: var(--s-1); }
+
+/* ---------- Stamps ---------- */
+.stamp {
+  display: inline-block;
+  font-family: var(--font-data);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 2px solid var(--ink);
+  color: var(--ink);
+  padding: 2px 8px;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+.stamp-auto     { border-color: var(--green); color: var(--green); }
+.stamp-approval { border-color: var(--red);   color: var(--red); }
+.stamp-flag     { border-color: var(--amber-text); color: var(--amber-text); background: var(--amber-wash); }
+.stamp-locked   { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.stamp-teal     { border-color: var(--teal-deep); color: var(--teal-deep); }
+
+/* ---------- Reasoning trace / done-when panel ---------- */
+.trace {
+  border-left: 3px solid var(--teal);
+  background: var(--teal-wash);
+  padding: var(--s-3) var(--s-4);
+  margin: var(--s-3) 0 0;
+  font-size: 15px;
+}
+.trace:last-child { margin-bottom: 0; }
+.trace-label {
+  font-family: var(--font-data);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+  display: block;
+  margin-bottom: var(--s-1);
+}
+
+.banner {
+  border-left: 3px solid var(--teal);
+  background: var(--teal-wash);
+  padding: var(--s-4);
+  font-size: 15px;
+}
+.banner-warn { border-left-color: var(--amber-text); background: var(--amber-wash); }
+
+/* ---------- Ledger table ---------- */
+.table-scroll { overflow-x: auto; }
+
+.ledger { width: 100%; border-collapse: collapse; font-size: 15px; }
+
+.ledger caption {
+  text-align: left;
+  padding-bottom: var(--s-2);
+  font-family: var(--font-data);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.ledger th {
+  font-family: var(--font-data);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--ink);
+  border-bottom: 3px double var(--ink);
+  padding: var(--s-2) var(--s-3);
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+.ledger td {
+  border-bottom: 1px dotted var(--rule-dark);
+  padding: var(--s-3);
+  vertical-align: top;
+}
+.ledger th[scope="row"] {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: normal;
+  border-bottom: 1px dotted var(--rule-dark);
+  padding: var(--s-3);
+  vertical-align: top;
+}
+.ledger tbody tr:hover td,
+.ledger tbody tr:hover th[scope="row"] { background: var(--teal-wash); }
+.ledger .col-item { min-width: 250px; }
+.ledger .col-rule { min-width: 300px; }
+
+/* ---------- File map ---------- */
+.filemap {
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--shadow);
+  overflow-x: auto;
+  padding: var(--s-5) var(--s-4);
+}
+.filemap pre {
+  font-family: var(--font-data);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink);
+  tab-size: 2;
+}
+.filemap b { font-weight: 700; }
+.filemap .fm-dir { color: var(--teal-deep); font-weight: 700; }
+.filemap .fm-note { color: var(--ink-soft); }
+.filemap .fm-form { color: var(--ink-soft); }
+
+.artifact-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-3);
+  margin-bottom: var(--s-4);
+}
+
+/* ---------- Lists ---------- */
+.plain-list { list-style: none; }
+.plain-list li {
+  position: relative;
+  padding-left: var(--s-5);
+  margin-bottom: var(--s-3);
+}
+.plain-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12px;
+  width: 10px;
+  height: 3px;
+  background: var(--ink);
+}
+.plain-list li:last-child { margin-bottom: 0; }
+
+.trust-list { list-style: none; counter-reset: trust; }
+.trust-list li {
+  counter-increment: trust;
+  position: relative;
+  padding-left: 42px;
+  margin-bottom: var(--s-4);
+}
+.trust-list li::before {
+  content: counter(trust);
+  position: absolute;
+  left: 0;
+  top: 3px;
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--ink);
+  background: var(--card);
+  font-family: var(--font-data);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 22px;
+  text-align: center;
+}
+.trust-list li:last-child { margin-bottom: 0; }
+
+.step-list { list-style: none; counter-reset: step; }
+.step-list > li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 42px;
+  margin-bottom: var(--s-4);
+}
+.step-list > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 26px;
+  height: 26px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-data);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 26px;
+  text-align: center;
+}
+.step-list > li:last-child { margin-bottom: 0; }
+
+/* ---------- QA checklist ---------- */
+.checklist { list-style: none; }
+.checklist li {
+  position: relative;
+  padding: var(--s-3) 0 var(--s-3) 38px;
+  border-bottom: 1px dotted var(--rule-dark);
+  font-size: 15px;
+}
+.checklist li:last-child { border-bottom: 0; padding-bottom: 0; }
+.checklist li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 16px;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--ink);
+  background: var(--card);
+}
+
+/* ---------- Contents index ---------- */
+.index-list { list-style: none; }
+.index-list li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+  border-bottom: 1px dotted var(--rule-dark);
+  padding: var(--s-2) 0;
+}
+.index-list li:last-child { border-bottom: 0; }
+.index-list .ix-no {
+  font-family: var(--font-data);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+  min-width: 34px;
+}
+.index-list a {
+  font-family: var(--font-data);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+}
+.index-list a:hover { color: var(--teal-deep); text-decoration: underline; }
+
+/* ---------- Phase cards ---------- */
+.phase-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-2) var(--s-4);
+  margin-bottom: var(--s-3);
+}
+.phase-head h3 { font-size: 18px; margin: 0; }
+.phase-head .phase-no {
+  font-family: var(--font-data);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ---------- Sub head ---------- */
+.sub-head {
+  font-family: var(--font-data);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--rule-dark);
+  padding-bottom: var(--s-2);
+  margin: var(--s-6) 0 var(--s-4);
+}
+
+.spec-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s-2) var(--s-3);
+  margin-bottom: var(--s-3);
+}
+.spec-head h3 { font-size: 18px; margin: 0; }
+.spec-file {
+  font-family: var(--font-data);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+}
+
+/* ---------- Closing note ---------- */
+.closing {
+  border-top: 1px solid var(--ink);
+  border-bottom: 3px double var(--ink);
+  padding: var(--s-5) 0;
+  margin-top: var(--s-7);
+}
+.closing p {
+  font-style: italic;
+  color: var(--ink-soft);
+  max-width: 76ch;
+}
+
+/* ---------- Footer ---------- */
+.colophon {
+  border-top: 3px double var(--ink);
+  margin-top: var(--s-8);
+  padding: var(--s-4) 0 var(--s-6);
+}
+.colophon-inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--s-2) var(--s-4);
+  font-family: var(--font-data);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ---------- Utilities ---------- */
+.mt-2 { margin-top: var(--s-2); }
+.mt-4 { margin-top: var(--s-4); }
+.mt-5 { margin-top: var(--s-5); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 880px) {
+  .grid-phases { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 700px) {
+  .section-head { flex-wrap: wrap; }
+}
+
+@media (max-width: 560px) {
+  .container { padding: 0 var(--s-4); }
+  .brand { font-size: 38px; }
+  .page-title { font-size: 28px; }
+  .stat-value { font-size: 28px; }
+  .section-head h2 { font-size: 22px; }
+  .card, .stat { padding: 20px; }
+  .filemap { padding: 20px var(--s-3); }
+  .masthead-kicker { justify-content: center; }
+  .masthead-kicker .mk-right { display: none; }
+  .trust-list li, .step-list > li { padding-left: 36px; }
+}
+
+/* ---------- Motion preferences ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* ---------- Print ---------- */
+@media print {
+  body { background: #fff; color: #000; }
+  body::before { display: none; }
+  .skip-link { display: none !important; }
+  .card, .stat, .filemap { box-shadow: none; }
+  a { color: #000; text-decoration: none; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="masthead">
+  <div class="container masthead-inner">
+    <p class="masthead-kicker">
+      <span>Est. 2026 · Autonomous Bookkeeping</span>
+      <span class="mk-right">Version 1.0 · August 2026</span>
+    </p>
+    <div class="brand-mark" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="currentColor" d="M4 12h40v2l-12 4-8 5-8-5-12-4z"/><rect fill="currentColor" x="4" y="21" width="14" height="3"/><rect fill="currentColor" x="30" y="21" width="14" height="3"/><rect fill="currentColor" x="4" y="27" width="40" height="3"/><rect fill="currentColor" x="4" y="33" width="40" height="3"/></svg></div>
+    <p class="brand">KEEL</p>
+    <p class="brand-sub">Keeps the books · Shows its work</p>
+    <p class="doc-line">
+      Form K-13 · Build Plan<span class="sep">·</span>Sources: keel-fsd.md (requirements)<span class="sep">·</span>keel-design-system.md (visual system)
+    </p>
+  </div>
+</header>
+
+<main id="main" class="container">
+
+  <div class="page-head">
+    <p class="kicker">World-class bookkeeping app · one design system, two builds</p>
+    <h1 class="page-title">Build Plan</h1>
+    <p class="page-lede">How Keel gets built, in what order, and what "done" means at each
+    step. Every requirement referenced here traces back to <code>keel-fsd.md</code>. Where a
+    screen and the spec disagree, the spec wins.</p>
+  </div>
+
+  <section class="section" aria-labelledby="h-figures">
+    <div class="section-head">
+      <h2 id="h-figures">The shape of the work</h2>
+      <span class="section-no">Rev 08/26</span>
+    </div>
+    <div class="stat-strip">
+      <div class="stat">
+        <span class="kicker">Artifacts</span>
+        <p class="stat-value num">3</p>
+        <p class="stat-note">archived · frozen · live</p>
+      </div>
+      <div class="stat">
+        <span class="kicker">Pages per build</span>
+        <p class="stat-value num">12</p>
+        <p class="stat-note">matching one for one</p>
+      </div>
+      <div class="stat">
+        <span class="kicker">npm dependencies</span>
+        <p class="stat-value num">0</p>
+        <p class="stat-note">no build step, no bundler</p>
+      </div>
+      <div class="stat">
+        <span class="kicker">Client-side JavaScript</span>
+        <p class="stat-value num">0</p>
+        <p class="stat-note">in both builds, by constraint</p>
+      </div>
+    </div>
+
+    <div class="card mt-5">
+      <h3>Contents</h3>
+      <ol class="index-list">
+        <li><span class="ix-no num">1</span><a href="#s1">North Star</a></li>
+        <li><span class="ix-no num">2</span><a href="#s2">Scope &amp; Constraints</a></li>
+        <li><span class="ix-no num">2b</span><a href="#s2b">Two builds, one design system</a></li>
+        <li><span class="ix-no num">3</span><a href="#s3">Screen-by-Screen Specification</a></li>
+        <li><span class="ix-no num">4</span><a href="#s4">Build Phases</a></li>
+        <li><span class="ix-no num">5</span><a href="#s5">QA Checklist</a></li>
+        <li><span class="ix-no num">6</span><a href="#s6">Beyond the Prototype</a></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 1 · NORTH STAR -->
+  <section class="section" id="s1" aria-labelledby="h-s1">
+    <div class="section-head">
+      <h2 id="h-s1">North Star</h2>
+      <span class="section-no">Section 1</span>
+    </div>
+
+    <p class="page-lede" style="max-width:76ch">Keel wins not by doing bookkeeping —
+    QuickBooks does bookkeeping — but by being the first bookkeeper you can <em>watch
+    think</em>. Every screen answers one of three trust questions.</p>
+
+    <div class="card mt-5">
+      <ol class="trust-list">
+        <li><strong>What did you do without me?</strong> → Activity (append-only, every entry
+        has a reasoning trace)</li>
+        <li><strong>What do you need from me?</strong> → Approvals (context-rich decisions,
+        never bare yes/no)</li>
+        <li><strong>What are you allowed to do?</strong> → Autonomy (visible rails, some
+        permanently locked)</li>
+      </ol>
+      <div class="trace">
+        <span class="trace-label">Plus one forward-looking view</span>
+        <strong>What's coming?</strong> → 90-day Forecast.
+      </div>
+      <p class="mt-4">The prototype's job: make an owner <em>feel</em> they could trust this,
+      within 60 seconds of looking at it.</p>
+    </div>
+  </section>
+
+  <!-- 2 · SCOPE -->
+  <section class="section" id="s2" aria-labelledby="h-s2">
+    <div class="section-head">
+      <h2 id="h-s2">Scope &amp; Constraints</h2>
+      <span class="section-no">Section 2</span>
+    </div>
+
+    <div class="card">
+      <ul class="plain-list">
+        <li><strong>Zero client-side JavaScript, in both builds.</strong> Interactivity comes
+        from native elements: <code>&lt;a&gt;</code> navigation, <code>&lt;details&gt;</code>
+        expandable reasoning traces, <code>&lt;input type="range"&gt;</code> sliders, form
+        POSTs, <code>:hover/:focus/:active</code> states. This is a deliberate constraint — it
+        proves the design system and information architecture before any framework decision,
+        and the live server keeps it (its CSP sends <code>default-src 'none'</code> with no
+        <code>script-src</code> at all).</li>
+        <li>Multi-page site sharing one stylesheet — mirrors the real IA and gives free
+        deep-linking (FSD nav requirement) and predictable back-button behavior.</li>
+        <li>In <code>app/</code>, all data is hardcoded from the FSD's <strong>Tested</strong>
+        examples, so the reference build shows the exact scenarios the spec validates. The
+        server computes the same scenarios from its own ledger instead.</li>
+      </ul>
+    </div>
+
+    <h3 class="sub-head">File map — three artifacts</h3>
+
+    <div class="artifact-chips">
+      <span class="stamp stamp-locked">prototype/ · Archived</span>
+      <span class="stamp stamp-teal">app/ · Frozen design reference</span>
+      <span class="stamp stamp-auto">server/ · The live product</span>
+    </div>
+
+    <div class="filemap">
+<pre><span class="fm-dir">prototype/</span>         ← ARCHIVED. The original 5-screen concept. Superseded by app/;
+                     kept to show where the ideas started. Not maintained.
+  style.css · index.html · approvals.html · activity.html · cashflow.html · settings.html
+
+<span class="fm-dir">app/</span>               ← FROZEN DESIGN REFERENCE — 12 pages, one stylesheet, zero JS.
+                     One hand-authored scenario, dated Sunday, 2 August 2026. Its numbers
+                     are a snapshot and stay put; see §2b before changing any of them.
+  style.css        ← full "Passbook" design system: tokens + every component.
+                     The single shared artifact — the server serves this exact file.
+  index.html       ← Overview (morning ledger)              <span class="fm-form">Form K-01</span>
+  approvals.html   ← Approval queue, 6 items incl. urgent   <span class="fm-form">Form K-02</span>
+  activity.html    ← Append-only log, filters, pager        <span class="fm-form">Form K-03</span>
+  cashflow.html    ← Forecast: 90-day, floor, pending items <span class="fm-form">Form K-04</span>
+  settings.html    ← Autonomy: sliders + locked rails       <span class="fm-form">Form K-05</span>
+  transactions.html← Full ledger w/ search, chips, sorting  <span class="fm-form">Form K-06</span>
+  invoices.html    ← Receivables, reminder ladder, drafts   <span class="fm-form">Form K-07</span>
+  bills.html       ← Recurring vendors &amp; auto-pay rules     <span class="fm-form">Form K-08</span>
+  onboarding.html  ← First-run tour (safety-rail framing)   <span class="fm-form">Form K-09</span>
+  login.html       ← Sign-in                                <span class="fm-form">Form K-10</span>
+  styleguide.html  ← Living design-system reference         <span class="fm-form">Form K-11</span>
+  404.html         ← Not-in-the-ledger error page           <span class="fm-form">Form K-12</span>
+
+<span class="fm-dir">server/</span>            ← THE LIVE PRODUCT — Node 24 (&gt;= 22.6), zero npm dependencies,
+                     zero client JS. Server-rendered from SQLite (node:sqlite); TypeScript
+                     run directly by Node in strip-only mode — no build step, no
+                     node_modules. Twelve pages, matching app/ one for one; every action is
+                     a form POST that redirects. Serves app/style.css at /style.css.
+  src/main.ts      ← entry point; seeds a ledger on first run, then serves
+  src/seed.ts      ← the opening scenario the ledger starts from
+  src/web/         ← server.ts (routes, auth gate, CSP) · ui.ts (layout + components,
+                     one function per style.css component) · context.ts
+    pages/main.ts      ← Overview · Approvals · Activity
+    pages/ledgers.ts   ← Transactions · Invoices · Bills · Forecast
+    pages/settings.ts  ← Autonomy · Login · Onboarding · Styleguide · 404
+  src/engine/      ← agent.ts · categorizer.ts · forecast.ts · rules.ts (FSD §6 rails)
+  src/store/       ← eventStore.ts (append-only) · repo.ts
+  src/domain/ · src/auth/ · src/adapters/ (bank, email)
+  test/            ← integrity.test.ts · rails.test.ts — `node --test`, no install required</pre>
+    </div>
+  </section>
+
+  <!-- 2b · TWO BUILDS -->
+  <section class="section" id="s2b" aria-labelledby="h-s2b">
+    <div class="section-head">
+      <h2 id="h-s2b">Two builds, one design system</h2>
+      <span class="section-no">Section 2b</span>
+    </div>
+
+    <p>There are two working builds of the same product. They are not copies of each other.</p>
+
+    <p><code>app/</code> is the frozen design reference: twelve pages, one hand-authored
+    scenario, every figure typed in by hand. It records what the design system looks like
+    when it is used well. <code>server/</code> is the live product: it renders the same
+    components from SQLite, so its figures move every time someone uses the app — an approval
+    decided, a threshold changed, a day of activity added.</p>
+
+    <p>They share <code>app/style.css</code>. The server reads that exact file off disk and
+    serves it at <code>/style.css</code>. There is no second stylesheet and no build step
+    between them, so any change to the visual system is made once, in
+    <code>app/style.css</code>, and both builds have it. The design system document describes
+    that one file.</p>
+
+    <div class="banner banner-warn mt-4">
+      <p>Because one build freezes a scenario and the other computes one, their
+      <strong>numbers</strong> legitimately differ — the forecast curve, approval reference
+      numbers, vendor counts, confidence scores, cash on hand. That is expected, and it is not
+      to be reconciled. Do not edit the static pages to match the database, and do not reseed
+      the database to match the static pages. When quoting a figure, say which build it came
+      from.</p>
+    </div>
+
+    <p class="mt-4">Where the two differ in <strong>features</strong>, the server is the one
+    that changes. If the static build shows something the server cannot do, that is a gap in
+    the product, not permission to delete it from <code>app/</code>. The reference build loses
+    a feature only when the product decides to drop it.</p>
+
+    <h3 class="sub-head">Recorded deviation from FSD §7</h3>
+
+    <div class="card">
+      <div class="card-meta">
+        <span>Deviation · 1 of 1</span>
+        <span class="stamp stamp-flag">Recorded</span>
+      </div>
+      <p>FSD §7 requires that Activity and Approvals stay responsive at 10,000+ historical
+      entries, and adds in parentheses "assumes virtualized list rendering, not pagination".
+      This build does not virtualize. Activity pages through an indexed SQL
+      <code>LIMIT</code>/<code>OFFSET</code> query, <span class="num">25</span> events at a
+      time, behind a rendered pager. Virtualized rendering needs client-side JavaScript, and
+      the product ships none.</p>
+
+      <p>The requirement is the responsiveness. The parenthesis is an assumption about
+      mechanism, written before the zero-JavaScript constraint, and the assumed mechanism is
+      deliberately not used. The requirement itself is met: measured against a ledger of
+      <span class="num">10,043</span> events, Overview renders in about
+      <span class="num">4 ms</span>, Activity <span class="num">2 ms</span>, Activity at page
+      <span class="num">400</span> <span class="num">7 ms</span>, Approvals
+      <span class="num">2 ms</span>, Forecast <span class="num">3 ms</span>, and the server
+      test suite holds that line. This is the one place the build knowingly departs from a
+      method the spec states.</p>
+    </div>
+
+    <h3 class="sub-head">Names that no longer match</h3>
+
+    <p>Two static files keep their original filenames for historical reasons.
+    <code>app/settings.html</code> is the <strong>Autonomy</strong> page (server route
+    <code>/autonomy</code>), and <code>app/cashflow.html</code> is the
+    <strong>Forecast</strong> page (server route <code>/forecast</code>). Titles, tab labels,
+    and routes all say Autonomy and Forecast; only the filenames lag. Grepping
+    <code>app/</code> for either word will not find its file.</p>
+  </section>
+
+  <!-- 3 · SCREEN BY SCREEN -->
+  <section class="section" id="s3" aria-labelledby="h-s3">
+    <div class="section-head">
+      <h2 id="h-s3">Screen-by-Screen Specification</h2>
+      <span class="section-no">Section 3</span>
+    </div>
+
+    <div class="card">
+      <div class="spec-head">
+        <h3>3.1 · Overview</h3>
+        <span class="spec-file num">index.html</span>
+      </div>
+      <p><strong>Purpose:</strong> the 8 a.m. glance. "While you were away: Keel handled 23
+      items; 4 need your call."</p>
+      <ul class="plain-list mt-4">
+        <li>Greeting line with date + trust summary sentence (plain language, FSD §3: no
+        accounting jargon)</li>
+        <li>Stat strip (4 tiles): Cash on hand · Pending approvals · Autonomous actions this
+        week · Est. time saved</li>
+        <li><strong>Needs your call</strong> — top 2 approval items, condensed cards linking
+        to Approvals</li>
+        <li><strong>Recent entries</strong> — last 5 activity rows linking to Activity</li>
+        <li>Forecast strip — 13-week mini bar chart + the week-5 dip flag (FSD "Flagged a cash
+        dip ahead")</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="spec-head">
+        <h3>3.2 · Approvals</h3>
+        <span class="spec-file num">approvals.html</span>
+        <span class="stamp stamp-teal">FSD §5.6</span>
+      </div>
+      <p>Every card: serial no. · proposed action · <strong>plain-language reasoning
+      trace</strong> · confidence meter (ticks + number, FSD §7) · decision buttons. Both
+      response shapes demonstrated.</p>
+
+      <div class="table-scroll mt-4">
+        <table class="ledger">
+          <caption>Table 3.2 · Approval queue items</caption>
+          <thead>
+            <tr>
+              <th scope="col" class="col-item">Item</th>
+              <th scope="col" class="col-rule">FSD rule</th>
+              <th scope="col">Shape</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Bridge City Holdings, <span class="num">$2,300</span> — <span class="num">31%</span> confidence</th>
+              <td>§5.1 below-40% floor → "Uncategorized," escalated, distinct urgent treatment</td>
+              <td>Multi-choice + "review manually"</td>
+            </tr>
+            <tr>
+              <th scope="row">Riverside Supper Club, <span class="num">$148.32</span> — <span class="num">62%</span></th>
+              <td>§5.1 below threshold → top-two category choice (Meals &amp; Entertainment vs Marketing)</td>
+              <td>Multi-choice</td>
+            </tr>
+            <tr>
+              <th scope="row">Nordic Roasting Equipment, <span class="num">$12,500</span></th>
+              <td>§5.2 first payment to new vendor → always manual, not configurable</td>
+              <td>Binary</td>
+            </tr>
+            <tr>
+              <th scope="row">Marlow &amp; Vine, <span class="num">$4,200</span> — <span class="num">15 days</span> overdue</th>
+              <td>§5.3 second reminder → approval required</td>
+              <td>Binary</td>
+            </tr>
+            <tr>
+              <th scope="row">Roastery Supply Co., <span class="num">$890 × 2</span> same day</th>
+              <td>§5.4 duplicate pair → always approval, either direction</td>
+              <td>Binary</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="trace">
+        <span class="trace-label">Note</span>
+        The FSD flags the below-40% queue treatment as <em>"not yet in the prototype"</em> —
+        this build closes that gap with a visually distinct urgent section at the top of the
+        queue.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="spec-head">
+        <h3>3.3 · Activity</h3>
+        <span class="spec-file num">activity.html</span>
+        <span class="stamp stamp-teal">FSD §5.7</span>
+      </div>
+      <ul class="plain-list">
+        <li>Append-only chronological ledger, newest first, grouped by day</li>
+        <li>Every entry expands (<code>&lt;details&gt;</code>) to full reasoning trace +
+        attribution (KEEL · AUTO vs OWNER)</li>
+        <li>Includes: auto-categorizations (<span class="num">94%</span>,
+        <span class="num">97%</span>), recurring bill auto-payment under the
+        <span class="num">$500</span> ceiling, first invoice reminder at 7+ days (§5.3), the
+        cash-dip <strong>flag</strong> (a flag, not an approval — §5.5), an owner-resolved
+        approval, and a <strong>correction entry</strong> that references its original rather
+        than editing it — proving audit integrity visually.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="spec-head">
+        <h3>3.4 · Forecast</h3>
+        <span class="spec-file num">cashflow.html</span>
+        <span class="stamp stamp-teal">FSD §5.5</span>
+      </div>
+      <ul class="plain-list">
+        <li>Pure-CSS 13-week bar chart, y-axis + dotted gridlines, dashed red
+        <strong><span class="num">$10,000</span> floor</strong> line</li>
+        <li>Weeks 5–6 below floor → red bars + flag callout ("flag, never blocks an
+        action")</li>
+        <li>Weeks 7–9 striped → visibly affected by pending approvals (Marlow &amp; Vine
+        receivable, Nordic Roasting payable), with a legend entry and an explanatory card
+        listing them</li>
+        <li>Full data table below the chart (accessibility alternative + exact values)</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="spec-head">
+        <h3>3.5 · Autonomy</h3>
+        <span class="spec-file num">settings.html</span>
+        <span class="stamp stamp-teal">FSD §5.8 + §6</span>
+      </div>
+      <ul class="plain-list">
+        <li>Adjustable rows: categorization threshold (<span class="num">90%</span>, range
+        <span class="num">50–99</span>) · bill ceiling (<span class="num">$500</span>, up to
+        <span class="num">$2,000</span>) · cash-floor alert (<span class="num">$10,000</span>,
+        flag-only)</li>
+        <li>Fixed row: invoice reminders (auto at 7+ days; escalation always manual — not
+        configurable)</li>
+        <li><strong>Locked rows:</strong> New vendor payments · Disputes &amp; anomalies — lock
+        icon + "ALWAYS ASK" stamp + safety-rail framing ("This is a safety rail, not a
+        limitation") per FSD onboarding intent</li>
+      </ul>
+      <div class="mt-4">
+        <span class="stamp stamp-locked">Always ask</span>
+        <span class="stamp stamp-locked">Not configurable</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · PHASES -->
+  <section class="section" id="s4" aria-labelledby="h-s4">
+    <div class="section-head">
+      <h2 id="h-s4">Build Phases</h2>
+      <span class="section-no">Section 4</span>
+    </div>
+
+    <div class="grid-phases">
+      <div class="card">
+        <div class="phase-head">
+          <h3>Design system foundation</h3>
+          <span class="phase-no">Phase 0 · style.css</span>
+        </div>
+        <p>Tokens (color/type/spacing) → base + reset → masthead/nav/footer → core components
+        (card, stamp, button, meter, ledger table, entry, chart, range).</p>
+        <div class="trace">
+          <span class="trace-label">Done when</span>
+          A bare page with masthead + one card of each component looks correct at
+          <span class="num">375/768/1120</span>.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="phase-head">
+          <h3>Trust core: Approvals + Activity</h3>
+          <span class="phase-no">Phase 1</span>
+        </div>
+        <p>The two screens that <em>are</em> the product thesis. Build with real FSD example
+        data.</p>
+        <div class="trace">
+          <span class="trace-label">Done when</span>
+          Every §5.6/§5.7 Tested behavior is visible; reasoning traces read in plain language.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="phase-head">
+          <h3>Overview + Forecast + Autonomy</h3>
+          <span class="phase-no">Phase 2</span>
+        </div>
+        <p>Dashboard composition from Phase-1 components; CSS chart; settings rows.</p>
+        <div class="trace">
+          <span class="trace-label">Done when</span>
+          Every row of the FSD §6 business-rules table appears somewhere on screen.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="phase-head">
+          <h3>Accessibility &amp; polish pass</h3>
+          <span class="phase-no">Phase 3</span>
+        </div>
+        <p>Skip links, landmarks, heading order, focus states, aria-labels on meters/stamps,
+        contrast spot-check, <span class="num">375px</span> + <span class="num">1440px</span>
+        sweep, reduced-motion, print-worthy footer details.</p>
+        <div class="trace">
+          <span class="trace-label">Done when</span>
+          The design-system §8 checklist passes on all five pages.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · QA -->
+  <section class="section" id="s5" aria-labelledby="h-s5">
+    <div class="section-head">
+      <h2 id="h-s5">QA Checklist</h2>
+      <span class="section-no">Section 5 · Pre-delivery</span>
+    </div>
+
+    <div class="card">
+      <ul class="checklist">
+        <li>Every autonomous action shown has a visible, human-readable reason (FSD goal:
+        <span class="num">100%</span>, non-negotiable)</li>
+        <li>No approval item is a bare yes/no — all show action + reasoning + confidence +
+        options</li>
+        <li>Confidence always ticks <strong>and</strong> number; debit/credit always sign
+        <strong>and</strong> color</li>
+        <li>Locked categories cannot be mistaken for adjustable ones</li>
+        <li>Keyboard-only walkthrough of an approval decision works on every card</li>
+        <li>No horizontal page scroll at <span class="num">375px</span>; chart/tables scroll
+        within their containers</li>
+        <li>Fonts load with <code>display=swap</code>; layout does not shift when they land</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 6 · BEYOND -->
+  <section class="section" id="s6" aria-labelledby="h-s6">
+    <div class="section-head">
+      <h2 id="h-s6">Beyond the Prototype</h2>
+      <span class="section-no">Section 6 · v1 product path</span>
+    </div>
+
+    <div class="banner mt-2">
+      <p>Written before <code>server/</code> existed, and kept because most of it is still
+      ahead of us. The server has since taken the first two steps its own way — no framework,
+      an append-only event store, and the §6 rails enforced in
+      <code>src/engine/rules.ts</code> — so read item 1's stack choice as one option that was
+      not taken, not as a plan.</p>
+    </div>
+
+    <div class="card mt-5">
+      <ol class="step-list">
+        <li><strong>Foundation</strong> — React/Next.js + the same design tokens; bank
+        aggregator (Plaid-class, FSD §7: never store raw credentials); append-only event store
+        for Activity (audit integrity is a data-model property, not a UI style).</li>
+        <li><strong>Agent loop</strong> — categorization with calibrated confidence (FSD §7:
+        <span class="num">90%</span> stated ≈ <span class="num">90%</span> real; measure before
+        tuning defaults), rules engine for §6 hard rails (rails enforced server-side, never
+        only in UI).</li>
+        <li><strong>Trust instrumentation</strong> — track approval-vs-override rates per
+        category to validate the FSD hypotheses (<span class="num">90%</span> threshold,
+        <span class="num">$10k</span> flat floor, <span class="num">5 hrs/week</span> saved)
+        with real data.</li>
+        <li><strong>Open questions still open</strong> (FSD §8): multi-account autonomy scope;
+        what happens to in-flight approvals when a threshold changes; accountant read-only
+        role. The fourth, list rendering at 10k+ entries (FSD §7), is settled — see the
+        recorded deviation in <a href="#s2b">§2b</a>.</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="closing">
+    <p>Every requirement ID above traces back to <code>keel-fsd.md</code>. If a screen and the
+    FSD ever disagree, the FSD wins — then update this plan, not just the pixels. The single
+    stated exception is the §7 rendering method, recorded in <a href="#s2b">§2b</a>.</p>
+  </div>
+
+</main>
+
+<footer class="colophon">
+  <div class="container colophon-inner">
+    <span>Form K-13 · Rev 08/26</span>
+    <span>All actions logged · Nothing hidden</span>
+    <span>Keel Ledger Systems · Build Plan v1.0</span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -10,6 +10,7 @@ import { site } from "@/lib/site";
 const nav = [
   { href: "/work", label: "Work" },
   { href: "/about", label: "About" },
+  { href: "/resume", label: "Résumé" },
   { href: "/contact", label: "Contact" },
 ];
 

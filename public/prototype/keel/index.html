@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keel — Autonomous bookkeeping that shows its work</title>
+<meta name="description" content="Keel: an autonomous bookkeeping agent for small business. A design system, a functional spec, and two working builds — a twelve-page design reference and a zero-dependency server rendered from SQLite.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20fill%3D%22%232B2416%22%2F%3E%3Cg%20fill%3D%22%23F6EFE0%22%20transform%3D%22translate(5.5%2C5.5)%20scale(0.77)%22%3E%3Cpath%20d%3D%22M4%2012h40v2l-12%204-8%205-8-5-12-4z%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2221%22%20width%3D%2214%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2221%22%20width%3D%2214%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2227%22%20width%3D%2240%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2233%22%20width%3D%2240%22%20height%3D%223%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Courier+Prime:wght@400;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   KEEL — prototype index · "The Passbook"
+   Self-contained. Tokens mirror app/style.css.
+   ============================================================ */
+:root{
+  --paper:#F6EFE0; --card:#FDF9EE; --ink:#2B2416; --ink-soft:#6C6047;
+  --rule:#D9CCAC; --rule-dark:#B8A87F;
+  --teal:#3E6E70; --teal-deep:#2E5456; --teal-wash:#E2EAE4;
+  --green:#3D6B47; --green-wash:#E4EBDD;
+  --red:#9E3B2F; --red-wash:#F3E0D8;
+  --amber-text:#7A5410; --amber-wash:#F3E3BC;
+  --shadow:rgba(43,36,22,.16);
+  --font-display:'Abril Fatface','Georgia',serif;
+  --font-body:'Merriweather','Georgia',serif;
+  --font-data:'Courier Prime','Courier New',monospace;
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px; --s-6:32px; --s-7:48px; --s-8:64px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:2000;pointer-events:none;opacity:.045;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/><feColorMatrix type='saturate' values='0'/></filter><rect width='140' height='140' filter='url(%23n)'/></svg>")}
+img,svg{display:block;max-width:100%}
+a{color:var(--teal-deep);text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{color:var(--ink)}
+::selection{background:var(--amber-wash);color:var(--ink)}
+:focus-visible{outline:2px dashed var(--ink);outline-offset:2px}
+h1,h2,h3,h4{font-weight:700;line-height:1.2}
+p+p{margin-top:var(--s-4)}
+strong{font-weight:700}
+
+.skip-link{position:absolute;left:-9999px;top:0;background:var(--ink);color:var(--paper);font-family:var(--font-data);padding:var(--s-3) var(--s-4);z-index:3000}
+.skip-link:focus{left:0}
+
+.container{max-width:1120px;margin:0 auto;padding:0 var(--s-5)}
+@media(max-width:480px){.container{padding:0 var(--s-4)}}
+
+.kicker{font-family:var(--font-data);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+.num{font-family:var(--font-data);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ---------- Cover ---------- */
+.cover{border-bottom:3px double var(--ink);padding-top:var(--s-5)}
+.cover-meta{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s-4);
+  font-family:var(--font-data);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-soft);border-bottom:1px solid var(--rule-dark);padding-bottom:var(--s-2)}
+@media(max-width:520px){.cover-meta{font-size:10.5px;letter-spacing:.1em}}
+
+.nameplate{position:relative;text-align:center;padding:var(--s-7) 0 var(--s-6)}
+.nameplate::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(to bottom,transparent 0 31px,var(--rule) 31px 32px)}
+.nameplate>*{position:relative}
+.brand-mark{width:60px;height:60px;margin:0 auto;color:var(--ink);background:var(--paper);padding:0 var(--s-3);box-sizing:content-box}
+.wordmark{font-family:var(--font-display);font-weight:400;font-size:clamp(66px,13vw,136px);
+  letter-spacing:.09em;line-height:1;margin:var(--s-4) 0 var(--s-3);text-indent:.09em}
+.wordmark span{background:var(--paper);padding:0 var(--s-4);display:inline-block}
+.tagline{display:inline-block;background:var(--paper);padding:var(--s-1) var(--s-4);
+  font-family:var(--font-data);font-size:clamp(11px,2.6vw,14px);font-weight:700;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--ink-soft)}
+.cover-band{border-top:1px solid var(--ink);border-bottom:3px double var(--ink);padding:var(--s-2) 0;
+  display:flex;justify-content:space-between;gap:var(--s-4);flex-wrap:wrap;
+  font-family:var(--font-data);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
+
+.stat-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:var(--s-4);padding:var(--s-5) 0 var(--s-6)}
+.stat{border-top:1px solid var(--rule-dark);padding-top:var(--s-3)}
+.stat-value{font-family:var(--font-data);font-variant-numeric:tabular-nums;font-size:26px;font-weight:700;line-height:1.15;margin-top:var(--s-1)}
+.stat-note{font-family:var(--font-data);font-size:11.5px;letter-spacing:.06em;color:var(--ink-soft);margin-top:2px}
+
+/* ---------- Sections ---------- */
+main.container{padding-top:var(--s-7);padding-bottom:var(--s-8)}
+.section{margin-bottom:var(--s-8)}
+.section:last-child{margin-bottom:0}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s-4);
+  border-top:1px solid var(--ink);border-bottom:3px double var(--ink);padding:var(--s-2) 0;margin-bottom:var(--s-5)}
+.section-head h2{font-family:var(--font-data);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.section-head .kicker{color:var(--ink-soft);text-align:right}
+@media(max-width:560px){.section-head .kicker{display:none}}
+
+.split{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:var(--s-6)}
+@media(max-width:880px){.split{grid-template-columns:1fr;gap:var(--s-5)}}
+.lede h3{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,3.6vw,34px);line-height:1.15;margin-bottom:var(--s-4)}
+.lede p{max-width:60ch}
+.lede p.small{font-size:15px;color:var(--ink-soft)}
+
+.card{background:var(--card);border:1.5px solid var(--ink);box-shadow:5px 5px 0 var(--shadow);padding:var(--s-5)}
+@media(max-width:480px){.card{padding:20px}}
+
+.spec{align-self:start}
+.spec-title{font-family:var(--font-data);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  border-bottom:3px double var(--ink);padding-bottom:var(--s-2);margin-bottom:var(--s-2)}
+.spec-row{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s-4);
+  padding:var(--s-2) 0;border-bottom:1px dotted var(--rule-dark);font-family:var(--font-data);font-size:12.5px}
+.spec-row:last-child{border-bottom:0}
+.spec-row dt{color:var(--ink-soft);letter-spacing:.08em;text-transform:uppercase;flex:0 0 auto}
+.spec-row dd{text-align:right;font-weight:700;letter-spacing:.01em}
+
+/* ---------- The three surfaces ---------- */
+.plates{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-5)}
+@media(max-width:880px){.plates{grid-template-columns:1fr;gap:var(--s-4)}}
+.plate{display:flex;flex-direction:column;background:var(--card);border:1.5px solid var(--ink);
+  box-shadow:5px 5px 0 var(--shadow);text-decoration:none;color:var(--ink);
+  transition:transform 150ms ease-out,box-shadow 150ms ease-out}
+.plate:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--shadow);color:var(--ink)}
+.plate:active{transform:translate(1px,1px);box-shadow:2px 2px 0 var(--shadow)}
+.plate-fig{height:104px;border-bottom:3px double var(--ink);background:var(--paper);
+  padding:var(--s-4) var(--s-5);display:flex;flex-direction:column;justify-content:center;gap:6px;overflow:hidden}
+.plate-body{padding:var(--s-4) var(--s-5) var(--s-5);display:flex;flex-direction:column;flex:1}
+.plate-no{font-family:var(--font-data);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-deep)}
+.plate-body h3{font-family:var(--font-display);font-weight:400;font-size:27px;line-height:1.1;margin:var(--s-2) 0 var(--s-3)}
+.plate-body p{font-size:14.5px;color:var(--ink-soft);flex:1;line-height:1.6}
+.plate-go{margin-top:var(--s-4);font-family:var(--font-data);font-size:12.5px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink);border-top:1px solid var(--rule-dark);padding-top:var(--s-3);
+  display:flex;justify-content:space-between;align-items:center}
+.plate-go .arr{transition:transform 150ms ease-out}
+.plate:hover .plate-go .arr{transform:translateX(4px)}
+
+/* figure I — ledger rows */
+.fig-row{display:flex;align-items:center;gap:var(--s-2);border-bottom:1px dotted var(--rule-dark);padding-bottom:5px}
+.fig-row i{display:block;height:5px;background:var(--rule-dark)}
+.fig-row .w1{flex:1}
+.fig-row .amt{width:34px;height:8px;background:var(--ink);opacity:.75}
+.fig-row .amt.g{background:var(--green)}
+.fig-row .amt.r{background:var(--red)}
+.fig-row .stmp{width:26px;height:10px;border:1.5px solid var(--teal);}
+/* figure II — swatches + Ag */
+.fig-type{display:flex;align-items:center;gap:var(--s-4)}
+.fig-ag{font-family:var(--font-display);font-size:46px;line-height:.9;color:var(--ink)}
+.fig-sw{display:flex;gap:5px}
+.fig-sw span{width:17px;height:34px;border:1.5px solid var(--ink)}
+/* figure III — phase bars */
+.fig-bar{display:flex;align-items:center;gap:var(--s-3);font-family:var(--font-data);font-size:9.5px;letter-spacing:.1em;color:var(--ink-soft)}
+.fig-bar i{display:block;height:9px;background:var(--teal)}
+
+/* ---------- Structural ideas ---------- */
+.traces{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-5)}
+@media(max-width:880px){.traces{grid-template-columns:1fr;gap:var(--s-4)}}
+.trace{background:var(--teal-wash);border:1px solid var(--rule-dark);border-left:4px solid var(--teal);padding:var(--s-4) var(--s-5)}
+.trace-no{font-family:var(--font-data);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-deep)}
+.trace h3{font-size:16.5px;line-height:1.45;margin:var(--s-2) 0 var(--s-3);text-wrap:balance}
+.trace p{font-size:14.5px;line-height:1.6}
+.trace code{font-family:var(--font-data);font-size:13px;background:var(--paper);padding:0 2px;border-bottom:1px solid var(--rule-dark);overflow-wrap:anywhere}
+.trace .cite{margin-top:var(--s-3);padding-top:var(--s-2);border-top:1px dotted var(--rule-dark);
+  font-family:var(--font-data);font-size:11.5px;letter-spacing:.02em;color:var(--ink-soft);word-break:break-word}
+
+/* ---------- Honest note ---------- */
+.note{position:relative}
+.note h3{font-family:var(--font-display);font-weight:400;font-size:25px;margin-bottom:var(--s-4);padding-right:130px}
+.note-split{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:var(--s-6)}
+@media(max-width:880px){.note-split{grid-template-columns:1fr;gap:var(--s-5)}}
+.note p{font-size:15.5px}
+.note p.small{font-size:14.5px;color:var(--ink-soft)}
+.not-built{align-self:start;background:var(--paper);border:1px solid var(--rule-dark);padding:var(--s-3) var(--s-4)}
+.not-built .spec-title{border-bottom:1px solid var(--ink);margin-bottom:0}
+.stamp{display:inline-block;font-family:var(--font-data);font-size:11.5px;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;border:2px solid var(--amber-text);color:var(--amber-text);background:var(--amber-wash);padding:4px 8px}
+.note .stamp{position:absolute;top:var(--s-5);right:var(--s-5);transform:rotate(-2deg)}
+@media(max-width:640px){.note .stamp{position:static;transform:rotate(-2deg);margin-bottom:var(--s-3)}.note h3{padding-right:0}}
+
+/* ---------- Footer ---------- */
+.colophon{border-top:3px double var(--ink);padding:var(--s-5) 0 var(--s-7)}
+.colophon-inner{display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--s-3);
+  font-family:var(--font-data);font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+@media(max-width:640px){.colophon-inner{flex-direction:column;gap:var(--s-2)}}
+
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="cover">
+  <div class="container">
+    <p class="cover-meta"><span>Est. 2026 · Autonomous bookkeeping</span><span>Form K-00 · Rev 08/26</span></p>
+
+    <div class="nameplate">
+      <div class="brand-mark" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="currentColor" d="M4 12h40v2l-12 4-8 5-8-5-12-4z"/><rect fill="currentColor" x="4" y="21" width="14" height="3"/><rect fill="currentColor" x="30" y="21" width="14" height="3"/><rect fill="currentColor" x="4" y="27" width="40" height="3"/><rect fill="currentColor" x="4" y="33" width="40" height="3"/></svg></div>
+      <h1 class="wordmark"><span>KEEL</span></h1>
+      <p class="tagline">Keeps the books · Shows its work</p>
+    </div>
+
+    <p class="cover-band"><span>An autonomous bookkeeping agent</span><span>Design system · Spec · Two builds</span></p>
+
+    <div class="stat-strip">
+      <div class="stat">
+        <span class="kicker">Builds</span>
+        <p class="stat-value">2</p>
+        <p class="stat-note">One stylesheet</p>
+      </div>
+      <div class="stat">
+        <span class="kicker">Pages each</span>
+        <p class="stat-value">12</p>
+        <p class="stat-note">Matched one for one</p>
+      </div>
+      <div class="stat">
+        <span class="kicker">npm dependencies</span>
+        <p class="stat-value">0</p>
+        <p class="stat-note">Node 24 · SQLite in core</p>
+      </div>
+      <div class="stat">
+        <span class="kicker">Client-side JS</span>
+        <p class="stat-value">0</p>
+        <p class="stat-note">Native elements only</p>
+      </div>
+      <div class="stat">
+        <span class="kicker">Server tests</span>
+        <p class="stat-value">61</p>
+        <p class="stat-note">Passing · no install</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="container">
+
+  <!-- THE THESIS -->
+  <section class="section" aria-labelledby="h-thesis">
+    <div class="section-head">
+      <h2 id="h-thesis">The project</h2>
+      <span class="kicker">Small business · bookkeeping · trust</span>
+    </div>
+    <div class="split">
+      <div class="lede">
+        <h3>The hard problem is not bookkeeping. It is how much of your money you let software touch.</h3>
+        <p>Keel does the repetitive bookkeeping on its own, stops for anything high-stakes or ambiguous,
+        and writes down why it did either. Every screen answers one of three questions: what did you do
+        without me, what do you need from me, what are you allowed to do.</p>
+        <p>It was designed from a functional spec in which every requirement is marked <strong>Tested</strong>,
+        <strong>Intent</strong> or <strong>Hypothesis</strong>, so the guesses are labelled as guesses rather than
+        dressed up as findings. The visual system, &ldquo;The Passbook&rdquo;, borrows from the financial artifacts people
+        already trust: the bank passbook, the ruled ledger, the typewritten statement, the rubber stamp.
+        Paper is the most legible metaphor for a record that cannot be quietly rewritten.</p>
+        <p class="small">Two builds came out of it. A twelve-page static design reference holding one
+        hand-authored scenario, and a working server that renders the same components from SQLite. They share
+        exactly one artifact, <span class="num">app/style.css</span>, which the server reads off disk and serves
+        verbatim. There is no second stylesheet and no build step between them.</p>
+      </div>
+      <div class="card spec">
+        <p class="spec-title">Particulars</p>
+        <dl>
+          <div class="spec-row"><dt>Type</dt><dd>Design system + build</dd></div>
+          <div class="spec-row"><dt>Domain</dt><dd>Small-business finance</dd></div>
+          <div class="spec-row"><dt>Identity</dt><dd>The Passbook</dd></div>
+          <div class="spec-row"><dt>Display</dt><dd>Abril Fatface</dd></div>
+          <div class="spec-row"><dt>Body</dt><dd>Merriweather</dd></div>
+          <div class="spec-row"><dt>Data</dt><dd>Courier Prime</dd></div>
+          <div class="spec-row"><dt>Paper</dt><dd>#F6EFE0</dd></div>
+          <div class="spec-row"><dt>Ink</dt><dd>#2B2416</dd></div>
+          <div class="spec-row"><dt>Teal</dt><dd>#3E6E70</dd></div>
+          <div class="spec-row"><dt>Server</dt><dd>Node 24 · SQLite</dd></div>
+          <div class="spec-row"><dt>Mode</dt><dd>Light only</dd></div>
+          <div class="spec-row"><dt>Corners</dt><dd>Square, all of them</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- THREE WAYS IN -->
+  <nav class="section" aria-labelledby="h-ways">
+    <div class="section-head">
+      <h2 id="h-ways">Three ways in</h2>
+      <span class="kicker">The app · the system · the plan</span>
+    </div>
+    <div class="plates">
+
+      <a class="plate" href="app.html">
+        <div class="plate-fig" aria-hidden="true">
+          <span class="fig-row"><i class="w1"></i><i class="stmp"></i><i class="amt r"></i></span>
+          <span class="fig-row"><i class="w1"></i><i class="stmp"></i><i class="amt g"></i></span>
+          <span class="fig-row"><i class="w1"></i><i class="stmp"></i><i class="amt"></i></span>
+          <span class="fig-row" style="border-bottom:3px double var(--ink)"><i class="w1"></i><i class="stmp"></i><i class="amt g"></i></span>
+        </div>
+        <div class="plate-body">
+          <span class="plate-no">Plate I · The reference build</span>
+          <h3>The app</h3>
+          <p>Twelve pages of the ledger: Overview, Approvals, Activity, Transactions, Invoices, Bills,
+          Forecast, Autonomy and the rest. One hand-authored scenario, frozen so the design can be read
+          without running anything.</p>
+          <span class="plate-go">Open <span class="arr">→</span></span>
+        </div>
+      </a>
+
+      <a class="plate" href="design-system.html">
+        <div class="plate-fig" aria-hidden="true">
+          <span class="fig-type">
+            <span class="fig-ag">Ag</span>
+            <span class="fig-sw">
+              <span style="background:#F6EFE0"></span>
+              <span style="background:#2B2416"></span>
+              <span style="background:#3E6E70"></span>
+              <span style="background:#3D6B47"></span>
+              <span style="background:#9E3B2F"></span>
+              <span style="background:#F3E3BC"></span>
+            </span>
+          </span>
+        </div>
+        <div class="plate-body">
+          <span class="plate-no">Plate II · Foundations</span>
+          <h3>Design system</h3>
+          <p>The mark, the paper-and-ink palette, three typefaces, stamps, double rules, the confidence
+          meter that never appears without its number, and the anti-patterns that keep the retro classic
+          instead of kitsch.</p>
+          <span class="plate-go">Open <span class="arr">→</span></span>
+        </div>
+      </a>
+
+      <a class="plate" href="build-plan.html">
+        <div class="plate-fig" aria-hidden="true">
+          <span class="fig-bar"><span>P0</span><i style="width:88%"></i></span>
+          <span class="fig-bar"><span>P1</span><i style="width:70%"></i></span>
+          <span class="fig-bar"><span>P2</span><i style="width:52%"></i></span>
+          <span class="fig-bar"><span>P3</span><i style="width:34%"></i></span>
+        </div>
+        <div class="plate-body">
+          <span class="plate-no">Plate III · The plan</span>
+          <h3>Build plan</h3>
+          <p>Phases, the screen-by-screen spec traced back to requirement numbers, why there are two builds
+          that are not copies of each other, and the one place the build knowingly departs from the spec,
+          written down rather than quietly done.</p>
+          <span class="plate-go">Open <span class="arr">→</span></span>
+        </div>
+      </a>
+
+    </div>
+  </nav>
+
+  <!-- STRUCTURAL IDEAS -->
+  <section class="section" aria-labelledby="h-structure">
+    <div class="section-head">
+      <h2 id="h-structure">Three things the code enforces</h2>
+      <span class="kicker">Not promises · constraints</span>
+    </div>
+    <div class="traces">
+
+      <article class="trace">
+        <p class="trace-no">No. 01</p>
+        <h3>Append-only is a database property, not a promise.</h3>
+        <p>The <code>events</code> table carries <code>BEFORE UPDATE</code> and <code>BEFORE DELETE</code>
+        triggers that call <code>RAISE(ABORT)</code>, so no code path, accidental or deliberate, can rewrite
+        history. A correction is a new row pointing at the one it supersedes, and a test re-reads the
+        superseded row to prove it is untouched.</p>
+        <p class="cite">server/src/store/eventStore.ts</p>
+      </article>
+
+      <article class="trace">
+        <p class="trace-no">No. 02</p>
+        <h3>&ldquo;No silent actions&rdquo; is a NOT NULL constraint.</h3>
+        <p>Every event requires a human-readable reason, written into the schema as
+        <code>reason TEXT NOT NULL CHECK (length(trim(reason)) &gt; 0)</code> rather than left to the code
+        above it. An action with no stated reason cannot be recorded, so it cannot happen. The spec calls
+        explainability non-negotiable; this is what non-negotiable looks like in a table definition.</p>
+        <p class="cite">server/src/store/eventStore.ts</p>
+      </article>
+
+      <article class="trace">
+        <p class="trace-no">No. 03</p>
+        <h3>The locked rails are not settings.</h3>
+        <p>First payment to a new vendor, and anything touching disputes or anomalies, always stop for a
+        human. They are constants in the rules engine, checked before configuration is read. The tests set
+        every dial to its most permissive legal value and assert the rails hold; an auto-pay ceiling POSTed
+        past the UI still clamps to <span class="num">$2,000</span>.</p>
+        <p class="cite">server/src/engine/rules.ts</p>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- HONEST NOTE -->
+  <section class="section" aria-labelledby="h-note">
+    <div class="section-head">
+      <h2 id="h-note">A note on what this is</h2>
+      <span class="kicker">Nothing hidden</span>
+    </div>
+    <div class="card note">
+      <span class="stamp">Prototype</span>
+      <h3>A design and functional prototype, on mock data.</h3>
+      <div class="note-split">
+        <div>
+          <p>Nothing here touches a real bank account, and none of it is production-hardened. Both builds
+          run on seeded books. Wiring a real aggregator needs a commercial account and a compliance review,
+          so the bank adapter is a stub that throws with an explanation rather than a demo that pretends.
+          Whether a stated 90% confidence really means 90% accuracy can only be settled by real outcomes
+          over real time, so the spec states it as a hypothesis and the build leaves it unmeasured.</p>
+          <p class="small">The static pages and the server also disagree about their numbers, on purpose.
+          One freezes a hand-authored scenario so the design can be read cold. The other computes everything
+          from live data and moves as you use it. That difference is documented, not reconciled.</p>
+        </div>
+        <div class="not-built">
+          <p class="spec-title">Deliberately not built</p>
+          <dl>
+            <div class="spec-row"><dt>Bank feed</dt><dd>Stub, throws</dd></div>
+            <div class="spec-row"><dt>Outbound email</dt><dd>Local outbox</dd></div>
+            <div class="spec-row"><dt>Calibration</dt><dd>Unmeasured</dd></div>
+            <div class="spec-row"><dt>TLS</dt><dd>None</dd></div>
+            <div class="spec-row"><dt>Client JS</dt><dd>By choice</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="colophon">
+  <div class="container colophon-inner">
+    <span>Form K-00 · Rev 08/26</span>
+    <span>All actions logged · Nothing hidden</span>
+    <span>Product design and build · Praduan Saha</span>
+  </div>
+</footer>
+
+</body>
+</html>

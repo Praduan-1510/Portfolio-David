@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Recurring bills on autopilot, and the payments that always come to you.">
+<title>Keel — Bills & Vendors</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20fill%3D%22%232B2416%22%2F%3E%3Cg%20fill%3D%22%23F6EFE0%22%20transform%3D%22translate(5.5%2C5.5)%20scale(0.77)%22%3E%3Cpath%20d%3D%22M4%2012h40v2l-12%204-8%205-8-5-12-4z%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2221%22%20width%3D%2214%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2221%22%20width%3D%2214%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2227%22%20width%3D%2240%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2233%22%20width%3D%2240%22%20height%3D%223%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="masthead">
+  <div class="container masthead-inner">
+    <p class="masthead-kicker">
+      <span>Est. 2026 · Autonomous Bookkeeping</span>
+      <span class="mk-right">Sunday · August 2, 2026</span>
+    </p>
+    <div class="brand-mark" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="currentColor" d="M4 12h40v2l-12 4-8 5-8-5-12-4z"/><rect fill="currentColor" x="4" y="21" width="14" height="3"/><rect fill="currentColor" x="30" y="21" width="14" height="3"/><rect fill="currentColor" x="4" y="27" width="40" height="3"/><rect fill="currentColor" x="4" y="33" width="40" height="3"/></svg></div>
+    <p class="brand"><a href="app.html">KEEL</a></p>
+    <p class="brand-sub">Keeps the books · Shows its work</p>
+    <nav class="tabs" aria-label="Primary">
+      <a class="tab" href="app.html">Overview</a>
+      <a class="tab" href="approvals.html">Approvals <span class="tab-count">6</span></a>
+      <a class="tab" href="activity.html">Activity</a>
+      <a class="tab" href="transactions.html">Transactions</a>
+      <a class="tab" href="invoices.html">Invoices</a>
+      <a class="tab" href="bills.html" aria-current="page">Bills</a>
+      <a class="tab" href="cashflow.html">Forecast</a>
+      <a class="tab" href="settings.html">Autonomy</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="container">
+
+  <div class="page-head">
+    <p class="kicker">Payables · 8 vendors · 1 first payment pending</p>
+    <h1 class="page-title">What gets paid, and by whom.</h1>
+    <hr class="rule">
+    <p class="page-lede">Established, predictable bills under your <span class="num">$500</span> ceiling pay themselves, on schedule and on the record. Anything new, large, or odd comes to you first.</p>
+  </div>
+
+  <section class="section">
+    <div class="stat-strip">
+      <div class="stat">
+        <span class="kicker">Auto-paid in July</span>
+        <p class="stat-value"><span class="num">$1,462</span></p>
+        <p class="stat-note"><span class="num">9</span> bills · all under ceiling</p>
+      </div>
+      <div class="stat">
+        <span class="kicker">Auto-pay ceiling</span>
+        <p class="stat-value"><span class="num">$500</span></p>
+        <p class="stat-note">yours to set, up to <span class="num">$2,000</span></p>
+      </div>
+      <div class="stat">
+        <span class="kicker">New vendor waiting</span>
+        <p class="stat-value"><span class="num">$12,500</span></p>
+        <p class="stat-note">Nordic Roasting · first payment</p>
+      </div>
+      <div class="stat">
+        <span class="kicker">Next manual bill</span>
+        <p class="stat-value"><span class="num">Sep 1</span></p>
+        <p class="stat-note"><span class="num">$2,400</span> rent · always yours</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="banner">Nordic Roasting Equipment&rsquo;s first invoice is waiting in <a href="approvals.html">Approvals</a> &mdash; first payments to new vendors always come to you, whatever the amount.</p>
+
+  <section class="section">
+    <div class="section-head">
+      <h2 class="kicker">Vendor ledger</h2>
+      <span class="kicker"><span class="num">8</span> on record · <span class="num">4</span> auto-payable</span>
+    </div>
+
+    <div class="card">
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Recurring vendors table, scrollable">
+        <table class="ledger">
+          <caption class="kicker">Recurring vendors on record</caption>
+          <thead>
+            <tr>
+              <th scope="col">Vendor</th>
+              <th scope="col">Cadence</th>
+              <th scope="col" class="col-amount">Typical amount</th>
+              <th scope="col" class="col-amount">On record</th>
+              <th scope="col">Last paid</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Cascade Utilities</strong>
+                <div class="prose-note">Paid this morning &mdash; <span class="num">8th</span> consecutive, within <span class="num">2%</span> of pattern.</div>
+              </td>
+              <td>Monthly</td>
+              <td class="num"><span class="num">≈$187</span></td>
+              <td class="num"><span class="num">8</span></td>
+              <td><span class="num">Aug 2</span> · <span class="num amount-debit">−$187.20</span></td>
+              <td><span class="stamp stamp-auto">Auto-payable</span></td>
+            </tr>
+            <tr>
+              <td><strong>Petrichor Web Services</strong></td>
+              <td>Monthly</td>
+              <td class="num"><span class="num">$240.00</span></td>
+              <td class="num"><span class="num">11</span></td>
+              <td><span class="num">Jul 28</span> · <span class="num amount-debit">−$240.00</span></td>
+              <td><span class="stamp stamp-auto">Auto-payable</span></td>
+            </tr>
+            <tr>
+              <td><strong>Meridian Insurance</strong></td>
+              <td>Quarterly</td>
+              <td class="num"><span class="num">$410.00</span></td>
+              <td class="num"><span class="num">6</span></td>
+              <td><span class="num">Aug 1</span> · <span class="num amount-debit">−$410.00</span></td>
+              <td><span class="stamp stamp-auto">Auto-payable</span></td>
+            </tr>
+            <tr>
+              <td><strong>Blue Bottle Wholesale</strong></td>
+              <td>About every two weeks</td>
+              <td class="num"><span class="num">≈$310</span></td>
+              <td class="num"><span class="num">14</span></td>
+              <td><span class="num">Aug 2</span> · <span class="num amount-debit">−$312.40</span></td>
+              <td><span class="stamp stamp-auto">Auto-payable</span></td>
+            </tr>
+            <tr>
+              <td><strong>Peak Courier</strong>
+                <div class="prose-note">A <span class="num">Jul 22</span> charge of <span class="num">$142</span> ran <span class="num">+49%</span> above pattern &mdash; held, then approved by you <span class="num">Jul 23</span>.</div>
+              </td>
+              <td>Monthly</td>
+              <td class="num"><span class="num">≈$95</span></td>
+              <td class="num"><span class="num">7</span></td>
+              <td><span class="num">Jul 29</span> · <span class="num amount-debit">−$95.00</span></td>
+              <td><span class="stamp stamp-flag">Watch</span></td>
+            </tr>
+            <tr>
+              <td><strong>Harbor Street Studio</strong>
+                <div class="prose-note">Rent &mdash; above even the <span class="num">$2,000</span> ceiling maximum. Next due <span class="num">Sep 1</span>.</div>
+              </td>
+              <td>Monthly</td>
+              <td class="num"><span class="num">$2,400.00</span></td>
+              <td class="num"><span class="num">12</span></td>
+              <td><span class="num">Jul 30</span> · <span class="num amount-debit">−$2,400.00</span></td>
+              <td><span class="stamp stamp-locked">Always manual</span></td>
+            </tr>
+            <tr>
+              <td><strong>Roastery Supply Co.</strong>
+                <div class="prose-note">Charged twice on <span class="num">Jul 30</span> &mdash; the pair is held in <a href="approvals.html">Approvals</a> as a possible duplicate.</div>
+              </td>
+              <td>Irregular</td>
+              <td class="num"><span class="num">≈$890</span></td>
+              <td class="num"><span class="num">5</span></td>
+              <td><span class="num">&mdash;</span></td>
+              <td><span class="stamp stamp-approval">In Approvals</span></td>
+            </tr>
+            <tr>
+              <td><strong>Nordic Roasting Equipment</strong>
+                <div class="prose-note">First invoice <span class="num">#NR-1181</span>, due <span class="num">Aug 8</span> &mdash; waiting in <a href="approvals.html">Approvals</a>.</div>
+              </td>
+              <td>&mdash;</td>
+              <td class="num"><span class="num">$12,500.00</span></td>
+              <td class="num"><span class="num">0</span></td>
+              <td><span class="num">&mdash;</span></td>
+              <td><span class="stamp stamp-approval">New vendor</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2 class="kicker">How auto-pay decides</h2>
+      <span class="kicker">Rails, in plain language</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>The auto-pay rules</h3>
+        <p class="mb-4">Four rules stand between your account and any bill. All four must clear before a payment goes out without you.</p>
+        <dl class="deflist">
+          <dt>Pattern</dt>
+          <dd>At least two prior matching charges from the same vendor before a bill is auto-payable.</dd>
+          <dt>Ceiling</dt>
+          <dd><span class="num">$500</span> per bill by default &mdash; never above your setting.</dd>
+          <dt>Deviation</dt>
+          <dd>A charge more than <span class="num">15%</span> off its history is treated as a brand-new decision, whatever the amount.</dd>
+          <dt>First payments</dt>
+          <dd>A vendor&rsquo;s first payment is always yours &mdash; a permanent rail, not a setting.</dd>
+        </dl>
+        <p class="mt-4"><a class="link-more" href="settings.html">Set your ceiling in Autonomy</a></p>
+      </div>
+
+      <div class="card">
+        <h3>A recent catch</h3>
+        <div class="trace">
+          <span class="trace-label">From the record</span>
+          <p>On <span class="num">Jul 22</span>, Peak Courier charged <span class="num">$142</span> against a pattern of about <span class="num">$95</span> &mdash; a swing of <span class="num">+49%</span>. Keel held it as a new decision instead of auto-paying. You approved it on <span class="num">Jul 23</span>, and the exception is on file in the <a href="activity.html">Activity log</a>.</p>
+        </div>
+        <p class="prose-note">The deviation rule, doing its job: nothing odd goes out quietly.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="prose-note">A note on scope: Keel never makes net-new one-off outbound payments &mdash; only recurring bills you&rsquo;ve established, under the rules you set in <a href="settings.html">Autonomy</a>.</p>
+
+</main>
+
+<footer class="colophon">
+  <div class="container colophon-inner">
+    <span>Form K-08 · Rev 08/26</span>
+    <span>All actions logged · Nothing hidden</span>
+    <span>Keel Ledger Systems · <a href="design-system.html">Styleguide</a></span>
+  </div>
+</footer>
+</body>
+</html>

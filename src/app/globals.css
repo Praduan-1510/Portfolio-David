@@ -221,6 +221,73 @@
   }
 
   /*
+   * Reel board, portrait layout (below lg): the broadcast lower-third.
+   *
+   * Below lg the film runs FULL-BLEED behind the board, so legibility here is
+   * not a token question: it depends on whatever pixels the frame happens to put
+   * behind each line, and the veil has already lifted to 0 by the time the rows
+   * arrive. The film's own reading scrim is anchored to the STAGE (a fixed share
+   * of the viewport), while the type is anchored to the board, so its strong
+   * end pooled in the empty space *below* the rows while the eyebrow, labels and
+   * subline rode the brightest part of the portrait. Measured worst cases:
+   * "Status · Live" 1.04:1, the subline 1.96:1, the headline 1.88:1.
+   *
+   * Two moves, and only the greys needed help: the white row VALUES already
+   * clear AA over the film at 5–14:1:
+   *
+   * 1. A well anchored to the BOARD rather than the viewport, so it covers the
+   *    type wherever it lands: however the values wrap, whether the headline
+   *    block is present, at any stage height. It bleeds past the container's
+   *    gutters (50% - 50vw, the .cs-bleed trick) and fades in above the
+   *    headline, so the portrait stays a bright poster down to that point and
+   *    then grades away: the lower-third of live broadcast, which is exactly
+   *    the device for legible type over moving footage. It stops at 92%, not
+   *    solid, so the film still reads faintly THROUGH the board.
+   * 2. --muted is remapped brighter for this context only. Remapping the
+   *    semantic token (rather than swapping classes on six elements) is how the
+   *    rest of the system handles a context shift, and it lifts the eyebrow,
+   *    row labels and subline together.
+   *
+   * Both are scoped to the motion-safe portrait layout. At lg+ the board rides
+   * the solid left panel and needs neither; under reduced motion the board sits
+   * in normal flow BELOW the poster, over --bg, and needs neither.
+   */
+  @media (prefers-reduced-motion: no-preference) and (max-width: 1023px) {
+    .reel-board {
+      /* Contain the well's negative z-index: `position: relative` alone does
+         not create a stacking context, so without this the ::before would drop
+         behind the film layer instead of sitting between film and type. */
+      isolation: isolate;
+      --muted: color-mix(in srgb, var(--fg) 58%, var(--gray-400));
+    }
+    .reel-board::before {
+      content: "";
+      position: absolute;
+      top: -5rem; /* the fade-in zone, entirely above the eyebrow */
+      bottom: -1px; /* meet the stage's bottom edge, no seam */
+      left: calc(50% - 50vw);
+      right: calc(50% - 50vw);
+      z-index: -1;
+      pointer-events: none;
+      /* The ramp is in ABSOLUTE lengths, not percentages: the board's height
+         changes with the viewport and with how the row values wrap, and a
+         percentage ramp would slide the "safe" band off the first line of type
+         whenever it did. Anchoring the fade to rem keeps 80% coverage landing on
+         the eyebrow at every size. It settles at 93%, never solid, so the film
+         still reads faintly through the board. */
+      background: linear-gradient(
+        to bottom,
+        transparent 0,
+        color-mix(in srgb, var(--bg) 20%, transparent) 1.75rem,
+        color-mix(in srgb, var(--bg) 50%, transparent) 3.25rem,
+        color-mix(in srgb, var(--bg) 78%, transparent) 5rem,
+        color-mix(in srgb, var(--bg) 85%, transparent) 8rem,
+        color-mix(in srgb, var(--bg) 88%, transparent) 100%
+      );
+    }
+  }
+
+  /*
    * Spectrum text accent — the one place a colour gradient is allowed to touch
    * type. An earned emphasis on the hero tagline's closing phrase ("unmistakably
    * yours"): the site's signature violet→blue, clipped to the glyphs. Opacity is

@@ -372,7 +372,11 @@ export function CinematicReel() {
             centered Container makes the w-1/2 wrapper end exactly at the seam,
             and pr-space-7 matches the hero column's inset off it. */}
         <Container className="relative py-space-7 motion-safe:absolute motion-safe:inset-x-0 motion-safe:bottom-0 motion-safe:py-0 motion-safe:pb-space-7 short-land:pb-space-4">
-          <div className="motion-safe:lg:w-1/2 motion-safe:lg:pr-space-7">
+          {/* `.reel-board` carries the portrait layout's lower-third well and its
+              brighter --muted (globals.css @layer components). Both are scoped
+              there to the motion-safe sub-lg case, so this class is inert at lg+
+              and under reduced motion; the board needs no scrim in either. */}
+          <div className="reel-board relative motion-safe:lg:w-1/2 motion-safe:lg:pr-space-7">
             {/* Board headline for every context that ISN'T the lg+ motion split
                 — mobile, narrow desktop windows, and reduced motion. The split
                 shows its own absolute copy up in the left panel (above); this

@@ -2,7 +2,7 @@
  * Shared base for all coded mockup screens. Each screen is a standalone HTML
  * file laid out at exact device CSS pixels and rendered headlessly at DPR 2
  * (scripts/render-mockups/render.mjs) to overwrite the PNG the site already
- * consumes. The page background stays transparent — the .screen container owns
+ * consumes. The page background stays transparent: the .screen container owns
  * the app background and the baked rounded-corner mask, exactly like the
  * originals (their corners are alpha-transparent).
  */

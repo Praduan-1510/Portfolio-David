@@ -8,13 +8,13 @@ import { displayTitle } from "@/lib/utils/typography";
 import type { ProjectMeta } from "@/types/project";
 
 /*
- * /work as a departure board — the split-flap signature writ large, and the
+ * /work as a departure board: the split-flap signature writ large, and the
  * deliberate OPPOSITE of the home page's showcase cards (dense information
  * table vs. big media), so the index adds a view instead of duplicating home.
  *
  * Each project is one full-width board row: spectrum ordinal · mono-caps title
  * that flutters on row hover (FlapText, restrained flips) · kind · year · a
- * LIVE/CONCEPT status chip — and a "remarks" line (the frontmatter indexNote,
+ * LIVE/CONCEPT status chip, and a "remarks" line (the frontmatter indexNote,
  * a different framing from the home summary). Hovering or focusing a row
  * crossfades its cover into the sticky preview stage on the right, washed in
  * that project's accent ember.
@@ -91,7 +91,7 @@ export function FlightBoard({ projects }: { projects: ProjectMeta[] }) {
                       {live ? "Live" : "Concept"}
                     </span>
                   </div>
-                  {/* Remarks — the indexNote framing (NOT the home summary). */}
+                  {/* Remarks: the indexNote framing (NOT the home summary). */}
                   <p className="mt-space-3 max-w-[52ch] pl-[calc(2ch+1rem)] font-sans text-body normal-case text-muted sm:pl-[calc(2ch+1.5rem)]">
                     {project.indexNote ?? project.summary}
                   </p>
@@ -114,7 +114,7 @@ export function FlightBoard({ projects }: { projects: ProjectMeta[] }) {
           })}
         </StaggerGroup>
 
-        {/* ── Preview stage — sticky, crossfades to the active row's cover ── */}
+        {/* ── Preview stage: sticky, crossfades to the active row's cover ── */}
         <div className="sticky top-space-9">
           <div
             className="relative isolate aspect-[4/3.4] overflow-hidden rounded-[3px] border border-line bg-bg"
@@ -171,7 +171,7 @@ export function FlightBoard({ projects }: { projects: ProjectMeta[] }) {
             />
           </div>
           <p className="mt-space-3 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
-            {String(active + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")} —{" "}
+            {String(active + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}:{" "}
             {displayTitle(projects[active]?.title ?? "")}
           </p>
         </div>

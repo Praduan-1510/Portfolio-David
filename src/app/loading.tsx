@@ -3,7 +3,7 @@ import { Container } from "@/components/primitives";
 /*
  * Root loading fallback (DESIGN_GUIDELINES.md §11 "loading is designed"). Quiet
  * by design: a mono "Loading" label + a few skeleton bars on the page's
- * vertical rhythm — never a spinner. Shown during navigation / Suspense.
+ * vertical rhythm, never a spinner. Shown during navigation / Suspense.
  */
 export default function Loading() {
   return (

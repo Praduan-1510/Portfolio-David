@@ -14,11 +14,11 @@ import { useReducedMotion, prefersReducedMotion } from "@/hooks/useReducedMotion
 
 /*
  * Kinetic typography (DESIGN_GUIDELINES.md §5 "type as motion" / §7). Headlines
- * reveal by line, word, or character behind a clip mask — the direct fix for
+ * reveal by line, word, or character behind a clip mask: the direct fix for
  * "text-heavy". Wraps GSAP SplitText (free) with autoSplit (re-splits on font
  * load + resize) and full cleanup.
  *
- * Before JS and under reduced motion it renders plain, fully-readable text — no
+ * Before JS and under reduced motion it renders plain, fully-readable text, no
  * split, nothing hidden (§10). Reserve `chars` for short, high-impact lines;
  * prefer `lines`/`words` for paragraphs so reading is never harder.
  */

@@ -8,7 +8,7 @@ import { easings } from "./easings";
  * Central GSAP setup. Registers the (now free) plugins once and builds a
  * CustomEase for each named curve from lib/motion/easings, so GSAP animations
  * use the EXACT same cubic-beziers as the CSS variables. Idempotent and a
- * no-op on the server — call registerGsap() at the top of any client effect
+ * no-op on the server: call registerGsap() at the top of any client effect
  * before creating tweens.
  *
  * cubic-bezier(x1,y1,x2,y2)  ->  CustomEase path "M0,0 C x1,y1 x2,y2 1,1".

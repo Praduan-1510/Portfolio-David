@@ -7,7 +7,7 @@ import { HeroWordmark } from "@/components/sections/HeroWordmark";
 import { HeroFlow } from "@/components/sections/HeroFlow";
 
 /*
- * Home hero — the INSTRUMENT hero. No shader wallpaper, no centered template:
+ * Home hero: the INSTRUMENT hero. No shader wallpaper, no centered template:
  * a type-led composition in the site's own departure-board / instrument
  * language (DESIGN_GUIDELINES §3 dark base, §7 motion).
  *
@@ -46,7 +46,7 @@ export function Hero() {
       aria-label="Introduction"
       className="relative isolate z-10 flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden text-fg [@media(max-height:600px)]:min-h-0"
     >
-      {/* Backdrop — blueprint dot grid (the case-hero motif language) under one
+      {/* Backdrop: blueprint dot grid (the case-hero motif language) under one
           quiet ember. Both -z, both decorative; no WebGL on the LCP path.
           At lg+ (motion-safe) the WHOLE atmosphere set (grid + flow + grain)
           is hidden here and lives on the reel's LEFT PANEL instead: it must
@@ -67,26 +67,26 @@ export function Hero() {
       />
       <HeroFlow className="motion-safe:lg:hidden" />
 
-      {/* Film grain — above the ember, below the content. */}
+      {/* Film grain: above the ember, below the content. */}
       <AnimatedNoise opacity={0.04} className="z-[1] motion-safe:lg:hidden" />
 
       {/* (The old bottom hand-off scrim is gone: the cinematic reel's film now
-          runs continuously beneath this section and past its bottom edge — a
+          runs continuously beneath this section and past its bottom edge: a
           fade-to-bg band here would cut a visible seam across the frames.) */}
 
       {/* Title-card composition: the top row pins to the top corners (framing
           the film's subject), a flexible spacer protects the face in the upper
-          half, and the wordmark + supporting rows anchor to the lower third —
+          half, and the wordmark + supporting rows anchor to the lower third:
           over the subject's dark jacket and the reel's bottom scrim, where
           white type actually reads. */}
       <Container className="relative z-10 flex flex-1 py-space-7 [@media(max-height:600px)]:py-space-5">
         {/* Left column (lg+): everything the hero says lives left of the 50vw
-            seam — the film owns the right half. Container is centered, so a
+            seam: the film owns the right half. Container is centered, so a
             w-1/2 child ends exactly at the seam; pr-space-7 is the shared
             inset off it (the reel's board uses the same). Below lg this is
             simply the old full-width column. */}
         <div className="flex w-full flex-col justify-between short-land:justify-start motion-safe:lg:w-1/2 motion-safe:lg:pr-space-7">
-        {/* Top row — mono-caps eyebrow left (the one label that used to break
+        {/* Top row: mono-caps eyebrow left (the one label that used to break
             the site's label voice), HUD status readout right (at lg+ its right
             edge sits just off the seam). */}
         <Reveal
@@ -119,20 +119,20 @@ export function Hero() {
           </span>
         </Reveal>
 
-        {/* Lower-third block — wordmark + supporting row travel together so the
+        {/* Lower-third block: wordmark + supporting row travel together so the
             justify-between spacer above them keeps the film's subject clear. */}
         <div className="mt-space-6 short-land:mt-space-4">
           <h1 className="sr-only">
-            Praduan Saha — product designer and front-end designer
+            Praduan Saha: product designer and front-end designer
           </h1>
           <HeroWordmark />
 
-        {/* Supporting row — statement + subhead, then CTAs. Single column at
+        {/* Supporting row: statement + subhead, then CTAs. Single column at
             lg too: the split's ~half-width column can't seat a 26ch heading
             beside two lg buttons (short-land keeps its own two-col shape). */}
         <div className="mt-space-5 grid items-end gap-x-space-9 gap-y-space-5 short-land:mt-space-5 short-land:grid-cols-[minmax(0,1fr)_auto] short-land:items-start short-land:gap-x-space-5 lg:mt-space-6">
           <div className="min-w-0">
-            {/* Tagline — word-by-word rise; the closing phrase carries the one
+            {/* Tagline: word-by-word rise; the closing phrase carries the one
                 sanctioned colour moment (.text-spectrum) and lands last. */}
             <p className="max-w-[26ch] font-display text-heading text-fg">
               <TextReveal
@@ -154,7 +154,7 @@ export function Hero() {
                 {"unmistakably yours."}
               </Reveal>
             </p>
-            {/* Subhead — closed em-dash ("front-end—working") so the dash can
+            {/* Subhead, closed em-dash ("front-end,working") so the dash can
                 never open a line: an NBSP does NOT survive TextReveal's line
                 splitter (SplitText tokenizes on \s+, which matches U+00A0), so
                 the closed dash is the only binding that holds. */}
@@ -165,9 +165,9 @@ export function Hero() {
               delay={SEQ.sub}
               className="mt-space-3 max-w-[48ch] font-sans text-body text-muted lg:mt-space-4 lg:max-w-[58ch] lg:text-body-l"
             >
-              {"I'm Praduan Saha, a product designer who also ships front-end—working since 2019, now inside a B2B AI go-to-market product. I turn complex, data-heavy ideas into clean interfaces and the systems that hold them together."}
+              {"I'm Praduan Saha, a product designer who also ships front-end,working since 2019, now inside a B2B AI go-to-market product. I turn complex, data-heavy ideas into clean interfaces and the systems that hold them together."}
             </TextReveal>
-            {/* The signature — the hand-signed counter-mark to the machine-set
+            {/* The signature: the hand-signed counter-mark to the machine-set
                 split-flap wordmark; writes itself in after the subhead. Sized
                 by font-size (it's real script type now, not a fixed-width SVG). */}
             <Signature

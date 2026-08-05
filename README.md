@@ -1,6 +1,6 @@
 # praduansaha.com
 
-Personal portfolio for Praduan Saha — product designer and front-end developer.
+Personal portfolio for Praduan Saha: product designer and front-end developer.
 A dark, instrument-styled site with a small set of case studies, an about page,
 and a contact page, built as a Next.js App Router application.
 
@@ -8,8 +8,8 @@ and a contact page, built as a Next.js App Router application.
 
 - **Next.js** (App Router) + **React** + **TypeScript**
 - **Tailwind CSS** (with PostCSS / Autoprefixer)
-- **MDX** case studies — `next-mdx-remote` + `gray-matter`, sourced from `src/content/work/`
-- **Motion** — `gsap` + `@gsap/react` for scroll-driven choreography, `motion` (Motion for React) for route/element transitions, `lenis` for smooth scroll
+- **MDX** case studies: `next-mdx-remote` + `gray-matter`, sourced from `src/content/work/`
+- **Motion**: `gsap` + `@gsap/react` for scroll-driven choreography, `motion` (Motion for React) for route/element transitions, `lenis` for smooth scroll
 - **lucide-react** icons, `next/image` for imagery
 
 Node `>=20.9.0`.
@@ -17,10 +17,10 @@ Node `>=20.9.0`.
 ## Notable implementation decisions
 
 - **Per-route Open Graph images.** OG/Twitter cards are generated dynamically per
-  route via `opengraph-image.tsx` / `twitter-image.tsx` — a root card plus a
+  route via `opengraph-image.tsx` / `twitter-image.tsx`: a root card plus a
   per-case-study card at `src/app/work/[slug]/opengraph-image.tsx`.
 - **Status board ("Currently").** The home page carries a live departure-board
-  readout (`CurrentlyBoard`) — current work, what shipped, method, and an
+  readout (`CurrentlyBoard`): current work, what shipped, method, and an
   availability row with a live IST clock. It is choreographed inside a
   scroll-scrubbed cinematic reel (`CinematicReel`).
 - **One shared motion system.** Motion tokens live in `src/lib/motion/` and are

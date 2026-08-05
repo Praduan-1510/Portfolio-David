@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils/cn";
  * Button / CTA. Renders a routed <NextLink>, an external <a>, or a <button>
  * depending on `href`. `variant` sets color, `shape` the radius (sharp
  * instrument default vs. pill), `size` the padding + type step. Hover settles on
- * the `fast` / ease-out-quad tokens — auto-neutralized under reduced motion by
+ * the `fast` / ease-out-quad tokens: auto-neutralized under reduced motion by
  * the global rule in globals.css. Focus styling comes from the global
  * :focus-visible ring.
  */
@@ -16,7 +16,7 @@ export type ButtonSize = "md" | "lg";
 const base =
   "inline-flex items-center justify-center gap-space-2 font-sans font-medium transition duration-fast ease-out-quad";
 
-// One CALM hover language site-wide — no cursor-chase (the magnetic drift was
+// One CALM hover language site-wide: no cursor-chase (the magnetic drift was
 // removed): on hover a button lifts a gentle 2px and gains a SOFT neon glow, the
 // `shadow-neon-soft` token (a low, ringless bloom) rather than the hard 1px ring
 // + wide flare the cards use. Outlined adds the neon border/label; ghost stays a
@@ -29,7 +29,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   secondary:
     "border border-line text-fg hover:border-neon hover:text-neon hover:-translate-y-0.5 hover:shadow-neon-soft active:translate-y-0",
   ghost: "text-fg hover:text-neon",
-  // High-contrast monochrome fill — white-on-dark (ink-on-paper in light).
+  // High-contrast monochrome fill: white-on-dark (ink-on-paper in light).
   invert:
     "bg-fg text-bg hover:-translate-y-0.5 hover:shadow-neon-soft active:translate-y-0",
 };
@@ -65,7 +65,7 @@ export function Button(props: AsButton | AsLink) {
   const { variant = "primary", shape = "sharp", size = "md", className, children } = props;
   // A `download` href points at a FILE in public/, not a route. Routing it
   // through NextLink makes the router prefetch it as an RSC payload, which 404s
-  // on every render of the page (e.g. /pdf/… ?_rsc=…) — so render a plain <a>.
+  // on every render of the page (e.g. /pdf/… ?_rsc=…), so render a plain <a>.
   const isDownload =
     "download" in props && props.download !== undefined && props.download !== false;
   const classes = cn(
@@ -93,7 +93,7 @@ export function Button(props: AsButton | AsLink) {
         ? ((rest as React.AnchorHTMLAttributes<HTMLAnchorElement>).rel ??
           "noopener noreferrer")
         : (rest as React.AnchorHTMLAttributes<HTMLAnchorElement>).rel;
-      // New-tab links need a programmatic cue — the visual ↗ glyph alone isn't
+      // New-tab links need a programmatic cue: the visual ↗ glyph alone isn't
       // announced. Append an sr-only note when the caller opens a new tab.
       const opensNewTab =
         (rest as React.AnchorHTMLAttributes<HTMLAnchorElement>).target === "_blank";

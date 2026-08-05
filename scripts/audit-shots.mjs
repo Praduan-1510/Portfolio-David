@@ -14,7 +14,7 @@ const browser = await puppeteer.launch({
 });
 
 // Clean, fully-composed captures: reduced-motion ON so every reveal is settled
-// and nothing is mid-animation — ideal for judging layout / type / spacing / colour.
+// and nothing is mid-animation: ideal for judging layout / type / spacing / colour.
 async function cap(name, path, vp, { reduced = true, full = true, wait = 700 } = {}) {
   const page = await browser.newPage();
   await page.setViewport(vp);

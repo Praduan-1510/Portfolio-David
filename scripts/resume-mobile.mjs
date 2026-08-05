@@ -1,5 +1,5 @@
 /*
- * Résumé mobile QA — full-page stitching is unreliable on this site (Lenis
+ * Résumé mobile QA: full-page stitching is unreliable on this site (Lenis
  * drives scroll), so capture discrete viewport frames instead and report the
  * real document height.
  *   node scripts/resume-mobile.mjs

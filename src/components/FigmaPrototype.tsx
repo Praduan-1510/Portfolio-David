@@ -10,13 +10,13 @@ const blurFor = (src: string): string | undefined =>
   (blurMap as Record<string, string>)[src];
 
 /*
- * FigmaPrototype — the real Figma prototype, embedded, but not at the cost of
+ * FigmaPrototype: the real Figma prototype, embedded, but not at the cost of
  * the page.
  *
  * WHY IT IS CLICK-TO-LAUNCH. Measured on this route (puppeteer against dev):
  * with the iframe in the markup, the case study fired **197 requests to
  * figma.com, the first at +199ms and the last still arriving at +10.4s**.
- * `loading="lazy"` did not save it — Chrome's lazy threshold for iframes is
+ * `loading="lazy"` did not save it: Chrome's lazy threshold for iframes is
  * generous enough that a below-the-fold embed still begins loading essentially
  * at navigation, so Figma's whole runtime competed with the page's own content
  * on every visit, whether or not the reader ever scrolled to it. Deferring the
@@ -25,7 +25,7 @@ const blurFor = (src: string): string | undefined =>
  * It does NOT make Figma fast, and the UI says so rather than implying an
  * instant demo: insertion to the iframe's load event measures ~1.5s, and the
  * artboard paints seconds after that. So the poster stays on screen UNDER the
- * iframe and the frame cross-fades only once Figma has actually painted —
+ * iframe and the frame cross-fades only once Figma has actually painted:
  * otherwise the reader watches Figma's white loading shell strobe on a
  * near-black page, which reads as a bug.
  *
@@ -34,18 +34,18 @@ const blurFor = (src: string): string | undefined =>
  * own iPhone body, and wrapping that in PhoneFrame would nest a phone inside a
  * phone.
  *
- * URL PARAMS (verified empirically, not assumed — each was loaded and
+ * URL PARAMS (verified empirically, not assumed: each was loaded and
  * screenshotted): `footer=0` removes Figma's chrome bar, which otherwise puts a
  * bright white band across the bottom of the frame advertising the FILE's name
  * ("E-Commerce V1 · Edited 8 months ago") on a study titled Spendee. `theme=dark`
  * keeps its shell from flashing white. The cost is that `footer=0` also removes
- * Figma's own back/forward/restart arrows — so Restart is rebuilt below in our
+ * Figma's own back/forward/restart arrows, so Restart is rebuilt below in our
  * own vocabulary (a key bump remounts the frame at the starting node).
  */
 interface FigmaPrototypeProps {
   /** Figma embed URL (embed.figma.com/proto/…&embed-host=share). */
   embedUrl: string;
-  /** Still of the prototype's first screen — a bare screen render, no device
+  /** Still of the prototype's first screen: a bare screen render, no device
    *  art. Doubles as the backdrop while Figma paints, so it must match the
    *  prototype's starting frame or launching reads as a jump cut. */
   poster: string;
@@ -60,7 +60,7 @@ interface FigmaPrototypeProps {
   /** next/image sizes hint for the poster. */
   sizes?: string;
   /** Max width of the frame as a raw CSS length. Applied inline so a caller can
-   *  always win — `cn` is a plain join, so a className cap wouldn't reliably
+   *  always win: `cn` is a plain join, so a className cap wouldn't reliably
    *  override the default. */
   maxWidth?: string;
   className?: string;
@@ -128,7 +128,7 @@ export function FigmaPrototype({
         {live ? (
           /* No frame of our own once it's live. Figma reserves room inside the
              embed for its nav arrows and letterboxes the artboard to fit, so the
-             phone always renders smaller than the box — inside a bordered shell
+             phone always renders smaller than the box: inside a bordered shell
              that reads as a badly fitted frame. Dropping the shell lets Figma's
              own device art float on the page instead, and the size difference
              reads as the prototype rather than as a mistake. */
@@ -181,8 +181,8 @@ export function FigmaPrototype({
           </div>
         ) : (
           /* The control sits BELOW the phone, not on it. This poster is a full
-             splash screen with content to every edge — its own two buttons are
-             at the bottom — so anything overlaid either veils the work this beat
+             splash screen with content to every edge, its own two buttons are
+             at the bottom, so anything overlaid either veils the work this beat
              exists to show or collides with the design's own controls. Keeping
              the screen untouched and grounding the affordance underneath solves
              both, and the phone lifts with the button on hover so the two still
@@ -198,7 +198,7 @@ export function FigmaPrototype({
 
       <div className="mt-space-5 flex justify-center">
         {live ? (
-          /* Restart — Figma's own arrows go away with footer=0, so the one
+          /* Restart: Figma's own arrows go away with footer=0, so the one
              control a prototype genuinely needs is rebuilt in our vocabulary. */
           <button
             type="button"
@@ -227,7 +227,7 @@ export function FigmaPrototype({
               context for the control, not a label on the design. */}
           {!live && (
             <span className="mt-space-2 block normal-case tracking-normal text-muted opacity-70">
-              Loads on demand — a few seconds to start.
+              Loads on demand: a few seconds to start.
             </span>
           )}
         </figcaption>

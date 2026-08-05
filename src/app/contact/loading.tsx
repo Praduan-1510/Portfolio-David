@@ -1,7 +1,7 @@
 import { Container } from "@/components/primitives";
 
 /*
- * Contact loading skeleton — mirrors src/app/contact/page.tsx: heading + the
+ * Contact loading skeleton: mirrors src/app/contact/page.tsx: heading + the
  * bordered channel rows (Email / LinkedIn / Location), on the page's section
  * rhythm (DESIGN_GUIDELINES §11).
  */
@@ -18,7 +18,7 @@ export default function Loading() {
         {/* Lead bar. */}
         <div className="mt-space-5 h-[1rem] w-[80%] max-w-[var(--measure)] rounded-[2px] bg-surface" />
 
-        {/* Channel rows — bordered, like the real contact list. */}
+        {/* Channel rows: bordered, like the real contact list. */}
         <dl className="mt-space-9 max-w-[var(--measure)]">
           {Array.from({ length: 3 }).map((_, i) => (
             <div

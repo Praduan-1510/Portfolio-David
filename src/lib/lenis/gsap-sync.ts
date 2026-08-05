@@ -7,7 +7,7 @@ import { gsap, ScrollTrigger } from "@/lib/motion/gsap";
  * (ScrollTrigger.update on every scroll). lagSmoothing(0) keeps scrub in lockstep
  * with the scroll position. Returns a cleanup that detaches everything.
  *
- * Golden rule: never run a second smooth-scroll engine — Lenis owns scrolling,
+ * Golden rule: never run a second smooth-scroll engine: Lenis owns scrolling,
  * ScrollTrigger only reads from it.
  */
 export function syncLenisWithGsap(lenis: Lenis): () => void {

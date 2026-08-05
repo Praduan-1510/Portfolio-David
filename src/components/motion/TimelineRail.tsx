@@ -8,12 +8,12 @@ import { useReducedMotion, prefersReducedMotion } from "@/hooks/useReducedMotion
 import { cn } from "@/lib/utils/cn";
 
 /*
- * Timeline rail — the shared "timeline that draws on scroll" beat, used by both
+ * Timeline rail: the shared "timeline that draws on scroll" beat, used by both
  * the About experience list and the résumé ledger. Wraps a group of role entries
  * and draws a vertical hairline down the left edge as the group scrolls in.
  *
  * The line is a transform: scaleY 0→1 from the top (origin top), so it animates on
- * the GPU only — never width/height/top. Reduced motion / no-JS: the line rests at
+ * the GPU only, never width/height/top. Reduced motion / no-JS: the line rests at
  * full height (static rail), so the structure is always present (§10). Decorative →
  * aria-hidden; the static `border-l` fallback is kept off so the two never overlap.
  */

@@ -1,5 +1,5 @@
 /*
- * Résumé content — the single source of truth for the /resume route.
+ * Résumé content: the single source of truth for the /resume route.
  *
  * Every line here is transcribed from the PDF in public/pdf (the file the
  * download button serves), condensed from its Situation/Task/Action/Result
@@ -13,7 +13,7 @@
  * Two deliberate departures from the PDF, both for the web context:
  *   1. The headline title uses site.jobTitle ("Product Designer (Design +
  *      Front-End)") so the site speaks with one voice. Employer titles below
- *      stay verbatim — those are matters of record.
+ *      stay verbatim: those are matters of record.
  *   2. The phone number printed on the PDF is NOT rendered in HTML (scrapeable
  *      on a public page). Contact routes through the site email / LinkedIn.
  */
@@ -24,13 +24,13 @@ export const RESUME_PDF = "/pdf/Praduan_Saha_Resume.pdf";
 /** Human-readable revision stamp shown in the masthead + document footer. */
 export const RESUME_UPDATED = "August 2026";
 
-/** Page count of the PDF — shown as a spec so the download is a known quantity. */
+/** Page count of the PDF: shown as a spec so the download is a known quantity. */
 export const RESUME_PAGES = 2;
 
 export const SUMMARY =
-  "Product designer and front-end designer with 5+ years across instructional design, content development, and user-centric digital experiences. I design intuitive web and mobile interfaces, lead front-end visual overhauls, build scalable design systems, and translate complex ideas — including GTM and data-heavy concepts — into clean, usable work. Hands-on with Figma, wireframing, prototyping, and modern design workflows that serve both the business and the person using it.";
+  "Product designer and front-end designer with 5+ years across instructional design, content development, and user-centric digital experiences. I design intuitive web and mobile interfaces, lead front-end visual overhauls, build scalable design systems, and translate complex ideas, including GTM and data-heavy concepts, into clean, usable work. Hands-on with Figma, wireframing, prototyping, and modern design workflows that serve both the business and the person using it.";
 
-/** Masthead spec strip — four facts, read as an instrument readout. */
+/** Masthead spec strip: four facts, read as an instrument readout. */
 export const SPECS = [
   { label: "Based", value: "Kolkata, IN" },
   { label: "Experience", value: "5+ years" },
@@ -103,7 +103,7 @@ export const EXPERIENCE: Position[] = [
         mode: "Full-time · On-site",
         period: "Feb 2026 – Present",
         bullets: [
-          "Own brand-aligned creative as InsightsTap scales its GTM and AI-focused marketing — marketing visuals, UI layouts, and campaign assets built alongside the marketing, strategy, and product teams — delivering a cohesive visual identity that strengthened brand recognition across GTM touchpoints.",
+          "Own brand-aligned creative as InsightsTap scales its GTM and AI-focused marketing (marketing visuals, UI layouts, and campaign assets built alongside the marketing, strategy, and product teams), delivering a cohesive visual identity that strengthened brand recognition across GTM touchpoints.",
           "Built a quick-iteration workflow in Figma on reusable components and shared style references, cutting creative turnaround time and raising feedback-to-final velocity without losing brand recall.",
         ],
       },
@@ -112,14 +112,14 @@ export const EXPERIENCE: Position[] = [
         mode: "Internship · Remote",
         period: "Sep 2025 – Feb 2026",
         bullets: [
-          "Produced on-brand creative for a B2B SaaS team launching GTM and AI-focused marketing — LinkedIn carousels, ad visuals, banners, pitch decks, and landing-page layouts in Canva and Figma, plus early UI concepts for marketing microsites.",
-          "Delivered 20+ creatives and wireframes that improved visual consistency and readability across GTM assets — earning a full-time conversion.",
+          "Produced on-brand creative for a B2B SaaS team launching GTM and AI-focused marketing: LinkedIn carousels, ad visuals, banners, pitch decks, and landing-page layouts in Canva and Figma, plus early UI concepts for marketing microsites.",
+          "Delivered 20+ creatives and wireframes that improved visual consistency and readability across GTM assets, earning a full-time conversion.",
         ],
       },
     ],
   },
   {
-    // NOT in the PDF — this entry is carried over verbatim from the About
+    // NOT in the PDF; this entry is carried over verbatim from the About
     // timeline, which has listed it since long before this page existed. Without
     // it the résumé shows a silent three-year gap (Sep 2022 → Sep 2025) that
     // About visibly fills, and a reader comparing the two pages can't tell which
@@ -148,7 +148,7 @@ export const EXPERIENCE: Position[] = [
         mode: "Full-time · Remote",
         period: "Nov 2021 – Sep 2022",
         bullets: [
-          "Designed end-to-end digital learning flows for professional certification courses — modular modules, structured navigation, and multimedia — partnering with subject-matter experts to align outcomes to business goals, and launching multiple certification modules that supported higher retention and completion.",
+          "Designed end-to-end digital learning flows for professional certification courses (modular modules, structured navigation, and multimedia), partnering with subject-matter experts to align outcomes to business goals, and launching multiple certification modules that supported higher retention and completion.",
           "Restructured course layouts, hierarchy, and interactive elements against user-centred principles, closing usability gaps that made content easier to scan, navigate, and finish.",
           "Produced and integrated audio, video, and interactive elements to carry course delivery beyond static text.",
         ],
@@ -165,7 +165,7 @@ export const EXPERIENCE: Position[] = [
         mode: "Full-time · Remote",
         period: "Mar 2019 – Sep 2021",
         bullets: [
-          "Created infographics, blog visuals, and marketing assets aligned to user intent, partnering with the SEO team on keyword research and search-friendly content structures — a consistent stream of infographic-led content that improved clarity, brand recall, and on-page engagement.",
+          "Created infographics, blog visuals, and marketing assets aligned to user intent, partnering with the SEO team on keyword research and search-friendly content structures: a consistent stream of infographic-led content that improved clarity, brand recall, and on-page engagement.",
           "Translated dense topics into clear layouts, visual hierarchies, and infographic formats that made complex material readable.",
           "Standardised layouts, typography, and visual treatments across content series, giving marketing content one consistent brand look.",
         ],
@@ -190,7 +190,7 @@ export const PROJECTS: ResumeProject[] = [
     period: "Mar 2026 – Apr 2026",
     href: "/work/insightstap",
     bullets: [
-      "Led the front-end development and visual overhaul, translating dense GTM and intent-signal concepts into a clean, component-based interface — responsive layouts built in Figma and implemented in code against brand guidelines and accessibility standards.",
+      "Led the front-end development and visual overhaul, translating dense GTM and intent-signal concepts into a clean, component-based interface: responsive layouts built in Figma and implemented in code against brand guidelines and accessibility standards.",
       "Built reusable UI components, typography scales, and shared style references, then applied them across key pages so a multi-contributor site kept consistent spacing, hierarchy, and styling.",
       "Partnered with fellow contributors on layout, component structure, and visual direction, iterating quickly on feedback to ship the overhauled site on schedule.",
     ],
@@ -220,13 +220,13 @@ export const CERTIFICATIONS: Certification[] = [
     title: "Claude Code in Action",
     issuer: "Anthropic",
     date: "Jul 2026",
-    note: "Agentic coding workflows — context management, custom workflows, and hooks.",
+    note: "Agentic coding workflows: context management, custom workflows, and hooks.",
   },
   {
     title: "Vibe Coding Fundamentals",
     issuer: "University of Colorado System",
     date: "Jun 2026",
-    note: "Prompt engineering and AI-assisted development — building applications with LLMs in natural language.",
+    note: "Prompt engineering and AI-assisted development: building applications with LLMs in natural language.",
   },
   {
     title: "Graphic Design",
@@ -256,7 +256,7 @@ export const CERTIFICATIONS: Certification[] = [
     title: "Complete Web & Mobile Designer: UI/UX, Figma & More",
     issuer: "Udemy",
     date: "Oct 2025",
-    note: "End-to-end UI/UX for web and mobile — wireframing, prototyping, responsive layouts, modern UI patterns.",
+    note: "End-to-end UI/UX for web and mobile: wireframing, prototyping, responsive layouts, modern UI patterns.",
   },
 ];
 

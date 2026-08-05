@@ -19,32 +19,32 @@ import { ProfileHero } from "./ProfileHero";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Product designer and front-end designer based in Kolkata — creating digital experiences through systematic design thinking and precise execution.",
+    "Product designer and front-end designer based in Kolkata, creating digital experiences through systematic design thinking and precise execution.",
   alternates: { canonical: "/about" },
   openGraph: {
-    title: "About — Praduan Saha",
+    title: "About: Praduan Saha",
     description:
-      "Product designer and front-end designer based in Kolkata — creating digital experiences through systematic design thinking and precise execution.",
+      "Product designer and front-end designer based in Kolkata, creating digital experiences through systematic design thinking and precise execution.",
     // No co-located image here; the root card isn't inherited once this
     // openGraph object is declared, so reference it explicitly.
     images: ["/opengraph-image"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "About — Praduan Saha",
+    title: "About: Praduan Saha",
     description:
-      "Product designer and front-end designer based in Kolkata — creating digital experiences through systematic design thinking and precise execution.",
+      "Product designer and front-end designer based in Kolkata, creating digital experiences through systematic design thinking and precise execution.",
     images: ["/twitter-image"],
   },
 };
 
 const BIO = [
-  "I'm Praduan Saha, a product designer and front-end designer born and raised in Asansol, West Bengal, and now based in Kolkata. Since 2019 I've worked across content development, learning design, and visual and product design — happiest at the point where a messy, complex idea turns into something clear, usable, and good-looking, whether that's a mobile flow, a landing page, or a full brand system.",
-  "My path ran from content and instructional design into graphic and UI/UX design, so I think as much about structure and information as I do about how something looks. I work primarily in Figma — wireframing, prototyping, and building reusable components — and I care about hierarchy, accessibility, and shipping work that actually supports the goal behind it.",
+  "I'm Praduan Saha, a product designer and front-end designer born and raised in Asansol, West Bengal, and now based in Kolkata. Since 2019 I've worked across content development, learning design, and visual and product design: happiest at the point where a messy, complex idea turns into something clear, usable, and good-looking, whether that's a mobile flow, a landing page, or a full brand system.",
+  "My path ran from content and instructional design into graphic and UI/UX design, so I think as much about structure and information as I do about how something looks. I work primarily in Figma (wireframing, prototyping, and building reusable components) and I care about hierarchy, accessibility, and shipping work that actually supports the goal behind it.",
   "I studied English (Honours) at Amity University, Kolkata, which still shapes how I approach design: reading closely, structuring information, and communicating clearly. A creative mindset, a positive outlook, and strong communication are what I lean on to lead work and collaborate well across a team.",
 ];
 
-// Kinetic band — the disciplines, set as a marquee.
+// Kinetic band: the disciplines, set as a marquee.
 const DISCIPLINES = [
   "UI/UX Design",
   "Brand & Identity",
@@ -59,7 +59,7 @@ const DISCIPLINES = [
 const APPROACH = [
   {
     title: "Clarity first.",
-    body: "Make the complex easy to understand and use — structure and hierarchy before decoration.",
+    body: "Make the complex easy to understand and use: structure and hierarchy before decoration.",
   },
   {
     title: "Systems, not one-offs.",
@@ -106,7 +106,7 @@ const EXPERIENCE = [
       {
         title: "Graphic Designer · Internship",
         period: "Remote · Sep 2025 – Feb 2026",
-        body: "Brought visual ideas to life through impactful design and branding, blending artistic vision with strategic thinking. Built on-brand creatives and UI concepts in Figma — carousels, ad visuals, banners, and pitch decks.",
+        body: "Brought visual ideas to life through impactful design and branding, blending artistic vision with strategic thinking. Built on-brand creatives and UI concepts in Figma: carousels, ad visuals, banners, and pitch decks.",
       },
     ],
   },
@@ -126,10 +126,10 @@ const EXPERIENCE = [
     roles: [
       {
         title: "Learning Designer · Full-time",
-        // Sep, not Oct — the résumé PDF is the record of employment dates, and
+        // Sep, not Oct: the résumé PDF is the record of employment dates, and
         // /resume reads from it. Keep the two in step.
         period: "Nov 2021 – Sep 2022",
-        body: "Designed end-to-end digital learning flows for professional certification courses — modular content, clear navigation, and multimedia — alongside subject-matter experts. Restructured course layouts to improve usability and completion.",
+        body: "Designed end-to-end digital learning flows for professional certification courses (modular content, clear navigation, and multimedia) alongside subject-matter experts. Restructured course layouts to improve usability and completion.",
       },
     ],
   },
@@ -139,7 +139,7 @@ const EXPERIENCE = [
       {
         title: "Content Developer · Full-time",
         period: "Remote · Mar 2019 – Sep 2021",
-        body: "Built presentations and content on social-media marketing topics — Facebook, Instagram, and email marketing — and reviewed video content. Standardized layouts and typography across content series for a consistent look.",
+        body: "Built presentations and content on social-media marketing topics (Facebook, Instagram, and email marketing) and reviewed video content. Standardized layouts and typography across content series for a consistent look.",
       },
     ],
   },
@@ -189,7 +189,7 @@ const EDUCATION = [
 const LANGUAGES =
   "English (fluent) · Bengali (fluent) · Hindi (fluent) · French (beginner)";
 
-// Real, content-derived figures — nothing fabricated.
+// Real, content-derived figures, nothing fabricated.
 const STATS = [
   { value: new Date().getFullYear() - 2019, suffix: "", label: "years in design" },
   { value: CAPABILITIES.length, suffix: "", label: "core disciplines" },
@@ -211,7 +211,7 @@ function CapabilityGlyph({ i }: { i: number }) {
     "aria-hidden": true,
   };
   switch (i) {
-    case 0: // UI/UX — a screen with a cursor
+    case 0: // UI/UX: a screen with a cursor
       return (
         <svg {...p}>
           <rect x="5" y="3.5" width="18" height="21" rx="2.5" />
@@ -220,14 +220,14 @@ function CapabilityGlyph({ i }: { i: number }) {
           <path d="M17.5 16.8l4 4-2 .3 1 1.9" />
         </svg>
       );
-    case 1: // Visual & branding — overlapping circle + square
+    case 1: // Visual & branding, overlapping circle + square
       return (
         <svg {...p}>
           <circle cx="11" cy="15" r="6.5" />
           <rect x="12.5" y="6.5" width="9.5" height="9.5" rx="1.5" />
         </svg>
       );
-    case 2: // Systems & a11y — connected nodes
+    case 2: // Systems & a11y: connected nodes
       return (
         <svg {...p}>
           <path d="M8 9.5l11-1.6M19 9l-1.6 9.6M16.5 19.4l-7-1M8.5 16.5l.7-5.6" />
@@ -237,7 +237,7 @@ function CapabilityGlyph({ i }: { i: number }) {
           <circle cx="8.5" cy="18" r="2.3" />
         </svg>
       );
-    default: // Content & multimedia — a play frame + baseline
+    default: // Content & multimedia: a play frame + baseline
       return (
         <svg {...p}>
           <rect x="3.5" y="5.5" width="21" height="13.5" rx="2" />
@@ -312,7 +312,7 @@ export default function About() {
                 </Text>
               ))}
             </StaggerGroup>
-            {/* Portrait — same four-side feather + PortraitFrame dynamics as the
+            {/* Portrait: same four-side feather + PortraitFrame dynamics as the
                 home teaser (clip-wipe entrance + scroll breath + desktop pointer
                 tilt), floating beside the bio with no hard border. */}
             <PortraitFrame
@@ -408,7 +408,7 @@ export default function About() {
             </div>
           ))}
         </StaggerGroup>
-        {/* Toolchain — the logo set that used to run as a marquee on home,
+        {/* Toolchain: the logo set that used to run as a marquee on home,
             grounded here as a quiet static grid where a tools inventory is
             defensible content rather than a first-scroll trope. */}
         <Reveal className="mt-space-8">
@@ -551,7 +551,7 @@ export default function About() {
                 View work
               </Button>
             </Magnetic>
-            {/* The full record — everything this page summarises, set as a
+            {/* The full record: everything this page summarises, set as a
                 document and downloadable as a PDF. */}
             <Magnetic className="inline-block">
               <Button href="/resume" variant="ghost">

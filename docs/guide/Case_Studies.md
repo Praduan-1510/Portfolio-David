@@ -16,7 +16,7 @@ like a screenshot dump:
    → here's what I shipped → here's what changed. If a section doesn't advance
    that arc, cut it.
 2. **Show the thinking, not just the pixels.** Anyone can post final screens.
-   What separates strong portfolios is visible reasoning — the messy middle,
+   What separates strong portfolios is visible reasoning: the messy middle,
    the tradeoffs, the decisions you *didn't* make and why.
 3. **Lead with impact, prove it with process.** State the outcome early
    (in the overview), then spend the body earning it.
@@ -94,7 +94,7 @@ everywhere.
   the study the reader is.
 
 **Visual**
-- Quiet by default — it's wayfinding, not decoration. Small type, muted color.
+- Quiet by default: it's wayfinding, not decoration. Small type, muted color.
 - Active state is the only loud thing.
 - Optional: section numbers (01–08) for a more editorial feel.
 
@@ -107,7 +107,7 @@ everywhere.
 
 ## 3. The Section System
 
-The canonical sections, in order. Not every case study needs all of them — but
+The canonical sections, in order. Not every case study needs all of them: but
 they should always appear in *this order*, and you should never invent a
 new top-level section type per project. Pick from this set.
 
@@ -116,19 +116,19 @@ For each section below: **Purpose** (the one question it answers),
 
 ---
 
-### 3.1 — Hero / Cover
+### 3.1: Hero / Cover
 > *Question: What is this and why should I care?*
 
 - **Include:** Project name, one-line value statement, a single striking visual
   (a polished hero mockup or product shot). Optionally: company logo, your role
   as a one-liner, year.
 - **Layout:** Full-bleed, above the side nav. Big type, lots of breathing room.
-  No body copy — this is a magazine cover, not a paragraph.
+  No body copy, this is a magazine cover, not a paragraph.
 - **Length:** 1 screen. One sentence of copy, max.
 
 ---
 
-### 3.2 — Overview / At a Glance
+### 3.2: Overview / At a Glance
 > *Question: Give me the whole story in 30 seconds.*
 
 This is the most important section for skimmers. Many readers decide here
@@ -138,10 +138,10 @@ whether to keep going.
   - A 2–3 sentence summary of the project and what you did.
   - **Meta block** (often rendered as a small left-aligned table or pill row):
     - **Role** (e.g. Lead Product Designer)
-    - **Team** (who else — PM, eng count, etc.)
+    - **Team** (who else: PM, eng count, etc.)
     - **Timeline** (e.g. 12 weeks, 2024)
     - **Platform** (iOS, Web, Design System…)
-    - **Tools** (Figma, etc. — keep brief, it's the least interesting part)
+    - **Tools** (Figma, etc., keep brief, it's the least interesting part)
   - **Headline outcome** stated up front (e.g. "+34% activation," "shipped to
     2M users"). Prove it later.
 - **Layout:** Summary paragraph + meta block side by side, or meta as a compact
@@ -150,7 +150,7 @@ whether to keep going.
 
 ---
 
-### 3.3 — Context & Background
+### 3.3: Context & Background
 > *Question: What's the product/company, and what world does this live in?*
 
 - **Include:** What the product does, who uses it, where it was in its lifecycle,
@@ -161,14 +161,14 @@ whether to keep going.
 
 ---
 
-### 3.4 — The Problem / Challenge
+### 3.4: The Problem / Challenge
 > *Question: What was broken, and what were we actually trying to solve?*
 
 The pivot point of the story. Be specific and concrete.
 
 - **Include:**
   - A sharp problem statement (ideally one bold sentence).
-  - The pain — for users *and* for the business. Quantify if you can
+  - The pain, for users *and* for the business. Quantify if you can
     (drop-off rates, support tickets, churn).
   - Constraints you were working within (tech, time, brand, platform).
 - **Layout:** A pulled-out problem statement (large quote-style text) followed by
@@ -177,7 +177,7 @@ The pivot point of the story. Be specific and concrete.
 
 ---
 
-### 3.5 — Goals & Success Metrics *(optional but powerful)*
+### 3.5: Goals & Success Metrics *(optional but powerful)*
 > *Question: How would we know if this worked?*
 
 - **Include:** The objectives, the design principles you set, and the metrics
@@ -189,22 +189,22 @@ The pivot point of the story. Be specific and concrete.
 
 ---
 
-### 3.6 — Research & Discovery
+### 3.6: Research & Discovery
 > *Question: How did I understand the problem before solving it?*
 
 - **Include:** Methods (interviews, surveys, competitive audit, analytics, support
-  log review), who you talked to, and — most importantly — the **insights**, not
+  log review), who you talked to, and, most importantly, the **insights**, not
   the raw activity. "We did 12 interviews" is boring; "users abandoned at the
   link-bank step because they didn't trust it" is gold.
 - Optionally: personas, journey maps, an affinity map, competitive teardown.
   Use these only if they earned a decision later.
 - **Layout:** Insights as the headline, evidence as support. Each key insight can
   be its own mini-block with a one-line takeaway + supporting image/quote.
-- **Length:** 1–2 screens. Curate ruthlessly — show 3 sharp insights, not 15.
+- **Length:** 1–2 screens. Curate ruthlessly: show 3 sharp insights, not 15.
 
 ---
 
-### 3.7 — Strategy / Approach
+### 3.7: Strategy / Approach
 > *Question: Given what I learned, what was the plan?*
 
 The bridge between research and design. This section proves you think
@@ -218,10 +218,10 @@ strategically, not just decoratively.
 
 ---
 
-### 3.8 — Design / The Solution
+### 3.8: Design / The Solution
 > *Question: What did I actually make?*
 
-The visual centerpiece — but structured, not a screenshot graveyard.
+The visual centerpiece, but structured, not a screenshot graveyard.
 
 - **Include:** Walk through the solution **by feature or flow**, not screen by
   screen. For each: what it is, the key decision behind it, and the screen(s)
@@ -232,23 +232,23 @@ The visual centerpiece — but structured, not a screenshot graveyard.
 - **Layout:** Alternate text and large media. Use full-bleed for the money shots,
   side-by-sides for before/after, device frames where they add clarity (and
   nowhere they don't).
-- **Length:** This is the longest section — but every screen must justify itself
+- **Length:** This is the longest section, but every screen must justify itself
   with a caption explaining *why*, not just *what*.
 
 ---
 
-### 3.9 — Design System / Craft Details *(optional)*
+### 3.9: Design System / Craft Details *(optional)*
 > *Question: How rigorous and detailed is the execution?*
 
 - **Include:** Components, tokens, type scale, motion principles, edge cases,
-  empty/error/loading states, responsive behavior — the craft that signals
+  empty/error/loading states, responsive behavior: the craft that signals
   senior execution.
 - **Layout:** A tidy grid of components or a spec-style breakdown.
 - **Length:** Half to one screen. Skip if it doesn't strengthen *this* story.
 
 ---
 
-### 3.10 — Prototype / Interaction *(optional)*
+### 3.10: Prototype / Interaction *(optional)*
 > *Question: How does it feel in motion?*
 
 - **Include:** Short looping videos or GIFs of key interactions and transitions.
@@ -258,18 +258,18 @@ The visual centerpiece — but structured, not a screenshot graveyard.
 
 ---
 
-### 3.11 — Testing & Iteration *(optional)*
+### 3.11: Testing & Iteration *(optional)*
 > *Question: How did the design change once it met reality?*
 
 - **Include:** Usability findings, what failed, what you changed. A v1→v2
-  before/after is one of the most persuasive things you can show — it proves you
+  before/after is one of the most persuasive things you can show: it proves you
   iterate based on evidence, not ego.
 - **Layout:** Before/after pairs with a note on what the test revealed.
 - **Length:** Half a screen, focused on 1–2 meaningful changes.
 
 ---
 
-### 3.12 — Outcome & Impact
+### 3.12: Outcome & Impact
 > *Question: Did it work?*
 
 Pay off the metrics you promised in Goals.
@@ -283,7 +283,7 @@ Pay off the metrics you promised in Goals.
 
 ---
 
-### 3.13 — Reflection / Learnings
+### 3.13: Reflection / Learnings
 > *Question: What did I take away, and what would I do differently?*
 
 The section juniors skip and seniors nail. Self-awareness reads as maturity.
@@ -296,7 +296,7 @@ The section juniors skip and seniors nail. Self-awareness reads as maturity.
 
 ---
 
-### 3.14 — Footer / Next Case Study
+### 3.14: Footer / Next Case Study
 > *Question: Where do I go next?*
 
 - **Include:** A prominent link to the **next** case study (keep people in the
@@ -380,7 +380,7 @@ Consistency across these is what makes the set feel "world-class."
 
 **Imagery**
 - Pick a consistent treatment: e.g. soft shadow + rounded corners, OR full-bleed
-  flat — not a mix. Same background tone behind mockups across all studies.
+  flat, not a mix. Same background tone behind mockups across all studies.
 - Reserve full-bleed for the 2–3 best shots per study. Everything else lives
   inside the content column.
 - Use device frames only when the platform context matters; otherwise show the
@@ -408,7 +408,7 @@ Consistency across these is what makes the set feel "world-class."
 
 **Do**
 - State the outcome early, prove it late.
-- Curate — 3 strong insights/screens beat 15 weak ones.
+- Curate: 3 strong insights/screens beat 15 weak ones.
 - Caption everything with the *why*.
 - Keep the same section system and side nav across every study.
 - Show one before/after and one honest reflection.
@@ -426,7 +426,7 @@ Consistency across these is what makes the set feel "world-class."
 ## 7. Applying this to Spendee (quick refactor checklist)
 
 1. Add the **sticky side nav** with scroll-spy using the §3 section names.
-2. Re-cut the existing page into the canonical sections — give each a real
+2. Re-cut the existing page into the canonical sections: give each a real
    `id` and heading so the nav can track it.
 3. Make sure there's an **Overview** with a meta block and a headline metric in
    the first screen.

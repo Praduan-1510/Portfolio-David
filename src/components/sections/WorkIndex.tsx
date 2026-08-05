@@ -11,7 +11,7 @@ import type { ProjectMeta } from "@/types/project";
 
 /*
  * Work index. On desktop with motion enabled it renders the pinned horizontal
- * scroll (WorkScrollTrack); otherwise — mobile, reduced motion, or SSR/no-JS —
+ * scroll (WorkScrollTrack); otherwise (mobile, reduced motion, or SSR/no-JS)
  * it renders a rich static vertical sequence with the same data
  * (DESIGN_GUIDELINES §13: signature scroll moments get an explicit simpler
  * mobile variant, and reduced motion degrades to a static list).
@@ -27,7 +27,7 @@ export function WorkIndex({ projects }: { projects: ProjectMeta[] }) {
   const isDesktop = useMediaQuery("(min-width: 1024px) and (pointer: fine)");
 
   if (isDesktop && !reduced) {
-    // The departure board — the signature writ large. The old pinned
+    // The departure board: the signature writ large. The old pinned
     // horizontal gallery (WorkScrollTrack) was the awards-kit piece every
     // jury has seen; the board is the ownable version.
     return <FlightBoard projects={projects} />;
@@ -37,20 +37,20 @@ export function WorkIndex({ projects }: { projects: ProjectMeta[] }) {
 
 /*
  * Static editorial sequence (reduced-motion / mobile). Each project is a
- * full-width ROW — not a narrow phone + text column with a dead gutter, but a
+ * full-width ROW: not a narrow phone + text column with a dead gutter, but a
  * composed two-part layout: a big oversized index numeral + an accent-washed
  * media stage on the left, and a meta column (title, client/year/role, summary,
  * services, and a "View case study →" affordance) that fills the right. The rows
  * alternate the media to the opposite side so the page reads as a rhythm rather
- * than a list. Each row carries its own project accent — the index numeral, the
- * stage wash, the top hairline, and the hover state — so the page is monochrome
+ * than a list. Each row carries its own project accent (the index numeral, the
+ * stage wash, the top hairline, and the hover state) so the page is monochrome
  * at rest and lights up per project. Reduced-motion safe: the StaggerGroup
  * degrades to its resting state and every transition is transform/opacity/colour.
  */
 function WorkStack({ projects }: { projects: ProjectMeta[] }) {
   return (
     <Container as="section" aria-label="Selected projects" data-work-stack>
-      {/* The rows enter in concert — each project rises in on scroll-in,
+      {/* The rows enter in concert: each project rises in on scroll-in,
           directional stagger. Reduced-motion renders the static list (the
           StaggerGroup degrades to its resting state). */}
       <StaggerGroup as="ul" from="below">
@@ -79,7 +79,7 @@ function WorkStackRow({
   // Per-project accent (lime / orange / blue). Scoped to this row only via an
   // inline --accent remap on a dark surface, so text-accent / bg-accent and the
   // color-mix washes below all resolve to the project's colour while the rest of
-  // the page stays monochrome (§4/§8 — the same remap the case-study route uses).
+  // the page stays monochrome (§4/§8: the same remap the case-study route uses).
   const accentStyle = project.accent
     ? ({ "--accent": project.accent } as React.CSSProperties)
     : undefined;
@@ -101,7 +101,7 @@ function WorkStackRow({
         aria-label={`View case study: ${project.title}`}
         className={`group grid grid-cols-1 items-center gap-x-space-8 gap-y-space-6 rounded-[3px] ${index === 0 ? "pt-space-3 pb-space-8 sm:pt-space-4 sm:pb-space-9" : "py-space-8 sm:py-space-9"} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]`}
       >
-        {/* Media stage — a large accent-washed panel with the cover screen rising
+        {/* Media stage: a large accent-washed panel with the cover screen rising
             from it, anchored to the row's accent. Order swaps each row so the
             media alternates sides on desktop (text always reads naturally). */}
         <div
@@ -131,7 +131,7 @@ function WorkStackRow({
             >
               {ordinal}
             </span>
-            {/* Cover frame — a portrait phone anchored low and bleeding off-edge
+            {/* Cover frame: a portrait phone anchored low and bleeding off-edge
                 (app), or a landscape browser window centered in the stage (web).
                 Lifts on hover. */}
             <div
@@ -156,7 +156,7 @@ function WorkStackRow({
           </div>
         </div>
 
-        {/* Meta column — fills the half the gutter used to waste. */}
+        {/* Meta column: fills the half the gutter used to waste. */}
         <div
           className={
             mediaLeft ? "md:order-2" : "md:order-1"
@@ -198,7 +198,7 @@ function WorkStackRow({
             {project.indexNote ?? project.summary}
           </Text>
 
-          {/* Services — turns the old dead gutter into substance. */}
+          {/* Services: turns the old dead gutter into substance. */}
           <ul className="mt-space-5 flex flex-wrap gap-x-space-2 gap-y-space-2 sm:gap-x-space-3">
             {project.services.map((service) => (
               <li
@@ -210,7 +210,7 @@ function WorkStackRow({
             ))}
           </ul>
 
-          {/* Explicit affordance — the arrow slides on hover (transform only). */}
+          {/* Explicit affordance: the arrow slides on hover (transform only). */}
           <span className="mt-space-6 inline-flex items-center gap-space-2 font-mono text-caption uppercase tracking-[0.16em] text-fg transition-colors duration-fast ease-out-quad group-hover:text-neon">
             View case study
             <span

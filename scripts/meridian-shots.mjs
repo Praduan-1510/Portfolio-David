@@ -7,9 +7,9 @@
 // production and proves the static assets are actually being served.
 //
 // Two aspect ratios on purpose:
-//   1280×800 (16:10) — the LivePrototype poster; matches the desktop viewport
+//   1280×800 (16:10): the LivePrototype poster; matches the desktop viewport
 //                      the frame renders, so launching causes no visual jump.
-//   1280×700 (64:35) — the listing cover; matches BrowserMockup's default well
+//   1280×700 (64:35): the listing cover; matches BrowserMockup's default well
 //                      aspect exactly, so ProjectCover crops nothing.
 import puppeteer from "puppeteer-core";
 import { mkdirSync } from "node:fs";
@@ -59,7 +59,7 @@ async function shoot(page, name, vp) {
   // The listing cover is the same dashboard at the card's exact aspect.
   await shoot(page, "cover", { width: 1280, height: 700 });
 
-  // Board view — the drag-and-drop work surface.
+  // Board view: the drag-and-drop work surface.
   await page.evaluate(() => {
     // eslint-disable-next-line no-undef
     go("all");
@@ -71,7 +71,7 @@ async function shoot(page, name, vp) {
   await sleep(500);
   await shoot(page, "app-board", { width: 1280, height: 800 });
 
-  // Command palette — the keyboard spine of the product.
+  // Command palette: the keyboard spine of the product.
   await page.evaluate(() => {
     // eslint-disable-next-line no-undef
     openPalette();
@@ -83,7 +83,7 @@ async function shoot(page, name, vp) {
     closePalette();
   });
 
-  // Billing — plans, usage, and the entitlement paywalls behind them.
+  // Billing: plans, usage, and the entitlement paywalls behind them.
   await page.evaluate(() => {
     // eslint-disable-next-line no-undef
     go("plans");

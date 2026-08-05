@@ -7,7 +7,7 @@ import { useReducedMotion, prefersReducedMotion } from "@/hooks/useReducedMotion
 
 /*
  * Scroll-linked parallax (DESIGN_GUIDELINES.md §7.5). The child translates as it
- * passes through the viewport, scrubbed LINEARLY to the scroll position — easing
+ * passes through the viewport, scrubbed LINEARLY to the scroll position, easing
  * scroll-linked motion makes it feel broken (§7.1). Keep `speed` subtle (<0.15).
  * Degrades to static under reduced motion.
  */
@@ -36,7 +36,7 @@ export function Parallax({
         { yPercent: -speed * 50 },
         {
           yPercent: speed * 50,
-          ease: "none", // linear — tracks scroll exactly (§7.1)
+          ease: "none", // linear: tracks scroll exactly (§7.1)
           scrollTrigger: {
             trigger: ref.current,
             start: "top bottom",

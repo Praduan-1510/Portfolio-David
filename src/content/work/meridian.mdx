@@ -7,17 +7,17 @@ year: 2026
 services: [Brand Identity, Design System, Product Design, Prototyping]
 summary: >-
   A brand identity, a design system, and a working multi-tenant B2B SaaS
-  platform — built from a functional spec that admitted it had no signature.
+  platform: built from a functional spec that admitted it had no signature.
   Sixteen views, a real permissions engine, and paywalls that actually gate.
   You can sign in and use it on this page.
 cover: /images/work/meridian/cover.png
 kind: web
 prototype:
   poster: /images/work/meridian/app-home.png
-  alt: Meridian's home dashboard — org switcher, trial banner, status rings and an assigned-work table
+  alt: "Meridian's home dashboard: org switcher, trial banner, status rings and an assigned-work table"
   aspect: 1.6
   launchNote: >-
-    It opens on the sign-in screen — the fields are pre-filled, any password and
+    It opens on the sign-in screen; the fields are pre-filled, any password and
     any 6-digit code will do.
   surfaces:
     - id: app
@@ -35,16 +35,16 @@ prototype:
       shortLabel: Plan
       src: /prototype/meridian/build-plan.html
       domain: meridian.app/build-plan
-indexNote: 'The playable one. A B2B SaaS platform you can sign into and use in the page — permissions, paywalls and audit trail included.'
+indexNote: 'The playable one. A B2B SaaS platform you can sign into and use in the page: permissions, paywalls and audit trail included.'
 accent: "#8A6BFF" # AA-tuned Day-Arc iris (brand ref #6D48F0 fails at 3.6:1 on the dark bg; this clears 5.3:1)
 motif: route
-disclaimer: A design and functional prototype on mock data — not a production system.
+disclaimer: A design and functional prototype on mock data, not a production system.
 featured: true
 order: 0
 ---
 
 <Lede>
-Most portfolio prototypes are a slideshow wearing a device frame. This one **you can sign into** — so the case for it is the thing itself, running above.
+Most portfolio prototypes are a slideshow wearing a device frame. This one **you can sign into**, so the case for it is the thing itself, running above.
 </Lede>
 
 ## The live prototype
@@ -52,7 +52,7 @@ Most portfolio prototypes are a slideshow wearing a device frame. This one **you
 Launch it and you land on Meridian's sign-in screen. The fields are pre-filled; any password and any six digits get you through. From there it behaves like a product, not a walkthrough: edit a record's status inline, drag cards between columns on the Board, press ⌘K to jump anywhere or start the guided tour.
 
 <Margin label="Try this">
-  Switch to *Acme Studio* from the org menu. You're a Guest there, and the permissions engine quietly removes what you can't do — no fake disabled states.
+  Switch to *Acme Studio* from the org menu. You're a Guest there, and the permissions engine quietly removes what you can't do, no fake disabled states.
 </Margin>
 
 The parts that usually get faked are the parts I was most interested in building. Flip the organisation's lifecycle state in Billing and watch the paywalls and dunning banners engage. Impersonate a user in the Admin console, then open the Audit log and find the action already recorded against your name. Your changes persist across a refresh, because there's a real store underneath.
@@ -61,39 +61,39 @@ Three surfaces are reachable from the tabs in the window chrome: the **App** its
 
 <Stats>
   <Stat value="16" label="Views, clickable end to end" />
-  <Stat value="3" label="Surfaces — app, system, plan" />
+  <Stat value="3" label="Surfaces: app, system, plan" />
   <Stat value="2" label="Themes, light and dark" />
   <Stat value="0" label="Backend services" />
 </Stats>
 
 ## Why it exists
 
-Meridian started from a 20,000-word functional specification for a B2B SaaS work platform — the genre of document that defines every state and permission a system needs and, in the same breath, concedes what it can't supply. This one said so outright: the design system it described had **no signature**. Correct, accessible, and indistinguishable from every competitor in its category.
+Meridian started from a 20,000-word functional specification for a B2B SaaS work platform: the genre of document that defines every state and permission a system needs and, in the same breath, concedes what it can't supply. This one said so outright: the design system it described had **no signature**. Correct, accessible, and indistinguishable from every competitor in its category.
 
 <Bleed
   quote="Correct, accessible, and indistinguishable from every competitor."
   attribution="The spec's own assessment of its design system"
 />
 
-That gap is the whole project. A spec can enumerate requirements; it can't decide what a product should feel like, and it can't prove the requirements hold together until something is actually built. So I did both — invented an identity for it, then built the platform out module by module until it ran.
+That gap is the whole project. A spec can enumerate requirements; it can't decide what a product should feel like, and it can't prove the requirements hold together until something is actually built. So I did both: invented an identity for it, then built the platform out module by module until it ran.
 
 <Aside label="Why build it, not draw it">
   A static comp can't tell you whether a permissions model is coherent, or whether a paywall lands in the right place in a flow. Building it on mock data is the cheapest way to find out that the answer is no.
 </Aside>
 
-## The identity — Day-Arc
+## The identity: Day-Arc
 
-A meridian is the line the sun crosses at its highest point: the moment of peak clarity. That single image does all the work. The mark is an arc, a meridian line, and a zenith orb — a hemisphere brought to its brightest. The palette runs the whole arc of a day, warm dawn through cool dusk, where the category defaults to corporate blue.
+A meridian is the line the sun crosses at its highest point: the moment of peak clarity. That single image does all the work. The mark is an arc, a meridian line, and a zenith orb: a hemisphere brought to its brightest. The palette runs the whole arc of a day, warm dawn through cool dusk, where the category defaults to corporate blue.
 
 <Shot
   src="/images/work/meridian/design-system.png"
   domain="meridian.app/design-system"
   align="left"
   aspect="8 / 5"
-  caption="The Day-Arc spectrum, its six named gradients, and the plum-ink neutrals — warm violet rather than cool graphite, so the spectrum glows against the surface instead of sitting on it."
+  caption="The Day-Arc spectrum, its six named gradients, and the plum-ink neutrals: warm violet rather than cool graphite, so the spectrum glows against the surface instead of sitting on it."
 />
 
-Six colours, six named gradients, and a deliberate constraint: colour is never the sole carrier of meaning, so every semantic role ships paired with an icon or a label. Type is rounded and warm on purpose — Gabarito gives the brand its voice, Figtree keeps dense data screens legible at small sizes. Nothing about it is neutral, which was the point.
+Six colours, six named gradients, and a deliberate constraint: colour is never the sole carrier of meaning, so every semantic role ships paired with an icon or a label. Type is rounded and warm on purpose: Gabarito gives the brand its voice, Figtree keeps dense data screens legible at small sizes. Nothing about it is neutral, which was the point.
 
 ## What's under it
 
@@ -104,11 +104,11 @@ The prototype is a single HTML file with no framework and no server, which meant
   domain="meridian.app"
   align="right"
   aspect="8 / 5"
-  caption="The Board view — the core work surface. Cards drag between status columns, and the change writes through the same store the List and Calendar views read."
+  caption="The Board view: the core work surface. Cards drag between status columns, and the change writes through the same store the List and Calendar views read."
 />
 
-A permissions engine gates every action against the current member's role, so a Guest's interface is genuinely different rather than cosmetically dimmed. An entitlements engine enforces plan limits, and a lifecycle state machine moves an org between trial, active, past due, restricted and cancelled — with the banners, paywalls and read-only states each of those implies. An audit spine records the actions worth recording. The command palette is a real router. State is optimistic and undoable, and it persists to your browser.
+A permissions engine gates every action against the current member's role, so a Guest's interface is genuinely different rather than cosmetically dimmed. An entitlements engine enforces plan limits, and a lifecycle state machine moves an org between trial, active, past due, restricted and cancelled: with the banners, paywalls and read-only states each of those implies. An audit spine records the actions worth recording. The command palette is a real router. State is optimistic and undoable, and it persists to your browser.
 
 <Aside label="Scope, honestly">
-  Sixteen views are built and clickable. The build plan you can read in the third tab scopes considerably more than that — its 106 screens and ~355 states are the *plan's* inventory, not a claim about what's running above. The prototype covers the spine of the product, not every leaf of it.
+  Sixteen views are built and clickable. The build plan you can read in the third tab scopes considerably more than that: its 106 screens and ~355 states are the *plan's* inventory, not a claim about what's running above. The prototype covers the spine of the product, not every leaf of it.
 </Aside>

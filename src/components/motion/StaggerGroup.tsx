@@ -9,7 +9,7 @@ import { useReducedMotion, prefersReducedMotion } from "@/hooks/useReducedMotion
 
 /*
  * Staggered group reveal (DESIGN_GUIDELINES.md §7.4 choreography). The group's
- * DIRECT children enter in concert — fading and rising in sequence — when the
+ * DIRECT children enter in concert, fading and rising in sequence, when the
  * group scrolls into view (or on load, for above-the-fold beats). One ScrollTrigger
  * per group, transform/opacity only.
  *

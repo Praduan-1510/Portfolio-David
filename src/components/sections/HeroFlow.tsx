@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils/cn";
 
 /*
- * Hero atmosphere — colour with a REASON. Instead of free-floating gradient
+ * Hero atmosphere: colour with a REASON. Instead of free-floating gradient
  * blobs (its own template smell), the hero's colour emanates from its one
  * structural colour element: the signal trace. A soft band of the four
- * project hues sits on the trace's latitude and FLOWS ALONG the line — an
+ * project hues sits on the trace's latitude and FLOWS ALONG the line: an
  * oversized gradient strip translated slowly on the compositor (transform
  * only, no repaints, no canvas). One quiet violet ember up-right adds depth
  * so the rest of the frame isn't dead. Reduced motion holds the still.
@@ -22,7 +22,7 @@ export function HeroFlow({ className }: { className?: string }) {
         className,
       )}
     >
-      {/* Trace glow — the light the signal line casts. Sits on the wordmark's
+      {/* Trace glow: the light the signal line casts. Sits on the wordmark's
           baseline latitude (~52% at desktop compositions), soft-masked so it
           reads as glow, not a band. The inner strip is 3x wide and drifts on
           a slow transform loop: the hues literally flow along the line. */}
@@ -50,7 +50,7 @@ export function HeroFlow({ className }: { className?: string }) {
           }}
         />
       </div>
-      {/* One quiet ember for depth — a single cool pool, not a constellation. */}
+      {/* One quiet ember for depth: a single cool pool, not a constellation. */}
       <div
         className="absolute"
         style={{

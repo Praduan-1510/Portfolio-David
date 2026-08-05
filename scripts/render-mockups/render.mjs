@@ -5,7 +5,7 @@ import { MANIFEST } from "./manifest.mjs";
 
 /*
  * Renders every coded mockup screen (scripts/render-mockups/<app>/<name>.html)
- * at its exact device dimensions, DPR 2, transparent background — overwriting
+ * at its exact device dimensions, DPR 2, transparent background, overwriting
  * the PNG under public/images/work/<app>/<name>.png that the site consumes.
  *
  *   node scripts/render-mockups/render.mjs                    render everything

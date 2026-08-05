@@ -7,12 +7,12 @@ import { durations } from "@/lib/motion/durations";
 import { SPECTRUM } from "@/lib/spectrum";
 
 /*
- * Inline split-flap character flutter — the signature motif scaled down to the
+ * Inline split-flap character flutter: the signature motif scaled down to the
  * mono-caps metadata voice (eyebrows, board rows, chips). JetBrains Mono is
  * monospace, so cycling glyphs causes ZERO layout shift; that's why this is
  * safe exactly where the mono voice already lives, and nowhere else.
  *
- * No tiles, no 3D — just characters ticking through the charset at the `tick`
+ * No tiles, no 3D, just characters ticking through the charset at the `tick`
  * cadence (one gsap.ticker per instance, removed when settled) with a tight
  * left-to-right cascade, an optional transient colour pass, then settling to
  * inherit. Reduced motion renders the settled text immediately.
@@ -25,7 +25,7 @@ interface FlapTextProps {
   text: string;
   /** "inView" (default) flutters once when scrolled into view; "load" on mount;
    *  "hover" re-flutters on pointer-enter of the wrapping element; "manual"
-   *  flutters once on the first rising edge of `active` (never re-fires) — for
+   *  flutters once on the first rising edge of `active` (never re-fires), for
    *  scroll-choreographed hosts like the home reel board. */
   trigger?: "inView" | "load" | "hover" | "manual";
   /** trigger="manual" only: flips the flutter on when it first becomes true. */
@@ -39,7 +39,7 @@ interface FlapTextProps {
   as?: "span" | "div";
 }
 
-const CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789·—+%↗".split("");
+const CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789·+%↗".split("");
 
 const flutterChar = (step: number, index: number, target: string) => {
   // Preserve spaces/punctuation rhythm: only alphanumerics flutter.

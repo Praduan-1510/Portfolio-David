@@ -7,7 +7,7 @@ import { durations } from "@/lib/motion/durations";
 import { useReducedMotion, prefersReducedMotion } from "@/hooks/useReducedMotion";
 
 /*
- * PortraitFrame — the "dynamic" treatment for the feathered About portrait.
+ * PortraitFrame: the "dynamic" treatment for the feathered About portrait.
  * Three composited layers, each on its OWN element so they never collide and so
  * the `.about-portrait` mask on the <Image> is never written to:
  *
@@ -16,7 +16,7 @@ import { useReducedMotion, prefersReducedMotion } from "@/hooks/useReducedMotion
  *      clip travels through the image's already-transparent top/bottom feather, so
  *      the moving edge never shows a hard line.
  *   2. SCROLL BREATH (persistent, LINEAR / scrubbed): a slow scale + tiny vertical
- *      drift tracked to the section's pass through the viewport — keeps it alive,
+ *      drift tracked to the section's pass through the viewport: keeps it alive,
  *      not just a single arrival. ease "none" per the scroll-linked rule (§7.1).
  *   3. POINTER DEPTH (desktop only, pointer:fine): a small cursor-follow tilt for
  *      parallax depth. Never attached on touch/coarse pointers.
@@ -57,7 +57,7 @@ export function PortraitFrame({
       const img = wrap.querySelector("img");
       if (!img) return;
 
-      // 1 — ENTRANCE. Start states are set ONLY here, so no-JS / reduced-motion
+      // 1, ENTRANCE. Start states are set ONLY here, so no-JS / reduced-motion
       //     never trap content behind the animation.
       gsap.set(wrap, {
         willChange: "clip-path, opacity",
@@ -86,13 +86,13 @@ export function PortraitFrame({
           { scale: 1, filter: "blur(0px)", duration: durations.slower, ease: gsapEase.outExpo },
           0,
         )
-        // Drop the inline props once settled — clearing `transform` also hands the
+        // Drop the inline props once settled, clearing `transform` also hands the
         // hover-scale (a CSS class on the <Image>) back its authority.
         .set(wrap, { willChange: "auto", clipPath: "none" })
         .set(img, { willChange: "auto", clearProps: "transform,filter" });
 
-      // 2 — SCROLL BREATH (linear, scrubbed) on the MID element. Stays over-scaled
-      //     (min 1.04) so the ±1.5% drift never exposes a gap — the image fills the
+      // 2: SCROLL BREATH (linear, scrubbed) on the MID element. Stays over-scaled
+      //     (min 1.04) so the ±1.5% drift never exposes a gap: the image fills the
       //     box exactly at scale 1, with no object-cover overflow to spare.
       gsap.fromTo(
         scrub,
@@ -105,7 +105,7 @@ export function PortraitFrame({
         },
       );
 
-      // 3 — POINTER DEPTH (desktop, fine pointer only). Tiny angles via quickTo.
+      // 3: POINTER DEPTH (desktop, fine pointer only). Tiny angles via quickTo.
       if (pointerDepth && window.matchMedia("(pointer: fine)").matches) {
         const ry = gsap.quickTo(tilt, "rotationY", { duration: durations.slow, ease: gsapEase.outQuad });
         const rx = gsap.quickTo(tilt, "rotationX", { duration: durations.slow, ease: gsapEase.outQuad });

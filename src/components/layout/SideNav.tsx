@@ -8,12 +8,12 @@ import { useLenis } from "@/lib/lenis/useLenis";
 import { spectrumAt } from "@/lib/spectrum";
 
 /*
- * Desktop-only left rail — a section-aware scroll indicator that COMPLEMENTS the
+ * Desktop-only left rail: a section-aware scroll indicator that COMPLEMENTS the
  * top <Nav> (it scrolls to in-page sections rather than routing). Hidden below md,
  * so the mobile hamburger nav is untouched. Ported from the v0 export and adapted:
  *   - cn import points at our util (@/lib/utils/cn);
  *   - hardcoded template ids/labels swapped for our real home-page section ids
- *     (each must exist on the home page — see src/app/page.tsx);
+ *     (each must exist on the home page: see src/app/page.tsx);
  *   - template classes (border-border/bg-background/muted-foreground) remapped to
  *     our semantic tokens (line/bg/muted/accent/fg); the /opacity modifiers the
  *     template used don't work on our var() tokens, so dot dimming uses opacity-*;
@@ -33,7 +33,7 @@ export function SideNav() {
   const lenis = useLenis();
   // Desktop, mouse-only affordance. It duplicates the top <Nav>, its labels only
   // reveal on hover, and its fixed rail would otherwise paint over the left gutter
-  // of the content on tablets — so it's gated to a fine pointer at lg+ (touch
+  // of the content on tablets, so it's gated to a fine pointer at lg+ (touch
   // tablets fall back to the top nav). SSR-false → it mounts after hydration.
   const enabled = useMediaQuery("(min-width: 1024px) and (pointer: fine)");
 
@@ -63,7 +63,7 @@ export function SideNav() {
     if (!el) return;
     e.preventDefault();
     window.history.pushState(null, "", `#${id}`);
-    // Scroll through the single engine (Lenis) when it's active — Lenis forces
+    // Scroll through the single engine (Lenis) when it's active: Lenis forces
     // scroll-behavior:auto, so a native smooth scroll would jump. Offset clears
     // the 64px sticky top nav. Under reduced motion Lenis is null → native jump.
     if (lenis) {

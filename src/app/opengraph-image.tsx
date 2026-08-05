@@ -8,18 +8,18 @@ const SITE_HOST = new URL(SITE_URL).host;
 /*
  * Root social card (1200×630). Dark-monochrome, instrument-grade composition:
  * left-aligned with generous padding, a hairline frame + corner ticks, the name
- * set large in off-white, a muted role line, and a small mono caption — colour
+ * set large in off-white, a muted role line, and a small mono caption: colour
  * is held back intentionally, matching the site system.
  *
  * Dependency-free: next/og's ImageResponse uses its built-in font, so there are
  * no external font fetches to fail at build/edge time. Literal hex is required
  * here because ImageResponse takes raw CSS, not Tailwind tokens.
  */
-export const alt = "Praduan Saha — Product Designer (Design + Front-End)";
+export const alt = "Praduan Saha: Product Designer (Design + Front-End)";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-// Design tokens (raw hex — ImageResponse can't read Tailwind classes).
+// Design tokens (raw hex: ImageResponse can't read Tailwind classes).
 const BG = "#0A0A0B";
 const FG = "#F3F3F1";
 const MUTED = "#8C8C92";
@@ -40,7 +40,7 @@ export default function OpengraphImage() {
           padding: 80,
         }}
       >
-        {/* Hairline frame — the faint grid hint that frames the composition. */}
+        {/* Hairline frame: the faint grid hint that frames the composition. */}
         <div
           style={{
             position: "absolute",
@@ -89,7 +89,7 @@ export default function OpengraphImage() {
           </div>
         </div>
 
-        {/* Bottom mono caption — location + medium. */}
+        {/* Bottom mono caption: location + medium. */}
         <div
           style={{
             display: "flex",

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Set how much Keel decides without you. Two rails are permanently locked.">
-<title>Keel — Autonomy</title>
+<title>Keel: Autonomy</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20fill%3D%22%232B2416%22%2F%3E%3Cg%20fill%3D%22%23F6EFE0%22%20transform%3D%22translate(5.5%2C5.5)%20scale(0.77)%22%3E%3Cpath%20d%3D%22M4%2012h40v2l-12%204-8%205-8-5-12-4z%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2221%22%20width%3D%2214%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2221%22%20width%3D%2214%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2227%22%20width%3D%2240%22%20height%3D%223%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2233%22%20width%3D%2240%22%20height%3D%223%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -39,7 +39,7 @@
     <p class="kicker">Autonomy · How much Keel decides without you</p>
     <h1 class="page-title">You set the leash.</h1>
     <p class="page-lede">Tighten or loosen what Keel handles on its own. Two categories
-    are permanently locked to <em>Always Ask</em> — those are safety rails built into the
+    are permanently locked to <em>Always Ask</em>: those are safety rails built into the
     product, not settings you&rsquo;ve left conservative.</p>
   </div>
 
@@ -54,14 +54,14 @@
         <div>
           <h3><label for="cat-threshold">Transaction categorization</label></h3>
           <p>Keel files transactions on its own when its confidence clears this bar.
-          Anything below it comes to you as a choice between the top two candidates —
+          Anything below it comes to you as a choice between the top two candidates,
           and below a hard <span class="num">40%</span> floor, Keel never guesses at all.</p>
         </div>
         <div class="setting-control">
           <span class="stamp">Confidence threshold</span>
           <input type="range" id="cat-threshold" min="50" max="99" value="90" step="1" aria-describedby="cat-threshold-current">
           <div class="range-scale"><span class="num">50%</span><span class="num">75%</span><span class="num">99%</span></div>
-          <p class="setting-current" id="cat-threshold-current">Currently: <span class="num">90%</span> — about <span class="num">8</span> in <span class="num">10</span> transactions file automatically</p>
+          <p class="setting-current" id="cat-threshold-current">Currently: <span class="num">90%</span>, about <span class="num">8</span> in <span class="num">10</span> transactions file automatically</p>
         </div>
       </div>
     </article>
@@ -90,7 +90,7 @@
           <h3><label for="cash-floor">Cash flow floor alert</label></h3>
           <p>When the <span class="num">90</span>-day projection dips below this line,
           Keel raises a flag in <a href="activity.html">Activity</a>. A flag is
-          information only — it never blocks a payment or takes an action on its own.</p>
+          information only: it never blocks a payment or takes an action on its own.</p>
         </div>
         <div class="setting-control">
           <span class="stamp">Alert floor</span>
@@ -113,7 +113,7 @@
           <h3>Invoice reminders</h3>
           <p>The first reminder sends automatically once an invoice is
           <span class="num">7+</span> days overdue, in your standard friendly tone. Every
-          reminder after the first — or any firmer tone — comes to you for approval. If a
+          reminder after the first, or any firmer tone, comes to you for approval. If a
           client disputes an invoice, the whole sequence pauses and routes to
           <a href="approvals.html">Approvals</a>.</p>
         </div>
@@ -140,7 +140,7 @@
         <div>
           <h3>New vendor payments</h3>
           <p>The first payment to any vendor Keel hasn&rsquo;t paid before always comes to
-          you — regardless of amount, confidence, or any setting on this page. This is a
+          you: regardless of amount, confidence, or any setting on this page. This is a
           rail, not a limitation: it&rsquo;s what makes every other automation on this page
           safe to allow.</p>
         </div>
@@ -162,7 +162,7 @@
           <h3>Disputes &amp; anomalies</h3>
           <p>Duplicate charges, disputed invoices, and out-of-pattern activity always stop
           and wait for a human. Confirming a flagged pair as legitimate de-prioritizes
-          that exact vendor-and-amount match in future scans — it never blinds Keel to a
+          that exact vendor-and-amount match in future scans: it never blinds Keel to a
           genuine duplicate later.</p>
         </div>
         <div class="setting-control">
@@ -186,7 +186,7 @@
     <article class="card">
       <dl class="deflist">
         <dt>One-off payments</dt>
-        <dd>No net-new outbound payments beyond your established recurring bills — ever,
+        <dd>No net-new outbound payments beyond your established recurring bills: ever,
         at any setting.</dd>
         <dt>Silent actions</dt>
         <dd>Nothing happens without a logged, readable reason. Every entry in
@@ -201,7 +201,7 @@
     </article>
   </section>
 
-  <p class="prose-note">Changing a threshold applies to new items only — anything already
+  <p class="prose-note">Changing a threshold applies to new items only: anything already
   in the <a href="approvals.html">approval queue</a> keeps the rules it was raised under.</p>
 
 </main>

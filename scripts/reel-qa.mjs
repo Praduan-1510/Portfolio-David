@@ -1,5 +1,5 @@
 /*
- * QA harness for the home cinematic reel (CinematicReel.tsx) — screenshots the
+ * QA harness for the home cinematic reel (CinematicReel.tsx): screenshots the
  * scrubbed stage at fixed scroll-progress points (desktop/mobile/short-land),
  * checks a reversal pass (rows scrub back out, flutter must not re-fire), and
  * captures the reduced-motion static fallback. Run against `next dev` on :3000.
@@ -26,7 +26,7 @@ async function scrollToProgress(page, p) {
   await page.evaluate((p) => {
     const el = document.getElementById("currently");
     // Mirror the ScrollTrigger config: start "top 64px", end "bottom bottom".
-    // (getBoundingClientRect, not offsetTop — the section may sit in a
+    // (getBoundingClientRect, not offsetTop; the section may sit in a
     // positioned wrapper.)
     const top = el.getBoundingClientRect().top + window.scrollY;
     const startY = top - 64;
@@ -54,7 +54,7 @@ async function run(name, viewport, progressPoints, { reduced = false } = {}) {
     await page.screenshot({ path: `${OUT}/${name}-p${String(p).replace(".", "")}.png` });
   }
 
-  // Reversal check: jump forward past all rows, then back to 0.35 — rows 3/4
+  // Reversal check: jump forward past all rows, then back to 0.35: rows 3/4
   // containers must scrub back out while row 1/2 text stays settled (no re-flutter).
   if (!reduced) {
     await scrollToProgress(page, 0.85);
@@ -83,7 +83,7 @@ async function run(name, viewport, progressPoints, { reduced = false } = {}) {
 
   // Split geometry check: at lg+ the film canvas must occupy the right half of
   // the sticky stage (±2px for the seam border); below lg it must stay
-  // full-bleed. Reduced motion hides the canvas entirely — skip.
+  // full-bleed. Reduced motion hides the canvas entirely, skip.
   if (!reduced && state.stageW && state.canvasCssW != null) {
     const half = viewport.width >= 1024;
     const wantW = half ? state.stageW / 2 : state.stageW;

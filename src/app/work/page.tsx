@@ -9,15 +9,15 @@ export const metadata: Metadata = {
   description: "Selected case studies in product design and front-end development.",
   alternates: { canonical: "/work" },
   openGraph: {
-    title: "Work — Praduan Saha",
+    title: "Work: Praduan Saha",
     description: "Selected case studies in product design and front-end development.",
     // This page has no co-located opengraph-image, and the root card isn't
-    // inherited once this openGraph object is declared — so point at it explicitly.
+    // inherited once this openGraph object is declared, so point at it explicitly.
     images: ["/opengraph-image"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Work — Praduan Saha",
+    title: "Work: Praduan Saha",
     description: "Selected case studies in product design and front-end development.",
     images: ["/twitter-image"],
   },
@@ -35,9 +35,9 @@ export default function WorkPage() {
   return (
     <>
       <Container as="header" className="relative isolate pt-space-10 pb-space-6">
-        {/* Spectrum ember — the identity's warm temperature on the index. */}
+        {/* Spectrum ember: the identity's warm temperature on the index. */}
         <AuroraEmber hues={["amber", "rose"]} position="top-right" intensity={0.12} />
-        {/* Signature header beat — the page title reveals word by word. */}
+        {/* Signature header beat: the page title reveals word by word. */}
         <TextReveal
           as="h1"
           by="words"
@@ -48,10 +48,10 @@ export default function WorkPage() {
           Selected projects
         </TextReveal>
 
-        {/* Supporting copy — quiet rise, no kinetic split. */}
+        {/* Supporting copy: quiet rise, no kinetic split. */}
         <Reveal trigger="load" delay={0.18} y={16}>
           <Text variant="body-l" className="mt-space-5 max-w-[var(--measure)] text-muted">
-            The full board — live work and labelled concepts, each with the
+            The full board: live work and labelled concepts, each with the
             argument it makes. One is in production, one you can use right here,
             and the rest are honest studies.
           </Text>

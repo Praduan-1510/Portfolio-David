@@ -3,8 +3,8 @@ import { getProjectBySlug } from "@/lib/content/work";
 import { site } from "@/lib/site";
 
 /*
- * Per-case-study social card (1200×630). Mirrors the root OG composition — same
- * dark frame, same left-aligned, instrument-grade rhythm — but themed to the
+ * Per-case-study social card (1200×630). Mirrors the root OG composition (same
+ * dark frame, same left-aligned, instrument-grade rhythm) but themed to the
  * project's own accent: an accent dot + a thin accent rule under the title.
  * Falls back to a sensible card if the slug is missing (route is static, but
  * keep it robust). Literal hex required by ImageResponse (no Tailwind tokens).
@@ -13,7 +13,7 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 // Per-image metadata so each card's og:image:alt names its own project instead
-// of a single generic "Case study — Praduan Saha" for all four. The default
+// of a single generic "Case study · Praduan Saha" for all four. The default
 // export below renders the one image this returns (id "card").
 export async function generateImageMetadata({
   params,
@@ -23,8 +23,8 @@ export async function generateImageMetadata({
   const { slug } = await params;
   const project = getProjectBySlug(slug);
   const alt = project
-    ? `${project.meta.title} — case study`
-    : "Case study — Praduan Saha";
+    ? `${project.meta.title}, case study`
+    : "Case study · Praduan Saha";
   return [{ id: "card", alt, size, contentType }];
 }
 
@@ -32,7 +32,7 @@ const BG = "#0A0A0B";
 const FG = "#F3F3F1";
 const MUTED = "#8C8C92";
 const LINE = "rgba(255,255,255,0.10)";
-// Default accent if a project omits one — the off-white fg, so the rule reads
+// Default accent if a project omits one: the off-white fg, so the rule reads
 // as a neutral hairline rather than a missing colour.
 const DEFAULT_ACCENT = FG;
 
@@ -119,7 +119,7 @@ export default async function Image({
           >
             {title}
           </div>
-          {/* Thin accent rule — the per-project colour cue. */}
+          {/* Thin accent rule: the per-project colour cue. */}
           <div
             style={{
               marginTop: 36,
@@ -142,7 +142,7 @@ export default async function Image({
           </div>
         </div>
 
-        {/* Bottom mono caption — attribution. */}
+        {/* Bottom mono caption, attribution. */}
         <div
           style={{
             display: "flex",

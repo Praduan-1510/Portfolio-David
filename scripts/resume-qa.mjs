@@ -1,6 +1,6 @@
 /*
- * Résumé QA — captures /resume at three viewports (reduced-motion, full page),
- * a live desktop hero shot, and — the point of this route — the actual PRINT
+ * Résumé QA: captures /resume at three viewports (reduced-motion, full page),
+ * a live desktop hero shot, and: the point of this route: the actual PRINT
  * output, both as a screenshot with print media emulated and as a real PDF
  * rendered through the @media print block in globals.css.
  *
@@ -59,7 +59,7 @@ await cap("resume-d", "/resume", D);
 await cap("resume-t", "/resume", T);
 await cap("resume-m", "/resume", M);
 await cap("resume-hero-live", "/resume", D, { reduced: false, full: false, wait: 2200 });
-// Nav gained a 4th item — re-check the routes whose chrome it shares.
+// Nav gained a 4th item: re-check the routes whose chrome it shares.
 await cap("about-d", "/about", D, { full: false });
 await cap("home-m", "/", M, { full: false });
 

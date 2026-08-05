@@ -6,7 +6,7 @@ import { Magnetic } from "@/components/motion";
 import { RESUME_PDF, RESUME_PAGES } from "@/lib/content/resume";
 
 /*
- * Résumé actions — download the PDF, or print the page itself.
+ * Résumé actions: download the PDF, or print the page itself.
  *
  * The print path is the point of the whole route: `@media print` in globals.css
  * strips the chrome and re-sets this document as ink-on-paper (see the .resume-*

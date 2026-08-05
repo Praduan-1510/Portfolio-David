@@ -11,21 +11,21 @@ const blurFor = (src: string): string | undefined =>
   (blurMap as Record<string, string>)[src];
 
 /*
- * Landscape browser/window mockup — the web counterpart to PhoneFrame. Holds a
+ * Landscape browser/window mockup: the web counterpart to PhoneFrame. Holds a
  * site screen-recording (looping <video>) or a still (poster) inside a dark
  * window chrome, on the dark page. Two modes:
- *   tilt="hero"  — the showpiece: a 3D-tilted "slab" (.browser-slab in globals.css)
+ *   tilt="hero": the showpiece: a 3D-tilted "slab" (.browser-slab in globals.css)
  *                  with a layered shadow + a resting teal glow that flips to neon
  *                  on hover, the looping video, and a live-capture badge.
- *   tilt="still" — a flat, lightly-shadowed frame holding the poster (used in cards,
+ *   tilt="still": a flat, lightly-shadowed frame holding the poster (used in cards,
  *                  the work index, and the gallery).
  *
  * The source recording includes the OS menu bar + browser chrome + dock, so the
  * screen well is CSS-cropped (aspect 64/35 + object-position) to show ONLY the page
- * content inside OUR chrome — no double chrome, and no re-encode (quality intact).
+ * content inside OUR chrome: no double chrome, and no re-encode (quality intact).
  *
  * Guardrails: the <video> is muted/loop/playsInline, preload="none", and only
- * .play()s while ≥50% in view (IntersectionObserver) — so it never blocks the SSR
+ * .play()s while ≥50% in view (IntersectionObserver), so it never blocks the SSR
  * headline's LCP. Under prefers-reduced-motion it renders ONLY the poster image (no
  * video, no autoplay). The well reserves its aspect → no CLS. The URL pill is a real
  * live link ONLY in hero mode (standalone); in still mode it's plain text so it never
@@ -38,7 +38,7 @@ interface BrowserMockupProps {
   mp4?: string;
   /** WebM source (hero mode; offered first). */
   webm?: string;
-  /** Live URL — turns the chrome URL pill into a link in hero mode. */
+  /** Live URL: turns the chrome URL pill into a link in hero mode. */
   liveUrl?: string;
   /** Domain shown in the URL pill. */
   domain?: string;
@@ -55,7 +55,7 @@ interface BrowserMockupProps {
   boot?: boolean;
   /** Hero centerpiece at full width: a gentler, more frontal resting tilt. */
   big?: boolean;
-  /** Screen-well aspect ratio (CSS aspect-ratio). Default "64 / 35" — the crop
+  /** Screen-well aspect ratio (CSS aspect-ratio). Default "64 / 35": the crop
    *  tuned to the hero video (which bakes in OS chrome). Clean screenshots that
    *  are already just page content should pass their own ratio (e.g. "198 / 100"). */
   aspect?: string;
@@ -66,10 +66,10 @@ interface BrowserMockupProps {
    *  whole screenshot when its ratio doesn't match the well. */
   fit?: "cover" | "contain";
   /** Play the looping capture even in `tilt="still"` (cards / work grid) instead
-   *  of showing the poster — so the flagship reads as the live product in motion.
+   *  of showing the poster, so the flagship reads as the live product in motion.
    *  Same guardrails as hero (muted, in-view only, preload="none", reduced-motion
    *  → poster). No pause button is rendered in still mode, so it stays valid HTML
-   *  when the frame is nested inside a card's link — the site treats this small
+   *  when the frame is nested inside a card's link: the site treats this small
    *  muted loop as ambient motion, opted out of via prefers-reduced-motion like
    *  the marquee and status pulses. */
   playInStill?: boolean;
@@ -114,7 +114,7 @@ export function BrowserMockup({
   const [userPaused, setUserPaused] = useState(false);
   const userPausedRef = useRef(false);
 
-  // Cursor parallax — the slab rotates toward the pointer for a tangible 3D look.
+  // Cursor parallax: the slab rotates toward the pointer for a tangible 3D look.
   // Only wired on fine pointers (mouse) with motion allowed; touch/reduced-motion
   // keep the vars at 0, so the slab just shows its static tilt.
   const tiltRef = useRef<HTMLDivElement>(null);
@@ -151,7 +151,7 @@ export function BrowserMockup({
     if (!v) return;
     // React doesn't reliably set the `muted` DOM property from the JSX attribute,
     // and browsers (Safari especially) block autoplay on a video they consider
-    // unmuted — so the in-view .play() silently rejects. Force the property.
+    // unmuted, so the in-view .play() silently rejects. Force the property.
     v.muted = true;
     const io = new IntersectionObserver(
       ([entry]) => {
@@ -196,7 +196,7 @@ export function BrowserMockup({
             : "shadow-[0_24px_60px_-26px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.06)]",
         )}
       >
-        {/* Window chrome — traffic dots (leftmost = teal tell) + the live URL pill. */}
+        {/* Window chrome: traffic dots (leftmost = teal tell) + the live URL pill. */}
         <div className="flex h-[34px] items-center gap-space-3 rounded-t-[7px] border-b border-line bg-[#0d0d10] px-space-3">
           <span aria-hidden="true" className="flex shrink-0 items-center gap-[6px]">
             <span className="bm-dot h-[10px] w-[10px] rounded-full bg-accent" />
@@ -224,7 +224,7 @@ export function BrowserMockup({
           <span aria-hidden="true" className="w-[46px] shrink-0" />
         </div>
 
-        {/* Screen well — cropped to the page content (64/35 + object-position hides
+        {/* Screen well: cropped to the page content (64/35 + object-position hides
             the recording's OS menu bar / browser chrome / dock). */}
         <div
           className={cn("relative overflow-hidden rounded-b-[7px] bg-bezel", wellClassName)}
@@ -272,7 +272,7 @@ export function BrowserMockup({
             className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(135deg,rgba(255,255,255,0.07),transparent_38%)] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)]"
           />
 
-          {/* Boot shutter — a dark panel over the screen that scans down off the
+          {/* Boot shutter: a dark panel over the screen that scans down off the
               bottom on load, revealing the capture top→bottom, with a teal scan
               line riding its leading (top) edge. Parked off-screen at rest, so
               reduced motion / no-boot shows the screen uncovered (CSS does the
@@ -294,7 +294,7 @@ export function BrowserMockup({
             </span>
           )}
 
-          {/* Pause/play — the WCAG 2.2.2 mechanism for the looping capture.
+          {/* Pause/play: the WCAG 2.2.2 mechanism for the looping capture.
               Mirrors the badge vocabulary at the opposite corner; ::before
               extends the hit area to a comfortable 44px. Hero mode is always
               standalone (never nested in a card link), so a button is safe; still
@@ -313,7 +313,7 @@ export function BrowserMockup({
               {userPaused ? "Play capture" : "Pause capture"}
             </button>
           )}
-          {/* Live-capture badge — signals this is a real screen recording (and reads
+          {/* Live-capture badge: signals this is a real screen recording (and reads
               "poster" honestly under reduced motion). Hero only. */}
           {hero && (
             <span className="bm-badge pointer-events-none absolute bottom-space-2 right-space-2 z-[2] inline-flex items-center gap-[5px] rounded-full bg-black/65 px-space-2 py-[2px] font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-white backdrop-blur-sm">

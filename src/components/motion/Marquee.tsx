@@ -14,22 +14,22 @@ import { cn } from "@/lib/utils/cn";
  * flex `gap`) so every cell is uniform-width and the halves match exactly.
  *
  * Robust on any viewport: `copies` is measured up on mount / resize / font-load
- * so that HALF the track always spans the visible width — otherwise a wide
+ * so that HALF the track always spans the visible width: otherwise a wide
  * screen shows an empty gap rotate through mid-cycle. Drift is a constant px/sec
  * (duration derived from track width) so speed reads the same at every size.
  *
- * Motion discipline: transform-only (xPercent) at a *linear* rate — easing a
+ * Motion discipline: transform-only (xPercent) at a *linear* rate, easing a
  * continuous loop reads as broken (§7.1). Paused when off-screen for the perf
  * budget (ARCHITECTURE.md §12). Under reduced motion it renders a static, fully
  * legible row (no tween); the duplicate cells are hidden from assistive tech.
  */
 interface MarqueeProps {
   items: React.ReactNode[];
-  /** Drift speed in pixels per second — constant regardless of track width. */
+  /** Drift speed in pixels per second: constant regardless of track width. */
   speed?: number;
   /** Trailing-gap utility applied to every cell (the inter-item spacing). */
   gapClassName?: string;
-  /** On-page pause/play control (WCAG 2.2.2 — auto-motion over 5s needs a user
+  /** On-page pause/play control (WCAG 2.2.2: auto-motion over 5s needs a user
    *  mechanism; prefers-reduced-motion only covers users who found the OS
    *  setting). Default on; the control never renders in the static branch. */
   pausable?: boolean;
@@ -64,7 +64,7 @@ export function Marquee({
     const track = trackRef.current;
     if (!wrap || !track || items.length === 0) return;
     // groupWidth is independent of `copies` (the track scales linearly), so this
-    // converges to a stable fixed point — no render loop.
+    // converges to a stable fixed point, no render loop.
     const measure = () => {
       const groupWidth = track.scrollWidth / copies;
       if (groupWidth <= 0) return;
@@ -97,7 +97,7 @@ export function Marquee({
 
       // Pause off-screen so the loop never burns frames once scrolled past
       // (§7.5 / §12). GSAP already throttles on tab-hidden. A user pause always
-      // wins — scrolling away and back must not restart a paused marquee.
+      // wins, scrolling away and back must not restart a paused marquee.
       const io = new IntersectionObserver(
         ([entry]) =>
           entry.isIntersecting && !userPausedRef.current
@@ -129,7 +129,7 @@ export function Marquee({
   };
 
   return (
-    // The control sits OUTSIDE the masked container — the edge fade would
+    // The control sits OUTSIDE the masked container: the edge fade would
     // otherwise wash it out at exactly the corner it occupies.
     <div className={cn("relative", className)}>
       <div

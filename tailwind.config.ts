@@ -15,7 +15,7 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      // Custom breakpoint — landscape phones are WIDE but very SHORT, exactly
+      // Custom breakpoint: landscape phones are WIDE but very SHORT, exactly
       // where the width-based type clamps (13vw / 7vw) render huge type that
       // eats the viewport and pushes content below the fold. `short-land:` lets
       // the hero + case-study headers dial themselves down for that case only.
@@ -29,14 +29,14 @@ const config: Config = {
         fg: "var(--fg)",
         muted: "var(--muted)",
         surface: "var(--surface)",
-        bezel: "var(--bezel)", // component layer — phone-frame device body/notch
+        bezel: "var(--bezel)", // component layer: phone-frame device body/notch
         line: "var(--line)",
         accent: {
           DEFAULT: "var(--accent)",
           hover: "var(--accent-hover)",
         },
         "on-accent": "var(--on-accent)",
-        // Interaction signal — the site-wide neon-green hover/affordance colour.
+        // Interaction signal: the site-wide neon-green hover/affordance colour.
         neon: "var(--neon)",
       },
 

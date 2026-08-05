@@ -2,7 +2,7 @@
  * Mobile legibility audit for the cinematic reel's "Currently" board.
  *
  * The board rides over a full-bleed film clip below lg, so its contrast is not a
- * token question — it depends on whatever pixels the frame happens to put behind
+ * token question: it depends on whatever pixels the frame happens to put behind
  * each line of type, and that changes as the reel scrubs. This walks the reel's
  * scroll timeline, screenshots the phone viewport at each beat, and measures REAL
  * contrast: it re-decodes each screenshot in a canvas, finds the LIGHTEST backdrop
@@ -84,7 +84,7 @@ for (const beat of BEATS) {
           // Allow a <dd> that wraps spans: FlapText splits its value into
           // per-character spans, each too narrow to survive the width filter, so
           // excluding any element with span children would silently drop the
-          // board's actual CONTENT — the most important text on the panel.
+          // board's actual CONTENT: the most important text on the panel.
           !el.querySelector("h2, p, dd")
         );
       })
@@ -93,7 +93,7 @@ for (const beat of BEATS) {
         const cs = getComputedStyle(el);
         // Gradient-clipped type (.text-spectrum) paints its glyphs from a
         // background-image and sets the fill transparent, so `color` is
-        // rgba(0,0,0,0) — reading that as the text colour reports a legible
+        // rgba(0,0,0,0), reading that as the text colour reports a legible
         // violet-on-black headline as a 1.3:1 failure. The real colours are the
         // gradient's own stops; judge it by its DARKEST stop, the worst case.
         const fill = cs.webkitTextFillColor || cs.color;
@@ -128,7 +128,7 @@ for (const beat of BEATS) {
 
   // Re-shoot with the board's TEXT hidden but everything behind it untouched.
   // Sampling the lit screenshot would find the glyphs themselves as the
-  // "lightest pixel" and report a meaningless 1.00:1 — the backdrop has to be
+  // "lightest pixel" and report a meaningless 1.00:1; the backdrop has to be
   // photographed on its own. Layout is preserved (visibility, not display), so
   // the boxes measured above still line up exactly.
   // Injected by hand, not page.addStyleTag: that helper ignores an `id`, so the
@@ -187,7 +187,7 @@ const contrast = (a, b) => {
   return (hi + 0.05) / (lo + 0.05);
 };
 
-console.log(`\n=== reel mobile contrast (${TAG}) — 390x844, worst-case backdrop pixel ===`);
+console.log(`\n=== reel mobile contrast (${TAG}): 390x844, worst-case backdrop pixel ===`);
 let worst = Infinity;
 let worstLine = "";
 let lowCount = 0;
@@ -209,5 +209,5 @@ for (const { beat, boxes, sampled } of beats) {
   });
 }
 console.log(`\n${lowCount} line(s) below their WCAG minimum`);
-console.log(`worst: ${worst.toFixed(2)}:1 — ${worstLine}`);
+console.log(`worst: ${worst.toFixed(2)}:1: ${worstLine}`);
 console.log(`shots in ${OUT} (tag: ${TAG})`);

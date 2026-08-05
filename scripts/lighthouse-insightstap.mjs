@@ -3,7 +3,7 @@ import { mkdirSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 /*
- * Measured outcomes for the InsightsTap case study — real Lighthouse numbers
+ * Measured outcomes for the InsightsTap case study: real Lighthouse numbers
  * against the LIVE production site, not lab claims. 5 runs per page per mode,
  * median reported (single Lighthouse runs are noisy). JSON reports are kept in
  * scripts/lighthouse/reports/ as provenance for every published figure.

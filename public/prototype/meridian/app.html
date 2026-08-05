@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Meridian — Tier B</title>
+<title>Meridian: Tier B</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700;800;900&family=Figtree:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -24,7 +24,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 /* Scrollbars hidden throughout. This prototype is presented inside a device
-   mockup, where a desktop scrollbar track breaks the illusion — and at phone /
+   mockup, where a desktop scrollbar track breaks the illusion, and at phone /
    tablet widths the shell becomes a document-scroll page, where every mobile
    platform hides them natively anyway. Scrolling itself is untouched. */
 html,body{scrollbar-width:none;-ms-overflow-style:none}
@@ -309,7 +309,7 @@ tbody tr.sel td{background:color-mix(in srgb,var(--iris) 12%,transparent)}
 .toast .ti{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;flex:none;font-size:12px}
 .toast .undo{background:var(--card);border:1px solid var(--line-2);color:var(--hi);font-weight:700;font-size:12.5px;padding:5px 12px;border-radius:var(--rfull)}
 .toast .undo:hover{border-color:var(--iris)}
-/* ===== Phase 3 — commercial ===== */
+/* ===== Phase 3: commercial ===== */
 #banner:empty{display:none}
 .banner{display:flex;align-items:center;gap:14px;padding:12px 32px;font-size:13.5px;font-weight:600;border-bottom:1px solid var(--line)}
 .banner .bi{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;flex:none}
@@ -368,13 +368,13 @@ tbody tr.sel td{background:color-mix(in srgb,var(--iris) 12%,transparent)}
 .sw::after{content:"";position:absolute;top:2.5px;left:2.5px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s}
 .sw.on{background:var(--grad-dusk)}.sw.on::after{transform:translateX(17px)}
 .pw-ic{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;margin-bottom:14px;background:var(--grad-iris)}
-/* ===== Phase 4 — operability ===== */
+/* ===== Phase 4: operability ===== */
 .modal.wide{width:min(600px,94vw)}
 .staff-tag{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--grad-iris);padding:2px 8px;border-radius:var(--rfull)}
 .flag-sw .sw{flex:none}
 .drop{border:1.5px dashed var(--line-2);border-radius:var(--rmd);padding:32px;text-align:center;color:var(--mut);transition:border-color .2s,background .2s}
 .drop:hover{border-color:var(--iris);background:var(--card)}
-/* ===== Phase 6 — calendar & reports ===== */
+/* ===== Phase 6: calendar & reports ===== */
 .cal-head{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:8px}
 .cal-head div{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--faint);text-align:center}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
@@ -390,7 +390,7 @@ tbody tr.sel td{background:color-mix(in srgb,var(--iris) 12%,transparent)}
 .ws:hover .wsmenu{opacity:1}
 .wsmenu:hover{color:var(--hi);background:var(--card)}
 @media(max-width:860px){.wsmenu{opacity:.55}}
-/* ===== Phase 5 — tour & a11y ===== */
+/* ===== Phase 5: tour & a11y ===== */
 .skip{position:absolute;left:-999px;top:8px;z-index:400;background:var(--iris);color:#fff;padding:8px 14px;border-radius:8px;font-weight:700;font-size:13px}
 .skip:focus{left:8px}
 .tourpanel{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:210;background:var(--ink-4);border:1px solid var(--line-2);border-radius:var(--rlg);box-shadow:var(--shadow);padding:18px 20px;width:min(440px,92vw);animation:tin .3s var(--ease)}
@@ -399,7 +399,7 @@ tbody tr.sel td{background:color-mix(in srgb,var(--iris) 12%,transparent)}
 .tourpanel p{font-size:13.5px;color:var(--mut);margin-bottom:14px}
 .tourpanel .trow{display:flex;gap:10px;align-items:center}
 .tourprog{flex:1;display:flex;gap:4px}.tourprog i{height:4px;flex:1;border-radius:2px;background:var(--line-2)}.tourprog i.on{background:var(--grad-dusk)}
-/* ===== Phase 5 — responsive / mobile ===== */
+/* ===== Phase 5: responsive / mobile ===== */
 .menu-btn{display:none}
 .botnav{position:fixed;bottom:0;left:0;right:0;z-index:65;background:var(--glass);backdrop-filter:blur(18px) saturate(1.4);border-top:1px solid var(--line);display:none;justify-content:space-around;padding:7px 4px calc(7px + env(safe-area-inset-bottom))}
 .botnav button{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;font-weight:600;color:var(--mut);padding:4px 12px;border-radius:10px}
@@ -503,7 +503,7 @@ tbody tr.sel td{background:color-mix(in srgb,var(--iris) 12%,transparent)}
   <div class="brandside">
     <div class="mesh"><span class="bm1"></span><span class="bm2"></span><span class="bm3"></span></div>
     <div class="logo"><svg width="28" height="28" style="color:var(--hi)"><use href="#mark"/></svg> Meridian</div>
-    <div class="pitch"><h1>Work at its<br><span>highest, clearest point.</span></h1><p>One shared, permissioned, auditable surface for your team's work — records, views, collaboration and reporting.</p></div>
+    <div class="pitch"><h1>Work at its<br><span>highest, clearest point.</span></h1><p>One shared, permissioned, auditable surface for your team's work: records, views, collaboration and reporting.</p></div>
     <div class="feat"><div>SOC 2 · GDPR</div><div>SSO &amp; SCIM</div><div>99.9% uptime</div></div>
   </div>
   <div class="authside"><div class="authcard" id="authcard"></div></div>
@@ -582,7 +582,7 @@ const R1=[
  ['Proration preview on seat change','open','med','sm','Aug 03',0],['Notification digest cadence','review','med','jl','Jul 27',0],
  ['Command palette action permissions','blocked','high','da','Jul 25',1],['Board drag between columns','open','med','ko','Aug 07',0],
 ];
-const R2=[['Q3 brand campaign assets','open','high','da','Aug 10',0],['Website hero redesign','review','med','da','Aug 12',0],['Motion guidelines doc','open','low','da','Aug 15',0],['Client handoff — Northwind','shipped','med','da','Jul 21',0]];
+const R2=[['Q3 brand campaign assets','open','high','da','Aug 10',0],['Website hero redesign','review','med','da','Aug 12',0],['Motion guidelines doc','open','low','da','Aug 15',0],['Client handoff: Northwind','shipped','med','da','Jul 21',0]];
 function mkMembers(defs){return defs.map((d,i)=>({id:d[0],initials:d[1],name:d[2],grad:GR[i%GR.length],role:d[3],email:d[0]+'@'+d[4],status:d[5]||'active'}));}
 function mkRecords(rows,ws){return rows.map((r,i)=>({id:'REC-'+(1042+i),title:r[0],status:r[1],prio:r[2],assignee:r[3],due:r[4],over:!!r[5],ws:ws,desc:'Prototype record seeded for the Meridian Tier B demo.',updated:NOW-i*3600e3,activity:[{who:r[3],t:'created this record',at:(i+2)+'d ago'}]}));}
 
@@ -605,7 +605,7 @@ function freshDB(){
 let DB=freshDB(), undo=null;
 const S={ view:'home', filters:{status:null,prio:null,assignee:null,q:''}, sort:{key:'updated',dir:'desc'}, sel:new Set(), sheet:null, mode:'list', recordId:null, checkoutPlan:null, coSeats:null, notifTab:'inbox', notifFilter:'all', bannerDismissed:null };
 
-/* ===== Phase 3 — data & entitlements ===== */
+/* ===== Phase 3: data & entitlements ===== */
 const PLANS=[
  {key:'trial',name:'Trial',price:0,recordLimit:20,seatLimit:5,blurb:'14-day evaluation',feat:['Up to 20 records','5 seats','Core work surface','Board & list views']},
  {key:'team',name:'Team',price:12,recordLimit:500,seatLimit:20,blurb:'For small teams',feat:['500 records','20 seats','Saved views','Calendar view','Email support']},
@@ -627,7 +627,7 @@ const atRecordLimit=()=>{const l=recLimit();return l!=null&&org().records.length
 const stateReadOnly=()=>['restricted','cancelled'].includes(org().state);
 const unreadCount=()=>(org().notifications||[]).filter(n=>!n.read).length;
 
-/* ===== Phase 4 — operability data ===== */
+/* ===== Phase 4: operability data ===== */
 let IMP=null, wiz={step:0};
 const FLAGS=[{k:'board_v2',n:'Board view v2',on:true,pct:100},{k:'ai_suggest',n:'AI suggestions',on:false,pct:0},{k:'new_checkout',n:'New checkout flow',on:true,pct:35},{k:'calendar',n:'Calendar view',on:true,pct:100},{k:'sso_scim',n:'SCIM provisioning',on:false,pct:0}];
 const ARTICLES=[['Getting started with records','Create, filter and share your first records.'],['Inviting your team','Roles, seats and workspace scope explained.'],['Saved views & filters','Build a view and set it as your default.'],['Billing & seats','Upgrades, downgrades and proration.'],['Keyboard shortcuts','Work without touching the mouse.'],['Importing data','CSV/XLSX import with column mapping.']];
@@ -643,7 +643,7 @@ const org=()=>DB.orgs[DB.currentOrg];
 const me=()=>org().members.find(m=>m.id===DB.currentUser)||{id:'da',initials:'DA',name:'You',grad:'g-iris',role:'Guest'};
 const myRole=()=>me().role;
 const memOf=id=>org().members.find(m=>m.id===id)||{initials:'??',name:'Unknown',grad:'g-iris'};
-const wsName=id=>{const w=org().workspaces.find(w=>w.id===id);return w?w.name:'—';};
+const wsName=id=>{const w=org().workspaces.find(w=>w.id===id);return w?w.name:',';};
 function can(action){
   const r=myRole(), rank=ROLES.indexOf(r);
   if(action==='billing')return r==='Owner';
@@ -652,7 +652,7 @@ function can(action){
   if(action==='create'||action==='edit')return r!=='Guest';
   return true;
 }
-function guard(action,label){ if(IMP&&['create','edit','delete'].includes(action)){ toast('Read-only impersonation — writes are disabled','⊘','var(--danger)'); return false; } if((action==='create'||action==='edit'||action==='delete')&&stateReadOnly()){ toast(`${org().name} is ${org().state} — read & export only`,'⊘','var(--danger)'); return false; } if(can(action))return true; toast(`Your role (${myRole()}) can't ${label}`,'⊘','var(--danger)'); return false; }
+function guard(action,label){ if(IMP&&['create','edit','delete'].includes(action)){ toast('Read-only impersonation: writes are disabled','⊘','var(--danger)'); return false; } if((action==='create'||action==='edit'||action==='delete')&&stateReadOnly()){ toast(`${org().name} is ${org().state}: read & export only`,'⊘','var(--danger)'); return false; } if(can(action))return true; toast(`Your role (${myRole()}) can't ${label}`,'⊘','var(--danger)'); return false; }
 
 /* ---------- persistence ---------- */
 function save(){ try{ DB.theme=root.getAttribute('data-theme'); localStorage.setItem('meridian-b',JSON.stringify(DB)); }catch(e){} }
@@ -682,7 +682,7 @@ function renderAuth(){
   const signup=authMode==='signup';
   c.innerHTML=`
     <h2>${signup?'Create your account':'Welcome back'}</h2>
-    <p class="lead">${signup?'Start your 14-day trial — no card required.':'Sign in to your Meridian workspace.'}</p>
+    <p class="lead">${signup?'Start your 14-day trial, no card required.':'Sign in to your Meridian workspace.'}</p>
     <div class="oauth">
       <button data-auth="oauth"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 11v3.6h5c-.2 1.3-1.6 3.9-5 3.9a5.5 5.5 0 1 1 0-11c1.7 0 2.8.7 3.5 1.3l2.4-2.3C16.9 5 14.7 4 12 4a8 8 0 1 0 0 16c4.6 0 7.7-3.2 7.7-7.8 0-.5 0-.9-.1-1.2H12z"/></svg>Google</button>
       <button data-auth="oauth"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M11.4 3H3v8.4h8.4V3zM21 3h-8.4v8.4H21V3zM11.4 12.6H3V21h8.4v-8.4zM21 12.6h-8.4V21H21v-8.4z"/></svg>Microsoft</button>
@@ -888,7 +888,7 @@ function renderRecordPage(){
     <div class="rp-frow"><span class="fl">Status</span>${statusBadge(r)}</div>
     <div class="rp-frow"><span class="fl">Priority</span>${prioTag(r)}</div>
     <div class="rp-frow"><span class="fl">Assignee</span><span class="badge tone-muted" data-edit="assignee" data-id="${r.id}" style="gap:8px">${avatar(r.assignee,22)} ${esc(m.name.split(' ')[0])}</span></div>
-    <div class="rp-frow"><span class="fl">Due</span><span class="pri" data-edit="due" data-id="${r.id}" style="padding:4px 10px;cursor:pointer">${r.over?'<span style="color:var(--danger);font-weight:600">Overdue</span>':(r.due&&r.due!=='—'?esc(r.due):'<span style="color:var(--faint)">Set date</span>')}</span></div>
+    <div class="rp-frow"><span class="fl">Due</span><span class="pri" data-edit="due" data-id="${r.id}" style="padding:4px 10px;cursor:pointer">${r.over?'<span style="color:var(--danger);font-weight:600">Overdue</span>':(r.due&&r.due!==':'?esc(r.due):'<span style="color:var(--faint)">Set date</span>')}</span></div>
     <div class="rp-frow"><span class="fl">Workspace</span><span style="font-size:13px;color:var(--mut)">${esc(wsName(r.ws))}</span></div>
   </div></div></div>`;
 }
@@ -903,11 +903,11 @@ function renderReports(){return `<div class="ph"><h1>Reports</h1></div><div clas
 
 /* ---------- mutations ---------- */
 function setStatus(id,k){const r=org().records.find(x=>x.id===id);if(!r||r.status===k)return;if(!guard('edit','edit records'))return;r.status=k;r.updated=NOW;logAudit('record.update',id+' → '+st(k).label);if(id===S.sheet)renderSheet();render();toast(`Status → ${st(k).label}`,'✓','var(--success)');}
-function setDue(id,off){const r=org().records.find(x=>x.id===id);if(!r)return;if(!guard('edit','edit records'))return;const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];if(off===null){r.due='—';r.over=false;}else{const d=new Date(NOW+off*86400000);r.due=M[d.getMonth()]+' '+String(d.getDate()).padStart(2,'0');r.over=off<0;}r.updated=NOW;logAudit('record.update',id+' due → '+r.due);if(id===S.sheet)renderSheet();render();toast('Due date updated','✓','var(--success)');}
+function setDue(id,off){const r=org().records.find(x=>x.id===id);if(!r)return;if(!guard('edit','edit records'))return;const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];if(off===null){r.due=':';r.over=false;}else{const d=new Date(NOW+off*86400000);r.due=M[d.getMonth()]+' '+String(d.getDate()).padStart(2,'0');r.over=off<0;}r.updated=NOW;logAudit('record.update',id+' due → '+r.due);if(id===S.sheet)renderSheet();render();toast('Due date updated','✓','var(--success)');}
 document.addEventListener('keydown',e=>{const c=e.target.closest&&e.target.closest('[data-comment]');if(c&&e.key==='Enter'){e.preventDefault();const b=document.querySelector(`[data-postcomment="${c.dataset.comment}"]`);b&&b.click();}});
 function setPrio(id,k){const r=org().records.find(x=>x.id===id);if(!r||r.prio===k)return;if(!guard('edit','edit records'))return;r.prio=k;if(id===S.sheet)renderSheet();render();toast(`Priority → ${pr(k).label}`,'✓','var(--success)');}
 function setAssignee(id,who){const r=org().records.find(x=>x.id===id);if(!r)return;if(!guard('edit','reassign records'))return;r.assignee=who;if(id===S.sheet)renderSheet();render();toast(`Assigned to ${memOf(who).name.split(' ')[0]}`,'✓','var(--success)');}
-function newRecord(){ if(!guard('create','create records'))return; if(atRecordLimit()){paywall('records');return;} const id='REC-'+(++org().seq); org().records.unshift({id,title:'Untitled record',status:'open',prio:'med',assignee:DB.currentUser,due:'—',over:false,ws:DB.currentWs,desc:'',updated:NOW,activity:[{who:DB.currentUser,t:'created this record',at:'just now'}]}); if(S.view==='home'||S.view==='reports'||S.view==='members'){S.view='all';} S.mode='list'; render(); openSheet(id); toast('Record created',' + ','var(--iris)'); setTimeout(()=>{const h=$('#sheet h2');if(h){h.focus();getSelection().selectAllChildren(h);}},340); }
+function newRecord(){ if(!guard('create','create records'))return; if(atRecordLimit()){paywall('records');return;} const id='REC-'+(++org().seq); org().records.unshift({id,title:'Untitled record',status:'open',prio:'med',assignee:DB.currentUser,due:',',over:false,ws:DB.currentWs,desc:'',updated:NOW,activity:[{who:DB.currentUser,t:'created this record',at:'just now'}]}); if(S.view==='home'||S.view==='reports'||S.view==='members'){S.view='all';} S.mode='list'; render(); openSheet(id); toast('Record created',' + ','var(--iris)'); setTimeout(()=>{const h=$('#sheet h2');if(h){h.focus();getSelection().selectAllChildren(h);}},340); }
 function delRecords(ids){ if(!guard('delete','delete records'))return; const removed=ids.map(id=>({r:org().records.find(x=>x.id===id),i:org().records.findIndex(x=>x.id===id)})).filter(o=>o.r); org().records=org().records.filter(r=>!ids.includes(r.id)); ids.forEach(id=>S.sel.delete(id)); if(ids.includes(S.sheet))closeSheet(); if(ids.includes(S.recordId)){S.mode='list';} const oid=DB.currentOrg; undo=()=>{DB.orgs[oid].records=DB.orgs[oid].records||[];removed.sort((a,b)=>a.i-b.i).forEach(o=>DB.orgs[oid].records.splice(o.i,0,o.r));undo=null;render();toast('Restored','↩','var(--iris)');}; render(); toast(`${ids.length} record${ids.length>1?'s':''} deleted`,'🗑','var(--danger)',true); }
 
 /* ---------- side sheet ---------- */
@@ -922,7 +922,7 @@ function renderSheet(){
     <div class="frow"><div class="fl">Status</div><div>${statusBadge(r)}</div></div>
     <div class="frow"><div class="fl">Priority</div><div>${prioTag(r)}</div></div>
     <div class="frow"><div class="fl">Assignee</div><div><span class="badge tone-muted" data-edit="assignee" data-id="${r.id}" style="gap:8px">${avatar(r.assignee,22)} ${esc(m.name)}</span></div></div>
-    <div class="frow"><div class="fl">Due date</div><div><span class="pri" data-edit="due" data-id="${r.id}" style="padding:4px 10px;cursor:pointer">${r.over?'<span style="color:var(--danger);font-weight:600">Overdue</span>':(r.due&&r.due!=='—'?esc(r.due):'<span style="color:var(--faint)">Set date</span>')}</span></div></div>
+    <div class="frow"><div class="fl">Due date</div><div><span class="pri" data-edit="due" data-id="${r.id}" style="padding:4px 10px;cursor:pointer">${r.over?'<span style="color:var(--danger);font-weight:600">Overdue</span>':(r.due&&r.due!==':'?esc(r.due):'<span style="color:var(--faint)">Set date</span>')}</span></div></div>
     <div class="frow"><div class="fl">Workspace</div><div style="font-size:13px;color:var(--mut)">${esc(wsName(r.ws))}</div></div>
     <div class="sec-h">Description</div><div class="desc" contenteditable="true" spellcheck="false" data-desc="${r.id}" data-ph="Add a description…">${esc(r.desc)}</div>
     <div class="sec-h">Activity</div>${(r.activity||[]).map(a=>`<div class="act-item">${avatar(a.who,24,'aav')}<b>${memOf(a.who).name.split(' ')[0]}</b> ${esc(a.t)}<span class="at">${a.at}</span></div>`).join('')}
@@ -1020,9 +1020,9 @@ document.addEventListener('click',e=>{
     else if(act==='coSeats'){S.coSeats=Math.max(1,(S.coSeats||org().seats)+ +a.dataset.d);render();}
     else if(act==='choosePlan'){S.checkoutPlan=a.dataset.plan;S.coSeats=org().seats;go('checkout');}
     else if(act==='confirmCheckout'){confirmCheckout();}
-    else if(act==='cancelSub'){setState('cancelled');toast('Subscription cancelled — access to period end','✓','var(--warning)');}
+    else if(act==='cancelSub'){setState('cancelled');toast('Subscription cancelled: access to period end','✓','var(--warning)');}
     else if(act==='reactivate'){setState('active');toast('Subscription reactivated','✓','var(--success)');}
-    else if(act==='payNow'){setState('active');toast('Payment successful — thanks!','✓','var(--success)');}
+    else if(act==='payNow'){setState('active');toast('Payment successful, thanks!','✓','var(--success)');}
     else if(act==='setState'){setState(a.dataset.state);}
     else if(act==='dismissBanner'){S.bannerDismissed=org().id;renderBanner();}
     else if(act==='downloadInvoice')toast('Invoice PDF downloaded (demo)','⬇','var(--iris)');
@@ -1041,12 +1041,12 @@ document.addEventListener('click',e=>{
     else if(act==='importWiz')wizStart();
     else if(act==='wizNext')wizNext();
     else if(act==='wizBack'){wiz.step--;wizRender();}
-    else if(act==='dsar')toast('DSAR queued — signed export link within 24h (demo)','◆','var(--iris)');
+    else if(act==='dsar')toast('DSAR queued: signed export link within 24h (demo)','◆','var(--iris)');
     else if(act==='retention')toast('Retention policy saved (demo)','✓','var(--success)');
     else if(act==='impersonate'){IMP={name:a.dataset.name};S.view='home';S.mode='list';logAudit('staff.impersonate',a.dataset.name);renderChrome();render();toast('Impersonating '+a.dataset.name,'◉','var(--iris)');}
     else if(act==='stopImp'){IMP=null;renderChrome();render();toast('Stopped impersonating','✓','var(--success)');}
     else if(act==='toggleFlag'){const f=FLAGS.find(x=>x.k===a.dataset.k);f.on=!f.on;f.pct=f.on?100:0;render();toast(f.n+' → '+(f.on?'on':'off'),'⚑','var(--iris)');}
-    else if(act==='killFlag'){FLAGS.forEach(f=>{f.on=false;f.pct=0;});render();toast('Kill switch — all flags off','⚠','var(--danger)');}
+    else if(act==='killFlag'){FLAGS.forEach(f=>{f.on=false;f.pct=0;});render();toast('Kill switch: all flags off','⚠','var(--danger)');}
     else if(act==='adminOpen'){S.adminOrg=a.dataset.o;render();}
     else if(act==='auditExport')auditExport();
     else if(act==='reportSet'){(S.report=S.report||{dim:'status',chart:'bar'})[a.dataset.key]=a.dataset.val;render();}
@@ -1063,7 +1063,7 @@ document.addEventListener('click',e=>{
     else if(act==='toggleSSO'){org().sso.enabled=!org().sso.enabled;logAudit('security.sso',org().sso.enabled?'enabled':'disabled');render();toast('SSO '+(org().sso.enabled?'enabled':'disabled'),'✓','var(--success)');}
     else if(act==='toggleSCIM'){org().sso.scim=!org().sso.scim;render();toast('SCIM provisioning '+(org().sso.scim?'on':'off'),'✓','var(--success)');}
     else if(act==='toggleMFA'){org().sso.mfa=!org().sso.mfa;logAudit('security.mfa',org().sso.mfa?'required':'optional');render();toast('MFA '+(org().sso.mfa?'now required':'optional'),'✓','var(--success)');}
-    else if(act==='addDomain'){org().domains.push('example.com');render();toast('Domain added — verify via DNS TXT','◆','var(--iris)');}
+    else if(act==='addDomain'){org().domains.push('example.com');render();toast('Domain added: verify via DNS TXT','◆','var(--iris)');}
     else if(act==='saveSettings')toast('Profile saved','✓','var(--success)');
     else if(act==='revokeSession')toast('Session revoked','✓','var(--danger)');
     else if(act==='signoutAll')toast('Signed out of all other sessions','✓','var(--success)');
@@ -1156,15 +1156,15 @@ document.addEventListener('keydown',e=>{
   else if(window._g&&['h','r','m'].includes(e.key.toLowerCase())){go({h:'home',r:'all',m:'members'}[e.key.toLowerCase()]);window._g=0;}
 });
 
-/* ============ PHASE 3 — RENDER ============ */
+/* ============ PHASE 3: RENDER ============ */
 function updateBell(){const el=$('#bellBadge');if(!el)return;const c=unreadCount();el.textContent=c>9?'9+':c;el.style.display=c?'grid':'none';}
 function settingsNav(active){return `<div class="setnav">${[['billing','Overview'],['plans','Plans'],['usage','Usage'],['invoices','Invoices']].map(t=>`<a class="${active===t[0]?'on':''}" data-action="goSet" data-v="${t[0]}">${t[1]}</a>`).join('')}</div>`;}
 function stateBadge(s){const m={trialing:['tone-info','Trialing'],active:['tone-success','Active'],past_due:['tone-danger','Past due'],restricted:['tone-danger','Restricted'],cancelled:['tone-warning','Cancelled']}[s]||['tone-muted',s];return `<span class="badge ${m[0]}" style="cursor:default"><span class="bd" style="background:currentColor"></span>${m[1]}</span>`;}
 function bannerHTML(tone,title,msg,btns){const ic={info:'◆',warning:'▲',danger:'⚠'}[tone];return `<div class="banner ${tone}"><span class="bi tone-${tone}">${ic}</span><span><b>${title}.</b> ${msg}</span><span class="bx">${btns.map(b=>`<button class="btn ${b.ghost?'btn-gho':'btn-sec'} sm" data-action="${b.a}">${b.l}</button>`).join('')}</span></div>`;}
 function renderBanner(){const b=$('#banner');if(!b)return;const o=org();let h='';if(IMP){b.innerHTML=bannerHTML('danger','Impersonating '+IMP.name,'Staff session · read-only · every action is audited.',[{l:'Stop impersonating',a:'stopImp'}]);return;}
- if(o.state==='past_due')h=bannerHTML('danger','Payment failed',"We couldn't charge your card — update your payment method to avoid interruption.",[{l:'Update payment',a:'payNow'}]);
+ if(o.state==='past_due')h=bannerHTML('danger','Payment failed',"We couldn't charge your card: update your payment method to avoid interruption.",[{l:'Update payment',a:'payNow'}]);
  else if(o.state==='restricted')h=bannerHTML('danger','Organisation restricted','Your subscription lapsed. You can read & export, but creating and editing are disabled.',[{l:'Reactivate',a:'reactivate'}]);
- else if(o.state==='cancelled')h=bannerHTML('warning','Subscription cancelled','Access ends at period end. Reactivate anytime — your data stays intact.',[{l:'Reactivate',a:'reactivate'}]);
+ else if(o.state==='cancelled')h=bannerHTML('warning','Subscription cancelled','Access ends at period end. Reactivate anytime: your data stays intact.',[{l:'Reactivate',a:'reactivate'}]);
  else if(o.state==='trialing'&&S.bannerDismissed!==o.id)h=bannerHTML('info',`Trial · ${o.trial} days left`,'Add a plan to keep full access when your trial ends.',[{l:'View plans',a:'viewPlans'},{l:'Dismiss',a:'dismissBanner',ghost:1}]);
  b.innerHTML=h;}
 function renderBilling(){const o=org(),p=planOf(o);
@@ -1193,20 +1193,20 @@ function renderCheckout(){const o=org(),p=PLANS.find(x=>x.key===S.checkoutPlan)|
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><div style="font-weight:700;color:var(--hi)">Billing interval</div><div class="itoggle">${['monthly','annual'].map(iv=>`<button class="${o.interval===iv?'on':''}" data-action="setInterval" data-iv="${iv}">${iv[0].toUpperCase()+iv.slice(1)}</button>`).join('')}</div></div>
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><div><div style="font-weight:700;color:var(--hi)">Seats</div><div style="font-size:12.5px;color:var(--mut)">${money(unit)} per seat / ${ann?'yr':'mo'}</div></div><div class="stepper"><button data-action="coSeats" data-d="-1">−</button><span class="val">${seats}</span><button data-action="coSeats" data-d="1">+</button></div></div>
   <div style="font-weight:700;color:var(--hi);margin-bottom:8px">Payment</div><div class="mock-card">4242 4242 4242 4242<span style="margin-left:auto">08/28 · 123</span></div>
-  <div style="font-size:11.5px;color:var(--faint);margin-top:10px">🔒 Demo only — tokenised by the PSP, never touches our servers.</div></div>
+  <div style="font-size:11.5px;color:var(--faint);margin-top:10px">🔒 Demo only: tokenised by the PSP, never touches our servers.</div></div>
   <div class="card2"><h3>Order summary</h3>
   <div class="sumrow"><span class="lbl">${p.name} × ${seats} seats</span><span>${money(sub)}</span></div>
   <div class="sumrow"><span class="lbl">Tax (8%)</span><span>${money(tax)}</span></div>
   <div class="sumrow tot"><span>Total / ${ann?'year':'month'}</span><span>${money(tot)}</span></div>
   <button class="btn btn-pri block lg" style="margin-top:18px" data-action="confirmCheckout">Confirm &amp; pay ${money(tot)}</button>
-  <div style="font-size:12px;color:var(--mut);text-align:center;margin-top:10px">Entitlements update instantly — no reload.</div></div></div>`;}
+  <div style="font-size:12px;color:var(--mut);text-align:center;margin-top:10px">Entitlements update instantly, no reload.</div></div></div>`;}
 function renderInvoices(){const o=org();
  return `<div class="ph"><div><h1>Invoices</h1><div class="sub">7-year retention · downloadable PDF</div></div></div>${settingsNav('invoices')}
  <div class="twrap"><table><thead><tr><th>Date</th><th>Invoice</th><th>Amount</th><th>Status</th><th></th></tr></thead><tbody>${o.invoices.map(iv=>`<tr><td class="tab">${iv.date}</td><td class="mono" style="font-size:12px;color:var(--mut)">${iv.num}</td><td class="tab" style="color:var(--hi);font-weight:600">${money(iv.amount)}</td><td><span class="inv-status tone-success">Paid</span></td><td style="width:120px"><button class="btn btn-gho sm" data-action="downloadInvoice">Download</button></td></tr>`).join('')}</tbody></table></div>`;}
 function renderUsage(){const o=org(),p=planOf(o),rl=recLimit();
  const bars=[{l:'Records',v:o.records.length,max:rl},{l:'Seats',v:o.seats,max:o.cap},{l:'Storage',v:o.storage,max:20,unit:' GB'}];
  return `<div class="ph"><div><h1>Usage</h1><div class="sub">Current period · resets Aug 01</div></div></div>${settingsNav('usage')}
- <div class="card2" style="max-width:760px">${bars.map(b=>{const max=b.max,pct=max==null?12:Math.min(100,Math.round(b.v/max*100)),cls=max==null?'':pct>=100?'over':pct>=80?'warn':'';return `<div class="ubar ${cls}"><div class="ut"><span>${b.l}</span><b>${b.v}${b.unit||''}${max==null?' <span style="color:var(--mut);font-weight:400">/ unlimited</span>':' / '+max+(b.unit||'')}</b></div><div class="track"><div class="fill" style="width:${max==null?12:pct}%"></div></div>${max!=null&&pct>=80?`<div style="font-size:12px;color:var(--${pct>=100?'danger':'warning'});margin-top:6px;font-weight:600">${pct>=100?'Limit reached — upgrade to add more.':'Approaching limit ('+pct+'%).'}</div>`:''}</div>`;}).join('')}<button class="btn btn-pri sm" data-action="viewPlans" style="margin-top:4px">Upgrade for higher limits</button></div>`;}
+ <div class="card2" style="max-width:760px">${bars.map(b=>{const max=b.max,pct=max==null?12:Math.min(100,Math.round(b.v/max*100)),cls=max==null?'':pct>=100?'over':pct>=80?'warn':'';return `<div class="ubar ${cls}"><div class="ut"><span>${b.l}</span><b>${b.v}${b.unit||''}${max==null?' <span style="color:var(--mut);font-weight:400">/ unlimited</span>':' / '+max+(b.unit||'')}</b></div><div class="track"><div class="fill" style="width:${max==null?12:pct}%"></div></div>${max!=null&&pct>=80?`<div style="font-size:12px;color:var(--${pct>=100?'danger':'warning'});margin-top:6px;font-weight:600">${pct>=100?'Limit reached: upgrade to add more.':'Approaching limit ('+pct+'%).'}</div>`:''}</div>`;}).join('')}<button class="btn btn-pri sm" data-action="viewPlans" style="margin-top:4px">Upgrade for higher limits</button></div>`;}
 function renderNotifications(){const o=org(),tab=S.notifTab||'inbox';
  if(tab==='prefs')return notifPrefsView();
  const nf=S.notifFilter==='unread'?o.notifications.filter(n=>!n.read):o.notifications;
@@ -1218,21 +1218,21 @@ function notifPrefsView(){const pf=org().notifPrefs,chans=['In-app','Email','Sla
  return `<div class="ph"><div><h1>Notifications</h1><div class="sub">Per-event delivery across channels</div></div></div>
  <div class="vtabs"><div class="vtab" data-action="notifTab" data-tab="inbox">Inbox</div><div class="vtab on" data-action="notifTab" data-tab="prefs">Preferences</div></div>
  <div class="card2" style="margin-top:20px;max-width:720px"><table class="prefs"><thead><tr><th>Event</th>${chans.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${Object.keys(pf).map(ev=>`<tr><td>${ev}</td>${chans.map(c=>`<td><span class="sw ${pf[ev][c]?'on':''}" data-action="prefToggle" data-ev="${ev}" data-ch="${c}"></span></td>`).join('')}</tr>`).join('')}</tbody></table></div>`;}
-function confirmCheckout(){const o=org(),p=PLANS.find(x=>x.key===S.checkoutPlan)||planOf(o);o.planKey=p.key;o.plan=p.name;o.state='active';o.trial=0;o.seats=S.coSeats||o.seats;o.cap=p.seatLimit||o.cap;if(!o.paymentMethods.length)o.paymentMethods=[{brand:'Visa',last4:'4242',exp:'08 / 28',default:true}];o.invoices.unshift({date:'Jul 25 2026',num:'INV-2026-07b',amount:(p.price||0)*o.seats,status:'paid'});S.coSeats=null;renderChrome();go('billing');toast("You're on "+p.name+" — entitlements updated",'✓','var(--success)');}
+function confirmCheckout(){const o=org(),p=PLANS.find(x=>x.key===S.checkoutPlan)||planOf(o);o.planKey=p.key;o.plan=p.name;o.state='active';o.trial=0;o.seats=S.coSeats||o.seats;o.cap=p.seatLimit||o.cap;if(!o.paymentMethods.length)o.paymentMethods=[{brand:'Visa',last4:'4242',exp:'08 / 28',default:true}];o.invoices.unshift({date:'Jul 25 2026',num:'INV-2026-07b',amount:(p.price||0)*o.seats,status:'paid'});S.coSeats=null;renderChrome();go('billing');toast("You're on "+p.name+": entitlements updated",'✓','var(--success)');}
 function setState(s){org().state=s;logAudit('billing.state','state → '+s);if(s==='active'&&org().trial>0)org().trial=0;S.bannerDismissed=null;renderChrome();render();toast('Org state → '+s,'⇄','var(--iris)');}
 function paywall(kind){const o=org(),p=planOf(o),idx=PLANS.findIndex(x=>x.key===p.key),next=PLANS[Math.min(idx+1,PLANS.length-1)];
  openModal(`<div class="modal-b" style="text-align:center;padding:26px 22px 8px"><div class="pw-ic" style="margin:0 auto"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke-linecap="round"/></svg></div><h3 style="font-size:20px;margin-bottom:6px">You've hit your ${kind==='seats'?'seat':'record'} limit</h3><p style="font-size:14px;color:var(--mut);max-width:36ch;margin:0 auto">Your ${p.name} plan includes ${kind==='seats'?o.cap+' seats':recLimit()+' records'}. Upgrade to ${next.name} for ${kind==='seats'?(next.seatLimit||'unlimited')+' seats':'unlimited records'}.</p></div><div class="modal-f"><button class="btn btn-gho" data-action="closeModal">Not now</button><button class="btn btn-pri" data-action="upgrade">Upgrade to ${next.name}</button></div>`);}
 
-/* ============ PHASE 4 — RENDER ============ */
+/* ============ PHASE 4: RENDER ============ */
 function renderData(){const o=org();
- return `<div class="ph"><div><h1>Import &amp; export</h1><div class="sub">Move your data in and out — freely. No lock-in.</div></div></div>
+ return `<div class="ph"><div><h1>Import &amp; export</h1><div class="sub">Move your data in and out, freely. No lock-in.</div></div></div>
  <div class="cols2"><div class="card2"><h3>Import</h3><p style="font-size:13.5px;color:var(--mut);margin-bottom:14px">Upload a CSV/XLSX, map columns, preview, then commit. Imported as one unit, undoable for 24 hours.</p><button class="btn btn-pri" data-action="importWiz">Start import</button></div>
- <div class="card2"><h3>Export</h3><p style="font-size:13.5px;color:var(--mut);margin-bottom:14px">Download this workspace's records as CSV — complete and portable.</p><button class="btn btn-pri" data-action="exportCsv">Export ${wsRecords().length} records (CSV)</button></div></div>
+ <div class="card2"><h3>Export</h3><p style="font-size:13.5px;color:var(--mut);margin-bottom:14px">Download this workspace's records as CSV: complete and portable.</p><button class="btn btn-pri" data-action="exportCsv">Export ${wsRecords().length} records (CSV)</button></div></div>
  <div class="cols2"><div class="card2"><h3>Data retention</h3><div style="font-size:13.5px;color:var(--mut);margin-bottom:12px">Soft-deleted records are recoverable for <b style="color:var(--hi)">30 days</b>, then purged. Audit log kept ${planOf(o).key==='enterprise'?'7 years':'12 months'}.</div><button class="btn btn-sec sm" data-action="retention">Edit policy</button></div>
  <div class="card2"><h3>GDPR · DSAR</h3><div style="font-size:13.5px;color:var(--mut);margin-bottom:12px">Export or erase all personal data for a named individual (Data Subject Access Request).</div><div style="display:flex;gap:10px"><button class="btn btn-sec sm" data-action="dsar">Export personal data</button><button class="btn btn-sec sm" data-action="dsar" style="color:var(--danger)">Erase</button></div></div></div>`;}
 function renderAudit(){const o=org(),rows=o.audit||[];
  return `<div class="ph"><div><h1>Audit log</h1><div class="sub">${rows.length} events · immutable · ${planOf(o).key==='enterprise'?'7-year':'12-month'} retention</div></div><div class="ph-actions"><button class="btn btn-sec sm" data-action="auditExport">Export CSV</button></div></div>
- <div style="margin:14px 0;font-size:12.5px;color:var(--faint)"><span style="font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:11px;color:var(--mut)">Immutable</span> — entries cannot be edited or deleted, only appended. Perform an action elsewhere and watch it appear here.</div>
+ <div style="margin:14px 0;font-size:12.5px;color:var(--faint)"><span style="font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:11px;color:var(--mut)">Immutable</span>: entries cannot be edited or deleted, only appended. Perform an action elsewhere and watch it appear here.</div>
  <div class="twrap"><table><thead><tr><th style="width:110px">When</th><th>Actor</th><th>Action</th><th>Target</th></tr></thead><tbody>${rows.map(a=>`<tr><td style="color:var(--mut);white-space:nowrap">${a.ts}</td><td><span style="display:inline-flex;align-items:center;gap:8px">${a.actor==='sys'?'<span class="av g-iris" style="width:22px;height:22px;font-size:9px">◆</span>':avatar(a.actor,22)}${a.actor==='sys'?'System':esc(memOf(a.actor).name.split(' ')[0])}</span></td><td><span class="mono" style="font-size:12px;color:var(--iris)">${a.action}</span></td><td style="color:var(--tx)">${esc(a.target)}</td></tr>`).join('')}</tbody></table></div>`;}
 function renderAdmin(){const orgs=Object.values(DB.orgs);const users=[];orgs.forEach(o=>o.members.forEach(m=>{if(!users.find(u=>u.id===m.id))users.push(m);}));const sel=S.adminOrg?DB.orgs[S.adminOrg]:null;
  return `<div class="ph"><div><h1 style="display:flex;align-items:center;gap:12px">Admin console <span class="staff-tag">Staff</span></h1><div class="sub">Back-office · every action is captured in the staff audit log</div></div></div>
@@ -1259,16 +1259,16 @@ function openHelp(tab){const t=tab||'articles',tabs=[['articles','Help'],['conta
 function wizStart(){wiz={step:0};wizRender();$('#mscrim').classList.add('on');$('#modal').classList.remove('wide');}
 function wizRender(){const steps=['Upload','Map columns','Preview','Import'],s=wiz.step;let body='';
  if(s===0)body=`<div class="drop"><div style="font-size:28px;margin-bottom:8px">⬆</div>Drop a CSV/XLSX file here<div style="font-size:12px;margin-top:6px">or <b style="color:var(--iris)">browse</b> · max 50MB</div></div><div style="font-size:12.5px;color:var(--faint);margin-top:12px">Demo: a sample file with 8 rows is pre-loaded.</div>`;
- else if(s===1)body=`<div style="font-size:13px;color:var(--mut);margin-bottom:12px">Columns auto-detected — adjust the mapping:</div>${[['Task name','Title'],['State','Status'],['Owner','Assignee'],['Due','Due date']].map(m=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span class="mono" style="font-size:12px;flex:1;color:var(--hi)">${m[0]}</span><span style="color:var(--faint)">→</span><span class="badge tone-muted" style="flex:1;cursor:default">${m[1]}</span></div>`).join('')}`;
+ else if(s===1)body=`<div style="font-size:13px;color:var(--mut);margin-bottom:12px">Columns auto-detected: adjust the mapping:</div>${[['Task name','Title'],['State','Status'],['Owner','Assignee'],['Due','Due date']].map(m=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span class="mono" style="font-size:12px;flex:1;color:var(--hi)">${m[0]}</span><span style="color:var(--faint)">→</span><span class="badge tone-muted" style="flex:1;cursor:default">${m[1]}</span></div>`).join('')}`;
  else if(s===2)body=`<div style="font-size:13px;color:var(--mut);margin-bottom:10px">Preview · first 3 of 8 rows</div><div class="twrap"><table><thead><tr><th>Title</th><th>Status</th><th>Assignee</th></tr></thead><tbody>${[1,2,3].map(i=>`<tr><td style="color:var(--hi)">Imported task ${i}</td><td><span class="badge tone-info">Open</span></td><td>${avatar(DB.currentUser,22)}</td></tr>`).join('')}</tbody></table></div><div style="font-size:12.5px;color:var(--success);margin-top:10px;font-weight:600">✓ 8 valid rows · 0 errors · dry-run passed</div>`;
  else body=`<div style="text-align:center;padding:14px"><div style="font-size:32px;margin-bottom:8px">🎉</div><div style="font-weight:700;color:var(--hi);font-size:16px">Ready to import 8 records</div><div style="font-size:13px;color:var(--mut);margin-top:6px">Imported as one unit · undoable for 24h.</div></div>`;
  $('#modal').innerHTML=`<div class="modal-h"><h3>Import records</h3><div class="setnav" style="margin:12px 0 0">${steps.map((t,i)=>`<a class="${i===s?'on':''}" style="pointer-events:none">${i+1}. ${t}</a>`).join('')}</div></div><div class="modal-b">${body}</div><div class="modal-f"><button class="btn btn-gho" data-action="${s===0?'closeModal':'wizBack'}">${s===0?'Cancel':'Back'}</button><button class="btn btn-pri" data-action="wizNext">${s===3?'Import 8 records':'Continue'}</button></div>`;}
-function wizNext(){if(wiz.step<3){wiz.step++;wizRender();return;}for(let i=0;i<8;i++){const id='REC-'+(++org().seq);org().records.push({id,title:'Imported task '+(i+1),status:'open',prio:'med',assignee:DB.currentUser,due:'—',over:false,ws:DB.currentWs,desc:'Imported via the CSV import wizard.',updated:NOW,activity:[{who:DB.currentUser,t:'imported this record',at:'just now'}]});}logAudit('import.run','8 records imported');closeModal();S.view='all';S.mode='list';render();toast('8 records imported','⬆','var(--success)');}
+function wizNext(){if(wiz.step<3){wiz.step++;wizRender();return;}for(let i=0;i<8;i++){const id='REC-'+(++org().seq);org().records.push({id,title:'Imported task '+(i+1),status:'open',prio:'med',assignee:DB.currentUser,due:',',over:false,ws:DB.currentWs,desc:'Imported via the CSV import wizard.',updated:NOW,activity:[{who:DB.currentUser,t:'imported this record',at:'just now'}]});}logAudit('import.run','8 records imported');closeModal();S.view='all';S.mode='list';render();toast('8 records imported','⬆','var(--success)');}
 function csvDownload(name,rows){const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');const b=new Blob([csv],{type:'text/csv'}),u=URL.createObjectURL(b),el=document.createElement('a');el.href=u;el.download=name;el.click();URL.revokeObjectURL(u);}
 function exportCsv(){const rs=filtered();csvDownload('meridian-records.csv',[['ID','Title','Status','Priority','Assignee','Due'],...rs.map(r=>[r.id,r.title,st(r.status).label,pr(r.prio).label,memOf(r.assignee).name,r.over?'Overdue':r.due])]);logAudit('export.csv',rs.length+' records');toast('Exported '+rs.length+' records to CSV','⬇','var(--success)');}
 function auditExport(){const rows=org().audit||[];csvDownload('meridian-audit.csv',[['When','Actor','Action','Target'],...rows.map(a=>[a.ts,a.actor,a.action,a.target])]);toast('Audit log exported','⬇','var(--success)');}
 
-/* ============ PHASE 6 — CALENDAR & REPORTS ============ */
+/* ============ PHASE 6: CALENDAR & REPORTS ============ */
 const RAMP=['#6D48F0','#FB2E7E','#FF6F55','#FFB43D','#14D3C4','#2FA4FF','#8A6BFF','#2FE0A6'];
 function renderCalendar(rs){const firstDay=3,days=31,byDay={};
  rs.forEach(r=>{const m=/([A-Za-z]{3}) (\d+)/.exec(r.due);if(m&&m[1]==='Jul'){const d=+m[2];(byDay[d]=byDay[d]||[]).push(r);}});
@@ -1286,7 +1286,7 @@ function renderReports(){const o=org();if(!o.reports)o.reports=[];const rep=S.re
  <div class="card2"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);margin-bottom:8px">Breakdown</div>${groups.map(g=>`<div style="display:flex;align-items:center;gap:9px;padding:6px 0;font-size:13px"><span style="width:10px;height:10px;border-radius:3px;background:${g.color}"></span><span style="flex:1;color:var(--tx)">${g.label}</span><b style="color:var(--hi)">${g.n}</b></div>`).join('')}</div></div></div>
  ${o.reports.length?`<h3 style="font-family:var(--fd);font-size:18px;margin:30px 0 12px">Saved reports &amp; dashboard</h3><div class="stats" style="grid-template-columns:repeat(3,1fr)">${o.reports.map(r=>`<div class="card2"><div style="font-weight:700;color:var(--hi)">${esc(r.name)}</div><div style="font-size:12.5px;color:var(--mut)">Grouped by ${r.dim} · ${r.chart} chart</div></div>`).join('')}</div>`:''}`;}
 
-/* ============ PHASE 6 — DEVELOPER & SETTINGS ============ */
+/* ============ PHASE 6: DEVELOPER & SETTINGS ============ */
 function renderDeveloper(){const o=org();o.apiKeys=o.apiKeys||[{name:'Production',prefix:'mrd_live_a91f2c',created:'Jul 10',used:'2h ago'},{name:'CI pipeline',prefix:'mrd_live_7c2e10',created:'Jun 02',used:'3d ago'}];o.webhooks=o.webhooks||[{url:'https://hooks.northwind.co/meridian',events:'record.*, member.*'}];o.integrations=o.integrations||{slack:true,gcal:false,outlook:false,zapier:false};
  const tab=S.devTab||'keys';let body='';
  if(tab==='keys')body=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div style="font-size:13.5px;color:var(--mut)">Keys authenticate requests to the v1 REST API.</div><button class="btn btn-pri sm" data-action="createKey">+ Create key</button></div><div class="twrap"><table><thead><tr><th>Name</th><th>Key</th><th>Created</th><th>Last used</th><th></th></tr></thead><tbody>${o.apiKeys.map((k,i)=>`<tr><td style="color:var(--hi);font-weight:600">${esc(k.name)}</td><td class="mono" style="font-size:12px;color:var(--mut)">${k.prefix}••••</td><td>${k.created}</td><td>${k.used}</td><td style="width:80px"><button class="btn btn-gho sm" data-action="revokeKey" data-i="${i}" style="color:var(--danger)">Revoke</button></td></tr>`).join('')||'<tr><td colspan="5" style="color:var(--mut);padding:16px">No keys yet.</td></tr>'}</tbody></table></div>`;
@@ -1295,7 +1295,7 @@ function renderDeveloper(){const o=org();o.apiKeys=o.apiKeys||[{name:'Production
  return `<div class="ph"><div><h1>Developer</h1><div class="sub">Public API, webhooks &amp; integrations · <a data-action="apiDocs" style="color:var(--iris);cursor:pointer">OpenAPI 3.1 docs</a></div></div></div>
  <div class="vtabs">${[['keys','API keys'],['hooks','Webhooks'],['int','Integrations']].map(t=>`<div class="vtab ${tab===t[0]?'on':''}" data-action="devTab" data-tab="${t[0]}">${t[1]}</div>`).join('')}</div><div style="margin-top:18px">${body}</div>`;}
 function createKey(){const o=org();const key='mrd_live_'+Math.random().toString(36).slice(2,10)+Math.random().toString(36).slice(2,8);o.apiKeys.unshift({name:'New key',prefix:key.slice(0,14),created:'just now',used:'never'});logAudit('apikey.create','New API key');render();
- openModal(`<div class="modal-h"><h3>API key created</h3><p>Copy it now — the full secret is shown only once.</p></div><div class="modal-b"><div class="mock-card" style="justify-content:space-between"><span style="color:var(--hi);overflow:hidden;text-overflow:ellipsis">${key}</span><button class="btn btn-sec sm" data-action="copyKey" data-k="${key}">Copy</button></div></div><div class="modal-f"><button class="btn btn-pri" data-action="closeModal">Done</button></div>`);}
+ openModal(`<div class="modal-h"><h3>API key created</h3><p>Copy it now: the full secret is shown only once.</p></div><div class="modal-b"><div class="mock-card" style="justify-content:space-between"><span style="color:var(--hi);overflow:hidden;text-overflow:ellipsis">${key}</span><button class="btn btn-sec sm" data-action="copyKey" data-k="${key}">Copy</button></div></div><div class="modal-f"><button class="btn btn-pri" data-action="closeModal">Done</button></div>`);}
 function renderSettings(){const o=org();o.sso=o.sso||{enabled:false,scim:false,mfa:false};o.domains=o.domains||[o.slug+'.co'];const tab=S.setTab||'profile';let body='';
  if(tab==='profile')body=`<div class="card2" style="max-width:560px"><div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">${avatar(DB.currentUser,48)}<div><div style="font-weight:700;color:var(--hi);font-size:16px">${esc(me().name)}</div><div style="font-size:13px;color:var(--mut)">${myRole()} · ${esc(o.name)}</div></div></div><div class="fld"><label>Full name</label><input class="inp" value="${esc(me().name)}"></div><div class="fld"><label>Email</label><input class="inp" value="${DB.currentUser}@${o.slug}.co"></div><div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:2px"><div class="fld" style="flex:1"><label>Theme</label><div class="seg"><button class="${root.getAttribute('data-theme')==='dark'?'on':''}" data-action="theme">Dark</button><button class="${root.getAttribute('data-theme')==='light'?'on':''}" data-action="theme">Light</button></div></div><div class="fld" style="flex:1"><label>Timezone</label><input class="inp" value="Europe/London" readonly></div></div><button class="btn btn-pri sm" data-action="saveSettings" style="margin-top:6px">Save changes</button></div>`;
  else body=`<div class="card2" style="max-width:640px;margin-bottom:16px"><div style="display:flex;align-items:center;justify-content:space-between"><div><h3 style="margin:0">Single sign-on (SAML)</h3><div style="font-size:12.5px;color:var(--mut);margin-top:2px">Let members sign in with your identity provider.</div></div><span class="sw ${o.sso.enabled?'on':''}" data-action="toggleSSO"></span></div>${o.sso.enabled?`<div style="margin-top:14px;border-top:1px solid var(--line);padding-top:14px"><div class="fld"><label>Entity ID</label><input class="inp mono" value="https://meridian.app/o/${o.slug}" readonly></div><div class="fld"><label>ACS (Reply) URL</label><input class="inp mono" value="https://meridian.app/sso/${o.slug}/acs" readonly></div><div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px"><div><div style="font-weight:600;color:var(--hi);font-size:13.5px">SCIM provisioning</div><div style="font-size:12px;color:var(--mut)">Auto-sync users &amp; groups from your IdP.</div></div><span class="sw ${o.sso.scim?'on':''}" data-action="toggleSCIM"></span></div></div>`:''}</div>
@@ -1303,19 +1303,19 @@ function renderSettings(){const o=org();o.sso=o.sso||{enabled:false,scim:false,m
    <div class="card2" style="max-width:640px"><h3>Active sessions</h3><div class="mock-card" style="justify-content:space-between;margin-bottom:8px"><span>MacBook · London · <span style="color:var(--success)">this device</span></span></div><div class="mock-card" style="justify-content:space-between"><span>iPhone · London · 2h ago</span><button class="btn btn-gho sm" data-action="revokeSession" style="color:var(--danger)">Revoke</button></div><button class="btn btn-sec sm" data-action="signoutAll" style="margin-top:12px">Sign out everywhere</button></div>`;
  return `<div class="ph"><div><h1>Settings</h1><div class="sub">Your profile and organisation security</div></div></div><div class="vtabs"><div class="vtab ${tab==='profile'?'on':''}" data-action="setTab" data-tab="profile">Profile</div><div class="vtab ${tab==='security'?'on':''}" data-action="setTab" data-tab="security">Security &amp; SSO</div></div><div style="margin-top:18px">${body}</div>`;}
 
-/* ============ PHASE 5/6 — DIGESTS & GUIDED TOUR ============ */
+/* ============ PHASE 5/6: DIGESTS & GUIDED TOUR ============ */
 function notifPrefsView(){const pf=org().notifPrefs,chans=['In-app','Email','Slack'],o=org();o.digest=o.digest||'daily';o.paused=o.paused||false;
  return `<div class="ph"><div><h1>Notifications</h1><div class="sub">Per-event delivery across channels</div></div><div class="ph-actions"><button class="btn ${o.paused?'btn-pri':'btn-sec'} sm" data-action="pauseAll">${o.paused?'Resume notifications':'Pause all'}</button></div></div>
  <div class="vtabs"><div class="vtab" data-action="notifTab" data-tab="inbox">Inbox</div><div class="vtab on" data-action="notifTab" data-tab="prefs">Preferences</div></div>
  <div class="card2" style="margin-top:20px;max-width:720px"><table class="prefs"><thead><tr><th>Event</th>${chans.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${Object.keys(pf).map(ev=>`<tr><td>${ev}</td>${chans.map(c=>`<td><span class="sw ${pf[ev][c]?'on':''}" data-action="prefToggle" data-ev="${ev}" data-ch="${c}"></span></td>`).join('')}</tr>`).join('')}</tbody></table></div>
  <div class="card2" style="margin-top:16px;max-width:720px"><div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap"><div><h3 style="margin:0">Email digest</h3><div style="font-size:12.5px;color:var(--mut)">Batch email notifications instead of one per event.</div></div><div class="seg">${[['immediate','Immediate'],['hourly','Hourly'],['daily','Daily']].map(d=>`<button class="${o.digest===d[0]?'on':''}" data-action="digestSet" data-d="${d[0]}">${d[1]}</button>`).join('')}</div></div></div>`;}
 const TOUR=[
- {v:'home',t:'Role-aware Home',d:'Your day at a glance — key stats and the work assigned to you.'},
+ {v:'home',t:'Role-aware Home',d:'Your day at a glance: key stats and the work assigned to you.'},
  {v:'all',t:'The work surface',d:'Filter, sort, select and inline-edit. Click any status badge to change it.'},
  {v:'all',mode:'board',t:'Board view (drag & drop)',d:'Drag a card between columns to change its status. Calendar view is here too.'},
- {v:'plans',t:'Plans & checkout',d:'Upgrade in-app — live totals, tax, and entitlements that update instantly.'},
+ {v:'plans',t:'Plans & checkout',d:'Upgrade in-app: live totals, tax, and entitlements that update instantly.'},
  {v:'billing',t:'Lifecycle state machine',d:'Flip the org state to preview dunning banners and the restricted read-only gate.'},
- {v:'admin',t:'Staff admin console',d:'Search accounts, flip feature flags, and impersonate — read-only and audited.'},
+ {v:'admin',t:'Staff admin console',d:'Search accounts, flip feature flags, and impersonate: read-only and audited.'},
  {v:'audit',t:'Audit log',d:'Every action across the app is captured immutably, and is exportable to CSV.'},
  {v:'reports',t:'Reports',d:'Build a bar or donut chart over your records and save it to a dashboard.'},
 ];
@@ -1323,7 +1323,7 @@ let tourI=-1;
 function startTour(){tourI=0;runTour();}
 function runTour(){const s=TOUR[tourI];if(!s)return endTour();if(s.v==='billing'&&!can('billing')){tourI++;return runTour();}S.view=s.v;S.mode=s.mode||'list';S.sel.clear();render();$('.body').scrollTop=0;renderTour();}
 function renderTour(){const el=$('#tour'),s=TOUR[tourI];el.classList.remove('hidden');el.innerHTML=`<div class="tstep">Guided tour · ${tourI+1} of ${TOUR.length}</div><h4>${s.t}</h4><p>${s.d}</p><div class="trow"><div class="tourprog">${TOUR.map((_,i)=>`<i class="${i<=tourI?'on':''}"></i>`).join('')}</div><button class="btn btn-gho sm" data-action="tourEnd">Exit</button><button class="btn btn-pri sm" data-action="tourNext">${tourI===TOUR.length-1?'Finish':'Next →'}</button></div>`;}
-function endTour(){tourI=-1;$('#tour').classList.add('hidden');toast('Tour complete — explore freely!','✦','var(--iris)');}
+function endTour(){tourI=-1;$('#tour').classList.add('hidden');toast('Tour complete, explore freely!','✦','var(--iris)');}
 
 /* ---------- workspace management ---------- */
 function renameWs(id){const w=org().workspaces.find(x=>x.id===id);if(!w)return;openModal(`<div class="modal-h"><h3>Rename workspace</h3></div><div class="modal-b"><input class="inp" id="wsName" value="${esc(w.name)}" maxlength="40"></div><div class="modal-f"><button class="btn btn-gho" data-action="closeModal">Cancel</button><button class="btn btn-pri" data-action="saveWsName" data-id="${id}">Save</button></div>`);$('#modal').classList.remove('wide');setTimeout(()=>{const i=$('#wsName');if(i){i.focus();i.select();}},60);}
@@ -1365,7 +1365,7 @@ loadDB();
 if(DB.theme)root.setAttribute('data-theme',DB.theme);
 $('#themeGlyph').textContent=root.getAttribute('data-theme')==='dark'?'◐':'☀';
 /* Demo: always launch at the login screen so every visitor sees the full flow.
-   Data still persists — after signing in you're back to your saved orgs & records. */
+   Data still persists: after signing in you're back to your saved orgs & records. */
 DB.session=null; DB.needsOnboarding=false;
 showGate();
 </script>

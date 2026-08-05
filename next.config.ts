@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
       {
         // The Meridian prototype ships as raw static HTML under /prototype so it
         // can be framed same-origin by the case study. It carries its own titles,
-        // nav, and landing page — left crawlable it would read as a second site
+        // nav, and landing page: left crawlable it would read as a second site
         // and compete with /work/meridian, which is the piece meant to be found.
         source: "/prototype/:path*",
         headers: [{ key: "X-Robots-Tag", value: "noindex" }],

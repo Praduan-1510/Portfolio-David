@@ -1,7 +1,7 @@
 import { Container } from "@/components/primitives";
 
 /*
- * Résumé loading skeleton — mirrors src/app/resume/page.tsx: the letterhead
+ * Résumé loading skeleton: mirrors src/app/resume/page.tsx: the letterhead
  * (name + title plate + statement + actions) over the first ledger rows
  * (DESIGN_GUIDELINES §11).
  */

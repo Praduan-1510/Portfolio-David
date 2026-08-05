@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Meridian — UI/UX Build Plan</title>
+<title>Meridian: UI/UX Build Plan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700;800;900&family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -38,7 +38,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-/* Scrollbars hidden — this page is shown inside a device mockup on the case
+/* Scrollbars hidden; this page is shown inside a device mockup on the case
    study, where a scrollbar track breaks the illusion. Scrolling is untouched. */
 html,body{scrollbar-width:none;-ms-overflow-style:none}
 html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
@@ -224,7 +224,7 @@ td b,.mname{color:var(--text-hi);font-weight:700}
   <div class="hero-inner">
     <div class="hero-badge"><span class="dot"></span> Meridian · UI/UX + Functional Prototype · from FSD v1.1</div>
     <h1>The <span class="grad-text">Build Plan</span>.</h1>
-    <p class="sub">A complete UI/UX system and a <b>fully-functional clickable prototype</b> — real interactions on mock data — delivered by a fleet of specialised agents across <b>6 phases and 17 sprints</b>, grounded in every one of the FSD's 18 modules.</p>
+    <p class="sub">A complete UI/UX system and a <b>fully-functional clickable prototype</b>, real interactions on mock data, delivered by a fleet of specialised agents across <b>6 phases and 17 sprints</b>, grounded in every one of the FSD's 18 modules.</p>
     <div class="stat-chips">
       <div class="stat-chip"><div class="n tabnum">18</div><div class="l">Modules</div></div>
       <div class="stat-chip"><div class="n tabnum">106</div><div class="l">Screens</div></div>
@@ -240,13 +240,13 @@ td b,.mname{color:var(--text-hi);font-weight:700}
 <section id="overview" class="wrap reveal">
   <span class="eyebrow">Overview</span>
   <h2 class="sec-title">What we're building, and the rules.</h2>
-  <p class="sec-lead">Frontend only. The FSD's server &amp; sync concerns are represented by a mock data/sync layer so the prototype behaves like the real thing — loading, errors, permissions, paywalls, undo — without a production backend.</p>
+  <p class="sec-lead">Frontend only. The FSD's server &amp; sync concerns are represented by a mock data/sync layer so the prototype behaves like the real thing: loading, errors, permissions, paywalls, undo: without a production backend.</p>
   <div class="grid three" style="margin-top:34px">
-    <div class="panel ov-card"><div class="ic" style="background:var(--grad-ember)">◑</div><h3>Complete UI/UX</h3><p>Every screen, modal, and state from the FSD — 106 screens, 170 sheets, ~355 states — built on one token-driven design system with light, dark &amp; high-contrast themes.</p></div>
+    <div class="panel ov-card"><div class="ic" style="background:var(--grad-ember)">◑</div><h3>Complete UI/UX</h3><p>Every screen, modal, and state from the FSD: 106 screens, 170 sheets, ~355 states: built on one token-driven design system with light, dark &amp; high-contrast themes.</p></div>
     <div class="panel ov-card"><div class="ic" style="background:var(--grad-aurora)">⚡</div><h3>Fully functional</h3><p>A mock API with real latency &amp; error injection, a permissions engine, an entitlements engine, optimistic updates + global undo, and URL-restorable state. It clicks, gates, and persists for real.</p></div>
-    <div class="panel ov-card"><div class="ic" style="background:var(--grad-iris)">◇</div><h3>The signature</h3><p>The FSD flags its own gap (G-10 / Q-08: "no signature"). Already answered — the Day-Arc identity: warm→cool spectrum, arc/orb logo, gradient-forward surfaces. Locked before the component library.</p></div>
+    <div class="panel ov-card"><div class="ic" style="background:var(--grad-iris)">◇</div><h3>The signature</h3><p>The FSD flags its own gap (G-10 / Q-08: "no signature"). Already answered: the Day-Arc identity: warm→cool spectrum, arc/orb logo, gradient-forward surfaces. Locked before the component library.</p></div>
   </div>
-  <div class="callout">🧭 <b>Guiding rule (FSD §17):</b> "Adjust durations, not order — the dependencies are real." Entitlement checks are built <b>with</b> the features they gate; audit logging is added <b>with</b> each module; and every screen ships with its <b>empty, error, and permission</b> states — never deferred.</div>
+  <div class="callout">🧭 <b>Guiding rule (FSD §17):</b> "Adjust durations, not order: the dependencies are real." Entitlement checks are built <b>with</b> the features they gate; audit logging is added <b>with</b> each module; and every screen ships with its <b>empty, error, and permission</b> states, never deferred.</div>
 </section>
 
 <!-- FLEET -->
@@ -260,24 +260,24 @@ td b,.mname{color:var(--text-hi);font-weight:700}
     <div class="agent wide"><div class="code">ORCH-0</div><h4>Orchestrator · Delivery Lead</h4><div class="role">Owns this plan, sequencing, cross-agent integration, phase gates, and final review. Runs the QA gate before each phase exit and reconciles the state-coverage checklist.</div></div>
   </div>
 
-  <div class="tier-label">L1 · Foundation &amp; platform — cross-cutting, start Phase 0</div>
+  <div class="tier-label">L1 · Foundation &amp; platform: cross-cutting, start Phase 0</div>
   <div class="agent-grid">
     <div class="agent" style="--ag:var(--grad-ember)"><div class="code">DS-1</div><h4>Design System</h4><div class="role">3-tier tokens, theming (light/dark/HC), ~60-component library, icons, motion, the signature.</div><div class="subs"><span class="sub">token-smith</span><span class="sub">primitive-smith</span><span class="sub">dataviz-smith</span><span class="sub">a11y-smith</span></div></div>
     <div class="agent" style="--ag:var(--grad-ember)"><div class="code">SHELL-1</div><h4>App Shell &amp; Nav</h4><div class="role">Top bar, collapsible rail (240↔64), breadcrumbs, org switcher, footer slot, responsive, route transitions.</div><div class="subs"><span class="sub">nav-rail</span><span class="sub">top-bar</span><span class="sub">responsive-shell</span></div></div>
     <div class="agent" style="--ag:var(--grad-ember)"><div class="code">DATA-1</div><h4>Prototype Data &amp; State</h4><div class="role">The "fake backend": seed factory, mock API (latency+errors), store, URL-sync, optimistic + global undo, perms &amp; entitlements engines.</div><div class="subs"><span class="sub">seed-factory</span><span class="sub">mock-api</span><span class="sub">store-router</span><span class="sub">perms-entitlements-engine</span></div></div>
   </div>
 
-  <div class="tier-label">L2 · Feature agents — phased</div>
+  <div class="tier-label">L2 · Feature agents: phased</div>
   <div class="agent-grid">
     <div class="agent"><div class="code">AUTH-1</div><h4>Identity &amp; Access</h4><div class="role">M1 auth, MFA, reset, SSO stub, session &amp; deep-link rules.</div><div class="subs"><span class="sub">auth-flows</span><span class="sub">mfa-recovery</span><span class="sub">session-guard</span></div></div>
     <div class="agent"><div class="code">TEN-1</div><h4>Tenancy &amp; Access Control</h4><div class="role">M2 orgs/workspaces/members, M3 roles &amp; permissions, audit spine.</div><div class="subs"><span class="sub">org-workspace</span><span class="sub">members-roles</span><span class="sub">audit-spine</span></div></div>
-    <div class="agent" style="--ag:var(--grad-dusk)"><div class="code">WORK-1</div><h4>Core Work Surface ★</h4><div class="role">M5 records, views (list/board/cal/timeline), detail sheet, bulk, trash, workflow — the core work surface.</div><div class="subs"><span class="sub">records-grid</span><span class="sub">views-engine</span><span class="sub">record-detail-sheet</span><span class="sub">bulk-and-trash</span></div></div>
+    <div class="agent" style="--ag:var(--grad-dusk)"><div class="code">WORK-1</div><h4>Core Work Surface ★</h4><div class="role">M5 records, views (list/board/cal/timeline), detail sheet, bulk, trash, workflow: the core work surface.</div><div class="subs"><span class="sub">records-grid</span><span class="sub">views-engine</span><span class="sub">record-detail-sheet</span><span class="sub">bulk-and-trash</span></div></div>
     <div class="agent"><div class="code">COLLAB-1</div><h4>Collab, Search &amp; Onboarding</h4><div class="role">M6 comments/mentions/activity, M7 search + ⌘K palette, M4 onboarding.</div><div class="subs"><span class="sub">comments-mentions</span><span class="sub">activity-feed</span><span class="sub">command-palette</span><span class="sub">onboarding-wizard</span></div></div>
     <div class="agent"><div class="code">COMM-1</div><h4>Commercial</h4><div class="role">M9 billing/usage, M10 entitlements &amp; gating, M18 lifecycle, M8 notifications.</div><div class="subs"><span class="sub">billing-checkout</span><span class="sub">plans-usage-invoices</span><span class="sub">entitlements-gate</span><span class="sub">notifications-center</span><span class="sub">lifecycle-dunning</span></div></div>
     <div class="agent"><div class="code">OPS-1</div><h4>Settings &amp; Operability</h4><div class="role">M11 settings, M13 admin console, M15 audit, M16 help, M17 import/export (+ M12/M14 in P1).</div><div class="subs"><span class="sub">settings-suite</span><span class="sub">admin-console</span><span class="sub">api-webhooks</span><span class="sub">reporting-charts</span><span class="sub">help-changelog</span><span class="sub">data-import-export</span></div></div>
   </div>
 
-  <div class="tier-label">L3 · Quality &amp; prototype — cross-cutting + Phase 5</div>
+  <div class="tier-label">L3 · Quality &amp; prototype: cross-cutting + Phase 5</div>
   <div class="agent-grid">
     <div class="agent" style="--ag:var(--grad-aurora)"><div class="code">QA-1</div><h4>Quality · A11y · Perf</h4><div class="role">Runs every phase. State-matrix completeness, WCAG 2.2 AA, keyboard paths, perf budgets, responsive. Adversarially verifies each agent's output.</div><div class="subs"><span class="sub">a11y-auditor</span><span class="sub">state-matrix-checker</span><span class="sub">perf-budget-checker</span><span class="sub">keyboard-path-tester</span></div></div>
     <div class="agent" style="--ag:var(--grad-aurora)"><div class="code">PROTO-1</div><h4>Prototype &amp; Motion</h4><div class="role">Wires the end-to-end clickable journeys (§16.3), empty-state illustration family, page transitions, and the demo script.</div><div class="subs"><span class="sub">journey-wiring</span><span class="sub">motion-polish</span><span class="sub">illustration-family</span></div></div>
@@ -316,7 +316,7 @@ td b,.mname{color:var(--text-hi);font-weight:700}
       <div class="phase-head"><h3><span class="num">3</span>Commercial</h3><span class="phase-sprints">Sprints 10–12</span></div>
       <div class="phase-agents"><span class="a">COMM-1</span></div>
       <div class="contents">M9 billing/checkout/usage/invoices · M10 entitlements &amp; gating · M18 lifecycle (trial→past_due→restricted→cancelled) · M8 notifications.</div>
-      <div class="exit"><span class="chk">✓</span><div><b>Exit:</b> an org can trial, pay, hit limits, upgrade, and cancel — unaided.</div></div>
+      <div class="exit"><span class="chk">✓</span><div><b>Exit:</b> an org can trial, pay, hit limits, upgrade, and cancel, unaided.</div></div>
     </div></div>
 
     <div class="phase"><div class="phase-card">
@@ -377,7 +377,7 @@ td b,.mname{color:var(--text-hi);font-weight:700}
 <section id="modules" class="wrap reveal">
   <span class="eyebrow">Module Inventory</span>
   <h2 class="sec-title">All 18 modules, <span class="grad-text">mapped &amp; counted</span>.</h2>
-  <p class="sec-lead">Screen/modal counts are the authoritative FSD-mined inventory. ★ marks the core work surface — the core work surface.</p>
+  <p class="sec-lead">Screen/modal counts are the authoritative FSD-mined inventory. ★ marks the core work surface: the core work surface.</p>
   <div class="tbl-wrap">
     <table>
       <thead><tr><th style="width:56px">ID</th><th>Module</th><th style="width:96px">Phase</th><th style="width:64px">Pri</th><th style="width:70px">Screens</th><th style="width:70px">Modals</th><th>Signature surfaces</th></tr></thead>
@@ -394,7 +394,7 @@ td b,.mname{color:var(--text-hi);font-weight:700}
         <tr><td class="mid">M17</td><td class="mname">Data import, export &amp; lifecycle</td><td><span class="badge ph">2 / 4</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">8</td><td class="num-cell">12</td><td>Import wizard · export jobs · org export · retention · DSAR</td></tr>
         <tr><td class="mid">M8</td><td class="mname">Notifications</td><td><span class="badge ph">3</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">3</td><td class="num-cell">6</td><td>Notification centre · preferences matrix · bell · digests</td></tr>
         <tr><td class="mid">M9</td><td class="mname">Billing &amp; subscriptions</td><td><span class="badge ph">3</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">10</td><td class="num-cell">18</td><td>Plans · checkout · invoices · usage · seats · cancel · dunning gate</td></tr>
-        <tr><td class="mid">M10</td><td class="mname">Entitlements &amp; gating</td><td><span class="badge ph">3</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">—‡</td><td class="num-cell">4</td><td>Contextual paywalls · limit-reached prompts · locked-feature detail</td></tr>
+        <tr><td class="mid">M10</td><td class="mname">Entitlements &amp; gating</td><td><span class="badge ph">3</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">:‡</td><td class="num-cell">4</td><td>Contextual paywalls · limit-reached prompts · locked-feature detail</td></tr>
         <tr><td class="mid">M18</td><td class="mname">Account &amp; org lifecycle</td><td><span class="badge ph">3 / 5</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">8</td><td class="num-cell">7</td><td>Lifecycle state banners · delete account/org · retention · reactivate</td></tr>
         <tr><td class="mid">M13</td><td class="mname">Internal admin console</td><td><span class="badge ph">4</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">8</td><td class="num-cell">13</td><td>Staff search · org/user detail · flags · impersonation · staff audit</td></tr>
         <tr><td class="mid">M15</td><td class="mname">Audit log &amp; compliance</td><td><span class="badge ph">4</span></td><td><span class="badge pri-p0">P0</span></td><td class="num-cell">2</td><td class="num-cell">4</td><td>Audit log table · before/after diff · export · SIEM (Ent.)</td></tr>
@@ -404,7 +404,7 @@ td b,.mname{color:var(--text-hi);font-weight:700}
     </table>
   </div>
   <div class="callout" style="background:color-mix(in srgb,var(--iris) 8%,transparent);border-color:color-mix(in srgb,var(--iris) 30%,transparent)">
-    <b>Notes:</b> <b>*</b> M11 is split from 8 collapsed pages into 15 discrete screens per §20.3 (Profile → identity/password-MFA/sessions/connected/delete; Security → MFA-enforce/SSO/domains/session-policy/IP/public-link). &nbsp;<b>†</b> M6 is embedded in record detail (tabs), not standalone routes. &nbsp;<b>‡</b> M10 is a cross-cutting gating layer — surfaces live inside every other module, not a standalone page.
+    <b>Notes:</b> <b>*</b> M11 is split from 8 collapsed pages into 15 discrete screens per §20.3 (Profile → identity/password-MFA/sessions/connected/delete; Security → MFA-enforce/SSO/domains/session-policy/IP/public-link). &nbsp;<b>†</b> M6 is embedded in record detail (tabs), not standalone routes. &nbsp;<b>‡</b> M10 is a cross-cutting gating layer: surfaces live inside every other module, not a standalone page.
   </div>
 </section>
 
@@ -412,22 +412,22 @@ td b,.mname{color:var(--text-hi);font-weight:700}
 <section id="architecture" class="wrap reveal">
   <span class="eyebrow">Prototype Architecture</span>
   <h2 class="sec-title">Why it's <span class="grad-text">fully functional</span>, not a mockup.</h2>
-  <p class="sec-lead">A mock data + sync layer stands in for the backend so every interaction — loading, errors, permissions, paywalls, undo, deep links — behaves for real.</p>
+  <p class="sec-lead">A mock data + sync layer stands in for the backend so every interaction: loading, errors, permissions, paywalls, undo, deep links: behaves for real.</p>
   <div class="arch-flow">
     <div class="arch-col"><h4>Stack</h4><ul>
       <li><b>React 18 + TypeScript + Vite</b></li>
-      <li><b>React Router</b> — URL is the source of truth for view state</li>
+      <li><b>React Router</b>: URL is the source of truth for view state</li>
       <li><b>Motion</b> (Framer) for animation</li>
-      <li><b>TanStack Table</b> — virtualized data grid</li>
+      <li><b>TanStack Table</b>: virtualized data grid</li>
       <li>Design tokens as <b>CSS custom properties</b> (Day-Arc)</li>
       <li>Charts wired to the <b>§8.14.1 categorical ramp</b></li>
     </ul></div>
-    <div class="arch-col hi"><h4>The mock "backend" — DATA-1</h4><ul>
-      <li><b>Seed factory</b> — deterministic orgs, members, records, invoices</li>
-      <li><b>Mock API</b> — in-memory, <b>real latency + error injection</b></li>
+    <div class="arch-col hi"><h4>The mock "backend": DATA-1</h4><ul>
+      <li><b>Seed factory</b>: deterministic orgs, members, records, invoices</li>
+      <li><b>Mock API</b>: in-memory, <b>real latency + error injection</b></li>
       <li><b>Optimistic updates</b> + a <b>global undo</b> stack (G-06)</li>
-      <li><b>Permissions engine</b> — the §20.1 role matrix</li>
-      <li><b>Entitlements engine</b> — plan limits + usage metering</li>
+      <li><b>Permissions engine</b>: the §20.1 role matrix</li>
+      <li><b>Entitlements engine</b>: plan limits + usage metering</li>
       <li><b>URL-state sync</b> + refresh-safe persistence</li>
     </ul></div>
     <div class="arch-col"><h4>Data entities mocked</h4><ul>
@@ -445,7 +445,7 @@ td b,.mname{color:var(--text-hi);font-weight:700}
 <section id="foundation" class="wrap reveal">
   <span class="eyebrow">Shared Foundation</span>
   <h2 class="sec-title">Built once, <span class="grad-text">consumed by everything</span>.</h2>
-  <p class="sec-lead">Delivered in Phase 0. A feature isn't complete without its cross-cutting UX — every component ships with docs, live examples, and every state rendered.</p>
+  <p class="sec-lead">Delivered in Phase 0. A feature isn't complete without its cross-cutting UX: every component ships with docs, live examples, and every state rendered.</p>
   <div class="grid two" style="margin-top:30px">
     <div class="panel fcard"><h4><span class="fic">◱</span> Component library (~60)</h4><div class="chips">
       <span class="chip">Button</span><span class="chip">Input</span><span class="chip">Select</span><span class="chip">Combobox</span><span class="chip">Date picker</span><span class="chip">File upload</span><span class="chip">Data table</span><span class="chip">Board</span><span class="chip">Calendar</span><span class="chip">Card</span><span class="chip">Badge</span><span class="chip">Avatar</span><span class="chip">Stat tile</span><span class="chip">Chart set</span><span class="chip">Empty state</span><span class="chip">Modal</span><span class="chip">Side sheet</span><span class="chip">Toast</span><span class="chip">Command palette</span><span class="chip">Filter bar</span><span class="chip">Split view</span>
@@ -455,9 +455,9 @@ td b,.mname{color:var(--text-hi);font-weight:700}
     </div><p style="font-size:13px;color:var(--text-mut);margin-top:12px">Single-key shortcuts disabled in text inputs; never override browser/AT combos; globally disableable in Preferences.</p></div>
   </div>
   <div class="grid two" style="margin-top:18px">
-    <div class="panel fcard"><h4><span class="fic">◐</span> Universal states — every screen</h4><div class="chips">
+    <div class="panel fcard"><h4><span class="fic">◐</span> Universal states: every screen</h4><div class="chips">
       <span class="chip">Loading</span><span class="chip">Skeleton</span><span class="chip">Optimistic</span><span class="chip">Empty · first-use</span><span class="chip">Empty · no-results</span><span class="chip">Empty · done</span><span class="chip">Empty · error-caused</span><span class="chip">Error + retry</span><span class="chip">Field validation</span><span class="chip">Permission-denied</span><span class="chip">404 vs 403</span><span class="chip">Offline</span><span class="chip">Reconnect</span><span class="chip">Version mismatch</span><span class="chip">Input preserved</span>
-    </div><p style="font-size:13px;color:var(--text-mut);margin-top:12px">~21 cross-cutting states × ~79 screens is what produces the ~355 total — applied as a per-screen checklist at build.</p></div>
+    </div><p style="font-size:13px;color:var(--text-mut);margin-top:12px">~21 cross-cutting states × ~79 screens is what produces the ~355 total: applied as a per-screen checklist at build.</p></div>
     <div class="panel fcard"><h4><span class="fic">⚡</span> Performance budgets §11.1</h4>
       <div class="tbl-wrap" style="margin-top:6px;border:none">
         <table style="min-width:0;font-size:12.5px">
@@ -485,30 +485,30 @@ td b,.mname{color:var(--text-hi);font-weight:700}
 <section id="quality" class="wrap reveal">
   <span class="eyebrow">Quality &amp; Definition of Done</span>
   <h2 class="sec-title">A screen isn't done <span class="grad-text">until it's all done</span>.</h2>
-  <p class="sec-lead">QA-1 gates every phase. No "we'll add the states later" — that's how a release slips (FSD §17).</p>
+  <p class="sec-lead">QA-1 gates every phase. No "we'll add the states later": that's how a release slips (FSD §17).</p>
   <div class="panel" style="margin-top:26px">
-    <h4 style="font-size:16px;margin-bottom:10px">Definition of Done — every screen</h4>
+    <h4 style="font-size:16px;margin-bottom:10px">Definition of Done: every screen</h4>
     <ul class="dod-list">
       <li><span class="chk">✓</span> All applicable states (default → skeleton → error → empty → permission-denied)</li>
       <li><span class="chk">✓</span> Keyboard-operable end-to-end with visible focus</li>
-      <li><span class="chk">✓</span> WCAG 2.2 AA — contrast, labels, roles, live regions</li>
+      <li><span class="chk">✓</span> WCAG 2.2 AA: contrast, labels, roles, live regions</li>
       <li><span class="chk">✓</span> Responsive to 375px; modals become full-screen sheets &lt;768px</li>
       <li><span class="chk">✓</span> Motion respects <code class="mono" style="font-size:12px">prefers-reduced-motion</code></li>
-      <li><span class="chk">✓</span> Consumes semantic tokens only — no hard-coded hex/px</li>
+      <li><span class="chk">✓</span> Consumes semantic tokens only, no hard-coded hex/px</li>
       <li><span class="chk">✓</span> Mock-data happy path + at least one error path</li>
       <li><span class="chk">✓</span> Deep-link / URL state restores exactly</li>
     </ul>
   </div>
   <div class="callout" style="margin-top:20px">
-    🔍 <b>The one gap the mining flagged:</b> "states" are the thin dimension (~190 enumerated vs ~355 target). Root cause — the universal-state matrix is defined <b>once</b> in the foundation but the official count multiplies it <b>per screen</b>. Remediation is built into <b>Sprint 15</b>: <code class="mono" style="font-size:12px">state-matrix-checker</code> walks every screen and asserts its applicable universal states, reconciling 190 → ~355. M11 Settings and M5 get priority (largest gaps).
+    🔍 <b>The one gap the mining flagged:</b> "states" are the thin dimension (~190 enumerated vs ~355 target). Root cause: the universal-state matrix is defined <b>once</b> in the foundation but the official count multiplies it <b>per screen</b>. Remediation is built into <b>Sprint 15</b>: <code class="mono" style="font-size:12px">state-matrix-checker</code> walks every screen and asserts its applicable universal states, reconciling 190 → ~355. M11 Settings and M5 get priority (largest gaps).
   </div>
 
   <h3 style="font-size:22px;margin:44px 0 6px">Risks &amp; the Sprint-0 decisions <span style="font-size:14px;color:var(--text-mut);font-weight:600">(FSD §19.4)</span></h3>
   <div class="panel">
-    <div class="risk"><span class="tag">G-10</span><div class="rt"><b>Design signature — resolved.</b> The Day-Arc identity (spectrum + arc/orb logo + gradient surfaces) answers Q-08. Locked before the component library — restyling 60+ components post-launch is a quarter of work.</div></div>
-    <div class="risk"><span class="tag">G-02</span><div class="rt"><b>Mock-sync contract.</b> The optimistic-update + global-undo model is decided in Phase 0 — every data path depends on it, so it can't be retrofitted.</div></div>
+    <div class="risk"><span class="tag">G-10</span><div class="rt"><b>Design signature: resolved.</b> The Day-Arc identity (spectrum + arc/orb logo + gradient surfaces) answers Q-08. Locked before the component library: restyling 60+ components post-launch is a quarter of work.</div></div>
+    <div class="risk"><span class="tag">G-02</span><div class="rt"><b>Mock-sync contract.</b> The optimistic-update + global-undo model is decided in Phase 0: every data path depends on it, so it can't be retrofitted.</div></div>
     <div class="risk"><span class="tag">RBAC</span><div class="rt"><b>Permissions &amp; entitlements as data.</b> Both engines land in Phase 0 so features gate consistently and checks are built <b>with</b> the features, never bolted on.</div></div>
-    <div class="risk"><span class="tag">§11.1</span><div class="rt"><b>Performance from day one.</b> QA-1 enforces budgets from Phase 0 — virtualization beyond 100 rows, module-boundary code-splitting, ≤250KB initial route JS.</div></div>
+    <div class="risk"><span class="tag">§11.1</span><div class="rt"><b>Performance from day one.</b> QA-1 enforces budgets from Phase 0: virtualization beyond 100 rows, module-boundary code-splitting, ≤250KB initial route JS.</div></div>
     <div class="risk"><span class="tag">A-06</span><div class="rt"><b>Billing is the highest-risk late change.</b> M9 pricing/packaging is frozen before Phase 3; state completeness on dunning/restricted/declined paths is non-negotiable.</div></div>
   </div>
 </section>

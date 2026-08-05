@@ -7,25 +7,25 @@ import {
 } from "@/components/motion";
 
 /*
- * Custom 404. Renders inside the root layout (Nav/Footer/main), so unknown URLs
- * — including unknown /work/[slug] (dynamicParams=false) — stay on-brand and
+ * Custom 404. Renders inside the root layout (Nav/Footer/main), so unknown URLs,
+ * including unknown /work/[slug] (dynamicParams=false), stay on-brand and
  * navigable rather than dropping to the framework's bare default.
  *
  * Composition (DESIGN_GUIDELINES.md §3/§6): a viewport-tall, centered statement
  * that FILLS the space instead of clustering top-left. The memorable beat is a
- * giant split-flap "404" — a departure-board destination that never arrived —
+ * giant split-flap "404", a departure-board destination that never arrived,
  * flipping through the charset on load before it settles, with the eyebrow above
  * and copy + balanced links beneath, all on one centered axis.
  *
  * Atmosphere (§4/§7.8): a soft off-white radial vignette behind the board plus
  * AnimatedNoise grain give the near-black depth, never flat. Colour stays
- * monochrome — data-theme="dark" only marks the dark surface (the split-flap's
+ * monochrome: data-theme="dark" only marks the dark surface (the split-flap's
  * transient flip-accent resolves to --accent = off-white here), so the chrome
  * stays colourless (§4).
  *
  * Reduced motion / no-JS (§10): the split-flap settles instantly, the
  * Reveal/StaggerGroup primitives render their content static and fully visible,
- * and nothing is trapped behind an animation — a clean, complete page.
+ * and nothing is trapped behind an animation: a clean, complete page.
  */
 
 // A dead URL should say so in the tab, not carry the home page title.
@@ -38,7 +38,7 @@ export default function NotFound() {
       aria-labelledby="notfound-heading"
       className="relative isolate flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden bg-bg text-fg"
     >
-      {/* Layer 0 — atmosphere: a soft monochrome glow centered behind the board
+      {/* Layer 0: atmosphere: a soft monochrome glow centered behind the board
           so the dark reads as depth, not a flat void. */}
       <div
         aria-hidden="true"
@@ -48,18 +48,18 @@ export default function NotFound() {
             "radial-gradient(60% 55% at 50% 42%, color-mix(in srgb, var(--spectrum-violet) 10%, rgba(255,255,255,0.04)), transparent 70%)",
         }}
       />
-      {/* Layer 1 — faint film grain over the glow, beneath the content. */}
+      {/* Layer 1: faint film grain over the glow, beneath the content. */}
       <AnimatedNoise opacity={0.035} className="-z-10" />
 
-      {/* Centered stack — eyebrow → split-flap 404 → copy + links. */}
+      {/* Centered stack: eyebrow → split-flap 404 → copy + links. */}
       <Container className="relative z-10 flex flex-1 flex-col items-center justify-center py-space-9 text-center">
         {/* Real heading for assistive tech / SEO; the board itself is decorative
             (the sr-only h1 announces the state; the flaps stay decorative). */}
         <h1 id="notfound-heading" className="sr-only">
-          404 — this page doesn&apos;t exist
+          404: this page doesn&apos;t exist
         </h1>
 
-        {/* Signature beat — departure-board "404": flips through the charset on
+        {/* Signature beat: departure-board "404": flips through the charset on
             load, then settles. Reduced motion shows it settled instantly. */}
         <div>
           <SplitFlapText

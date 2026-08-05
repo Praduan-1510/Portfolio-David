@@ -15,10 +15,10 @@ let fail = 0;
 const ok = (name, cond, detail = "") => {
   if (cond) {
     pass++;
-    console.log(`  ✓ ${name}${detail ? ` — ${detail}` : ""}`);
+    console.log(`  ✓ ${name}${detail ? `: ${detail}` : ""}`);
   } else {
     fail++;
-    console.log(`  ✗ ${name}${detail ? ` — ${detail}` : ""}`);
+    console.log(`  ✗ ${name}${detail ? `: ${detail}` : ""}`);
   }
 };
 
@@ -74,7 +74,7 @@ ok(
 console.log("\n4. Clicks reach the running app");
 // NOTE: puppeteer's elementHandle.click() adds the iframe's page offset WITHOUT
 // applying its CSS scale, so it lands in the wrong place inside a scaled frame.
-// That is a harness bug, not a product one — real hit-testing maps through the
+// That is a harness bug, not a product one: real hit-testing maps through the
 // transform correctly, which is exactly what these helpers use real mouse events
 // at manually-mapped coordinates to prove.
 const frameScale = () =>
@@ -113,11 +113,11 @@ console.log("\n4b. Hit-test precision through the CSS scale");
 // pointer positions through the transform, everything (including the Board's
 // native drag-and-drop, whose dragover targets resolve on the same hit-testing
 // pipeline) lands on the wrong element. This probes points spread across the
-// frame — cards at the top, middle and bottom of the board, nav items down the
-// sidebar — and asserts each one hit-tests to exactly the intended element.
+// frame (cards at the top, middle and bottom of the board, nav items down the
+// sidebar) and asserts each one hit-tests to exactly the intended element.
 //
 // Native HTML5 DnD itself is NOT asserted here: headless Chrome doesn't
-// synthesise it at all — verified by control runs against the prototype
+// synthesise it at all: verified by control runs against the prototype
 // directly, with no iframe and no scale, where the same drag also does nothing.
 // It needs a human click-through. If it ever does misbehave at fractional
 // scale, the fix is to cap the scale at 1 rather than to change the mapping.

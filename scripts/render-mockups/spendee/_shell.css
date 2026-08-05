@@ -1,5 +1,5 @@
 /*
- * Spendee design system — sampled from the original renders: pure-black base,
+ * Spendee design system: sampled from the original renders: pure-black base,
  * #262626 cards (#1a1a1a list rows), rounded sans (Quicksand display /
  * Poppins text), and the three-colour status language (green in / red out /
  * amber pending) the case study documents. 402px-wide screens.
@@ -84,7 +84,7 @@
 .h-row .title { font-size: 17px; font-weight: 600; font-family: "Quicksand", sans-serif; }
 .h-row .link { font-size: 13px; color: var(--blue); }
 
-/* Avatar disc — an initials avatar (honest; no stock faces). */
+/* Avatar disc: an initials avatar (honest; no stock faces). */
 .avatar {
   width: 40px;
   height: 40px;

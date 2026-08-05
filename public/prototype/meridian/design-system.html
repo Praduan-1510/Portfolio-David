@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Meridian — Design System</title>
+<title>Meridian: Design System</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700;800;900&family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   MERIDIAN — DESIGN SYSTEM
+   MERIDIAN: DESIGN SYSTEM
    A day-arc identity: warm→cool spectrum, rounded type, gradients.
    ============================================================ */
 
 /* ---------- Tokens ---------- */
 :root{
-  /* Brand spectrum — the "day arc" */
+  /* Brand spectrum: the "day arc" */
   --amber:  #FFB43D;
   --coral:  #FF6F55;
   --magenta:#FB2E7E;
@@ -46,7 +46,7 @@
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 }
 
-/* Dark theme (default) — midnight plum, gradients glow */
+/* Dark theme (default): midnight plum, gradients glow */
 :root[data-theme="dark"]{
   --ink-0:#0C0A15;      /* deepest */
   --ink-1:#12101E;      /* app canvas */
@@ -71,7 +71,7 @@
   --action:#8A6BFF;  --action-hover:#9C82FF; --action-text:#fff;
 }
 
-/* Light theme — warm porcelain */
+/* Light theme: warm porcelain */
 :root[data-theme="light"]{
   --ink-0:#FFFFFF;
   --ink-1:#FBF7F4;      /* app canvas, warm */
@@ -98,7 +98,7 @@
 
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-/* Scrollbars hidden — this page is shown inside a device mockup on the case
+/* Scrollbars hidden; this page is shown inside a device mockup on the case
    study, where a scrollbar track breaks the illusion. Scrolling is untouched. */
 html,body{scrollbar-width:none;-ms-overflow-style:none}
 html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
@@ -532,7 +532,7 @@ section{padding:110px 0;position:relative}
 <section id="identity" class="wrap reveal">
   <span class="eyebrow">Identity</span>
   <h2 class="sec-title">A mark for the <span class="gradient-text">zenith</span>.</h2>
-  <p class="sec-lead">A meridian is the line the sun crosses at its highest point — the moment of peak clarity. The mark is an <b style="color:var(--text-hi)">arc, a meridian line, and a zenith orb</b>: a hemisphere brought to its brightest.</p>
+  <p class="sec-lead">A meridian is the line the sun crosses at its highest point: the moment of peak clarity. The mark is an <b style="color:var(--text-hi)">arc, a meridian line, and a zenith orb</b>: a hemisphere brought to its brightest.</p>
 
   <div class="logo-grid">
     <div class="panel logo-hero-card">
@@ -575,9 +575,9 @@ section{padding:110px 0;position:relative}
     <div class="panel">
       <div class="frole" style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-mut);margin-bottom:18px">The three ideas</div>
       <ul class="concept-list">
-        <li><span class="k">◠</span><div><b>The arc</b> — the celestial hemisphere, the sweep of a day.</div></li>
-        <li><span class="k">│</span><div><b>The meridian</b> — the line of alignment where work meets clarity.</div></li>
-        <li><span class="k">●</span><div><b>The orb</b> — the sun at its zenith, the peak moment.</div></li>
+        <li><span class="k">◠</span><div><b>The arc</b>: the celestial hemisphere, the sweep of a day.</div></li>
+        <li><span class="k">│</span><div><b>The meridian</b>: the line of alignment where work meets clarity.</div></li>
+        <li><span class="k">●</span><div><b>The orb</b>: the sun at its zenith, the peak moment.</div></li>
       </ul>
     </div>
   </div>
@@ -587,7 +587,7 @@ section{padding:110px 0;position:relative}
 <section id="color" class="wrap reveal">
   <span class="eyebrow">Color</span>
   <h2 class="sec-title">The Day-Arc <span class="gradient-text">Spectrum</span>.</h2>
-  <p class="sec-lead">Warm dawn to cool dusk in a single sweep. Where most work tools hide behind corporate blue, Meridian runs the whole arc of the sky — vibrant, but disciplined into semantic roles. <b style="color:var(--text-hi)">Click any swatch to copy.</b></p>
+  <p class="sec-lead">Warm dawn to cool dusk in a single sweep. Where most work tools hide behind corporate blue, Meridian runs the whole arc of the sky: vibrant, but disciplined into semantic roles. <b style="color:var(--text-hi)">Click any swatch to copy.</b></p>
 
   <div class="spectrum-bar"></div>
   <div class="spectrum-caption"><span>DAWN · Amber</span><span>Coral</span><span>MIDDAY · Magenta</span><span>Iris</span><span>DUSK · Aqua</span></div>
@@ -602,7 +602,7 @@ section{padding:110px 0;position:relative}
   </div>
 
   <h3 style="font-family:var(--font-display);font-size:22px;margin-top:56px;margin-bottom:4px">Signature gradients</h3>
-  <p style="color:var(--text-mut);font-size:15px">Six named gradients carry the brand. <b style="color:var(--text-hi)">Dusk</b> is the primary — buttons, active states, focus.</p>
+  <p style="color:var(--text-mut);font-size:15px">Six named gradients carry the brand. <b style="color:var(--text-hi)">Dusk</b> is the primary: buttons, active states, focus.</p>
   <div class="grad-grid">
     <div class="grad-card" style="background:var(--grad-solar)"><div class="gname">Solar</div><div class="gtok">--grad-solar</div></div>
     <div class="grad-card" style="background:var(--grad-dusk)"><div class="gname">Dusk · primary</div><div class="gtok">--grad-dusk</div></div>
@@ -613,11 +613,11 @@ section{padding:110px 0;position:relative}
   </div>
 
   <h3 style="font-family:var(--font-display);font-size:22px;margin-top:56px;margin-bottom:4px">Plum-ink neutrals</h3>
-  <p style="color:var(--text-mut);font-size:15px">Not cool graphite — a warm violet-tinted ink so the spectrum glows against it.</p>
+  <p style="color:var(--text-mut);font-size:15px">Not cool graphite: a warm violet-tinted ink so the spectrum glows against it.</p>
   <div class="neutral-ramp" id="neutralRamp"></div>
 
   <h3 style="font-family:var(--font-display);font-size:22px;margin-top:56px;margin-bottom:4px">Semantic roles</h3>
-  <p style="color:var(--text-mut);font-size:15px">Vibrant, but always paired with an icon or label — color is never the sole carrier of meaning.</p>
+  <p style="color:var(--text-mut);font-size:15px">Vibrant, but always paired with an icon or label: color is never the sole carrier of meaning.</p>
   <div class="semantic-grid">
     <div class="sem-card"><div class="sem-dot" style="background:var(--success-bg)"><span style="color:var(--success)">✓</span></div><div class="st">Success</div><div class="sh" id="semSuccess">--success</div></div>
     <div class="sem-card"><div class="sem-dot" style="background:var(--warning-bg)"><span style="color:var(--warning)">▲</span></div><div class="st">Warning</div><div class="sh" id="semWarning">--warning</div></div>
@@ -660,7 +660,7 @@ section{padding:110px 0;position:relative}
     <div class="scale-row"><span class="tok">--text-h1</span><span class="spec" style="font-family:var(--font-display);font-weight:700;font-size:28px">Section headline</span><span class="dim">28 / 700</span></div>
     <div class="scale-row"><span class="tok">--text-h2</span><span class="spec" style="font-family:var(--font-display);font-weight:700;font-size:22px">Card & modal titles</span><span class="dim">22 / 700</span></div>
     <div class="scale-row"><span class="tok">--text-h3</span><span class="spec" style="font-weight:700;font-size:17px">Sub-section header</span><span class="dim">17 / 700</span></div>
-    <div class="scale-row"><span class="tok">--text-body</span><span class="spec" style="font-size:15px">Default body — Figtree keeps prose readable to 75 characters per line.</span><span class="dim">15 / 400</span></div>
+    <div class="scale-row"><span class="tok">--text-body</span><span class="spec" style="font-size:15px">Default body: Figtree keeps prose readable to 75 characters per line.</span><span class="dim">15 / 400</span></div>
     <div class="scale-row"><span class="tok">--text-small</span><span class="spec" style="font-size:13px">Secondary text, dense table cells</span><span class="dim">13 / 400</span></div>
     <div class="scale-row"><span class="tok">--text-mono</span><span class="spec mono" style="font-size:13px">mrd_a91f · API keys & record IDs</span><span class="dim">13 / mono</span></div>
   </div>
@@ -702,7 +702,7 @@ section{padding:110px 0;position:relative}
 <section id="components" class="wrap reveal">
   <span class="eyebrow">Components</span>
   <h2 class="sec-title">A kit that <span class="gradient-text">feels alive</span>.</h2>
-  <p class="sec-lead">Every primitive from the FSD component inventory, re-skinned in the Meridian language — gradient-forward, rounded, with real states.</p>
+  <p class="sec-lead">Every primitive from the FSD component inventory, re-skinned in the Meridian language: gradient-forward, rounded, with real states.</p>
 
   <div class="panel" style="margin-top:44px">
     <div class="comp-block" style="margin-top:0">
@@ -759,7 +759,7 @@ section{padding:110px 0;position:relative}
 
     <div class="comp-block">
       <h3>Stat tiles</h3>
-      <p style="font-size:13px;color:var(--text-mut);margin:-4px 0 6px">Metric + donut gauge — the ring shows the value's share of the whole, coloured by status.</p>
+      <p style="font-size:13px;color:var(--text-mut);margin:-4px 0 6px">Metric + donut gauge: the ring shows the value's share of the whole, coloured by status.</p>
       <div class="stat-tiles">
         <div class="stat-tile" style="--acc:var(--sky)">
           <div class="si">
@@ -805,7 +805,7 @@ section{padding:110px 0;position:relative}
 <section id="product" class="wrap reveal">
   <span class="eyebrow">In Product</span>
   <h2 class="sec-title">Meridian, <span class="gradient-text">assembled</span>.</h2>
-  <p class="sec-lead">The system on a real work surface — app shell, command bar, saved views, and a records table. This is the screenshot that should be recognisable without the logo.</p>
+  <p class="sec-lead">The system on a real work surface: app shell, command bar, saved views, and a records table. This is the screenshot that should be recognisable without the logo.</p>
 
   <div class="mock">
     <aside class="mock-side">
@@ -923,7 +923,7 @@ section{padding:110px 0;position:relative}
 <section id="tokens" class="wrap reveal">
   <span class="eyebrow">Tokens</span>
   <h2 class="sec-title">One source of <span class="gradient-text">truth</span>.</h2>
-  <p class="sec-lead">Three-tier architecture, per the FSD. Feature code consumes semantic tokens only; theming re-maps them — no component branches on theme.</p>
+  <p class="sec-lead">Three-tier architecture, per the FSD. Feature code consumes semantic tokens only; theming re-maps them, no component branches on theme.</p>
 
   <div class="tokens-table">
     <div class="tk-row tk-head"><span>Token</span><span>Value</span><span>Use</span></div>

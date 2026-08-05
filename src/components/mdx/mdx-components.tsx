@@ -34,7 +34,7 @@ function toText(node: React.ReactNode): string {
 
 /*
  * Maps MDX elements in case-study bodies to token-styled primitives. Passed to
- * <MDXRemote components={mdxComponents} />. The h1 is intentionally omitted —
+ * <MDXRemote components={mdxComponents} />. The h1 is intentionally omitted:
  * the page renders the title from frontmatter, so bodies start at h2.
  *
  * Editorial treatment (this is the case-study reading experience, so it leads
@@ -52,7 +52,7 @@ function toText(node: React.ReactNode): string {
 type Props = Record<string, unknown>;
 
 export const mdxComponents = {
-  // h2 — section head with an accent tick. Generous top space so sections
+  // h2: section head with an accent tick. Generous top space so sections
   // breathe; the tick is a short --accent rule that anchors the heading and
   // threads the project colour through the column (decorative → aria-hidden).
   h2: ({ children, ...props }: Props & { children?: React.ReactNode }) => (
@@ -70,7 +70,7 @@ export const mdxComponents = {
       <span>{children}</span>
     </Text>
   ),
-  // h3 — subsection. A real scale step below h2 (heading-s), not body-l with
+  // h3, subsection. A real scale step below h2 (heading-s), not body-l with
   // weight, so dense Design/Strategy sections keep a third articulated level.
   h3: ({ children, ...props }: Props & { children?: React.ReactNode }) => (
     <Text
@@ -89,7 +89,7 @@ export const mdxComponents = {
   p: (props: Props) => (
     <Text as="p" variant="body" className="mb-space-5 max-w-[var(--measure)]" {...props} />
   ),
-  // Lists — custom accent markers (the disc/decimal colour is the project accent
+  // Lists: custom accent markers (the disc/decimal colour is the project accent
   // via the marker pseudo-element) so enumeration carries the thread too.
   ul: (props: Props) => (
     <ul
@@ -107,7 +107,7 @@ export const mdxComponents = {
   a: ({ href = "#", ...rest }: Props & { href?: string }) => (
     <Link href={href} {...rest} />
   ),
-  // Pull-quote — large, confident, with an accent edge. The leading accent bar
+  // Pull-quote: large, confident, with an accent edge. The leading accent bar
   // and oversized display type break up the prose density (DESIGN brief #1).
   blockquote: (props: Props) => (
     <blockquote
@@ -115,14 +115,14 @@ export const mdxComponents = {
       {...props}
     />
   ),
-  // Hairline rule — a centred short accent tick over a full hairline, so section
+  // Hairline rule: a centred short accent tick over a full hairline, so section
   // breaks read as a deliberate editorial mark rather than a plain border.
   hr: () => (
     <div aria-hidden="true" className="relative my-space-9 h-px w-full max-w-[var(--measure)] bg-line">
       <span className="absolute left-1/2 top-1/2 h-px w-space-6 -translate-x-1/2 -translate-y-1/2 bg-accent" />
     </div>
   ),
-  // strong — accent-tinted weight so emphasis carries the project colour without
+  // strong: accent-tinted weight so emphasis carries the project colour without
   // shouting; em stays foreground but italic for a quieter second emphasis.
   strong: (props: Props) => (
     <strong className="font-medium text-fg" {...props} />
@@ -134,10 +134,10 @@ export const mdxComponents = {
       {...props}
     />
   ),
-  // Shot — an inline browser-framed screenshot for case-study bodies (the still
+  // Shot: an inline browser-framed screenshot for case-study bodies (the still
   // counterpart to the hero's looping capture). Reuses BrowserMockup's window
   // chrome so an embedded screen reads as a real browser window, then a caption
-  // that explains the *decision*, not the obvious (DESIGN_GUIDELINES §5 — captions
+  // that explains the *decision*, not the obvious (DESIGN_GUIDELINES §5: captions
   // are non-negotiable, and mirror the screen-gallery caption treatment).
   // `align` lets consecutive shots sit on opposite sides of the column for a
   // woven, editorial rhythm (lg+; below that they fill the single column). The
@@ -184,7 +184,7 @@ export const mdxComponents = {
   ),
   // Editorial blocks for the reading column (see CaseStudyBlocks.tsx): inline
   // phone screens, numbered findings, decision cards, asides, the status-colour
-  // system, and a by-the-numbers band — one device per major section for cadence.
+  // system, and a by-the-numbers band: one device per major section for cadence.
   ScreenBeat,
   FindingStack,
   Finding,
@@ -202,7 +202,7 @@ export const mdxComponents = {
   Bleed,
   BeforeAfter,
   FigmaPrototype,
-  // A real, playable HTML prototype in the reading column — the interactive
+  // A real, playable HTML prototype in the reading column: the interactive
   // counterpart to <Shot>. Carries its own figure + caption, so no wrapper here.
   LivePrototype,
 };

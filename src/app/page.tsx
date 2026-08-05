@@ -15,7 +15,7 @@ import {
 import { getFeaturedProjectsMeta } from "@/lib/content/work";
 
 /*
- * Home (ARCHITECTURE.md §6): the scroll BUILDS instead of decaying — hero, then
+ * Home (ARCHITECTURE.md §6): the scroll BUILDS instead of decaying: hero, then
  * the cinematic reel (a scroll-scrubbed film clip that starts with the first
  * scroll tick and carries the "Currently" departure board, its rows synced to
  * the frames), then the proof (work grid), the about teaser, and the closing
@@ -24,7 +24,7 @@ import { getFeaturedProjectsMeta } from "@/lib/content/work";
  * shared motion primitives, reduced-motion-safe, transform/opacity only.
  */
 export default function Home() {
-  // Four features on home — Meridian, InsightsTap, Spendee, Voyager. An even
+  // Four features on home: Meridian, InsightsTap, Spendee, Voyager. An even
   // count also means the grid closes as a clean 2×2 with no trailing full-width
   // row. /work still carries the full inventory, so "All work" genuinely adds
   // something (Decathlon) instead of duplicating this grid.
@@ -32,14 +32,14 @@ export default function Home() {
 
   return (
     <>
-      {/* Desktop-only section rail — complements the top <Nav>; scrolls to the
+      {/* Desktop-only section rail: complements the top <Nav>; scrolls to the
           in-page section ids below (#top is on the Hero). Hidden on mobile. */}
       <SideNav />
 
-      {/* Hero — primary signature, orchestrated load sequence. id="top". */}
+      {/* Hero: primary signature, orchestrated load sequence. id="top". */}
       <Hero />
 
-      {/* Cinematic reel + "Currently" board — the second beat. The section
+      {/* Cinematic reel + "Currently" board: the second beat. The section
           overlaps the hero (negative top margin), so the clip crossfades in
           OVER the departing hero type from the very first scroll tick, holds
           while the board rows flutter in (synced to the frames), then dims
@@ -49,9 +49,9 @@ export default function Home() {
 
       {/* Below-hero atmosphere wrapper. The home base is near-black; left flat it
           reads as empty voids between sections. This `relative isolate` shell
-          carries restrained depth behind ALL the content below the hero — faint,
+          carries restrained depth behind ALL the content below the hero (faint,
           widely-spaced radial pools that lift the dark near each beat, plus a
-          whisper of film grain — so the dark feels composed and intentional, not
+          whisper of film grain) so the dark feels composed and intentional, not
           unlit. Decorative layers are aria-hidden, pointer-events none, and sit
           at -z so they never intercept the content above. */}
       <div className="relative isolate">
@@ -65,7 +65,7 @@ export default function Home() {
         />
         <HomeAtmosphere />
 
-      {/* Selected work — proof right after the reel. */}
+      {/* Selected work: proof right after the reel. */}
       <Container as="section" id="work" className="scroll-mt-16 py-space-9">
         <div className="mb-space-7 flex items-end justify-between gap-space-4">
           <div>
@@ -83,8 +83,8 @@ export default function Home() {
         </div>
         {/* 2-up grid; if the count is odd, the trailing project becomes a
             full-width feature row (spanning both columns) so the grid never
-            leaves an empty cell. StaggerGroup animates its direct children —
-            the <article>s — so the entrance choreography is unchanged. */}
+            leaves an empty cell. StaggerGroup animates its direct children,
+            the <article>s, so the entrance choreography is unchanged. */}
         <StaggerGroup
           as="div"
           stagger={0.1}
@@ -109,7 +109,7 @@ export default function Home() {
         <AnimatedDivider spectrum />
       </Container>
 
-      {/* About teaser — a quiet, type-led editorial beat. The portrait that
+      {/* About teaser: a quiet, type-led editorial beat. The portrait that
           used to hold the right column moved on: the hero now opens the page
           with a full-viewport film of the same face, and a second portrait
           here read as a repeated note. The statement carries the beat alone at
@@ -135,14 +135,14 @@ export default function Home() {
         </div>
       </Container>
 
-      {/* Contact CTA — a framed panel with real depth: a layered radial glow from
+      {/* Contact CTA: a framed panel with real depth: a layered radial glow from
           the top-left, a faint hairline grid, a top accent edge, and an eyebrow +
           oversized headline so the closing beat has presence instead of reading as
           a flat surface. The Magnetic "Get in touch" button is preserved. */}
       <Container as="section" id="contact" className="scroll-mt-16 py-space-9">
         <Reveal>
           <div className="card-neon relative isolate overflow-hidden rounded-[3px] border border-line bg-surface p-space-6 sm:p-space-8 md:p-space-9">
-            {/* Top accent hairline — the spectrum lit across the crown of the
+            {/* Top accent hairline: the spectrum lit across the crown of the
                 panel (faded ends), so the closing CTA carries the same signal as
                 the hero and footer. */}
             <span
@@ -157,7 +157,7 @@ export default function Home() {
                   "linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent)",
               }}
             />
-            {/* Layered radial glow — a soft pool of light in the upper-left so the
+            {/* Layered radial glow: a soft pool of light in the upper-left so the
                 panel reads as lit, not flat. */}
             <div
               aria-hidden="true"
@@ -167,7 +167,7 @@ export default function Home() {
                   "radial-gradient(90% 120% at 8% 0%, color-mix(in srgb, var(--fg) 8%, transparent) 0%, transparent 55%)",
               }}
             />
-            {/* Faint hairline grid — instrument texture, barely-there. */}
+            {/* Faint hairline grid: instrument texture, barely-there. */}
             <div
               aria-hidden="true"
               className="absolute inset-0 -z-10 opacity-[0.5]"

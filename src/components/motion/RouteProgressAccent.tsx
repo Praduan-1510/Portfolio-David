@@ -13,7 +13,7 @@ export function RouteProgressAccent({ accent }: { accent?: string }) {
     if (!accent) return;
     const root = document.documentElement;
     root.style.setProperty("--progress-accent", accent);
-    // Block body so the cleanup returns void — removeProperty() returns a string,
+    // Block body so the cleanup returns void: removeProperty() returns a string,
     // which isn't a valid effect Destructor.
     return () => {
       root.style.removeProperty("--progress-accent");

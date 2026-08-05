@@ -1,5 +1,5 @@
 /**
- * Duration scale — the TS mirror of the CSS custom properties in
+ * Duration scale: the TS mirror of the CSS custom properties in
  * src/app/globals.css (DESIGN_GUIDELINES.md §7.3). Keep these in lockstep
  * with the `--dur-*` variables.
  *
@@ -7,9 +7,9 @@
  * - `durationsMs`  → milliseconds, matching the CSS values exactly.
  */
 
-/** Seconds — for Motion (`motion/react`) and GSAP. */
+/** Seconds, for Motion (`motion/react`) and GSAP. */
 export const durations = {
-  /** Split-flap character cadence — the departure-board tick. */
+  /** Split-flap character cadence: the departure-board tick. */
   tick: 0.05,
   /** Micro hover feedback. */
   instant: 0.1,
@@ -25,7 +25,7 @@ export const durations = {
   ambient: 1.2,
 } as const satisfies Record<string, number>;
 
-/** Milliseconds — identical values, matching the `--dur-*` CSS variables. */
+/** Milliseconds: identical values, matching the `--dur-*` CSS variables. */
 export const durationsMs = {
   tick: 50,
   instant: 100,

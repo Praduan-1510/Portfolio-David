@@ -6,7 +6,7 @@ import type { Project, ProjectMeta } from "@/types/project";
 /*
  * Thin content layer (ARCHITECTURE.md §8). Case studies are MDX files in
  * src/content/work/. All filesystem access is isolated here so that swapping
- * to a CMS later means changing this file only — components keep the same
+ * to a CMS later means changing this file only: components keep the same
  * Project / ProjectMeta shapes. Runs at build time (Server Components +
  * generateStaticParams), so synchronous fs is fine.
  */
@@ -15,7 +15,7 @@ const WORK_DIR = path.join(process.cwd(), "src", "content", "work");
 
 /**
  * Fail the build (not silently at runtime) when a case study's frontmatter is
- * missing required fields or has the wrong type. No dependency — a small guard
+ * missing required fields or has the wrong type. No dependency: a small guard
  * over the §8 schema is enough to catch authoring mistakes early.
  */
 function assertProjectMeta(
@@ -58,7 +58,7 @@ function assertProjectMeta(
 
   if (kind === "web") {
     // A web study's centerpiece is either a recording of a shipped site
-    // (`video`) or a playable prototype (`prototype`) — one or the other.
+    // (`video`) or a playable prototype (`prototype`): one or the other.
     const v = data.video as Record<string, unknown> | undefined;
     const p = data.prototype as Record<string, unknown> | undefined;
     const hasVideo = !!v && typeof v.src === "string" && typeof v.poster === "string";
@@ -121,7 +121,7 @@ function assertProjectMeta(
       }
     }
   }
-  // Optional Figma prototype — takes over the signature-showcase slot, so a
+  // Optional Figma prototype: takes over the signature-showcase slot, so a
   // typo here would silently blank the strongest beat on the page.
   if (data.figma !== undefined) {
     const f = data.figma as Record<string, unknown>;
@@ -131,7 +131,7 @@ function assertProjectMeta(
       );
   }
 
-  // Optional accent themes the route — if present it must be a usable hex.
+  // Optional accent themes the route: if present it must be a usable hex.
   if (
     data.accent !== undefined &&
     (typeof data.accent !== "string" || !data.accent.startsWith("#"))
@@ -171,7 +171,7 @@ export function getProjectBySlug(slug: string): Project | null {
  *
  * The slug tiebreaker is not cosmetic: two studies can be authored with the same
  * `order` (nothing in the schema forbids it), and without it the tie falls
- * through to `fs.readdirSync` order — so which project leads the work index, and
+ * through to `fs.readdirSync` order: so which project leads the work index, and
  * which one falls off the end of the home grid, would be decided by the
  * filesystem and could differ between machines or builds.
  */
@@ -182,12 +182,12 @@ export function getAllProjects(): Project[] {
     .sort((a, b) => a.meta.order - b.meta.order || a.meta.slug.localeCompare(b.meta.slug));
 }
 
-/** Just the frontmatter for every project — for index/listing views. */
+/** Just the frontmatter for every project, for index/listing views. */
 export function getAllProjectsMeta(): ProjectMeta[] {
   return getAllProjects().map((project) => project.meta);
 }
 
-/** Featured projects only, sorted by `order` — for the home teaser. */
+/** Featured projects only, sorted by `order`, for the home teaser. */
 export function getFeaturedProjectsMeta(): ProjectMeta[] {
   return getAllProjectsMeta().filter((meta) => meta.featured);
 }

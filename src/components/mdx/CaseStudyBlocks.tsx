@@ -4,7 +4,7 @@ import { Reveal, StaggerGroup, Parallax, FlapDigits } from "@/components/motion"
 import { cn } from "@/lib/utils/cn";
 
 /*
- * Editorial blocks for case-study MDX bodies — the devices that turn a wall of
+ * Editorial blocks for case-study MDX bodies: the devices that turn a wall of
  * prose into something a reader scans and enjoys, all built from the existing
  * system (PhoneFrame + the motion primitives + tokens; per-project accent, mono
  * labels, hairline borders, radius-0). Each is reduced-motion-safe because the
@@ -131,7 +131,7 @@ export function Aside({ label = "Note", children }: { label?: string; children?:
 
 /* ── StatusColourSystem ─ makes Spendee's "colour is information" claim tangible:
    the green / red / amber status palette as real swatches with their meaning. The
-   one place colour beyond the route accent is intentional — it's the subject app's
+   one place colour beyond the route accent is intentional: it's the subject app's
    own system, shown as content (like a screenshot would carry it), not site chrome. */
 const STATUS = [
   { color: "#5BD08A", name: "Green", label: "Settled / In", meaning: "Money received, paid, reconciled" },
@@ -154,7 +154,7 @@ export function StatusColourSystem() {
             style={{ backgroundColor: s.color }}
           />
           <span className="mt-space-3 block font-mono text-caption uppercase tracking-[0.14em] text-fg">
-            {s.name} — {s.label}
+            {s.name}: {s.label}
           </span>
           <span className="mt-space-1 block text-caption text-muted">{s.meaning}</span>
         </li>
@@ -185,7 +185,7 @@ export function Stat({ value, label }: { value?: string; label?: string }) {
         {label}
       </dt>
       <dd className="whitespace-nowrap font-display text-heading-l leading-none text-accent">
-        {/* Odometer flutter on scroll-in — the payoff band speaks the site's
+        {/* Odometer flutter on scroll-in: the payoff band speaks the site's
             departure-board language (digits only; word values render static). */}
         <FlapDigits value={value ?? ""} />
       </dd>
@@ -195,7 +195,7 @@ export function Stat({ value, label }: { value?: string; label?: string }) {
 
 /* ── Lede ─ the executive deck. A short, confident thesis statement set at the
    very top of a study (before the first section), under an accent rule. It frames
-   the whole case study in one line for a skimming reader — the "lead with the
+   the whole case study in one line for a skimming reader: the "lead with the
    punchline" move. Rendered as a <div> so it never steals the body's lead-paragraph
    (:first-of-type) treatment from the Overview that follows. **bold** inside lifts
    to the accent. ───────────────────────────────────────────────────────────── */
@@ -213,8 +213,8 @@ export function Lede({ children }: { children?: React.ReactNode }) {
 }
 
 /* ── Goals / Goal ─ a "goals & signals" instrument table. Each row pairs a design
-   GOAL with the SUCCESS SIGNAL it would be judged by — framed as a target/hypothesis,
-   never a claimed result — plus an optional honest status chip ("untested hypothesis",
+   GOAL with the SUCCESS SIGNAL it would be judged by (framed as a target/hypothesis,
+   never a claimed result) plus an optional honest status chip ("untested hypothesis",
    "measured on the live site", "design intent"). This is how a concept earns a
    credible goals→outcome arc without fabricating metrics. Same counter/accent/surface
    language as <Finding> and <DecisionCard>. ──────────────────────────────────── */
@@ -276,7 +276,7 @@ export function Goal({
 /* ── Margin ─ a marginalia note for the case-study right rail (lg+). Place it
    directly BEFORE the paragraph it annotates: the reading grid's dense flow
    sets it beside that paragraph in the rail. Below lg it renders as a quiet
-   inline aside. The "research notebook" voice — mono label, caption text. ── */
+   inline aside. The "research notebook" voice: mono label, caption text. ── */
 export function Margin({ label = "Why", children }: { label?: string; children?: React.ReactNode }) {
   return (
     <aside className="cs-margin my-space-5 border-l border-line pl-space-4 lg:my-0 lg:border-l-0 lg:border-t lg:border-line lg:pl-0 lg:pt-space-3">
@@ -298,7 +298,7 @@ export function Wide({ children }: { children?: React.ReactNode }) {
 
 /* ── Bleed ─ the set-piece: a full-viewport colour-field band in the project
    accent, holding a display pull-quote or an oversized artifact. One or two
-   per study — the moment the page stops being a column. ────────────────── */
+   per study: the moment the page stops being a column. ────────────────── */
 export function Bleed({
   quote,
   attribution,
@@ -348,7 +348,7 @@ export function Bleed({
 
 /* ── BeforeAfter ─ REAL process evidence: the first-pass screen beside the
    shipped one, with what revision caught. The V1s are the actual earlier
-   renders this project replaced — true iteration, not staged process theatre,
+   renders this project replaced: true iteration, not staged process theatre,
    which is the only kind the honesty positioning can afford. ─────────────── */
 export function BeforeAfter({
   before,
@@ -364,14 +364,14 @@ export function BeforeAfter({
   altBefore?: string;
   altAfter?: string;
   /** Label on the final-state (right) image. Defaults to "Shipped" for the real
-   *  shipped work; concept studies pass "Final" — nothing shipped. */
+   *  shipped work; concept studies pass "Final", nothing shipped. */
   afterChip?: string;
 }) {
   return (
     <figure className="cs-wide my-space-9">
       <StaggerGroup as="div" stagger={0.1} className="grid grid-cols-2 items-start gap-space-5 sm:gap-space-8 lg:max-w-[36rem]">
         {[
-          { src: before, chip: "V1 — caught in revision", alt: altBefore ?? "First-pass screen", dim: true },
+          { src: before, chip: "V1: caught in revision", alt: altBefore ?? "First-pass screen", dim: true },
           { src: after, chip: afterChip, alt: altAfter ?? `${afterChip} screen`, dim: false },
         ].map((side) => (
           <div key={side.chip} className="min-w-0">

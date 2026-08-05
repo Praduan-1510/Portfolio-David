@@ -3,15 +3,15 @@
 import { useEffect, useRef } from "react";
 
 /*
- * Ambient film grain (DESIGN_GUIDELINES.md §7.8 / §9 — faint, purposeful texture).
+ * Ambient film grain (DESIGN_GUIDELINES.md §7.8 / §9: faint, purposeful texture).
  * A small grayscale-noise tile generated ONCE on mount and repeated as a CSS
  * background, composited with `mix-blend-overlay` so it reads as subtle atmosphere
- * over a dark surface. Standalone — uses no design tokens.
+ * over a dark surface. Standalone: uses no design tokens.
  *
  * PERFORMANCE: this used to redraw a FULL-element noise canvas every other frame
  * via createImageData + a per-pixel loop + putImageData. On the page-tall
  * home-atmosphere instance (≈6000px) that was millions of Math.random() writes per
- * frame on the main thread, continuously — a measured ~14% of the main thread at
+ * frame on the main thread, continuously: a measured ~14% of the main thread at
  * idle on its own, and a major scroll-jank source. At ≤5% opacity over near-black
  * the grain is texture, not motion, so the animation was imperceptible: we now
  * paint a single repeating tile (O(1), independent of layer size) and the cost is
@@ -23,7 +23,7 @@ interface AnimatedNoiseProps {
   className?: string;
 }
 
-const TILE = 128; // px; repeated across the layer — fine grain at any element size.
+const TILE = 128; // px; repeated across the layer: fine grain at any element size.
 
 export function AnimatedNoise({ opacity = 0.05, className }: AnimatedNoiseProps) {
   const ref = useRef<HTMLDivElement>(null);

@@ -41,10 +41,10 @@ export function Nav() {
   const overlayRef = useRef<HTMLDivElement>(null);
 
   // The route readout is derived from usePathname(), which is stable on every
-  // real route (server prerender === client) — EXCEPT the not-found page. It is
+  // real route (server prerender === client): EXCEPT the not-found page. It is
   // statically prerendered as the internal `/_not-found` route (baking "→ _not-
-  // found"), but the client hydrates on the actual unknown URL, so the label —
-  // and its per-character flap-tile count — differ, causing a hydration mismatch
+  // found"), but the client hydrates on the actual unknown URL, so the label,
+  // and its per-character flap-tile count, differ, causing a hydration mismatch
   // (React #418). Since the readout is decorative and flutters in on mount
   // anyway, gate it on mount: identical (empty) first render on both sides.
   const [mounted, setMounted] = useState(false);
@@ -106,7 +106,7 @@ export function Nav() {
         <div className="flex items-center gap-space-4">
           <NextLink
             href="/"
-            aria-label="Praduan Saha — home"
+            aria-label="Praduan Saha: home"
             className="flex min-h-[44px] items-center gap-space-2 font-display text-body-l font-semibold tracking-[-0.02em]"
           >
             <Image
@@ -119,7 +119,7 @@ export function Nav() {
             />
             Praduan Saha
           </NextLink>
-          {/* RouteFlap — a persistent departure-board chip reading the current
+          {/* RouteFlap: a persistent departure-board chip reading the current
               route; keyed by pathname so it re-flutters on every navigation
               (the settled end-state of the transition readout). */}
           <span
@@ -132,7 +132,7 @@ export function Nav() {
           </span>
         </div>
 
-        {/* Inline nav — md and up. */}
+        {/* Inline nav: md and up. */}
         <nav aria-label="Primary" className="hidden md:block">
           <ul className="flex items-center gap-space-5">
             {links.slice(1).map((link) => {
@@ -155,7 +155,7 @@ export function Nav() {
           </ul>
         </nav>
 
-        {/* Hamburger — below md. */}
+        {/* Hamburger, below md. */}
         <button
           ref={triggerRef}
           type="button"

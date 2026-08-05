@@ -7,7 +7,7 @@ import { durations } from "@/lib/motion/durations";
 import { useReducedMotion, prefersReducedMotion } from "@/hooks/useReducedMotion";
 
 /*
- * In-view reveal — fades/translates in once when scrolled into view
+ * In-view reveal: fades/translates in once when scrolled into view
  * (DESIGN_GUIDELINES.md §7.5). Transform + opacity only. Content is visible by
  * default and only hidden in a layout effect (useGSAP), so no-JS / reduced-motion
  * never traps content behind the animation (§10).
@@ -16,7 +16,7 @@ interface RevealProps extends React.HTMLAttributes<HTMLElement> {
   as?: React.ElementType;
   /** Translate distance in px (16–40 per §7.3). */
   y?: number;
-  /** Delay in seconds — stagger siblings 0.04–0.08 (§7.4). */
+  /** Delay in seconds: stagger siblings 0.04–0.08 (§7.4). */
   delay?: number;
   /** Tween duration in seconds (defaults to the `slow` token). */
   duration?: number;

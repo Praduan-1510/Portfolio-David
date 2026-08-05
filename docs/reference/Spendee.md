@@ -2,10 +2,10 @@
 title: Spendee
 slug: spendee
 client: Concept project        # [confirm] self-initiated, or real client work?
-role: UI/UX & Product Design   # [confirm] your exact role — solo, or part of a team?
+role: UI/UX & Product Design   # [confirm] your exact role: solo, or part of a team?
 year: 2025                     # [confirm]
 services: [UX Design, UI Design, Design System, Prototyping]
-summary: A dark-mode finance super-app for Indian small businesses — ledger, GST, invoicing, payments, and credit in one calm interface.
+summary: A dark-mode finance super-app for Indian small businesses: ledger, GST, invoicing, payments, and credit in one calm interface.
 cover: /images/work/spendee/dashboard.png
 accent: "#C2E000"              # [confirm] Spendee's lime-green; or use the onboarding blue
 featured: true
@@ -32,57 +32,57 @@ gallery:
   - /images/work/spendee/edit-profile.png
 ---
 
-> **This is the MDX body for `src/content/work/spendee.mdx`.** The frontmatter above matches the `Project` schema in `ARCHITECTURE.md` §8. Image paths assume the screens are placed under `public/images/work/spendee/` — see the asset manifest at the end.
+> **This is the MDX body for `src/content/work/spendee.mdx`.** The frontmatter above matches the `Project` schema in `ARCHITECTURE.md` §8. Image paths assume the screens are placed under `public/images/work/spendee/`: see the asset manifest at the end.
 
-# Spendee — a finance super-app for small business
+# Spendee: a finance super-app for small business
 
-Spendee pulls everything a small-business owner juggles — their ledger, GST filing, invoicing, payments, and access to credit — into one dark, calm interface. It's a concept exploring how to make Indian SMB finance feel manageable instead of scattered across a paper khata, a tax portal, an invoicing tool, and three banking apps.
+Spendee pulls everything a small-business owner juggles (their ledger, GST filing, invoicing, payments, and access to credit) into one dark, calm interface. It's a concept exploring how to make Indian SMB finance feel manageable instead of scattered across a paper khata, a tax portal, an invoicing tool, and three banking apps.
 
 ## The problem
 
 A small-business owner in India usually keeps their books in a paper khata or a basic ledger app, files GST through a separate portal or an accountant, raises invoices somewhere else, collects over UPI, and chases working capital from banks that never see their real cash position. The information lives in silos, compliance deadlines sneak up, and the very data that proves a business is healthy never gets used to unlock the credit it qualifies for.
 
-The design challenge: bring all of it into one place — and make a dense, high-stakes, deadline-driven domain feel calm and in control rather than overwhelming.
+The design challenge: bring all of it into one place: and make a dense, high-stakes, deadline-driven domain feel calm and in control rather than overwhelming.
 
 ## My role
 
-`[confirm]` I designed Spendee end to end — information architecture, user flows, UI across every screen, and the design system that holds it together.
+`[confirm]` I designed Spendee end to end: information architecture, user flows, UI across every screen, and the design system that holds it together.
 
 ## Approach
 
 A few decisions shaped the whole product.
 
-**Start from a model the owner already knows: "I Gave / I Got."** The core ledger entry is built on the khata mental model — money you gave (payable) versus money you got (receivable) — so the most frequent action feels familiar from the first use rather than like accounting software.
+**Start from a model the owner already knows: "I Gave / I Got."** The core ledger entry is built on the khata mental model, money you gave (payable) versus money you got (receivable), so the most frequent action feels familiar from the first use rather than like accounting software.
 
 **A calm dark interface where colour is information, not decoration.** The entire app sits on near-black, which lets colour carry meaning: green for money in and settled, red for overdue and money out, amber for pending items and approaching deadlines. The eye learns the system once and reads every screen faster for it.
 
-**Surface the next action, not just the data.** Every screen leads with something to do — "File & Pay Now", "Collect from 3 clients", "Get ₹62k Today", "Apply in 2 Minutes" — turning passive numbers into prompts that move the business forward.
+**Surface the next action, not just the data.** Every screen leads with something to do ("File & Pay Now", "Collect from 3 clients", "Get ₹62k Today", "Apply in 2 Minutes"), turning passive numbers into prompts that move the business forward.
 
-**One consistent shell.** A five-slot bottom bar — Home, Ledger, a central add button, Bank, More — keeps the highest-frequency actions one tap away everywhere in the app, with a recurring header pattern (back · section label · title) so you always know where you are.
+**One consistent shell.** A five-slot bottom bar (Home, Ledger, a central add button, Bank, More) keeps the highest-frequency actions one tap away everywhere in the app, with a recurring header pattern (back · section label · title) so you always know where you are.
 
 ## Walkthrough
 
-**Onboarding & welcome.** A short, four-step intro frames the value — a smart ledger, AI that watches your cash flow, and credit built on your books — over a blue-to-lime gradient, before handing off to the calm, near-black product.
+**Onboarding & welcome.** A short, four-step intro frames the value (a smart ledger, AI that watches your cash flow, and credit built on your books) over a blue-to-lime gradient, before handing off to the calm, near-black product.
 
-**Sign in & sign up.** Mobile-first auth with a four-digit PIN, biometrics, and Google, plus GSTIN capture at registration — built for how Indian small businesses actually onboard.
+**Sign in & sign up.** Mobile-first auth with a four-digit PIN, biometrics, and Google, plus GSTIN capture at registration: built for how Indian small businesses actually onboard.
 
-**Dashboard.** The home screen answers one question: *how is my business right now?* Net position with its monthly trend, money to get versus give, a cash-velocity gauge, quick actions, recent activity, and surfaced alerts for GST due and low stock — the whole state of the business above the fold.
+**Dashboard.** The home screen answers one question: *how is my business right now?* Net position with its monthly trend, money to get versus give, a cash-velocity gauge, quick actions, recent activity, and surfaced alerts for GST due and low stock: the whole state of the business above the fold.
 
 **Ledger.** Recording a transaction is the core loop: choose gave or got, enter the amount, contact, dates, and payment method, and attach a receipt that OCR reads automatically. Sending money links straight back to an open payable so the books stay reconciled.
 
 **Contacts & customers.** Every customer and vendor with their outstanding balance and status, filterable by overdue, pending, and settled, drilling into a per-contact history with one-tap call, invoice, WhatsApp, and reminders.
 
-**Invoices.** Create, track, and chase invoices by status, with share-as-PDF and reminders — and for overdue invoices, the option to discount them for instant cash.
+**Invoices.** Create, track, and chase invoices by status, with share-as-PDF and reminders, and for overdue invoices, the option to discount them for instant cash.
 
 **GST Center.** The compliance hub, and the screen I'm most proud of: GSTR-3B and GSTR-1 summaries, tax liability against available input tax credit, deadline countdowns, and one-tap file-and-pay. It turns a stressful, easy-to-miss obligation into a guided task.
 
-**Reports.** A P&L summary, a six-month cash-flow chart, and the metrics owners actually act on — average collection period, working capital, gross margin — exportable as a PDF.
+**Reports.** A P&L summary, a six-month cash-flow chart, and the metrics owners actually act on (average collection period, working capital, gross margin) exportable as a PDF.
 
 **Banking.** A built-in account with card, balance, a virtual account for UPI collections, and a shareable payment link, alongside transaction history.
 
-**Credit & Growth.** The payoff of keeping good books: a ledger-health score built from on-time payments, inflow, and GST compliance, used to pre-approve working capital and let owners discount specific invoices for cash. This is the thread that ties the whole product together — good data in the ledger becomes real financial leverage.
+**Credit & Growth.** The payoff of keeping good books: a ledger-health score built from on-time payments, inflow, and GST compliance, used to pre-approve working capital and let owners discount specific invoices for cash. This is the thread that ties the whole product together: good data in the ledger becomes real financial leverage.
 
-**Notifications & settings.** Prioritised alerts split into urgent and earlier — overdue payments, filing deadlines, low stock — plus a settings hub for business profile, reminders, team access, and Tally-compatible data export.
+**Notifications & settings.** Prioritised alerts split into urgent and earlier (overdue payments, filing deadlines, low stock) plus a settings hub for business profile, reminders, team access, and Tally-compatible data export.
 
 ## Design system
 
@@ -90,9 +90,9 @@ One dark surface; a status colour system (green / red / amber) that encodes mean
 
 ## Outcome
 
-An end-to-end product design: 19 screens spanning onboarding, authentication, ledger, contacts, invoicing, GST, reporting, banking, credit, and settings — held together by a single design system and one consistent navigation model.
+An end-to-end product design: 19 screens spanning onboarding, authentication, ledger, contacts, invoicing, GST, reporting, banking, credit, and settings: held together by a single design system and one consistent navigation model.
 
-`[confirm — reflection in your words]` As a concept, Spendee explores how an intimidating, compliance-heavy domain can be made to feel calm and actionable. Given more time, I'd validate the ledger flow with real owners, build a clickable prototype of the core loops, and pressure-test the GST flow against real filing data.
+`[confirm: reflection in your words]` As a concept, Spendee explores how an intimidating, compliance-heavy domain can be made to feel calm and actionable. Given more time, I'd validate the ledger flow with real owners, build a clickable prototype of the core loops, and pressure-test the GST flow against real filing data.
 
 ---
 

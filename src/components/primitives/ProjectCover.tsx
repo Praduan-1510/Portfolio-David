@@ -42,9 +42,9 @@ export function ProjectCover({
         webm={project.video?.webm}
         playInStill={playVideo}
         // A prototype has no live host, so it falls back to the product domain
-        // its own chrome shows — an empty URL pill reads as a broken frame.
+        // its own chrome shows: an empty URL pill reads as a broken frame.
         domain={hostOf(project.liveUrl) ?? project.prototype?.surfaces[0]?.domain}
-        alt={`${project.title} — website`}
+        alt={`${project.title}, website`}
         sizes={sizes}
         priority={priority}
         className={className}
@@ -55,7 +55,7 @@ export function ProjectCover({
   return (
     <PhoneFrame
       src={project.cover}
-      alt={`${project.title} — cover screen`}
+      alt={`${project.title}, cover screen`}
       sizes={sizes}
       priority={priority}
       className={className}

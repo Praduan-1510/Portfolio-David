@@ -68,5 +68,5 @@ await cap("about-hero-live", "/about", D, { reduced: false, full: false, wait: 2
 
 await browser.close();
 console.log("\n=== RUNTIME ERRORS / OVERFLOW ===");
-console.log(errors.length ? JSON.stringify(errors, null, 2) : "NONE — no console errors, no horizontal overflow");
+console.log(errors.length ? JSON.stringify(errors, null, 2) : "NONE, no console errors, no horizontal overflow");
 console.log("ALL DONE");

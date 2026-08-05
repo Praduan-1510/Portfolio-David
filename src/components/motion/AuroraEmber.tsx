@@ -1,14 +1,14 @@
 import { cn } from "@/lib/utils/cn";
 
 /*
- * Spectrum ember — a coal of the home hero's aurora, carried to every route so
+ * Spectrum ember: a coal of the home hero's aurora, carried to every route so
  * the identity survives past the first viewport. Pure CSS (two/three radial
  * blooms in the same color-mix recipe as the hero Fallback), decorative,
  * pointer-events:none, zero runtime cost. Each surface tunes temperature via
  * `hues`; "accent" blends the route's --accent with its spectrum neighbours so
  * case-study heroes read as "the aurora, tuned to this project".
  *
- * Dosage: ONE ember per viewport, always behind content (-z), always subtle —
+ * Dosage: ONE ember per viewport, always behind content (-z), always subtle:
  * it's an ember, not a second hero.
  */
 

@@ -13,24 +13,24 @@ import ContactForm from "@/components/ContactForm";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Start a project or just say hello — send a message straight from the page, or reach Praduan Saha by email or LinkedIn.",
+    "Start a project or just say hello: send a message straight from the page, or reach Praduan Saha by email or LinkedIn.",
   alternates: { canonical: "/contact" },
   openGraph: {
-    title: "Contact — Praduan Saha",
+    title: "Contact: Praduan Saha",
     description:
-      "Start a project or just say hello — send a message straight from the page, or reach me by email or LinkedIn.",
+      "Start a project or just say hello: send a message straight from the page, or reach me by email or LinkedIn.",
     images: ["/opengraph-image"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Contact — Praduan Saha",
+    title: "Contact: Praduan Saha",
     description:
-      "Start a project or just say hello — send a message straight from the page, or reach me by email or LinkedIn.",
+      "Start a project or just say hello: send a message straight from the page, or reach me by email or LinkedIn.",
     images: ["/twitter-image"],
   },
 };
 
-// Left-column spec readout. Copy is DRAFT — each value is shown as an "e.g."
+// Left-column spec readout. Copy is DRAFT: each value is shown as an "e.g."
 // example (a small mono tag, not a repeated "PLACEHOLDER" word). The owner
 // replaces these with their own lines; nothing here is invented as fact.
 const BLOCKS = [
@@ -48,7 +48,7 @@ const BLOCKS = [
   },
 ];
 
-// Spectrum stops used as the spec indices — the site's structural signal layer
+// Spectrum stops used as the spec indices: the site's structural signal layer
 // (thin marks only), warm→cool across the three readouts.
 const INDEX_HUES = [
   "var(--spectrum-violet)",
@@ -57,7 +57,7 @@ const INDEX_HUES = [
 ];
 
 /*
- * Contact — the site's closing statement as an instrument "console": a spec
+ * Contact: the site's closing statement as an instrument "console": a spec
  * readout on the left (numbered, spectrum-indexed, hairline-ruled) and the
  * message form framed as an input panel on the right, with an email / LinkedIn
  * fallback beneath. Two columns at lg, stacks below.
@@ -76,7 +76,7 @@ export default function Contact() {
       aria-labelledby="contact-heading"
       className="relative isolate flex min-h-[calc(80svh-4rem)] flex-col overflow-hidden bg-bg text-fg [@media(max-height:600px)]:min-h-0"
     >
-      {/* Layer 0 — atmosphere: two soft monochrome radial glows. */}
+      {/* Layer 0: atmosphere: two soft monochrome radial glows. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10"
@@ -85,13 +85,13 @@ export default function Contact() {
             "radial-gradient(60% 70% at 18% 24%, rgba(255,255,255,0.06), transparent 70%), radial-gradient(46% 58% at 86% 84%, rgba(255,255,255,0.04), transparent 72%)",
         }}
       />
-      {/* Spectrum ember — the closing page still speaks the aurora. */}
+      {/* Spectrum ember: the closing page still speaks the aurora. */}
       <AuroraEmber hues={["violet", "rose"]} position="top-left" intensity={0.1} />
 
-      {/* Layer 1 — faint film grain over the glows, beneath the content. */}
+      {/* Layer 1: faint film grain over the glows, beneath the content. */}
       <AnimatedNoise opacity={0.035} className="-z-10" />
 
-      {/* Corner crosshair ticks — frame the whole section like an instrument. */}
+      {/* Corner crosshair ticks: frame the whole section like an instrument. */}
       {["left-0 top-0", "right-0 top-0", "left-0 bottom-0", "right-0 bottom-0"].map(
         (pos) => (
           <span
@@ -110,7 +110,7 @@ export default function Contact() {
 
       <Container className="relative z-10 flex flex-1 items-start py-space-10 [@media(max-height:600px)]:py-space-6">
         <div className="grid w-full grid-cols-1 gap-space-9 lg:grid-cols-12 lg:gap-space-9">
-          {/* Left — the statement + the spec readout. */}
+          {/* Left: the statement + the spec readout. */}
           <div className="lg:col-span-5">
             <Reveal trigger="load" delay={0.05}>
               <p className="flex items-center gap-space-2 font-mono text-caption uppercase tracking-[0.18em] text-muted">
@@ -136,7 +136,7 @@ export default function Contact() {
 
             <Reveal trigger="load" delay={0.36}>
               <Text variant="body-l" className="mt-space-5 max-w-[40ch] text-muted">
-                {"Tell me what you're working on and where it stands — I read every message."}
+                {"Tell me what you're working on and where it stands: I read every message."}
               </Text>
             </Reveal>
 
@@ -178,11 +178,11 @@ export default function Contact() {
             </StaggerGroup>
           </div>
 
-          {/* Right — the message form, framed as an input panel. */}
+          {/* Right: the message form, framed as an input panel. */}
           <div className="lg:col-span-6 lg:col-start-7">
             <Reveal trigger="load" delay={0.3}>
               <div className="relative overflow-hidden rounded-[3px] border border-line bg-surface p-space-6 sm:p-space-7">
-                {/* Spectrum crown — the wayfinding signal across the panel top. */}
+                {/* Spectrum crown: the wayfinding signal across the panel top. */}
                 <span
                   aria-hidden="true"
                   className="absolute inset-x-0 top-0 h-px"

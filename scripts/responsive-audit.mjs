@@ -4,7 +4,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 /*
  * Responsive sweep harness. Sweeps every route across a wide width matrix and,
  * at each width, measures horizontal overflow + any element wider than the
- * viewport (the two most common responsive bugs) entirely programmatically —
+ * viewport (the two most common responsive bugs) entirely programmatically,
  * no image reading needed. It ALSO captures fold + full-page PNGs at a
  * representative subset of widths (incl. landscape phone) for visual review.
  *
@@ -35,7 +35,7 @@ const routes = [
   ["case-voyager", "/work/voyager"],
 ];
 
-// Width matrix — covers small phone → large desktop, plus landscape phone & the
+// Width matrix: covers small phone → large desktop, plus landscape phone & the
 // tablet-landscape / small-laptop crossover where `md:` choreography turns on.
 const WIDTHS = [
   { w: 320, h: 720, label: "320 (iPhone SE / small)" },
@@ -115,7 +115,7 @@ for (const [name, path] of routes) {
 
     if (SHOTS && SHOT_WIDTHS.has(w)) {
       await page.screenshot({ path: `${OUT}/${name}_${w}_fold.png`, fullPage: false });
-      // Full-page only for shorter routes — case studies are 11k–23k px tall, so
+      // Full-page only for shorter routes: case studies are 11k–23k px tall, so
       // a full capture is unreadable; the fold + section captures cover them.
       if (metrics.docH < 9000) {
         await page.screenshot({ path: `${OUT}/${name}_${w}_full.png`, fullPage: true });

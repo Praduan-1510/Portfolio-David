@@ -8,7 +8,7 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
  * A looping product capture that floats over the hero background as if it were
  * transparent. The source is an *opaque* H.264 MP4 (plays everywhere incl.
  * Safari, unlike a VP9-alpha WebM) whose surround is baked to a near-black
- * (~rgb(15,17,18)) — a hair lighter than the page's near-black --bg (~rgb(5,5,5)).
+ * (~rgb(15,17,18)): a hair lighter than the page's near-black --bg (~rgb(5,5,5)).
  *
  * We recreate the transparency with two moves, no alpha and no colour-shifting
  * blend mode:
@@ -16,7 +16,7 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
  *      radial mask feathers the fanned side-screens so the crop never shows an
  *      edge.
  *   2. a *gentle* contrast() pulls that near-black surround down toward the page
- *      black — contrast(1.06) sends rgb(~17)→rgb(~10) while whites stay white and
+ *      black: contrast(1.06) sends rgb(~17)→rgb(~10) while whites stay white and
  *      mids hold. It's deliberately restrained: pushing harder (e.g. 1.12) crushes
  *      the montage's genuinely-dark top screens *below* the page black, which then
  *      read as a dark block where they overlap the bright aurora glow. The mask,
@@ -27,7 +27,7 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
  * Reduced motion renders the static `fallback` (the phone still) instead.
  */
 
-// Feathered apertures — ellipses nudged DOWN (centre ~55%) with a short
+// Feathered apertures: ellipses nudged DOWN (centre ~55%) with a short
 // vertical radius, so a montage's dark top screens dissolve well before the
 // box edge (otherwise they form a hard block against the aurora) and the crop
 // never shows an edge. Two geometries, both tuned on the live heroes:
@@ -40,7 +40,7 @@ const PORTRAIT_MASK =
   "radial-gradient(58% 74% at 50% 56%, #000 26%, transparent 88%)";
 // closest-side reaches EXACTLY zero at every box edge, so full-frame
 // compositions (whose content bleeds to the video's own edges) can never leave
-// a residual straight line where the aperture ends — the geometry guarantees it.
+// a residual straight line where the aperture ends: the geometry guarantees it.
 const LANDSCAPE_MASK =
   "radial-gradient(closest-side at 50% 52%, #000 64%, transparent 100%)";
 
@@ -54,7 +54,7 @@ const ratioOf = (aspect: string): number => {
 const SURROUND_KNOCKOUT = "contrast(1.06) brightness(0.99)";
 
 interface HeroLoopVideoProps {
-  /** H.264 MP4 source — plays in every browser, including Safari. */
+  /** H.264 MP4 source: plays in every browser, including Safari. */
   mp4: string;
   /** Accessible label for the looping capture. */
   alt: string;
@@ -78,7 +78,7 @@ export function HeroLoopVideo({
   const reduced = useReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Cursor parallax — the reel rotates toward the pointer for a tangible 3D
+  // Cursor parallax: the reel rotates toward the pointer for a tangible 3D
   // feel (same idiom as BrowserMockup's .bm-tilt). Only wired on fine pointers
   // with motion allowed; touch/reduced-motion keep the vars at 0.
   const tiltRef = useRef<HTMLDivElement>(null);
@@ -114,7 +114,7 @@ export function HeroLoopVideo({
     const v = videoRef.current;
     if (!v) return;
     // React doesn't reliably set the `muted` DOM property from JSX, and Safari
-    // blocks autoplay on a video it considers unmuted — force the property so
+    // blocks autoplay on a video it considers unmuted: force the property so
     // the in-view .play() isn't silently rejected.
     v.muted = true;
     const io = new IntersectionObserver(

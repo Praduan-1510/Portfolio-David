@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-/** Live HH:MM:SS in Asia/Kolkata — null until mounted (SSR-safe). */
+/** Live HH:MM:SS in Asia/Kolkata: null until mounted (SSR-safe). */
 export function useKolkataClock() {
   const [time, setTime] = useState<string | null>(null);
   useEffect(() => {

@@ -59,7 +59,7 @@ export async function generateMetadata({
     alternates: { canonical: `/work/${slug}` },
     openGraph: { title: project.meta.title, description: project.meta.summary },
     // card must be re-declared: metadata merging is shallow, so this per-page
-    // twitter object replaces the layout's — dropping its summary_large_image
+    // twitter object replaces the layout's, dropping its summary_large_image
     // and falling back to the small "summary" card. The image itself comes from
     // the co-located opengraph-image.tsx (used for twitter too, no twitter-image).
     twitter: {
@@ -83,7 +83,7 @@ export default async function CaseStudy({
   const isWeb = meta.kind === "web";
   // A "reel hero" is an APP study with a hero video (the floating HeroLoopVideo
   // montage). Web studies also carry meta.video (for the BrowserMockup screen),
-  // so gate on kind too — insightstap must keep the standard hero treatment.
+  // so gate on kind too: insightstap must keep the standard hero treatment.
   const hasReel = !isWeb && !!meta.video?.src;
   const liveHost = meta.liveUrl
     ? meta.liveUrl.replace(/^https?:\/\//, "").replace(/\/+$/, "")
@@ -94,19 +94,19 @@ export default async function CaseStudy({
   const idx = all.findIndex((p) => p.slug === slug);
   const next = idx >= 0 ? all[(idx + 1) % all.length] : null;
 
-  // Three key screens for the signature showcase — the cover centred, flanked by
+  // Three key screens for the signature showcase: the cover centred, flanked by
   // the next two distinct screens (a confident "big reveal" of the actual work).
   const heroScreens = Array.from(new Set([meta.cover, ...meta.gallery])).slice(0, 3);
 
   // When a study ships a clickable prototype, the signature slot under the hero
-  // holds the prototype itself instead of the static trio — the strongest
+  // holds the prototype itself instead of the static trio: the strongest
   // position on the page goes to the one thing a reader can operate. Studies
   // without one (Voyager, Decathlon) keep the trio exactly as before.
   const showFigmaShowcase = Boolean(meta.figma);
   const showScreenTrio =
     !showFigmaShowcase && meta.kind !== "web" && heroScreens.length === 3;
 
-  // Narrative sections (the MDX h2s) for the sticky "Contents" rail — extracted
+  // Narrative sections (the MDX h2s) for the sticky "Contents" rail: extracted
   // from the raw MDX so the ids match the slugs the heading renderer sets.
   const sections = content.split("\n").flatMap((line) => {
     const m = line.match(/^##\s+(.+?)\s*$/);
@@ -116,7 +116,7 @@ export default async function CaseStudy({
 
   // Evidence before verdict: when a screens gallery exists, the MDX body is
   // split at "## Outcome" so the flow gallery renders BETWEEN the narrative
-  // and the Outcome/Reflection — a skimmer meets the screens before the
+  // and the Outcome/Reflection: a skimmer meets the screens before the
   // conclusions. Anchors/TOC are unaffected (ids live on the headings).
   const hasGallery = Boolean(meta.flows && meta.flows.length > 0);
   const outcomeAt = content.indexOf("\n## Outcome");
@@ -131,7 +131,7 @@ export default async function CaseStudy({
     ? ({ "--accent": meta.accent } as React.CSSProperties)
     : undefined;
 
-  // Hero reel aperture — each capture declares its composition's aspect in
+  // Hero reel aperture: each capture declares its composition's aspect in
   // frontmatter (video.aspect) so nothing meaningful gets cropped: Spendee's
   // centre-column montage crops to a 9/16 portrait, Decathlon's carousel ring
   // wants 4/3, Voyager's edge-to-edge isometric flow needs the full 16/9 frame.
@@ -145,21 +145,21 @@ export default async function CaseStudy({
   const reelAspect = (meta.video?.aspect ?? "9/16").replace(/\s/g, "");
   const reelMaxWidth = REEL_WIDTHS[reelAspect] ?? "26rem";
   // A landscape reel is the hero's centrepiece, so it takes an even 1fr/1fr
-  // split — measured, not overbuilt: bigger than the phone-era column yet the
+  // split: measured, not overbuilt: bigger than the phone-era column yet the
   // title keeps its proportion. Portrait (Spendee) keeps the phone-era ratio.
   // Class strings are literal so Tailwind's JIT generates them.
   const reelIsLandscape = hasReel && reelAspect !== "9/16";
   // Landscape reels go two-column only from lg up. Below that (phones + tablet
   // portrait) the hero STACKS so the wide reel spans full width instead of being
-  // squeezed into a tiny half-column (a 2-col landscape reel at 768px is ~300px
-  // — too small, with dead space). Portrait/phone heroes keep the md split.
+  // squeezed into a tiny half-column (a 2-col landscape reel at 768px is ~300px,
+  // too small, with dead space). Portrait/phone heroes keep the md split.
   const heroGridCols = reelIsLandscape
     ? "lg:grid-cols-[1fr_1fr]"
     : "md:grid-cols-[1.12fr_0.88fr]";
 
   // Landscape reels are vertically centred on the (tall) left column by the
   // grid, which drops them low against the title. Lift each at lg so its centre
-  // lands on the title's eye-line — per-aspect, since a 4/3 ring stands taller
+  // lands on the title's eye-line: per-aspect, since a 4/3 ring stands taller
   // than a 16/9 flow and needs a bigger lift. lg-only (below lg the hero stacks,
   // so there's no left column to centre against). Aspects with no entry keep the
   // plain grid centring.
@@ -168,7 +168,7 @@ export default async function CaseStudy({
   };
   const reelYShift = reelIsLandscape ? REEL_YSHIFT[reelAspect] ?? "" : "";
 
-  // CreativeWork structured data for the case study — describes the project and
+  // CreativeWork structured data for the case study: describes the project and
   // credits it to the Person declared in the layout (referenced by name + url).
   const creativeWorkJsonLd = {
     "@context": "https://schema.org",
@@ -194,7 +194,7 @@ export default async function CaseStudy({
       />
       {/* Theme the global scroll-progress bar to this project's accent. */}
       {meta.accent && <RouteProgressAccent accent={meta.accent} />}
-      {/* Cover hero — accent field + faint blueprint grid, a big title, an
+      {/* Cover hero: accent field + faint blueprint grid, a big title, an
           instrument spec strip, the cover screen lifted on an accent glow, and a
           hairline scroll cue that frames the reveal below. */}
       <header className="relative isolate overflow-hidden border-b border-line">
@@ -212,12 +212,12 @@ export default async function CaseStudy({
           className={hasReel ? "cs-ember-drift" : undefined}
         />
         {/* Per-study decorative motif (data-motif on the article): blueprint
-            dots / ledger ruling / route dashes / athletic grid — so each study
+            dots / ledger ruling / route dashes / athletic grid, so each study
             screenshots differently beyond its accent. Recipes in globals.css. */}
         <div aria-hidden="true" className="cs-motif" />
         {isWeb ? (
           <>
-            {/* Compact web header — eyebrow + a title row that carries the live CTA,
+            {/* Compact web header: eyebrow + a title row that carries the live CTA,
                 then a short summary. Kept deliberately tight so the full-width
                 capture below dominates the intro instead of being pushed off-screen. */}
             <Container className="pt-space-10 pb-space-6 short-land:pt-space-6">
@@ -273,7 +273,7 @@ export default async function CaseStudy({
               )}
             </Container>
 
-            {/* Full-width capture stage — the showpiece. Runs the orchestrated `boot`
+            {/* Full-width capture stage, the showpiece. Runs the orchestrated `boot`
                 intro (chrome lights up → screen scans in → live badge) on a gentler
                 `big` resting tilt; entrance/tilt/glow are CSS + reduced-motion-safe,
                 and the <video> is IO-gated + preload="none" so it never blocks LCP. */}
@@ -288,7 +288,7 @@ export default async function CaseStudy({
               />
               {meta.prototype ? (
                 /* When the deliverable IS a working artefact, the showpiece slot
-                   holds the artefact itself rather than a recording of one — the
+                   holds the artefact itself rather than a recording of one; the
                    reader can launch it and use it in place. Same slot, same glow,
                    same spec strip below. */
                 <LivePrototype
@@ -296,7 +296,7 @@ export default async function CaseStudy({
                   poster={meta.prototype.poster}
                   alt={
                     meta.prototype.alt ??
-                    `${meta.title} — the prototype, before launching it`
+                    `${meta.title}, the prototype before launching it`
                   }
                   title={meta.title}
                   desktopAspect={meta.prototype.aspect}
@@ -315,13 +315,13 @@ export default async function CaseStudy({
                   poster={meta.video?.poster ?? meta.cover}
                   liveUrl={meta.liveUrl}
                   domain={liveHost}
-                  alt={`${meta.title} — homepage, looping screen recording`}
+                  alt={`${meta.title}, homepage, looping screen recording`}
                   sizes="(min-width: 768px) 78rem, 92vw"
                 />
               )}
             </Container>
 
-            {/* Spec strip below the capture — instrument fact sheet. */}
+            {/* Spec strip below the capture: instrument fact sheet. */}
             <Container className="pb-space-9">
               <StaggerGroup
                 as="dl"
@@ -384,7 +384,7 @@ export default async function CaseStudy({
                 </Reveal>
               )}
 
-              {/* Spec strip — instrument fact sheet (Role · Year · Services). */}
+              {/* Spec strip: instrument fact sheet (Role · Year · Services). */}
               <StaggerGroup
                 as="dl"
                 trigger="load"
@@ -433,7 +433,7 @@ export default async function CaseStudy({
                 className="absolute -inset-10 -z-10"
                 style={{
                   // The reel carries its own presence, so its lift-bloom is
-                  // dialled right down — it should float in near-darkness, not
+                  // dialled right down, it should float in near-darkness, not
                   // sit in a green halo. The phone still keeps the fuller lift.
                   background: `radial-gradient(closest-side, color-mix(in srgb, var(--accent) ${
                     hasReel ? 9 : 20
@@ -444,12 +444,12 @@ export default async function CaseStudy({
                 <HeroLoopVideo
                   mp4={meta.video.src}
                   aspect={reelAspect}
-                  alt={`${meta.title} — looping product reel`}
+                  alt={`${meta.title}, looping product reel`}
                   fallback={
                     <div className="mx-auto max-w-[17rem]">
                       <PhoneFrame
                         src={meta.cover}
-                        alt={`${meta.title} — cover screen`}
+                        alt={`${meta.title}, cover screen`}
                         priority
                         sizes="17rem"
                         imgClassName="object-top"
@@ -460,7 +460,7 @@ export default async function CaseStudy({
               ) : (
                 <PhoneFrame
                   src={meta.cover}
-                  alt={`${meta.title} — cover screen`}
+                  alt={`${meta.title}, cover screen`}
                   priority
                   sizes="17rem"
                   imgClassName="object-top"
@@ -472,10 +472,10 @@ export default async function CaseStudy({
 
       </header>
 
-      {/* Signature showcase — a confident "big reveal" of the work. On sm+ the
+      {/* Signature showcase: a confident "big reveal" of the work. On sm+ the
           cover is centred and lifted, flanked by two more screens (the designed
           trio). On phones the cover is already the centrepiece of the hero just
-          above, so re-showing it here reads as a duplicate — instead mobile drops
+          above, so re-showing it here reads as a duplicate: instead mobile drops
           the cover and reveals the two OTHER screens as a balanced pair, so the
           beat shows fresh work at every size. Woven parallax; reduced-motion-safe. */}
       {(showFigmaShowcase || showScreenTrio) && (
@@ -492,7 +492,7 @@ export default async function CaseStudy({
             {showFigmaShowcase ? (
               /* Prototype-led variant: the slot holds the real, clickable thing
                  instead of three pictures of it. Nothing is lost by dropping the
-                 trio — the flows gallery further down renders every screen, and
+                 trio: the flows gallery further down renders every screen, and
                  the hero above already runs a montage of them, so the trio was
                  this study's most redundant beat. It earns the slot by being the
                  one thing on the page a reader can actually operate.
@@ -504,9 +504,9 @@ export default async function CaseStudy({
                   poster={meta.figma!.poster}
                   posterAlt={
                     meta.figma!.alt ??
-                    `${meta.title} — the prototype's first screen`
+                    `${meta.title}, the prototype's first screen`
                   }
-                  title={`${meta.title} — interactive Figma prototype`}
+                  title={`${meta.title}, interactive Figma prototype`}
                   aspectRatio={meta.figma!.aspect ?? "390 / 844"}
                   caption={meta.figma!.caption}
                 />
@@ -514,37 +514,37 @@ export default async function CaseStudy({
             ) : (
             <Reveal>
               <div className="mx-auto flex max-w-[42rem] items-end justify-center gap-space-5 sm:gap-space-7">
-                {/* Left — a flank on desktop; a full member of the mobile pair. */}
+                {/* Left: a flank on desktop; a full member of the mobile pair. */}
                 <div className="w-[45%] -translate-y-2 sm:w-[28%]">
                   <Parallax speed={0.05}>
                     <PhoneFrame
                       src={heroScreens[1]}
-                      alt={`${meta.title} — second key screen`}
+                      alt={`${meta.title}, second key screen`}
                       sizes="(min-width: 640px) 14rem, 45vw"
                       imgClassName="object-top"
                       className="opacity-100 sm:opacity-80"
                     />
                   </Parallax>
                 </div>
-                {/* Centre — the cover. Hidden on phones (it leads the hero above);
+                {/* Centre, the cover. Hidden on phones (it leads the hero above);
                     the lifted centrepiece from sm up. */}
                 <div className="relative z-10 hidden w-[40%] -translate-y-6 sm:block">
                   <Parallax speed={0.09}>
                     <PhoneFrame
                       src={heroScreens[0]}
-                      alt={`${meta.title} — cover screen`}
+                      alt={`${meta.title}, cover screen`}
                       sizes="18rem"
                       imgClassName="object-top"
                       className="shadow-[0_44px_100px_-32px_rgba(0,0,0,0.92)]"
                     />
                   </Parallax>
                 </div>
-                {/* Right — a flank on desktop; the other half of the mobile pair. */}
+                {/* Right: a flank on desktop; the other half of the mobile pair. */}
                 <div className="w-[45%] -translate-y-2 sm:w-[28%]">
                   <Parallax speed={0.07}>
                     <PhoneFrame
                       src={heroScreens[2]}
-                      alt={`${meta.title} — third key screen`}
+                      alt={`${meta.title}, third key screen`}
                       sizes="(min-width: 640px) 14rem, 45vw"
                       imgClassName="object-top"
                       className="opacity-100 sm:opacity-80"
@@ -575,14 +575,14 @@ export default async function CaseStudy({
       )}
 
       {/* Body (MDX). The first paragraph opens the study as a larger, lighter
-          LEAD (scoped :first-of-type variant — MDX is a flat element list, so the
+          LEAD (scoped :first-of-type variant: MDX is a flat element list, so the
           lead is keyed off document position rather than a per-element tag). The
           measure keeps the column at a readable line length (§5). */}
       <Container as="section" className="py-space-10">
         {hasContents ? (
           <>
             {/* Phones/small tablets get a sticky horizontal chip rail; md+ gets the
-                vertical sidebar — so the very tall page is navigable at every size. */}
+                vertical sidebar, so the very tall page is navigable at every size. */}
             <CaseStudyNav variant="mobile" sections={sections} />
             <div className="grid gap-space-7 md:grid-cols-[11rem_minmax(0,1fr)] md:gap-space-9">
               <CaseStudyNav variant="desktop" sections={sections} className="hidden md:block" />
@@ -600,13 +600,13 @@ export default async function CaseStudy({
         )}
       </Container>
 
-      {/* Screens — grouped by product flow and captioned, so the gallery reads
+      {/* Screens: grouped by product flow and captioned, so the gallery reads
           as a walkthrough of the experience rather than a flat wall of phones.
           Each flow carries a mono index (§3 instrument-grade), a hairline, and
           a count; tall screens anchor to the top so their header stays visible. */}
       {meta.flows && meta.flows.length > 0 && (
         <Container as="section" data-screens className="relative isolate border-t border-line py-space-10">
-          {/* Faint accent wash anchoring the gallery header — gives the long
+          {/* Faint accent wash anchoring the gallery header: gives the long
               screens section atmosphere/depth without competing with the phones
               (very low mix; restrained, §3). Decorative. */}
           <div
@@ -629,7 +629,7 @@ export default async function CaseStudy({
           <div className="mt-space-9 flex flex-col gap-space-10">
             {meta.flows.map((flow, fi) => (
               // content-visibility:auto lets the browser skip layout/paint for
-              // flows that are off-screen — the fix for case-study scroll jank,
+              // flows that are off-screen: the fix for case-study scroll jank,
               // which is paint-bound (many large box-shadowed PhoneFrames), not JS.
               // contain-intrinsic-size reserves a plausible height so the scrollbar
               // and ScrollTrigger geometry stay stable; `auto` remembers the real
@@ -639,7 +639,7 @@ export default async function CaseStudy({
                 aria-labelledby={`flow-${fi}`}
                 className="[content-visibility:auto] [contain-intrinsic-size:auto_1000px]"
               >
-                {/* Flow header — index · title · count, over a hairline with a
+                {/* Flow header: index · title · count, over a hairline with a
                     leading accent tick so each flow reads as a marked chapter and
                     the gallery gains cadence as it scrolls (DESIGN brief #3). */}
                 <Reveal>
@@ -664,7 +664,7 @@ export default async function CaseStudy({
                   </Reveal>
                 )}
 
-                {/* Captioned phone grid — screens enter in a staggered sequence,
+                {/* Captioned phone grid: screens enter in a staggered sequence,
                     with a subtle woven parallax (alternating column speeds) for
                     depth as the flow scrolls. Two-up on phones, four-up from lg. */}
                 <StaggerGroup
@@ -676,12 +676,12 @@ export default async function CaseStudy({
                     <li key={screen.src} className="group/sc">
                       {/* No per-phone scroll Parallax here: a long flow renders many
                           shadowed PhoneFrames, and scrubbing a transform on each one
-                          re-rasterises its big box-shadow every scroll frame — the
+                          re-rasterises its big box-shadow every scroll frame: the
                           measured cause of case-study scroll jank. The hover lift
                           (transform/box-shadow on interaction) stays. */}
                       <PhoneFrame
                         src={screen.src}
-                        alt={`${meta.title} — ${screen.caption}`}
+                        alt={`${meta.title}, ${screen.caption}`}
                         sizes="(min-width: 1024px) 19rem, 45vw"
                         imgClassName="object-top"
                         className="transition-[transform,box-shadow] duration-base ease-out-quad group-hover/sc:-translate-y-1 group-hover/sc:shadow-neon"
@@ -698,7 +698,7 @@ export default async function CaseStudy({
         </Container>
       )}
 
-      {/* Outcome + Reflection — rendered AFTER the gallery so conclusions come
+      {/* Outcome + Reflection: rendered AFTER the gallery so conclusions come
           with the evidence already seen. Spacer column keeps rail alignment. */}
       {contentOutcome && (
         <Container as="section" className="pb-space-10 pt-space-8">
@@ -717,7 +717,7 @@ export default async function CaseStudy({
         </Container>
       )}
 
-      {/* Next project — a bold full-bleed CTA: oversized title, an arrow cue, and
+      {/* Next project: a bold full-bleed CTA: oversized title, an arrow cue, and
           the next cover lifting on hover (neon affordance). */}
       {next && (
         <section className="relative isolate overflow-hidden border-t border-line">

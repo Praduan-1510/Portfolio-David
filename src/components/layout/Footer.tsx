@@ -4,7 +4,7 @@ import { Container, Text } from "@/components/primitives";
 import { site } from "@/lib/site";
 
 /*
- * Site footer. Static server component — mark, one-line descriptor, nav, social,
+ * Site footer. Static server component: mark, one-line descriptor, nav, social,
  * copyright. Copy is verbatim from docs/reference/Site.md.
  */
 const nav = [
@@ -25,7 +25,7 @@ export function Footer() {
 
   return (
     <footer className="relative mt-space-9 border-t border-line">
-      {/* Closing spectrum thread — the hero opens by resolving the spectrum into
+      {/* Closing spectrum thread: the hero opens by resolving the spectrum into
           the wordmark; the footer lays it back out flat across the top edge as a
           bookend. Faded ends so it's a thread, not a bar. Decorative. */}
       <span

@@ -5,13 +5,13 @@ import { useKolkataClock } from "@/hooks/useKolkataClock";
 import { spectrumAt } from "@/lib/spectrum";
 
 /*
- * "Currently" board primitives — the departure-board answer to a stats strip.
+ * "Currently" board primitives: the departure-board answer to a stats strip.
  * Four instrument rows of REAL positioning data (what's being designed, what
  * shipped and how it measures, how each claim is labelled, availability + live IST
  * clock). All mono-caps (the flap-safe voice), hairline-framed.
  *
  * The board now lives inside the home cinematic reel (reel/CinematicReel.tsx),
- * which choreographs each row against the scroll-scrubbed frame sequence — so
+ * which choreographs each row against the scroll-scrubbed frame sequence, so
  * this file exports the pieces (ROWS, BoardRow, StatusValue) rather than a
  * self-triggering section. Semantics are unchanged: dl > sr-only dt + dd.
  */
@@ -20,15 +20,15 @@ export const ROWS: { label: string; value: string }[] = [
   { label: "Currently", value: "Designing InsightsTap · B2B AI GTM" },
   { label: "Shipped", value: "insightstap.com · Lighthouse a11y 95" },
   { label: "Method", value: "Every claim labelled: tested, intent, or hypothesis" },
-  // The STATUS row is rendered separately — it carries the live clock.
+  // The STATUS row is rendered separately: it carries the live clock.
 ];
 
 /*
- * Board title card — the human voice above the instrument rows. It frames the
+ * Board title card: the human voice above the instrument rows. It frames the
  * status board as a live readout and fills the split's upper-left band (which
  * otherwise sat empty on lg). Each child animates in on its own (the reel's
  * timeline staggers `.children`), so keep them as three direct children.
- * Purely the lg+ split's framing — the reel renders it only there.
+ * Purely the lg+ split's framing: the reel renders it only there.
  *
  * motion-safe:opacity-0 pre-empts GSAP's at-rest autoAlpha:0 so the parts never
  * flash over the hero before the reel's choreography effect runs (the whole
@@ -50,13 +50,13 @@ export function BoardTitle() {
         <span className="text-spectrum">in motion.</span>
       </h2>
       <p className="mt-space-4 max-w-[36ch] font-sans text-body text-muted motion-safe:opacity-0 [@media(max-height:820px)]:hidden">
-        {"What I'm building, what shipped, and where to reach me — read straight off the board."}
+        {"What I'm building, what shipped, and where to reach me: read straight off the board."}
       </p>
     </>
   );
 }
 
-/* Status value — pulse dot + availability flap + live IST clock. A leaf
+/* Status value: pulse dot + availability flap + live IST clock. A leaf
  * component so the 1s clock tick re-renders nothing but this span. */
 export function StatusValue({
   flapTrigger = "inView",

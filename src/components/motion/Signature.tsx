@@ -5,8 +5,8 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { cn } from "@/lib/utils/cn";
 
 /*
- * Signature — the hand-signed counter-mark to the machine-set split-flap
- * wordmark. Real script letterforms (Mrs Saint Delafield via --font-signature —
+ * Signature: the hand-signed counter-mark to the machine-set split-flap
+ * wordmark. Real script letterforms (Mrs Saint Delafield via --font-signature:
  * hand-authored bezier "signatures" read as scribble, a designed script face
  * reads as a pen), revealed with a left-to-right writing wipe as if being
  * signed, then finished by ONE drawn underline swash that inks in beneath.
@@ -29,10 +29,10 @@ export function Signature({
   return (
     <span
       role="img"
-      aria-label="Praduan Saha — signature"
+      aria-label="Praduan Saha: signature"
       className={cn("inline-block", className)}
     >
-      {/* The autograph — clip-path insets are negative on top/bottom/left so
+      {/* The autograph: clip-path insets are negative on top/bottom/left so
           the script's tall ascenders and lead-in stroke never get shaved. */}
       <motion.span
         aria-hidden="true"
@@ -48,7 +48,7 @@ export function Signature({
       >
         Praduan Saha
       </motion.span>
-      {/* Underline swash — a single confident sweep, drawn after the name. */}
+      {/* Underline swash: a single confident sweep, drawn after the name. */}
       <svg
         aria-hidden="true"
         viewBox="0 0 300 22"

@@ -7,7 +7,7 @@ import type { ProjectMeta } from "@/types/project";
 /*
  * Project teaser for the home page. The whole card is a single link to the case
  * study. The media is an accent-washed dark "stage" holding the project's cover
- * screen in a phone frame — themed to each project's own accent (the same remap
+ * screen in a phone frame: themed to each project's own accent (the same remap
  * the case-study route uses), with the phone bleeding off the bottom edge so it
  * reads as rising out of the card. Hover lifts the phone and shifts the title to
  * the site accent. The per-project accent is scoped to the stage only, so the
@@ -31,8 +31,8 @@ export function ProjectCard({
     ? ({ "--accent": project.accent } as React.CSSProperties)
     : undefined;
   const wide = layout === "wide";
-  // Web projects use a landscape browser frame — wide + vertically centered in
-  // the stage — rather than the portrait phone "rising from the base".
+  // Web projects use a landscape browser frame, wide + vertically centered in
+  // the stage, rather than the portrait phone "rising from the base".
   const isWeb = project.kind === "web";
 
   return (
@@ -45,10 +45,10 @@ export function ProjectCard({
           wide && "grid items-stretch gap-space-6 md:grid-cols-[1.15fr_1fr] md:gap-space-8",
         )}
       >
-        {/* Media stage — dark, accent-washed, cover screen rising from the base.
+        {/* Media stage: dark, accent-washed, cover screen rising from the base.
             A radial accent wash from the top, a soft floor gradient so the phone
             doesn't float, and an inset hairline + shadow ring so the stage reads
-            as a recessed well with the phone raised inside it — keeping presence
+            as a recessed well with the phone raised inside it, keeping presence
             even on a dark app screen (e.g. Spendee/Decathlon). */}
         <div
           data-theme="dark"
@@ -77,7 +77,7 @@ export function ProjectCard({
                 "linear-gradient(to top, color-mix(in srgb, var(--bg) 92%, #000) 0%, transparent 100%)",
             }}
           />
-          {/* Inset ring — a recessed-well edge that lifts the phone off the stage.
+          {/* Inset ring: a recessed-well edge that lifts the phone off the stage.
               Inline style (not an arbitrary shadow class) so the color-mix commas
               don't fight Tailwind's multi-shadow splitting. */}
           <div
@@ -88,7 +88,7 @@ export function ProjectCard({
                 "inset 0 1px 0 color-mix(in srgb, var(--accent) 22%, transparent), inset 0 0 0 1px rgba(255,255,255,0.04), inset 0 -40px 60px -30px rgba(0,0,0,0.6)",
             }}
           />
-          {/* Cover frame — a portrait phone anchored low (app), or a landscape
+          {/* Cover frame: a portrait phone anchored low (app), or a landscape
               browser window centered in the stage (web). */}
           <div
             className={cn(
@@ -122,7 +122,7 @@ export function ProjectCard({
             />
           </div>
           {/* Bottom dissolve OVER the phone: the cover bleeds off the stage edge
-              by design, but a hard slice mid-module read as accidental cropping —
+              by design, but a hard slice mid-module read as accidental cropping;
               the fade makes the bleed look intentional. Phone cards only (web
               covers are fully contained). */}
           {!isWeb && (
@@ -141,7 +141,7 @@ export function ProjectCard({
           </span>
         </div>
 
-        {/* Meta — beside the stage in the wide layout, beneath it otherwise. */}
+        {/* Meta: beside the stage in the wide layout, beneath it otherwise. */}
         <div className={cn(wide && "flex flex-col justify-center")}>
           {wide && (
             <span className="mb-space-4 font-mono text-caption uppercase tracking-[0.18em] text-muted">

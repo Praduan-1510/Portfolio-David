@@ -1,5 +1,5 @@
 /*
- * Cover-fit drawImage — the shared math behind every full-bleed canvas image
+ * Cover-fit drawImage: the shared math behind every full-bleed canvas image
  * (extracted from AboutHeroMap): scale the image so it covers w×h, then place
  * the overflow according to the anchor (0 = left/top edge flush, 1 = right/
  * bottom edge flush, 0.5 = centred). Callers own canvas sizing + dpr transform.

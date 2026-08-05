@@ -7,13 +7,13 @@ import { useLenis } from "@/lib/lenis/useLenis";
 import { spectrumAt } from "@/lib/spectrum";
 
 /*
- * Case-study "Contents" rail — a sticky, scroll-spying index of the narrative
+ * Case-study "Contents" rail: a sticky, scroll-spying index of the narrative
  * sections (the MDX h2s), beside the reading column. Mirrors the site's instrument
  * rails (home SideNav): each section owns one spectrum hue (position in the study =
  * position in the spectrum), carried on a per-item `--dot` var so the active tick +
  * label pick it up while the list stays monochrome at rest.
  *
- * Scroll uses the single engine (Lenis) when active — a native smooth scroll would
+ * Scroll uses the single engine (Lenis) when active: a native smooth scroll would
  * jump because Lenis forces scroll-behavior:auto; under reduced motion Lenis is
  * null and we fall back to an instant native jump (the headings carry scroll-mt).
  * The scrollspy is plain state, so it works regardless of motion preference.
@@ -51,7 +51,7 @@ export function CaseStudyNav({
   const lenis = useLenis();
 
   // Cold-load hash restore: Lenis initializes at the top, swallowing the
-  // browser's native #hash landing — re-drive it through the engine once
+  // browser's native #hash landing: re-drive it through the engine once
   // layout has settled. Runs in the desktop instance only (both variants
   // mount; one restore is enough).
   useEffect(() => {

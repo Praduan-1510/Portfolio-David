@@ -28,7 +28,7 @@ export function useReducedMotion(): boolean {
 }
 
 /*
- * Live, synchronous read for use INSIDE a (layout) effect — accurate even during
+ * Live, synchronous read for use INSIDE a (layout) effect: accurate even during
  * the hydration frame, where useReducedMotion() still returns the SSR value
  * (false) for one render. Motion primitives gate their animation on this so
  * already-reduced-motion users never see content hidden, while keeping the hook

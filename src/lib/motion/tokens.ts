@@ -1,5 +1,5 @@
 /**
- * Motion tokens — the SINGLE motion language for the whole site.
+ * Motion tokens: the SINGLE motion language for the whole site.
  *
  * Everything that moves draws from this file: the same handful of durations,
  * two signature eases, one standard stagger, and a small set of travel
@@ -15,7 +15,7 @@ import { durations } from "./durations";
 import { easings } from "./easings";
 
 /**
- * Standard stagger steps (seconds) — siblings enter 40–80ms apart (§7.4).
+ * Standard stagger steps (seconds): siblings enter 40–80ms apart (§7.4).
  * `base` is the default; `tight` for dense lists, `loose` for a few large beats.
  */
 export const stagger = {
@@ -24,7 +24,7 @@ export const stagger = {
   loose: 0.08,
 } as const;
 
-/** Reveal travel distances (px) — translate 12–40px on entrance (§7.3). */
+/** Reveal travel distances (px): translate 12–40px on entrance (§7.3). */
 export const distance = {
   sm: 12,
   md: 24,
@@ -44,7 +44,7 @@ export const curve = {
 } as const;
 
 /**
- * Motion (`motion/react`) Transition presets — spread straight into `transition`.
+ * Motion (`motion/react`) Transition presets: spread straight into `transition`.
  * These are the eased "feel"; springs below are for physical element motion.
  */
 export const transitions = {
@@ -58,11 +58,11 @@ export const transitions = {
   cinematic: { duration: durations.slow, ease: easings.inOutQuart },
 } as const;
 
-/** Motion spring presets — physics, never robotic. */
+/** Motion spring presets: physics, never robotic. */
 export const springs = {
-  /** Soft settle — content entrances, magnetic returns. */
+  /** Soft settle: content entrances, magnetic returns. */
   soft: { type: "spring", stiffness: 140, damping: 22, mass: 1 },
-  /** Snappy — interactive feedback, small UI. */
+  /** Snappy: interactive feedback, small UI. */
   snappy: { type: "spring", stiffness: 380, damping: 32, mass: 0.7 },
 } as const;
 

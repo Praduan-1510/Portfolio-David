@@ -1,7 +1,7 @@
 import { Container } from "@/components/primitives";
 
 /*
- * Work index loading skeleton — mirrors src/app/work/page.tsx (header) and the
+ * Work index loading skeleton: mirrors src/app/work/page.tsx (header) and the
  * ProjectCard grid: an aspect-[4/3] media stage + title bar + summary bar per
  * card. Reserves the real grid rhythm to avoid pop-in (DESIGN_GUIDELINES §11).
  */
@@ -29,7 +29,7 @@ export default function Loading() {
         <div className="grid animate-pulse grid-cols-1 gap-space-8 md:grid-cols-2">
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i}>
-              {/* Media stage — aspect-[4/3], same frame as ProjectCard. */}
+              {/* Media stage: aspect-[4/3], same frame as ProjectCard. */}
               <div className="aspect-[4/3] rounded-[3px] border border-line bg-surface" />
               {/* Title bar. */}
               <div className="mt-space-4 h-[1.5rem] w-[55%] rounded-[2px] bg-surface" />

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils/cn";
 /*
  * Text link. Internal hrefs route through next/link; external / mailto / tel
  * render a plain <a>. Always underlined with a transparent decoration that
- * inks in on hover/focus — zero layout shift, and the ink-in eases on the
+ * inks in on hover/focus: zero layout shift, and the ink-in eases on the
  * motion tokens (DESIGN_GUIDELINES.md §7.7 / §10).
  */
 interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {

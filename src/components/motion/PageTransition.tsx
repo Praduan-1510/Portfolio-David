@@ -17,14 +17,14 @@ import { routeLabel } from "@/lib/utils/routeLabel";
  * Rendered from app/template.tsx, which re-mounts on every navigation.
  *
  * On a client navigation: a near-black panel wipes UP off the new page (pure
- * transform: scaleY, origin top) while the content cross-fades in just behind it
- * — a brief, cinematic hand-off (~0.6s, under the §7.6 1s ceiling).
+ * transform: scaleY, origin top) while the content cross-fades in just behind it:
+ * a brief, cinematic hand-off (~0.6s, under the §7.6 1s ceiling).
  *
  * On the very FIRST load of the session the wipe is skipped and the content isn't
  * re-animated, so the hero owns the first-load moment (no double intro). Under
  * prefers-reduced-motion the children render instantly with no overlay (§10).
  *
- * The persistent content wrapper animates OPACITY ONLY — a lingering transform
+ * The persistent content wrapper animates OPACITY ONLY: a lingering transform
  * there would create a containing block and break position:fixed / GSAP pinning
  * inside pages. The wipe panel is a separate fixed leaf (no descendants), so its
  * transform is safe. Scroll resets to top and ScrollTrigger refreshes per route.
@@ -47,7 +47,7 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
   // Reset scroll to the top + refresh ScrollTrigger when the route changes.
   // Lenis owns the scroll position and PERSISTS across routes (it's mounted once
   // in the root layout), so a bare window.scrollTo is overridden on Lenis's next
-  // RAF tick — the new page would open at the previous route's offset (e.g. deep
+  // RAF tick: the new page would open at the previous route's offset (e.g. deep
   // inside the pinned work track). Reset the Lenis instance itself (immediate, no
   // smooth, force past any lenis-stop), and fall back to native scroll when smooth
   // scroll is off (reduced motion → lenis is null).
@@ -72,7 +72,7 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
           transition={{ duration: durations.slow, ease: easings.inOutQuart }}
         />
       )}
-      {/* Destination readout — the departure board flips to where you're going
+      {/* Destination readout: the departure board flips to where you're going
           while the wipe covers the hand-off. A SIBLING of the wipe (the panel
           scaleY-collapses; text inside it would squash), fading out just before
           the panel finishes. Decorative: the page announces itself normally. */}

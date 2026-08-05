@@ -1,11 +1,11 @@
 /*
  * Frame manifest + loader for the home cinematic reel (CinematicReel.tsx).
  *
- * 40 WebP frames, 1280×720 (native clip resolution), ~1.0MB TOTAL — the v2
+ * 40 WebP frames, 1280×720 (native clip resolution), ~1.0MB TOTAL: the v2
  * clip (subject before the dark grid backdrop), watermark-cleaned and
  * re-encoded at WebP q74 from the source JPGs. They are fetched as plain
  * HTMLImageElements (browser keeps only the encoded bytes in JS reach;
- * decoded bitmaps live in the evictable decode cache — we deliberately do NOT
+ * decoded bitmaps live in the evictable decode cache; we deliberately do NOT
  * retain 40 ImageBitmaps ≈ 145MB of pinned RGBA).
  *
  * fetchPriority "low" + post-mount start keep the sequence from ever competing
@@ -35,7 +35,7 @@ export function createFrameLoader(): FrameLoader {
   async function load(i: number) {
     const img = new window.Image();
     img.decoding = "async";
-    // Frame 0 is the hero's visible backdrop from load — fetch it eagerly;
+    // Frame 0 is the hero's visible backdrop from load: fetch it eagerly;
     // the rest of the reel stays low-priority behind everything else.
     (img as HTMLImageElement & { fetchPriority?: string }).fetchPriority =
       i === 0 ? "high" : "low";
@@ -45,7 +45,7 @@ export function createFrameLoader(): FrameLoader {
       await img.decode();
       ready[i] = true;
     } catch {
-      /* failed/aborted frame — nearestReady simply skips it */
+      /* failed/aborted frame: nearestReady simply skips it */
     }
   }
 

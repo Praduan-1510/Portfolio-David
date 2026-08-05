@@ -3,26 +3,26 @@
 @tailwind utilities;
 
 /*
- * Design tokens — single source of truth.
+ * Design tokens: single source of truth.
  * Three layers (DESIGN_GUIDELINES.md §4):
- *   1. Primitives  — raw values, never consumed directly by components.
- *   2. Semantic    — role-based aliases components use (--bg, --fg, --muted, --accent, --line).
- *   3. Component   — added only when the semantic layer can't cover a need.
+ *   1. Primitives: raw values, never consumed directly by components.
+ *   2. Semantic: role-based aliases components use (--bg, --fg, --muted, --accent, --line).
+ *   3. Component: added only when the semantic layer can't cover a need.
  * Light/dark and per-project accents remap the SEMANTIC layer only.
  */
 
 :root {
   /* ---- 1. Primitives (raw values) ---------------------------------- */
   /* Near-black monochrome base (DESIGN_GUIDELINES.md §4). The site is
-     dark-first; the interface chrome carries NO colour — type and the fluid
+     dark-first; the interface chrome carries NO colour: type and the fluid
      background lead, and colour belongs to the projects. */
   --black-950: #0a0a0b; /* primary background, near-black */
   --offwhite-50: #f3f3f1; /* primary foreground */
   --gray-400: #8c8c92; /* secondary text */
-  --gray-600: #55555c; /* DECORATIVE/non-text only (2.7:1 on bg — fails AA). Caption/mono label TEXT uses --muted. */
+  --gray-600: #55555c; /* DECORATIVE/non-text only (2.7:1 on bg, fails AA). Caption/mono label TEXT uses --muted. */
   --surface-900: #141417; /* raised surface / cards on near-black */
 
-  /* Project accents — the ONLY colour anywhere on the site. Applied per project
+  /* Project accents: the ONLY colour anywhere on the site. Applied per project
      by remapping --accent inside that project's context (its work-index card and
      its case-study route); never on the base chrome (DESIGN_GUIDELINES.md §4).
      Tuned for AA legibility on the near-black base. */
@@ -30,12 +30,12 @@
   --orange: #f7a53b; /* Voyager */
   --blue: #46b4f0; /* Decathlon */
 
-  /* Spectrum palette — the site's five signature hues. First used as the hero
+  /* Spectrum palette: the site's five signature hues. First used as the hero
      wordmark's "counter" (the flaps cycle through these before settling to mono),
      now the shared SIGNAL layer for structure + wayfinding: the scroll-progress
      bar, the section-rail dots, numbered indices, and the hairline seams. Built
-     from the site's own colour language — the three project accents above (blue /
-     lime / amber) plus a cool violet and a warm rose — so it reads as one family
+     from the site's own colour language, the three project accents above (blue /
+     lime / amber) plus a cool violet and a warm rose, so it reads as one family
      across a warm→cool sweep. Deliberately distinct from the two existing colour
      roles: the neon-green INTERACTION signal and the per-project IDENTITY accents.
      It only ever paints thin structural marks (lines, dots, small indices), never
@@ -45,7 +45,7 @@
   --spectrum-lime: var(--lime);
   --spectrum-amber: var(--orange);
   --spectrum-rose: #ff5e8f;
-  /* The five stops as one reusable left→right gradient — progress bar, seams,
+  /* The five stops as one reusable left→right gradient: progress bar, seams,
      and lit edges all read from this so the sweep is identical everywhere. */
   --spectrum-gradient: linear-gradient(
     90deg,
@@ -56,7 +56,7 @@
     var(--spectrum-rose) 100%
   );
 
-  /* Signal — the one interaction colour. A vivid neon green used site-wide for
+  /* Signal: the one interaction colour. A vivid neon green used site-wide for
      the live hover/affordance state (every card lights up to it) and for
      "available / live" indicators. Distinct from the work-only project accents:
      this is the colour of *interaction*, not of any single project. */
@@ -65,13 +65,13 @@
 
   --white: #ffffff;
 
-  /* ---- 2. Semantic (role-based — components consume these) ---------- */
+  /* ---- 2. Semantic (role-based: components consume these) ---------- */
   --bg: var(--black-950);
   --fg: var(--offwhite-50);
   --muted: var(--gray-400);
   --surface: var(--surface-900); /* raised surfaces / cards */
   --line: rgba(255, 255, 255, 0.1); /* hairlines, dividers (§4 `--line`) */
-  /* Base "accent" is MONOCHROME — the bright foreground. So focus rings, links,
+  /* Base "accent" is MONOCHROME: the bright foreground. So focus rings, links,
      and primary CTAs read as high-contrast white-on-near-black, and the chrome
      stays colourless (§4). Per-project routes override --accent inline with the
      project colour, so colour only ever appears alongside the work. */
@@ -80,29 +80,29 @@
   --on-accent: var(--black-950); /* text/icon on an accent fill */
 
   /* Interaction signal (consumed as `neon` / `shadow-neon` in Tailwind). Stays
-     constant across per-project routes — hover always reads neon green, so the
+     constant across per-project routes: hover always reads neon green, so the
      affordance language is consistent everywhere. */
   --neon: var(--neon-green);
   --neon-glow: var(--neon-green-glow);
 
   /* ---- 3. Component (only where the semantic layer can't cover a need) -- */
   /* Phone-frame device bezel/notch. Sits one step off --bg/--surface so a phone
-     reads as a raised device and its screen as a glass inset — even when the app
+     reads as a raised device and its screen as a glass inset, even when the app
      screen itself is near-black (e.g. Spendee). Single-sourced so it tracks the
      base if that ever shifts. */
   --bezel: #0b0b0d;
 
-  /* Reading measure — line length 60–75ch (DESIGN_GUIDELINES.md §5).
+  /* Reading measure: line length 60–75ch (DESIGN_GUIDELINES.md §5).
      NOTE: ch is the width of "0", ~30% wider than Inter's average glyph, so
      68ch rendered ~90 real characters per line; 58ch lands ~70–75. */
   --measure: 58ch;
 
   /* ---- Motion tokens (DESIGN_GUIDELINES.md §7.2 / §7.3) ------------- */
-  /* Easing — named curves; use these, not ad-hoc beziers. */
+  /* Easing: named curves; use these, not ad-hoc beziers. */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1); /* workhorse: reveals & entrances */
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1); /* transforms, page/section transitions */
   --ease-out-quad: cubic-bezier(0.25, 1, 0.5, 1); /* default UI / hover settles */
-  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1); /* slight overshoot — sparingly */
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1); /* slight overshoot: sparingly */
   --ease-linear: linear; /* scroll-linked / scrubbed motion only */
 
   /* Duration scale */
@@ -117,7 +117,7 @@
 
 /*
  * The base IS dark now (DESIGN_GUIDELINES.md §4 dark-first), so [data-theme="dark"]
- * needs no remap — it simply inherits the near-black monochrome :root. The
+ * needs no remap: it simply inherits the near-black monochrome :root. The
  * attribute is kept in the markup (Hero, LogoMarquee, ProjectCard, case-study)
  * as an explicit semantic marker and as the hook for per-project --accent
  * overrides (set inline on the card / route), which layer over the monochrome base.
@@ -125,7 +125,7 @@
 
 @layer components {
   /*
-   * Case-study marginalia rail (lg+) — the classic float sidenote: prose
+   * Case-study marginalia rail (lg+): the classic float sidenote: prose
    * self-clamps to the measure on the left, so a .cs-margin floated hard right
    * lands in the otherwise-empty rail EXACTLY at its source position in the
    * flow (a grid can't anchor rail items to their paragraphs; floats can).
@@ -143,7 +143,7 @@
       clear: right;
     }
   }
-  /* Full-viewport colour-field band — the case studies' set-piece moment.
+  /* Full-viewport colour-field band: the case studies' set-piece moment.
      Static negative margins ignore ancestor transforms, so this works inside
      Reveal; the article carries overflow-x:clip as the scrollbar guard. */
   .cs-bleed {
@@ -151,7 +151,7 @@
   }
 
   /* Per-study decorative motif on the case hero (data-motif on the article).
-     Thin structural texture only — never a fill behind content. */
+     Thin structural texture only, never a fill behind content. */
   .cs-motif {
     position: absolute;
     inset: 0;
@@ -188,17 +188,17 @@
   }
 
   /*
-   * Site-wide card hover — the neon-green affordance.
+   * Site-wide card hover: the neon-green affordance.
    * `.card-neon` on any bordered panel: on hover OR keyboard focus-within, its
    * border lifts to neon green and it gains a soft neon glow. Pair with
    * `group-hover:text-neon` on the card's title so the heading lights up too.
    * `.card-neon-row` is the lighter variant for list rows carrying only a top
-   * hairline (border turns neon, no box glow). Colour/border/shadow only — the
+   * hairline (border turns neon, no box glow). Colour/border/shadow only: the
    * affordance still reads under prefers-reduced-motion; any lift is opt-in per
    * card via `hover:-translate-y-*`.
    */
   .card-neon {
-    /* No `transform` here — many cards are GSAP-animated (Reveal/StaggerGroup),
+    /* No `transform` here: many cards are GSAP-animated (Reveal/StaggerGroup),
        and a CSS transform transition would fight that. Cards opt into a lift
        separately via `hover:-translate-y-*` + `transition-transform`. */
     transition-property: color, border-color, box-shadow;
@@ -288,11 +288,11 @@
   }
 
   /*
-   * Spectrum text accent — the one place a colour gradient is allowed to touch
+   * Spectrum text accent: the one place a colour gradient is allowed to touch
    * type. An earned emphasis on the hero tagline's closing phrase ("unmistakably
    * yours"): the site's signature violet→blue, clipped to the glyphs. Opacity is
    * baked into the gradient stops (color-mix at definition time), never via a
-   * Tailwind /opacity modifier — those silently no-op on var() token colours.
+   * Tailwind /opacity modifier: those silently no-op on var() token colours.
    * `-webkit-text-fill-color` inherits, so the fill survives GSAP SplitText
    * wrapping each word in its own span. Falls back to a solid spectrum hue where
    * background-clip:text is unsupported.
@@ -315,7 +315,7 @@
   }
   /*
    * Forced-colors / Windows High Contrast strips the gradient background-image
-   * but leaves `-webkit-text-fill-color: transparent` in force — which would
+   * but leaves `-webkit-text-fill-color: transparent` in force: which would
    * knock the phrase out to invisible for the exact low-vision audience that
    * enables High Contrast. Restore a solid, system-coloured, visible fill there.
    */
@@ -328,7 +328,7 @@
   }
   
   /*
-   * Tagline alignment fix — aligns the GSAP SplitText generated inline-block
+   * Tagline alignment fix: aligns the GSAP SplitText generated inline-block
    * word divs with the `.text-spectrum` inline-block span. Since the split divs
    * have `overflow: clip` / `hidden`, they align to their bottom margin edge
    * rather than the text baseline, causing a vertical misalignment with normal
@@ -347,7 +347,7 @@
   }
 
   /* Color + font on <body> come from the Tailwind utilities (bg-bg text-fg
-     font-sans), which resolve to the same tokens — kept as the single source.
+     font-sans), which resolve to the same tokens: kept as the single source.
      Here we only add the rendering hints utilities don't cover. */
   body {
     -webkit-font-smoothing: antialiased;
@@ -355,13 +355,13 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* Visible focus using the accent — never remove without a clear replacement. */
+  /* Visible focus using the accent, never remove without a clear replacement. */
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
 
-  /* Selection in the system's voice — accent-tinted instead of UA blue, and it
+  /* Selection in the system's voice: accent-tinted instead of UA blue, and it
      tracks per-project accent remaps automatically. */
   ::selection {
     background: color-mix(in srgb, var(--accent) 30%, var(--bg));
@@ -369,7 +369,7 @@
   }
 
   /* Rag control: balanced display headings (no single-word last lines on
-     marquee statements), pretty-wrapped body text (no orphans). Progressive —
+     marquee statements), pretty-wrapped body text (no orphans). Progressive:
      engines without support simply ignore it. */
   h1,
   h2,
@@ -397,7 +397,7 @@
 }
 
 /* Hero trace-glow flow (HeroFlow.tsx): the oversized hue strip drifts one
-   gradient period laterally — colour flowing along the signal line. Transform
+   gradient period laterally: colour flowing along the signal line. Transform
    only (compositor), and only when motion is welcome. */
 @media (prefers-reduced-motion: no-preference) {
   @keyframes trace-flow {
@@ -429,8 +429,8 @@ html.lenis body {
 /* …but interactive embeds opt back in. The rule above is Lenis's own (copied
    from lenis/dist/lenis.css) and it's right for decorative frames: it lets a
    flick-scroll pass OVER an embed instead of being captured by it. `lenis-smooth`
-   is transient in v1.3 — see `get className()` in lenis/dist/lenis.mjs, it's only
-   set while isScrolling === "smooth" — but with lerp 0.1 the animation isn't
+   is transient in v1.3 (see `get className()` in lenis/dist/lenis.mjs, it's only
+   set while isScrolling === "smooth") but with lerp 0.1 the animation isn't
    "done" until it rounds to the target, i.e. ~0.3–1s of coast after the last
    wheel tick, during which a click on a LIVE embed is silently eaten. A swallowed
    click on a working demo is a silent failure; a diverted flick is visible and
@@ -454,7 +454,7 @@ html.lenis body {
   }
 }
 
-/* Hero background map — a barely-perceptible slow drift (gentle zoom + pan) so the
+/* Hero background map: a barely-perceptible slow drift (gentle zoom + pan) so the
    decorative map feels alive without ever competing with the headline. The map
    wrapper is oversized (-inset) so the drift never reveals an edge. Gated to
    no-preference: reduced-motion users get a completely static map (no auto-pan,
@@ -474,13 +474,13 @@ html.lenis body {
   }
 }
 
-/* BrowserMockup (the "Live Slab") — the web case-study centerpiece. The stage
+/* BrowserMockup (the "Live Slab"): the web case-study centerpiece. The stage
    sets the perspective; the slab carries the 3D tilt, a layered depth shadow, and
    a RESTING teal glow (the project accent → static, so it survives reduced motion).
    On hover/focus it squares up, lifts toward the viewer, and the rim flips to the
    neon interaction signal. Transform/opacity/box-shadow only → 60fps. */
 /* Feathered portrait. All FOUR edges dissolve into the page so the image has no
-   hard border — it floats on the near-black. Built by intersecting a horizontal
+   hard border: it floats on the near-black. Built by intersecting a horizontal
    feather (fades left+right) with a vertical one (fades top+bottom); the centre
    stays fully opaque, so a centred subject reads sharp while the surrounding
    environment melts away. Used on the home About teaser + the About-page bio. */
@@ -541,7 +541,7 @@ html.lenis body {
       0 0 80px -14px var(--neon-glow);
   }
 }
-/* One orchestrated landing — only when motion is allowed (the `to` matches the
+/* One orchestrated landing, only when motion is allowed (the `to` matches the
    resting transform so it holds cleanly). Reduced motion → static tilted slab. */
 @keyframes browser-land {
   from {
@@ -564,12 +564,12 @@ html.lenis body {
   }
 }
 
-/* ── Web case-study centerpiece — the "boot" intro ───────────────────────────
+/* ── Web case-study centerpiece: the "boot" intro ───────────────────────────
    With `boot`, the hero slab powers on like a live capture connecting: the frame
    lands, the chrome lights up (dots → URL), a dark shutter scans up off the screen
    (a teal scan-line riding its leading edge) to reveal the site, then the live
    badge blinks on. Pure transform/opacity, staggered by animation-delay, gated to
-   no-preference — under reduced motion every element rests at its visible end
+   no-preference: under reduced motion every element rests at its visible end
    state (shutter parked off-screen), so the finished slab shows with no motion. */
 .browser-slab[data-variant="big"] {
   /* Dimensional resting tilt for the full-width centerpiece (also the reduced-motion
@@ -597,7 +597,7 @@ html.lenis body {
 }
 
 /* Phones: the dimensional tilt reads as a crooked window whose corner is clipped
-   by the header's overflow-hidden inside the narrow gutter — it looks like a
+   by the header's overflow-hidden inside the narrow gutter: it looks like a
    glitch, not a flourish. Flatten the slab to an upright frame below md (the
    `!important` overrides the boot keyframe's filled transform too, so the screen
    still fades/reveals in but lands square). Desktop keeps the full 3D tilt. */
@@ -611,7 +611,7 @@ html.lenis body {
   }
 }
 
-/* Cursor parallax — a wrapper between the perspective stage and the slab that
+/* Cursor parallax: a wrapper between the perspective stage and the slab that
    rotates toward the pointer (vars set in JS), so the mockup reads as a physical
    3D object you can look around. It LAYERS on the slab's own tilt (preserve-3d),
    and lives on a separate element so it never collides with the slab's boot
@@ -666,8 +666,8 @@ html.lenis body {
 }
 
 /* ── Live prototype (LivePrototype.tsx) ──────────────────────────────────────
-   The playable case study. Deliberately speaks BrowserMockup's language — same
-   window radius, same layered shadow, same resting tilt — but owns its own
+   The playable case study. Deliberately speaks BrowserMockup's language (same
+   window radius, same layered shadow, same resting tilt) but owns its own
    recipe because it has one behaviour the mockup doesn't: it goes FLAT when the
    visitor launches the demo. A tilted slab is right for a picture of a product
    and wrong for a product, so the tilt is the dormant state and square-on is the
@@ -677,7 +677,7 @@ html.lenis body {
    CLS, no measurement race): --lp-ratio is the chosen device's aspect, and the
    width takes whichever of the column, 78vh, or --lp-maxh binds first. The 76px
    subtracted from the viewport cap is the two chrome rows + the slab's padding,
-   so the *whole* frame — not just its screen — clears the fold with page left
+   so the *whole* frame, not just its screen, clears the fold with page left
    above and below to scroll on. */
 .lp-slab {
   position: relative;
@@ -731,7 +731,7 @@ html.lenis body {
     0 0 0 1px rgba(255, 255, 255, 0.1),
     0 0 90px -20px color-mix(in srgb, var(--accent) 30%, transparent);
 }
-/* Phones: same reasoning as .browser-slab — a 3D tilt inside a narrow gutter
+/* Phones: same reasoning as .browser-slab: a 3D tilt inside a narrow gutter
    reads as a clipped glitch, not a flourish. */
 @media (max-width: 767px) {
   .lp-slab {
@@ -771,7 +771,7 @@ html.lenis body {
    fold rather than fill it: a 390×844 phone at full column width is ~760px tall,
    which plus the section padding is a whole screen for one object. --fp-ratio
    (set inline from the artboard's aspect) turns a height budget back into a
-   width, so the frame shrinks on short viewports — the landscape-phone case
+   width, so the frame shrinks on short viewports: the landscape-phone case
    this site has repeatedly had to defend. Pure CSS, so the box is reserved
    server-side: no measurement race, no CLS. */
 .fp-frame {
@@ -779,7 +779,7 @@ html.lenis body {
   margin-inline: auto;
 }
 
-/* Reel hero (HeroLoopVideo) — the floating product capture. Shares BrowserMockup's
+/* Reel hero (HeroLoopVideo): the floating product capture. Shares BrowserMockup's
    motion vocabulary: a perspective stage, a cursor-parallax wrapper (vars set in
    JS on fine pointers only; rest at 0 for touch/reduced), and a slow idle
    levitation so the reel reads as a living object, not a placed rectangle.
@@ -797,7 +797,7 @@ html.lenis body {
   .hlv-float {
     animation: hlv-float 8.5s var(--ease-in-out-quart) infinite alternate;
   }
-  /* Aurora drift — on reel heroes the ember slowly wanders and breathes, so the
+  /* Aurora drift: on reel heroes the ember slowly wanders and breathes, so the
      backdrop feels alive behind the moving capture. One ember per viewport,
      still subtle (§ ember dosage); transform/opacity only. */
   .cs-ember-drift {
@@ -805,7 +805,7 @@ html.lenis body {
     will-change: transform, opacity;
   }
 }
-/* Landscape reel bleed — the container caps content at 90rem, which locks the
+/* Landscape reel bleed: the container caps content at 90rem, which locks the
    reel to a ~600px column and leaves it small on wide monitors. This breaks the
    reel wrapper out of that cap toward the right viewport edge (~2rem inset), so
    it grows wide and leads the hero, and scales with the screen. Mobile keeps it
@@ -816,7 +816,7 @@ html.lenis body {
   max-width: 36rem;
   margin-inline: auto;
 }
-/* Two-column bleed only from lg up — matches the hero's lg stack→split (page).
+/* Two-column bleed only from lg up: matches the hero's lg stack→split (page).
    Below lg the reel is full-width in the stacked layout. */
 @media (min-width: 1024px) {
   .hlv-bleed {
@@ -838,7 +838,7 @@ html.lenis body {
 }
 
 @layer components {
-  /* Skip-to-content link — visually hidden until focused (DESIGN_GUIDELINES.md §10). */
+  /* Skip-to-content link: visually hidden until focused (DESIGN_GUIDELINES.md §10). */
   .skip-link {
     position: fixed;
     top: 1rem;
@@ -865,7 +865,7 @@ html.lenis body {
    clamp (13vw) renders ~110px type that fills the whole viewport, pushing the
    value-prop and both CTAs below the fold on first paint. Cap the wordmark by
    viewport HEIGHT in that case only, so the supporting copy + a CTA are visible.
-   (Set as a variable the inline fontSize reads via var() — see HeroWordmark.) */
+   (Set as a variable the inline fontSize reads via var(), see HeroWordmark.) */
 @media (max-height: 520px) and (orientation: landscape) {
   .hero-wordmark {
     --hero-wordmark-size: clamp(2.25rem, 12vh, 3.75rem);
@@ -873,14 +873,14 @@ html.lenis body {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
- * PRINT — ink on paper.
+ * PRINT: ink on paper.
  *
  * The whole site consumes SEMANTIC tokens, never raw values, so flipping the
  * semantic layer here re-sets every page as a black-on-white document for free:
  * no per-component print overrides, no second stylesheet to keep in sync.
  *
  * This matters most on /resume, which is designed to be printed (its "Print"
- * button calls window.print()) — the rules below strip the site chrome, collapse
+ * button calls window.print()): the rules below strip the site chrome, collapse
  * the sticky ledger rail into a normal document flow, and keep rows from
  * splitting across a page break. Everything decorative opts out with
  * [data-noprint] or aria-hidden.
@@ -898,7 +898,7 @@ html.lenis body {
     --accent: #101012;
     --accent-hover: #101012;
     --on-accent: #ffffff;
-    /* The neon interaction signal is a screen affordance — on paper it becomes
+    /* The neon interaction signal is a screen affordance: on paper it becomes
        ink, so hover-coloured headings don't print as highlighter green. */
     --neon: #101012;
     --neon-glow: transparent;
@@ -930,7 +930,7 @@ html.lenis body {
      landmarks (the /work index header, each case study's cover hero with its h1
      and disclaimer, pull-quote attributions in CaseStudyBlocks), so a bare type
      selector here would silently delete real content from every printed case
-     study. Nav and Footer are direct children of <body> — LenisProvider is a
+     study. Nav and Footer are direct children of <body>: LenisProvider is a
      context provider and renders no element of its own. */
   body > header,
   body > footer,
@@ -941,7 +941,7 @@ html.lenis body {
 
   /* Atmosphere layers: grain, maps, embedded prototypes, the fixed scroll-
      progress bar, the ruled case-study motif.
-     Two traps to respect, both learned the hard way — aria-hidden does NOT mean
+     Two traps to respect, both learned the hard way: aria-hidden does NOT mean
      "decorative" in this codebase, it means "the accessible copy lives on an
      ancestor":
        · GSAP SplitText marks the split units of a <TextReveal> headline
@@ -982,7 +982,7 @@ html.lenis body {
     line-height: 1.42;
   }
   /* GSAP reveals can leave inline opacity/transform mid-flight; force-settle so
-     nothing prints half-faded or offset. Scoped to the résumé ON PURPOSE — as a
+     nothing prints half-faded or offset. Scoped to the résumé ON PURPOSE: as a
      global rule it flattens transform-composed type elsewhere (the home hero's
      split-flap positions each glyph's two halves with translate inside an
      overflow-hidden tile, so `transform: none` prints the wordmark scrambled). */
@@ -1009,7 +1009,7 @@ html.lenis body {
     padding-bottom: 6pt !important;
   }
 
-  /* The screen rhythm is built for a scrolled page — 2–4rem between blocks. On
+  /* The screen rhythm is built for a scrolled page: 2–4rem between blocks. On
      paper that's a wasted page, so every spacing stack collapses to a document
      scale. Bullets tighten further (they're one list, not separate blocks). */
   .resume-doc [class*="space-y-space-"] > * + * {
@@ -1037,7 +1037,7 @@ html.lenis body {
   .resume-doc [class*="py-space-"] {
     padding-block: 6pt !important;
   }
-  /* Container gutters are viewport-fluid (up to 6rem) — pointless inside a
+  /* Container gutters are viewport-fluid (up to 6rem): pointless inside a
      printed page that already has @page margins. */
   .resume-doc .mx-auto {
     max-width: none !important;
@@ -1056,7 +1056,7 @@ html.lenis body {
     position: static !important;
     margin-bottom: 6pt;
   }
-  /* The section index carries a spectrum hue inline — pale on white. Beat the
+  /* The section index carries a spectrum hue inline: pale on white. Beat the
      inline style so every label prints as ink. */
   .resume-doc .resume-section-label span {
     color: var(--fg) !important;
@@ -1071,7 +1071,7 @@ html.lenis body {
   .resume-doc .resume-bullet > span:first-child {
     display: none !important;
   }
-  /* Rows, roles and cards are the atoms — never split one across pages. */
+  /* Rows, roles and cards are the atoms, never split one across pages. */
   .resume-doc .resume-entry,
   .resume-doc li {
     break-inside: avoid;

@@ -61,7 +61,7 @@ await shot("mobile-nav", {
   },
 });
 
-// Reduced motion — content must be fully visible immediately
+// Reduced motion: content must be fully visible immediately
 await shot("reduced-home", { path: "/", reduced: true });
 await shot("reduced-case", { path: "/work/voyager", reduced: true, scrollTo: 1700 });
 

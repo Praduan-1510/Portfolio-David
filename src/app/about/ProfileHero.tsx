@@ -6,7 +6,7 @@ import { useKolkataClock } from "@/hooks/useKolkataClock";
 import { AboutHeroMap } from "./AboutHeroMap";
 
 /*
- * About hero — the whole section is the instrument now: a full-bleed bespoke
+ * About hero: the whole section is the instrument now: a full-bleed bespoke
  * "motion map" (HeroMap) under a reading scrim, with the profile statement on the
  * left and a HUD of mono readouts framing the corners (STATUS / BASED / LOCAL·IST
  * clock / DESIGNING SINCE) plus a quiet PS station mark. Dark-monochrome, hairline
@@ -17,7 +17,7 @@ import { AboutHeroMap } from "./AboutHeroMap";
 
 const HEADLINE = "Turning complex problems into clean, usable products.";
 const SUPPORT =
-  "Product designer & front-end designer based in Kolkata — from systems thinking through to precise execution.";
+  "Product designer & front-end designer based in Kolkata, from systems thinking through to precise execution.";
 
 
 function Readout({
@@ -43,24 +43,24 @@ export function ProfileHero() {
   return (
     <section
       data-theme="dark"
-      aria-label="About — profile"
+      aria-label="About: profile"
       className="relative isolate overflow-hidden bg-bg text-fg"
       // Floor at 26rem (not 34rem) so the clamp can actually shrink on short
       // landscape phones (82svh < 34rem there) instead of forcing a tall band;
       // taller screens are unaffected (82svh wins).
       style={{ minHeight: "clamp(26rem, 82svh, 50rem)" }}
     >
-      {/* Layer 0 — full-bleed styled map texture: a static map screenshot inverted
+      {/* Layer 0: full-bleed styled map texture: a static map screenshot inverted
           to a dark near-black schematic (see AboutHeroMap). Lazy, aria-hidden +
           pointer-events-none, dimmed + left-scrimmed so the headline/HUD stay
           legible, with the shared drift; reduced-motion-safe. No API key needed. */}
       <AboutHeroMap />
 
-      {/* Spectrum ember on the map horizon — the home aurora's coal carried to
+      {/* Spectrum ember on the map horizon: the home aurora's coal carried to
           this route, so the grayscale HUD map stops reading as a different site. */}
       <AuroraEmber hues={["violet", "blue"]} position="top-right" intensity={0.14} className="z-[1]" />
 
-      {/* Layer 10 — content. */}
+      {/* Layer 10, content. */}
       <Container className="relative z-10 flex min-h-[inherit] items-center py-space-9">
         <div className="max-w-[40rem]">
           <TextReveal
@@ -107,7 +107,7 @@ export function ProfileHero() {
         </div>
       </Container>
 
-      {/* HUD readouts — frame the hero like an instrument (md+ to avoid mobile clutter). */}
+      {/* HUD readouts: frame the hero like an instrument (md+ to avoid mobile clutter). */}
       <div className="absolute right-space-6 top-space-6 z-10 hidden flex-col items-end gap-space-4 text-right md:flex">
         <Readout label="Status" className="items-end">
           <span className="inline-flex items-center gap-space-2">
@@ -138,7 +138,7 @@ export function ProfileHero() {
         </span>
       </div>
 
-      {/* Corner crosshair ticks — instrument frame. */}
+      {/* Corner crosshair ticks, instrument frame. */}
       {["left-0 top-0", "right-0 top-0", "left-0 bottom-0", "right-0 bottom-0"].map((pos) => (
         <span
           key={pos}

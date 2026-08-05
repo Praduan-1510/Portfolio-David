@@ -4,7 +4,7 @@ import { AnimatedNoise } from "@/components/motion";
 
 /*
  * Below-hero ambient grain. A whisper of the same film grain the hero uses
- * (AnimatedNoise — half-res, mix-blend-overlay, reduced-motion-safe: one static
+ * (AnimatedNoise: half-res, mix-blend-overlay, reduced-motion-safe: one static
  * frame and no rAF loop under prefers-reduced-motion), pulled across the whole
  * below-hero column so the near-black base carries a consistent, intentional
  * texture instead of reading as flat voids between sections.

@@ -16,7 +16,7 @@ const blurFor = (src: string): string | undefined =>
   (blurMap as Record<string, string>)[src];
 
 /*
- * LivePrototype — the real thing, running in the page.
+ * LivePrototype: the real thing, running in the page.
  *
  * Every other project on this site is shown through a recording or a still.
  * Meridian is a self-contained HTML prototype, so it can be USED instead of
@@ -25,7 +25,7 @@ const blurFor = (src: string): string | undefined =>
  *
  * Sibling to BrowserMockup, not a fork of it. BrowserMockup's screen well
  * hardcodes <Image>/<video> and is load-bearing on five surfaces (case hero,
- * ProjectCard, WorkStack, FlightBoard, <Shot>) — threading a node slot and a tab
+ * ProjectCard, WorkStack, FlightBoard, <Shot>), threading a node slot and a tab
  * strip through it to serve one caller would put every card at risk. The shared
  * look lives in CSS (.lp-* mirrors .browser-slab's tilt/shadow values, see
  * globals.css), which stays the single source of truth for the vocabulary.
@@ -40,13 +40,13 @@ const blurFor = (src: string): string | undefined =>
  *
  * 2. TILT → FLAT ON LAUNCH. At rest it's the same 3D-tilted slab as the web
  *    case-study hero. On activation it eases square-on: a picture of a product
- *    becomes the product. It's also the correct call technically — an
+ *    becomes the product. It's also the correct call technically: an
  *    interactive surface shouldn't be hit-tested through a rotateY(-9deg)
  *    parent. Reduced motion lands flat instantly.
  *
  * 3. THE VIEWPORT REALLY CHANGES. The device switcher resizes the window (and
  *    therefore the iframe's LAYOUT viewport) rather than just zooming a picture,
- *    so the prototype's own media queries fire — its sign-in gate collapses to
+ *    so the prototype's own media queries fire: its sign-in gate collapses to
  *    one column below 900px, its nav folds below 820px. That responsive
  *    behaviour is part of the work being shown, so it has to be real.
  *
@@ -64,7 +64,7 @@ export interface PrototypeTab {
   shortLabel?: string;
   /** Same-origin path to the prototype page, e.g. /prototype/meridian/app.html */
   src: string;
-  /** Text shown in the address pill (not a real link — this isn't a live site). */
+  /** Text shown in the address pill (not a real link: this isn't a live site). */
   domain: string;
 }
 
@@ -85,7 +85,7 @@ interface LivePrototypeProps {
   poster: string;
   /** Accessible description of the poster. */
   alt: string;
-  /** Base for the iframe title, e.g. "Meridian" → "Meridian — App (interactive demo)". */
+  /** Base for the iframe title, e.g. "Meridian" → "Meridian: App (interactive demo)". */
   title: string;
   /** Tab id to open first. Defaults to the first tab. */
   initialTab?: string;
@@ -99,10 +99,10 @@ interface LivePrototypeProps {
   hint?: string;
   /** What THIS prototype does on open, e.g. "It opens on the sign-in screen…".
    *  Sits between the two invariant sentences of the launch scrim. Left out,
-   *  the scrim promises nothing project-specific — which is the only safe
+   *  the scrim promises nothing project-specific: which is the only safe
    *  default, since the component is shared by every prototype study. */
   launchNote?: string;
-  /** Eager-load the poster — set only where the frame is the LCP element (hero). */
+  /** Eager-load the poster: set only where the frame is the LCP element (hero). */
   priority?: boolean;
   className?: string;
 }
@@ -215,7 +215,7 @@ export function LivePrototype({
   }, []);
 
   // The frame only ever mounts from a click, so directing keys into it is the
-  // expected outcome (same contract as opening a dialog) — and it's what makes
+  // expected outcome (same contract as opening a dialog), and it's what makes
   // the demo's best feature, its ⌘K palette, work on the first try. The app
   // installs no focus trap, so Tab/Shift+Tab genuinely step back out.
   const focusFrame = useCallback(() => {
@@ -253,7 +253,7 @@ export function LivePrototype({
             style={
               {
                 // Pure CSS geometry: the frame is `ratio`-shaped and shrinks to
-                // whichever of the column, 78vh, or maxHeight binds first — so
+                // whichever of the column, 78vh, or maxHeight binds first, so
                 // the box is correct on the server with no measurement and no CLS.
                 "--lp-ratio": String(ratio),
                 "--lp-maxh": `${maxHeight}px`,
@@ -270,7 +270,7 @@ export function LivePrototype({
 
               <div
                 role="tablist"
-                aria-label={`${title} — prototype surfaces`}
+                aria-label={`${title}, prototype surfaces`}
                 className="flex min-w-0 flex-1 items-center gap-[3px] overflow-hidden"
               >
                 {tabs.map((t) => {
@@ -369,14 +369,14 @@ export function LivePrototype({
                     ref={frameRef}
                     // Deliberately NOT keyed on `device`: switching viewport must
                     // resize the frame, not remount it, so the running app keeps
-                    // its state (the prototype has no resize listener — it just
+                    // its state (the prototype has no resize listener: it just
                     // re-lays-out and re-fires its own media queries).
                     key={`${tab.id}-${reloadKey}`}
                     src={tab.src}
-                    title={`${title} — ${tab.label} (interactive demo)`}
+                    title={`${title}, ${tab.label} (interactive demo)`}
                     onLoad={focusFrame}
                     // Opts out of Lenis's blanket pointer-events:none on iframes
-                    // (see globals.css) — without it, clicks are eaten for the
+                    // (see globals.css), without it, clicks are eaten for the
                     // ~0.3–1s a smooth scroll coasts.
                     data-live-frame
                     // User-initiated, so lazy would be pointless. No `sandbox`:
@@ -387,7 +387,7 @@ export function LivePrototype({
                     className="absolute left-0 top-0 border-0 bg-[#12101E]"
                     style={{
                       // The iframe is given the DEVICE's pixel dimensions and
-                      // scaled to fit — so the document inside lays out at 390 /
+                      // scaled to fit: so the document inside lays out at 390 /
                       // 834 / 1280 CSS px and its own media queries fire, which
                       // a plain percentage width could never do.
                       width: dev.w,
@@ -409,7 +409,7 @@ export function LivePrototype({
                     blurDataURL={blurFor(poster)}
                     className="object-cover object-[50%_0%]"
                   />
-                  {/* Launch scrim — dims the still just enough that the control
+                  {/* Launch scrim: dims the still just enough that the control
                       is unmistakably the primary action. */}
                   <div className="absolute inset-0 z-[2] flex flex-col items-center justify-center gap-space-4 bg-gradient-to-b from-black/55 via-black/70 to-black/80 px-space-5 text-center">
                     <button
@@ -421,7 +421,7 @@ export function LivePrototype({
                       Launch the live demo
                     </button>
                     <p className="max-w-[48ch] font-mono text-caption text-white/70">
-                      {/* Only the two invariants are hardcoded — they hold for
+                      {/* Only the two invariants are hardcoded: they hold for
                           every prototype study. What happens on open is a claim
                           about ONE artefact, so it comes from that project's
                           frontmatter (`prototype.launchNote`). This sentence
@@ -449,7 +449,7 @@ export function LivePrototype({
                   </div>
                 </>
               )}
-              {/* Glass sheen — shared with PhoneFrame / BrowserMockup. Never
+              {/* Glass sheen: shared with PhoneFrame / BrowserMockup. Never
                   intercepts a click meant for the running app. */}
               <span
                 aria-hidden="true"
@@ -484,8 +484,8 @@ export function LivePrototype({
                   >
                     {DEVICES[id].label}
                     <span className="sr-only">
-                      {" "}
-                      — {DEVICES[id].w} pixels wide
+                      {", "}
+                      {DEVICES[id].w} pixels wide
                     </span>
                   </button>
                 );

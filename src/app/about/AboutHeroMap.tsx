@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 
 /*
- * About-hero background — a static styled map screenshot read as quiet dark
- * TEXTURE (About page only). No API key / Maps JS — just a compressed image.
+ * About-hero background: a static styled map screenshot read as quiet dark
+ * TEXTURE (About page only). No API key / Maps JS, just a compressed image.
  *
  * The source webp is PRE-INVERTED to a near-black road schematic (light grid on
  * near-black), cohesive with the dark monochrome system (luminance not hue;
@@ -14,7 +14,7 @@ import { useEffect, useRef, useState } from "react";
  * Why a canvas (not <img>/next/image): a full-bleed <img> becomes the LARGEST
  * contentful paint and steals LCP from the headline. A <canvas> is NOT an LCP
  * candidate (same reason the old WebGL/Maps tiles never regressed LCP,
- * ARCHITECTURE.md §7.6 / §12) — so the SSR headline stays the LCP, and this
+ * ARCHITECTURE.md §7.6 / §12): so the SSR headline stays the LCP, and this
  * decorative layer loads after, behind it.
  *
  * Guardrails: aria-hidden + pointer-events:none (scroll passes through); fades in
@@ -79,7 +79,7 @@ export function AboutHeroMap() {
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-bg"
     >
-      {/* Map texture — oversized so the drift never reveals an edge; dimmed so it
+      {/* Map texture: oversized so the drift never reveals an edge; dimmed so it
           stays texture, not focal; fades in once drawn. */}
       <div
         className="hero-map-drift absolute -inset-[8%]"
@@ -94,7 +94,7 @@ export function AboutHeroMap() {
       {/* Reading scrim (desktop composition: pools left, fades the edges). */}
       <div className="absolute inset-0" style={{ background: LEFT_SCRIM }} />
 
-      {/* Mobile reinforcement — the headline spans full width here, so pool --bg
+      {/* Mobile reinforcement: the headline spans full width here, so pool --bg
           from the top over the upper ~64% (where the copy sits); the map texture
           shows in the lower band. Desktop keeps the left/right composition above. */}
       <div

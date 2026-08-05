@@ -15,7 +15,7 @@ import { initialContactState, ENQUIRY_TYPES } from "@/app/actions/contact-schema
  * Styled to the site tokens (DESIGN_GUIDELINES.md §4–6): mono caption labels,
  * hairline `border-line` underline fields that brighten to `fg` on focus, the
  * shared `Button` primitive for submit, and the in-system `--spectrum-rose` hue
- * for errors — one instrument language, no foreign colours or new tokens.
+ * for errors: one instrument language, no foreign colours or new tokens.
  */
 
 const label =
@@ -101,7 +101,7 @@ export default function ContactForm() {
         <form ref={formRef} action={formAction} className="space-y-space-6" noValidate>
           <input type="hidden" name="startedAt" value={startedAt} />
 
-          {/* Honeypot. Hidden from people, not from bots. Never display:none —
+          {/* Honeypot. Hidden from people, not from bots. Never display:none:
               some bots skip those; this is off-screen and unreachable instead. */}
           <div aria-hidden="true" className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
             <label htmlFor="website">Website</label>
@@ -189,7 +189,7 @@ export default function ContactForm() {
           {/* Form-level message ONLY when it isn't a field-validation failure
               (e.g. a delivery/config error). When fields are invalid they already
               highlight themselves, so the generic "fix the highlighted fields"
-              summary is suppressed here — it's still announced to screen readers
+              summary is suppressed here: it's still announced to screen readers
               via the sr-only aria-live region above. */}
           {state.status === "error" &&
             state.message &&

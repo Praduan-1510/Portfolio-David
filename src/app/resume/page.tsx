@@ -32,32 +32,32 @@ import { ResumeActions } from "./ResumeActions";
 export const metadata: Metadata = {
   title: "Résumé",
   description:
-    "The full résumé of Praduan Saha — product designer and front-end designer in Kolkata. Experience, projects, education, and certifications, readable on the page or downloadable as a PDF.",
+    "The full résumé of Praduan Saha: product designer and front-end designer in Kolkata. Experience, projects, education, and certifications, readable on the page or downloadable as a PDF.",
   alternates: { canonical: "/resume" },
   openGraph: {
-    title: "Résumé — Praduan Saha",
+    title: "Résumé: Praduan Saha",
     description:
-      "Experience, selected projects, education, and certifications — read it on the page or download the PDF.",
+      "Experience, selected projects, education, and certifications: read it on the page or download the PDF.",
     images: ["/opengraph-image"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Résumé — Praduan Saha",
+    title: "Résumé: Praduan Saha",
     description:
-      "Experience, selected projects, education, and certifications — read it on the page or download the PDF.",
+      "Experience, selected projects, education, and certifications: read it on the page or download the PDF.",
     images: ["/twitter-image"],
   },
 };
 
 /*
- * Résumé — the site's one DOCUMENT.
+ * Résumé: the site's one DOCUMENT.
  *
  * Every other route is a composition; this one is a record, so it's set like a
  * specification sheet rather than a page: a letterhead masthead over a ruled
  * ledger, where each section's mono index + label sits in a sticky left rail and
  * the content runs in a single measure on the right. Facts sit on hairlines,
  * dates hang right in mono, and the only colour is the spectrum on the section
- * indices — the site's structural signal layer, never a fill.
+ * indices: the site's structural signal layer, never a fill.
  *
  * It's also literally printable: `.resume-doc` hooks the @media print block in
  * globals.css, which remaps the semantic tokens to ink-on-paper, drops the site
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
  * button in ResumeActions is a real feature, not an afterthought.
  *
  * Content comes from src/lib/content/resume.ts (transcribed from the PDF the
- * download button serves) — nothing on this page is written here.
+ * download button serves): nothing on this page is written here.
  */
 
 /** One ledger section: sticky mono index + label on the left, content right. */
@@ -113,7 +113,7 @@ function Bullets({ items }: { items: string[] }) {
     <ul className="mt-space-4 space-y-space-3">
       {items.map((item) => (
         // .resume-bullet swaps the hairline dash for a real list marker in print
-        // (see the @media print block) — a background dash wouldn't survive the
+        // (see the @media print block): a background dash wouldn't survive the
         // "background graphics off" default.
         <li key={item} className="resume-bullet flex gap-space-3">
           <span
@@ -129,7 +129,7 @@ function Bullets({ items }: { items: string[] }) {
   );
 }
 
-/** Title left, mono dateline hanging right — the document's repeating rhythm. */
+/** Title left, mono dateline hanging right: the document's repeating rhythm. */
 function EntryHead({
   title,
   meta,
@@ -174,7 +174,7 @@ export default function Resume() {
         aria-labelledby="resume-name"
         className="resume-masthead relative isolate overflow-hidden border-b border-line bg-bg text-fg"
       >
-        {/* Ruled-paper motif — the case-study "ledger" texture, reused because
+        {/* Ruled-paper motif: the case-study "ledger" texture, reused because
             this route IS a ledger. Decorative, aria-hidden via .cs-motif usage. */}
         <span aria-hidden="true" className="cs-motif" />
         <AuroraEmber
@@ -185,7 +185,7 @@ export default function Resume() {
         />
         <AnimatedNoise opacity={0.03} className="-z-10 print:hidden" />
 
-        {/* Corner crosshair ticks — the site's instrument frame. */}
+        {/* Corner crosshair ticks: the site's instrument frame. */}
         {["left-0 top-0", "right-0 top-0", "left-0 bottom-0", "right-0 bottom-0"].map(
           (pos) => (
             <span
@@ -203,7 +203,7 @@ export default function Resume() {
         )}
 
         <Container className="relative z-10 pb-space-8 pt-space-9">
-          {/* Document rule — what this is, and which revision. */}
+          {/* Document rule: what this is, and which revision. */}
           <Reveal trigger="load" delay={0.04}>
             <div className="flex flex-wrap items-center justify-between gap-space-3 border-b border-line pb-space-4">
               <p className="flex items-center gap-space-2 font-mono text-caption uppercase tracking-[0.18em] text-muted">
@@ -221,7 +221,7 @@ export default function Resume() {
           </Reveal>
 
           <div className="mt-space-7 grid gap-space-8 lg:grid-cols-12 lg:gap-space-8">
-            {/* Left — identity + statement + actions. */}
+            {/* Left: identity + statement + actions. */}
             <div className="lg:col-span-7">
               <TextReveal
                 as="h1"
@@ -238,7 +238,7 @@ export default function Resume() {
                 <p className="mt-space-5 font-mono text-caption uppercase tracking-[0.22em] text-fg">
                   {site.jobTitle}
                 </p>
-                {/* Spectrum thread under the title plate — the same bookend
+                {/* Spectrum thread under the title plate: the same bookend
                     device as the hero and footer, at document scale. */}
                 <span
                   aria-hidden="true"
@@ -258,7 +258,7 @@ export default function Resume() {
                 </Text>
               </Reveal>
 
-              {/* data-noprint sits on the wrapper, not the buttons — otherwise
+              {/* data-noprint sits on the wrapper, not the buttons: otherwise
                   an empty but still-laid-out block leaves a hole on the page. */}
               <Reveal trigger="load" delay={0.44} className="mt-space-7" data-noprint>
                 <ResumeActions />
@@ -268,7 +268,7 @@ export default function Resume() {
               </Reveal>
             </div>
 
-            {/* Right — the contact plate. A quiet bordered card so the reachable
+            {/* Right: the contact plate. A quiet bordered card so the reachable
                 facts sit together where a recruiter looks for them. */}
             <div className="lg:col-span-4 lg:col-start-9">
               <Reveal trigger="load" delay={0.34}>
@@ -343,7 +343,7 @@ export default function Resume() {
           </div>
         </Container>
 
-        {/* Spec strip — four readouts across the foot of the letterhead. */}
+        {/* Spec strip: four readouts across the foot of the letterhead. */}
         <Container className="relative z-10 border-t border-line">
           <StaggerGroup
             as="dl"
@@ -365,7 +365,7 @@ export default function Resume() {
                 <dt className="font-mono text-[0.625rem] uppercase tracking-[0.2em] text-muted">
                   {spec.label}
                 </dt>
-                {/* Steps down a notch on phones — at 2-up, "Product · Front-end"
+                {/* Steps down a notch on phones: at 2-up, "Product · Front-end"
                     at the caption step + 0.1em tracking breaks across lines. */}
                 <dd className="mt-space-2 font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-fg sm:text-caption sm:tracking-[0.1em]">
                   {spec.value}
@@ -378,7 +378,7 @@ export default function Resume() {
 
       {/* ── The ledger ──────────────────────────────────────────────────── */}
       <Container as="div" className="pb-space-10 pt-space-4">
-        {/* 01 — Capabilities */}
+        {/* 01: Capabilities */}
         <Section index={0} label="Capabilities" id="capabilities">
           <StaggerGroup className="space-y-space-6" stagger={0.06}>
             {SKILLS.map((group) => (
@@ -401,7 +401,7 @@ export default function Resume() {
           </StaggerGroup>
         </Section>
 
-        {/* 02 — Experience */}
+        {/* 02: Experience */}
         <Section index={1} label="Experience" id="experience">
           <StaggerGroup as="ul" stagger={0.08} y={28} className="space-y-space-8">
             {EXPERIENCE.map((job) => (
@@ -411,7 +411,7 @@ export default function Resume() {
                   {job.roles.map((role) => (
                     <div key={`${role.title}-${role.period}`} className="resume-entry">
                       <div className="flex flex-col gap-space-1 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-space-3">
-                        {/* Body face, not display — the role reads as a different
+                        {/* Body face, not display; the role reads as a different
                             voice from the employer heading above it. */}
                         <Text variant="body-l" className="font-medium">
                           {role.title}
@@ -430,7 +430,7 @@ export default function Resume() {
           </StaggerGroup>
         </Section>
 
-        {/* 03 — Selected projects */}
+        {/* 03: Selected projects */}
         <Section index={2} label="Selected projects" id="projects">
           <StaggerGroup as="ul" stagger={0.08} className="space-y-space-7">
             {PROJECTS.map((project) => (
@@ -457,7 +457,7 @@ export default function Resume() {
           </StaggerGroup>
         </Section>
 
-        {/* 04 — Education */}
+        {/* 04: Education */}
         <Section index={3} label="Education" id="education">
           <Reveal className="resume-entry card-neon-row group">
             <EntryHead
@@ -469,7 +469,7 @@ export default function Resume() {
           </Reveal>
         </Section>
 
-        {/* 05 — Certifications */}
+        {/* 05: Certifications */}
         <Section index={4} label="Certifications" id="certifications">
           <StaggerGroup as="ul" stagger={0.05}>
             {CERTIFICATIONS.map((cert, i) => (
@@ -502,7 +502,7 @@ export default function Resume() {
           </StaggerGroup>
         </Section>
 
-        {/* 06 — Languages & strengths */}
+        {/* 06: Languages & strengths */}
         <Section index={5} label="Languages & strengths" id="languages">
           <div className="grid gap-space-7 sm:grid-cols-2">
             <StaggerGroup as="dl" stagger={0.05} className="resume-entry">
@@ -533,7 +533,7 @@ export default function Resume() {
           </div>
         </Section>
 
-        {/* Document colophon — closes the record, and prints. */}
+        {/* Document colophon: closes the record, and prints. */}
         <div className="flex flex-wrap items-center justify-between gap-space-3 border-t border-line py-space-5">
           <span className="font-mono text-caption uppercase tracking-[0.16em] text-muted">
             End of document
@@ -563,7 +563,7 @@ export default function Resume() {
             Take a copy with you.
           </Text>
           <Text variant="body-l" className="mt-space-4 max-w-[46ch] text-muted">
-            The same document as a {RESUME_PAGES}-page PDF — or skip it and just
+            The same document as a {RESUME_PAGES}-page PDF, or skip it and just
             tell me what you&apos;re building.
           </Text>
           <div className="mt-space-6 flex flex-wrap gap-space-4">

@@ -6,7 +6,7 @@ import { gsap, registerGsap } from "@/lib/motion/gsap";
 import { durations } from "@/lib/motion/durations";
 
 /*
- * Odometer digits in the split-flap language — for stat values. Digits tick
+ * Odometer digits in the split-flap language, for stat values. Digits tick
  * through 0–9 at the `tick` cadence and settle RIGHT-TO-LEFT (an odometer
  * locking its smallest wheel last reads mechanical; locking left-to-right
  * reads like a slot machine). Non-digit glyphs (".", "%", "→", units) render
@@ -34,7 +34,7 @@ export function FlapDigits({ value, flips = 8, className = "" }: FlapDigitsProps
     .map((c, i) => (/[0-9]/.test(c) ? i : -1))
     .filter((i) => i >= 0);
   // Right-to-left settle: the LAST digit locks after `flips`, each digit to its
-  // left locks 2 steps later... inverted: leftmost locks first? No — odometer:
+  // left locks 2 steps later... inverted: leftmost locks first? No: odometer:
   // leftmost (biggest wheel) locks first, rightmost keeps spinning longest.
   const settleAt = new Map(
     digitPositions.map((pos, orderFromLeft) => [pos, flips + orderFromLeft * 2]),

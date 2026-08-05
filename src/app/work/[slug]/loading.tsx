@@ -1,7 +1,7 @@
 import { Container } from "@/components/primitives";
 
 /*
- * Case-study loading skeleton — mirrors src/app/work/[slug]/page.tsx: a
+ * Case-study loading skeleton: mirrors src/app/work/[slug]/page.tsx: a
  * full-bleed header (left title block + right phone-frame cover) and the
  * "Screens" grid of phone placeholders. Reserves the same space as the real
  * page to avoid layout shift (DESIGN_GUIDELINES §11).
@@ -13,7 +13,7 @@ export default function Loading() {
         Loading case study
       </span>
 
-      {/* Header — title block (left) + phone cover (right). */}
+      {/* Header: title block (left) + phone cover (right). */}
       <header className="border-b border-line" aria-hidden="true">
         <Container className="grid animate-pulse items-center gap-space-9 py-space-11 md:grid-cols-[1.15fr_0.85fr]">
           <div>
@@ -43,7 +43,7 @@ export default function Loading() {
         </Container>
       </header>
 
-      {/* Screens — grid of phone placeholders. */}
+      {/* Screens: grid of phone placeholders. */}
       <Container as="section" className="border-t border-line py-space-10" aria-hidden="true">
         <div className="animate-pulse">
           {/* Section heading bar. */}

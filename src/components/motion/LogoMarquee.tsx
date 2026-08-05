@@ -2,10 +2,10 @@ import { cn } from "@/lib/utils/cn";
 import { spectrumAt } from "@/lib/spectrum";
 
 /*
- * "Tools I work with" — a compact static tool grid mounted on /about ("Toolchain").
+ * "Tools I work with": a compact static tool grid mounted on /about ("Toolchain").
  *
  * Logos are self-hosted monochrome SVGs in /public/logos (Simple Icons, CC0; the
- * two it lacks — Midjourney, Runway — from svgl). Self-hosting means no CDN client
+ * two it lacks (Midjourney, Runway) from svgl). Self-hosting means no CDN client
  * id and no network dependency.
  *
  * Each logo is painted by using its SVG as a CSS mask over a solid fill, so the
@@ -17,9 +17,9 @@ import { spectrumAt } from "@/lib/spectrum";
 
 type Tool = { src: string; name: string };
 
-// Edit freely — order is render order. To add a tool, drop a monochrome SVG into
+// Edit freely: order is render order. To add a tool, drop a monochrome SVG into
 // /public/logos and add a line here. (Spline is intentionally omitted: it ships
-// only low-res PNG favicons, no clean open-license SVG — add one here if you have it.)
+// only low-res PNG favicons, no clean open-license SVG: add one here if you have it.)
 const TOOLS: Tool[] = [
   // Design
   { src: "/logos/figma.svg", name: "Figma" },
@@ -58,7 +58,7 @@ function ToolLogo({
       {/* The self-hosted SVG is used as a CSS mask over a solid token fill, so the
           silhouette is an EXACT colour: it rests at --muted and, on hover, lifts to
           its OWN hue from the site spectrum (violet→blue→lime→amber→rose, cycled by
-          index via --tool-fill) — so adjacent icons never share a colour and the
+          index via --tool-fill), so adjacent icons never share a colour and the
           whole strip reads in the site's signature palette. transition-colors on
           the `fast`/ease-out-quad tokens; auto-neutralised under reduced motion by
           the global rule. Height-normalised + centred in a fixed slot so the mixed
@@ -86,7 +86,7 @@ function ToolLogo({
   );
 }
 
-/* Compact static tool grid — the marquee's information without the trope.
+/* Compact static tool grid: the marquee's information without the trope.
    Mounted on /about ("Toolchain"); the home page no longer carries the band. */
 export function ToolGrid({ className }: { className?: string }) {
   return (

@@ -1,5 +1,5 @@
 /*
- * Print audit — the @media print block in globals.css is GLOBAL, so it has to be
+ * Print audit: the @media print block in globals.css is GLOBAL, so it has to be
  * checked on more than /resume. For each route this asserts, with print media
  * emulated, that the site chrome is gone, that in-content <header>/<footer>
  * landmarks SURVIVE (they carry the case-study h1, disclaimer and pull-quote
@@ -38,7 +38,7 @@ for (const route of ROUTES) {
     const shown = (el) => !!el && getComputedStyle(el).display !== "none";
     const article = document.querySelector("article");
     const h1 = document.querySelector("h1");
-    // Longest visible text inside the main heading — blank means the print
+    // Longest visible text inside the main heading: blank means the print
     // rules ate it.
     const h1Text = h1 ? (h1.innerText || h1.textContent || "").trim() : null;
     const contentHeaders = Array.from(document.querySelectorAll("header")).filter(
@@ -67,7 +67,7 @@ for (const route of ROUTES) {
     return {
       visibleTextEls: textNodes.length,
       // The home hero's wordmark is composed of aria-hidden SplitFlapText tiles,
-      // not the sr-only <h1> — assert the tiles themselves survive print.
+      // not the sr-only <h1>: assert the tiles themselves survive print.
       wordmarkShown: (() => {
         const wm = document.querySelector(".hero-wordmark");
         if (!wm) return null;

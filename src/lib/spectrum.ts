@@ -1,13 +1,13 @@
 /*
- * The site spectrum — five signature hues, defined as CSS variables in
+ * The site spectrum: five signature hues, defined as CSS variables in
  * globals.css (`--spectrum-violet … --spectrum-rose`) and exposed here as the
  * single ordered list components consume.
  *
- * This is the SIGNAL layer (wayfinding / structure / progress) — deliberately
+ * This is the SIGNAL layer (wayfinding / structure / progress): deliberately
  * distinct from the site's other two colour roles: the neon-green INTERACTION
  * signal (hover / live) and the per-project IDENTITY accents (blue / lime /
- * amber). The spectrum only ever paints thin structural marks — the scroll
- * progress bar, the section-rail dots, numbered indices, hairline seams — never a
+ * amber). The spectrum only ever paints thin structural marks (the scroll
+ * progress bar, the section-rail dots, numbered indices, hairline seams) never a
  * fill behind content, so "colour still belongs to the work" (Design.md §4).
  *
  * Order is a warm→cool sweep so a run of indices/dots reads as one gradient and

@@ -9,12 +9,12 @@ import { easings, cssEasings } from "@/lib/motion/easings";
 import { SPECTRUM } from "@/lib/spectrum";
 
 /*
- * Split-flap (departure board) text — the site's signature motif. A SHORT,
+ * Split-flap (departure board) text: the site's signature motif. A SHORT,
  * UPPERCASE wordmark whose letters flip through the charset before settling.
  * Built for A–Z / 0–9; any other glyph renders as a gap.
  *
  * Fully on-system: ONE gsap.ticker per board drives a shared step counter at
- * the `tick` cadence (durations.tick — the sanctioned split-flap token); every
+ * the `tick` cadence (durations.tick: the sanctioned split-flap token); every
  * per-tile duration/ease reads from lib/motion tokens. The flutter glyphs are
  * a deterministic hash of (step, index), so renders are stable and the board
  * needs no per-tile timers.
@@ -27,7 +27,7 @@ import { SPECTRUM } from "@/lib/spectrum";
  *
  * settle="kern": once every tile has settled, the tile board crossfades into a
  * REAL kerned span (natural glyph advances, font-display) absolutely centered
- * over it — so the resting wordmark reads as set type, not monospaced caps,
+ * over it, so the resting wordmark reads as set type, not monospaced caps,
  * while the entrance still flips against solid cards. Reduced motion renders
  * the kerned span from frame one.
  */
@@ -42,13 +42,13 @@ interface SplitFlapTextProps {
    *  uses the single --accent. Used by the hero wordmark. */
   multicolor?: boolean;
   /** Announce the settled text via an sr-only span (default). Pass false when a
-   *  sibling heading already announces the same words — the hero and the 404
+   *  sibling heading already announces the same words: the hero and the 404
    *  both carry their own sr-only h1, and a duplicate reads twice back-to-back. */
   announce?: boolean;
   /** "tiles" (default) keeps the settled board as tiles; "kern" crossfades the
    *  settled board into a real kerned span (hero wordmark). */
   settle?: "tiles" | "kern";
-  /** Horizontal alignment of the kerned settle twin within the board's width —
+  /** Horizontal alignment of the kerned settle twin within the board's width:
    *  "start" for left-aligned compositions (the twin is narrower than the
    *  monospaced tile row, so centering would shift the left edge). */
   kernAlign?: "center" | "start";
@@ -69,13 +69,13 @@ const FLAP_PALETTE = SPECTRUM;
 // is wider than the kerned twin, so inline boards close the slack with a
 // negative right margin. A STATIC em value (not a live measurement of the
 // kerned twin) is deliberate: the twin's width depends on the display font,
-// which loads async (display:swap) — measuring it made the next word reflow
+// which loads async (display:swap), measuring it made the next word reflow
 // when the font swapped in. A fixed em is in place from first paint and never
 // moves. Tuned so tiles just meet during the flap (no overlap) and the settled
 // word gap reads natural. Applies to any fitKern board (hero wordmark, 404).
 const KERN_PULL_EM = 0.28;
 
-/** Deterministic flutter glyph — stable across renders, chaotic to the eye. */
+/** Deterministic flutter glyph: stable across renders, chaotic to the eye. */
 const flutterChar = (step: number, index: number) =>
   CHARSET[(step * 31 + index * 17 + ((index * 7) % 5)) % CHARSET.length];
 
@@ -148,7 +148,7 @@ export function SplitFlapText({
     >
       {/* Flaps are decorative; the word is announced once for assistive tech. */}
       {announce && <span className="sr-only">{text}</span>}
-      {/* Tile board — fades out under the kerned twin once settled (kern mode).
+      {/* Tile board: fades out under the kerned twin once settled (kern mode).
           It stays in flow either way, so the composition's width never shifts. */}
       <span
         aria-hidden="true"
@@ -178,7 +178,7 @@ export function SplitFlapText({
           />
         ))}
       </span>
-      {/* Kerned settle twin — real glyph advances, centered over the board. */}
+      {/* Kerned settle twin: real glyph advances, centered over the board. */}
       {kern && (
         <span
           aria-hidden="true"
@@ -187,14 +187,14 @@ export function SplitFlapText({
             fontSize,
             opacity: allSettled ? 1 : 0,
             // Settle beat: as the board resolves, the kerned twin rises a hair
-            // and crisps from a near-imperceptible under-scale into exact type —
+            // and crisps from a near-imperceptible under-scale into exact type:
             // the wordmark "lands" rather than merely crossfading in. Reduced
             // motion is settled from frame one (allSettled) and the global rule
             // zeroes the transition, so it appears instantly.
             transform: allSettled
               ? "translateY(0) scale(1)"
               : "translateY(0.06em) scale(0.994)",
-            // Opacity snaps in fast (matches the tile fade-out — no ghosted
+            // Opacity snaps in fast (matches the tile fade-out, no ghosted
             // overlap); the subtle rise/scale "land" keeps the slow easing so
             // the settled wordmark still arrives rather than merely popping.
             transition: `opacity ${durations.fast}s ${cssEasings.outExpo}, transform ${durations.slow}s ${cssEasings.outExpo}`,

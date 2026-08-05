@@ -1,5 +1,5 @@
 /*
- * Screen registry — one entry per coded mockup. `w`/`h` are the ORIGINAL PNG's
+ * Screen registry: one entry per coded mockup. `w`/`h` are the ORIGINAL PNG's
  * CSS-pixel dimensions (the renderer outputs @2x). A screen only renders once
  * scripts/render-mockups/<app>/<name>.html exists, so this list can lead the
  * build. Screens verified clean (onboarding/splash/photo-collages and the

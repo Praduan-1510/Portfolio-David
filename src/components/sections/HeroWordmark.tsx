@@ -12,7 +12,7 @@ import { SplitFlapText } from "@/components/motion";
 // Two scales, one markup: below lg the old 13vw signature size forces the pair
 // to wrap into the stacked two-line block (PRADUAN over SAHA); at lg+ the
 // clamp shrinks so both words fit ONE baseline inside the split's left column
-// (~43vw of usable width — 12 glyphs ≈ 8.7em). The `--hw` hop lets Tailwind
+// (~43vw of usable width: 12 glyphs ≈ 8.7em). The `--hw` hop lets Tailwind
 // switch the clamp per breakpoint; the outer var() still lets the
 // short-landscape rule in globals.css (.hero-wordmark → --hero-wordmark-size)
 // cap it by viewport HEIGHT.

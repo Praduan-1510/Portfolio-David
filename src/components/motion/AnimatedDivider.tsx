@@ -8,7 +8,7 @@ import { useReducedMotion, prefersReducedMotion } from "@/hooks/useReducedMotion
 import { cn } from "@/lib/utils/cn";
 
 /*
- * Animated divider (DESIGN_GUIDELINES.md §9 / §7.5) — a hairline that draws across
+ * Animated divider (DESIGN_GUIDELINES.md §9 / §7.5): a hairline that draws across
  * as it enters view, to break up dense text without decoration that means nothing.
  * Pure transform: scaleX 0→1 from the left, on the linear/expo entrance curve.
  *
@@ -22,7 +22,7 @@ interface AnimatedDividerProps {
   /** Tween duration (seconds). */
   duration?: number;
   /** Paint the rule with the site spectrum (faded ends) instead of the flat
-   *  hairline — the structural "signal" thread between sections. */
+   *  hairline: the structural "signal" thread between sections. */
   spectrum?: boolean;
 }
 

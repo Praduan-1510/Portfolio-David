@@ -3,16 +3,16 @@
 Validate public/pdf/Praduan_Saha_Resume.pdf after scripts/patch-resume-title.py.
 
 The PDF is edited at the byte level, and it is the artefact that reaches
-recruiters and ATS parsers — so "it still opens on my machine" is not evidence.
+recruiters and ATS parsers, so "it still opens on my machine" is not evidence.
 This checks it four ways, two of them independent of the patch script's own
 assumptions:
 
-  1. Structure  — every xref offset lands exactly on "N 0 obj", the trailer /Size
+  1. Structure: every xref offset lands exactly on "N 0 obj", the trailer /Size
                   matches, and every stream's /Length equals its real byte count.
-  2. Parser     — pypdf (a third-party implementation) opens it, reports the page
+  2. Parser: pypdf (a third-party implementation) opens it, reports the page
                   count, and extracts text without raising.
-  3. Diff       — extracted text differs from the original ONLY on the title line.
-  4. Geometry   — the retitled run is still centered on the 612pt page.
+  3. Diff: extracted text differs from the original ONLY on the title line.
+  4. Geometry: the retitled run is still centered on the 612pt page.
 
 Usage: python3 scripts/verify-resume-pdf.py [original.pdf]
 Exit code is non-zero if any check fails.
@@ -36,13 +36,13 @@ def squash(s: str) -> str:
     The title line carries -150 letter-spacing, which pypdf renders as a space
     between every glyph ("P R O D U C T  D E S I G N E R"). That is how the
     ORIGINAL file extracts too, so it is a property of the document's typography,
-    not of the patch — normalise it out rather than chase it.
+    not of the patch: normalise it out rather than chase it.
     """
     return re.sub(r"\s+", "", s).upper()
 
 
 def check(ok: bool, label: str, detail: str = "") -> None:
-    print(f"{'  ok' if ok else 'FAIL'}  {label}{(' — ' + detail) if detail else ''}")
+    print(f"{'  ok' if ok else 'FAIL'}  {label}{(': ' + detail) if detail else ''}")
     if not ok:
         failures.append(label)
 
@@ -73,11 +73,11 @@ for om in re.finditer(rb"(\d+)\s+0\s+obj(.*?)endobj", data, re.S):
     sm = re.search(rb"stream\r?\n(.*?)\s*endstream", body, re.S)
     if not sm:
         continue
-    # `/Length 60 0 R` is an INDIRECT reference to object 60, not a length of 60 —
+    # `/Length 60 0 R` is an INDIRECT reference to object 60, not a length of 60:
     # several of this document's streams use that form. Only literal lengths are
     # comparable here.
     # \b after the digits stops the regex backtracking to a PREFIX of the number
-    # to satisfy the lookahead — without it "/Length 4905 0 R" matches as "490".
+    # to satisfy the lookahead, without it "/Length 4905 0 R" matches as "490".
     declared = re.search(rb"/Length\s+(\d+)\b(?!\s+\d+\s+R)", body)
     if declared and int(declared.group(1)) != len(sm.group(1)):
         lengths_bad.append((int(om.group(1)), int(declared.group(1)), len(sm.group(1))))
@@ -131,7 +131,7 @@ try:
     check(squash(EXPECTED_TITLE) in lines, "new title is its own line", EXPECTED_TITLE)
     # Line-scoped, not a substring of the whole document: the professional
     # summary legitimately opens "UI/UX & Graphic Designer with 5+ years…", so a
-    # blob search can never go green. Only the TITLE LINE is being replaced —
+    # blob search can never go green. Only the TITLE LINE is being replaced,
     # rewording the summary would mean re-flowing a wrapped paragraph, which is
     # a re-export job, not a byte patch.
     check(squash(RETIRED_TITLE) not in lines, "old title no longer a heading line", RETIRED_TITLE)
@@ -186,4 +186,4 @@ print()
 if failures:
     print(f"{len(failures)} CHECK(S) FAILED: {failures}")
     raise SystemExit(1)
-print("PDF VERIFIED — structurally sound, independently parseable, only the title changed")
+print("PDF VERIFIED: structurally sound, independently parseable, only the title changed")

@@ -5,53 +5,32 @@ import { cn } from "@/lib/utils/cn";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 /*
- * A looping product capture that floats over the hero background as if it were
- * transparent. The source is an *opaque* H.264 MP4 (plays everywhere incl.
- * Safari, unlike a VP9-alpha WebM) whose surround is baked to a near-black
- * (~rgb(15,17,18)): a hair lighter than the page's near-black --bg (~rgb(5,5,5)).
+ * A looping product capture, presented as a PLATE: a dark panel with a
+ * hairline, sitting on the page. The source is an *opaque* H.264 MP4 (plays
+ * everywhere incl. Safari, unlike a VP9-alpha WebM) whose surround is baked to
+ * a near-black (~rgb(15,17,18)).
  *
- * We recreate the transparency with two moves, no alpha and no colour-shifting
- * blend mode:
- *   1. object-cover on a portrait aperture drops the dark side-margins, and a
- *      radial mask feathers the fanned side-screens so the crop never shows an
- *      edge.
- *   2. a *gentle* contrast() pulls that near-black surround down toward the page
- *      black: contrast(1.06) sends rgb(~17)→rgb(~10) while whites stay white and
- *      mids hold. It's deliberately restrained: pushing harder (e.g. 1.12) crushes
- *      the montage's genuinely-dark top screens *below* the page black, which then
- *      read as a dark block where they overlap the bright aurora glow. The mask,
- *      not the filter, is what erases the box; the filter only narrows the delta.
+ * This used to fake transparency: a feathered radial aperture plus a gentle
+ * contrast() that pulled the near-black surround down toward the page's own
+ * near-black, so the capture appeared to float with no box. That illusion was
+ * only ever available because the page WAS near-black. It is not recoverable
+ * on a paper ground: there is no colour that feathers cleanly between the
+ * capture's surround and #f5f0e8, so a feather there is just a grey smudge
+ * around a dark rectangle.
+ *
+ * So the box stops being hidden and starts being the point. The capture reads
+ * as a dark object photographed on the sheet, which is exactly what --device
+ * and --bezel already say a screenshot is, and what keeps the case-study
+ * diagrams legible as the page's only LINE DRAWINGS.
+ *
+ * Rejected on the way here: mix-blend-mode: screen. The montages contain
+ * genuinely-dark screens (that is why the old contrast() was capped at 1.06),
+ * and screen() over paper would erase those along with the surround.
  *
  * "Lazyload" here is preload="none" + an IntersectionObserver play-gate: the
  * file never touches the LCP path and only decodes while the hero is on screen.
  * Reduced motion renders the static `fallback` (the phone still) instead.
  */
-
-// Feathered apertures: ellipses nudged DOWN (centre ~55%) with a short
-// vertical radius, so a montage's dark top screens dissolve well before the
-// box edge (otherwise they form a hard block against the aurora) and the crop
-// never shows an edge. Two geometries, both tuned on the live heroes:
-// - portrait crops (Spendee's centre-column montage) want a narrow ellipse that
-//   melts the fanned side-screens early;
-// - landscape apertures (Decathlon's carousel, Voyager's isometric flow) show
-//   the WHOLE composition, so the ellipse widens to keep the outermost screens
-//   present and only feather the true edges.
-const PORTRAIT_MASK =
-  "radial-gradient(58% 74% at 50% 56%, #000 26%, transparent 88%)";
-// closest-side reaches EXACTLY zero at every box edge, so full-frame
-// compositions (whose content bleeds to the video's own edges) can never leave
-// a residual straight line where the aperture ends: the geometry guarantees it.
-const LANDSCAPE_MASK =
-  "radial-gradient(closest-side at 50% 52%, #000 64%, transparent 100%)";
-
-// "9 / 16" | "4/3" → numeric ratio (NaN-safe: falls back to portrait).
-const ratioOf = (aspect: string): number => {
-  const [w, h] = aspect.split("/").map((n) => parseFloat(n));
-  return w > 0 && h > 0 ? w / h : 0;
-};
-
-// Narrows the surround-vs-page delta without crushing darks (see note above).
-const SURROUND_KNOCKOUT = "contrast(1.06) brightness(0.99)";
 
 interface HeroLoopVideoProps {
   /** H.264 MP4 source: plays in every browser, including Safari. */
@@ -135,8 +114,6 @@ export function HeroLoopVideo({
   // Reduced motion → the static still; no video mounted, no motion.
   if (reduced) return <>{fallback}</>;
 
-  const edgeMask = ratioOf(aspect) >= 1 ? LANDSCAPE_MASK : PORTRAIT_MASK;
-
   return (
     <div className={cn("hlv-stage relative", className)}>
       <div
@@ -146,12 +123,8 @@ export function HeroLoopVideo({
         onPointerLeave={handleTiltLeave}
       >
         <div
-          className="hlv-float relative w-full overflow-hidden"
-          style={{
-            aspectRatio: aspect,
-            WebkitMaskImage: edgeMask,
-            maskImage: edgeMask,
-          }}
+          className="hlv-float hlv-plate relative w-full overflow-hidden"
+          style={{ aspectRatio: aspect }}
         >
           <video
             ref={videoRef}
@@ -162,7 +135,6 @@ export function HeroLoopVideo({
             poster={poster}
             aria-label={alt}
             className="h-full w-full object-cover"
-            style={{ filter: SURROUND_KNOCKOUT }}
           >
             <source src={mp4} type="video/mp4" />
           </video>

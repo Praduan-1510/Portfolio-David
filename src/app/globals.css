@@ -13,33 +13,13 @@
 
 :root {
   /* ---- 1. Primitives (raw values) ---------------------------------- */
-  /* Near-black monochrome base (DESIGN_GUIDELINES.md §4). The site is
-     dark-first; the interface chrome carries NO colour: type and the fluid
-     background lead, and colour belongs to the projects. */
-  --black-950: #0a0a0b; /* primary background, near-black */
-  --offwhite-50: #f3f3f1; /* primary foreground */
-  --gray-400: #8c8c92; /* secondary text */
-  --gray-600: #55555c; /* DECORATIVE/non-text only (2.7:1 on bg, fails AA). Caption/mono label TEXT uses --muted. */
-  --surface-900: #141417; /* raised surface / cards on near-black */
+  /* The near-black set that used to live here (--black-950, --offwhite-50,
+     --gray-400, --gray-600, --surface-900) and the three framework-adjacent
+     project hues (--lime, --orange, --blue) are gone. The paper and ink
+     families below replace them; the project hues now live in exactly one
+     place each, their own .mdx frontmatter. --gray-600 and --white were
+     already dead: defined, never referenced. */
 
-  /* Project accents: the ONLY colour anywhere on the site. Applied per project
-     by remapping --accent inside that project's context (its work-index card and
-     its case-study route); never on the base chrome (DESIGN_GUIDELINES.md §4).
-     Tuned for AA legibility on the near-black base. */
-  --lime: #c9e94b; /* Spendee */
-  --orange: #f7a53b; /* Voyager */
-  --blue: #46b4f0; /* Decathlon */
-
-  /* Spectrum palette: the site's five signature hues. First used as the hero
-     wordmark's "counter" (the flaps cycle through these before settling to mono),
-     now the shared SIGNAL layer for structure + wayfinding: the scroll-progress
-     bar, the section-rail dots, numbered indices, and the hairline seams. Built
-     from the site's own colour language, the three project accents above (blue /
-     lime / amber) plus a cool violet and a warm rose, so it reads as one family
-     across a warm→cool sweep. Deliberately distinct from the two existing colour
-     roles: the neon-green INTERACTION signal and the per-project IDENTITY accents.
-     It only ever paints thin structural marks (lines, dots, small indices), never
-     a fill behind content, so colour still belongs to the work (Design.md §4). */
   /* COLLAPSED (was a five-hue violet→blue→lime→amber→rose sweep).
      Hue carrying position is rainbow-as-system: no printed thing has ever
      done it, and it was the loudest generated-UI signature on the site after
@@ -70,23 +50,13 @@
     var(--muted) 100%
   );
 
-  /* Signal: the one interaction colour. A vivid neon green used site-wide for
-     the live hover/affordance state (every card lights up to it) and for
-     "available / live" indicators. Distinct from the work-only project accents:
-     this is the colour of *interaction*, not of any single project. */
-  --neon-green: #39ff6a;
-  --neon-green-glow: rgba(57, 255, 106, 0.3);
-
-  --white: #ffffff;
+  /* --neon-green #39ff6a and --neon-green-glow are gone. Neon on near-black
+     was the single loudest generated-UI signature on this site, and the role
+     it filled (the one interaction colour) is now --signal below, in oxblood.
+     --white is gone too: it was defined and never referenced. */
 
   /* ------------------------------------------------------------------
-   * NEWSPRINT & OXBLOOD: the incoming palette. A two-ink press run on
-   * uncoated stock.
-   *
-   * Defined here alongside the near-black primitives above but NOT yet
-   * consumed: the semantic layer still points at the dark set, so this
-   * block changes nothing on screen. That is deliberate. It makes the
-   * colour decision reviewable as a plain hex diff before anything moves.
+   * NEWSPRINT & OXBLOOD. A two-ink press run on uncoated stock.
    *
    * The PAPER family is warm (hue ~41deg, the hue of newsprint). The INK
    * family is COOL at full strength (h_ab 258deg) and drifts WARM as it
@@ -167,40 +137,61 @@
   --rule-ink: linear-gradient(90deg, var(--ink-700) 0%, var(--ink-500) 46%, var(--ink-300) 100%);
 
   /* ---- 2. Semantic (role-based: components consume these) ---------- */
-  --bg: var(--black-950);
-  --fg: var(--offwhite-50);
-  --muted: var(--gray-400);
-  --surface: var(--surface-900); /* raised surfaces / cards */
-  --line: rgba(255, 255, 255, 0.1); /* hairlines, dividers (§4 `--line`) */
-  /* Base "accent" is MONOCHROME: the bright foreground. So focus rings, links,
-     and primary CTAs read as high-contrast white-on-near-black, and the chrome
-     stays colourless (§4). Per-project routes override --accent inline with the
-     project colour, so colour only ever appears alongside the work. */
-  --accent: var(--offwhite-50);
-  --accent-hover: #d8d8d2;
-  --on-accent: var(--black-950); /* text/icon on an accent fill */
+  --bg: var(--paper-50);
+  --fg: var(--ink-900);
+  --muted: var(--ink-500);
+  /* A raised panel is ink laid down at a percentage, not a second sheet: on
+     one press run there is only ever one paper. This also fixes the loading
+     skeletons, which were 1.076:1 against the near-black base. */
+  --surface: var(--paper-100);
+  --well: var(--paper-200); /* where a panel must recede further */
+  --lift: var(--paper-25); /* the hover ground of a --surface panel */
 
-  /* Interaction signal (consumed as `neon` / `shadow-neon` in Tailwind). Stays
-     constant across per-project routes: hover always reads neon green, so the
-     affordance language is consistent everywhere. */
-  --neon: var(--neon-green);
-  --neon-glow: var(--neon-green-glow);
+  --line: rgba(var(--ink-rgb), 0.18); /* hairlines, dividers (§4 `--line`) */
+  --line-strong: rgba(var(--ink-rgb), 0.3); /* rails, table rules, slab edges */
+
+  /* --accent is the GUEST SLOT. Case-study routes and project cards overwrite
+     it inline with the project's own ink (validated in
+     src/lib/content/work.ts), so colour still only ever appears alongside the
+     work. It DEFAULTS to oxblood so the base chrome speaks in the site's own
+     voice rather than in no voice at all. */
+  --accent: var(--oxblood-700);
+  --accent-hover: var(--oxblood-900);
+  /* Every accent is a dark ink now, so type on an accent fill is paper. */
+  --on-accent: var(--paper-50);
+
+  /* --signal is the CONSTANT a guest cannot take: focus, hover, live, the
+     current-section marker, the progress bar. Identical to the default accent
+     by design, but it survives the per-project inline --accent override, which
+     is the whole reason it exists as a separate token. */
+  --signal: var(--oxblood-700);
+  --signal-press: var(--oxblood-900);
+  /* A glow means nothing on paper, so hover LIFTS OFF THE SHEET instead: a
+     warm ink drop. Deliberately NOT a tinted oxblood halo, because a soft
+     coloured bloom is the exact tell this palette exists to remove. */
+  --signal-shadow: rgba(var(--ink-rgb), 0.2);
+
+  /* DEPRECATED aliases. Around fifty consumers still say `neon` /
+     `shadow-neon`, and the Tailwind boxShadow keys read these two names;
+     keeping them pointed at --signal means every one of those sites keeps
+     working verbatim and can be renamed mechanically later, instead of this
+     commit touching fifty files. */
+  --neon: var(--signal);
+  --neon-glow: var(--signal-shadow);
 
   /* Form status. These exist as their own roles because the contact form was
      borrowing the spectrum for "error" and the interaction signal for
      "success", and neither survives the spectrum collapse: a grey error
-     message is not an error message. Held at today's values on the
-     near-black base; they repoint to --ink-error / --ink-success with the
-     ground, where a deep red and a deep green are the legible pair. */
-  --error: #ff5e8f; /* the rose the form used to borrow, now owned outright */
-  --success: var(--neon-green);
+     message is not an error message. */
+  --error: var(--ink-error);
+  --success: var(--ink-success);
 
   /* ---- 3. Component (only where the semantic layer can't cover a need) -- */
-  /* Phone-frame device bezel/notch. Sits one step off --bg/--surface so a phone
-     reads as a raised device and its screen as a glass inset, even when the app
-     screen itself is near-black (e.g. Spendee). Single-sourced so it tracks the
-     base if that ever shifts. */
-  --bezel: #0b0b0d;
+  /* Screen well and phone notch. One step darker than --device so the notch
+     still reads as a cutout in the device body rather than a tab glued to it
+     (device/bezel = 1.196:1, matching the 1.09:1 the dark build carried).
+     --device, up in the primitives, is the device BODY. */
+  --bezel: #14171b;
 
   /* Reading measure: line length 60–75ch (DESIGN_GUIDELINES.md §5).
      NOTE: ch is the width of "0", ~30% wider than Inter's average glyph, so
@@ -212,6 +203,13 @@
      always run on the fallback. Defining it AT the fallback value changes
      nothing today and gives the rail a real token to tune. */
   --sp-6: 2rem;
+
+  /* Diagram rule ink, for the case-study plates. --line (0.18a) is tuned for
+     long container borders and reads as a smudge at connector length, and
+     --muted is a text colour; line work needs its own weight.
+     Composites #565758 over paper: 6.38 / 5.72 / 5.02, clears 3:1 on all
+     three grounds. */
+  --diagram-ink: color-mix(in srgb, var(--fg) 72%, transparent);
 
   /* ---- Motion tokens (DESIGN_GUIDELINES.md §7.2 / §7.3) ------------- */
   /* Easing: named curves; use these, not ad-hoc beziers. */
@@ -232,12 +230,33 @@
 }
 
 /*
- * The base IS dark now (DESIGN_GUIDELINES.md §4 dark-first), so [data-theme="dark"]
- * needs no remap: it simply inherits the near-black monochrome :root. The
+ * The base is PAPER now. [data-theme="dark"] still needs no remap: it never
+ * was a theme switch, and there is still no toggle anywhere in the app. The
  * attribute is kept in the markup (Hero, LogoMarquee, ProjectCard, case-study)
- * as an explicit semantic marker and as the hook for per-project --accent
- * overrides (set inline on the card / route), which layer over the monochrome base.
+ * purely as a semantic marker and as the hook for per-project --accent
+ * overrides set inline on the card or route.
  */
+
+/*
+ * Token island for the dark device chrome: browser bars, prototype toolbars
+ * and phone screen wells.
+ *
+ * These surfaces stay dark on a paper page on purpose, because a screenshot is
+ * a dark object photographed on the sheet. But everything inside them still
+ * asks for --fg, --muted, --line and --neon, and on #14171B those resolve to
+ * 1.07:1, 2.2:1, 1.01:1 and an oxblood that all but vanishes. Rather than
+ * rewrite every class in four components, the island re-points the semantic
+ * layer for the subtree, which is exactly the mechanism .reel-board already
+ * uses for the same kind of context shift.
+ */
+.chrome-dark {
+  --fg: var(--paper-50); /* 15.85:1 on --bezel */
+  --muted: #b0aaa1; /* 7.80:1 on --bezel, 6.52 on --device */
+  --line: rgba(245, 240, 232, 0.16); /* composites #383A3C */
+  --signal: #d08c6e; /* 6.56:1 on --bezel: oxblood read from the paper side */
+  --neon: var(--signal);
+  --on-accent: var(--bezel);
+}
 
 @layer components {
   /*
@@ -391,7 +410,12 @@
          not create a stacking context, so without this the ::before would drop
          behind the film layer instead of sitting between film and type. */
       isolation: isolate;
-      --muted: color-mix(in srgb, var(--fg) 58%, var(--gray-400));
+      /* The formula self-corrects across the flip: mixing toward --fg made
+         --muted BRIGHTER over a dark page and makes it DARKER over paper,
+         which is the right direction in both cases, because the film behind
+         it stayed dark. --gray-400 is gone, so the mix target is --ink-500,
+         the same value --muted already points at. */
+      --muted: color-mix(in srgb, var(--fg) 45%, var(--ink-500));
     }
     .reel-board::before {
       content: "";
@@ -440,7 +464,7 @@
        -webkit-text-fill-color must be reset explicitly, not just dropped:
        GSAP SplitText wraps each word in its own span and the old transparent
        value would inherit into them. */
-    color: var(--fg);
+    color: var(--signal);
     -webkit-text-fill-color: currentColor;
   }
   /*
@@ -472,7 +496,7 @@
 
 @layer base {
   html {
-    color-scheme: dark;
+    color-scheme: light;
     -webkit-text-size-adjust: 100%;
   }
 
@@ -487,14 +511,14 @@
 
   /* Visible focus using the accent, never remove without a clear replacement. */
   :focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--signal);
     outline-offset: 2px;
   }
 
   /* Selection in the system's voice: accent-tinted instead of UA blue, and it
      tracks per-project accent remaps automatically. */
   ::selection {
-    background: color-mix(in srgb, var(--accent) 30%, var(--bg));
+    background: color-mix(in srgb, var(--signal) 30%, var(--bg));
     color: var(--fg);
   }
 
@@ -1032,19 +1056,38 @@ html.lenis body {
   :root {
     color-scheme: light;
 
+    /* Still load-bearing after the repaint, and for a new reason: the screen
+       ground is a CREAM TINT (#f5f0e8). A printed page wants the stock's own
+       true white, so this block is no longer an inversion, it is a
+       de-tinting. */
     --bg: #ffffff;
-    --fg: #101012;
-    --muted: #4a4a52;
+    --fg: #181c20; /* the same ink family as screen, not a separate near-black */
+    --muted: #373f41; /* one step DENSER than screen muted: 9.5pt mono needs
+                         weight to survive ink spread. 10.77:1 on white. */
     --surface: #ffffff;
+    --well: #ffffff; /* without it a --well panel prints as a grey tint block */
+    --lift: #ffffff;
+    --device: #ffffff; /* without it every phone and browser body prints as a
+                          black slab: --device is a real dark object on screen */
     --bezel: #ffffff;
     --line: rgba(0, 0, 0, 0.22);
-    --accent: #101012;
-    --accent-hover: #101012;
+    --line-strong: rgba(0, 0, 0, 0.32);
+    --accent: #181c20;
+    --accent-hover: #181c20;
     --on-accent: #ffffff;
-    /* The neon interaction signal is a screen affordance: on paper it becomes
-       ink, so hover-coloured headings don't print as highlighter green. */
-    --neon: #101012;
+    /* The interaction signal is a screen affordance: on paper it becomes ink,
+       so hover-coloured headings don't print as oxblood.
+       --neon is `var(--signal)` at :root, so overriding --neon alone does NOT
+       reach --signal. Both are needed: two --signal consumers genuinely print
+       (the resume's register mark, and .text-spectrum on the home hero and
+       CurrentlyBoard, none of which carry print:hidden). */
+    --neon: #181c20;
     --neon-glow: transparent;
+    --signal: #181c20;
+    --signal-press: #181c20;
+    --signal-shadow: transparent;
+    --diagram-ink: #181c20; /* case-study plate line work prints as ink */
+    --rule-ink: none;
 
     --measure: 100%;
   }
@@ -1064,8 +1107,8 @@ html.lenis body {
      screen tint on white. A stylesheet declaration carrying !important beats an
      inline style that doesn't, so force it back to ink everywhere. */
   * {
-    --accent: #101012 !important;
-    --accent-hover: #101012 !important;
+    --accent: #181c20 !important;
+    --accent-hover: #181c20 !important;
   }
 
   /* Site chrome + anything explicitly marked as screen-only.

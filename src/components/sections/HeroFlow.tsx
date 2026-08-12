@@ -10,8 +10,16 @@ import { cn } from "@/lib/utils/cn";
  * so the rest of the frame isn't dead. Reduced motion holds the still.
  */
 
+/* The signal trace. Was five hard-coded project/spectrum hues in one string
+   (#2DD4BF, #C9E94B, #F7A53B, #46B4F0, #A98BFF): the single biggest bypass of
+   the token system on the site, and a rainbow at that.
+   It now runs the site's own two inks, oxblood into ochre and out to ink,
+   which is what a two-colour press run looks like when the plates are slightly
+   out of register. Literal hex rather than var() is deliberate here: this is a
+   painted artwork gradient, not chrome, and the values are stated once with
+   their token names beside them so a repaint finds them. */
 const TRACE_GRADIENT =
-  "linear-gradient(90deg, transparent 0%, #2DD4BF 12%, #C9E94B 32%, #F7A53B 52%, #46B4F0 72%, #A98BFF 88%, transparent 100%)";
+  "linear-gradient(90deg, transparent 0%, #7D352F 18%, #896824 44%, #6F561D 66%, #283035 86%, transparent 100%)"; /* oxblood-700, ochre-500, ochre-700, ink-700 */
 
 export function HeroFlow({ className }: { className?: string }) {
   return (
@@ -59,7 +67,9 @@ export function HeroFlow({ className }: { className?: string }) {
           width: "56%",
           height: "52%",
           background:
-            "radial-gradient(50% 50% at 50% 50%, color-mix(in srgb, #A98BFF 14%, transparent), transparent 70%)",
+            /* was #A98BFF at 14%: a violet bloom. Now the site's own oxblood,
+               dialled down, because a coloured bloom on paper is a smudge. */
+            "radial-gradient(50% 50% at 50% 50%, color-mix(in srgb, #7D352F 10%, transparent), transparent 70%)",
         }}
       />
     </div>

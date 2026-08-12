@@ -29,21 +29,31 @@ const config: Config = {
         fg: "var(--fg)",
         muted: "var(--muted)",
         surface: "var(--surface)",
-        bezel: "var(--bezel)", // component layer: phone-frame device body/notch
+        well: "var(--well)", // a panel that must recede further than --surface
+        lift: "var(--lift)", // the hover ground of a --surface panel
+        device: "var(--device)", // component layer: the device BODY
+        bezel: "var(--bezel)", // component layer: screen well + phone notch
         line: "var(--line)",
+        "line-strong": "var(--line-strong)", // rails, table rules, slab edges
         accent: {
           DEFAULT: "var(--accent)",
           hover: "var(--accent-hover)",
         },
         "on-accent": "var(--on-accent)",
-        // Interaction signal: the site-wide neon-green hover/affordance colour.
+        // The site's constant voice: focus, hover, live, current-section.
+        // A per-project accent cannot take it.
+        signal: "var(--signal)",
+        // DEPRECATED alias of `signal`, kept so ~50 existing `neon` utilities
+        // keep working. Rename mechanically, not in the repaint commits.
         neon: "var(--neon)",
       },
 
-      // Neon glow for card hovers (pairs with border-neon / the .card-neon class).
+      // Card hover. On paper a glow means nothing, so this lifts the panel off
+      // the sheet with an ink drop instead: a 1px signal rim plus a soft
+      // shadow, deliberately not a tinted halo.
       boxShadow: {
-        neon: "0 0 0 1px var(--neon), 0 0 34px -8px var(--neon-glow)",
-        "neon-soft": "0 0 28px -10px var(--neon-glow)",
+        neon: "0 0 0 1px var(--neon), 0 18px 34px -18px var(--neon-glow)",
+        "neon-soft": "0 14px 28px -16px var(--neon-glow)",
       },
 
       // ---- Fluid type scale (DESIGN_GUIDELINES.md §5) ----

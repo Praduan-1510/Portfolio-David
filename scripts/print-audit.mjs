@@ -91,6 +91,13 @@ for (const route of ROUTES) {
       accent: article
         ? getComputedStyle(article).getPropertyValue("--accent").trim()
         : getComputedStyle(document.documentElement).getPropertyValue("--accent").trim(),
+      // The ink the print block collapses everything to. Read it rather than
+      // hardcoding it: this assertion is about the RELATIONSHIP (a project
+      // accent must not survive into print), and a literal here goes stale the
+      // next time the palette moves, reporting a false failure.
+      printInk: getComputedStyle(document.documentElement)
+        .getPropertyValue("--fg")
+        .trim(),
       bodyColor: getComputedStyle(document.body).color,
     };
   });
@@ -108,8 +115,8 @@ for (const route of ROUTES) {
     bad.push(`in-content <header> hidden: ${state.contentHeadersShown}/${state.contentHeaders} shown`);
   if (state.contentFooters !== state.contentFootersShown)
     bad.push(`in-content <footer> hidden: ${state.contentFootersShown}/${state.contentFooters} shown`);
-  if (state.accent && state.accent.toLowerCase() !== "#101012")
-    bad.push(`--accent not ink: ${state.accent}`);
+  if (state.accent && state.accent.toLowerCase() !== state.printInk.toLowerCase())
+    bad.push(`--accent not ink: ${state.accent} (expected ${state.printInk})`);
 
   console.log(
     `${route.padEnd(16)} text=${String(state.visibleTextEls).padStart(3)} ` +

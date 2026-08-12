@@ -28,10 +28,10 @@ export async function generateImageMetadata({
   return [{ id: "card", alt, size, contentType }];
 }
 
-const BG = "#0A0A0B";
-const FG = "#F3F3F1";
-const MUTED = "#8C8C92";
-const LINE = "rgba(255,255,255,0.10)";
+const BG = "#F5F0E8";
+const FG = "#181C20";
+const MUTED = "#4F4E44";
+const LINE = "rgba(24,28,32,0.18)";
 // Default accent if a project omits one: the off-white fg, so the rule reads
 // as a neutral hairline rather than a missing colour.
 const DEFAULT_ACCENT = FG;

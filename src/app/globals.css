@@ -444,7 +444,7 @@
 
   /* Landscape: two camps, and the gap that must stay BETWEEN them at every
      width, including stacked. */
-  .dgm-landscape { display: grid; gap: var(--dgm-gap); align-items: center; }
+  .dgm-landscape { display: grid; gap: var(--dgm-gap); align-items: start; }
   @media (min-width: 1280px) {
     .dgm-landscape { grid-template-columns: 1fr 0.8fr 1fr; }
   }
@@ -462,13 +462,28 @@
   }
   .dgm-gap {
     position: relative;
+    align-self: stretch;
     border-inline: 1px solid var(--diagram-ink);
     padding: var(--space-5, 1.5rem) var(--space-4, 1rem);
     text-align: center;
   }
-  .dgm-lean { position: absolute; top: 50%; color: var(--diagram-ink); }
-  .dgm-lean--right { inset-inline-end: calc(var(--dgm-gap) / -2); translate: 50% -50%; }
-  .dgm-lean--left { inset-inline-start: calc(var(--dgm-gap) / -2); translate: -50% -50%; }
+  /* The leans sit on the seam's two outer edges, half a gutter out, pointing
+     in. A flex SPINE spanning the gap places them, rather than a pair of
+     per-side logical insets: an absolutely-positioned box with only one inset
+     specified falls back to its static position on the other axis, which
+     silently parks both chevrons on the same edge. A spine cannot do that. */
+  .dgm-gap__leans {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+  .dgm-gap__lean-slot { display: flex; align-items: center; }
+  .dgm-gap__lean-slot:first-child { margin-inline-start: calc(var(--dgm-gap) / -2 - 5px); }
+  .dgm-gap__lean-slot:last-child { margin-inline-end: calc(var(--dgm-gap) / -2 - 5px); }
+  .dgm-lean { color: var(--diagram-ink); }
   @media (max-width: 1279px) {
     .dgm-lean { display: none; }
     .dgm-gap { border-inline: 0; border-block: 1px solid var(--diagram-ink); }

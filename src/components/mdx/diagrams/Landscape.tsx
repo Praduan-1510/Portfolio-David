@@ -106,6 +106,18 @@ export function Landscape({
         {camps[0] && <Camp p={camps[0].p} side="left" />}
         {g && (
           <div className={`dgm-gap${g.tone === "intent" ? " dgm-gap--intent" : ""}`}>
+            {/* The leans hang off the SEAM, not off the camps: the claim is
+                "both sides are walking toward this", so the arrows belong to
+                the thing being walked toward. Rendered only where the camp
+                actually declared lean, because the copy has to say so. */}
+            <span className="dgm-gap__leans" aria-hidden="true">
+              <span className="dgm-gap__lean-slot">
+                {camps[0]?.p.lean && <Lean dir="right" />}
+              </span>
+              <span className="dgm-gap__lean-slot">
+                {camps[1]?.p.lean && <Lean dir="left" />}
+              </span>
+            </span>
             <span className="dgm-gap__label">{g.label}</span>
             <ul className="dgm-gap__items">
               {occupants.map((n) => (
@@ -130,11 +142,13 @@ export function Landscape({
   );
 }
 
+/* Label, then items, then note. The note goes BELOW the stack, not between
+   label and items, so two camps whose notes wrap to different line counts
+   still start their boxes on the same line. */
 function Camp({ p, side }: { p: LandscapeCampProps; side: "left" | "right" }) {
   return (
     <div className={`dgm-camp dgm-camp--${side}`}>
       <span className="dgm-camp__label">{p.label}</span>
-      {p.note && <span className="dgm-camp__note">{p.note}</span>}
       <ul className="dgm-camp__items">
         {kids(p.children).map((n) => (
           <li key={n.label} className="dgm-cell">
@@ -145,7 +159,7 @@ function Camp({ p, side }: { p: LandscapeCampProps; side: "left" | "right" }) {
           </li>
         ))}
       </ul>
-      {p.lean && <Lean dir={side === "left" ? "right" : "left"} />}
+      {p.note && <span className="dgm-camp__note">{p.note}</span>}
     </div>
   );
 }

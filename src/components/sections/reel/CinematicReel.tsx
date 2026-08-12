@@ -16,6 +16,24 @@ import { FRAME_COUNT, framePath, createFrameLoader } from "./frames";
 import { drawImageCover } from "@/lib/canvas/drawCover";
 
 /*
+ * Film grade. The 40 frames are a colour capture: a black cyclorama, a white
+ * grid, a teal key light. On a paper ground a colour clip reads as "a video
+ * embedded in a page"; graded to monochrome it reads as a PHOTOGRAPHIC PLATE
+ * printed on the stock, which is the one thing on the page allowed to be a
+ * photograph (the case-study diagrams are line drawings, and a page carrying
+ * two kinds of drawing and no photograph loses the diagram layer).
+ *
+ * ONE constant, deliberately: the grade has to land on the canvas draw path
+ * AND on the reduced-motion <img>, which are different elements in different
+ * layers. Splitting them into two literals is how they silently drift apart.
+ *
+ * Honest limit: this is a mitigation, not a fix. The frames themselves are
+ * still the aesthetic the review objected to, and no token or filter changes
+ * a pixel of what was shot.
+ */
+const FILM_GRADE = "grayscale(1) contrast(1.06) brightness(1.04)";
+
+/*
  * The cinematic reel: the film that IS the hero's backdrop and carries it
  * into the second beat.
  *
@@ -120,6 +138,10 @@ export function CinematicReel() {
       const img = i >= 0 ? loader.img(i) : undefined;
       if (!img || i === lastDrawn) return;
       lastDrawn = i;
+      // Re-applied per draw, not once at setup: assigning canvas.width/height
+      // in size() resets the whole 2D context state, filter included, so a
+      // setup-time assignment silently drops on the first resize.
+      ctx.filter = FILM_GRADE;
       drawImageCover(ctx, img, canvas.clientWidth, canvas.clientHeight, 0.5, 0.42);
       if (!shown) {
         shown = true;
@@ -261,6 +283,10 @@ export function CinematicReel() {
           alt="Praduan facing the camera, then turning away, in front of a dark gridded backdrop"
           loading="lazy"
           decoding="async"
+          // Same grade as the canvas path. This element IS the entire visual
+          // under reduced motion, so leaving it ungraded ships two different
+          // films to two different audiences.
+          style={{ filter: FILM_GRADE }}
           className="block w-full object-cover motion-safe:invisible motion-safe:absolute motion-safe:inset-0 motion-safe:h-full"
         />
         {/* Film layer: canvas frames, reading scrim, grain, veil. Visible

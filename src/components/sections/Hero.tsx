@@ -54,11 +54,9 @@ export function Hero() {
           visible shade-step across the panel during the handoff. */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 opacity-60 motion-safe:lg:hidden"
+        className="blueprint-dots absolute inset-0 -z-10 opacity-60 motion-safe:lg:hidden"
         style={{
-          backgroundImage: "radial-gradient(currentColor 0.5px, transparent 0.5px)",
           backgroundSize: "22px 22px",
-          color: "rgba(255,255,255,0.045)",
           maskImage:
             "radial-gradient(120% 100% at 30% 40%, #000 0%, transparent 78%)",
           WebkitMaskImage:
@@ -197,7 +195,7 @@ export function Hero() {
                 href="/contact"
                 variant="secondary"
                 size="lg"
-                className="w-full bg-white/[0.04] hover:bg-white/[0.07] sm:w-auto"
+                className="w-full bg-[color:color-mix(in_srgb,var(--fg)_4%,transparent)] hover:bg-[color:color-mix(in_srgb,var(--fg)_7%,transparent)] sm:w-auto"
               >
                 Get in touch
               </Button>

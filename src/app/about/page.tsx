@@ -529,13 +529,8 @@ export default function About() {
         >
           <div
             aria-hidden="true"
-            className="absolute inset-0 -z-10 opacity-50"
-            style={{
-              backgroundImage:
-                "radial-gradient(currentColor 0.5px, transparent 0.5px)",
-              backgroundSize: "18px 18px",
-              color: "rgba(255,255,255,0.045)",
-            }}
+            className="blueprint-dots absolute inset-0 -z-10 opacity-50"
+            style={{ backgroundSize: "18px 18px" }}
           />
           <Text as="h2" variant="display-l" className="max-w-[18ch] font-display">
             Have something worth building?

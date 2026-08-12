@@ -82,7 +82,7 @@ export default function Contact() {
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(60% 70% at 18% 24%, rgba(255,255,255,0.06), transparent 70%), radial-gradient(46% 58% at 86% 84%, rgba(255,255,255,0.04), transparent 72%)",
+            "radial-gradient(60% 70% at 18% 24%, color-mix(in srgb, var(--fg) 6%, transparent), transparent 70%), radial-gradient(46% 58% at 86% 84%, color-mix(in srgb, var(--fg) 4%, transparent), transparent 72%)",
         }}
       />
       {/* Spectrum ember: the closing page still speaks the aurora. */}

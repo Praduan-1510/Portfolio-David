@@ -535,7 +535,7 @@ export default async function CaseStudy({
                       alt={`${meta.title}, cover screen`}
                       sizes="18rem"
                       imgClassName="object-top"
-                      className="shadow-[0_44px_100px_-32px_rgba(0,0,0,0.92)]"
+                      className="shadow-[0_44px_100px_-32px_rgba(var(--ink-rgb),0.92)]"
                     />
                   </Parallax>
                 </div>

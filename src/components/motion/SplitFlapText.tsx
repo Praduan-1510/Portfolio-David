@@ -269,7 +269,10 @@ function SplitFlapChar({
         transition: `background-color ${durations.fast}s ${cssEasings.outQuad}`,
       }}
     >
-      <div className="pointer-events-none absolute inset-x-0 top-1/2 z-10 h-[1px] bg-black/20" />
+      {/* The hinge seam across the middle of a flap. Ink, not "black": on a
+          paper ground the flap face is stock and the seam still has to be the
+          darkest thing on it. */}
+      <div className="pointer-events-none absolute inset-x-0 top-1/2 z-10 h-[1px] bg-[color:color-mix(in_srgb,var(--ink-900)_20%,transparent)]" />
 
       <div className="absolute inset-x-0 top-0 bottom-1/2 flex items-end justify-center overflow-hidden">
         <span

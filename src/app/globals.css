@@ -248,7 +248,24 @@
     inset: 0;
     z-index: -10;
     opacity: 0.5;
-    color: rgba(255, 255, 255, 0.05);
+    /* Ground-relative, not a white literal: on the near-black base --fg is the
+       off-white foreground so this stays a light texture, and on a paper ground
+       it becomes an ink texture without a second rule. The texture must always
+       be the FOREGROUND at low alpha, never "white". */
+    color: color-mix(in srgb, var(--fg) 5%, transparent);
+  }
+
+  /*
+   * Blueprint dot texture: the quiet drafting grid behind the home hero, the
+   * two CTA panels and the reel's left column. Was the same
+   * rgba(255,255,255,0.045) literal copy-pasted into four files; now one class,
+   * expressed against --fg so it inverts with the ground. Callers keep their
+   * own background-size (18px on the CTA panels, 22px on the hero and reel) and
+   * their own mask, which is what actually differs between them.
+   */
+  .blueprint-dots {
+    background-image: radial-gradient(currentColor 0.5px, transparent 0.5px);
+    color: color-mix(in srgb, var(--fg) 4.5%, transparent);
   }
   [data-motif="blueprint"] .cs-motif {
     background-image: radial-gradient(currentColor 0.5px, transparent 0.5px);

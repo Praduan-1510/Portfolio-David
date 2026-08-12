@@ -339,12 +339,9 @@ export function CinematicReel() {
           className="isolate absolute inset-y-0 left-0 hidden w-1/2 overflow-hidden bg-bg motion-safe:lg:block"
         >
           <div
-            className="absolute inset-0 -z-10 opacity-60"
+            className="blueprint-dots absolute inset-0 -z-10 opacity-60"
             style={{
-              backgroundImage:
-                "radial-gradient(currentColor 0.5px, transparent 0.5px)",
               backgroundSize: "22px 22px",
-              color: "rgba(255,255,255,0.045)",
               maskImage:
                 "radial-gradient(120% 100% at 30% 40%, #000 0%, transparent 78%)",
               WebkitMaskImage:

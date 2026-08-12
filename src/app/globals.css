@@ -40,20 +40,34 @@
      roles: the neon-green INTERACTION signal and the per-project IDENTITY accents.
      It only ever paints thin structural marks (lines, dots, small indices), never
      a fill behind content, so colour still belongs to the work (Design.md §4). */
-  --spectrum-violet: #a98bff;
-  --spectrum-blue: var(--blue);
-  --spectrum-lime: var(--lime);
-  --spectrum-amber: var(--orange);
-  --spectrum-rose: #ff5e8f;
-  /* The five stops as one reusable left→right gradient: progress bar, seams,
-     and lit edges all read from this so the sweep is identical everywhere. */
+  /* COLLAPSED (was a five-hue violet→blue→lime→amber→rose sweep).
+     Hue carrying position is rainbow-as-system: no printed thing has ever
+     done it, and it was the loudest generated-UI signature on the site after
+     the neon green. Structure is now expressed as INK WEIGHT, the way a
+     printed contents list runs heaviest at the top.
+
+     Defined ground-relative, as mixes of --fg into --muted, so one
+     expression reads as an off-white ramp on the near-black base and as an
+     ink ramp on paper. The names are kept for now purely so the 22
+     consumers and src/lib/spectrum.ts compile untouched; C7 renames them to
+     --ink-900…--ink-300 as the last commit of the repaint, alone, because
+     doing it early breaks thirteen components at once.
+
+     STRUCTURE is tonal. STATE is the one spot colour: --signal marks the
+     active, hovered and live item, and it arrives with the ground flip. */
+  --spectrum-violet: var(--fg);
+  --spectrum-blue: color-mix(in srgb, var(--fg) 78%, var(--muted));
+  --spectrum-lime: color-mix(in srgb, var(--fg) 55%, var(--muted));
+  --spectrum-amber: color-mix(in srgb, var(--fg) 30%, var(--muted));
+  --spectrum-rose: var(--muted);
+  /* The ramp as one reusable left→right gradient: progress bar, seams and lit
+     edges all read from this so the sweep is identical everywhere. A rule
+     that runs out of ink, which is a real printing artefact. */
   --spectrum-gradient: linear-gradient(
     90deg,
-    var(--spectrum-violet) 0%,
-    var(--spectrum-blue) 28%,
-    var(--spectrum-lime) 52%,
-    var(--spectrum-amber) 76%,
-    var(--spectrum-rose) 100%
+    var(--fg) 0%,
+    color-mix(in srgb, var(--fg) 55%, var(--muted)) 52%,
+    var(--muted) 100%
   );
 
   /* Signal: the one interaction colour. A vivid neon green used site-wide for
@@ -127,13 +141,15 @@
   --ochre-500: #896824; /* graphic stroke / mark: 4.55 / 4.08 / 3.58 */
   --ochre-700: #6f561d; /* text-safe ochre: 6.12 / 5.48 / 4.81 */
 
-  /* Status. --error is hotter and half again more saturated than oxblood
-     (hsl 10/72% vs 4/45%, dE 27.8) so a validation message can never be
-     read as the site's own voice. --success exists because the contact
-     form paints its confirmation tick in --neon, which would otherwise
-     render the success state in oxblood red. */
-  --error: #a3311b; /* 6.15 / 5.51 / 4.83 */
-  --success: #1d6340; /* 6.36 / 5.70 / 5.00 */
+  /* Status inks, for the paper ground. --ink-error is hotter and half again
+     more saturated than oxblood (hsl 10/72% vs 4/45%, dE 27.8) so a
+     validation message can never be read as the site's own voice.
+     --ink-success exists because the contact form paints its confirmation
+     tick in --neon, which would otherwise render the success state in
+     oxblood red. Primitives: the semantic --error / --success below point
+     at these only once the ground flips. */
+  --ink-error: #a3311b; /* 6.15 / 5.51 / 4.83 */
+  --ink-success: #1d6340; /* 6.36 / 5.70 / 5.00 */
 
   /* A screenshot stays a DARK OBJECT PHOTOGRAPHED ON THE PAGE, not a line
      drawing, because the incoming case-study diagrams ARE line drawings and
@@ -169,6 +185,15 @@
      affordance language is consistent everywhere. */
   --neon: var(--neon-green);
   --neon-glow: var(--neon-green-glow);
+
+  /* Form status. These exist as their own roles because the contact form was
+     borrowing the spectrum for "error" and the interaction signal for
+     "success", and neither survives the spectrum collapse: a grey error
+     message is not an error message. Held at today's values on the
+     near-black base; they repoint to --ink-error / --ink-success with the
+     ground, where a deep red and a deep green are the legible pair. */
+  --error: #ff5e8f; /* the rose the form used to borrow, now owned outright */
+  --success: var(--neon-green);
 
   /* ---- 3. Component (only where the semantic layer can't cover a need) -- */
   /* Phone-frame device bezel/notch. Sits one step off --bg/--surface so a phone
@@ -406,20 +431,17 @@
    * background-clip:text is unsupported.
    */
   .text-spectrum {
-    color: var(--spectrum-violet);
-  }
-  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
-    .text-spectrum {
-      background-image: linear-gradient(
-        100deg,
-        var(--spectrum-violet) 0%,
-        var(--spectrum-blue) 100%
-      );
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      color: transparent;
-    }
+    /* Was a violet→blue gradient clipped to the glyphs. Gradient-clipped
+       display type is a generated-UI tell on its own, so the phrase is a
+       solid now. It is deliberately flat for the moment: with the ground
+       flip this becomes var(--signal), the site's oxblood, and the emphasis
+       comes back as the second ink of a two-ink press run rather than as a
+       colour effect.
+       -webkit-text-fill-color must be reset explicitly, not just dropped:
+       GSAP SplitText wraps each word in its own span and the old transparent
+       value would inherit into them. */
+    color: var(--fg);
+    -webkit-text-fill-color: currentColor;
   }
   /*
    * Forced-colors / Windows High Contrast strips the gradient background-image

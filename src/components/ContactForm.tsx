@@ -14,8 +14,12 @@ import { initialContactState, ENQUIRY_TYPES } from "@/app/actions/contact-schema
  *
  * Styled to the site tokens (DESIGN_GUIDELINES.md §4–6): mono caption labels,
  * hairline `border-line` underline fields that brighten to `fg` on focus, the
- * shared `Button` primitive for submit, and the in-system `--spectrum-rose` hue
- * for errors: one instrument language, no foreign colours or new tokens.
+ * shared `Button` primitive for submit, and the semantic `--error` / `--success`
+ * roles for validation state: one instrument language, no foreign colours.
+ *
+ * Those two roles exist because this form used to borrow the spectrum for
+ * "error" and the interaction signal for "success". Neither survives the
+ * spectrum collapse, and a grey error message is not an error message.
  */
 
 const label =
@@ -30,7 +34,7 @@ const field =
   "focus:border-fg focus:outline-none focus:ring-0 transition-colors duration-base ease-out-quad";
 
 const errorText =
-  "mt-space-2 flex items-center gap-space-2 text-caption text-[color:var(--spectrum-rose)]";
+  "mt-space-2 flex items-center gap-space-2 text-caption text-[color:var(--error)]";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -58,7 +62,7 @@ function FieldError({ id, children }: { id: string; children?: string }) {
   if (!children) return null;
   return (
     <p id={id} className={errorText}>
-      <span aria-hidden className="inline-block size-[5px] shrink-0 rounded-full bg-[color:var(--spectrum-rose)]" />
+      <span aria-hidden className="inline-block size-[5px] shrink-0 rounded-full bg-[color:var(--error)]" />
       {children}
     </p>
   );
@@ -91,7 +95,7 @@ export default function ContactForm() {
         <div className="flex items-start gap-space-4 py-space-4">
           <span
             aria-hidden
-            className="mt-[2px] inline-flex size-space-6 shrink-0 items-center justify-center rounded-full border border-neon text-neon"
+            className="mt-[2px] inline-flex size-space-6 shrink-0 items-center justify-center rounded-full border border-[color:var(--success)] text-[color:var(--success)]"
           >
             <Check className="size-4" />
           </span>
@@ -194,8 +198,8 @@ export default function ContactForm() {
           {state.status === "error" &&
             state.message &&
             !Object.keys(state.errors ?? {}).length && (
-              <p className="flex items-center gap-space-2 text-caption text-[color:var(--spectrum-rose)]">
-                <span aria-hidden className="inline-block size-[5px] shrink-0 rounded-full bg-[color:var(--spectrum-rose)]" />
+              <p className="flex items-center gap-space-2 text-caption text-[color:var(--error)]">
+                <span aria-hidden className="inline-block size-[5px] shrink-0 rounded-full bg-[color:var(--error)]" />
                 {state.message}
               </p>
             )}

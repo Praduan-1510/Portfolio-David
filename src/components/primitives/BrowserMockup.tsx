@@ -190,7 +190,7 @@ export function BrowserMockup({
         data-boot={runBoot ? "" : undefined}
         data-variant={hero && big ? "big" : undefined}
         className={cn(
-          "group/bm relative w-full overflow-hidden rounded-[12px] border border-white/12 bg-surface p-[6px]",
+          "group/bm relative w-full overflow-hidden rounded-[12px] border border-[color:color-mix(in_srgb,var(--fg)_12%,transparent)] bg-device p-[6px]",
           hero
             ? "browser-slab"
             : "shadow-[0_24px_60px_-26px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.06)]",

@@ -1,25 +1,28 @@
 import { cn } from "@/lib/utils/cn";
 
 /*
- * Spectrum ember: a coal of the home hero's aurora, carried to every route so
- * the identity survives past the first viewport. Pure CSS (two/three radial
- * blooms in the same color-mix recipe as the hero Fallback), decorative,
- * pointer-events:none, zero runtime cost. Each surface tunes temperature via
- * `hues`; "accent" blends the route's --accent with its spectrum neighbours so
- * case-study heroes read as "the aurora, tuned to this project".
+ * The ember: a warm coal behind the content, carried to every route so the
+ * identity survives past the first viewport. Pure CSS (two radial blooms in
+ * one color-mix recipe), decorative, pointer-events:none, zero runtime cost.
+ *
+ * Its vocabulary used to be the five-hue spectrum, which meant an ember could
+ * be violet on one route and lime on the next for no stated reason. That is
+ * gone. There are exactly TWO temperatures now, because the palette has
+ * exactly two things colour is allowed to mean:
+ *   "signal"  the site's own voice (vermilion). The default.
+ *   "accent"  the route's guest colour, inside a project's own context.
+ * A second, dimmer bloom of the same colour gives the coal its depth; it is
+ * never a second HUE.
  *
  * Dosage: ONE ember per viewport, always behind content (-z), always subtle:
  * it's an ember, not a second hero.
  */
 
-type Hue = "violet" | "blue" | "lime" | "amber" | "rose" | "accent";
+type Hue = "signal" | "accent";
 
-const HUE_VAR: Record<Exclude<Hue, "accent">, string> = {
-  violet: "var(--spectrum-violet)",
-  blue: "var(--spectrum-blue)",
-  lime: "var(--spectrum-lime)",
-  amber: "var(--spectrum-amber)",
-  rose: "var(--spectrum-rose)",
+const HUE_VAR: Record<Hue, string> = {
+  signal: "var(--signal)",
+  accent: "var(--accent)",
 };
 
 const POSITIONS: Record<string, [string, string]> = {
@@ -31,8 +34,8 @@ const POSITIONS: Record<string, [string, string]> = {
 };
 
 interface AuroraEmberProps {
-  /** One or two hues; "accent" uses the route's accent + a violet neighbour. */
-  hues?: Hue[];
+  /** The ember's temperature: the site's voice, or the route's guest colour. */
+  hue?: Hue;
   position?: keyof typeof POSITIONS;
   /** Peak bloom opacity 0–1 (the ember's temperature). */
   intensity?: number;
@@ -40,16 +43,13 @@ interface AuroraEmberProps {
 }
 
 export function AuroraEmber({
-  hues = ["violet", "blue"],
+  hue = "signal",
   position = "top-right",
   intensity = 0.16,
   className,
 }: AuroraEmberProps) {
   const [pos1, pos2] = POSITIONS[position];
-  const c1 =
-    hues[0] === "accent" ? "var(--accent)" : HUE_VAR[hues[0] ?? "violet"];
-  const second = hues[1] ?? (hues[0] === "accent" ? "violet" : "blue");
-  const c2 = second === "accent" ? "var(--accent)" : HUE_VAR[second];
+  const c = HUE_VAR[hue];
   const a1 = Math.round(intensity * 100);
   const a2 = Math.round(intensity * 62);
 
@@ -59,8 +59,8 @@ export function AuroraEmber({
       className={cn("pointer-events-none absolute inset-0 -z-10", className)}
       style={{
         background: [
-          `radial-gradient(46% 42% at ${pos1}, color-mix(in srgb, ${c1} ${a1}%, transparent), transparent 72%)`,
-          `radial-gradient(52% 48% at ${pos2}, color-mix(in srgb, ${c2} ${a2}%, transparent), transparent 74%)`,
+          `radial-gradient(46% 42% at ${pos1}, color-mix(in srgb, ${c} ${a1}%, transparent), transparent 72%)`,
+          `radial-gradient(52% 48% at ${pos2}, color-mix(in srgb, ${c} ${a2}%, transparent), transparent 74%)`,
         ].join(", "),
       }}
     />

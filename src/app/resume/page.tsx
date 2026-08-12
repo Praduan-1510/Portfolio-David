@@ -56,8 +56,8 @@ export const metadata: Metadata = {
  * specification sheet rather than a page: a letterhead masthead over a ruled
  * ledger, where each section's mono index + label sits in a sticky left rail and
  * the content runs in a single measure on the right. Facts sit on hairlines,
- * dates hang right in mono, and the only colour is the spectrum on the section
- * indices: the site's structural signal layer, never a fill.
+ * dates hang right in mono, and the section indices carry the tonal ink ramp:
+ * the site's structural signal layer, weight not hue, and never a fill.
  *
  * It's also literally printable: `.resume-doc` hooks the @media print block in
  * globals.css, which remaps the semantic tokens to ink-on-paper, drops the site
@@ -178,7 +178,7 @@ export default function Resume() {
             this route IS a ledger. Decorative, aria-hidden via .cs-motif usage. */}
         <span aria-hidden="true" className="cs-motif" />
         <AuroraEmber
-          hues={["violet", "blue"]}
+          hue="signal"
           position="top-right"
           intensity={0.12}
           className="print:hidden"

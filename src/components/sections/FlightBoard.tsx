@@ -122,7 +122,7 @@ export function FlightBoard({ projects }: { projects: ProjectMeta[] }) {
             style={{ "--accent": projects[active]?.accent } as React.CSSProperties}
             aria-hidden="true"
           >
-            <AuroraEmber hues={["accent", "violet"]} position="top-right" intensity={0.28} />
+            <AuroraEmber hue="accent" position="top-right" intensity={0.28} />
             {projects.map((project, i) => {
               const isWeb = project.kind === "web";
               const on = active === i;

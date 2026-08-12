@@ -58,7 +58,7 @@ export function ProfileHero() {
 
       {/* Spectrum ember on the map horizon: the home aurora's coal carried to
           this route, so the grayscale HUD map stops reading as a different site. */}
-      <AuroraEmber hues={["violet", "blue"]} position="top-right" intensity={0.14} className="z-[1]" />
+      <AuroraEmber hue="signal" position="top-right" intensity={0.14} className="z-[1]" />
 
       {/* Layer 10, content. */}
       <Container className="relative z-10 flex min-h-[inherit] items-center py-space-9">

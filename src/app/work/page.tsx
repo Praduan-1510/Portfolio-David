@@ -36,7 +36,7 @@ export default function WorkPage() {
     <>
       <Container as="header" className="relative isolate pt-space-10 pb-space-6">
         {/* Spectrum ember: the identity's warm temperature on the index. */}
-        <AuroraEmber hues={["amber", "rose"]} position="top-right" intensity={0.12} />
+        <AuroraEmber hue="signal" position="top-right" intensity={0.12} />
         {/* Signature header beat: the page title reveals word by word. */}
         <TextReveal
           as="h1"

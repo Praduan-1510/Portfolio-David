@@ -43,7 +43,7 @@ export function PhoneFrame({
         // Device body: raised on --surface with a hairline rim, a top highlight
         // and a refined drop shadow so the phone reads as a physical object
         // lifted off the near-black page.
-        "relative aspect-[9/19.5] w-full overflow-hidden rounded-[2rem] border border-white/12 bg-surface p-[6px] shadow-[0_28px_70px_-24px_rgba(0,0,0,0.85),0_2px_8px_-2px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.1)]",
+        "relative aspect-[9/19.5] w-full overflow-hidden rounded-[2rem] border border-[color:color-mix(in_srgb,var(--fg)_12%,transparent)] bg-device p-[6px] shadow-[0_28px_70px_-24px_rgba(0,0,0,0.85),0_2px_8px_-2px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.1)]",
         className,
       )}
     >

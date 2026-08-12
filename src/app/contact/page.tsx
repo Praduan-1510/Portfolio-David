@@ -48,8 +48,8 @@ const BLOCKS = [
   },
 ];
 
-// Spectrum stops used as the spec indices: the site's structural signal layer
-// (thin marks only), warm→cool across the three readouts.
+// The ink ramp as the spec indices: the site's structural signal layer, thin
+// marks only. Weight carries position now, not hue.
 const INDEX_HUES = [
   "var(--spectrum-violet)",
   "var(--spectrum-blue)",
@@ -65,8 +65,8 @@ const INDEX_HUES = [
  * Atmosphere (§4/§7.8): soft monochrome radial glows + a spectrum aurora ember +
  * faint grain give the near-black depth; corner crosshair ticks frame the
  * section like an instrument. Decorative layers are aria-hidden / pointer-none;
- * the only hue is the site spectrum (indices, panel crown) and --spectrum-rose
- * for the form's validation errors. Server Component; the form is a client
+ * the indices and panel crown are the tonal ink ramp, and the only real colour
+ * is --error on the form's validation messages. Server Component; the form is a client
  * island (ContactForm).
  */
 export default function Contact() {
@@ -85,8 +85,8 @@ export default function Contact() {
             "radial-gradient(60% 70% at 18% 24%, color-mix(in srgb, var(--fg) 6%, transparent), transparent 70%), radial-gradient(46% 58% at 86% 84%, color-mix(in srgb, var(--fg) 4%, transparent), transparent 72%)",
         }}
       />
-      {/* Spectrum ember: the closing page still speaks the aurora. */}
-      <AuroraEmber hues={["violet", "rose"]} position="top-left" intensity={0.1} />
+      {/* The ember: the closing page still speaks in the site's voice. */}
+      <AuroraEmber hue="signal" position="top-left" intensity={0.1} />
 
       {/* Layer 1: faint film grain over the glows, beneath the content. */}
       <AnimatedNoise opacity={0.035} className="-z-10" />

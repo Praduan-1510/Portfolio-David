@@ -204,7 +204,7 @@ export default async function CaseStudy({
             montage leads instead of fighting a bloom behind it; other studies
             keep the standard top-right ember. */}
         <AuroraEmber
-          hues={["accent", "violet"]}
+          hue="accent"
           position={hasReel ? "top-left" : "top-right"}
           intensity={hasReel ? 0.14 : 0.24}
           // Reel heroes get a slow drift/breathe so the backdrop feels alive

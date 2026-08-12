@@ -65,6 +65,91 @@
 
   --white: #ffffff;
 
+  /* ------------------------------------------------------------------
+   * NEWSPRINT & OXBLOOD: the incoming palette. A two-ink press run on
+   * uncoated stock.
+   *
+   * Defined here alongside the near-black primitives above but NOT yet
+   * consumed: the semantic layer still points at the dark set, so this
+   * block changes nothing on screen. That is deliberate. It makes the
+   * colour decision reviewable as a plain hex diff before anything moves.
+   *
+   * The PAPER family is warm (hue ~41deg, the hue of newsprint). The INK
+   * family is COOL at full strength (h_ab 258deg) and drifts WARM as it
+   * thins (h_ab 89deg at the lightest step), because a thin ink film picks
+   * up the stock underneath it. That warm/cool tension between sheet and
+   * ink is what reads as printed matter; a single held hue angle is what
+   * reads as a generated ramp. Nothing below is a pure grey, a pure black,
+   * or a pure white.
+   *
+   * Colour roles: ink = type. paper = ground. OXBLOOD = the site's own
+   * voice (interaction, hover, focus, active, live), constant on every
+   * route. OCHRE = secondary, data, diagram fills. A PROJECT INK is a
+   * GUEST, borrowed only inside that project's article.
+   *
+   * Every ratio below was computed with the WCAG relative-luminance
+   * formula against the three grounds, in this order:
+   *   --paper-50 / --paper-100 / --paper-200.
+   * ------------------------------------------------------------------ */
+
+  /* PAPER: the stock. Four weights of one sheet. */
+  --paper-25: #f9f7f0; /* lifted stock: a panel that has come off the page (hover) */
+  --paper-50: #f5f0e8; /* THE GROUND. L* 95.0 */
+  --paper-100: #eae4d8; /* raised panel: ink laid down at a percentage, not a 2nd sheet */
+  --paper-200: #ded6c7; /* sunken well: deeper tint, skeletons, zebra rows */
+
+  /* INK: one press ink in five weights. This IS the wayfinding ramp that
+     replaces the five-hue spectrum (src/lib/spectrum.ts reads these five,
+     in this order); there is no second colour registry. Every step clears
+     AA 4.5:1 as TEXT on all three paper grounds, so a ramp step can carry
+     13px mono anywhere on the site. */
+  --ink-900: #181c20; /* type.      L* 10.0  h_ab 258  15.10 / 13.53 / 11.87 */
+  --ink-700: #283035; /*            L* 19.3  h_ab 245  11.83 / 10.60 / 9.30 */
+  --ink-600: #373f41; /*            L* 26.0  h_ab 220   9.49 / 8.51 / 7.46 */
+  --ink-500: #4f4e44; /* secondary. L* 33.0  h_ab 105   7.39 / 6.62 / 5.81 */
+  --ink-300: #625c50; /* tertiary.  L* 39.3  h_ab  89   5.85 / 5.24 / 4.60 */
+  /* --ink-900 as channels, for hairlines and ink shadows. rgba(var(--x),a)
+     is a LOWER support floor than the color-mix() this file already ships. */
+  --ink-rgb: 24, 28, 32;
+
+  /* OXBLOOD: the site's own voice. One deep spot colour held across every
+     route, so a visitor learns to read it as "the site talking" as distinct
+     from a project's guest ink. Separated from the closest project ink
+     (Voyager rust) by dE 23.9 normal vision, 24.5 deuteranopia. */
+  --oxblood-700: #7d352f; /* 7.64 / 6.85 / 6.01: safe as text AND as a fill */
+  --oxblood-900: #5d2521; /* 10.57 on paper: the pressed / active-darken step */
+
+  /* OCHRE: the secondary. Data, diagram fills, the second colour in a
+     figure. --ochre-500 is the DRAWING stroke and is darkened until it
+     clears the 3:1 non-text minimum on ALL THREE grounds, because the
+     diagram layer sits on panels as well as on the page. */
+  --ochre-300: #e0bf7a; /* FILL beneath ink type (ink-900 on it: 9.71) */
+  --ochre-500: #896824; /* graphic stroke / mark: 4.55 / 4.08 / 3.58 */
+  --ochre-700: #6f561d; /* text-safe ochre: 6.12 / 5.48 / 4.81 */
+
+  /* Status. --error is hotter and half again more saturated than oxblood
+     (hsl 10/72% vs 4/45%, dE 27.8) so a validation message can never be
+     read as the site's own voice. --success exists because the contact
+     form paints its confirmation tick in --neon, which would otherwise
+     render the success state in oxblood red. */
+  --error: #a3311b; /* 6.15 / 5.51 / 4.83 */
+  --success: #1d6340; /* 6.36 / 5.70 / 5.00 */
+
+  /* A screenshot stays a DARK OBJECT PHOTOGRAPHED ON THE PAGE, not a line
+     drawing, because the incoming case-study diagrams ARE line drawings and
+     a page carrying two kinds of drawing and no photograph loses the
+     diagram layer entirely. --device is the device BODY (PhoneFrame and
+     BrowserMockup both paint it with --surface today); --bezel stays the
+     screen well and notch, one step darker so the notch still reads as a
+     cutout (device/bezel = 1.196:1, the same relationship the dark build
+     carries at 1.09:1). */
+  --device: #23272b; /* 13.26:1 vs paper */
+
+  /* Structural thread. Replaces --spectrum-gradient for the consumers that
+     used it as a BACKGROUND: a rule that runs out of ink, which is a real
+     printing artefact, instead of a rainbow sweep, which is not. */
+  --rule-ink: linear-gradient(90deg, var(--ink-700) 0%, var(--ink-500) 46%, var(--ink-300) 100%);
+
   /* ---- 2. Semantic (role-based: components consume these) ---------- */
   --bg: var(--black-950);
   --fg: var(--offwhite-50);
@@ -96,6 +181,12 @@
      NOTE: ch is the width of "0", ~30% wider than Inter's average glyph, so
      68ch rendered ~90 real characters per line; 58ch lands ~70–75. */
   --measure: 58ch;
+
+  /* Marginalia rail gutter. Latent bug fix: the .cs-margin rule below reads
+     var(--sp-6, 2rem) and --sp-6 was never defined anywhere, so the rail has
+     always run on the fallback. Defining it AT the fallback value changes
+     nothing today and gives the rail a real token to tune. */
+  --sp-6: 2rem;
 
   /* ---- Motion tokens (DESIGN_GUIDELINES.md §7.2 / §7.3) ------------- */
   /* Easing: named curves; use these, not ad-hoc beziers. */

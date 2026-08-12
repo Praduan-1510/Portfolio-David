@@ -52,146 +52,122 @@
 
   /* --neon-green #39ff6a and --neon-green-glow are gone. Neon on near-black
      was the single loudest generated-UI signature on this site, and the role
-     it filled (the one interaction colour) is now --signal below, in oxblood.
+     it filled (the one interaction colour) is now --signal below, in vermilion.
      --white is gone too: it was defined and never referenced. */
 
   /* ------------------------------------------------------------------
-   * NEWSPRINT & OXBLOOD. A two-ink press run on uncoated stock.
+   * VERMILION ON GRAPHITE. One loud colour, and nothing else shouting.
    *
-   * The PAPER family is warm (hue ~41deg, the hue of newsprint). The INK
-   * family is COOL at full strength (h_ab 258deg) and drifts WARM as it
-   * thins (h_ab 89deg at the lightest step), because a thin ink film picks
-   * up the stock underneath it. That warm/cool tension between sheet and
-   * ink is what reads as printed matter; a single held hue angle is what
-   * reads as a generated ramp. Nothing below is a pure grey, a pure black,
-   * or a pure white.
+   * The review called the old palette AI scrap, and it was right about the
+   * symptoms but the cause was never "too much colour". It was three things:
+   * a neon green on a pure near-black, five hues promoted to STRUCTURE, and
+   * accents sitting within a few points of a framework's defaults. All three
+   * are gone. What replaces them is louder, not quieter.
    *
-   * Colour roles: ink = type. paper = ground. OXBLOOD = the site's own
-   * voice (interaction, hover, focus, active, live), constant on every
-   * route. OCHRE = secondary, data, diagram fills. A PROJECT INK is a
-   * GUEST, borrowed only inside that project's article.
+   * VERMILION is the site's whole voice: interaction, hover, focus, active,
+   * live. One saturated colour doing every job is the thing a generated
+   * palette never does, because generators hedge across three to five hues.
+   * Sampled off racing livery and safety signage, not off a colour wheel.
    *
-   * Every ratio below was computed with the WCAG relative-luminance
-   * formula against the three grounds, in this order:
-   *   --paper-50 / --paper-100 / --paper-200.
+   * The ground is a WARM graphite, not a blue-black and not #000. Every
+   * neutral here carries the same warm cast, which is what stops a dark page
+   * reading as "default dark theme".
+   *
+   * Ratios below are measured against --graphite-900 / --graphite-800.
    * ------------------------------------------------------------------ */
 
-  /* PAPER: the stock. Four weights of one sheet. */
-  --paper-25: #f9f7f0; /* lifted stock: a panel that has come off the page (hover) */
-  --paper-50: #f5f0e8; /* THE GROUND. L* 95.0 */
-  --paper-100: #eae4d8; /* raised panel: ink laid down at a percentage, not a 2nd sheet */
-  --paper-200: #ded6c7; /* sunken well: deeper tint, skeletons, zebra rows */
+  /* GROUND: warm graphite. Four steps of one material. */
+  --graphite-900: #14120f; /* THE GROUND */
+  --graphite-800: #201d19; /* raised panel / card */
+  --graphite-700: #2b2721; /* sunken well, zebra rows */
+  --graphite-950: #0b0a09; /* deeper than the ground: seams, wells, notch */
 
-  /* INK: one press ink in five weights. This IS the wayfinding ramp that
-     replaces the five-hue spectrum (src/lib/spectrum.ts reads these five,
-     in this order); there is no second colour registry. Every step clears
-     AA 4.5:1 as TEXT on all three paper grounds, so a ramp step can carry
-     13px mono anywhere on the site. */
-  --ink-900: #181c20; /* type.      L* 10.0  h_ab 258  15.10 / 13.53 / 11.87 */
-  --ink-700: #283035; /*            L* 19.3  h_ab 245  11.83 / 10.60 / 9.30 */
-  --ink-600: #373f41; /*            L* 26.0  h_ab 220   9.49 / 8.51 / 7.46 */
-  --ink-500: #4f4e44; /* secondary. L* 33.0  h_ab 105   7.39 / 6.62 / 5.81 */
-  --ink-300: #625c50; /* tertiary.  L* 39.3  h_ab  89   5.85 / 5.24 / 4.60 */
-  /* --ink-900 as channels, for hairlines and ink shadows. rgba(var(--x),a)
-     is a LOWER support floor than the color-mix() this file already ships. */
-  --ink-rgb: 24, 28, 32;
+  /* TYPE: bone, not white. A neutral grey-white is the single cheapest tell
+     that nobody chose the palette, so every step here is warm. */
+  --bone-50: #f4f1ea; /* type.       16.58 / 14.88 */
+  --bone-300: #c8c2b6; /*             11.29 / 10.13 */
+  --bone-500: #9b9489; /* secondary.   6.22 /  5.59 */
+  --bone-700: #6f6a61; /* tertiary.    3.36 /  3.02 - NON-TEXT only */
 
-  /* OXBLOOD: the site's own voice. One deep spot colour held across every
-     route, so a visitor learns to read it as "the site talking" as distinct
-     from a project's guest ink. Separated from the closest project ink
-     (Voyager rust) by dE 23.9 normal vision, 24.5 deuteranopia. */
-  --oxblood-700: #7d352f; /* 7.64 / 6.85 / 6.01: safe as text AND as a fill */
-  --oxblood-900: #5d2521; /* 10.57 on paper: the pressed / active-darken step */
+  /* VERMILION: the voice. */
+  --vermilion-500: #ff3b14; /* 5.24 / 4.71: clears AA as text and as a fill */
+  --vermilion-300: #ff6b45; /* 6.63 / 5.95: the ACTIVE step. On a dark ground a
+                               pressed state gets brighter, never darker. */
 
-  /* OCHRE: the secondary. Data, diagram fills, the second colour in a
-     figure. --ochre-500 is the DRAWING stroke and is darkened until it
-     clears the 3:1 non-text minimum on ALL THREE grounds, because the
-     diagram layer sits on panels as well as on the page. */
-  --ochre-300: #e0bf7a; /* FILL beneath ink type (ink-900 on it: 9.71) */
-  --ochre-500: #896824; /* graphic stroke / mark: 4.55 / 4.08 / 3.58 */
-  --ochre-700: #6f561d; /* text-safe ochre: 6.12 / 5.48 / 4.81 */
+  /* Shadow channel. Shadows on a dark ground are still black, so this stays
+     a true zero: it is the only place in the file that is not warm. */
+  --shadow-rgb: 0, 0, 0;
 
-  /* Status inks, for the paper ground. --ink-error is hotter and half again
-     more saturated than oxblood (hsl 10/72% vs 4/45%, dE 27.8) so a
-     validation message can never be read as the site's own voice.
-     --ink-success exists because the contact form paints its confirmation
-     tick in --neon, which would otherwise render the success state in
-     oxblood red. Primitives: the semantic --error / --success below point
-     at these only once the ground flips. */
-  --ink-error: #a3311b; /* 6.15 / 5.51 / 4.83 */
-  --ink-success: #1d6340; /* 6.36 / 5.70 / 5.00 */
+  /* Status. --error is a CRIMSON, deliberately 40+ dE from the vermilion
+     voice, because on a site whose signal colour is already a red an error
+     that is merely "red" is unreadable as an error. */
+  --status-error: #ff5470; /* 6.01 / 5.40, dE 42.8 from vermilion */
+  --status-success: #45c86b; /* 8.66 / 7.77 */
 
-  /* A screenshot stays a DARK OBJECT PHOTOGRAPHED ON THE PAGE, not a line
-     drawing, because the incoming case-study diagrams ARE line drawings and
-     a page carrying two kinds of drawing and no photograph loses the
-     diagram layer entirely. --device is the device BODY (PhoneFrame and
-     BrowserMockup both paint it with --surface today); --bezel stays the
-     screen well and notch, one step darker so the notch still reads as a
-     cutout (device/bezel = 1.196:1, the same relationship the dark build
-     carries at 1.09:1). */
-  --device: #23272b; /* 13.26:1 vs paper */
+  /* Device body. One step off the ground so a phone reads as a raised object
+     rather than a hole in the page; --bezel below is its screen well. */
+  --device: #1a1815;
 
   /* Structural thread. Replaces --spectrum-gradient for the consumers that
      used it as a BACKGROUND: a rule that runs out of ink, which is a real
      printing artefact, instead of a rainbow sweep, which is not. */
-  --rule-ink: linear-gradient(90deg, var(--ink-700) 0%, var(--ink-500) 46%, var(--ink-300) 100%);
+  --rule-ink: linear-gradient(90deg, var(--bone-300) 0%, var(--bone-500) 46%, var(--bone-700) 100%);
 
   /* ---- 2. Semantic (role-based: components consume these) ---------- */
-  --bg: var(--paper-50);
-  --fg: var(--ink-900);
-  --muted: var(--ink-500);
-  /* A raised panel is ink laid down at a percentage, not a second sheet: on
-     one press run there is only ever one paper. This also fixes the loading
-     skeletons, which were 1.076:1 against the near-black base. */
-  --surface: var(--paper-100);
-  --well: var(--paper-200); /* where a panel must recede further */
-  --lift: var(--paper-25); /* the hover ground of a --surface panel */
+  --bg: var(--graphite-900);
+  --fg: var(--bone-50);
+  --muted: var(--bone-500);
+  --surface: var(--graphite-800); /* raised surfaces / cards */
+  --well: var(--graphite-700); /* where a panel must recede further */
+  --lift: var(--graphite-700); /* the hover ground of a --surface panel */
 
-  --line: rgba(var(--ink-rgb), 0.18); /* hairlines, dividers (§4 `--line`) */
-  --line-strong: rgba(var(--ink-rgb), 0.3); /* rails, table rules, slab edges */
+  /* Hairlines read as light on a dark ground: the rule is a lit edge, not a
+     drawn line. Expressed against --fg so a future ground change inverts it
+     for free instead of stranding a white literal. */
+  --line: color-mix(in srgb, var(--fg) 12%, transparent);
+  --line-strong: color-mix(in srgb, var(--fg) 22%, transparent);
 
   /* --accent is the GUEST SLOT. Case-study routes and project cards overwrite
-     it inline with the project's own ink (validated in
+     it inline with the project's own colour (validated in
      src/lib/content/work.ts), so colour still only ever appears alongside the
-     work. It DEFAULTS to oxblood so the base chrome speaks in the site's own
-     voice rather than in no voice at all. */
-  --accent: var(--oxblood-700);
-  --accent-hover: var(--oxblood-900);
-  /* Every accent is a dark ink now, so type on an accent fill is paper. */
-  --on-accent: var(--paper-50);
+     work. It DEFAULTS to vermilion so the base chrome speaks in the site's
+     own voice rather than in no voice at all. */
+  --accent: var(--vermilion-500);
+  --accent-hover: var(--vermilion-300);
+  --on-accent: var(--graphite-900); /* 5.24:1 under vermilion */
 
   /* --signal is the CONSTANT a guest cannot take: focus, hover, live, the
      current-section marker, the progress bar. Identical to the default accent
      by design, but it survives the per-project inline --accent override, which
-     is the whole reason it exists as a separate token. */
-  --signal: var(--oxblood-700);
-  --signal-press: var(--oxblood-900);
-  /* A glow means nothing on paper, so hover LIFTS OFF THE SHEET instead: a
-     warm ink drop. Deliberately NOT a tinted oxblood halo, because a soft
-     coloured bloom is the exact tell this palette exists to remove. */
-  --signal-shadow: rgba(var(--ink-rgb), 0.2);
+     is the whole reason it exists as a separate token. Without it every case
+     study would have a differently-coloured focus ring. */
+  --signal: var(--vermilion-500);
+  --signal-press: var(--vermilion-300);
+  /* The hover lift. A vermilion halo at low alpha, which on a warm graphite
+     reads as the colour bleeding rather than as a neon glow: the old
+     rgba(57,255,106,0.3) bloom was the loudest single tell on the site. */
+  --signal-shadow: color-mix(in srgb, var(--vermilion-500) 34%, transparent);
 
   /* DEPRECATED aliases. Around fifty consumers still say `neon` /
      `shadow-neon`, and the Tailwind boxShadow keys read these two names;
      keeping them pointed at --signal means every one of those sites keeps
-     working verbatim and can be renamed mechanically later, instead of this
-     commit touching fifty files. */
+     working verbatim and can be renamed mechanically later. */
   --neon: var(--signal);
   --neon-glow: var(--signal-shadow);
 
   /* Form status. These exist as their own roles because the contact form was
      borrowing the spectrum for "error" and the interaction signal for
      "success", and neither survives the spectrum collapse: a grey error
-     message is not an error message. */
-  --error: var(--ink-error);
-  --success: var(--ink-success);
+     message is not an error message, and a vermilion one is indistinguishable
+     from the site simply talking. */
+  --error: var(--status-error);
+  --success: var(--status-success);
 
   /* ---- 3. Component (only where the semantic layer can't cover a need) -- */
-  /* Screen well and phone notch. One step darker than --device so the notch
-     still reads as a cutout in the device body rather than a tab glued to it
-     (device/bezel = 1.196:1, matching the 1.09:1 the dark build carried).
-     --device, up in the primitives, is the device BODY. */
-  --bezel: #14171b;
+  /* Screen well and phone notch: the deepest step, so the notch reads as a
+     cutout in the device body rather than a tab glued to it. --device, up in
+     the primitives, is the device BODY. */
+  --bezel: var(--graphite-950);
 
   /* Reading measure: line length 60–75ch (DESIGN_GUIDELINES.md §5).
      NOTE: ch is the width of "0", ~30% wider than Inter's average glyph, so
@@ -206,9 +182,7 @@
 
   /* Diagram rule ink, for the case-study plates. --line (0.18a) is tuned for
      long container borders and reads as a smudge at connector length, and
-     --muted is a text colour; line work needs its own weight.
-     Composites #565758 over paper: 6.38 / 5.72 / 5.02, clears 3:1 on all
-     three grounds. */
+     --muted is a text colour; line work needs its own weight. */
   --diagram-ink: color-mix(in srgb, var(--fg) 72%, transparent);
 
   /* ---- Motion tokens (DESIGN_GUIDELINES.md §7.2 / §7.3) ------------- */
@@ -236,27 +210,6 @@
  * purely as a semantic marker and as the hook for per-project --accent
  * overrides set inline on the card or route.
  */
-
-/*
- * Token island for the dark device chrome: browser bars, prototype toolbars
- * and phone screen wells.
- *
- * These surfaces stay dark on a paper page on purpose, because a screenshot is
- * a dark object photographed on the sheet. But everything inside them still
- * asks for --fg, --muted, --line and --neon, and on #14171B those resolve to
- * 1.07:1, 2.2:1, 1.01:1 and an oxblood that all but vanishes. Rather than
- * rewrite every class in four components, the island re-points the semantic
- * layer for the subtree, which is exactly the mechanism .reel-board already
- * uses for the same kind of context shift.
- */
-.chrome-dark {
-  --fg: var(--paper-50); /* 15.85:1 on --bezel */
-  --muted: #b0aaa1; /* 7.80:1 on --bezel, 6.52 on --device */
-  --line: rgba(245, 240, 232, 0.16); /* composites #383A3C */
-  --signal: #d08c6e; /* 6.56:1 on --bezel: oxblood read from the paper side */
-  --neon: var(--signal);
-  --on-accent: var(--bezel);
-}
 
 @layer components {
   /*
@@ -413,9 +366,9 @@
       /* The formula self-corrects across the flip: mixing toward --fg made
          --muted BRIGHTER over a dark page and makes it DARKER over paper,
          which is the right direction in both cases, because the film behind
-         it stayed dark. --gray-400 is gone, so the mix target is --ink-500,
-         the same value --muted already points at. */
-      --muted: color-mix(in srgb, var(--fg) 45%, var(--ink-500));
+         it stayed dark. Expressed as --fg mixed INTO --muted so it stays
+         correct on either ground. */
+      --muted: color-mix(in srgb, var(--fg) 58%, var(--muted));
     }
     .reel-board::before {
       content: "";
@@ -458,9 +411,9 @@
     /* Was a violet→blue gradient clipped to the glyphs. Gradient-clipped
        display type is a generated-UI tell on its own, so the phrase is a
        solid now. It is deliberately flat for the moment: with the ground
-       flip this becomes var(--signal), the site's oxblood, and the emphasis
-       comes back as the second ink of a two-ink press run rather than as a
-       colour effect.
+       it now paints in var(--signal), the site's vermilion, so the emphasis
+       is carried by the one colour the site actually owns rather than by a
+       gradient effect.
        -webkit-text-fill-color must be reset explicitly, not just dropped:
        GSAP SplitText wraps each word in its own span and the old transparent
        value would inherit into them. */
@@ -957,8 +910,8 @@ html.lenis body {
   border: 1px solid color-mix(in srgb, var(--fg) 14%, transparent);
   border-radius: 1.25rem;
   box-shadow:
-    0 34px 80px -28px rgba(var(--ink-rgb), 0.55),
-    0 2px 10px -3px rgba(var(--ink-rgb), 0.35);
+    0 34px 80px -28px rgba(var(--shadow-rgb), 0.55),
+    0 2px 10px -3px rgba(var(--shadow-rgb), 0.35);
 }
 @media (prefers-reduced-motion: no-preference) {
   .hlv-float {
@@ -1056,14 +1009,13 @@ html.lenis body {
   :root {
     color-scheme: light;
 
-    /* Still load-bearing after the repaint, and for a new reason: the screen
-       ground is a CREAM TINT (#f5f0e8). A printed page wants the stock's own
-       true white, so this block is no longer an inversion, it is a
-       de-tinting. */
+    /* The ground is dark again, so this block is a genuine INVERSION once
+       more: it re-sets the semantic layer to ink on white and every page
+       follows, with no per-component print overrides and no second
+       stylesheet. */
     --bg: #ffffff;
-    --fg: #181c20; /* the same ink family as screen, not a separate near-black */
-    --muted: #373f41; /* one step DENSER than screen muted: 9.5pt mono needs
-                         weight to survive ink spread. 10.77:1 on white. */
+    --fg: #101012;
+    --muted: #4a4a52;
     --surface: #ffffff;
     --well: #ffffff; /* without it a --well panel prints as a grey tint block */
     --lift: #ffffff;
@@ -1072,21 +1024,21 @@ html.lenis body {
     --bezel: #ffffff;
     --line: rgba(0, 0, 0, 0.22);
     --line-strong: rgba(0, 0, 0, 0.32);
-    --accent: #181c20;
-    --accent-hover: #181c20;
+    --accent: #101012;
+    --accent-hover: #101012;
     --on-accent: #ffffff;
     /* The interaction signal is a screen affordance: on paper it becomes ink,
-       so hover-coloured headings don't print as oxblood.
+       so hover-coloured headings don't print as vermilion.
        --neon is `var(--signal)` at :root, so overriding --neon alone does NOT
        reach --signal. Both are needed: two --signal consumers genuinely print
        (the resume's register mark, and .text-spectrum on the home hero and
        CurrentlyBoard, none of which carry print:hidden). */
-    --neon: #181c20;
+    --neon: #101012;
     --neon-glow: transparent;
-    --signal: #181c20;
-    --signal-press: #181c20;
+    --signal: #101012;
+    --signal-press: #101012;
     --signal-shadow: transparent;
-    --diagram-ink: #181c20; /* case-study plate line work prints as ink */
+    --diagram-ink: #101012;
     --rule-ink: none;
 
     --measure: 100%;
@@ -1107,8 +1059,8 @@ html.lenis body {
      screen tint on white. A stylesheet declaration carrying !important beats an
      inline style that doesn't, so force it back to ink everywhere. */
   * {
-    --accent: #181c20 !important;
-    --accent-hover: #181c20 !important;
+    --accent: #101012 !important;
+    --accent-hover: #101012 !important;
   }
 
   /* Site chrome + anything explicitly marked as screen-only.

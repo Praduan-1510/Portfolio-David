@@ -6,20 +6,20 @@ import { cn } from "@/lib/utils/cn";
  * structural colour element: the signal trace. A soft band of the four
  * project hues sits on the trace's latitude and FLOWS ALONG the line: an
  * oversized gradient strip translated slowly on the compositor (transform
- * only, no repaints, no canvas). One quiet violet ember up-right adds depth
+ * only, no repaints, no canvas). One quiet vermilion ember up-right adds depth
  * so the rest of the frame isn't dead. Reduced motion holds the still.
  */
 
 /* The signal trace. Was five hard-coded project/spectrum hues in one string
    (#2DD4BF, #C9E94B, #F7A53B, #46B4F0, #A98BFF): the single biggest bypass of
    the token system on the site, and a rainbow at that.
-   It now runs the site's own two inks, oxblood into ochre and out to ink,
-   which is what a two-colour press run looks like when the plates are slightly
-   out of register. Literal hex rather than var() is deliberate here: this is a
-   painted artwork gradient, not chrome, and the values are stated once with
-   their token names beside them so a repaint finds them. */
+   It now runs the site's own voice: vermilion at full strength, cooling
+   through its active step into the graphite ground. One colour, stated once.
+   Literal hex rather than var() is deliberate: this is a painted artwork
+   gradient, not chrome, and the token names are written beside the values so
+   a future repaint can find them. */
 const TRACE_GRADIENT =
-  "linear-gradient(90deg, transparent 0%, #7D352F 18%, #896824 44%, #6F561D 66%, #283035 86%, transparent 100%)"; /* oxblood-700, ochre-500, ochre-700, ink-700 */
+  "linear-gradient(90deg, transparent 0%, #FF3B14 18%, #FF6B45 44%, #E8A317 66%, #2B2721 86%, transparent 100%)"; /* vermilion-500, vermilion-300, voyager amber, graphite-700 */
 
 export function HeroFlow({ className }: { className?: string }) {
   return (
@@ -67,9 +67,10 @@ export function HeroFlow({ className }: { className?: string }) {
           width: "56%",
           height: "52%",
           background:
-            /* was #A98BFF at 14%: a violet bloom. Now the site's own oxblood,
-               dialled down, because a coloured bloom on paper is a smudge. */
-            "radial-gradient(50% 50% at 50% 50%, color-mix(in srgb, #7D352F 10%, transparent), transparent 70%)",
+            /* was #A98BFF at 14%: a violet bloom, and violet is exactly the
+               hue a generated palette reaches for. Now the site's own
+               vermilion, at the same dosage. */
+            "radial-gradient(50% 50% at 50% 50%, color-mix(in srgb, #FF3B14 14%, transparent), transparent 70%)",
         }}
       />
     </div>

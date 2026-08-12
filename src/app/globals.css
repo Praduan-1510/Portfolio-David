@@ -238,6 +238,14 @@
     margin-inline: calc(50% - 50vw);
   }
 
+  /* .cs-wide had ONLY `clear: right` until the plates landed: its apparent
+     width came from paragraphs self-clamping to --measure, not from the class.
+     The diagrams are the first thing that actually needs it to span. */
+  .cs-wide {
+    width: 100%;
+    max-width: 100%;
+  }
+
   /* Per-study decorative motif on the case hero (data-motif on the article).
      Thin structural texture only, never a fill behind content. */
   .cs-motif {
@@ -250,6 +258,220 @@
        it becomes an ink texture without a second rule. The texture must always
        be the FOREGROUND at low alpha, never "white". */
     color: color-mix(in srgb, var(--fg) 5%, transparent);
+  }
+
+  /* ── THE PLATE ─ case-study diagrams ─────────────────────────────────
+   *
+   * THE ONE RULE: one hairline, one ink, one promotion.
+   * Every stroke in every plate is the same 1px hairline in --diagram-ink.
+   * Exactly ONE element per plate is promoted, to 2px + two registration
+   * marks + the project accent, and it is always the element the surrounding
+   * paragraph is arguing about. Promotion is encoded three ways on purpose
+   * (weight, marks, colour) so it survives @media print, where the accent
+   * flattens to ink, and forced-colors, where it is replaced outright.
+   *
+   * Register: ruled technical drawing set as a printed schedule, which is what
+   * the case studies already are. rounded-none everywhere, mono uppercase
+   * micro-labels, decimal-leading-zero counters.
+   *
+   * Text is HTML, never SVG <text>. Scaled SVG type turns to mush, and keeping
+   * the words in the DOM is what lets every svg here be aria-hidden.
+   */
+  .dgm {
+    container-type: inline-size;
+    --dgm-gap: clamp(2rem, 4cqi, 3rem);
+    counter-increment: plate;
+  }
+  .cs-article { counter-reset: plate; }
+  .dgm-plate::before { content: "Fig. " counter(plate, decimal-leading-zero); }
+  .dgm-caption { border-top-color: color-mix(in srgb, var(--accent) 30%, var(--line)); }
+
+  /* Every stroke: one weight, one ink, never scaled. */
+  .dgm :is(line, path, rect, polyline, circle) {
+    vector-effect: non-scaling-stroke;
+    stroke: var(--diagram-ink);
+    stroke-width: 1px;
+    fill: none;
+  }
+
+  /* Node: square, hairline, no fill. The ground shows through. */
+  .dgm-node {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+    border: 1px solid var(--diagram-ink);
+    padding: var(--space-4, 1rem);
+  }
+  .dgm-node--quiet { color: var(--muted); border-color: var(--line); }
+  .dgm-kicker,
+  .dgm-note { font-family: var(--font-mono), ui-monospace, monospace; }
+  .dgm-kicker {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+  }
+  .dgm-label { font-family: var(--font-display), system-ui, sans-serif; font-size: 1.0625rem; font-weight: 500; }
+  .dgm-note { font-size: 0.8125rem; line-height: 1.5; color: var(--muted); }
+  .dgm-value {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(1.25rem, 2.4cqi, 1.5rem);
+  }
+
+  /* The promoted element: 2px accent registration marks at two opposed
+     corners. TWO corners read as a registration mark; four read as a box. */
+  .dgm-node--key {
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--diagram-ink));
+  }
+  .dgm-node--key::before,
+  .dgm-node--key::after {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-color: var(--accent);
+    border-style: solid;
+    border-width: 0;
+  }
+  .dgm-node--key::before { top: -1px; left: -1px; border-top-width: 2px; border-left-width: 2px; }
+  .dgm-node--key::after { bottom: -1px; right: -1px; border-bottom-width: 2px; border-right-width: 2px; }
+
+  /* The gate: the accountant's double rule on the leading edge, which is
+     Keel's own image for a closed total. */
+  .dgm-node--gate::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: -5px;
+    width: 3px;
+    border-inline: 1px solid var(--diagram-ink);
+  }
+  /* Hatched, not filled: a concept is not a shipping competitor. */
+  .dgm-node--intent {
+    background-image: repeating-linear-gradient(
+      45deg,
+      color-mix(in srgb, var(--accent) 22%, transparent) 0 2px,
+      transparent 2px 7px
+    );
+  }
+
+  /* Chain: n equal stages. Horizontal only from xl, because the reading
+     column is 419px at 768px and 650px at 1024px against a ~690px need, and
+     the article carries overflow-x:clip so the overflow would be silently
+     CLIPPED rather than caught by the overflow probe. */
+  .dgm-chain { display: grid; gap: var(--dgm-gap); list-style: none; margin: 0; padding: 0; }
+  .dgm-cell { position: relative; }
+  .dgm-cell > .dgm-edge {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 100%;
+    width: var(--dgm-gap);
+    display: flex;
+    align-items: center;
+    color: var(--diagram-ink);
+  }
+  .dgm-edge__shaft { flex: 1 1 auto; height: 24px; }
+  .dgm-edge__head { flex: 0 0 10px; }
+  /* Dashed means NOT VERIFIED. */
+  .dgm-edge--soft .dgm-edge__shaft line { stroke-dasharray: 4 4; }
+  .dgm-edge__label {
+    position: absolute;
+    inset-inline: 0;
+    bottom: calc(50% + 0.75rem);
+    text-align: center;
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+  }
+  @media (min-width: 1280px) {
+    .dgm-chain { grid-template-columns: repeat(var(--dgm-n, 3), minmax(0, 1fr)); }
+  }
+  /* Below xl the chain runs vertically, so the arriving edge turns with it. */
+  @media (max-width: 1279px) {
+    .dgm-cell > .dgm-edge {
+      inset-inline: 0;
+      inset-block-end: 100%;
+      block-size: var(--dgm-gap);
+      width: auto;
+      flex-direction: column;
+    }
+    .dgm-edge__shaft { width: 24px; height: auto; }
+  }
+  /* Landscape phones: never horizontal, notes suppressed. */
+  @media (max-height: 520px) and (orientation: landscape) {
+    .dgm-chain { grid-template-columns: none; }
+    .dgm-note { display: none; }
+  }
+
+  /* Tracks: two or more chains compared on one unit. These SCROLL below xl
+     rather than reflowing, because reflowing a comparison to vertical
+     destroys the comparison, and with a fixed cell the scroll IS the message. */
+  .dgm-tracks { display: grid; gap: var(--space-6, 2rem); }
+  .dgm-track__label,
+  .dgm-group__label,
+  .dgm-camp__label,
+  .dgm-gap__label {
+    display: block;
+    margin-bottom: var(--space-3, 0.75rem);
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+  }
+  .dgm-scroll { overflow-x: auto; overscroll-behavior-x: contain; }
+
+  /* Convergence: gapless ruled sources, then a fan into one target. */
+  .dgm-converge { display: grid; gap: var(--dgm-gap); align-items: center; }
+  .dgm-group__items,
+  .dgm-camp__items,
+  .dgm-gap__items,
+  .dgm-target { list-style: none; margin: 0; padding: 0; }
+  /* gap:0 is load-bearing: fanY is exact only for an equal, gapless stack.
+     It is also simply what a printed schedule looks like. */
+  .dgm-group__items { display: grid; grid-auto-rows: 1fr; gap: 0; }
+  .dgm-group__items > .dgm-cell + .dgm-cell > .dgm-node { border-block-start: 0; }
+  .dgm-fan { display: none; }
+  @media (min-width: 1280px) {
+    .dgm-converge { grid-template-columns: 1fr var(--dgm-gap) 0.8fr; }
+    .dgm-fan { display: block; width: 100%; height: 100%; color: var(--diagram-ink); }
+  }
+
+  /* Landscape: two camps, and the gap that must stay BETWEEN them at every
+     width, including stacked. */
+  .dgm-landscape { display: grid; gap: var(--dgm-gap); align-items: center; }
+  @media (min-width: 1280px) {
+    .dgm-landscape { grid-template-columns: 1fr 0.8fr 1fr; }
+  }
+  .dgm-camp { position: relative; }
+  .dgm-camp__items { display: grid; grid-auto-rows: 1fr; gap: 0; }
+  .dgm-camp__items > .dgm-cell + .dgm-cell > .dgm-node { border-block-start: 0; }
+  .dgm-camp__note,
+  .dgm-gap__note {
+    display: block;
+    margin-top: var(--space-3, 0.75rem);
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  .dgm-gap {
+    position: relative;
+    border-inline: 1px solid var(--diagram-ink);
+    padding: var(--space-5, 1.5rem) var(--space-4, 1rem);
+    text-align: center;
+  }
+  .dgm-lean { position: absolute; top: 50%; color: var(--diagram-ink); }
+  .dgm-lean--right { inset-inline-end: calc(var(--dgm-gap) / -2); translate: 50% -50%; }
+  .dgm-lean--left { inset-inline-start: calc(var(--dgm-gap) / -2); translate: -50% -50%; }
+  @media (max-width: 1279px) {
+    .dgm-lean { display: none; }
+    .dgm-gap { border-inline: 0; border-block: 1px solid var(--diagram-ink); }
   }
 
   /*
@@ -426,6 +648,14 @@
    * knock the phrase out to invisible for the exact low-vision audience that
    * enables High Contrast. Restore a solid, system-coloured, visible fill there.
    */
+  @media (forced-colors: active) {
+    /* The accent wash and the registration marks both disappear under a
+       system palette, so the promoted node falls back to the system text
+       colour and keeps its 2px weight: the promotion is encoded three ways
+       precisely so it survives losing one of them. */
+    .dgm-node--key { color: CanvasText; background: transparent; forced-color-adjust: auto; }
+    .dgm [data-draw] { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
+  }
   @media (forced-colors: active) {
     .text-spectrum {
       background-image: none;
@@ -1098,6 +1328,15 @@ html.lenis body {
   iframe {
     display: none !important;
   }
+
+  /* Plates: DrawIn dashes the strokes at hydration and only clears them when
+     its ScrollTrigger fires, so a plate the reader never scrolled past would
+     print with invisible line work. print-audit never scrolls. */
+  .dgm [data-draw] {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+  .dgm { break-inside: avoid; }
 
   /* Kill every shadow/animation and let content break naturally. */
   *,

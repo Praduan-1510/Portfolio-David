@@ -186,7 +186,7 @@ export default async function CaseStudy({
   };
 
   return (
-    <article data-theme="dark" data-motif={meta.motif ?? "blueprint"} style={themeStyle} className="overflow-x-clip bg-bg text-fg">
+    <article data-theme="dark" data-motif={meta.motif ?? "blueprint"} style={themeStyle} className="cs-article overflow-x-clip bg-bg text-fg">
       {/* Case-study structured data (rendered as plain JSON, not user input). */}
       <script
         type="application/ld+json"

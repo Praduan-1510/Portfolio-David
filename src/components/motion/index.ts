@@ -18,3 +18,4 @@ export { Signature } from "./Signature";
 export { FlapText } from "./FlapText";
 export { FlapDigits } from "./FlapDigits";
 export { AuroraEmber } from "./AuroraEmber";
+export { DrawIn } from "./DrawIn";

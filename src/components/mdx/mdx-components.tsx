@@ -20,6 +20,15 @@ import {
   Bleed,
   BeforeAfter,
 } from "./CaseStudyBlocks";
+import {
+  Flow,
+  FlowNode,
+  FlowTrack,
+  FlowGroup,
+  Landscape,
+  LandscapeCamp,
+  LandscapeGap,
+} from "./diagrams";
 
 // Flatten MDX children to plain text so an h2's id matches the slug the contents
 // rail derives from the raw MDX (handles plain strings, arrays, and inline nodes).
@@ -205,4 +214,17 @@ export const mdxComponents = {
   // A real, playable HTML prototype in the reading column: the interactive
   // counterpart to <Shot>. Carries its own figure + caption, so no wrapper here.
   LivePrototype,
+  // The PLATE system: inline-SVG diagrams that REPLACE prose rather than
+  // accompany it. Two archetypes: <Flow> for a sequence, a comparison of
+  // sequences or a convergence; <Landscape> for a positioning, two camps and
+  // the gap between them. Every label inside one must be a quotation from the
+  // surrounding .mdx: a diagram that invents an enumeration is worse than the
+  // paragraph it replaced.
+  Flow,
+  FlowNode,
+  FlowTrack,
+  FlowGroup,
+  Landscape,
+  LandscapeCamp,
+  LandscapeGap,
 };

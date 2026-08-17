@@ -116,8 +116,16 @@ export function FlightBoard({ projects }: { projects: ProjectMeta[] }) {
 
         {/* ── Preview stage: sticky, crossfades to the active row's cover ── */}
         <div className="sticky top-space-9">
+          {/* No panel around the media, same call as the reel hero: this stage
+              is aria-hidden and carries no hover, so its border was decorative
+              only, and the covers inside it are PhoneFrames and BrowserMockups
+              that already have their own edges. A frame around a frame reads as
+              a mistake once you notice it. The card stages in WorkIndex and
+              ProjectCard keep theirs deliberately: there the border is the
+              hover affordance on a link (group-hover:border-neon), so it is
+              doing a job this one was not. */}
           <div
-            className="relative isolate aspect-[4/3.4] overflow-hidden rounded-[3px] border border-line bg-bg"
+            className="relative isolate aspect-[4/3.4] overflow-hidden bg-bg"
             data-theme="dark"
             style={{ "--accent": projects[active]?.accent } as React.CSSProperties}
             aria-hidden="true"

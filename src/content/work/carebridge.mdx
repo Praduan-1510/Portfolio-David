@@ -1,0 +1,186 @@
+---
+title: CareBridge
+slug: carebridge
+client: Self-directed
+role: Product Design, Design System & Prototype
+year: 2026
+services: [Product Design, Design System, Interaction Design, Prototyping]
+summary: >-
+  A multi-specialty health platform built so the patient stops being the
+  integration layer: one record that carries a prescription to the pharmacy, a
+  test order to the lab, and the result back to the doctor who asked for it.
+  Patient, clinician and operations are three surfaces over one token system,
+  and the safety rules constrain the interface rather than decorate it. You can
+  open it and use it on this page.
+cover: /images/work/carebridge/cover.png
+kind: web
+prototype:
+  poster: /images/work/carebridge/app-home.png
+  alt: "CareBridge's patient home: a household switcher, an emergency banner, four care lanes, and the day's medicines across five people"
+  aspect: 1.6
+  launchNote: >-
+    It opens on the patient's home screen, already signed in as Amanda, who
+    manages care for a household of five.
+  surfaces:
+    - id: patient
+      label: Patient
+      shortLabel: Patient
+      src: /prototype/carebridge/app.html
+      domain: carebridge.health
+    - id: clinician
+      label: Clinician
+      shortLabel: Clinic
+      src: /prototype/carebridge/clinician.html
+      domain: carebridge.health/clinician
+    - id: ops
+      label: Operations
+      shortLabel: Ops
+      src: /prototype/carebridge/ops.html
+      domain: carebridge.health/ops
+    - id: system
+      label: Design system
+      shortLabel: System
+      src: /prototype/carebridge/styleguide.html
+      domain: carebridge.health/aurora
+indexNote: 'The careful one. A multi-specialty health platform where the safety rules constrain the interface: red is never a trend, and a notification never names your condition.'
+accent: "#7FB8FF" # CareBridge's azure.300, used as-shipped: the token its own styleguide designates for accent text on dark surfaces. 9.43:1 on --bg, 8.67:1 on --surface, dE00 48.8 from the nearest flame, 18.4 from Keel's teal and 28.7 from Meridian's verdigris, so the three prototype studies stay apart in the index. azure.500 is the brand fill but reaches only 3.9:1 on white by the system's own measurement, which is precisely why it is not the token that carries text.
+motif: route
+disclaimer: A design prototype on fictional data. Not a medical device, and not a source of clinical advice.
+featured: true
+order: 0
+---
+
+<Lede>
+In a multi-specialty hospital, the patient is the integration layer. They carry a paper prescription to the pharmacy, a paper requisition to the lab, and a printed report back to the doctor who ordered it. **Every handoff is a place the system quietly asks the patient to do its job.**
+</Lede>
+
+## The live prototype
+
+Launch it and you land on Amanda's home screen on a Monday morning. She manages care for a household of five, so the first thing the product has to get right is whose day this is: the medicines list runs across three different people before you have scrolled once.
+
+Four surfaces sit in the window chrome. **Patient** is the app itself. **Clinician** is the same Monday from Dr Robertson's side: seven people booked, four notes unfinished, and one critical potassium waiting. **Operations** is the desk that runs the building, with 84 appointments, a bed board and a pharmacy verification queue. **Design system** is Aurora, the token layer all three are built from.
+
+<Margin label="Try this">
+  Open *Clinician* and find Margaret Reyes in the 9:40 slot. Then switch back to *Patient*: Margaret is one of Amanda's household, and her metformin is in the 8:00 AM dose list. One cast of people, seen from two sides.
+</Margin>
+
+<Stats>
+  <Stat value="132" label="Screens, clickable end to end" />
+  <Stat value="32" label="Clinical departments" />
+  <Stat value="3" label="Surfaces on one token system" />
+  <Stat value="0" label="Backend services" />
+</Stats>
+
+## Why it exists
+
+The specification this came from opens by listing eight ways multi-specialty care fails people. None of them are dramatic, and none of them are anybody's fault. They are the ordinary seams between departments that were each built correctly on their own terms.
+
+<Bleed
+  quote="Eight failures, all of them ordinary, none of them anybody's fault."
+  attribution="The prototype's own framing of the problem"
+/>
+
+Discovery is guesswork. Prescriptions are unreadable to the person holding them. Reports arrive as a text-message link that expires. Families are invisible to a system that models one patient at a time. Every one of those is a handoff where the record stops and a human being is asked to carry it the rest of the way.
+
+## Routing someone who cannot name their problem
+
+A person with abdominal pain does not know whether they need Gastroenterology, General Medicine or Emergency. Presenting them with an alphabetical list of 32 departments is not help, it is a quiz they did not study for.
+
+So the entry point is plain language. Describe it in your own words, or point at a body map instead. Then at most four questions, every one of them skippable, with a standing offer to stop and just book a general appointment. What comes back is a proposal with its reasoning attached, not a verdict.
+
+<Shot
+  src="/images/work/carebridge/triage.png"
+  domain="carebridge.health"
+  align="left"
+  aspect="8 / 5"
+  caption="The routing result states the department, the reasoning that got there, and its own status: a suggestion, not a diagnosis. The offer to book something general instead never disappears."
+/>
+
+Underneath every lane runs a red-flag check. Describe chest tightness with exertion and you get Cardiology. Add shortness of breath or sweating and the routing is overridden entirely: the flow stops and hands you emergency options before anything else can happen.
+
+<Shot
+  src="/images/work/carebridge/redflag.png"
+  domain="carebridge.health"
+  align="right"
+  aspect="8 / 5"
+  caption="The escalation screen. It interrupts the booking flow rather than appending a warning to it, and it still leaves a way back for the person who knows their own situation better than the questionnaire does."
+/>
+
+<Aside label="Why 911 is not a link">
+  A click-through demo that dials a real emergency service is a genuine incident, not a rough edge. So the number renders, the affordance is complete, and the `tel:` link is absent. The prototype prints that limitation on the screen itself rather than hoping nobody presses it.
+</Aside>
+
+## The same episode, from both sides
+
+The argument for one record is easiest to see by watching a single thing cross the boundary. A prescription written in a consult becomes fillable in two taps. An ordered test becomes a booking, with a phlebotomist and a collection window. The result returns to the doctor who asked for it, rather than to a portal the patient has to think to check.
+
+<Shot
+  src="/images/work/carebridge/clinician.png"
+  domain="carebridge.health/clinician"
+  align="left"
+  aspect="8 / 5"
+  caption="The clinician's Monday. The right-hand column is ranked by clinical urgency rather than by arrival time, and each card names what it wants done: acknowledge a critical value, review a result, finish two unsigned notes."
+/>
+
+The clinician surface is where the record has to earn its keep. A pre-consult brief assembles what is already known about the next patient before the door opens, and the critical potassium at the top of the queue carries the time it was released and the reference range it fell outside. Neither of those is new information. Both are usually somewhere else.
+
+My favourite detail is in the prescribing form, where the dosage instruction is typed out as a sentence rather than assembled from codes. The field help underneath explains why: *the patient reads exactly this, and so does the pharmacist*. One string, written once, with no translation step between the person who meant it and the two people who have to act on it.
+
+<Shot
+  src="/images/work/carebridge/medicines.png"
+  domain="carebridge.health"
+  align="right"
+  aspect="8 / 5"
+  caption="Store stock with the time it was last updated. A prescription the patient cannot fill nearby is a prescription that did not happen, so availability is part of the medicine, not a separate errand."
+/>
+
+## The rules that constrain the interface
+
+Most of the interesting decisions here are refusals. In a product where colour and language carry clinical weight, the design system is most useful when it forbids things.
+
+<FindingStack>
+  <Finding title="Red is never a trend">
+    A worsening value renders in calm azure whether it rose or fell. Coral is reserved for the emergency button, the critical-value card and the delete confirmation, and appears nowhere else on a patient surface. If red meant "worse", every routine fluctuation would read as an alarm and the real alarm would stop working.
+  </Finding>
+  <Finding title="A notification never names your condition">
+    Lock-screen copy says only that something is waiting: a report is ready, an evening dose is due. It does not name the condition, the result or the department. The notification is read by whoever is holding the phone, which is not always the patient.
+  </Finding>
+  <Finding title="Colour is never the only carrier">
+    The 14 categorical department tokens were chosen for hue *and* lightness separation, so pairs stay distinguishable under deuteranopia and protanopia and survive being printed in grayscale. Department colour is identity and wayfinding only, never clinical status, and always sits next to a text label.
+  </Finding>
+  <Finding title="No photograph is attached to a person">
+    Patients and clinicians get generated initials on a deterministic tint. There is photography in the product, but every image of it sits in the onboarding screens, where it is selling the idea of care. Not one of them appears next to a record.
+  </Finding>
+</FindingStack>
+
+Numbers get the same treatment. Every result, dose, vital and price is set in tabular figures with a slashed zero, which is the difference between reading a dose and guessing at one.
+
+## Aurora: one system, three registers
+
+Aurora is the token layer underneath all three surfaces, expressed through iOS 26 Liquid Glass. Its brief is "calm by default, exact under pressure", which in practice means the visual system has to get quieter exactly where the stakes rise.
+
+<Shot
+  src="/images/work/carebridge/styleguide.png"
+  domain="carebridge.health/aurora"
+  align="left"
+  aspect="8 / 5"
+  caption="The azure ramp with its contrast ratios printed on the swatches. The 500 and 600 steps read as the same blue; only one of them is legible as body text, and the system is explicit about which."
+/>
+
+The most consequential decision in the palette is a split most people would never notice. `azure.500` is the brand colour and reaches 3.9:1 on white, which is enough for fills and large text and not enough for body copy. So `azure.600` carries text and icons on light surfaces at 5.5:1. They look like the same blue. Only one of them is readable, and the system refuses to let the pretty one do the reading.
+
+The glass has a rule too: any surface carrying body text, a form control, a data table or a clinical value drops to the least transparent material or goes fully solid. Translucency is allowed to be decorative right up until the moment something has to be read correctly.
+
+## It adapts to the room
+
+There is no device picker. The app measures its own environment and lays itself out accordingly: a fixed 88px rail with a twelve-column field on a desktop, an eight-column layout with a floating tab bar on a tablet, and a single column on a phone.
+
+<Margin label="Try this">
+  Use the device buttons in the window chrome above. They resize the frame's real layout viewport rather than zooming a picture, so you are watching the prototype's own breakpoints fire, not a simulation of them.
+</Margin>
+
+## Scope, honestly
+
+<Aside label="What this is and is not">
+  Every person, facility, dosage and phone number is fictional and comes from one shared cast, so a name in a screenshot matches a fixture everywhere else it appears. Phone numbers use the 555 exchange. The 132 screens are real and clickable, but there is no backend, no clinician has reviewed the clinical logic, and the triage routing is a designed interaction rather than a validated tool. It is a prototype for thinking with, not a medical device.
+</Aside>

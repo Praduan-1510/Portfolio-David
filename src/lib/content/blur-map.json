@@ -1,4 +1,13 @@
 {
+  "/images/work/carebridge/app-home.png": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACwAQCdASoMAAgAA4BaJZQAAudGpbAAAP7wS+up/5iF2EYL7DM9Tx+muAyYUAAA",
+  "/images/work/carebridge/clinician.png": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACwAQCdASoMAAgAA4BaJZQAAxZgjyZAAP71I0TTgY7/WR0JdoazQb9kmMFwQAAA",
+  "/images/work/carebridge/cover.png": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAACwAQCdASoMAAcAA4BaJZQC7AEPAzS4AP7yPT/CXpuWm+wUyTWebl3+ATM6EyYNKeIMEwATgezgAA==",
+  "/images/work/carebridge/critical.png": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADQAQCdASoMAAgAA4BaJYwAAqzUz3rjAAD+9QLW1nMvdftcyghM0GGlDvR2AkAAAAA=",
+  "/images/work/carebridge/medicines.png": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAADQAQCdASoMAAgAA4BaJYwC7AEPSbpwwAD+88vKQXqFqo8zxjyQTcyjoEEAAA==",
+  "/images/work/carebridge/ops.png": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAQCdASoMAAgAA4BaJYwAAudP5XgAAP72KSiUbnKuOzI8Thic9gAA",
+  "/images/work/carebridge/redflag.png": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAADQAQCdASoMAAgAA4BaJQBOgBufSUDjgAD+9iwuLHxNZJFsvipqZQtFTjo5NMEjUOS9B/rrlEAAAA==",
+  "/images/work/carebridge/styleguide.png": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAACwAQCdASoMAAgAA4BaJZgCdADzesxgAP7z7KzCUYDNdQn3+gC5zvJnmd5clbq6SFT65ojKhO1tcCCLhsd7BxAA",
+  "/images/work/carebridge/triage.png": "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAADwAQCdASoMAAgAA4BaJYwC7AEPC+i2SAAA/vJtEBA6/3QF22X7xZz96IUFNKEp7JyhAAAA",
   "/images/work/decathlon/account.png": "data:image/webp;base64,UklGRqIAAABXRUJQVlA4WAoAAAAQAAAACwAAGQAAQUxQSDcAAAABR6CQbQTIX+b8/tOIiPh/gxUURZLUNPGdDGABB0hCAv6r+Ef0P0tk3Yh2IizQ/Ncm7IR2aqc9AFZQOCBEAAAAcAMAnQEqDAAaAC61drtdo6mpqYmAtEsYBmDiP/34iNAb0+yAAP73KfPyF8NGk9nC08f5ATskvSBRV7Eunqi/Jx1FCAA=",
   "/images/work/decathlon/bag.png": "data:image/webp;base64,UklGRtoAAABXRUJQVlA4WAoAAAAQAAAACwAAHAAAQUxQSDQAAAABP6CgbRuGP7QyOjuhEREBoPUCTSQ52STQIyESkIQE/NfU1BH9n4AZ9A3YCctHJnQ8RtAHVlA4IIAAAAAQBACdASoMAB0APu1iqU2ppaOiMAgBMB2JZwDG9CHgI/Z+k4Ev5MynIAD+7Y4GKMpqaAh1fN9lGItU51UVqG7bOnrkHiXB1NlOQMTkRzHQK22CETImPt973F/45x/1CZH+76wmq3n5Fk31NZqG27KEtMNiz5KkxaIoWRDN04AAAA==",
   "/images/work/decathlon/categories.jpg": "data:image/webp;base64,UklGRsAAAABXRUJQVlA4ILQAAAAwBACdASoMABoAPu1iqk2ppaQiMAgBMB2JQBOkDgQXom8e3uJN/iQVAQAA/sYAm15XzHIdWnFrvqcJG+Ug6Fa74u/gfTt7Szp19hc1NYSPc8JdYEtY37pY3zy2+JnUGkKN2LLP8aj9oqiTN6RfogguNwkHumDYjvHuQq7yFQVOgMlfM1424h3qPe81MxSM+T9OIE+Qy7gfz7vKQWKR09nbuhhmiDWzllyZaUZn6BgITmYAAAA=",

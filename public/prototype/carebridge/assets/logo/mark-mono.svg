@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="CareBridge">
+  <title>CareBridge</title>
+  <!-- Monochrome lockup. Inherits currentColor, so it works on any surface
+       and in both themes without a second file. Depth is carried by opacity
+       rather than hue, which also survives grayscale printing. -->
+  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4.5 35.5A19.5 19.5 0 0 1 43.5 35.5" stroke-width="4"   opacity=".45"/>
+    <path d="M12.5 35.5A11.5 11.5 0 0 1 35.5 35.5" stroke-width="4"  opacity=".72"/>
+    <path d="M24 26.5V34.5M20 30.5H28"             stroke-width="3.8"/>
+  </g>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 232 48" width="232" height="48" role="img" aria-label="CareBridge">
+  <title>CareBridge</title>
+  <!-- Horizontal lockup. Clear space = one band radius (11.5u) on all sides.
+       In-app the lockup is composed from mark.svg plus live HTML text so the
+       wordmark uses the real General Sans; this standalone file falls back to
+       the system display face. -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4.5 35.5A19.5 19.5 0 0 1 43.5 35.5" stroke="#7FB8FF" stroke-width="4"/>
+    <path d="M12.5 35.5A11.5 11.5 0 0 1 35.5 35.5" stroke="#4E9AFA" stroke-width="4"/>
+    <path d="M24 26.5V34.5M20 30.5H28" stroke="#1E66CC" stroke-width="3.8"/>
+  </g>
+  <text x="58" y="35.5"
+        font-family="'General Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Avenir Next', Inter, system-ui, sans-serif"
+        font-size="26" font-weight="600" letter-spacing="-0.52"
+        fill="#101828">CareBridge</text>
+</svg>

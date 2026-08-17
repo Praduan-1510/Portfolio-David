@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="CareBridge">
+  <title>CareBridge</title>
+  <!-- Aurora arch: two concentric bands rising from a shared baseline,
+       closing into a rounded plus at the core.
+       Bridge span + aurora bands + medical cross, in one mark. -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- outer band -->
+    <path d="M4.5 35.5A19.5 19.5 0 0 1 43.5 35.5" stroke="#7FB8FF" stroke-width="4"/>
+    <!-- inner band -->
+    <path d="M12.5 35.5A11.5 11.5 0 0 1 35.5 35.5" stroke="#4E9AFA" stroke-width="4"/>
+    <!-- the core: a rounded plus, grounded on the baseline -->
+    <path d="M24 26.5V34.5M20 30.5H28" stroke="#1E66CC" stroke-width="3.8"/>
+  </g>
+</svg>

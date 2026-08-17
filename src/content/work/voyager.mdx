@@ -14,7 +14,24 @@ cover: /images/work/voyager/dashboard.png
 video:
   src: /videos/Voyager.mp4
   aspect: "16/9" # isometric flow fills the frame edge-to-edge: full frame, zero crop
-accent: "#E8A317" # Voyager amber: brand #F5A623 deepened so it separates from the site's own vermilion voice (dE 58) instead of competing with it. 8.62:1 on --bg, 7.74:1 on --surface.
+# NO accent, and this is the one study without one on purpose. The old value
+# was #E8A317, "Voyager amber, deepened so it separates from the site's own
+# vermilion voice (dE 58)". That dE 58 was CIE76; the site's voice is now the
+# logo's flame, and Voyager's brand #F5A623 measures dE 5.5 from it under
+# CIEDE2000. It is not near the site's colour, it IS the site's colour.
+#
+# scripts/palette-audit.mjs swept the entire gold arc past the flame's top
+# step for something that could hold an amber identity at the same bar that
+# separates two guests on the work index: everything that clears it has left
+# amber and become dark olive (#6F8A0F) at barely-AA contrast, which would
+# both misread the brand and read worse.
+#
+# So Voyager runs in the site's voice, and the study already says why: :185
+# is a DecisionCard titled "One warm accent doing the work." and :265
+# describes "a single warm orange accent for actions and highlights". The
+# site's voice IS a single warm orange. Inheriting it states the same thing
+# the case study states, rather than faking a distinction that is not there.
+# Removing a colour is also the direction this repaint has gone throughout.
 motif: route
 featured: true
 order: 3

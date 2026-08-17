@@ -12,20 +12,23 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
  *
  * This used to fake transparency: a feathered radial aperture plus a gentle
  * contrast() that pulled the near-black surround down toward the page's own
- * near-black, so the capture appeared to float with no box. That illusion was
- * only ever available because the page WAS near-black. It is not recoverable
- * on a paper ground: there is no colour that feathers cleanly between the
- * capture's surround and #f5f0e8, so a feather there is just a grey smudge
- * around a dark rectangle.
+ * near-black, so the capture appeared to float with no box.
  *
- * So the box stops being hidden and starts being the point. The capture reads
- * as a dark object photographed on the sheet, which is exactly what --device
- * and --bezel already say a screenshot is, and what keeps the case-study
- * diagrams legible as the page's only LINE DRAWINGS.
+ * The argument written here previously was that the illusion died with the
+ * PAPER ground, because nothing feathers cleanly between the capture's
+ * surround and #f5f0e8. That ground lasted one commit: B2 flipped back to a
+ * dark one and the logo repaint has since made it a cool #0D0D10, which is
+ * actually within a couple of points of the surround's own ~rgb(15,17,18).
+ * So the feather is technically back on the table, and the box stays anyway,
+ * on the grounds it should have been kept for in the first place: the capture
+ * reads as a dark object photographed on the page, which is exactly what
+ * --device and --bezel already say a screenshot is, and what keeps the
+ * case-study plates legible as the page's only LINE DRAWINGS. A feathered
+ * aperture is an effect; a plate is a register.
  *
  * Rejected on the way here: mix-blend-mode: screen. The montages contain
  * genuinely-dark screens (that is why the old contrast() was capped at 1.06),
- * and screen() over paper would erase those along with the surround.
+ * and screen() would erase those along with the surround.
  *
  * "Lazyload" here is preload="none" + an IntersectionObserver play-gate: the
  * file never touches the LCP path and only decodes while the hero is on screen.

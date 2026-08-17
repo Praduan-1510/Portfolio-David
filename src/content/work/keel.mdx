@@ -42,7 +42,7 @@ prototype:
       src: /prototype/keel/build-plan.html
       domain: keel.app/build-plan
 indexNote: 'The honest one. An autonomous bookkeeping agent whose ledger cannot be rewritten: append-only by database trigger, with two rails no setting can reach.'
-accent: "#3FB0C4" # Passbook teal as a petrol cyan: brand #3E6E70 held near its hue and lifted for legibility on the graphite ground. 7.32:1 on --bg, 6.57:1 on --surface.
+accent: "#3FB0C4" # Passbook teal as a petrol cyan: brand #3E6E70 held near its hue and lifted for legibility on the graphite ground. 7.59:1 on --bg, 6.98:1 on --surface, dE 45.4 from the site's flame.
 motif: route
 disclaimer: A design and functional prototype on mock data, not a production system.
 featured: true
@@ -117,7 +117,37 @@ Alongside the static reference is a working build: Node 24, server-rendered from
 
 **"No silent actions" is a `NOT NULL` constraint.** Every event requires a non-empty, human-readable reason. An action without one can't be recorded, which means it can't happen.
 
-**The locked rails aren't settings.** First payment to a new vendor, and anything touching a dispute or an anomaly, always stop for a human. Those live as constants in the rules engine, checked before configuration is read. The test suite cranks every dial to its most permissive legal value and asserts the rails hold, and a `$99,999` auto-pay ceiling POSTed straight past the interface still clamps to `$2,000`, because the clamp runs on the server, not in the slider.
+**The locked rails aren't settings.** First payment to a new vendor, and anything touching a dispute or an anomaly, always stop for a human. Those live as constants in the rules engine, checked before configuration is read, and the test suite cranks every dial to its most permissive legal value to assert they hold.
+
+<Flow
+  title="The clamp runs on the server, not in the slider"
+  alt="Three stages left to right. A request for a $99,999 auto-pay ceiling, POSTed straight past the interface, arrives at the locked rails; the rails are constants in the rules engine, read before any configuration; what is recorded is $2,000. Bypassing the interface changes nothing, because the interface was never what was holding the limit."
+  note="The order of the checks is the whole claim: a limit enforced after configuration is a suggestion, and one enforced before it is a rail."
+  replaces="keel.mdx:118"
+>
+  <FlowNode
+    kicker="Requested"
+    label="Auto-pay ceiling"
+    value="$99,999"
+    note="POSTed straight past the interface"
+    quiet
+  />
+  <FlowNode
+    kicker="Rules engine"
+    label="The locked rails"
+    note="Constants, checked before configuration is read"
+    kind="gate"
+    edge="bypasses the slider"
+    promote
+  />
+  <FlowNode
+    kicker="Recorded"
+    label="Clamped"
+    value="$2,000"
+    note="The clamp runs on the server"
+    edge="clamps"
+  />
+</Flow>
 
 <Aside label="Scope, honestly">
   What's embedded above is the frozen design reference: twelve hand-authored pages that show the system used well. The working build (rules engine, event store, 61 tests) runs separately and computes its own figures from live data, so the two disagree on numbers by design. Deliberately not built: real bank connection (the Plaid adapter is a stub that throws with an explanation), real outbound email (reminders land in an inspectable outbox), calibration measurement, and TLS. Proving a stated 90% confidence means roughly 90% real accuracy needs real outcomes over real time, which a prototype cannot supply.

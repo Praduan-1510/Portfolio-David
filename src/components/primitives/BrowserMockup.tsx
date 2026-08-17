@@ -197,7 +197,7 @@ export function BrowserMockup({
         )}
       >
         {/* Window chrome: traffic dots (leftmost = teal tell) + the live URL pill. */}
-        <div className="flex h-[34px] items-center gap-space-3 rounded-t-[7px] border-b border-line bg-[#0d0d10] px-space-3">
+        <div className="flex h-[34px] items-center gap-space-3 rounded-t-[7px] border-b border-line bg-bezel px-space-3">
           <span aria-hidden="true" className="flex shrink-0 items-center gap-[6px]">
             <span className="bm-dot h-[10px] w-[10px] rounded-full bg-accent" />
             <span className="bm-dot h-[10px] w-[10px] rounded-full bg-white/15" />

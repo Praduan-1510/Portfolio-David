@@ -9,8 +9,15 @@ import { cn } from "@/lib/utils/cn";
  * be violet on one route and lime on the next for no stated reason. That is
  * gone. There are exactly TWO temperatures now, because the palette has
  * exactly two things colour is allowed to mean:
- *   "signal"  the site's own voice (vermilion). The default.
+ *   "signal"  the site's own voice (the flame). The default.
  *   "accent"  the route's guest colour, inside a project's own context.
+ *
+ * The component is also, since the logo repaint, the literal statement of the
+ * logo's third fact: warm light spilling onto a cool ground, which the icon
+ * does behind its own mark (#17110E against a #0C0C0F field). C1 kept this
+ * component on the argument that "on a dark ground a warm coal genuinely adds
+ * depth"; on a COOL dark ground it is no longer just depth, it is the mark's
+ * own behaviour repeated at page scale.
  * A second, dimmer bloom of the same colour gives the coal its depth; it is
  * never a second HUE.
  *

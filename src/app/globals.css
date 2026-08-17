@@ -52,61 +52,161 @@
 
   /* --neon-green #39ff6a and --neon-green-glow are gone. Neon on near-black
      was the single loudest generated-UI signature on this site, and the role
-     it filled (the one interaction colour) is now --signal below, in vermilion.
-     --white is gone too: it was defined and never referenced. */
+     it filled (the one interaction colour) is now --signal below, in the
+     flame. --white is gone too: it was defined and never referenced. */
 
   /* ------------------------------------------------------------------
-   * VERMILION ON GRAPHITE. One loud colour, and nothing else shouting.
+   * THE FLAME ON RICH BLACK. The palette comes from the logo now, and
+   * nothing below is a taste call: every value is either sampled from
+   * public/Favicon/icon-512.png or a stated extension of what was sampled.
+   * `node scripts/palette-audit.mjs` re-measures the asset, recomputes every
+   * ratio written in this file and exits non-zero when one has drifted,
+   * which is the part the earlier repaints never had: their numbers were
+   * hand-computed once and then silently invalidated by the next ground.
    *
-   * The review called the old palette AI scrap, and it was right about the
-   * symptoms but the cause was never "too much colour". It was three things:
-   * a neon green on a pure near-black, five hues promoted to STRUCTURE, and
-   * accents sitting within a few points of a framework's defaults. All three
-   * are gone. What replaces them is louder, not quieter.
+   * The logo states exactly THREE facts, and this palette is those three
+   * facts scaled up to a website.
    *
-   * VERMILION is the site's whole voice: interaction, hover, focus, active,
-   * live. One saturated colour doing every job is the thing a generated
-   * palette never does, because generators hedge across three to five hues.
-   * Sampled off racing livery and safety signage, not off a colour wheel.
+   *   1. The ground is COOL. #0D0D10 at the icon's top edge falling to
+   *      #070708 at the bottom, r == g with blue a quarter higher: hue 290.
+   *   2. The mark is a WARM flame. A ramp from #F8B838 at the tip to
+   *      #F03E17 at the foot, area-weighted mean #FB7B20.
+   *   3. Warm light SPILLS onto the cool ground where they meet: the bloom
+   *      behind the mark measures #17110E against a #0C0C0F ground.
    *
-   * The ground is a WARM graphite, not a blue-black and not #000. Every
-   * neutral here carries the same warm cast, which is what stops a dark page
-   * reading as "default dark theme".
+   * The site shipped the exact inverse of fact 1: a WARM graphite ground
+   * (#14120F, red five points OVER blue) beneath a warm accent. That is why
+   * the vermilion never read as hot as it was supposed to. A warm accent on
+   * a warm ground competes with its own backdrop, and the icon does the
+   * opposite: that one temperature opposition is most of what makes the
+   * small mark carry. Following it costs nothing and improves every ratio in
+   * this file at once, because the logo's ground is darker than ours was.
+   *
+   * Cool near-black is the more honest register here anyway. These case
+   * studies are set as printed schedules, and a press black is built by
+   * laying black over heavy CYAN: rich black IS blue-black. The warm
+   * graphite was reaching for newsprint, which this site is not.
+   *
+   * THE TEMPERATURE RULE, which fact 3 buys and which every token below
+   * obeys: WARM is the site SPEAKING, COLD is the system REPORTING. The
+   * voice, hover, focus ring and bloom are all the flame; the ground, the
+   * panels, the errors and the confirmations are all cold. Nothing has to
+   * remember which hue means what, because hue stopped carrying it.
    *
    * Ratios below are measured against --graphite-900 / --graphite-800.
    * ------------------------------------------------------------------ */
 
-  /* GROUND: warm graphite. Four steps of one material. */
-  --graphite-900: #14120f; /* THE GROUND */
-  --graphite-800: #201d19; /* raised panel / card */
-  --graphite-700: #2b2721; /* sunken well, zebra rows */
-  --graphite-950: #0b0a09; /* deeper than the ground: seams, wells, notch */
+  /* GROUND: rich black, cool. The outer two steps are the logo's own two
+     edges; the inner steps carry its bias, blue rising with lightness in the
+     same proportion the old ramp had red rising with it. */
+  --graphite-950: #070708; /* the logo's bottom edge: seams, wells, notch */
+  --graphite-900: #0d0d10; /* the logo's top edge: THE GROUND */
+  --graphite-800: #17171d; /* raised panel / card */
+  --graphite-700: #212129; /* sunken well, zebra rows */
 
-  /* TYPE: bone, not white. A neutral grey-white is the single cheapest tell
-     that nobody chose the palette, so every step here is warm. */
-  --bone-50: #f4f1ea; /* type.       16.58 / 14.88 */
-  --bone-300: #c8c2b6; /*             11.29 / 10.13 */
-  --bone-500: #9b9489; /* secondary.   6.22 /  5.59 */
-  --bone-700: #6f6a61; /* tertiary.    3.36 /  3.02 - NON-TEXT only */
+  /* TYPE: ash. Fact 3 is what type is made of on this palette, so the ramp
+     is the flame at 5-9 chroma rather than a neutral grey-white (the
+     cheapest tell that nobody chose the palette) and rather than the
+     #F4F1EA cream it was: that cream was warm in the yellow-GREEN
+     direction, hue 93, and read as old paper beside a flame at hue 56. */
+  --bone-50: #f7f0e4; /* type.       17.13 / 15.75 */
+  --bone-300: #ccc3b1; /*             11.10 / 10.20 */
+  --bone-500: #a09689; /* secondary.   6.67 /  6.13 */
+  --bone-700: #746c5d; /* tertiary.    3.74 /  3.44 - NON-TEXT only */
 
-  /* VERMILION: the voice. */
-  --vermilion-500: #ff3b14; /* 5.24 / 4.71: clears AA as text and as a fill */
-  --vermilion-300: #ff6b45; /* 6.63 / 5.95: the ACTIVE step. On a dark ground a
-                               pressed state gets brighter, never darker. */
+  /* THE FLAME: the voice. Five steps, every one sampled off the mark.
+     --flame-500 is the logo's AREA-WEIGHTED mean, and that is what makes it
+     the default rather than the tip: the mark is 15.4% of the icon, the eye
+     weights a gradient by area, and so the colour the logo actually reads as
+     is this orange, not the amber above it or the vermilion below.
+
+     It replaces --vermilion-500/-300, which were sampled off racing livery
+     and safety signage. A good instinct aimed at the wrong source: the site
+     already had a logo and was not using it.
+
+     The ACTIVE step goes UP the ramp. A pressed state on a dark ground has
+     to get brighter, and on this palette brighter is also HOTTER, which is
+     the one direction a flame can travel. */
+  --flame-300: #f8b838; /* the tip.    11.00 / 10.12 */
+  --flame-400: #ff9929; /* ACTIVE.      9.09 /  8.36 */
+  --flame-500: #fb7b20; /* THE VOICE.   7.35 /  6.76 */
+  --flame-600: #f75718; /*              5.85 /  5.38 */
+  --flame-700: #f03e17; /* the foot.    5.00 /  4.59 */
+
+  /* THE FLAME AS A GRADIENT. The mark in the icon is not a flat colour, it is
+     a ramp from orange to red, so the site's colour is a ramp too wherever
+     there is enough AREA to show one. The stops are three of the sampled
+     steps in the icon's own order, tip to foot, so this is the logo's own
+     gradient rather than a decorative one.
+
+     That distinction is the whole reason this is allowed. The note further
+     down on .text-spectrum used to reject gradient-clipped type outright as a
+     generated-UI tell, and it was right about the version it was rejecting: a
+     violet-to-blue sweep that came from nowhere and meant nothing. A ramp
+     lifted off the site's own logo is a different object. The tell was never
+     "gradient", it was "arbitrary".
+
+     --flame-angle re-aims it without redefining the stops. 180deg is the
+     icon's own orientation and is what FILLS use, so a button reads as a lit
+     object; the 100deg default is for horizontal runs (rules, the progress
+     bar, a clipped phrase) where a vertical ramp would be invisible across a
+     3px height.
+
+     WHERE IT IS NOT USED, which matters as much as where it is: 1px
+     hairlines, the 5-10px status dots, mono micro-labels and the focus ring
+     all stay FLAT --flame-500. Three stops inside a 5px dot is not a
+     gradient, it is a slightly wrong colour, and clipped 13px type is
+     illegible. The rule is AREA: a surface that cannot show all three stops
+     gets one. */
+  --flame-gradient: linear-gradient(
+    var(--flame-angle, 100deg),
+    var(--flame-300) 0%,
+    var(--flame-500) 48%,
+    var(--flame-700) 100%
+  );
 
   /* Shadow channel. Shadows on a dark ground are still black, so this stays
-     a true zero: it is the only place in the file that is not warm. */
+     a true zero: it is the only place in the file that is not cool. */
   --shadow-rgb: 0, 0, 0;
 
-  /* Status. --error is a CRIMSON, deliberately 40+ dE from the vermilion
-     voice, because on a site whose signal colour is already a red an error
-     that is merely "red" is unreadable as an error. */
-  --status-error: #ff5470; /* 6.01 / 5.40, dE 42.8 from vermilion */
-  --status-success: #45c86b; /* 8.66 / 7.77 */
+  /* STATUS: both COLD, per the temperature rule. This is also the one place
+     the old palette was measurably WRONG rather than merely warm.
+
+     --status-error was #FF5470, documented as "dE 42.8 from vermilion".
+     That 42.8 is CIE76, which overstates differences in exactly the
+     saturated-red region this palette lives in; the same pair measures dE
+     18.2 under CIEDE2000. The site's error colour sat well under half the
+     distance from its own accent that the comment claimed, so a failed
+     contact submit read as the site talking rather than as a failure.
+     palette-audit.mjs prints both formulas on that pair so the correction
+     is checkable rather than asserted.
+
+     The replacement separates by TEMPERATURE rather than by hue distance,
+     because hue distance has nowhere left to go: the flame now owns the
+     entire warm arc from 42 to 80. Both statuses are COLD reds and greens on
+     the far side of their hue from the flame, which is also why the bar in
+     palette-audit.mjs is 20 rather than the old 40: a saturated GREEN
+     measures only 39 from this flame, so a bar of 40 demanded more
+     separation between two REDS than exists between red and green. Pushing
+     for 40 walks an error colour all the way to lilac (#D968E0 measures 40.5
+     and reads decorative, not alarming), which is the failure the bar was
+     supposed to prevent.
+
+     Both are checked against the flame at 20 and against the per-project
+     guest accents at only 10, and that asymmetry is deliberate rather than
+     lazy: --error and --success are consumed in exactly one component
+     (ContactForm) on exactly one route (/contact), which sets no guest
+     accent, so a status and a guest NEVER share a viewport. 10 is there
+     purely so a confirmation is not literally the same green a reader saw
+     one route ago. */
+  --status-error: #ff4d9e; /* 6.29 / 5.78, dE 29.9 from the nearest flame */
+  --status-success: #26dbb6; /* 10.99 / 10.10, dE 41.8. Cold, so a
+                                confirmation sits with the ground rather than
+                                with the voice */
 
   /* Device body. One step off the ground so a phone reads as a raised object
      rather than a hole in the page; --bezel below is its screen well. */
-  --device: #1a1815;
+  --device: #121217;
 
   /* Structural thread. Replaces --spectrum-gradient for the consumers that
      used it as a BACKGROUND: a rule that runs out of ink, which is a real
@@ -130,23 +230,39 @@
   /* --accent is the GUEST SLOT. Case-study routes and project cards overwrite
      it inline with the project's own colour (validated in
      src/lib/content/work.ts), so colour still only ever appears alongside the
-     work. It DEFAULTS to vermilion so the base chrome speaks in the site's
-     own voice rather than in no voice at all. */
-  --accent: var(--vermilion-500);
-  --accent-hover: var(--vermilion-300);
-  --on-accent: var(--graphite-900); /* 5.24:1 under vermilion */
+     work. It DEFAULTS to the flame so the base chrome speaks in the site's
+     own voice rather than in no voice at all. Voyager relies on that default
+     deliberately: see voyager.mdx. */
+  --accent: var(--flame-500);
+  --accent-hover: var(--flame-400);
+  --on-accent: var(--graphite-900); /* 7.35:1 under the voice, 9.09 when active */
+  /* The gradient form of the guest slot, for surfaces with the area to show a
+     ramp (primary button fills, the CTA panel). It has to be its own token
+     rather than derived: a guest accent is ONE colour, and there is no honest
+     way to synthesise a project's three-stop ramp from it. So a case study
+     overrides this with its flat guest colour (see work/[slug]/page.tsx) and
+     keeps its own identity, while every other route gets the flame ramp.
+     `background` accepts a flat colour and a gradient interchangeably, which
+     is what makes one token able to carry both. */
+  --accent-gradient: var(--flame-gradient);
 
   /* --signal is the CONSTANT a guest cannot take: focus, hover, live, the
      current-section marker, the progress bar. Identical to the default accent
      by design, but it survives the per-project inline --accent override, which
      is the whole reason it exists as a separate token. Without it every case
      study would have a differently-coloured focus ring. */
-  --signal: var(--vermilion-500);
-  --signal-press: var(--vermilion-300);
-  /* The hover lift. A vermilion halo at low alpha, which on a warm graphite
-     reads as the colour bleeding rather than as a neon glow: the old
-     rgba(57,255,106,0.3) bloom was the loudest single tell on the site. */
-  --signal-shadow: color-mix(in srgb, var(--vermilion-500) 34%, transparent);
+  --signal: var(--flame-500);
+  --signal-press: var(--flame-400);
+  /* The gradient a guest CANNOT take, same contract as --signal itself: the
+     scroll progress bar and the hero's emphasised phrase read this, so they
+     stay the site's own ramp on every route. */
+  --signal-gradient: var(--flame-gradient);
+  /* The hover lift, and now the logo's fact 3 rather than a generic halo:
+     warm light spilling onto a cool ground is the thing the icon does behind
+     its mark, measured there as #17110E over #0C0C0F. On a cool ground this
+     reads as the colour BLEEDING, which is what the old
+     rgba(57,255,106,0.3) neon bloom was pretending to be. */
+  --signal-shadow: color-mix(in srgb, var(--flame-500) 34%, transparent);
 
   /* DEPRECATED aliases. Around fifty consumers still say `neon` /
      `shadow-neon`, and the Tailwind boxShadow keys read these two names;
@@ -158,8 +274,9 @@
   /* Form status. These exist as their own roles because the contact form was
      borrowing the spectrum for "error" and the interaction signal for
      "success", and neither survives the spectrum collapse: a grey error
-     message is not an error message, and a vermilion one is indistinguishable
-     from the site simply talking. */
+     message is not an error message, and one in the site's own warm red is
+     indistinguishable from the site simply talking. Both are COLD now, per
+     the temperature rule in the primitives above. */
   --error: var(--status-error);
   --success: var(--status-success);
 
@@ -373,10 +490,13 @@
     align-items: center;
     color: var(--diagram-ink);
   }
-  .dgm-edge__shaft { flex: 1 1 auto; height: 24px; }
   .dgm-edge__head { flex: 0 0 10px; }
   /* Dashed means NOT VERIFIED. */
   .dgm-edge--soft .dgm-edge__shaft line { stroke-dasharray: 4 4; }
+  /* The label sits in the GAP, centred on the arrow, and wraps inside it: the
+     box is the gap's width, so a chain that carries labels widens its gap
+     (.dgm-chain--labelled) instead of letting the text run under the node it is
+     labelling. */
   .dgm-edge__label {
     position: absolute;
     inset-inline: 0;
@@ -384,23 +504,61 @@
     text-align: center;
     font-family: var(--font-mono), ui-monospace, monospace;
     font-size: 0.8125rem;
+    line-height: 1.35;
     text-transform: uppercase;
     letter-spacing: 0.14em;
     color: var(--muted);
   }
   @media (min-width: 1280px) {
     .dgm-chain { grid-template-columns: repeat(var(--dgm-n, 3), minmax(0, 1fr)); }
+    /* Only the horizontal chain needs this: stacked, the gap already spans the
+       full column width and any label fits on one line. */
+    .dgm-chain--labelled { --dgm-gap: clamp(3.5rem, 8cqi, 6.5rem); }
+    /* Horizontal flow: show the horizontal pair, hide the vertical one. */
+    .dgm-edge__shaft--v,
+    .dgm-edge__head--v { display: none; }
+    .dgm-edge__shaft--h { flex: 1 1 auto; height: 24px; }
   }
-  /* Below xl the chain runs vertically, so the arriving edge turns with it. */
+  /* Below xl the chain runs vertically, so the arriving edge turns with it: the
+     edge box moves above the cell and becomes a column, and the VERTICAL glyph
+     pair is the one that shows. Swapping the glyph in CSS rather than in props
+     is not a style choice: the direction is set by this media query, so nothing
+     in JS can know which way the arrow should point. */
   @media (max-width: 1279px) {
     .dgm-cell > .dgm-edge {
+      /* inset-block-start: auto is load-bearing and was the whole bug in the
+         stacked layout. The base rule above sets `inset-block: 0`, i.e. BOTH
+         top and bottom. Adding `inset-block-end: 100%` here without releasing
+         the top over-constrains the box, and CSS resolves that by ignoring
+         `bottom` when top and height are both given: so the edge stayed pinned
+         at the cell's top and drew its shaft and chevron INSIDE the node
+         instead of in the gap above it. */
+      inset-block-start: auto;
       inset-inline: 0;
       inset-block-end: 100%;
       block-size: var(--dgm-gap);
       width: auto;
       flex-direction: column;
     }
-    .dgm-edge__shaft { width: 24px; height: auto; }
+    .dgm-edge__shaft--h,
+    .dgm-edge__head--h { display: none; }
+    .dgm-edge__shaft--v { flex: 1 1 auto; width: 24px; }
+    /* Stacked, the label and the shaft both want the middle of the gap, so the
+       label takes a --bg knockout and breaks the rule it annotates. That is the
+       drafting convention for exactly this collision, and it is why the label
+       can stay ON the edge here rather than being exiled above it. */
+    .dgm-edge__label {
+      top: 50%;
+      bottom: auto;
+      transform: translateY(-50%);
+      width: fit-content;
+      margin-inline: auto;
+      padding-inline: 0.5rem;
+      background: var(--bg);
+    }
+    /* A labelled stacked chain still needs a little more air than an unlabelled
+       one: the knockout has to clear both nodes at the clamp's smallest gap. */
+    .dgm-chain--labelled { --dgm-gap: 3.75rem; }
   }
   /* Landscape phones: never horizontal, notes suppressed. */
   @media (max-height: 520px) and (orientation: landscape) {
@@ -594,6 +752,95 @@
    * the solid left panel and needs neither; under reduced motion the board sits
    * in normal flow BELOW the poster, over --bg, and needs neither.
    */
+  /*
+   * Reel film, seam (lg+). The 50/50 split used to be blended by painting a
+   * wide --bg gradient ON TOP of the film, fully opaque at the seam and rolling
+   * off to transparent. The intent was that "the eye can't find where the clip
+   * emerges", and measured against the actual render it failed twice:
+   *
+   * 1. Fully opaque --bg at the seam is not a blend, it is a WALL. Anything
+   *    behind the film half gets covered, so the hero's warm ember bloom was
+   *    sliced off at exactly x=50%: a 5.77 luminance step at 719->720, on 10 of
+   *    21 sampled rows (the ones where the bloom is actually bright). Where the
+   *    panel behind happened to be exactly --bg the wall was invisible, which
+   *    is why this survived: it only shows where there is something to cut.
+   * 2. AnimatedNoise sits INSIDE the film layer, so the grain stopped at the
+   *    seam too. Measured texture stddev 0.21 on the panel against 1.26 on the
+   *    film. Film grain that ends halfway across the frame is a seam even when
+   *    every colour matches, which is why the edge stayed visible in the rows
+   *    where the luminance step was zero.
+   *
+   * Masking the film's ALPHA instead of painting over it fixes both at once:
+   * the ground shows through with its bloom intact, and the grain fades out
+   * with the film it belongs to rather than stopping at a border.
+   *
+   * The stops are the old ramp's tuned curve, inverted (film visibility = 1 -
+   * the old --bg opacity) and rescaled to the 52% the old overlay spanned, so
+   * this is the same falloff that was already dialled in, not a new guess.
+   * AnimatedNoise stays a static tile: masking does not touch that.
+   */
+  /*
+   * ...and the same treatment on the OTHER side of the seam, which is where the
+   * measurable step actually was. The left panel is w-1/2 + overflow-hidden and
+   * owns the stage's whole atmosphere set (blueprint dots, the HeroFlow ember
+   * bloom, grain), so all three were being guillotined at exactly 50%. Masking
+   * only the film moved the film's edge and left the step at 5.77 untouched,
+   * because the step was the BLOOM ending, not the film starting: measured
+   * 19.1 on the panel against 13.2 on the film at y=150.
+   *
+   * Fading the panel's trailing edge is enough and is deliberately cheaper than
+   * making the atmosphere span the full stage: the panel paints ABOVE the film
+   * in DOM order (that is why it is a half in the first place), so widening it
+   * would cover the clip and need a reorder of a component whose layering is
+   * load-bearing. Nothing is lost by fading instead, because the only thing
+   * under the panel's right edge is the page's own --bg.
+   */
+  @media (min-width: 1024px) {
+    .reel-panel {
+      -webkit-mask-image: linear-gradient(
+        to right,
+        #000 0%,
+        #000 72%,
+        rgba(0, 0, 0, 0.72) 84%,
+        rgba(0, 0, 0, 0.3) 93%,
+        transparent 100%
+      );
+      mask-image: linear-gradient(
+        to right,
+        #000 0%,
+        #000 72%,
+        rgba(0, 0, 0, 0.72) 84%,
+        rgba(0, 0, 0, 0.3) 93%,
+        transparent 100%
+      );
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .reel-film {
+      -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(0, 0, 0, 0.04) 6.2%,
+        rgba(0, 0, 0, 0.18) 12.5%,
+        rgba(0, 0, 0, 0.45) 20.8%,
+        rgba(0, 0, 0, 0.74) 31.2%,
+        rgba(0, 0, 0, 0.92) 41.6%,
+        #000 52%
+      );
+      mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(0, 0, 0, 0.04) 6.2%,
+        rgba(0, 0, 0, 0.18) 12.5%,
+        rgba(0, 0, 0, 0.45) 20.8%,
+        rgba(0, 0, 0, 0.74) 31.2%,
+        rgba(0, 0, 0, 0.92) 41.6%,
+        #000 52%
+      );
+    }
+  }
+
   @media (prefers-reduced-motion: no-preference) and (max-width: 1023px) {
     .reel-board {
       /* Contain the well's negative z-index: `position: relative` alone does
@@ -645,18 +892,30 @@
    * background-clip:text is unsupported.
    */
   .text-spectrum {
-    /* Was a violet→blue gradient clipped to the glyphs. Gradient-clipped
-       display type is a generated-UI tell on its own, so the phrase is a
-       solid now. It is deliberately flat for the moment: with the ground
-       it now paints in var(--signal), the site's vermilion, so the emphasis
-       is carried by the one colour the site actually owns rather than by a
-       gradient effect.
-       -webkit-text-fill-color must be reset explicitly, not just dropped:
-       GSAP SplitText wraps each word in its own span and the old transparent
-       value would inherit into them. */
-    color: var(--signal);
-    -webkit-text-fill-color: currentColor;
+    /* The emphasis is CLIPPED TO THE GLYPHS again, and the history is worth
+       keeping straight because this rule has now been all three things.
+       First a violet-to-blue sweep, correctly rejected as a generated-UI
+       tell. Then a flat --signal, which was the right call while the site's
+       colour was a single flat vermilion. Now the site's colour is the logo's
+       orange-to-red ramp, and this phrase is the largest type on the site, so
+       it is the one place with the area to actually show the ramp.
+
+       `color` stays set underneath as the fallback for engines without
+       background-clip:text, and it is the MIDDLE stop, not an end: a fallback
+       that lands on the tip or the foot misrepresents the ramp. */
+    color: var(--flame-500);
+    background-image: var(--signal-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
+  /* Every context that strips the gradient must ALSO put the fill back, or
+     the phrase renders as invisible text rather than as plain text. There are
+     three such contexts and all three are handled: forced-colors below,
+     @media print near the end of this file, and any engine without
+     background-clip support (covered by `color` above). This is the specific
+     failure the old note here warned about, and it is easy to reintroduce by
+     removing a gradient and forgetting its fill. */
   /*
    * Forced-colors / Windows High Contrast strips the gradient background-image
    * but leaves `-webkit-text-fill-color: transparent` in force: which would
@@ -1150,13 +1409,32 @@ html.lenis body {
    near-black page (see HeroLoopVideo.tsx). --bezel backs it so the plate is
    the same material as a PhoneFrame's screen well, and the hairline is
    ground-relative so it reads on both a dark and a paper page. */
+/* The reel hero FLOATS again: no panel, no border, no radius, no drop shadow.
+   It was a plate (background --bezel, a 14% hairline, a 1.25rem radius and a
+   heavy shadow) because A5 could not feather it: the capture's surround is
+   baked to ~rgb(15,17,18) and the ground at the time was a WARM #14120F, so
+   there was no colour that graded between them and the box was the honest
+   option.
+
+   The logo repaint removes that constraint. The ground is now a cool #0D0D10,
+   within about two luminance points of the surround, so the surround can simply
+   dissolve into the page and the capture reads as light in the dark rather than
+   as a framed object. The feather is a mask on all four edges rather than a
+   radial aperture: the reels are full-frame compositions (Voyager's isometric
+   flow runs edge to edge) and a radial aperture eats their corners.
+
+   The device chrome elsewhere is NOT this and must stay boxed: a PhoneFrame and
+   a BrowserMockup are supposed to look like objects with edges, because there
+   the frame is the subject. This was a panel around a video, which is not. */
 .hlv-plate {
-  background: var(--bezel);
-  border: 1px solid color-mix(in srgb, var(--fg) 14%, transparent);
-  border-radius: 1.25rem;
-  box-shadow:
-    0 34px 80px -28px rgba(var(--shadow-rgb), 0.55),
-    0 2px 10px -3px rgba(var(--shadow-rgb), 0.35);
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0, #000 5%, #000 95%, transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 4%, #000 96%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent 0, #000 5%, #000 95%, transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 4%, #000 96%, transparent 100%);
+  mask-composite: intersect;
 }
 @media (prefers-reduced-motion: no-preference) {
   .hlv-float {
@@ -1272,8 +1550,14 @@ html.lenis body {
     --accent: #101012;
     --accent-hover: #101012;
     --on-accent: #ffffff;
+    /* Both gradient tokens flatten to ink. A gradient fill prints as a muddy
+       band on white and costs a reader real toner for no information. Note
+       these are flat COLOURS, not `none`: they are consumed via `background`,
+       and `none` there would paint nothing at all. */
+    --accent-gradient: #101012;
+    --signal-gradient: #101012;
     /* The interaction signal is a screen affordance: on paper it becomes ink,
-       so hover-coloured headings don't print as vermilion.
+       so hover-coloured headings do not print as the flame.
        --neon is `var(--signal)` at :root, so overriding --neon alone does NOT
        reach --signal. Both are needed: two --signal consumers genuinely print
        (the resume's register mark, and .text-spectrum on the home hero and
@@ -1306,6 +1590,20 @@ html.lenis body {
   * {
     --accent: #101012 !important;
     --accent-hover: #101012 !important;
+    /* Case studies set this inline too, so it needs the same !important
+       treatment: an inline gradient would otherwise outrank the :root remap
+       and print the project's colour as a band. */
+    --accent-gradient: #101012 !important;
+  }
+
+  /* .text-spectrum is clipped to its glyphs on screen. Flattening the
+     gradient is not enough on its own: -webkit-text-fill-color: transparent
+     would survive and print the site's largest phrase as a blank gap. Put the
+     fill back explicitly, the same way the forced-colors block does. */
+  .text-spectrum {
+    background-image: none !important;
+    -webkit-text-fill-color: currentColor !important;
+    color: var(--fg) !important;
   }
 
   /* Site chrome + anything explicitly marked as screen-only.

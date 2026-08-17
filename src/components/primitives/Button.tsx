@@ -24,8 +24,14 @@ const base =
 // `transition` animates transform + box-shadow on the `fast` button token, so the
 // settle reads soft and smooth, never bouncy.
 const variantClasses: Record<ButtonVariant, string> = {
+  // A primary button is the largest continuous area of the site's colour
+  // anywhere in the chrome, so it takes the RAMP rather than a flat fill, aimed
+  // at 180deg: the logo's own orientation, which makes the button read as a lit
+  // object rather than a coloured rectangle. It reads --accent-gradient, not
+  // --signal-gradient, so a case study's flat guest colour still themes its own
+  // buttons (see globals.css on why a guest cannot have a ramp).
   primary:
-    "bg-accent text-on-accent hover:-translate-y-0.5 hover:shadow-neon-soft active:translate-y-0",
+    "bg-[image:var(--accent-gradient)] [--flame-angle:180deg] text-on-accent hover:-translate-y-0.5 hover:shadow-neon-soft active:translate-y-0",
   secondary:
     "border border-line text-fg hover:border-neon hover:text-neon hover:-translate-y-0.5 hover:shadow-neon-soft active:translate-y-0",
   ghost: "text-fg hover:text-neon",

@@ -3,23 +3,28 @@ import { cn } from "@/lib/utils/cn";
 /*
  * Hero atmosphere: colour with a REASON. Instead of free-floating gradient
  * blobs (its own template smell), the hero's colour emanates from its one
- * structural colour element: the signal trace. A soft band of the four
- * project hues sits on the trace's latitude and FLOWS ALONG the line: an
+ * structural colour element: the signal trace. A soft band of the flame ramp
+ * sits on the trace's latitude and FLOWS ALONG the line: an
  * oversized gradient strip translated slowly on the compositor (transform
- * only, no repaints, no canvas). One quiet vermilion ember up-right adds depth
- * so the rest of the frame isn't dead. Reduced motion holds the still.
+ * only, no repaints, no canvas). One quiet ember up-right adds depth so the
+ * rest of the frame isn't dead. Reduced motion holds the still.
  */
 
 /* The signal trace. Was five hard-coded project/spectrum hues in one string
    (#2DD4BF, #C9E94B, #F7A53B, #46B4F0, #A98BFF): the single biggest bypass of
-   the token system on the site, and a rainbow at that.
-   It now runs the site's own voice: vermilion at full strength, cooling
-   through its active step into the graphite ground. One colour, stated once.
+   the token system on the site, and a rainbow at that. Then it was the
+   vermilion voice, but with a stray #E8A317 (Voyager's guest amber) sitting
+   in the middle of it, which meant the home hero was painting one project's
+   colour for no stated reason.
+   It now runs the LOGO'S OWN GRADIENT, laid on its side: tip, mean, foot, in
+   that order, the same three steps in the same sequence the icon reads from
+   top to bottom. The trace is the one place on the site where the flame gets
+   to be a ramp rather than a single step, which is what the mark itself is.
    Literal hex rather than var() is deliberate: this is a painted artwork
    gradient, not chrome, and the token names are written beside the values so
    a future repaint can find them. */
 const TRACE_GRADIENT =
-  "linear-gradient(90deg, transparent 0%, #FF3B14 18%, #FF6B45 44%, #E8A317 66%, #2B2721 86%, transparent 100%)"; /* vermilion-500, vermilion-300, voyager amber, graphite-700 */
+  "linear-gradient(90deg, transparent 0%, #F8B838 16%, #FB7B20 42%, #F03E17 66%, #212129 86%, transparent 100%)"; /* flame-300, flame-500, flame-700, graphite-700 */
 
 export function HeroFlow({ className }: { className?: string }) {
   return (
@@ -58,7 +63,7 @@ export function HeroFlow({ className }: { className?: string }) {
           }}
         />
       </div>
-      {/* One quiet ember for depth: a single cool pool, not a constellation. */}
+      {/* One quiet ember for depth: a single warm pool, not a constellation. */}
       <div
         className="absolute"
         style={{
@@ -68,9 +73,12 @@ export function HeroFlow({ className }: { className?: string }) {
           height: "52%",
           background:
             /* was #A98BFF at 14%: a violet bloom, and violet is exactly the
-               hue a generated palette reaches for. Now the site's own
-               vermilion, at the same dosage. */
-            "radial-gradient(50% 50% at 50% 50%, color-mix(in srgb, #FF3B14 14%, transparent), transparent 70%)",
+               hue a generated palette reaches for. Now the logo's third fact
+               at the same dosage: warm light spilling onto a cool ground,
+               which is measurable in the icon as #17110E behind the mark
+               against a #0C0C0F field. On the old WARM graphite this bloom
+               had nothing to be warm against; it does now. */
+            "radial-gradient(50% 50% at 50% 50%, color-mix(in srgb, #FB7B20 14%, transparent), transparent 70%)" /* flame-500 */,
         }}
       />
     </div>

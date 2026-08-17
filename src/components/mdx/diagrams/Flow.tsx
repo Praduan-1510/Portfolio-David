@@ -64,46 +64,62 @@ function kids<T>(children: ReactNode): T[] {
     .filter((p): p is T => p !== null);
 }
 
-/** The arriving edge: a stretch shaft plus a fixed-size chevron glyph. */
-function Edge({
-  style = "solid",
-  label,
-  vertical = false,
-}: {
-  style?: EdgeStyle;
-  label?: string;
-  vertical?: boolean;
-}) {
+/*
+ * The arriving edge: a stretch shaft plus a fixed-size chevron glyph.
+ *
+ * BOTH orientations are rendered and CSS shows one, which looks wasteful and is
+ * the only correct option. The chain's direction is decided by a MEDIA QUERY
+ * (horizontal from xl, vertical below, see globals.css), so a JS `vertical`
+ * prop can never agree with it: this component previously took one, defaulted
+ * it to false, and was never passed anything, so every stacked chain drew a
+ * right-pointing arrow across a downward flow. CHEVRON_DOWN and the
+ * `dgm-edge--v` class were both written for that switch and neither was ever
+ * reachable (`dgm-edge--v` has no rule in the stylesheet at all).
+ *
+ * Rotating one glyph instead would be fewer nodes and wrong: the shaft is a
+ * preserveAspectRatio="none" STRETCH piece that has to stretch along the flow
+ * axis, and rotating it stretches the other one.
+ */
+function Edge({ style = "solid", label }: { style?: EdgeStyle; label?: string }) {
   const soft = style === "soft";
+  // A dashed shaft means NOT VERIFIED and deliberately does not draw on:
+  // animating a dash pattern destroys it.
+  const draw = soft ? {} : { pathLength: 1, "data-draw": "" };
   return (
-    <span
-      className={`dgm-edge${soft ? " dgm-edge--soft" : ""}${vertical ? " dgm-edge--v" : ""}`}
-      aria-hidden="true"
-    >
+    <span className={`dgm-edge${soft ? " dgm-edge--soft" : ""}`} aria-hidden="true">
       <svg
-        className="dgm-edge__shaft"
-        viewBox={vertical ? "0 0 24 24" : "0 0 24 24"}
+        className="dgm-edge__shaft dgm-edge__shaft--h"
+        viewBox="0 0 24 24"
         preserveAspectRatio="none"
         focusable="false"
       >
-        {vertical ? (
-          <line x1="12" y1="0" x2="12" y2="24" {...(soft ? {} : { pathLength: 1, "data-draw": "" })} />
-        ) : (
-          <line x1="0" y1="12" x2="24" y2="12" {...(soft ? {} : { pathLength: 1, "data-draw": "" })} />
-        )}
+        <line x1="0" y1="12" x2="24" y2="12" {...draw} />
       </svg>
       <svg
-        className="dgm-edge__head"
-        width={vertical ? 24 : 10}
-        height={vertical ? 10 : 24}
-        viewBox={vertical ? "0 0 24 10" : "0 0 10 24"}
+        className="dgm-edge__head dgm-edge__head--h"
+        width={10}
+        height={24}
+        viewBox="0 0 10 24"
         focusable="false"
       >
-        <path
-          d={vertical ? CHEVRON_DOWN : CHEVRON_RIGHT}
-          strokeLinejoin="miter"
-          strokeLinecap="butt"
-        />
+        <path d={CHEVRON_RIGHT} strokeLinejoin="miter" strokeLinecap="butt" />
+      </svg>
+      <svg
+        className="dgm-edge__shaft dgm-edge__shaft--v"
+        viewBox="0 0 24 24"
+        preserveAspectRatio="none"
+        focusable="false"
+      >
+        <line x1="12" y1="0" x2="12" y2="24" {...draw} />
+      </svg>
+      <svg
+        className="dgm-edge__head dgm-edge__head--v"
+        width={24}
+        height={10}
+        viewBox="0 0 24 10"
+        focusable="false"
+      >
+        <path d={CHEVRON_DOWN} strokeLinejoin="miter" strokeLinecap="butt" />
       </svg>
       {label && <span className="dgm-edge__label">{label}</span>}
     </span>
@@ -175,6 +191,12 @@ export function Flow({
           : [props<FlowNodeProps>(c)].filter((p): p is FlowNodeProps => p !== null),
       );
   const promoted = all.filter((n) => n.promote).length;
+  /* An edge label has to live in the GAP between two cells, and the default gap
+     (2-3rem) cannot hold one: at 13px mono with 0.14em tracking, anything past
+     about five characters wraps and then collides with the node it labels. So a
+     labelled chain widens its own gap rather than silently overlapping, and the
+     class is set here because only Flow can see whether any label exists. */
+  const labelled = all.some((n) => !!n.edge);
   if (promoted !== 1) {
     const msg = `<Flow title="${title}"> has ${promoted} promoted nodes, needs exactly 1 (replaces ${replaces}).`;
     if (process.env.NODE_ENV === "production") throw new Error(msg);
@@ -203,7 +225,7 @@ export function Flow({
                   delay={0.08}
                 >
                   <ol
-                    className="dgm-chain"
+                    className={`dgm-chain${labelled ? " dgm-chain--labelled" : ""}`}
                     style={{ "--dgm-n": nodes.length } as React.CSSProperties}
                   >
                     {nodes.map((n, i) => (
@@ -251,7 +273,7 @@ export function Flow({
         >
           <DrawIn stagger={stagger.tight} duration={durations.slow} delay={0.08}>
             <ol
-              className="dgm-chain"
+              className={`dgm-chain${labelled ? " dgm-chain--labelled" : ""}`}
               style={{ "--dgm-n": all.length } as React.CSSProperties}
             >
               {all.map((n, i) => (

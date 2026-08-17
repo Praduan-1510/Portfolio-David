@@ -292,13 +292,16 @@ export function CinematicReel() {
         {/* Film layer: canvas frames, reading scrim, grain, veil. Visible
             from load (the hero paints above it). At lg+ it is
             confined to the RIGHT half of the stage (the 50/50 split):
-            left-1/2 overrides inset-0's left edge, and the seam-blend
-            gradient inside feathers the film into the dark panel, no hard
-            cut. Below lg it stays full-bleed: the portrait design is
-            untouched. */}
+            left-1/2 overrides inset-0's left edge, and `.reel-film` masks the
+            layer's ALPHA so it dissolves into the dark panel with no hard cut.
+            The mask replaced an opaque --bg overlay that was slicing the
+            hero's ember bloom and the film grain at exactly the seam: see the
+            measurements in globals.css. Below lg the class is inert (the mask
+            is gated at lg+) and the film stays full-bleed, so the portrait
+            design is untouched. */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 motion-reduce:hidden lg:left-1/2"
+          className="reel-film absolute inset-0 motion-reduce:hidden lg:left-1/2"
         >
           <canvas
             ref={canvasRef}
@@ -316,19 +319,11 @@ export function CinematicReel() {
                 "linear-gradient(to top, var(--bg) 0%, color-mix(in srgb, var(--bg) 62%, transparent) 45%, transparent 100%)",
             }}
           />
-          {/* Seam blend (lg+): the film DISSOLVES into the dark panel over a
-              wide, eased band: --bg is fully opaque at the seam (matching the
-              panel exactly) and rolls off through a long smootherstep ramp, so
-              the eye can't find where the clip's grid/subject emerges. Nearly
-              half the film width, but the subject sits centre-right and stays
-              clear. */}
-          <div
-            className="absolute inset-y-0 left-0 hidden w-[52%] lg:block"
-            style={{
-              background:
-                "linear-gradient(to right, var(--bg) 0%, color-mix(in srgb, var(--bg) 96%, transparent) 12%, color-mix(in srgb, var(--bg) 82%, transparent) 24%, color-mix(in srgb, var(--bg) 55%, transparent) 40%, color-mix(in srgb, var(--bg) 26%, transparent) 60%, color-mix(in srgb, var(--bg) 8%, transparent) 80%, transparent 100%)",
-            }}
-          />
+          {/* The seam blend that used to live here is gone: it was an opaque
+              --bg overlay pretending to be a dissolve, and `.reel-film`'s alpha
+              mask does the same falloff without cutting the ground behind it.
+              Its ramp was tuned well and is preserved verbatim in the mask
+              stops, inverted and rescaled to the 52% this overlay spanned. */}
           {/* Corner vignette (lg+): the grid backdrop is brightest at the
               film's top-left, right where it hugs the seam; a soft --bg pool
               anchored to that corner keeps it from popping against the flat
@@ -362,7 +357,7 @@ export function CinematicReel() {
             above this div's own bg. */}
         <div
           aria-hidden="true"
-          className="isolate absolute inset-y-0 left-0 hidden w-1/2 overflow-hidden bg-bg motion-safe:lg:block"
+          className="reel-panel isolate absolute inset-y-0 left-0 hidden w-1/2 overflow-hidden bg-bg motion-safe:lg:block"
         >
           <div
             className="blueprint-dots absolute inset-0 -z-10 opacity-60"

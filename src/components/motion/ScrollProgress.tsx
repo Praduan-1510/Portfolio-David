@@ -46,15 +46,21 @@ export function ScrollProgress({ className }: ScrollProgressProps) {
     >
       {/* Colour reads --progress-accent when a case-study route sets it (a single
           project hue: identity wins inside a project); everywhere else it falls
-          back to the site spectrum gradient, so the bar reads as the wayfinding
+          back to the site's own ramp, so the bar reads as the wayfinding
           signal. `background` (not background-color) accepts either a flat colour
           or the gradient image. The bar scales via scaleX, so the gradient is the
-          full spectrum compressed into the filled width: a complete sweep that
-          grows as you scroll. */}
+          full ramp compressed into the filled width: a complete sweep that
+          grows as you scroll.
+
+          The fallback was --spectrum-gradient, the TONAL bone ramp, which was
+          correct while the site's colour was a single flat step and there was no
+          coloured gradient to reach for. There is now: --signal-gradient is the
+          logo's orange-to-red, and a 3px bar spanning the viewport is exactly
+          the "enough area to show all three stops" case the token is for. */}
       <div
         ref={ref}
         className="h-full w-full"
-        style={{ background: "var(--progress-accent, var(--spectrum-gradient))" }}
+        style={{ background: "var(--progress-accent, var(--signal-gradient))" }}
       />
     </div>
   );

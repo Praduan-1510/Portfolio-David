@@ -20,10 +20,10 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 // Design tokens (raw hex: ImageResponse can't read Tailwind classes).
-const BG = "#14120F";
-const FG = "#F4F1EA";
-const MUTED = "#9B9489";
-const LINE = "rgba(244,241,234,0.12)";
+const BG = "#0D0D10";
+const FG = "#F7F0E4";
+const MUTED = "#A09689";
+const LINE = "rgba(247,240,228,0.12)";
 
 export default function OpengraphImage() {
   return new ImageResponse(

@@ -28,13 +28,19 @@ export async function generateImageMetadata({
   return [{ id: "card", alt, size, contentType }];
 }
 
-const BG = "#14120F";
-const FG = "#F4F1EA";
-const MUTED = "#9B9489";
-const LINE = "rgba(244,241,234,0.12)";
-// Default accent if a project omits one: the off-white fg, so the rule reads
-// as a neutral hairline rather than a missing colour.
-const DEFAULT_ACCENT = FG;
+const BG = "#0D0D10";
+const FG = "#F7F0E4";
+const MUTED = "#A09689";
+const LINE = "rgba(247,240,228,0.12)";
+// Default accent if a project omits one. This used to be FG, on the reasoning
+// that a missing colour should read as a neutral hairline, and nothing
+// exercised it because every study set an accent. Voyager now deliberately
+// omits one (see voyager.mdx: its brand amber measures dE 5.5 from the site's
+// flame, so it inherits the voice instead of faking a distinction), which
+// makes this branch live: it has to match what the ROUTE renders, or the
+// share card and the page disagree. --accent falls back to --flame-500 in
+// :root, so this does too.
+const DEFAULT_ACCENT = "#FB7B20"; // --flame-500, the site's voice
 
 /** Trim the summary so it never overruns the card. */
 function truncate(text: string, max = 120): string {

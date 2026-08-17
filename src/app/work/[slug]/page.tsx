@@ -127,8 +127,18 @@ export default async function CaseStudy({
 
   // Theme the route to the project accent (semantic remap, §4/§8) and run it on
   // the dark surface so any accent (lime/orange/blue) stays high-contrast (§3).
+  // --accent-gradient is remapped to the SAME flat colour, not left to inherit:
+  // it defaults to the site's flame ramp, so without this a project's primary
+  // buttons would still be painting the site's orange-to-red inside a study
+  // themed lime or blue. A guest is one colour and cannot honestly be given a
+  // three-stop ramp of its own, so it gets a flat one, which `background`
+  // accepts interchangeably with a gradient.
+  //
+  // Voyager deliberately omits `accent` (its brand amber measures dE 5.5 from
+  // the site's flame, so it inherits the voice), which means it also inherits
+  // the ramp here. That is the intended outcome, not an oversight.
   const themeStyle = meta.accent
-    ? ({ "--accent": meta.accent } as React.CSSProperties)
+    ? ({ "--accent": meta.accent, "--accent-gradient": meta.accent } as React.CSSProperties)
     : undefined;
 
   // Hero reel aperture: each capture declares its composition's aspect in

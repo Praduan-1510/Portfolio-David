@@ -48,7 +48,7 @@ const signature = Mrs_Saint_Delafield({
 });
 
 // Tint mobile browser chrome to the near-black base (address bar, overscroll).
-export const viewport: Viewport = { themeColor: "#14120f" };
+export const viewport: Viewport = { themeColor: "#0d0d10" };
 
 export const metadata: Metadata = {
   // Base for resolving relative OG/twitter image paths to absolute URLs.

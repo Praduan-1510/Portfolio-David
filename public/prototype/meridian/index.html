@@ -10,30 +10,31 @@
 <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700;800;900&family=Figtree:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --amber:#FFB43D;--coral:#FF6F55;--magenta:#FB2E7E;--iris:#6D48F0;--aqua:#14D3C4;--sky:#2FA4FF;
-  --grad-dusk:linear-gradient(135deg,#FF6F55,#FB2E7E 45%,#6D48F0);
-  --grad-ember:linear-gradient(135deg,#FFB43D,#FF6F55 60%,#FB2E7E);
-  --grad-aurora:linear-gradient(135deg,#14D3C4,#2FA4FF 45%,#6D48F0);
-  --grad-iris:linear-gradient(135deg,#8A6BFF,#6D48F0 55%,#4B2ED0);
-  --grad-zenith:linear-gradient(90deg,#FFB43D,#FF6F55 25%,#FB2E7E 50%,#6D48F0 75%,#14D3C4);
+  --straw:#D8C079;--copper:#B4703C;--iron:#A8474A;--verdigris:#7D9B8E;--steel:#6E8CA0;
+  --fill-brass:#C08A3E;--on-brass:#1B1509;--brass-hi:#D3A15A;--brass-deep:#8F6529;
+  --grad-copper:linear-gradient(150deg,#A96C38,#834E24);
+  --grad-steel:linear-gradient(150deg,#5D7A8B,#425667);
+  --grad-brass:linear-gradient(150deg,#A8763C,#8A6229);
+  --grad-meridian:linear-gradient(90deg,#D8C079,#C08A3E 30%,#B4703C 62%,#8E4A3C);
   --rmd:14px;--rlg:22px;--rxl:32px;--rfull:999px;--ease:cubic-bezier(.22,.61,.36,1);
   --fd:"Gabarito",system-ui,sans-serif;--fu:"Figtree",system-ui,sans-serif;--fm:"IBM Plex Mono",monospace;
 }
-:root[data-theme="dark"]{--ink-1:#12101E;--ink-2:#191634;--ink-3:#221E42;--line:rgba(255,255,255,.09);--line-2:rgba(255,255,255,.16);--hi:#F4F1FF;--tx:#C9C3E6;--mut:#8E88B4;--faint:#615C86;--card:rgba(255,255,255,.035);--glass:rgba(20,17,42,.72);--grain:.05}
-:root[data-theme="light"]{--ink-1:#FBF7F4;--ink-2:#FFFFFF;--ink-3:#FFFFFF;--line:#ECE3DC;--line-2:#DCD1C8;--hi:#211A2E;--tx:#4A4360;--mut:#847C97;--faint:#B3A9BE;--card:#FFFFFF;--glass:rgba(251,247,244,.82);--grain:.03}
+:root[data-theme="dark"]{--brass:#C08A3E;--ink-1:#16181B;--ink-2:#1D2024;--ink-3:#25292E;--line:rgba(255,255,255,.09);--line-2:rgba(255,255,255,.16);--hi:#E9E7E2;--tx:#B4B3AD;--mut:#96958F;--faint:#787974;--card:rgba(255,255,255,.035);--glass:rgba(22,24,27,.72);--grain:.05}
+:root[data-theme="light"]{--brass:#6E4E1B;--ink-1:#F4F3F0;--ink-2:#FFFFFF;--ink-3:#FFFFFF;--line:#DFDEDA;--line-2:#C8C7C2;--hi:#1B1E21;--tx:#43474B;--mut:#6B6F74;--faint:#83888D;--card:#FFFFFF;--glass:rgba(244,243,240,.82);--grain:.03}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:var(--fu);background:var(--ink-1);color:var(--tx);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .5s var(--ease),color .5s var(--ease)}
 body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:var(--grain);mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-::selection{background:rgba(251,46,126,.35);color:#fff}
+::selection{background:rgba(192,138,62,.35);color:#fff}
 h1,h2,h3,h4{font-family:var(--fd);color:var(--hi);letter-spacing:-.02em;line-height:1.08;font-weight:800}
 a{color:inherit;text-decoration:none}
 .mono{font-family:var(--fm)}.tab{font-variant-numeric:tabular-nums}
-.grad{background:var(--grad-zenith);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+/* emphasis is struck in brass, not filled with a gradient */
+.brass-text{color:var(--brass)}
 .wrap{max-width:1160px;margin:0 auto;padding:0 24px}
 section{padding:90px 0;position:relative}
 .eyebrow{font-weight:700;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--mut);display:inline-flex;align-items:center;gap:10px;margin-bottom:16px}
-.eyebrow::before{content:"";width:26px;height:2px;border-radius:2px;background:var(--grad-ember)}
+.eyebrow::before{content:"";width:26px;height:2px;border-radius:2px;background:var(--grad-copper)}
 .sec-title{font-size:clamp(30px,5vw,52px);margin-bottom:16px}
 .lead{font-size:clamp(16px,2vw,19px);color:var(--mut);max-width:64ch}
 
@@ -49,29 +50,31 @@ section{padding:90px 0;position:relative}
 
 .btn{font-weight:700;font-size:14px;border-radius:var(--rfull);display:inline-flex;align-items:center;gap:8px;padding:12px 22px;cursor:pointer;border:none;transition:transform .15s var(--ease),filter .2s,border-color .2s,background .2s;font-family:var(--fu)}
 .btn:active{transform:translateY(1px) scale(.99)}
-.btn-pri{background:var(--grad-dusk);color:#fff;box-shadow:0 10px 30px -10px rgba(251,46,126,.6)}
+.btn-pri{background:var(--fill-brass);color:var(--on-brass);border:1px solid #8F6529;box-shadow:inset 0 1px 0 rgba(255,255,255,.22)}
 .btn-pri:hover{filter:brightness(1.08)}
 .btn-sec{background:var(--card);color:var(--hi);border:1px solid var(--line-2)}
-.btn-sec:hover{border-color:var(--iris)}
+.btn-sec:hover{border-color:var(--brass)}
 .btn.sm{padding:9px 16px;font-size:13px}
 
 /* hero */
 .hero{min-height:96vh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;padding-top:80px}
-.mesh{position:absolute;inset:-20%;z-index:0;filter:blur(80px);opacity:.85}
-.mesh span{position:absolute;border-radius:50%;mix-blend-mode:screen}
-:root[data-theme="light"] .mesh span{mix-blend-mode:multiply;opacity:.5}
-.b1{width:48vw;height:48vw;left:-6%;top:-8%;background:radial-gradient(circle,#FF6F55,transparent 62%);animation:drift 24s var(--ease) infinite alternate}
-.b2{width:44vw;height:44vw;right:-6%;top:0;background:radial-gradient(circle,#6D48F0,transparent 62%);animation:drift 28s var(--ease) infinite alternate-reverse}
-.b3{width:42vw;height:42vw;left:28%;bottom:-18%;background:radial-gradient(circle,#14D3C4,transparent 64%);animation:drift 22s var(--ease) infinite alternate}
-@keyframes drift{to{transform:translate(6%,8%) scale(1.15)}}
+.graticule{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+/* the ruled plate: 48px graticule, faded off at the edges */
+.graticule::before{content:"";position:absolute;inset:-1px;background:repeating-linear-gradient(0deg,transparent 0 47px,rgba(255,255,255,.05) 47px 48px),repeating-linear-gradient(90deg,transparent 0 47px,rgba(255,255,255,.05) 47px 48px);-webkit-mask-image:radial-gradient(ellipse 78% 68% at 50% 38%,#000 30%,transparent 100%);mask-image:radial-gradient(ellipse 78% 68% at 50% 38%,#000 30%,transparent 100%)}
+:root[data-theme="light"] .graticule::before{background:repeating-linear-gradient(0deg,transparent 0 47px,rgba(20,22,25,.055) 47px 48px),repeating-linear-gradient(90deg,transparent 0 47px,rgba(20,22,25,.055) 47px 48px)}
+/* the meridian: one struck arc, brass, with the zenith marked where it peaks */
+.graticule .arc{position:absolute;left:50%;top:8%;width:150%;aspect-ratio:2/1;transform:translateX(-50%);border:1px solid rgba(192,138,62,.3);border-bottom:none;border-radius:50% 50% 0 0/100% 100% 0 0}
+.graticule .arc::after{content:"";position:absolute;top:-4px;left:50%;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:#C08A3E}
+:root[data-theme="light"] .graticule .arc{border-color:rgba(110,78,27,.34);border-bottom:none}
+:root[data-theme="light"] .graticule .arc::after{background:#6E4E1B}
 .hero-in{position:relative;z-index:2;width:100%;max-width:1160px;margin:0 auto;padding:0 24px}
 .badge{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;padding:7px 16px;border-radius:var(--rfull);color:var(--hi);border:1px solid var(--line-2);background:var(--glass);margin-bottom:26px}
-.badge .dot{width:8px;height:8px;border-radius:50%;background:var(--grad-ember);box-shadow:0 0 12px 2px rgba(251,46,126,.7)}
+.badge .dot{width:8px;height:8px;border-radius:50%;background:var(--grad-copper);box-shadow:0 0 0 1px rgba(192,138,62,.35)}
 .hero h1{font-size:clamp(52px,10vw,120px);font-weight:900;letter-spacing:-.045em;line-height:.9;margin-bottom:22px}
 .hero .sub{font-size:clamp(17px,2.2vw,23px);color:var(--tx);max-width:56ch;line-height:1.5;margin-bottom:34px}
 .hero .sub b{color:var(--hi);font-weight:700}
 .cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
-.hero-lock{margin-bottom:26px;filter:drop-shadow(0 20px 50px rgba(123,45,255,.45))}
+.hero-lock{margin-bottom:26px;filter:drop-shadow(0 20px 50px rgba(192,138,62,.45))}
 .chips{display:flex;gap:26px;flex-wrap:wrap;margin-top:46px}
 .chip{display:flex;flex-direction:column}
 .chip .n{font-family:var(--fd);font-weight:800;font-size:30px;color:var(--hi);line-height:1}
@@ -80,7 +83,7 @@ section{padding:90px 0;position:relative}
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .reveal.in{opacity:1;transform:none}
 .panel{background:var(--ink-2);border:1px solid var(--line);border-radius:var(--rlg);padding:28px}
-:root[data-theme="light"] .panel{box-shadow:0 2px 4px rgba(20,10,40,.03),0 16px 44px -26px rgba(20,10,40,.18)}
+:root[data-theme="light"] .panel{box-shadow:0 2px 4px rgba(20,22,25,.03),0 16px 44px -26px rgba(20,22,25,.18)}
 .grid{display:grid;gap:18px}
 .g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
 @media(max-width:860px){.g2,.g3{grid-template-columns:1fr}}
@@ -97,11 +100,11 @@ section{padding:90px 0;position:relative}
 /* identity mini */
 .id-grid{display:grid;grid-template-columns:auto 1fr;gap:20px;margin-top:30px;align-items:stretch}
 @media(max-width:720px){.id-grid{grid-template-columns:1fr}}
-.id-tile{width:150px;height:150px;border-radius:34px;background:var(--grad-dusk);display:grid;place-items:center;box-shadow:0 24px 50px -16px rgba(251,46,126,.5)}
-.spectrum{height:60px;border-radius:var(--rmd);background:var(--grad-zenith);margin-bottom:14px}
+.id-tile{width:150px;height:150px;border-radius:34px;background:var(--grad-raking);display:grid;place-items:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 24px 50px -20px rgba(0,0,0,.55)}
+.spectrum{height:60px;border-radius:var(--rmd);background:var(--grad-meridian);margin-bottom:14px}
 .id-right{display:flex;flex-direction:column;justify-content:space-between}
 .type-row{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
-.type-row .big{font-family:var(--fd);font-weight:900;font-size:44px;background:var(--grad-solar,var(--grad-dusk));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--iris)}
+.type-row .big{font-family:var(--fd);font-weight:900;font-size:44px;color:var(--brass)}
 .type-row .lbl{font-size:13px;color:var(--mut)}
 .type-row .lbl b{color:var(--hi)}
 
@@ -116,7 +119,7 @@ section{padding:90px 0;position:relative}
 .ex-prev{height:180px;position:relative;overflow:hidden;background:var(--ink-3);border-bottom:1px solid var(--line)}
 .ex.feat .ex-prev{height:280px}
 .ex-body{padding:20px 22px;flex:1;display:flex;flex-direction:column}
-.ex-body .tag{font-family:var(--fm);font-size:11px;color:var(--iris);font-weight:600;letter-spacing:.04em}
+.ex-body .tag{font-family:var(--fm);font-size:11px;color:var(--brass);font-weight:600;letter-spacing:.04em}
 .ex-body h3{font-size:20px;margin:6px 0 6px}
 .ex-body p{font-size:14px;color:var(--mut);flex:1;margin-bottom:14px}
 .ex-go{font-weight:700;font-size:13.5px;color:var(--hi);display:inline-flex;align-items:center;gap:7px}
@@ -126,12 +129,12 @@ section{padding:90px 0;position:relative}
 .mm{position:absolute;inset:0;display:grid;grid-template-columns:56px 1fr;font-size:0}
 .mm-side{background:var(--ink-2);border-right:1px solid var(--line);padding:10px 8px;display:flex;flex-direction:column;gap:7px}
 .mm-side i{height:8px;border-radius:3px;background:var(--card)}
-.mm-side i.logo{height:16px;width:16px;border-radius:5px;background:var(--grad-iris);margin-bottom:6px}
-.mm-side i.on{background:var(--grad-dusk);width:70%}
+.mm-side i.logo{height:16px;width:16px;border-radius:5px;background:var(--grad-brass);margin-bottom:6px}
+.mm-side i.on{background:var(--fill-brass);width:70%}
 .mm-main{padding:14px}
 .mm-top{display:flex;gap:8px;margin-bottom:12px;align-items:center}
 .mm-top .s{flex:1;height:18px;border-radius:9px;background:var(--ink-2);border:1px solid var(--line)}
-.mm-top .b{height:18px;width:56px;border-radius:9px;background:var(--grad-dusk)}
+.mm-top .b{height:18px;width:56px;border-radius:9px;background:var(--fill-brass)}
 .mm-stats{display:flex;gap:8px;margin-bottom:12px}
 .mm-stats div{flex:1;height:44px;border-radius:8px;background:var(--ink-2);border:1px solid var(--line)}
 .mm-rows{display:flex;flex-direction:column;gap:6px}
@@ -152,13 +155,13 @@ section{padding:90px 0;position:relative}
 .fc p{font-size:13.5px;color:var(--mut)}
 
 /* cta band */
-.band{background:var(--grad-iris);border-radius:var(--rxl);padding:52px 40px;text-align:center;position:relative;overflow:hidden;color:#fff;margin-top:20px}
+.band{background:var(--grad-brass);border-radius:var(--rxl);padding:52px 40px;text-align:center;position:relative;overflow:hidden;color:#fff;margin-top:20px}
 .band::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 10%,rgba(255,255,255,.28),transparent 45%)}
 .band h2{color:#fff;font-size:clamp(28px,4vw,44px);margin-bottom:12px;position:relative}
 .band p{color:rgba(255,255,255,.86);font-size:17px;max-width:50ch;margin:0 auto 26px;position:relative}
 .band .cta{justify-content:center;position:relative}
 .band .btn-sec{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.3);color:#fff}
-.band .btn-pri{background:#fff;color:#4B2ED0;box-shadow:none}
+.band .btn-pri{background:#fff;color:#8F6529;box-shadow:none}
 
 .footer{padding:56px 0 70px;border-top:1px solid var(--line);text-align:center;margin-top:20px}
 .footer .fl{display:flex;align-items:center;justify-content:center;gap:11px;font-family:var(--fd);font-weight:800;font-size:20px;color:var(--hi);margin-bottom:10px}
@@ -169,11 +172,11 @@ section{padding:90px 0;position:relative}
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-<linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC24B"/><stop offset=".35" stop-color="#FF6F55"/><stop offset=".68" stop-color="#FB2E7E"/><stop offset="1" stop-color="#6D48F0"/></linearGradient>
+<linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D8C079"/><stop offset=".35" stop-color="#B4703C"/><stop offset=".68" stop-color="#A8474A"/><stop offset="1" stop-color="#C08A3E"/></linearGradient>
 <symbol id="mark" viewBox="0 0 120 120"><path d="M26 90 A34 34 0 0 1 94 90" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round"/><line x1="60" y1="42" x2="60" y2="70" stroke="currentColor" stroke-width="9" stroke-linecap="round"/><circle cx="60" cy="26" r="12" fill="currentColor"/></symbol></defs></svg>
 
 <nav class="nav">
-  <div class="nav-logo"><svg width="24" height="24" style="color:var(--iris)"><use href="#mark"/></svg> Meridian</div>
+  <div class="nav-logo"><svg width="24" height="24" style="color:var(--brass)"><use href="#mark"/></svg> Meridian</div>
   <div class="nav-r">
     <div class="nav-links"><a href="#about">Overview</a><a href="#identity">Identity</a><a href="#explore">Explore</a><a href="#inside">Inside</a></div>
     <a class="btn btn-pri sm" href="app.html">Launch demo →</a>
@@ -182,11 +185,11 @@ section{padding:90px 0;position:relative}
 </nav>
 
 <header class="hero">
-  <div class="mesh"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
+  <div class="graticule"><span class="arc"></span></div>
   <div class="hero-in">
     <div class="badge"><span class="dot"></span> Design system · brand identity · functional prototype</div>
     <div class="hero-lock"><svg width="88" height="88" style="color:var(--hi)"><use href="#mark"/></svg></div>
-    <h1><span class="grad">Meridian</span></h1>
+    <h1><span class="brass-text">Meridian</span></h1>
     <p class="sub">A complete <b>brand identity, design system, and fully-functional prototype</b> for a multi-tenant B2B SaaS work platform: reimagined from a deliberately neutral functional spec into something unmistakable.</p>
     <div class="cta">
       <a class="btn btn-pri" href="app.html">Launch interactive demo →</a>
@@ -204,17 +207,17 @@ section{padding:90px 0;position:relative}
 <!-- ABOUT -->
 <section id="about" class="wrap reveal">
   <span class="eyebrow">The project</span>
-  <h2 class="sec-title">From a spec with <span class="grad">no signature</span>: to a product you'd remember.</h2>
+  <h2 class="sec-title">From a spec with <span class="brass-text">no signature</span>: to a product you'd remember.</h2>
   <div class="about-grid">
     <div class="about">
       <p>Meridian began as a 20,000-word functional specification for a B2B SaaS platform: the kind of document that defines <b>everything the system does</b> but, by its own admission, describes a design system with "no signature": correct, accessible, and indistinguishable from every competitor.</p>
-      <p>This project answers that gap. I designed a distinctive identity, the <b>Day-Arc</b> language, then built the platform out module by module as a <b>working prototype</b>: real interactions on mock data, a permissions engine, entitlement paywalls, an audit trail, and a lifecycle state machine. Not screens in a slideshow: an app you can actually use.</p>
+      <p>This project answers that gap. I designed a distinctive identity, the <b>Instrument</b> language, then built the platform out module by module as a <b>working prototype</b>: real interactions on mock data, a permissions engine, entitlement paywalls, an audit trail, and a lifecycle state machine. Not screens in a slideshow: an app you can actually use.</p>
       <p>It spans the whole product surface: identity &amp; tenancy, the core work surface, collaboration &amp; search, billing &amp; entitlements, operability, and a public API: <b>all 18 modules, clickable end-to-end.</b></p>
     </div>
     <div class="panel meta-card">
       <div class="row"><span class="k">Type</span><span class="v">Design system + prototype</span></div>
       <div class="row"><span class="k">Domain</span><span class="v">B2B SaaS · multi-tenant</span></div>
-      <div class="row"><span class="k">Identity</span><span class="v">Day-Arc spectrum</span></div>
+      <div class="row"><span class="k">Identity</span><span class="v">Brass on slate</span></div>
       <div class="row"><span class="k">Type</span><span class="v">Gabarito · Figtree</span></div>
       <div class="row"><span class="k">Build</span><span class="v">HTML · CSS · vanilla JS</span></div>
       <div class="row"><span class="k">Themes</span><span class="v">Light · Dark</span></div>
@@ -226,15 +229,15 @@ section{padding:90px 0;position:relative}
 <!-- IDENTITY -->
 <section id="identity" class="wrap reveal">
   <span class="eyebrow">The identity</span>
-  <h2 class="sec-title">The Day-Arc language.</h2>
-  <p class="lead">A meridian is the line the sun crosses at its highest point: the moment of peak clarity. That single idea drives the mark (an arc, a meridian line, a zenith orb), a warm-to-cool spectrum, and rounded, human type.</p>
+  <h2 class="sec-title">The Instrument language.</h2>
+  <p class="lead">A meridian is the line the sun crosses at its highest point: the moment of peak clarity. A meridian is also a surveyor's line, and that is where the palette comes from: the mark is an arc, a meridian line and a zenith orb, and the colour is the instrument itself &mdash; a machined slate housing, a brass index arm, and the oxides brass ages into.</p>
   <div class="id-grid">
-    <div class="id-tile"><svg width="84" height="84" style="color:#fff"><use href="#mark"/></svg></div>
+    <div class="id-tile"><svg width="84" height="84" style="color:var(--on-brass)"><use href="#mark"/></svg></div>
     <div class="panel id-right">
       <div>
-        <div style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:10px">Day-Arc spectrum</div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:10px">The oxidation arc</div>
         <div class="spectrum"></div>
-        <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:var(--mut)"><span>Amber</span><span>Coral</span><span>Magenta</span><span>Iris</span><span>Aqua</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:var(--mut)"><span>Straw</span><span>Brass</span><span>Copper</span><span>Iron oxide</span></div>
       </div>
       <div class="type-row" style="margin-top:22px">
         <span class="big">Ag</span>
@@ -258,10 +261,10 @@ section{padding:90px 0;position:relative}
             <div class="mm-top"><div class="s"></div><div class="b"></div></div>
             <div class="mm-stats"><div></div><div></div><div></div><div></div></div>
             <div class="mm-rows">
-              <div class="r"><span class="d" style="background:var(--magenta)"></span><span class="t"></span><span class="p" style="background:color-mix(in srgb,var(--warning,#FFC24B) 30%,transparent)"></span></div>
-              <div class="r"><span class="d" style="background:var(--aqua)"></span><span class="t"></span><span class="p" style="background:color-mix(in srgb,var(--sky) 30%,transparent)"></span></div>
-              <div class="r"><span class="d" style="background:var(--iris)"></span><span class="t"></span><span class="p" style="background:color-mix(in srgb,var(--aqua) 30%,transparent)"></span></div>
-              <div class="r"><span class="d" style="background:var(--coral)"></span><span class="t"></span><span class="p" style="background:color-mix(in srgb,var(--magenta) 30%,transparent)"></span></div>
+              <div class="r"><span class="d" style="background:var(--iron)"></span><span class="t"></span><span class="p" style="background:color-mix(in srgb,var(--warning,#D8C079) 30%,transparent)"></span></div>
+              <div class="r"><span class="d" style="background:var(--verdigris)"></span><span class="t"></span><span class="p" style="background:color-mix(in srgb,var(--steel) 30%,transparent)"></span></div>
+              <div class="r"><span class="d" style="background:var(--brass)"></span><span class="t"></span><span class="p" style="background:color-mix(in srgb,var(--verdigris) 30%,transparent)"></span></div>
+              <div class="r"><span class="d" style="background:var(--copper)"></span><span class="t"></span><span class="p" style="background:color-mix(in srgb,var(--iron) 30%,transparent)"></span></div>
             </div>
           </div>
         </div>
@@ -269,11 +272,11 @@ section{padding:90px 0;position:relative}
       <div class="ex-body"><span class="tag">the interactive demo</span><h3>The Meridian app</h3><p>Sign in, build records, drag a board, run ⌘K, upgrade a plan, impersonate as staff. All 18 modules, clickable and persistent: try the guided tour inside.</p><span class="ex-go">Launch app <span class="arr">→</span></span></div>
     </a>
     <a class="ex" href="design-system.html">
-      <div class="ex-prev"><div class="prev-grad" style="background:var(--grad-zenith)"></div><div class="prev-center"><svg width="52" height="52" style="color:#fff"><use href="#mark"/></svg></div></div>
-      <div class="ex-body"><span class="tag">foundations</span><h3>Design system</h3><p>Logo, spectrum, gradients, type, components &amp; tokens.</p><span class="ex-go">Open <span class="arr">→</span></span></div>
+      <div class="ex-prev"><div class="prev-grad" style="background:var(--grad-meridian)"></div><div class="prev-center"><svg width="52" height="52" style="color:#fff"><use href="#mark"/></svg></div></div>
+      <div class="ex-body"><span class="tag">foundations</span><h3>Design system</h3><p>Logo, materials, washes, type, components &amp; tokens.</p><span class="ex-go">Open <span class="arr">→</span></span></div>
     </a>
     <a class="ex" href="build-plan.html">
-      <div class="ex-prev"><div class="prev-grad" style="background:var(--grad-aurora)"></div><div class="prev-center" style="color:#fff;font-family:var(--fd);font-weight:900;font-size:40px">18<span style="font-size:16px;font-weight:600;opacity:.8">/mods</span></div></div>
+      <div class="ex-prev"><div class="prev-grad" style="background:var(--grad-steel)"></div><div class="prev-center" style="color:#fff;font-family:var(--fd);font-weight:900;font-size:40px">18<span style="font-size:16px;font-weight:600;opacity:.8">/mods</span></div></div>
       <div class="ex-body"><span class="tag">the plan</span><h3>Build plan</h3><p>Phases, sprints &amp; a specialised agent fleet.</p><span class="ex-go">Open <span class="arr">→</span></span></div>
     </a>
   </div>
@@ -282,14 +285,14 @@ section{padding:90px 0;position:relative}
 <!-- INSIDE -->
 <section id="inside" class="wrap reveal">
   <span class="eyebrow">What's inside the prototype</span>
-  <h2 class="sec-title">Not a mockup: <span class="grad">it actually works</span>.</h2>
+  <h2 class="sec-title">Not a mockup: <span class="brass-text">it actually works</span>.</h2>
   <div class="feat-grid">
-    <div class="fc"><div class="ic" style="background:var(--grad-ember)">◑</div><h4>Auth &amp; onboarding</h4><p>Login, OAuth, MFA, and a create-org wizard that seeds real data.</p></div>
-    <div class="fc"><div class="ic" style="background:var(--grad-aurora)">◱</div><h4>Work surface</h4><p>Records with List / Board (drag) / Calendar, filters, sort, bulk, inline edit, side-sheet.</p></div>
-    <div class="fc"><div class="ic" style="background:var(--grad-iris)">⌘</div><h4>Command palette</h4><p>⌘K to navigate, run actions, switch orgs: fully keyboard-driven.</p></div>
-    <div class="fc"><div class="ic" style="background:var(--grad-mag,var(--grad-dusk))">◆</div><h4>Commercial</h4><p>Plans, checkout, usage, entitlement paywalls, and a lifecycle state machine.</p></div>
-    <div class="fc"><div class="ic" style="background:var(--grad-sky,var(--grad-aurora))">⚑</div><h4>Operability</h4><p>Staff admin console, feature flags, impersonation, and an immutable audit log.</p></div>
-    <div class="fc"><div class="ic" style="background:var(--grad-iris)">⇄</div><h4>Multi-tenancy</h4><p>Switch orgs &amp; workspaces; roles &amp; permissions gate every action for real.</p></div>
+    <div class="fc"><div class="ic" style="background:var(--grad-copper)">◑</div><h4>Auth &amp; onboarding</h4><p>Login, OAuth, MFA, and a create-org wizard that seeds real data.</p></div>
+    <div class="fc"><div class="ic" style="background:var(--grad-steel)">◱</div><h4>Work surface</h4><p>Records with List / Board (drag) / Calendar, filters, sort, bulk, inline edit, side-sheet.</p></div>
+    <div class="fc"><div class="ic" style="background:var(--grad-brass)">⌘</div><h4>Command palette</h4><p>⌘K to navigate, run actions, switch orgs: fully keyboard-driven.</p></div>
+    <div class="fc"><div class="ic" style="background:var(--grad-iron,var(--fill-brass))">◆</div><h4>Commercial</h4><p>Plans, checkout, usage, entitlement paywalls, and a lifecycle state machine.</p></div>
+    <div class="fc"><div class="ic" style="background:var(--grad-patina,var(--grad-steel))">⚑</div><h4>Operability</h4><p>Staff admin console, feature flags, impersonation, and an immutable audit log.</p></div>
+    <div class="fc"><div class="ic" style="background:var(--grad-brass)">⇄</div><h4>Multi-tenancy</h4><p>Switch orgs &amp; workspaces; roles &amp; permissions gate every action for real.</p></div>
   </div>
 </section>
 
@@ -306,7 +309,7 @@ section{padding:90px 0;position:relative}
 </section>
 
 <footer class="footer">
-  <div class="fl"><svg width="26" height="26" style="color:var(--iris)"><use href="#mark"/></svg> Meridian</div>
+  <div class="fl"><svg width="26" height="26" style="color:var(--brass)"><use href="#mark"/></svg> Meridian</div>
   <p>A self-directed design &amp; prototyping project: brand identity, design system, and a fully-functional web app built from a functional specification.</p>
   <div class="by">Designed &amp; built by <b>Praduan Saha</b> · <span class="mono" id="year">2026</span></div>
 </footer>

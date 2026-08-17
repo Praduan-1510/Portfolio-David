@@ -384,14 +384,16 @@ export function LivePrototype({
                     // `allow-scripts allow-same-origin` on a same-origin document
                     // is equivalent to no sandbox at all.
                     allow="fullscreen; clipboard-write"
-                    // #12101E is NOT a site colour and must not be tokenised:
+                    // #16181B is NOT a site colour and must not be tokenised:
                     // it is the prototype document's own --ink-1 (see
                     // public/prototype/meridian/app.html), painted here so the
                     // frame does not flash a different dark before the iframe
                     // paints. Like the Spendee status swatches, it is CONTENT
                     // that happens to be a colour, so the logo repaint leaves
                     // it alone; retuning it would just reintroduce the flash.
-                    className="absolute left-0 top-0 border-0 bg-[#12101E]"
+                    // It tracks the prototype, though: it moved from the old
+                    // plum #12101E when that palette became machined slate.
+                    className="absolute left-0 top-0 border-0 bg-[#16181B]"
                     style={{
                       // The iframe is given the DEVICE's pixel dimensions and
                       // scaled to fit: so the document inside lays out at 390 /

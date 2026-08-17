@@ -19,13 +19,18 @@ prototype:
   alt: "CareBridge's patient home: a household switcher, an emergency banner, four care lanes, and the day's medicines across five people"
   aspect: 1.6
   launchNote: >-
-    It opens on the patient's home screen, already signed in as Amanda, who
-    manages care for a household of five.
+    It starts where a real user would: a splash, three intro cards, then a
+    passwordless sign in. There is no password to type and the six-digit code
+    is already filled, so you can walk the whole way in or skip ahead.
   surfaces:
+    # Entry point is the first-run flow, not the signed-in dashboard: onboarding
+    # is where this product makes its argument about households and consent, and
+    # auth.html was otherwise a surface a visitor would never see. It links on to
+    # app.html at the end, so the flow completes into the product.
     - id: patient
       label: Patient
       shortLabel: Patient
-      src: /prototype/carebridge/app.html
+      src: /prototype/carebridge/auth.html
       domain: carebridge.health
     - id: clinician
       label: Clinician
@@ -56,7 +61,9 @@ In a multi-specialty hospital, the patient is the integration layer. They carry 
 
 ## The live prototype
 
-Launch it and you land on Amanda's home screen on a Monday morning. She manages care for a household of five, so the first thing the product has to get right is whose day this is: the medicines list runs across three different people before you have scrolled once.
+Launch it and you start where a real user starts: a splash, three cards explaining what the thing is for, then a sign in with no password in it. Onboarding asks who you are, what a doctor should know, who to call in an emergency, and who else you look after. That last question is the one that matters, because it is where a health app stops modelling one patient and starts modelling a household.
+
+Come out the other side and you are on Amanda's home screen on a Monday morning. She looks after five people, so the first thing the product has to get right is whose day this is: the medicines list runs across three different people before you have scrolled once.
 
 Four surfaces sit in the window chrome. **Patient** is the app itself. **Clinician** is the same Monday from Dr Robertson's side: seven people booked, four notes unfinished, and one critical potassium waiting. **Operations** is the desk that runs the building, with 84 appointments, a bed board and a pharmacy verification queue. **Design system** is Aurora, the token layer all three are built from.
 

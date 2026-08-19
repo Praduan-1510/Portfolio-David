@@ -327,7 +327,15 @@ a.code, a.pri, a.rail__link, a.btn, a.popover__item, a.scopecard,
 a.hhrow, a.pnav > a, .pnav a, .topbar__crumbs a, a.sc, .empty a { text-decoration: none; }
 a.code { color: var(--ink-primary); }
 a.code:visited { color: var(--ink-primary); }
-a.btn, a.btn:visited { color: inherit; }
+/* NOT `color: inherit`. The comment above says these keep their OWN colour, and
+   inherit does the opposite: it takes the PARENT's, discarding whatever the
+   .btn variant set. Because a.btn is (0,2,0) it also outranked
+   .btn--primary (0,1,0) on the very next line, so every primary action rendered
+   as an anchor came out ink-primary on the hi-vis wash: bone on #C6FF3D, 1.03:1,
+   across 15 buttons including Post movement, Confirm scan and Submit count.
+   Dropping the declaration lets the cascade do what it was already written to
+   do: .btn (0,1,0) beats a (0,0,1) for the base colour, and each .btn--*
+   variant overrides it in turn. */
 .rail__link, .rail__link:visited, .popover__item, .popover__item:visited,
 .scopecard, .scopecard:visited, .sc, .sc:visited, .hhrow, .hhrow:visited { color: inherit; }
 .btn--primary, .btn--primary:visited { color: var(--ink-inverse); }

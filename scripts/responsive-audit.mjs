@@ -33,6 +33,11 @@ const routes = [
   ["case-spendee", "/work/spendee"],
   ["case-decathlon", "/work/decathlon"],
   ["case-voyager", "/work/voyager"],
+  // The prototype studies were never added here. OmniStock is the densest page
+  // on the site (a 14-column table screenshot, a 51-screen prototype frame and
+  // a phone frame in the same column), so it is the one most likely to push a
+  // scrollbar at a narrow width, which is exactly what this harness checks.
+  ["case-omnistock", "/work/omnistock"],
 ];
 
 // Width matrix: covers small phone → large desktop, plus landscape phone & the

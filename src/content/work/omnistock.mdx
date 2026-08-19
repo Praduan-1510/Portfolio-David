@@ -1,0 +1,121 @@
+---
+title: OmniStock
+slug: omnistock
+client: Self-directed
+role: Product Design, Design System & Front-End Build
+year: 2026
+services: [Product Design, Design System, Interaction Design, Front-End Prototyping]
+summary: >-
+  A custody ledger for third-party logistics warehousing, where the operator
+  holds goods it does not own. Stock is a derived balance and never an editable
+  field: there is no quantity input anywhere in the system, and the roles matrix
+  marks setting one Impossible for every role including Tenant Admin. Fifty-one
+  screens across four shells, each annotated with the requirement it exists to
+  make visible. You can walk all of it on this page.
+cover: /images/work/omnistock/cover.png
+kind: web
+prototype:
+  poster: /images/work/omnistock/app-dashboard.png
+  alt: "OmniStock's controller dashboard: shift header, exposure-ranked variance queue, quarantine panel and device fleet"
+  aspect: 1.6
+  launchNote: >-
+    It opens on the controller's dashboard. The tabs above switch shells: the
+    handheld is a real 390px layout, and the client portal is a separate
+    application on the same ledger.
+  surfaces:
+    # One HTML file with a hash router, so a surface is a hash rather than a
+    # page. These three ARE the argument: the case study claims the shells share
+    # no layout, and the tabs let a reader check that claim in two clicks.
+    - id: console
+      label: Console
+      shortLabel: Console
+      src: /prototype/omnistock/omnistock.html#05-dashboard
+      domain: omnistock.app
+    - id: handheld
+      label: Handheld
+      shortLabel: Handheld
+      src: /prototype/omnistock/omnistock.html#handheld-45-scan
+      domain: omnistock.app/handheld
+    - id: portal
+      label: Client portal
+      shortLabel: Portal
+      src: /prototype/omnistock/omnistock.html#portal-32-holdings
+      domain: omnistock.app/portal
+indexNote: 'The systems one. A 3PL custody ledger with no quantity field anywhere: stock is a derived balance, and setting one is marked Impossible for every role in the matrix.'
+accent: "#C6FF3D" # OmniStock's hi-vis vest lime, --hivis-500, used as-shipped: the token its own design system builds the whole accent family from, sampled off a high-visibility vest rather than a colour wheel. 16.42:1 on --bg, 15.10:1 on --surface, dE00 30.0 from the nearest flame step. Spendee's acid lime moved to the deep end (#A1A329) to clear this: the two measured 8.7 apart against a bar of 20, and lime is load-bearing here in a way it is not for a finance app.
+motif: grid
+disclaimer: A design prototype on mock data, not a production system.
+featured: true
+order: 0
+---
+
+<Lede>
+**OmniStock is not an inventory manager; it is a custody instrument for a third-party logistics operator holding other people's goods.** One rule produces every decision in it: nobody, at any privilege level, can state a quantity that is not the sum of attributable events. Liability is the reason, and the missing quantity field is the interface.
+</Lede>
+
+## The live prototype
+
+It opens on a 51-screen index, not a home page. The four shells share no layout on purpose: auth is chromeless and keypad-first, the console is the controller's desk, the handheld is what a picker carries, the client portal is a separate application on the same ledger. Every screen names the requirement it exists to make visible.
+
+<Margin label="Try this">
+Follow one count end to end: keypad, confirmation, movement detail, count session, variance queue, portal. The screens are stills; every form routes back to the index.
+</Margin>
+
+<Stats>
+<Stat value="51" label="screens, one HTML file" />
+<Stat value="4" label="shells: auth, console, portal, handheld" />
+<Stat value="0" label="fields anywhere that set a stock level" />
+<Stat value="12" label="Impossible cells: two actions, six roles" />
+</Stats>
+
+## Scope happens before the data does
+
+Sign-in separates the device credential from the operator credential: "Device TC-52-014 posted this" is not an attribution. Scope is then its own screen, on two axes, because SITE-4 holds three owners while Kestrel Foods sits across both sites, and the client user's site scope is empty on purpose. Cross-owner queries return zero rows rather than an error, so nothing confirms a record exists. The sixth identity is not a person: service accounts are scoped per endpoint, IP-allowlisted, and cannot log into the console at all. At 500k+ SKUs search rather than the tree is the way in, and item hits carry their owner, because a SKU means nothing until you know whose goods it is.
+
+## There is no field that sets a stock level
+
+The edit form states the thesis under a ledger it cannot touch: "There is no quantity field on this form. Not hidden, not disabled, not permission-gated: it does not exist." Balances calls itself a cache of the ledger, rebuilt from it whenever the two disagree, and the dashboard says it plainly: "Nothing on this page is a stored figure that someone typed."
+
+<Shot src="/images/work/omnistock/item-edit.png" domain="omnistock.app" align="right" aspect="8 / 5" caption="The negative space is the design: description, dimensions, handling class, and nowhere to say how many there are." />
+
+A `PATCH /v1/items/88213-K` of `{ "on_hand": 1847 }` returns `422 quantity_not_settable` and names the caller's alternative in the same body, `post_to /v1/movements`. 1,847 is the item's own derived balance, so the API is declining a verb rather than catching a bad number. Two enforcement layers are specified beneath it, `OS001: stock_movement is append-only` and `permission denied for table stock_balance`: one a rule the schema raises by name, the other a grant nobody ever issued. The prototype argues for them on screen; it does not run them. `Set a stock quantity` and `Modify or delete a movement` read `Impossible` in all six columns of the roles matrix, Tenant Admin included.
+
+<Bleed quote="There is no admin flag, support tool, or migration that turns this off. That is the whole product." attribution="Roles" />
+
+## Every number is the sum of events someone signed for
+
+An operator types 1,192 into a handheld keypad. What is stored is not a corrected quantity but a movement: 12 units, `A/12/03` to `VARIANCE:kestrel`, reason `COUNT_SHORT`, actor op-4471, device TC-52-014, `occurred_at 14:02:47` device against `recorded_at 14:03:11` server, net zero by construction. Human and device are separate fields, because an attestation built on device IDs is worthless in a dispute; ordering runs on `recorded_at`, because a tamper-evident chain cannot be ordered by a clock the client controls, and that 24-second gap is the row's `clock_skew_ms 24,000`.
+
+<ScreenBeat src="/images/work/omnistock/handheld.png" side="left" label="Handheld" caption="One record on screen, no text inputs, expected figure hidden. This keypad is where the traced event starts." />
+
+Reserved accounts are real locations that allow negatives where physical bins block them, so disputed stock still has an address; a movement that would take a bin negative aborts with `OS003 negative_position`. The ledger has no row action, a correction is a compensating movement, and eight document types share one write path. A short receipt posts nothing at all: PO-9901's 600 missing units are a supplier claim, not a stock adjustment, because they never entered custody. Suppliers are thin for the same reason, replenishment being the client's decision, and one with no history renders as a dash rather than 0%. Fulfilment is the one genuine read-modify-write, under a per-position lock because two orders promised the same unit is a broken promise; title transfer is two movements in one transaction, approved by someone other than its author.
+
+## Disagreement is evidence
+
+A second operator counted 1,204 in the same bin. Both counts survive, and a `Disagrees` chip sits on the one that matched expected exactly: the system does not pick a winner, because the disagreement is the signal. The expected figure is withheld until submit, since seeing it first changes what people count. The queue ranks by exposure rather than recency, extended value by SLA weight, £3,776 at 1.4 becoming £5,286, and CS-8811's 31 variances in 144 lines reads as one probable process failure rather than 31 losses. Aldgate's £250 gate carries its cause on the audit log, append-only and hash-chained like the ledger but deliberately separate, because configuration changes need attribution, not double-entry. Approval sits on `CHECK (approved_by IS DISTINCT FROM created_by)`, which the settings toggle cannot override. Alerts admits the staffing gap it creates: the quarantine queue has no owner and competes with variance triage for the same controller.
+
+<Shot src="/images/work/omnistock/variance.png" domain="omnistock.app" align="right" aspect="8 / 5" caption="Ranked by money at risk, not by recency: the Age column runs 3h, 1d, 23m, 4h, and the gate column comes from the owner's contract." />
+
+## The rule does not relax for the mess
+
+Offline is an ordinary condition here: racking dead zones, cold rooms that behave like Faraday cages. 27 movements are quarantined and never rejected, because a rejected write is an unknown unknown and that is worse. They sit in `PENDING:site-4`, and reconciling one appends a completing movement out of PENDING rather than editing the original. Across 48 handhelds, 6 offline with 64 queued writes and one clock 41 minutes out, offline is typed as caution and never error, and the lock screen shows queue depth because queued work survives lock, reboot and battery swap. The dashboard reserves a scan-write floor, on the argument that a picker who receives a 429 writes on paper.
+
+## The client reads the same object the operator wrote
+
+Owner is first-class, distinct from tenant, and contract terms are live inputs to a work queue rather than a PDF in a drawer. The attestation binds to head `seq 1,000,412` and hash `9f3a44e1…c1f2`, and it reports what the operator cannot find: the 6 units awaiting reconciliation and the 12 under investigation appear on the client's own statement, because "unaccounted for" is not a state this system can represent. Most systems, the prototype argues, would print 184,202 and not mention it. What the portal structurally lacks is the point: bin paths, operator names, device IDs, commercial data, any write control.
+
+<Shot src="/images/work/omnistock/portal.png" domain="omnistock.app/portal" align="left" aspect="8 / 5" caption="The client's holdings carry the operator's bad news: quarantined and variance units sit on the statement rather than being netted out of it." />
+
+## Two shells, one rulebook
+
+Console density grows row height, 32 / 40 / 48px, and sheds columns, never the reverse, because those columns are records someone is legally accountable for. The handheld inverts the numbers, 48px targets and one record at a time, and has no text inputs at all, so it cannot originate an unstructured record; the auth keypad runs 64px for gloved hands. Signal states carry two tokens each, 4.0:1 for non-text and 7.1:1 for type, so the stock badge holds its number at 16.9:1 in every state and a red-flagged quantity reads exactly as well as a green one. The error tiers follow: a failed row is never removed, because a failed record is still a record, and a recoverable error never gets a modal, because an operator dismissing one mid-scan loses their place in the pick. The 500 page tells the floor to keep scanning, since stopping it is how a shift's work ends up on paper.
+
+<Shot src="/images/work/omnistock/system.png" domain="omnistock.app" align="right" aspect="8 / 5" caption="Three empties checked against each other rather than discovered one at a time, and the third never implies that the data exists." />
+
+<Aside label="Scope, honestly">
+Nothing submits: the required-field gates are the only live validation, and the two database rules quoted above are specified on screen, not running. Hand-written HTML and CSS plus about 360 lines of vanilla JavaScript. Three of six integrations are marked `Stub`, and nothing marked `Stub` moves real freight. `Chain verified` does not yet mean what it sounds like, and the portal says so itself: Anchored reads `Not yet`.
+
+The £500 gate, the 15% flag rate and the 50k-SKU device cache are invented, instrumented for replacement after about 90 days against one test, that a threshold is defensible when raising it does not increase the reopen rate. One architectural question is open in the prototype's own words: reservations "currently live beside the ledger rather than in it, on the reasoning that a reservation has not moved anything. But RSV-3299 expired at 13:00 and simply stopped applying, which is an unrecorded state change."
+
+The thesis has never met an angry operations director at 2am in a peak-season count. Its instrument is the count of `422 quantity_not_settable` responses: if those are frequent and legitimate, the rule "should be revised in daylight rather than defended."
+</Aside>

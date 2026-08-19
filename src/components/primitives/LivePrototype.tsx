@@ -336,8 +336,11 @@ export function LivePrototype({
 
   if (!tab) return null;
 
+  // `lp-ctl` and `lp-chrome` below are hooks for the fullscreen rules in
+  // globals.css, which scale this chrome up. They carry no styling of their own:
+  // the utilities stay the source of truth for the in-page appearance.
   const chromeButton =
-    "inline-flex h-[22px] w-[22px] items-center justify-center rounded-[5px] border border-line text-muted transition-colors duration-fast ease-out-quad hover:border-neon hover:text-neon focus-visible:border-neon focus-visible:text-neon";
+    "lp-ctl inline-flex h-[22px] w-[22px] items-center justify-center rounded-[5px] border border-line text-muted transition-colors duration-fast ease-out-quad hover:border-neon hover:text-neon focus-visible:border-neon focus-visible:text-neon";
 
   return (
     <figure className={cn("lp-root not-prose my-space-8", className)}>
@@ -362,7 +365,7 @@ export function LivePrototype({
             }
           >
             {/* ── Chrome, row 1: window dots · tabs · window actions ────────── */}
-            <div className="flex h-[34px] items-center gap-space-3 rounded-t-[7px] border-b border-line bg-bezel px-space-3">
+            <div className="lp-chrome flex h-[34px] items-center gap-space-3 rounded-t-[7px] border-b border-line bg-bezel px-space-3">
               <span aria-hidden="true" className="flex shrink-0 items-center gap-[6px]">
                 <span className="h-[10px] w-[10px] rounded-full bg-accent" />
                 <span className="h-[10px] w-[10px] rounded-full bg-white/15" />
@@ -446,7 +449,7 @@ export function LivePrototype({
             </div>
 
             {/* ── Chrome, row 2: address pill + honesty badge ───────────────── */}
-            <div className="flex h-[30px] items-center gap-space-3 border-b border-line bg-bezel px-space-3">
+            <div className="lp-chrome flex h-[30px] items-center gap-space-3 border-b border-line bg-bezel px-space-3">
               <span className="inline-flex min-w-0 flex-1 items-center gap-space-2 rounded-full border border-line bg-white/[0.04] px-space-3 py-[2px] font-mono text-caption text-muted">
                 <Lock />
                 <span className="truncate">{tab.domain}</span>
@@ -581,7 +584,7 @@ export function LivePrototype({
 
         {/* ── Device switcher ─────────────────────────────────────────────── */}
         {devices.length > 1 && (
-          <div className="mt-space-4 flex flex-wrap items-center justify-center gap-space-3">
+          <div className="lp-devices mt-space-4 flex flex-wrap items-center justify-center gap-space-3">
             <span
               role="group"
               aria-label="Demo viewport size"

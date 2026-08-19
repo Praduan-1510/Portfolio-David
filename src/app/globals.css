@@ -1428,6 +1428,67 @@ html.lenis body {
   border-radius: 0;
 }
 
+/* The chrome is sized for a slab about 1100px wide sitting in a page. Stretched
+   across a whole display it is the same 11px mono uppercase at --muted, which
+   measures 6.13:1 and still reads as unreadable, because contrast is not the
+   only variable: 11px of 0.14em-tracked uppercase grey is small type at arm's
+   length on a 1600px screen. So fullscreen scales the chrome instead of just
+   recolouring it.
+
+   --muted is REMAPPED rather than the labels being reclassed, which is how the
+   rest of this file handles a context shift (see .reel-board): one declaration
+   lifts the inactive tabs, the address pill, the status text and the icon
+   controls together, and the active/inactive hierarchy survives intact because
+   both ends move. bone-300 is 11.10:1 on the ground against bone-500's 6.67.
+
+   Sizes here are deliberately not `em`: the chrome rows are fixed-height utility
+   classes, so type and control boxes are stepped explicitly and the rows given
+   room to hold them. */
+.lp-wrap:fullscreen .lp-chrome {
+  --muted: var(--bone-300);
+  height: 46px;
+  gap: 1rem;
+  padding-inline: 1rem;
+}
+.lp-wrap:fullscreen .lp-chrome [role="tab"] {
+  font-size: 0.875rem;
+  padding-block: 6px;
+  padding-inline: 0.75rem;
+  border-radius: 8px;
+}
+/* The address pill, the honesty badge and the status text: everything in the
+   chrome that is set at the caption or micro step. */
+.lp-wrap:fullscreen .lp-chrome span,
+.lp-wrap:fullscreen .lp-chrome a {
+  font-size: 0.8125rem;
+}
+.lp-wrap:fullscreen .lp-ctl {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+}
+.lp-wrap:fullscreen .lp-ctl svg {
+  width: 15px;
+  height: 15px;
+}
+/* The traffic dots are decoration and would look like buttons if they grew with
+   everything else. */
+.lp-wrap:fullscreen .lp-chrome [aria-hidden="true"] > span {
+  font-size: inherit;
+}
+/* Device switcher: same argument, and it sits below the well rather than in a
+   chrome row, so it is stepped separately. */
+.lp-wrap:fullscreen .lp-devices {
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+  --muted: var(--bone-300);
+}
+.lp-wrap:fullscreen .lp-devices button {
+  font-size: 0.8125rem;
+  padding-block: 7px;
+  padding-inline: 1rem;
+}
+
 /* Same four rules for WebKit older than 16.4. Separate blocks, per the note
    above: an engine that cannot parse one selector drops only that block. */
 .lp-wrap:-webkit-full-screen {

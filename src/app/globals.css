@@ -1379,12 +1379,19 @@ html.lenis body {
    is painted in --bezel: it is the screen well of a device that does not share
    the display's aspect, not a gap.
 
-   ONLY the unprefixed :fullscreen is written here. Adding the -webkit- selector
-   by hand looks like belt and braces and is actively destructive: autoprefixer
-   already emits the prefixed copy, and handing it a list that mixes both made it
-   rewrite the pair into :-webkit-any()/:is() and DROP two of these three rules
+   The prefixed selectors are SEPARATE blocks, never a comma list with the
+   unprefixed ones. That is not style: a list mixing the two made autoprefixer
+   rewrite the pair into :-webkit-any()/:is() and DROP two of the three rules
    from the built stylesheet outright. Verified by reading the served CSS, which
-   is the only place that question can be settled. */
+   is the only place that question can be settled.
+
+   Autoprefixer does not add these for us. This project has no browserslist, so
+   it resolves to defaults that start at Safari 26, and unprefixed :fullscreen
+   has been supported since 16.4: correctly, nothing is emitted. They are written
+   out anyway because the JS half calls webkitRequestFullscreen, so on a WebKit
+   older than 16.4 the demo would ENTER fullscreen with none of this applied,
+   which is precisely the bug these rules exist to fix. JS and CSS have to agree
+   about which browsers they serve. */
 .lp-wrap:fullscreen {
   width: 100%;
   height: 100%;
@@ -1415,6 +1422,36 @@ html.lenis body {
   box-shadow: none;
 }
 .lp-wrap:fullscreen .lp-well {
+  flex: 1 1 auto;
+  aspect-ratio: auto;
+  min-height: 0;
+  border-radius: 0;
+}
+
+/* Same four rules for WebKit older than 16.4. Separate blocks, per the note
+   above: an engine that cannot parse one selector drops only that block. */
+.lp-wrap:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  background: var(--bg);
+}
+.lp-wrap:-webkit-full-screen > div {
+  height: 100%;
+}
+.lp-wrap:-webkit-full-screen .lp-slab {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  transform: none;
+  box-shadow: none;
+}
+.lp-wrap:-webkit-full-screen .lp-well {
   flex: 1 1 auto;
   aspect-ratio: auto;
   min-height: 0;

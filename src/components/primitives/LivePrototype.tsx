@@ -110,6 +110,17 @@ interface LivePrototypeProps {
 /** Stable no-op subscriber for capability reads that never change at runtime. */
 const NO_SUBSCRIBE = () => () => {};
 
+/* The prefixed halves of the Fullscreen API. WebKit still ships these and only
+   these, so they are typed here rather than cast away at each call site. */
+type FsDocument = Document & {
+  webkitFullscreenEnabled?: boolean;
+  webkitFullscreenElement?: Element | null;
+  webkitExitFullscreen?: () => Promise<void> | void;
+};
+type FsElement = HTMLElement & {
+  webkitRequestFullscreen?: () => Promise<void> | void;
+};
+
 function Lock() {
   return (
     <svg width="9" height="9" viewBox="0 0 10 10" fill="none" aria-hidden="true" className="shrink-0">
@@ -147,6 +158,20 @@ function ExpandIcon() {
   );
 }
 
+function CollapseIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <path
+        d="M1.6 5.4h3.8V1.6M12.4 8.6H8.6v3.8M8.6 5.4h3.8V1.6M5.4 8.6H1.6v3.8"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function LivePrototype({
   tabs,
   poster,
@@ -166,13 +191,25 @@ export function LivePrototype({
   const [device, setDevice] = useState<DeviceId>(devices[0] ?? "desktop");
   // Bumped by the reload control; keying the iframe on it forces a remount.
   const [reloadKey, setReloadKey] = useState(0);
-  // Measured frame width → the scale that fits a real device viewport into it.
+  // Measured well box → the scale that fits a real device viewport into it.
+  // Height matters as much as width once the frame can go fullscreen: in the
+  // page the well is aspect-locked so the two agree, but on a full screen it is
+  // not, and scaling on width alone would push the bottom of the app off the
+  // display.
   const [frameWidth, setFrameWidth] = useState(0);
+  const [frameHeight, setFrameHeight] = useState(0);
+  // Whether the frame currently OWNS the screen. Tracked rather than inferred so
+  // the control can say which way it goes, and so it survives the user leaving
+  // fullscreen by a route this component never sees (Esc, the F11 key, the
+  // browser's own chrome).
+  const [fsActive, setFsActive] = useState(false);
   // Browser-capability read, SSR-safe and without a setState-in-effect: same
   // shape as useReducedMotion (no-op subscribe, false on the server).
   const canFullscreen = useSyncExternalStore(
     NO_SUBSCRIBE,
-    () => !!document.fullscreenEnabled,
+    // Safari and iPadOS expose only the prefixed flag, and reading the standard
+    // one alone reported "no fullscreen" on every WebKit browser.
+    () => !!(document.fullscreenEnabled || (document as FsDocument).webkitFullscreenEnabled),
     () => false,
   );
 
@@ -188,7 +225,20 @@ export function LivePrototype({
   // scale. Splitting it this way means the frame reserves its space server-side
   // with no layout shift, and only the transform waits on measurement.
   const ratio = dev.w / devH;
-  const scale = frameWidth > 0 ? frameWidth / dev.w : 1;
+  // Fit on the tighter axis. In the page this is arithmetically identical to
+  // the old width-only scale, because the well is aspect-locked to exactly this
+  // device ratio, so `min` only ever bites in fullscreen. Centring is done in
+  // pixels rather than with a translate(-50%) because percentage translates
+  // resolve against the element's UNSCALED box, which is wrong by a factor of
+  // `scale` precisely when it matters.
+  const scale =
+    frameWidth > 0 && frameHeight > 0
+      ? Math.min(frameWidth / dev.w, frameHeight / devH)
+      : frameWidth > 0
+        ? frameWidth / dev.w
+        : 1;
+  const offsetX = Math.max(0, (frameWidth - dev.w * scale) / 2);
+  const offsetY = Math.max(0, (frameHeight - devH * scale) / 2);
   // The chrome sizes itself to the WINDOW, not the page: in tablet/phone mode the
   // slab is only a few hundred px wide, so full tab labels truncate to "A…" and
   // the status badge crowds the address pill. Host-viewport breakpoints can't see
@@ -203,16 +253,13 @@ export function LivePrototype({
     if (!el || typeof ResizeObserver === "undefined") return;
     const ro = new ResizeObserver(([entry]) => {
       setFrameWidth(entry.contentRect.width);
+      setFrameHeight(entry.contentRect.height);
     });
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
 
 
-  const launch = useCallback((id?: string) => {
-    if (id) setTabId(id);
-    setLive(true);
-  }, []);
 
   // The frame only ever mounts from a click, so directing keys into it is the
   // expected outcome (same contract as opening a dialog), and it's what makes
@@ -226,12 +273,66 @@ export function LivePrototype({
     }
   }, []);
 
-  const toggleFullscreen = useCallback(() => {
-    const el = wrapRef.current;
-    if (!el) return;
-    if (document.fullscreenElement) void document.exitFullscreen();
-    else void el.requestFullscreen?.().catch(() => {});
+  const isFullscreen = () =>
+    !!(document.fullscreenElement || (document as FsDocument).webkitFullscreenElement);
+
+  const enterFullscreen = useCallback(() => {
+    const el = wrapRef.current as FsElement | null;
+    if (!el || isFullscreen()) return;
+    // Must stay inside the click's user gesture, so this is called synchronously
+    // from the handler and never after an await. A rejection is not a failure
+    // mode: the demo has already launched inline underneath.
+    const req = el.requestFullscreen ?? el.webkitRequestFullscreen;
+    try {
+      void req?.call(el)?.catch?.(() => {});
+    } catch {
+      /* some engines throw synchronously instead of rejecting */
+    }
   }, []);
+
+  const toggleFullscreen = useCallback(() => {
+    const el = wrapRef.current as FsElement | null;
+    if (!el) return;
+    if (isFullscreen()) {
+      const exit = document.exitFullscreen ?? (document as FsDocument).webkitExitFullscreen;
+      try {
+        void exit?.call(document)?.catch?.(() => {});
+      } catch {
+        /* as above */
+      }
+    } else {
+      enterFullscreen();
+    }
+  }, [enterFullscreen]);
+
+  // Launching takes over the screen. The demo IS the artefact on these studies,
+  // and the in-page frame is capped at 78vh precisely so the page still scrolls,
+  // which is the right call for a dormant poster and the wrong one for a working
+  // 14-column table. Fullscreen is requested in the same tick as the click so it
+  // stays inside the user gesture; where the browser refuses or cannot (older
+  // WebKit on iPhone), the demo simply launches inline as before.
+  useEffect(() => {
+    const sync = () =>
+      setFsActive(
+        !!(document.fullscreenElement || (document as FsDocument).webkitFullscreenElement),
+      );
+    document.addEventListener("fullscreenchange", sync);
+    document.addEventListener("webkitfullscreenchange", sync);
+    sync();
+    return () => {
+      document.removeEventListener("fullscreenchange", sync);
+      document.removeEventListener("webkitfullscreenchange", sync);
+    };
+  }, []);
+
+  const launch = useCallback(
+    (id?: string) => {
+      if (id) setTabId(id);
+      setLive(true);
+      enterFullscreen();
+    },
+    [enterFullscreen],
+  );
 
   if (!tab) return null;
 
@@ -314,15 +415,23 @@ export function LivePrototype({
                 )}
                 {/* Dropped in the narrow window: the three tab labels need that
                     space more than a control the OPEN ↗ link already covers. */}
-                {live && canFullscreen && !compact && (
+                {/* `!compact` hides this in the phone and tablet viewports, where the
+                    chrome genuinely has no room for it. That gate must not apply
+                    while the demo owns the screen: switching to Phone in
+                    fullscreen would otherwise remove the only way back out, and
+                    leave the reader hunting for Esc. On a full screen there is
+                    room for one 22px button. */}
+                {live && canFullscreen && (fsActive || !compact) && (
                   <button
                     type="button"
                     onClick={toggleFullscreen}
-                    className={cn(chromeButton, "hidden md:inline-flex")}
-                    title="Expand to full screen"
+                    className={cn(chromeButton, fsActive ? "inline-flex" : "hidden md:inline-flex")}
+                    title={fsActive ? "Exit full screen" : "Expand to full screen"}
                   >
-                    <ExpandIcon />
-                    <span className="sr-only">Expand the demo to full screen</span>
+                    {fsActive ? <CollapseIcon /> : <ExpandIcon />}
+                    <span className="sr-only">
+                      {fsActive ? "Exit full screen" : "Expand the demo to full screen"}
+                    </span>
                   </button>
                 )}
                 <a
@@ -393,7 +502,7 @@ export function LivePrototype({
                     // it alone; retuning it would just reintroduce the flash.
                     // It tracks the prototype, though: it moved from the old
                     // plum #12101E when that palette became machined slate.
-                    className="absolute left-0 top-0 border-0 bg-[#16181B]"
+                    className="absolute border-0 bg-[#16181B]"
                     style={{
                       // The iframe is given the DEVICE's pixel dimensions and
                       // scaled to fit: so the document inside lays out at 390 /
@@ -401,6 +510,8 @@ export function LivePrototype({
                       // a plain percentage width could never do.
                       width: dev.w,
                       height: devH,
+                      left: offsetX,
+                      top: offsetY,
                       transform: `scale(${scale})`,
                       transformOrigin: "0 0",
                     }}

@@ -1359,6 +1359,68 @@ html.lenis body {
   transition: aspect-ratio var(--dur-base) var(--ease-out-quad);
 }
 
+/* ── Fullscreen ───────────────────────────────────────────────────────────
+   Launching a demo takes over the display, and until now that did nothing
+   visible: :fullscreen put .lp-wrap at the size of the screen while .lp-slab
+   kept the width it is given in the page, so the app sat at 1126x773 in the
+   middle of a 1600x1000 black field. Measured, not assumed. The three caps that
+   pin it are all deliberate IN THE PAGE and all wrong on a full screen:
+
+     width: min(100%, (78vh - 76px) * ratio, --lp-maxh * ratio)
+
+   78vh exists so there is page left above and below to scroll on, and --lp-maxh
+   stops the frame dominating a tall monitor. On a full screen there is no page
+   to scroll and dominating the display is the entire point, so both are
+   released and the slab fills its box.
+
+   The well then stops being aspect-locked and simply takes the height left over
+   after the two chrome rows; the component fits the device viewport into it on
+   whichever axis binds first and centres the remainder. That is why the leftover
+   is painted in --bezel: it is the screen well of a device that does not share
+   the display's aspect, not a gap.
+
+   ONLY the unprefixed :fullscreen is written here. Adding the -webkit- selector
+   by hand looks like belt and braces and is actively destructive: autoprefixer
+   already emits the prefixed copy, and handing it a list that mixes both made it
+   rewrite the pair into :-webkit-any()/:is() and DROP two of these three rules
+   from the built stylesheet outright. Verified by reading the served CSS, which
+   is the only place that question can be settled. */
+.lp-wrap:fullscreen {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  background: var(--bg);
+}
+/* The height chain has to be unbroken or nothing below it can resolve 100%.
+   `place-items: center` on a grid here was the first attempt and is a trap: it
+   stops the item stretching, so the single auto column sizes to the slab's
+   content and `width: 100%` then resolves against 480px rather than the
+   display. The unnamed div is the .browser-stage wrapper, which carries no
+   class once the demo is live, so it is reachable only as a child. */
+.lp-wrap:fullscreen > div {
+  height: 100%;
+}
+.lp-wrap:fullscreen .lp-slab {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  /* The tilt is already dropped by [data-live]; this covers the reduced-motion
+     and not-yet-transitioned cases so nothing is rotated on a full screen. */
+  transform: none;
+  box-shadow: none;
+}
+.lp-wrap:fullscreen .lp-well {
+  flex: 1 1 auto;
+  aspect-ratio: auto;
+  min-height: 0;
+  border-radius: 0;
+}
+
 /* The launch control gets a slow breath at rest so the dormant frame reads as
    armed rather than as a static screenshot. Motion-safe only. */
 @media (prefers-reduced-motion: no-preference) {

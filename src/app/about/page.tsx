@@ -88,7 +88,7 @@ const CAPABILITIES = [
   },
   {
     title: "Front-end that ships",
-    body: "Production React and Next.js, motion, and performance work: I build the interface I designed, including the site you are reading.",
+    body: "Production React and Next.js, motion, and performance work: I build the interface I designed, including the site you are reading — see the colophon.",
   },
   {
     title: "Working prototypes",

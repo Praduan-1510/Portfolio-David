@@ -24,6 +24,7 @@ import { spectrumAt } from "@/lib/spectrum";
 const links = [
   { href: "/", label: "Home" },
   { href: "/work", label: "Work" },
+  { href: "/services", label: "Services" },
   { href: "/about", label: "About" },
   { href: "/resume", label: "Résumé" },
   { href: "/contact", label: "Contact" },

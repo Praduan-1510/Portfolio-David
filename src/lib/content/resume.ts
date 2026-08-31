@@ -228,6 +228,12 @@ export type Certification = {
 /** Newest first. */
 export const CERTIFICATIONS: Certification[] = [
   {
+    title: "Google UX Design",
+    issuer: "Google",
+    date: "Aug 2026",
+    note: "Google's 8-course UX Design Professional Certificate: the full design process from user research and empathy mapping through wireframing, low- and high-fidelity prototyping, and usability studies.",
+  },
+  {
     title: "Claude Code in Action",
     issuer: "Anthropic",
     date: "Jul 2026",

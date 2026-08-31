@@ -161,7 +161,28 @@ type Certification = {
 // Newest first. The `certifications` stat gauge counts this array, so it stays
 // in sync automatically.
 const CERTIFICATIONS: Certification[] = [
-  { title: "Claude Code in Action", issuer: "Anthropic", year: "2026" },
+  // Credential ID IJH8K4U6YXZ3. The verify URL is the one behind LinkedIn's
+  // "Show credential" button, supplied by the user: Coursera serves these pages
+  // client-side, so all three of its accomplishment endpoints (/verify/,
+  // /professional-cert/, /specialization/) answer 200 with the same empty shell
+  // and a wrong URL cannot be told from a right one by fetching it. Do not
+  // "correct" this path to a different endpoint without a source.
+  {
+    title: "Google UX Design",
+    issuer: "Google",
+    year: "2026",
+    href: "https://www.coursera.org/account/accomplishments/specialization/IJH8K4U6YXZ3",
+  },
+  // Skilljar (Anthropic's LMS), and unlike the Coursera links above this one is
+  // server-rendered: fetching it returns the real certificate, so it was checked
+  // rather than taken on faith — Praduan Saha, "Claude Code in Action",
+  // Anthropic Education, 18 July 2026.
+  {
+    title: "Claude Code in Action",
+    issuer: "Anthropic",
+    year: "2026",
+    href: "https://verify.skilljar.com/c/ug2928qxymea",
+  },
   {
     title: "Vibe Coding Fundamentals",
     issuer: "University of Colorado",

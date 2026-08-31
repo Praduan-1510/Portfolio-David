@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Validate public/pdf/Praduan_Saha_Resume.pdf after either byte-level patch:
-scripts/patch-resume-title.py and scripts/patch-resume-insightstap.py.
+Validate public/pdf/Praduan_Saha_Resume.pdf after any of the byte-level patches:
+patch-resume-title.py, patch-resume-insightstap.py, patch-resume-certification.py.
 
 The PDF is edited at the byte level, and it is the artefact that reaches
 recruiters and ATS parsers, so "it still opens on my machine" is not evidence.
@@ -36,6 +36,11 @@ BOTTOM_MARGIN = 36.0
 # this in step with lib/content/resume.ts and the About timeline.
 INSIGHTSTAP_ROLE = "Graphic Designer · Full-time · On-site" "Sep 2025 – Present"
 RETIRED_ROLE = "Graphic Designer · Internship · Remote"
+
+# The Google UX Design certificate, inserted at the head of the list. Its
+# credential ID is deliberately absent: no Carlito subset in this file has a
+# glyph for "3", "4", "Y" or "Z". See patch-resume-certification.py.
+NEW_CERT = "Google UX Design" "Aug 2026"
 
 failures: list[str] = []
 
@@ -155,6 +160,10 @@ try:
     check(squash(RETIRED_ROLE) not in blob, "internship entry is gone")
     check("FEB2026" not in blob, "no Feb 2026 start date remains")
     check("EARNINGAFULL-TIMECONVERSION" not in blob, "conversion claim removed")
+    check(squash(NEW_CERT) in blob, "Google UX Design certificate present")
+    # It must land inside CERTIFICATIONS, not merely somewhere in the file.
+    certs = blob.split("CERTIFICATIONS")[-1].split("ADDITIONALSKILLS")[0]
+    check(squash(NEW_CERT) in certs, "…and inside the certifications section")
 except ImportError:
     check(False, "pypdf available for independent parse", "pip install pypdf")
 
@@ -193,12 +202,19 @@ if orig_path and orig_path.exists():
         "EARNINGAFULL-TIMECONVERSION",
         "FEB2026",
     ]
-    allowed_added = [squash(EXPECTED_TITLE), "SEP2025–PRESENT", "·1YR"]
+    allowed_added = [
+        squash(EXPECTED_TITLE), "SEP2025–PRESENT", "·1YR",
+        squash(NEW_CERT), "8-COURSEUXDESIGNPROFESSIONALCERTIFICATE",
+    ]
     stray_removed = [ln for ln in only_a if not any(x in ln for x in allowed_removed)]
     stray_added = [ln for ln in only_b if not any(x in ln for x in allowed_added)]
     check(not stray_removed, "no unexplained text was removed", str(stray_removed[:3]))
     check(not stray_added, "no unexplained text was added", str(stray_added[:3]))
-    check(len(b) <= len(a), "no lines gained", f"{len(a)} -> {len(b)}")
+    # The certificate insert legitimately adds two lines (title+date, issuer+note);
+    # anything beyond that is unexplained and the allowlists above would not have
+    # caught a line that merely CONTAINS an allowed phrase plus something else.
+    check(len(b) - len(a) <= 2, "at most the two certificate lines gained",
+          f"{len(a)} -> {len(b)}")
 
 # ---------- 4. Geometry -------------------------------------------------------
 objs = {int(o.group(1)): o.group(2) for o in re.finditer(rb"(\d+)\s+0\s+obj(.*?)endobj", data, re.S)}

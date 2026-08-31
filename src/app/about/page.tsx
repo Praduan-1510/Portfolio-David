@@ -19,12 +19,12 @@ import { ProfileHero } from "./ProfileHero";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Product designer and front-end designer based in Kolkata, creating digital experiences through systematic design thinking and precise execution.",
+    "Product designer and front-end designer in Kolkata, working on operational B2B software: ledgers, consoles and multi-tenant tools, where trust and permissions are the hard part.",
   alternates: { canonical: "/about" },
   openGraph: {
     title: "About: Praduan Saha",
     description:
-      "Product designer and front-end designer based in Kolkata, creating digital experiences through systematic design thinking and precise execution.",
+      "Product designer and front-end designer in Kolkata, working on operational B2B software: ledgers, consoles and multi-tenant tools, where trust and permissions are the hard part.",
     // No co-located image here; the root card isn't inherited once this
     // openGraph object is declared, so reference it explicitly.
     images: ["/opengraph-image"],
@@ -33,26 +33,27 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "About: Praduan Saha",
     description:
-      "Product designer and front-end designer based in Kolkata, creating digital experiences through systematic design thinking and precise execution.",
+      "Product designer and front-end designer in Kolkata, working on operational B2B software: ledgers, consoles and multi-tenant tools, where trust and permissions are the hard part.",
     images: ["/twitter-image"],
   },
 };
 
 const BIO = [
-  "I'm Praduan Saha, a product designer and front-end designer born and raised in Asansol, West Bengal, and now based in Kolkata. Since 2019 I've worked across content development, learning design, and visual and product design: happiest at the point where a messy, complex idea turns into something clear, usable, and good-looking, whether that's a mobile flow, a landing page, or a full brand system.",
+  "I'm Praduan Saha, a product designer and front-end designer born and raised in Asansol, West Bengal, and now based in Kolkata. Since 2019 I've worked across content development, learning design, and visual and product design: happiest at the point where a messy, complex idea turns into something clear and usable.",
+  "The work I keep choosing is operational software: ledgers, consoles, and multi-tenant tools, where the hard part isn't the surface but trust, state, and who is allowed to do what. A stock figure that can't be typed in because it's derived. An approval card that shows its reasoning before it moves your money. Those constraints are the design, and most of what's on this site is me arguing that in public.",
   "My path ran from content and instructional design into graphic and UI/UX design, so I think as much about structure and information as I do about how something looks. I work primarily in Figma (wireframing, prototyping, and building reusable components) and I care about hierarchy, accessibility, and shipping work that actually supports the goal behind it.",
   "I studied English (Honours) at Amity University, Kolkata, which still shapes how I approach design: reading closely, structuring information, and communicating clearly. A creative mindset, a positive outlook, and strong communication are what I lean on to lead work and collaborate well across a team.",
 ];
 
 // Kinetic band: the disciplines, set as a marquee.
 const DISCIPLINES = [
+  "Product Design",
   "UI/UX Design",
-  "Brand & Identity",
   "Design Systems",
-  "Prototyping",
-  "Visual Design",
-  "Instructional Design",
   "Front-end",
+  "Prototyping",
+  "Interaction Design",
+  "Brand & Identity",
   "Motion",
 ];
 
@@ -71,22 +72,27 @@ const APPROACH = [
   },
 ];
 
+// Four, and the same four the résumé leads with (lib/content/resume.ts SKILLS).
+// They used to disagree: this page claimed "Content & multimedia" as a headline
+// skill while the résumé led with tools, so a reader comparing the two met two
+// different people. Instructional design and the marketing-tool tail are still
+// true and still in the employment history; they are just not the claim.
 const CAPABILITIES = [
   {
-    title: "UI/UX design (web & mobile)",
-    body: "Wireframing, user flows, information architecture, high-fidelity UI, interactive prototyping.",
+    title: "Product design for complex software",
+    body: "Flows, information architecture, and high-fidelity UI for data-dense tools: the screens where state, permissions, and edge cases decide the design.",
   },
   {
-    title: "Visual design & branding",
-    body: "Identity and brand work, visual systems, marketing and campaign creative, pitch decks.",
+    title: "Design systems",
+    body: "Reusable component libraries and consistent tokens, with contrast and accessibility built into the system rather than checked at the end.",
   },
   {
-    title: "Design systems & accessibility",
-    body: "Reusable component libraries, consistent tokens, usability and accessibility.",
+    title: "Front-end that ships",
+    body: "Production React and Next.js, motion, and performance work: I build the interface I designed, including the site you are reading.",
   },
   {
-    title: "Content & multimedia",
-    body: "Instructional/learning design, infographics, and interactive content that makes complex topics easy to absorb.",
+    title: "Working prototypes",
+    body: "Not clickable mockups: functional builds that enforce their own rules, so a claim about a product can be opened and tested instead of taken on trust.",
   },
 ];
 

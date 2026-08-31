@@ -6,11 +6,11 @@ import { getAllProjectsMeta } from "@/lib/content/work";
 
 export const metadata: Metadata = {
   title: "Work",
-  description: "Selected case studies in product design and front-end development.",
+  description: "Selected case studies in operational B2B software: product design, design systems, and the front-end that ships them.",
   alternates: { canonical: "/work" },
   openGraph: {
     title: "Work: Praduan Saha",
-    description: "Selected case studies in product design and front-end development.",
+    description: "Selected case studies in operational B2B software: product design, design systems, and the front-end that ships them.",
     // This page has no co-located opengraph-image, and the root card isn't
     // inherited once this openGraph object is declared, so point at it explicitly.
     images: ["/opengraph-image"],
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Work: Praduan Saha",
-    description: "Selected case studies in product design and front-end development.",
+    description: "Selected case studies in operational B2B software: product design, design systems, and the front-end that ships them.",
     images: ["/twitter-image"],
   },
 };

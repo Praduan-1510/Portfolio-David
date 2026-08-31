@@ -17,7 +17,7 @@ import { AboutHeroMap } from "./AboutHeroMap";
 
 const HEADLINE = "Turning complex problems into clean, usable products.";
 const SUPPORT =
-  "Product designer & front-end designer based in Kolkata, from systems thinking through to precise execution.";
+  "Product designer & front-end designer in Kolkata, working on operational B2B software: ledgers, consoles and multi-tenant tools.";
 
 
 function Readout({

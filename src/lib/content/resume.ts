@@ -16,7 +16,11 @@
  *      stay verbatim: those are matters of record.
  *   2. The phone number printed on the PDF is NOT rendered in HTML (scrapeable
  *      on a public page). Contact routes through the site email / LinkedIn.
- *   3. InsightsTap is ONE full-time role spanning Sep 2025 – Present. The PDF
+ *   3. The summary and skills lead with the niche (operational B2B software)
+ *      and are grouped under the four capabilities the About page claims. The
+ *      PDF still carries the older, broader "CORE SKILLS" strip; it is a
+ *      wrapped paragraph, so it changes on the next export, not by patch.
+ *   4. InsightsTap is ONE full-time role spanning Sep 2025 – Present. The PDF
  *      still splits it into an internship (Sep 2025 – Feb 2026) and the
  *      full-time role that followed; LinkedIn shows the single full-time span,
  *      and that is the version to keep. The PDF should match on its next
@@ -33,49 +37,59 @@ export const RESUME_UPDATED = "August 2026";
 export const RESUME_PAGES = 2;
 
 export const SUMMARY =
-  "Product designer and front-end designer with 5+ years across instructional design, content development, and user-centric digital experiences. I design intuitive web and mobile interfaces, lead front-end visual overhauls, build scalable design systems, and translate complex ideas, including GTM and data-heavy concepts, into clean, usable work. Hands-on with Figma, wireframing, prototyping, and modern design workflows that serve both the business and the person using it.";
+  "Product designer and front-end designer with 5+ years, working on operational B2B software: ledgers, consoles and multi-tenant tools, where trust, state and permissions are the hard part. I design intuitive web and mobile interfaces, build scalable design systems, and ship the production front-end for what I design, translating complex GTM and data-heavy concepts into clean, usable work. Background in instructional design and content development, and hands-on with Figma, wireframing, and prototyping.";
 
 /** Masthead spec strip: four facts, read as an instrument readout. */
 export const SPECS = [
   { label: "Based", value: "Kolkata, IN" },
   { label: "Experience", value: "5+ years" },
-  { label: "Focus", value: "Product · Front-end" },
+  { label: "Focus", value: "Operational B2B" },
   { label: "Updated", value: RESUME_UPDATED },
 ] as const;
 
 export type SkillGroup = { label: string; items: string[] };
 
+// Grouped under the same four headings the About page leads with, so the two
+// pages describe one person. This is a SELECTION, not the record: what came out
+// (Canva, Microsoft Office, audio editing, "cross-functional collaboration")
+// read as marketing-generalist next to a product-design claim. The history that
+// earned them is still in EXPERIENCE below, which is where a record belongs.
 export const SKILLS: SkillGroup[] = [
   {
-    label: "Design",
+    label: "Product design",
     items: [
       "UI/UX design (web & mobile)",
       "Wireframing & user flows",
-      "High-fidelity UI & prototyping",
       "Information architecture",
-      "Design systems",
-      "Accessibility & usability",
+      "High-fidelity UI",
+      "Interaction design",
     ],
   },
   {
-    label: "Build & craft",
+    label: "Design systems",
+    items: [
+      "Component libraries",
+      "Design tokens",
+      "Accessibility & usability",
+      "Visual design & branding",
+    ],
+  },
+  {
+    label: "Front-end",
     items: [
       "Front-end development",
+      "React & Next.js",
       "Responsive web design",
-      "Visual design & branding",
-      "Multimedia & interactive content",
-      "Cross-functional collaboration",
+      "Motion & interaction",
     ],
   },
   {
-    label: "Tools",
+    label: "Prototyping & tools",
     items: [
-      "Figma",
-      "Canva",
+      "Figma (components & prototyping)",
+      "Working HTML/CSS/JS prototypes",
       "WordPress",
       "HubSpot",
-      "Microsoft Office",
-      "Audio & multimedia editing",
     ],
   },
 ];

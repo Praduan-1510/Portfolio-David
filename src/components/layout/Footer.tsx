@@ -13,7 +13,6 @@ const nav = [
   { href: "/about", label: "About" },
   { href: "/resume", label: "Résumé" },
   { href: "/contact", label: "Contact" },
-  { href: "/colophon", label: "Colophon" },
 ];
 
 const socials = [

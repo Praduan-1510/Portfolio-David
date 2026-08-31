@@ -3,7 +3,6 @@ import {
   Bricolage_Grotesque,
   Inter,
   JetBrains_Mono,
-  Mrs_Saint_Delafield,
 } from "next/font/google";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
@@ -35,15 +34,6 @@ const body = Inter({
 const mono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
-  display: "swap",
-});
-
-// Signature script: used ONCE (the hero's hand-signed counter-mark to the
-// machine-set split-flap). Single weight, tiny subset; still self-hosted.
-const signature = Mrs_Saint_Delafield({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-signature",
   display: "swap",
 });
 
@@ -129,7 +119,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${display.variable} ${body.variable} ${mono.variable} ${signature.variable}`}
+      className={`${display.variable} ${body.variable} ${mono.variable}`}
     >
       <body className="bg-bg text-fg font-sans">
         <a href="#main-content" className="skip-link">

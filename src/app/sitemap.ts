@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 import { getProjectSlugs } from "@/lib/content/work";
+import { getNoteSlugs, hasPublishedNotes } from "@/lib/content/notes";
 
 /*
  * XML sitemap (build-time). Static routes plus one entry per case study, all
@@ -26,5 +27,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...staticRoutes, ...projectRoutes];
+  // /notes enters the sitemap only once something is actually published.
+  // Submitting an empty section is worse than not having one: it invites a
+  // crawl of a page that says "nothing published yet". getNoteSlugs() already
+  // excludes drafts in a production build, so this stays empty until the first
+  // note flips `draft: false`.
+  const noteRoutes: MetadataRoute.Sitemap = hasPublishedNotes()
+    ? [
+        {
+          url: `${SITE_URL}/notes`,
+          lastModified,
+          changeFrequency: "weekly" as const,
+          priority: 0.7,
+        },
+        ...getNoteSlugs().map((slug) => ({
+          url: `${SITE_URL}/notes/${slug}`,
+          lastModified,
+          changeFrequency: "yearly" as const,
+          priority: 0.6,
+        })),
+      ]
+    : [];
+
+  return [...staticRoutes, ...projectRoutes, ...noteRoutes];
 }

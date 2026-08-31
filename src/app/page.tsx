@@ -24,10 +24,11 @@ import { getFeaturedProjectsMeta } from "@/lib/content/work";
  * shared motion primitives, reduced-motion-safe, transform/opacity only.
  */
 export default function Home() {
-  // Four features on home: Meridian, InsightsTap, Spendee, Voyager. An even
-  // count also means the grid closes as a clean 2×2 with no trailing full-width
-  // row. /work still carries the full inventory, so "All work" genuinely adds
-  // something (Decathlon) instead of duplicating this grid.
+  // Four features on home. This resolves to the four `order: 0` studies, slug-
+  // sorted: CareBridge, Keel, Meridian, OmniStock — the ones with a prototype a
+  // visitor can open and use. An even count also means the grid closes as a
+  // clean 2×2 with no trailing full-width row. /work carries the full inventory,
+  // so "All work" genuinely adds something rather than duplicating this grid.
   const featured = getFeaturedProjectsMeta().slice(0, 4);
 
   return (

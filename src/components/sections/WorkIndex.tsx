@@ -26,13 +26,98 @@ export function WorkIndex({ projects }: { projects: ProjectMeta[] }) {
   // get the static WorkStack instead.
   const isDesktop = useMediaQuery("(min-width: 1024px) and (pointer: fine)");
 
-  if (isDesktop && !reduced) {
-    // The departure board: the signature writ large. The old pinned
-    // horizontal gallery (WorkScrollTrack) was the awards-kit piece every
-    // jury has seen; the board is the ownable version.
-    return <FlightBoard projects={projects} />;
-  }
-  return <WorkStack projects={projects} />;
+  // Two tiers. `featured` is the A-list; everything else is concept work that
+  // sits below the fold of the argument, in one compact list.
+  //
+  // The split happens HERE rather than inside each renderer for two reasons:
+  // the board's sticky preview and its "01 / 06" counter are indexed off the
+  // array it is handed, so feeding it the full set would make the counter
+  // promise rows the preview never shows; and the compact tier is identical at
+  // every breakpoint, so writing it once beats duplicating it into both.
+  const main = projects.filter((p) => p.featured);
+  const concepts = projects.filter((p) => !p.featured);
+
+  return (
+    <>
+      {isDesktop && !reduced ? (
+        // The departure board: the signature writ large. The old pinned
+        // horizontal gallery (WorkScrollTrack) was the awards-kit piece every
+        // jury has seen; the board is the ownable version.
+        <FlightBoard projects={main} />
+      ) : (
+        <WorkStack projects={main} />
+      )}
+      {concepts.length > 0 && <ConceptTier projects={concepts} />}
+    </>
+  );
+}
+
+/*
+ * Selected concept work: the compact tier.
+ *
+ * Deliberately the quietest thing on the page. These are real studies with real
+ * pages, but the index now makes a claim about operational B2B software, and a
+ * travel app and a retail redesign are the two rows that argue against it. Left
+ * at full weight they read as "available for anything"; deleted they throw away
+ * work. So they get a labelled shelf: named, dated, honestly framed, one click
+ * away, and visibly not the headline.
+ *
+ * One list at every breakpoint — no board, no preview stage, no media. The
+ * absence of imagery IS the demotion; a compact card grid would just be the
+ * main tier again at 80% size.
+ */
+function ConceptTier({ projects }: { projects: ProjectMeta[] }) {
+  return (
+    <Container as="section" aria-labelledby="concept-work" className="pb-space-9 pt-space-8">
+      <div className="border-t border-line pt-space-6">
+        <h2
+          id="concept-work"
+          className="font-mono text-caption uppercase tracking-[0.18em] text-muted"
+        >
+          Selected concept work
+        </h2>
+        <Text variant="body" className="mt-space-3 max-w-[var(--measure)] text-muted">
+          Unshipped studies, kept for the one argument each makes rather than for
+          the sector it sits in.
+        </Text>
+
+        <StaggerGroup as="ul" from="below" className="mt-space-6 border-t border-line">
+          {projects.map((project) => (
+            <li key={project.slug} className="border-b border-line">
+              <NextLink
+                href={`/work/${project.slug}`}
+                aria-label={`View case study: ${project.title}`}
+                className="group flex flex-col gap-space-2 py-space-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg sm:flex-row sm:items-baseline sm:gap-space-5"
+                style={{ "--accent": project.accent } as React.CSSProperties}
+              >
+                <span className="min-w-0 shrink-0 font-mono text-[0.9375rem] uppercase tracking-[0.12em] text-fg transition-colors duration-fast ease-out-quad group-hover:text-neon sm:w-[14rem]">
+                  {displayTitle(project.title)}
+                </span>
+                <span className="min-w-0 flex-1 font-sans text-body text-muted">
+                  {project.indexNote ?? project.summary}
+                </span>
+                {/* Meta + affordance share one row on phones (`sm:contents`
+                    dissolves this wrapper at sm+, so the desktop row keeps them
+                    as separate flex children). Stacked, the arrow orphans onto a
+                    line of its own and reads as a stray glyph. */}
+                <span className="flex items-baseline gap-space-3 sm:contents">
+                  <span className="shrink-0 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
+                    {project.kind === "web" ? "Web" : "App"} · {project.year}
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="shrink-0 text-fg transition-transform duration-base ease-out-quad group-hover:translate-x-1 group-hover:text-neon"
+                  >
+                    →
+                  </span>
+                </span>
+              </NextLink>
+            </li>
+          ))}
+        </StaggerGroup>
+      </div>
+    </Container>
+  );
 }
 
 /*

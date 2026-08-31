@@ -23,6 +23,9 @@ import { spectrumAt } from "@/lib/spectrum";
 const navItems = [
   { id: "top", label: "Index" },
   { id: "work", label: "Work" },
+  // The register sits between the work grid and the about teaser; the rail
+  // indexes the page's sections, so leaving it out would make the rail wrong.
+  { id: "testimonials", label: "Record" },
   { id: "about", label: "About" },
   { id: "contact", label: "Contact" },
 ] as const;

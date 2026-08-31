@@ -3,6 +3,7 @@ import { ProjectCard } from "@/components/work/ProjectCard";
 import { Hero } from "@/components/sections/Hero";
 import { HomeAtmosphere } from "@/components/sections/HomeAtmosphere";
 import { CinematicReel } from "@/components/sections/reel/CinematicReel";
+import { Testimonials } from "@/components/sections/Testimonials";
 import { SideNav } from "@/components/layout/SideNav";
 import {
   Reveal,
@@ -105,6 +106,10 @@ export default function Home() {
           })}
         </StaggerGroup>
       </Container>
+
+      {/* On the record. Renders nothing until a verified quote exists, so the
+          divider below stays the seam between work and about either way. */}
+      <Testimonials />
 
       <Container>
         <AnimatedDivider spectrum />

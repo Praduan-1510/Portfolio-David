@@ -18,8 +18,10 @@
  *      on a public page). Contact routes through the site email / LinkedIn.
  *   3. The summary and skills lead with the niche (operational B2B software)
  *      and are grouped under the four capabilities the About page claims. The
- *      PDF still carries the older, broader "CORE SKILLS" strip; it is a
- *      wrapped paragraph, so it changes on the next export, not by patch.
+ *      PDF now matches: scripts/patch-resume-summary.py re-flowed both wrapped
+ *      paragraphs in place, so this is no longer a departure. Keep it that way
+ *      — if this text changes again, re-run that script rather than letting the
+ *      download drift back.
  *   4. InsightsTap is ONE full-time role spanning Sep 2025 – Present. The PDF
  *      still splits it into an internship (Sep 2025 – Feb 2026) and the
  *      full-time role that followed; LinkedIn shows the single full-time span,

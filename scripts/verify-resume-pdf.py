@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 Validate public/pdf/Praduan_Saha_Resume.pdf after any of the byte-level patches:
-patch-resume-title.py, patch-resume-insightstap.py, patch-resume-certification.py.
+patch-resume-title.py, patch-resume-insightstap.py, patch-resume-certification.py,
+patch-resume-summary.py.
 
 The PDF is edited at the byte level, and it is the artefact that reaches
 recruiters and ATS parsers, so "it still opens on my machine" is not evidence.
@@ -41,6 +42,10 @@ RETIRED_ROLE = "Graphic Designer · Internship · Remote"
 # credential ID is deliberately absent: no Carlito subset in this file has a
 # glyph for "3", "4", "Y" or "Z". See patch-resume-certification.py.
 NEW_CERT = "Google UX Design" "Aug 2026"
+
+# The re-flowed PROFESSIONAL SUMMARY and CORE SKILLS (patch-resume-summary.py).
+NEW_SUMMARY_OPENS = "Product designer and front-end designer with 5+ years"
+NEW_SKILLS_OPENS = "Product Design: UI/UX design (web & mobile)"
 
 failures: list[str] = []
 
@@ -144,12 +149,13 @@ try:
     check(len(text) > 3000, "pypdf extracts the full text", f"{len(text)} chars")
     lines = [squash(ln) for ln in text.splitlines() if ln.strip()]
     check(squash(EXPECTED_TITLE) in lines, "new title is its own line", EXPECTED_TITLE)
-    # Line-scoped, not a substring of the whole document: the professional
-    # summary legitimately opens "UI/UX & Graphic Designer with 5+ years…", so a
-    # blob search can never go green. Only the TITLE LINE is being replaced,
-    # rewording the summary would mean re-flowing a wrapped paragraph, which is
-    # a re-export job, not a byte patch.
+    # This used to be line-scoped, because the summary legitimately opened
+    # "UI/UX & Graphic Designer with 5+ years…" and a blob search could never go
+    # green. patch-resume-summary.py re-flowed that paragraph, so the retired
+    # title is now gone from the ENTIRE document and the check can say so.
     check(squash(RETIRED_TITLE) not in lines, "old title no longer a heading line", RETIRED_TITLE)
+    check(squash(RETIRED_TITLE) not in squash(text),
+          "retired title gone from the whole document", RETIRED_TITLE)
     for anchor in ("PRADUAN SAHA", "INSIGHTSTAP", "SIMPLILEARN", "LEADSARK", "AMITY"):
         check(squash(anchor) in squash(text), f"content intact: {anchor}")
 
@@ -164,6 +170,14 @@ try:
     # It must land inside CERTIFICATIONS, not merely somewhere in the file.
     certs = blob.split("CERTIFICATIONS")[-1].split("ADDITIONALSKILLS")[0]
     check(squash(NEW_CERT) in certs, "…and inside the certifications section")
+    check(squash(NEW_SUMMARY_OPENS) in blob, "summary leads with the current title")
+    check(squash(NEW_SKILLS_OPENS) in blob, "core skills grouped under the four capabilities")
+    # Scoped to CORE SKILLS, not the whole document: "Microsoft Office" is still
+    # a true statement of what was used at Simplilearn and stays in that bullet.
+    # A skills list is a selection; the employment history is a record.
+    skills = blob.split("CORESKILLS")[-1].split("PROFESSIONALEXPERIENCE")[0]
+    for gone in ("CANVA", "MICROSOFTOFFICE", "MULTIMEDIA&INTERACTIVECONTENT"):
+        check(gone not in skills, f"retired from CORE SKILLS: {gone}")
 except ImportError:
     check(False, "pypdf available for independent parse", "pip install pypdf")
 
@@ -201,10 +215,21 @@ if orig_path and orig_path.exists():
         "MARKETINGMICROSITES",
         "EARNINGAFULL-TIMECONVERSION",
         "FEB2026",
+        # The re-flowed paragraphs: matched on phrases unique to the old text,
+        # since the line breaks are a property of the wrap, not of the content.
+        "SKILLEDINDESIGNING", "DATA-DRIVENCONCEPTS", "MODERNDESIGNWORKFLOWS",
+        "HIGH-FIDELITYUI&PROTOTYPING", "CROSS-FUNCTIONALCOLLABORATION",
+        "FIGMA·CANVA·WORDPRESS", "MULTIMEDIA&INTERACTIVECONTENT",
+        "VISUALDESIGN&BRANDING·INFORMATIONARCHITECTURE",
     ]
     allowed_added = [
         squash(EXPECTED_TITLE), "SEP2025–PRESENT", "·1YR",
         squash(NEW_CERT), "8-COURSEUXDESIGNPROFESSIONALCERTIFICATE",
+        "PRODUCTDESIGNERANDFRONT-ENDDESIGNER", "WHERETRUST,STATEANDPERMISSIONS",
+        "THEPRODUCTIONFRONT-ENDFORWHATIDESIGN", "CONTENTDEVELOPMENT,ANDHANDS-ON",
+        "PRODUCTDESIGN:UI/UXDESIGN", "ACCESSIBILITY&USABILITY·VISUALDESIGN",
+        "RESPONSIVEWEBDESIGN·MOTION&INTERACTION",
+        "TOOLS:FIGMA(COMPONENTS&PROTOTYPING)",
     ]
     stray_removed = [ln for ln in only_a if not any(x in ln for x in allowed_removed)]
     stray_added = [ln for ln in only_b if not any(x in ln for x in allowed_added)]

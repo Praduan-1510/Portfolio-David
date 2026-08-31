@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import NextLink from "next/link";
-import { Container, Text, Button } from "@/components/primitives";
+import { Container, Text, Button, BrowserMockup } from "@/components/primitives";
 import { Reveal, TextReveal, AnimatedDivider, StaggerGroup, Magnetic } from "@/components/motion";
 import { getProjectBySlug } from "@/lib/content/work";
 
@@ -37,7 +37,15 @@ export const metadata: Metadata = {
  * an unevidenced service list is the single most generic artefact in this
  * industry and the rest of the site earns the right not to be that. And the
  * page says what it declines, which is a stronger filter than anything it
- * claims — the enquiries it turns away are the ones worth not having.
+ * claims: the enquiries it turns away are the ones worth not having.
+ *
+ * Every offer also SHOWS that proof rather than linking to it. The page used to
+ * carry no image at all, which for a designer's services page is the whole
+ * problem: it argued well and demonstrated nothing, and the strongest assets on
+ * the site sat one 11px mono link away. Each offer now runs claim-left,
+ * evidence-right, and the shot is chosen to prove the specific sentence above
+ * it rather than to decorate the row. The sides alternate so three offers do
+ * not read as three identical bands.
  */
 
 /** Each offer points at work that already demonstrates it. */
@@ -48,9 +56,18 @@ const OFFERS = [
     lede:
       "Before a team commits engineering time to the flow that decides the product, build that flow for real and use it.",
     body:
-      "Not a clickable mockup: a working build that enforces its own rules, so the question stops being whether the model reads well and becomes whether it survives contact. Permissions that actually gate, ledgers that actually refuse to be edited, states you can drive rather than describe. Cheapest possible way to find out a model is incoherent, while it still costs a fortnight instead of a quarter.",
+      "Not a clickable mockup: a working build that enforces its own rules, so the question stops being whether the model reads well and becomes whether it survives contact. The cheapest way to find out a model is incoherent, while that still costs a fortnight instead of a quarter.",
     proof: "omnistock",
     good: "A model nobody can agree on, a spec that keeps growing, or a decision that keeps getting deferred because no artefact settles it.",
+    shot: {
+      src: "/images/work/omnistock/variance.png",
+      domain: "omnistock.app/variance",
+      aspect: "16 / 10", // 2560x1600 natively: no crop
+      alt: "OmniStock's variance triage: a ranked queue where each row carries a gate state and the exposure figure is derived, not typed",
+      // The caption points at the part of the image that IS the argument.
+      caption:
+        "The GATE column is the claim: rows sit at second approval or controlled, and exposure is derived (£3,776 x 1.4) rather than typed.",
+    },
   },
   {
     id: "ship",
@@ -58,9 +75,18 @@ const OFFERS = [
     lede:
       "Interface design through to the production front-end, on one component system, by one person.",
     body:
-      "The handoff is where most of the design goes missing — not through bad faith, but because a static file cannot specify motion, empty states, focus order, or what happens at 320px. When the same person designs and builds, none of that needs specifying. What ships is what was designed, and it is accountable to real numbers: performance, accessibility, and layout stability, measured rather than asserted.",
+      "The handoff is where most of the design goes missing, not through bad faith but because a static file cannot specify motion, empty states, focus order, or what happens at 320px. When the same person designs and builds, none of that needs specifying, and what ships is accountable to measured numbers rather than asserted ones.",
     proof: "insightstap",
     good: "A marketing site or product surface where the gap between the comp and the live page keeps costing you time.",
+    shot: {
+      src: "/videos/insightstap-poster.jpg",
+      domain: "insightstap.com",
+      // 1600x875 natively, which is BrowserMockup's own 64/35. At 16/10 the
+      // well cropped the site's logo off the left edge.
+      aspect: "64 / 35",
+      alt: "The InsightsTap marketing site as it runs in production",
+      caption: "In production, not a comp of it. Designed and built by the same person, so nothing needed specifying twice.",
+    },
   },
   {
     id: "system",
@@ -68,9 +94,17 @@ const OFFERS = [
     lede:
       "Tokens, components, and the accessibility and contrast rules built into the system rather than checked at the end.",
     body:
-      "A component library is the easy half. The hard half is the decisions underneath it: how many status colours the product is allowed, what contrast every state has to clear, which figures are derived and can never be typed. Systems that hold up are the ones where those rules live in the tokens, so the wrong thing is difficult to build rather than merely discouraged in a doc.",
+      "A component library is the easy half. The hard half is the decisions underneath: how many status colours the product is allowed, what contrast every state has to clear, which figures are derived and can never be typed. Systems that hold up put those rules in the tokens, so the wrong thing is hard to build rather than discouraged in a doc.",
     proof: "meridian",
     good: "A product where every new screen restarts the same arguments, or where accessibility keeps arriving as a late fix.",
+    shot: {
+      src: "/images/work/meridian/design-system.png",
+      domain: "meridian.app/design-system",
+      aspect: "16 / 10", // 2560x1600 natively: no crop
+      alt: "Meridian's design system page, with each colour swatch carrying its measured contrast ratio",
+      caption:
+        "Every swatch carries its measured ratio, so the rule lives in the token rather than in a document nobody opens.",
+    },
   },
 ] as const;
 
@@ -101,7 +135,7 @@ const PROCESS = [
 /** What I need from you, said up front because it is the usual failure mode. */
 const NEEDS = [
   "One person who can decide. Design by committee is where timelines go, and it is not a scheduling problem.",
-  "Access to whoever knows the domain — the operations lead, the accountant, the person who actually files the returns.",
+  "Access to whoever knows the domain: the operations lead, the accountant, the person who actually files the returns.",
   "Real data, or a real description of it. Products like these fail on the edge cases, and lorem ipsum has no edge cases.",
 ] as const;
 
@@ -175,11 +209,18 @@ export default function ServicesPage() {
                 key={offer.id}
                 className="border-t border-line py-space-8 first:border-t-0 first:pt-0"
               >
-                <div className="grid gap-space-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-space-9">
+                {/* Claim left, evidence right, sides alternating. The shot is
+                    the argument, so it gets real width rather than sitting in a
+                    sidebar. */}
+                <div
+                  className={`grid gap-space-6 lg:grid-cols-2 lg:items-center lg:gap-space-9 ${
+                    i % 2 === 1 ? "lg:[&>figure]:order-first" : ""
+                  }`}
+                >
                   <div className="min-w-0">
                     <span
                       aria-hidden="true"
-                      className="font-mono text-caption tabular-nums text-muted"
+                      className="font-mono text-caption tabular-nums text-accent"
                     >
                       {String(i + 1).padStart(2, "0")}
                     </span>
@@ -199,35 +240,44 @@ export default function ServicesPage() {
                     <Text variant="body" className="mt-space-4 max-w-[var(--measure)] text-muted">
                       {offer.body}
                     </Text>
-                  </div>
 
-                  <aside className="min-w-0 border-t border-line pt-space-5 lg:border-l lg:border-t-0 lg:pl-space-7 lg:pt-0">
-                    <p className="font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-muted">
+                    <p className="mt-space-6 font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-muted">
                       Right when
                     </p>
-                    <Text variant="body" className="mt-space-3 text-muted">
+                    <Text variant="body" className="mt-space-2 max-w-[var(--measure)] text-muted">
                       {offer.good}
                     </Text>
+
                     {project && (
-                      <>
-                        <p className="mt-space-6 font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-muted">
-                          Proof
-                        </p>
-                        <NextLink
-                          href={`/work/${project.meta.slug}`}
-                          className="group mt-space-3 inline-flex items-baseline gap-space-2 font-mono text-[0.8125rem] uppercase tracking-[0.1em] text-fg transition-colors duration-fast ease-out-quad hover:text-neon focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg"
+                      <NextLink
+                        href={`/work/${project.meta.slug}`}
+                        className="group mt-space-5 inline-flex items-baseline gap-space-2 font-mono text-[0.8125rem] uppercase tracking-[0.1em] text-fg transition-colors duration-fast ease-out-quad hover:text-neon focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg"
+                      >
+                        <span className="text-muted">Proof:</span>
+                        {project.meta.title}
+                        <span
+                          aria-hidden="true"
+                          className="transition-transform duration-base ease-out-quad group-hover:translate-x-1"
                         >
-                          {project.meta.title}
-                          <span
-                            aria-hidden="true"
-                            className="transition-transform duration-base ease-out-quad group-hover:translate-x-1"
-                          >
-                            →
-                          </span>
-                        </NextLink>
-                      </>
+                          &rarr;
+                        </span>
+                      </NextLink>
                     )}
-                  </aside>
+                  </div>
+
+                  <figure className="min-w-0">
+                    <BrowserMockup
+                      poster={offer.shot.src}
+                      domain={offer.shot.domain}
+                      alt={offer.shot.alt}
+                      tilt="still"
+                      aspect={offer.shot.aspect}
+                      sizes="(min-width: 1024px) 34rem, 92vw"
+                    />
+                    <figcaption className="mt-space-4 max-w-[42ch] border-l-2 border-accent pl-space-4 text-caption leading-relaxed text-muted">
+                      {offer.shot.caption}
+                    </figcaption>
+                  </figure>
                 </div>
               </li>
             );
@@ -271,9 +321,10 @@ export default function ServicesPage() {
               <ul className="mt-space-4 space-y-space-4">
                 {NEEDS.map((need) => (
                   <li key={need} className="flex gap-space-3">
-                    <span aria-hidden="true" className="shrink-0 text-muted">
-                      —
-                    </span>
+                    <span
+                      aria-hidden="true"
+                      className="mt-[0.62em] h-[5px] w-[5px] shrink-0 rounded-full bg-accent"
+                    />
                     <Text variant="body" className="text-muted">
                       {need}
                     </Text>
@@ -288,7 +339,7 @@ export default function ServicesPage() {
               <Text variant="body" className="mt-space-4 max-w-[var(--measure)] text-muted">
                 Fixed price per phase, agreed in writing before work starts, so
                 the number does not move while the work is happening. Tell me
-                the problem and where it stands and you get a written proposal —
+                the problem and where it stands and you get a written proposal:
                 scope, deliverables, timeline, price. If the shape does not fit
                 a fixed price, I will say that too.
               </Text>

@@ -77,18 +77,18 @@ export const metadata: Metadata = {
     template: "%s · Praduan Saha",
   },
   description:
-    "Product designer and front-end designer based in Kolkata: turning complex, data-heavy products into clear, usable interfaces, and building the front-end that ships them.",
+    "Product designer and front-end designer in Kolkata, working on operational B2B software: ledgers, consoles and multi-tenant tools, where trust and permissions are the hard part.",
   openGraph: {
     title: "Praduan Saha: Product Designer (Design + Front-End)",
     description:
-      "Portfolio of Praduan Saha: a product designer who designs and ships production front-end, focused on clarity, usable systems, and getting work into production.",
+      "Portfolio of Praduan Saha: a product designer who designs and ships operational B2B software — ledgers, consoles and multi-tenant tools you can open and use on the page.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Praduan Saha: Product Designer (Design + Front-End)",
     description:
-      "Portfolio of Praduan Saha: a product designer who designs and ships production front-end, focused on clarity, usable systems, and getting work into production.",
+      "Portfolio of Praduan Saha: a product designer who designs and ships operational B2B software — ledgers, consoles and multi-tenant tools you can open and use on the page.",
   },
 };
 

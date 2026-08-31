@@ -33,18 +33,22 @@ export const metadata: Metadata = {
 // Left-column spec readout. Copy is DRAFT: each value is shown as an "e.g."
 // example (a small mono tag, not a repeated "PLACEHOLDER" word). The owner
 // replaces these with their own lines; nothing here is invented as fact.
+// These are MY facts, stated plainly. They used to render behind an "e.g."
+// prefix, which turned a response-time commitment into a vague suggestion and
+// read as though the sender were being prompted to supply their own. How an
+// engagement actually runs now lives on /services; this is just the readout.
 const BLOCKS = [
   {
-    label: "What I'm looking for",
-    hint: "product design + front-end for data-heavy B2B products",
+    label: "What I work on",
+    value: "Operational B2B software: ledgers, consoles and multi-tenant tools",
   },
   {
-    label: "Freelance availability",
-    hint: "open to freelance from August",
+    label: "Availability",
+    value: "Open to freelance and contract projects",
   },
   {
     label: "Response time",
-    hint: "within 1–2 working days (IST)",
+    value: "Within 1–2 working days (IST)",
   },
 ];
 
@@ -163,14 +167,8 @@ export default function Contact() {
                     <dt className="font-mono text-caption uppercase tracking-[0.16em] text-muted">
                       {block.label}
                     </dt>
-                    <dd className="mt-space-2 flex max-w-[34ch] items-baseline gap-space-2 text-body text-muted">
-                      <span
-                        aria-hidden
-                        className="shrink-0 font-mono text-caption uppercase tracking-[0.12em] opacity-60"
-                      >
-                        e.g.
-                      </span>
-                      <span>{block.hint}</span>
+                    <dd className="mt-space-2 max-w-[34ch] text-body text-muted">
+                      {block.value}
                     </dd>
                   </div>
                 </div>

@@ -1,0 +1,74 @@
+---
+title: "The field that isn't there"
+summary: "A warehouse system with no quantity input anywhere. Designing an absence is harder than designing a control, and it is the only version that survives a dispute."
+date: "2026-08-31"
+related: omnistock
+tags: ["Operational software", "Constraints", "Data model"]
+draft: true
+---
+
+Most inventory software has a box you can type a number into. Someone counts a
+shelf, the number on screen disagrees, and they fix it. The fix is the feature.
+
+I spent a while designing a system where that box does not exist, and the
+interesting part was how much of the interface the absence decided.
+
+## The liability changes the noun
+
+A third-party logistics operator holds goods it does not own. That single fact
+turns inventory from a number the business tracks into a claim the business has
+to defend. If a client says twelve units are missing, "our system said 1,847"
+is not evidence. It is an assertion, and the person who typed it is not
+available at 2am.
+
+So stock stops being a value and becomes a **derived balance**: the sum of
+attributable events, and nothing else. Nobody, at any privilege level, can
+state a quantity that is not that sum.
+
+That is a data-model decision. It is also, immediately, an interface decision,
+because there is now nothing to bind an input to.
+
+## Saying it out loud beats disabling it
+
+The easy version greys the field out. The honest version deletes it and
+explains itself. The edit form in the study says:
+
+> There is no quantity field on this form. Not hidden, not disabled, not
+> permission-gated: it does not exist.
+
+A disabled control is a promise that the right person could still type there.
+That promise is exactly what the design is trying to withdraw. The roles matrix
+makes the same point without hedging: `Set a stock quantity` reads **Impossible**
+in all six columns, Tenant Admin included. Not "restricted". Impossible.
+
+The dashboard carries the same sentence in plainer clothes: nothing on the page
+is a stored figure that someone typed.
+
+## The correction still has to work
+
+Removing the box does not remove the problem it solved. An operator counts a
+shelf and finds twelve units short; that has to go somewhere.
+
+It goes in as a movement, not a correction. Twelve units, from the bin to a
+variance account, reason `COUNT_SHORT`, with the actor and the device recorded
+as separate fields — because an attestation built on device IDs is worthless the
+moment a dispute involves who was holding it. Net zero by construction. The
+balance moves because the events moved, which is the whole rule restated as a
+workflow.
+
+The API refuses the same verb in the same language. `PATCH` an `on_hand` value
+and you get `422 quantity_not_settable`, plus the alternative in the same
+response body: `post_to /v1/movements`. It is declining a verb, not catching a
+bad number.
+
+## What this is really about
+
+Constraints of this kind are usually treated as the engineering team's
+territory, something design routes around with a disabled state and a tooltip.
+I think it is the opposite. The constraint *is* the product's argument, and an
+interface that softens it is quietly telling users the rule is negotiable.
+
+The test I would apply: if your system's most important rule is enforced by a
+disabled input, it is not enforced.
+
+[See the full case study →](/work/omnistock)

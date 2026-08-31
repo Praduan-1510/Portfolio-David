@@ -16,6 +16,17 @@
  *      stay verbatim: those are matters of record.
  *   2. The phone number printed on the PDF is NOT rendered in HTML (scrapeable
  *      on a public page). Contact routes through the site email / LinkedIn.
+ *   3. The summary and skills lead with the niche (operational B2B software)
+ *      and are grouped under the four capabilities the About page claims. The
+ *      PDF now matches: scripts/patch-resume-summary.py re-flowed both wrapped
+ *      paragraphs in place, so this is no longer a departure. Keep it that way
+ *      — if this text changes again, re-run that script rather than letting the
+ *      download drift back.
+ *   4. InsightsTap is ONE full-time role spanning Sep 2025 – Present. The PDF
+ *      still splits it into an internship (Sep 2025 – Feb 2026) and the
+ *      full-time role that followed; LinkedIn shows the single full-time span,
+ *      and that is the version to keep. The PDF should match on its next
+ *      export. Keep this in step with the About timeline.
  */
 
 /** The downloadable file, served from public/. */
@@ -28,49 +39,59 @@ export const RESUME_UPDATED = "August 2026";
 export const RESUME_PAGES = 2;
 
 export const SUMMARY =
-  "Product designer and front-end designer with 5+ years across instructional design, content development, and user-centric digital experiences. I design intuitive web and mobile interfaces, lead front-end visual overhauls, build scalable design systems, and translate complex ideas, including GTM and data-heavy concepts, into clean, usable work. Hands-on with Figma, wireframing, prototyping, and modern design workflows that serve both the business and the person using it.";
+  "Product designer and front-end designer with 5+ years, working on operational B2B software: ledgers, consoles and multi-tenant tools, where trust, state and permissions are the hard part. I design intuitive web and mobile interfaces, build scalable design systems, and ship the production front-end for what I design, translating complex GTM and data-heavy concepts into clean, usable work. Background in instructional design and content development, and hands-on with Figma, wireframing, and prototyping.";
 
 /** Masthead spec strip: four facts, read as an instrument readout. */
 export const SPECS = [
   { label: "Based", value: "Kolkata, IN" },
   { label: "Experience", value: "5+ years" },
-  { label: "Focus", value: "Product · Front-end" },
+  { label: "Focus", value: "Operational B2B" },
   { label: "Updated", value: RESUME_UPDATED },
 ] as const;
 
 export type SkillGroup = { label: string; items: string[] };
 
+// Grouped under the same four headings the About page leads with, so the two
+// pages describe one person. This is a SELECTION, not the record: what came out
+// (Canva, Microsoft Office, audio editing, "cross-functional collaboration")
+// read as marketing-generalist next to a product-design claim. The history that
+// earned them is still in EXPERIENCE below, which is where a record belongs.
 export const SKILLS: SkillGroup[] = [
   {
-    label: "Design",
+    label: "Product design",
     items: [
       "UI/UX design (web & mobile)",
       "Wireframing & user flows",
-      "High-fidelity UI & prototyping",
       "Information architecture",
-      "Design systems",
-      "Accessibility & usability",
+      "High-fidelity UI",
+      "Interaction design",
     ],
   },
   {
-    label: "Build & craft",
+    label: "Design systems",
+    items: [
+      "Component libraries",
+      "Design tokens",
+      "Accessibility & usability",
+      "Visual design & branding",
+    ],
+  },
+  {
+    label: "Front-end",
     items: [
       "Front-end development",
+      "React & Next.js",
       "Responsive web design",
-      "Visual design & branding",
-      "Multimedia & interactive content",
-      "Cross-functional collaboration",
+      "Motion & interaction",
     ],
   },
   {
-    label: "Tools",
+    label: "Prototyping & tools",
     items: [
-      "Figma",
-      "Canva",
+      "Figma (components & prototyping)",
+      "Working HTML/CSS/JS prototypes",
       "WordPress",
       "HubSpot",
-      "Microsoft Office",
-      "Audio & multimedia editing",
     ],
   },
 ];
@@ -101,19 +122,11 @@ export const EXPERIENCE: Position[] = [
       {
         title: "Graphic Designer",
         mode: "Full-time · On-site",
-        period: "Feb 2026 – Present",
+        period: "Sep 2025 – Present",
         bullets: [
           "Own brand-aligned creative as InsightsTap scales its GTM and AI-focused marketing (marketing visuals, UI layouts, and campaign assets built alongside the marketing, strategy, and product teams), delivering a cohesive visual identity that strengthened brand recognition across GTM touchpoints.",
+          "Delivered 20+ creatives and wireframes across the GTM funnel — LinkedIn carousels, ad visuals, banners, pitch decks, and landing-page layouts in Canva and Figma, plus early UI concepts for marketing microsites — raising visual consistency and readability throughout.",
           "Built a quick-iteration workflow in Figma on reusable components and shared style references, cutting creative turnaround time and raising feedback-to-final velocity without losing brand recall.",
-        ],
-      },
-      {
-        title: "Graphic Designer",
-        mode: "Internship · Remote",
-        period: "Sep 2025 – Feb 2026",
-        bullets: [
-          "Produced on-brand creative for a B2B SaaS team launching GTM and AI-focused marketing: LinkedIn carousels, ad visuals, banners, pitch decks, and landing-page layouts in Canva and Figma, plus early UI concepts for marketing microsites.",
-          "Delivered 20+ creatives and wireframes that improved visual consistency and readability across GTM assets, earning a full-time conversion.",
         ],
       },
     ],
@@ -216,6 +229,12 @@ export type Certification = {
 
 /** Newest first. */
 export const CERTIFICATIONS: Certification[] = [
+  {
+    title: "Google UX Design",
+    issuer: "Google",
+    date: "Aug 2026",
+    note: "Google's 8-course UX Design Professional Certificate: the full design process from user research and empathy mapping through wireframing, low- and high-fidelity prototyping, and usability studies.",
+  },
   {
     title: "Claude Code in Action",
     issuer: "Anthropic",

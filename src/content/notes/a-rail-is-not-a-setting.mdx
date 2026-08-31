@@ -1,0 +1,69 @@
+---
+title: "A rail is not a setting"
+summary: "A limit checked after configuration is a suggestion. The order of the checks is the entire difference between a guardrail and a default, and users can feel which one they are looking at."
+date: "2026-08-24"
+related: keel
+tags: ["Trust", "AI agents", "Constraints"]
+draft: true
+---
+
+When you hand a system authority over something that matters — money, in this
+case — the design question stops being "what can it do" and becomes "what can it
+never do, and how would I know."
+
+Those are not the same question, and most interfaces answer the first one while
+appearing to answer the second.
+
+## The order of the checks is the claim
+
+Build a bookkeeping agent with an auto-pay ceiling. A user sets it to $2,000. So
+far this is a setting, and settings have a well-known property: whoever can
+reach the settings can move the ceiling.
+
+Now `POST` a request for a $99,999 ceiling straight past the interface. What
+happens next is the only thing a user actually cares about, and it is decided by
+sequence:
+
+- Read configuration, **then** check limits → the limit is whatever the
+  configuration says. You have a default with good manners.
+- Check limits, **then** read configuration → the configuration cannot reach
+  past the limit. You have a rail.
+
+In the build, first payment to a new vendor, and anything touching a dispute or
+an anomaly, always stop for a human. Those live as constants in the rules
+engine, checked *before* configuration is read. The recorded result of that
+$99,999 request is $2,000. Bypassing the interface changes nothing, because the
+interface was never what was holding the limit.
+
+The test suite makes the same point adversarially: crank every dial to its most
+permissive legal value and assert the rails hold anyway.
+
+## Append-only is a database property, not a promise
+
+The same distinction shows up in the ledger. A mockup can say a ledger is
+append-only. Only a database can refuse to edit it.
+
+The `events` table carries `BEFORE UPDATE` and `BEFORE DELETE` triggers that
+`RAISE(ABORT)`. No code path, careless or deliberate, rewrites history. A
+correction is a new row pointing at the one it supersedes — and a test re-reads
+the superseded row afterwards to prove it is untouched, word for word.
+
+That last detail is the one I would defend hardest. "History is immutable" is a
+sentence anybody can write on a slide. "Here is a test that reads the old row
+back and diffs it" is the version that survives someone asking how you know.
+
+## Why this is a design problem
+
+It looks like architecture, and the temptation is to leave it there. But the
+user-facing consequence is enormous: it decides whether your product can
+honestly say *this cannot happen* rather than *this is switched off*.
+
+Those two sentences ask for completely different amounts of trust, and users are
+better at telling them apart than we usually credit. An interface that promises
+the first while implementing the second is spending trust it has not earned, and
+the bill arrives during the incident.
+
+If a requirement is worth putting in a design, it is worth knowing whether it is
+enforced or merely drawn. There is no way to find out by drawing it.
+
+[See the full case study →](/work/keel)

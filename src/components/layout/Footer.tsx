@@ -9,9 +9,11 @@ import { site } from "@/lib/site";
  */
 const nav = [
   { href: "/work", label: "Work" },
+  { href: "/services", label: "Services" },
   { href: "/about", label: "About" },
   { href: "/resume", label: "Résumé" },
   { href: "/contact", label: "Contact" },
+  { href: "/colophon", label: "Colophon" },
 ];
 
 const socials = [

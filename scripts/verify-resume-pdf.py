@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """
-Validate public/pdf/Praduan_Saha_Resume.pdf after scripts/patch-resume-title.py.
+Validate public/pdf/Praduan_Saha_Resume.pdf after any of the byte-level patches:
+patch-resume-title.py, patch-resume-insightstap.py, patch-resume-certification.py,
+patch-resume-summary.py.
 
 The PDF is edited at the byte level, and it is the artefact that reaches
 recruiters and ATS parsers, so "it still opens on my machine" is not evidence.
@@ -11,8 +13,10 @@ assumptions:
                   matches, and every stream's /Length equals its real byte count.
   2. Parser: pypdf (a third-party implementation) opens it, reports the page
                   count, and extracts text without raising.
-  3. Diff: extracted text differs from the original ONLY on the title line.
-  4. Geometry: the retitled run is still centered on the 612pt page.
+  3. Diff: extracted text differs from the original ONLY in ways the patches
+                  are supposed to cause (title line; the folded-in internship).
+  4. Geometry: the retitled run is still centered on the 612pt page, and the
+                  reflowed page 1 still reads top-to-bottom inside its margins.
 
 Usage: python3 scripts/verify-resume-pdf.py [original.pdf]
 Exit code is non-zero if any check fails.
@@ -26,6 +30,22 @@ PDF = Path("public/pdf/Praduan_Saha_Resume.pdf")
 EXPECTED_TITLE = "PRODUCT DESIGNER (DESIGN + FRONT-END)"
 RETIRED_TITLE = "UI/UX & GRAPHIC DESIGNER"
 PAGE_WIDTH = 612.0
+BOTTOM_MARGIN = 36.0
+
+# InsightsTap is ONE full-time role spanning Sep 2025 - Present; the separate
+# internship entry was folded into it. See patch-resume-insightstap.py, and keep
+# this in step with lib/content/resume.ts and the About timeline.
+INSIGHTSTAP_ROLE = "Graphic Designer · Full-time · On-site" "Sep 2025 – Present"
+RETIRED_ROLE = "Graphic Designer · Internship · Remote"
+
+# The Google UX Design certificate, inserted at the head of the list. Its
+# credential ID is deliberately absent: no Carlito subset in this file has a
+# glyph for "3", "4", "Y" or "Z". See patch-resume-certification.py.
+NEW_CERT = "Google UX Design" "Aug 2026"
+
+# The re-flowed PROFESSIONAL SUMMARY and CORE SKILLS (patch-resume-summary.py).
+NEW_SUMMARY_OPENS = "Product designer and front-end designer with 5+ years"
+NEW_SKILLS_OPENS = "Product Design: UI/UX design (web & mobile)"
 
 failures: list[str] = []
 
@@ -129,14 +149,35 @@ try:
     check(len(text) > 3000, "pypdf extracts the full text", f"{len(text)} chars")
     lines = [squash(ln) for ln in text.splitlines() if ln.strip()]
     check(squash(EXPECTED_TITLE) in lines, "new title is its own line", EXPECTED_TITLE)
-    # Line-scoped, not a substring of the whole document: the professional
-    # summary legitimately opens "UI/UX & Graphic Designer with 5+ years…", so a
-    # blob search can never go green. Only the TITLE LINE is being replaced,
-    # rewording the summary would mean re-flowing a wrapped paragraph, which is
-    # a re-export job, not a byte patch.
+    # This used to be line-scoped, because the summary legitimately opened
+    # "UI/UX & Graphic Designer with 5+ years…" and a blob search could never go
+    # green. patch-resume-summary.py re-flowed that paragraph, so the retired
+    # title is now gone from the ENTIRE document and the check can say so.
     check(squash(RETIRED_TITLE) not in lines, "old title no longer a heading line", RETIRED_TITLE)
+    check(squash(RETIRED_TITLE) not in squash(text),
+          "retired title gone from the whole document", RETIRED_TITLE)
     for anchor in ("PRADUAN SAHA", "INSIGHTSTAP", "SIMPLILEARN", "LEADSARK", "AMITY"):
         check(squash(anchor) in squash(text), f"content intact: {anchor}")
+
+    # The InsightsTap fold. Checked on the whole document, not per line: the one
+    # surviving role heading and its dateline extract as a single run.
+    blob = squash(text)
+    check(squash(INSIGHTSTAP_ROLE) in blob, "InsightsTap is one Sep 2025 role")
+    check(squash(RETIRED_ROLE) not in blob, "internship entry is gone")
+    check("FEB2026" not in blob, "no Feb 2026 start date remains")
+    check("EARNINGAFULL-TIMECONVERSION" not in blob, "conversion claim removed")
+    check(squash(NEW_CERT) in blob, "Google UX Design certificate present")
+    # It must land inside CERTIFICATIONS, not merely somewhere in the file.
+    certs = blob.split("CERTIFICATIONS")[-1].split("ADDITIONALSKILLS")[0]
+    check(squash(NEW_CERT) in certs, "…and inside the certifications section")
+    check(squash(NEW_SUMMARY_OPENS) in blob, "summary leads with the current title")
+    check(squash(NEW_SKILLS_OPENS) in blob, "core skills grouped under the four capabilities")
+    # Scoped to CORE SKILLS, not the whole document: "Microsoft Office" is still
+    # a true statement of what was used at Simplilearn and stays in that bullet.
+    # A skills list is a selection; the employment history is a record.
+    skills = blob.split("CORESKILLS")[-1].split("PROFESSIONALEXPERIENCE")[0]
+    for gone in ("CANVA", "MICROSOFTOFFICE", "MULTIMEDIA&INTERACTIVECONTENT"):
+        check(gone not in skills, f"retired from CORE SKILLS: {gone}")
 except ImportError:
     check(False, "pypdf available for independent parse", "pip install pypdf")
 
@@ -156,12 +197,49 @@ if orig_path and orig_path.exists():
     a, b = [squash(x) for x in norm(orig_path)], [squash(x) for x in norm(PDF)]
     only_a = [ln for ln in a if ln not in b]
     only_b = [ln for ln in b if ln not in a]
-    check(
-        only_a == [squash(RETIRED_TITLE)] and only_b == [squash(EXPECTED_TITLE)],
-        "ONLY the title line changed",
-        f"removed={only_a} added={only_b}",
-    )
-    check(len(a) == len(b), "line count unchanged", f"{len(a)} vs {len(b)}")
+    # An allowlist, not an equality check: the original may predate either patch,
+    # so what matters is that every difference is one the patches explain. A line
+    # that changed for any OTHER reason is the thing this is here to catch.
+    #
+    # Removals are matched by SUBSTRING because the internship's bullets extract
+    # as wrapped lines whose breaks are a property of the layout, not the text.
+    allowed_removed = [
+        squash(RETIRED_TITLE),
+        squash(RETIRED_ROLE),
+        "SEP2025–FEB2026",
+        "·10MOS",
+        # The internship's two STAR bullets, keyed on phrases unique to them.
+        "JOINEDAB2BSAASTEAM",
+        "PRODUCEON-BRANDCREATIVES",
+        "DESIGNEDLINKEDINCAROUSELS",
+        "MARKETINGMICROSITES",
+        "EARNINGAFULL-TIMECONVERSION",
+        "FEB2026",
+        # The re-flowed paragraphs: matched on phrases unique to the old text,
+        # since the line breaks are a property of the wrap, not of the content.
+        "SKILLEDINDESIGNING", "DATA-DRIVENCONCEPTS", "MODERNDESIGNWORKFLOWS",
+        "HIGH-FIDELITYUI&PROTOTYPING", "CROSS-FUNCTIONALCOLLABORATION",
+        "FIGMA·CANVA·WORDPRESS", "MULTIMEDIA&INTERACTIVECONTENT",
+        "VISUALDESIGN&BRANDING·INFORMATIONARCHITECTURE",
+    ]
+    allowed_added = [
+        squash(EXPECTED_TITLE), "SEP2025–PRESENT", "·1YR",
+        squash(NEW_CERT), "8-COURSEUXDESIGNPROFESSIONALCERTIFICATE",
+        "PRODUCTDESIGNERANDFRONT-ENDDESIGNER", "WHERETRUST,STATEANDPERMISSIONS",
+        "THEPRODUCTIONFRONT-ENDFORWHATIDESIGN", "CONTENTDEVELOPMENT,ANDHANDS-ON",
+        "PRODUCTDESIGN:UI/UXDESIGN", "ACCESSIBILITY&USABILITY·VISUALDESIGN",
+        "RESPONSIVEWEBDESIGN·MOTION&INTERACTION",
+        "TOOLS:FIGMA(COMPONENTS&PROTOTYPING)",
+    ]
+    stray_removed = [ln for ln in only_a if not any(x in ln for x in allowed_removed)]
+    stray_added = [ln for ln in only_b if not any(x in ln for x in allowed_added)]
+    check(not stray_removed, "no unexplained text was removed", str(stray_removed[:3]))
+    check(not stray_added, "no unexplained text was added", str(stray_added[:3]))
+    # The certificate insert legitimately adds two lines (title+date, issuer+note);
+    # anything beyond that is unexplained and the allowlists above would not have
+    # caught a line that merely CONTAINS an allowed phrase plus something else.
+    check(len(b) - len(a) <= 2, "at most the two certificate lines gained",
+          f"{len(a)} -> {len(b)}")
 
 # ---------- 4. Geometry -------------------------------------------------------
 objs = {int(o.group(1)): o.group(2) for o in re.finditer(rb"(\d+)\s+0\s+obj(.*?)endobj", data, re.S)}
@@ -182,8 +260,41 @@ centre_err = abs((x + w / 2) - PAGE_WIDTH / 2)
 check(centre_err < 1.0, "title still centered on the page", f"off by {centre_err:.2f}pt")
 check(x > 36, "title starts inside the margin", f"x={x}")
 
+# The reflow: deleting lines and shifting the rest up is only correct if page 1
+# still reads strictly top-to-bottom and nothing was pushed off the paper. A
+# botched shift shows up here as a baseline that rises again mid-page, or one
+# that lands under the bottom margin, neither of which the text checks can see.
+for page_obj, label in ((2, "page 1"), (59, "page 2")):
+    body = objs[page_obj]
+    stream = zlib.decompress(re.search(rb"stream\r?\n(.*?)\s*endstream", body, re.S).group(1))
+    ys = [float(m.group(1)) for m in re.finditer(rb"[\d.]+ ([\d.]+) Td /F", stream)]
+    rising = [(ys[i - 1], ys[i]) for i in range(1, len(ys)) if ys[i] > ys[i - 1]]
+    check(not rising, f"{label} baselines never rise", str(rising[:3]))
+    check(min(ys) >= BOTTOM_MARGIN, f"{label} stays above the bottom margin", f"{min(ys)}")
+    check(max(ys) <= 792 - BOTTOM_MARGIN, f"{label} stays below the top margin", f"{max(ys)}")
+
+# MCIDs must stay contiguous from 0 per page, or the /ParentTree (which is
+# indexed by MCID) no longer lines up with the marked content it describes.
+for page_obj, label in ((2, "page 1"), (59, "page 2")):
+    body = objs[page_obj]
+    stream = zlib.decompress(re.search(rb"stream\r?\n(.*?)\s*endstream", body, re.S).group(1))
+    ids = [int(m.group(1)) for m in re.finditer(rb"/MCID (\d+)", stream)]
+    check(ids == list(range(len(ids))), f"{label} MCIDs contiguous from 0", f"{len(ids)} ids")
+
+pt_num = int(re.search(rb"/ParentTree (\d+) 0 R", data).group(1))
+pt_body = objs[pt_num]
+for idx, page_obj, label in ((0, 2, "page 1"), (1, 59, "page 2")):
+    nums = re.search(rb"%d \[(.*?)\]" % idx, pt_body, re.S)
+    n_entries = len(re.findall(rb"\d+ 0 R", nums.group(1)))
+    body = objs[page_obj]
+    stream = zlib.decompress(re.search(rb"stream\r?\n(.*?)\s*endstream", body, re.S).group(1))
+    n_mcids = len(re.findall(rb"/MCID \d+", stream))
+    check(n_entries == n_mcids, f"{label} ParentTree matches MCID count",
+          f"{n_entries} vs {n_mcids}")
+
 print()
 if failures:
     print(f"{len(failures)} CHECK(S) FAILED: {failures}")
     raise SystemExit(1)
-print("PDF VERIFIED: structurally sound, independently parseable, only the title changed")
+print("PDF VERIFIED: structurally sound, independently parseable, "
+      "and different from the original only where the patches say so")

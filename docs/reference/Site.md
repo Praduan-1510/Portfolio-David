@@ -9,8 +9,9 @@
 ## Metadata / SEO
 
 - **Site title:** Praduan Saha: Product Designer (Design + Front-End)
-- **Meta description** (~155 chars): Product designer and front-end designer turning complex, data-heavy products into clear, usable interfaces, and building the front-end that ships them.
-- **Social / OG description:** Portfolio of Praduan Saha: a product designer who designs and ships production front-end, focused on clarity, usable systems, and getting work into production.
+- **Meta description** (~155 chars): Product designer and front-end designer in Kolkata, working on operational B2B software: ledgers, consoles and multi-tenant tools, where trust and permissions are the hard part.
+- **Social / OG description:** Portfolio of Praduan Saha: a product designer who designs and ships operational B2B software — ledgers, consoles and multi-tenant tools you can open and use on the page.
+- **Niche:** operational B2B software. Stated, not implied: "complex, data-heavy" described any product at all, while six of the eight case studies (Keel, Meridian, OmniStock, InsightsTap, CareBridge, Spendee) are operational B2B tools. The claim the work actually backs.
 - **Nav / logo mark:** "Praduan Saha" (or initials **PS** for a compact mark)
 
 ---
@@ -29,7 +30,7 @@
 4. Clear design for complicated problems.
 
 **Subhead:**
-I'm Praduan Saha, a product designer who also ships front-end, working since 2019, now inside a B2B AI go-to-market product. I turn complex, data-heavy ideas into clean interfaces and the systems that hold them together.
+I'm Praduan Saha, a product designer who also ships front-end, working since 2019, now inside a B2B AI go-to-market product. I work on operational software: ledgers, consoles and multi-tenant tools, where trust, state and permissions are the hard part.
 
 **Buttons:**
 - Primary: **View work** → `/work`

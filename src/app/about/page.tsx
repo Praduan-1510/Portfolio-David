@@ -19,12 +19,12 @@ import { ProfileHero } from "./ProfileHero";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Product designer and front-end designer based in Kolkata, creating digital experiences through systematic design thinking and precise execution.",
+    "Product designer and front-end designer in Kolkata, working on operational B2B software: ledgers, consoles and multi-tenant tools, where trust and permissions are the hard part.",
   alternates: { canonical: "/about" },
   openGraph: {
     title: "About: Praduan Saha",
     description:
-      "Product designer and front-end designer based in Kolkata, creating digital experiences through systematic design thinking and precise execution.",
+      "Product designer and front-end designer in Kolkata, working on operational B2B software: ledgers, consoles and multi-tenant tools, where trust and permissions are the hard part.",
     // No co-located image here; the root card isn't inherited once this
     // openGraph object is declared, so reference it explicitly.
     images: ["/opengraph-image"],
@@ -33,26 +33,27 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "About: Praduan Saha",
     description:
-      "Product designer and front-end designer based in Kolkata, creating digital experiences through systematic design thinking and precise execution.",
+      "Product designer and front-end designer in Kolkata, working on operational B2B software: ledgers, consoles and multi-tenant tools, where trust and permissions are the hard part.",
     images: ["/twitter-image"],
   },
 };
 
 const BIO = [
-  "I'm Praduan Saha, a product designer and front-end designer born and raised in Asansol, West Bengal, and now based in Kolkata. Since 2019 I've worked across content development, learning design, and visual and product design: happiest at the point where a messy, complex idea turns into something clear, usable, and good-looking, whether that's a mobile flow, a landing page, or a full brand system.",
+  "I'm Praduan Saha, a product designer and front-end designer born and raised in Asansol, West Bengal, and now based in Kolkata. Since 2019 I've worked across content development, learning design, and visual and product design: happiest at the point where a messy, complex idea turns into something clear and usable.",
+  "The work I keep choosing is operational software: ledgers, consoles, and multi-tenant tools, where the hard part isn't the surface but trust, state, and who is allowed to do what. A stock figure that can't be typed in because it's derived. An approval card that shows its reasoning before it moves your money. Those constraints are the design, and most of what's on this site is me arguing that in public.",
   "My path ran from content and instructional design into graphic and UI/UX design, so I think as much about structure and information as I do about how something looks. I work primarily in Figma (wireframing, prototyping, and building reusable components) and I care about hierarchy, accessibility, and shipping work that actually supports the goal behind it.",
   "I studied English (Honours) at Amity University, Kolkata, which still shapes how I approach design: reading closely, structuring information, and communicating clearly. A creative mindset, a positive outlook, and strong communication are what I lean on to lead work and collaborate well across a team.",
 ];
 
 // Kinetic band: the disciplines, set as a marquee.
 const DISCIPLINES = [
+  "Product Design",
   "UI/UX Design",
-  "Brand & Identity",
   "Design Systems",
-  "Prototyping",
-  "Visual Design",
-  "Instructional Design",
   "Front-end",
+  "Prototyping",
+  "Interaction Design",
+  "Brand & Identity",
   "Motion",
 ];
 
@@ -71,28 +72,33 @@ const APPROACH = [
   },
 ];
 
+// Four, and the same four the résumé leads with (lib/content/resume.ts SKILLS).
+// They used to disagree: this page claimed "Content & multimedia" as a headline
+// skill while the résumé led with tools, so a reader comparing the two met two
+// different people. Instructional design and the marketing-tool tail are still
+// true and still in the employment history; they are just not the claim.
 const CAPABILITIES = [
   {
-    title: "UI/UX design (web & mobile)",
-    body: "Wireframing, user flows, information architecture, high-fidelity UI, interactive prototyping.",
+    title: "Product design for complex software",
+    body: "Flows, information architecture, and high-fidelity UI for data-dense tools: the screens where state, permissions, and edge cases decide the design.",
   },
   {
-    title: "Visual design & branding",
-    body: "Identity and brand work, visual systems, marketing and campaign creative, pitch decks.",
+    title: "Design systems",
+    body: "Reusable component libraries and consistent tokens, with contrast and accessibility built into the system rather than checked at the end.",
   },
   {
-    title: "Design systems & accessibility",
-    body: "Reusable component libraries, consistent tokens, usability and accessibility.",
+    title: "Front-end that ships",
+    body: "Production React and Next.js, motion, and performance work: I build the interface I designed, including the site you are reading — see the colophon.",
   },
   {
-    title: "Content & multimedia",
-    body: "Instructional/learning design, infographics, and interactive content that makes complex topics easy to absorb.",
+    title: "Working prototypes",
+    body: "Not clickable mockups: functional builds that enforce their own rules, so a claim about a product can be opened and tested instead of taken on trust.",
   },
 ];
 
 // Each entry is a company that holds one or more roles. Single-role companies
-// have a one-item `roles` array; multi-role companies (e.g. InsightsTap) group
-// their positions under one company header.
+// have a one-item `roles` array; a company with several positions groups them
+// under one company header.
 const EXPERIENCE = [
   {
     company: "InsightsTap",
@@ -100,13 +106,11 @@ const EXPERIENCE = [
     roles: [
       {
         title: "Graphic Designer · Full-time",
-        period: "On-site · Feb 2026 – Present",
-        body: "Crafting visually impactful, brand-aligned designs that turn ideas into engaging digital experiences, working closely with cross-functional teams. Also led the front-end development and visual overhaul of the InsightsTap marketing site, translating complex go-to-market (GTM) data concepts into a clean, usable interface.",
-      },
-      {
-        title: "Graphic Designer · Internship",
-        period: "Remote · Sep 2025 – Feb 2026",
-        body: "Brought visual ideas to life through impactful design and branding, blending artistic vision with strategic thinking. Built on-brand creatives and UI concepts in Figma: carousels, ad visuals, banners, and pitch decks.",
+        // One unbroken span, matching LinkedIn and /resume: the earlier
+        // internship months are folded into the full-time role, not listed
+        // separately. See the note in lib/content/resume.ts.
+        period: "On-site · Sep 2025 – Present",
+        body: "Crafting visually impactful, brand-aligned designs that turn ideas into engaging digital experiences, working closely with cross-functional teams: on-brand creatives and UI concepts in Figma, from carousels and ad visuals to banners and pitch decks. Also led the front-end development and visual overhaul of the InsightsTap marketing site, translating complex go-to-market (GTM) data concepts into a clean, usable interface.",
       },
     ],
   },
@@ -157,7 +161,28 @@ type Certification = {
 // Newest first. The `certifications` stat gauge counts this array, so it stays
 // in sync automatically.
 const CERTIFICATIONS: Certification[] = [
-  { title: "Claude Code in Action", issuer: "Anthropic", year: "2026" },
+  // Credential ID IJH8K4U6YXZ3. The verify URL is the one behind LinkedIn's
+  // "Show credential" button, supplied by the user: Coursera serves these pages
+  // client-side, so all three of its accomplishment endpoints (/verify/,
+  // /professional-cert/, /specialization/) answer 200 with the same empty shell
+  // and a wrong URL cannot be told from a right one by fetching it. Do not
+  // "correct" this path to a different endpoint without a source.
+  {
+    title: "Google UX Design",
+    issuer: "Google",
+    year: "2026",
+    href: "https://www.coursera.org/account/accomplishments/specialization/IJH8K4U6YXZ3",
+  },
+  // Skilljar (Anthropic's LMS), and unlike the Coursera links above this one is
+  // server-rendered: fetching it returns the real certificate, so it was checked
+  // rather than taken on faith — Praduan Saha, "Claude Code in Action",
+  // Anthropic Education, 18 July 2026.
+  {
+    title: "Claude Code in Action",
+    issuer: "Anthropic",
+    year: "2026",
+    href: "https://verify.skilljar.com/c/ug2928qxymea",
+  },
   {
     title: "Vibe Coding Fundamentals",
     issuer: "University of Colorado",

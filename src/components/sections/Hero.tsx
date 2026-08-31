@@ -152,10 +152,12 @@ export function Hero() {
                 {"unmistakably yours."}
               </Reveal>
             </p>
-            {/* Subhead, closed em-dash ("front-end,working") so the dash can
-                never open a line: an NBSP does NOT survive TextReveal's line
-                splitter (SplitText tokenizes on \s+, which matches U+00A0), so
-                the closed dash is the only binding that holds. */}
+            {/* Subhead. The old text closed up a comma ("front-end,working")
+                to stop a spaced em-dash starting a line: SplitText tokenizes on
+                \s+ (which matches U+00A0, so an NBSP is no defence) and a
+                free-standing dash becomes its own token. A comma needs none of
+                that — it binds to the word before it and can never open a line,
+                so the space belongs back. Colons here for the same reason. */}
             <TextReveal
               as="p"
               by="lines"
@@ -163,7 +165,7 @@ export function Hero() {
               delay={SEQ.sub}
               className="mt-space-3 max-w-[48ch] font-sans text-body text-muted lg:mt-space-4 lg:max-w-[58ch] lg:text-body-l"
             >
-              {"I'm Praduan Saha, a product designer who also ships front-end,working since 2019, now inside a B2B AI go-to-market product. I turn complex, data-heavy ideas into clean interfaces and the systems that hold them together."}
+              {"I'm Praduan Saha, a product designer who also ships front-end, working since 2019, now inside a B2B AI go-to-market product. I work on operational software: ledgers, consoles and multi-tenant tools, where trust, state and permissions are the hard part."}
             </TextReveal>
             {/* The signature: the hand-signed counter-mark to the machine-set
                 split-flap wordmark; writes itself in after the subhead. Sized

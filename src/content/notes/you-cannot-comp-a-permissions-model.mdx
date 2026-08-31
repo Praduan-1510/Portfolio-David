@@ -1,0 +1,70 @@
+---
+title: "You cannot comp a permissions model"
+summary: "A static screen can show one role at one moment. It cannot tell you whether the model is coherent, or whether a paywall lands in the right place in a flow. Building it on mock data is the cheapest way to find out it doesn't."
+date: "2026-08-17"
+related: meridian
+tags: ["Design systems", "Prototyping", "B2B SaaS"]
+draft: true
+---
+
+Every B2B product has a matrix somewhere: roles down one side, actions across
+the top, ticks in the cells. It is a genuinely useful document, and it is not a
+design.
+
+The matrix says an Admin can do this and a Guest cannot. It says nothing about
+what a Guest's interface *is*.
+
+## Dimmed is not the same as absent
+
+The default answer is to render the full interface and disable what the current
+role can't reach. It comps beautifully. Every screen has the same composition
+whoever is looking at it, which makes the design system look consistent in
+review.
+
+It is also, from the user's side, a list of things they are not allowed to have.
+A Guest lands in a workspace and sees eleven greyed-out controls, which reads as
+either a bug or an upsell, and is a poor introduction to a product they were
+invited into.
+
+The version I built removes what the role can't do, so a Guest's interface is
+genuinely different rather than cosmetically dimmed. That sounds like a small
+change and it is not: once things can be absent, the layout has to hold up with
+holes in it. Composition, empty states, and the order of the remaining actions
+all become live problems.
+
+You do not discover any of those in a comp, because in a comp you drew the
+version with everything present.
+
+## The lifecycle is where it gets away from you
+
+Roles are the easy half. The hard half is that an organisation moves through
+states — trial, active, past due, restricted, cancelled — and each one implies
+its own banners, paywalls and read-only rules, *multiplied by* whatever role you
+happen to be.
+
+That product is not five screens. Nobody comps it, and nobody notices what is
+missing, because there is no single artefact where the gap is visible. The gap
+lives between the artefacts.
+
+So it got built: a real permissions engine, an entitlements engine enforcing
+plan limits, and a lifecycle state machine. Flip the org's state in Billing and
+the paywalls and dunning banners engage. Impersonate a user in the admin
+console, open the audit log, and the action is already recorded against your
+name. State persists across a refresh, because there is a real store underneath.
+
+## The cheap part is finding out you were wrong
+
+The honest reason to build rather than draw is not craft. It is that mock data
+is the least expensive way to discover that a permissions model is incoherent or
+that a paywall lands in the wrong step of a flow — while it still costs a
+weekend rather than a quarter.
+
+A static comp cannot tell you that. It is not a weakness in the comp; it is a
+category difference. Comps are for questions about a moment. Systems like this
+mostly raise questions about sequence, and sequence needs something that runs.
+
+The upside is what it does to a conversation with engineering. "Here is the
+matrix" invites interpretation. "Here it is, running, switch roles yourself"
+does not.
+
+[See the full case study →](/work/meridian)

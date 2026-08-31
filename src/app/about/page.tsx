@@ -91,8 +91,8 @@ const CAPABILITIES = [
 ];
 
 // Each entry is a company that holds one or more roles. Single-role companies
-// have a one-item `roles` array; multi-role companies (e.g. InsightsTap) group
-// their positions under one company header.
+// have a one-item `roles` array; a company with several positions groups them
+// under one company header.
 const EXPERIENCE = [
   {
     company: "InsightsTap",
@@ -100,13 +100,11 @@ const EXPERIENCE = [
     roles: [
       {
         title: "Graphic Designer · Full-time",
-        period: "On-site · Feb 2026 – Present",
-        body: "Crafting visually impactful, brand-aligned designs that turn ideas into engaging digital experiences, working closely with cross-functional teams. Also led the front-end development and visual overhaul of the InsightsTap marketing site, translating complex go-to-market (GTM) data concepts into a clean, usable interface.",
-      },
-      {
-        title: "Graphic Designer · Internship",
-        period: "Remote · Sep 2025 – Feb 2026",
-        body: "Brought visual ideas to life through impactful design and branding, blending artistic vision with strategic thinking. Built on-brand creatives and UI concepts in Figma: carousels, ad visuals, banners, and pitch decks.",
+        // One unbroken span, matching LinkedIn and /resume: the earlier
+        // internship months are folded into the full-time role, not listed
+        // separately. See the note in lib/content/resume.ts.
+        period: "On-site · Sep 2025 – Present",
+        body: "Crafting visually impactful, brand-aligned designs that turn ideas into engaging digital experiences, working closely with cross-functional teams: on-brand creatives and UI concepts in Figma, from carousels and ad visuals to banners and pitch decks. Also led the front-end development and visual overhaul of the InsightsTap marketing site, translating complex go-to-market (GTM) data concepts into a clean, usable interface.",
       },
     ],
   },

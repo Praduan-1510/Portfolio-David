@@ -16,6 +16,11 @@
  *      stay verbatim: those are matters of record.
  *   2. The phone number printed on the PDF is NOT rendered in HTML (scrapeable
  *      on a public page). Contact routes through the site email / LinkedIn.
+ *   3. InsightsTap is ONE full-time role spanning Sep 2025 – Present. The PDF
+ *      still splits it into an internship (Sep 2025 – Feb 2026) and the
+ *      full-time role that followed; LinkedIn shows the single full-time span,
+ *      and that is the version to keep. The PDF should match on its next
+ *      export. Keep this in step with the About timeline.
  */
 
 /** The downloadable file, served from public/. */
@@ -101,19 +106,11 @@ export const EXPERIENCE: Position[] = [
       {
         title: "Graphic Designer",
         mode: "Full-time · On-site",
-        period: "Feb 2026 – Present",
+        period: "Sep 2025 – Present",
         bullets: [
           "Own brand-aligned creative as InsightsTap scales its GTM and AI-focused marketing (marketing visuals, UI layouts, and campaign assets built alongside the marketing, strategy, and product teams), delivering a cohesive visual identity that strengthened brand recognition across GTM touchpoints.",
+          "Delivered 20+ creatives and wireframes across the GTM funnel — LinkedIn carousels, ad visuals, banners, pitch decks, and landing-page layouts in Canva and Figma, plus early UI concepts for marketing microsites — raising visual consistency and readability throughout.",
           "Built a quick-iteration workflow in Figma on reusable components and shared style references, cutting creative turnaround time and raising feedback-to-final velocity without losing brand recall.",
-        ],
-      },
-      {
-        title: "Graphic Designer",
-        mode: "Internship · Remote",
-        period: "Sep 2025 – Feb 2026",
-        bullets: [
-          "Produced on-brand creative for a B2B SaaS team launching GTM and AI-focused marketing: LinkedIn carousels, ad visuals, banners, pitch decks, and landing-page layouts in Canva and Figma, plus early UI concepts for marketing microsites.",
-          "Delivered 20+ creatives and wireframes that improved visual consistency and readability across GTM assets, earning a full-time conversion.",
         ],
       },
     ],

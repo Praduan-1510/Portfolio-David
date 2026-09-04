@@ -18,15 +18,19 @@ prototype:
   alt: "Baseweight's kit builder: base weight as the hero figure, with worn and consumable totals beside it labelled excluded"
   aspect: 1.6
   launchNote: >-
-    It opens on the shop's home page. Nothing is gated: the tabs switch to the
-    kit builder, the operators' back office, and an index of every screen.
+    It opens where a customer starts, on the welcome screen: sign in, create an
+    account, or keep browsing as a guest. Nothing is actually gated, so every
+    route through it reaches the shop.
   surfaces:
-    # Every src carries an explicit fragment on purpose. A bare load with no hash
-    # redirects to #/welcome, which is a sign-in splash and reads as an auth wall.
+    # Every src carries an explicit fragment on purpose: a bare load with no hash
+    # is at the mercy of the boot redirect, so each surface names its own route.
+    # The Shop tab opens on /welcome rather than / because that is where a
+    # customer actually starts, and none of it is gated: guest browsing is one
+    # click and no route consults a session.
     - id: shop
       label: Shop
       shortLabel: Shop
-      src: /prototype/baseweight/baseweight-app.html#/
+      src: /prototype/baseweight/baseweight-app.html#/welcome
       domain: baseweight.co.uk
     - id: kit
       label: Kit builder
@@ -57,7 +61,7 @@ Every shop selling outdoor gear says it is honest about weight. Baseweight is an
 
 ## The live prototype
 
-Launch it and you land on the shop. Four surfaces sit in the window chrome: the **Shop**, the **Kit builder** where the argument is clearest, the **Back office** the shop is run from, and an **index of every screen**, because a claim about how much is built should be checkable rather than asserted.
+Launch it and you start where a customer starts, on the welcome screen: sign in, create an account, or keep browsing as a guest. Nothing behind it is actually gated, so every route through reaches the same shop. Four surfaces sit in the window chrome: the **Shop**, the **Kit builder** where the argument is clearest, the **Back office** the shop is run from, and an **index of every screen**, because a claim about how much is built should be checkable rather than asserted.
 
 <Margin label="Try this">
   Open a product, follow *Every measurement on file*, and add a reading of your own. The published figure recomputes in front of you, because it is a median over every measurement rather than a number somebody typed.

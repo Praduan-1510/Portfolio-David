@@ -125,9 +125,20 @@ async function shoot(route, name, opts = {}) {
 }
 
 // ── The storefront ─────────────────────────────────────────────────────────
+// This is a shop, and the case study has to look like one. An early cut of the
+// stills leaned on the planner and the back office, which are the interesting
+// half but read as a data console: no photography, no price, no product. The
+// storefront shots below carry the commerce, and each still happens to carry
+// the argument too, which is the point of the whole build.
+//
 // Cover at BrowserMockup's 64/35 well so ProjectCover crops nothing.
 await shoot("#/", "cover", { w: 1280, h: 700, screen: "/" });
 await shoot("#/", "home", { screen: "/" });
+// The category grid: product photography, ratings and prices, plus a filter on
+// WEIGHT SOURCE and a sort by weight. Shopping and provenance in one frame.
+await shoot("#/c/shelters", "shop-shelters", { w: 1280, h: 900, screen: "/gear" });
+await shoot("#/search", "shop-search", { w: 1280, h: 900, screen: "/search" });
+await shoot("#/cart", "shop-cart", { screen: "/cart" });
 
 // ── The argument: a defined headline number ────────────────────────────────
 await shoot("#/kit", "app-kit", { screen: "/kit" });
@@ -135,7 +146,10 @@ await shoot("#/plan-kit", "plan-kit", { w: 1280, h: 900 });
 
 // ── The argument: both figures kept when they disagree ─────────────────────
 // Resolved route, never the #/pdp alias, which location.replace()s itself.
+// Shot at 1.6 because it is the launch poster: photography, price and variants
+// above the fold, with the reconciliation note inside the weight block.
 await shoot("#/p/x-mid", "pdp-recon", { screen: "/pdp" });
+await shoot("#/p/aeon", "pdp-aeon", { w: 1280, h: 900, screen: "/pdp" });
 await shoot("#/weight", "weight-record", {});
 
 // ── The operator's half: the rule is enforced, not asserted ────────────────

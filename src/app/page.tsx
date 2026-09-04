@@ -12,6 +12,7 @@ import {
   AnimatedDivider,
   Magnetic,
   FlapText,
+  AmbientField,
 } from "@/components/motion";
 import { getFeaturedProjectsMeta } from "@/lib/content/work";
 
@@ -34,6 +35,13 @@ export default function Home() {
 
   return (
     <>
+      {/* Ambient ledger field: a WebGL shader behind the whole page. Mounted
+          OUTSIDE the `relative isolate` wrapper below, because an isolated
+          stacking context would clip a -z fixed layer to that subtree. Carries
+          its own pause control (WCAG 2.2.2) and never starts under reduced
+          motion. */}
+      <AmbientField />
+
       {/* Desktop-only section rail: complements the top <Nav>; scrolls to the
           in-page section ids below (#top is on the Hero). Hidden on mobile. */}
       <SideNav />

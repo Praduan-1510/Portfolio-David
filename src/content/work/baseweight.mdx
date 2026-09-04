@@ -1,0 +1,137 @@
+---
+title: Baseweight
+slug: baseweight
+client: Self-directed
+role: Product Design, Design System & Prototype
+year: 2026
+services: [Product Design, Design System, Interaction Design, Prototyping]
+summary: >-
+  An outdoor gear shop where the weight is the hero stat and every weight carries
+  a visible source. The interesting half is the back office: a catalogue tool that
+  refuses to publish a number with no provenance, and has no field for a "was"
+  price. More than eighty screens in one file, including the twenty-six nobody
+  usually shows. You can open it and use it on this page.
+cover: /images/work/baseweight/cover.png
+kind: web
+prototype:
+  poster: /images/work/baseweight/app-kit.png
+  alt: "Baseweight's kit builder: base weight as the hero figure, with worn and consumable totals beside it labelled excluded"
+  aspect: 1.6
+  launchNote: >-
+    It opens on the shop's home page. Nothing is gated: the tabs switch to the
+    kit builder, the operators' back office, and an index of every screen.
+  surfaces:
+    # Every src carries an explicit fragment on purpose. A bare load with no hash
+    # redirects to #/welcome, which is a sign-in splash and reads as an auth wall.
+    - id: shop
+      label: Shop
+      shortLabel: Shop
+      src: /prototype/baseweight/baseweight-app.html#/
+      domain: baseweight.co.uk
+    - id: kit
+      label: Kit builder
+      shortLabel: Kit
+      src: /prototype/baseweight/baseweight-app.html#/kit
+      domain: baseweight.co.uk/kit
+    - id: ops
+      label: Back office
+      shortLabel: Ops
+      src: /prototype/baseweight/baseweight-app.html#/admin
+      domain: baseweight.co.uk/admin
+    - id: index
+      label: Every screen
+      shortLabel: Index
+      src: /prototype/baseweight/baseweight-app.html#/index
+      domain: baseweight.co.uk/index
+indexNote: 'The stubborn one. A gear shop whose catalogue tool refuses to publish a number without a source, and has no field for a "was" price.'
+accent: "#B3E7EE" # Baseweight's own glacier.200, used as-shipped. It is the only token in the project's palette that clears every separation gate at once: 14.40:1 on --bg, 13.24:1 on --surface, dE00 38.3 from the nearest flame, and 17.1 / 21.8 / 20.9 from Keel, Meridian and CareBridge. The brand's more obvious blues cannot be used here: glacier.400 is dE00 4.4 from Keel's teal and the cobalt brand mark is 7.2 from CareBridge's azure, so either would collapse into a neighbour in the work index. C* 17.4 keeps it reading as pale ice rather than as white.
+motif: route
+disclaimer: A design and functional prototype on invented data. Real brand and product names carry invented weights and prices; Baseweight is not affiliated with any of them.
+featured: true
+order: 0
+---
+
+<Lede>
+Every shop selling outdoor gear says it is honest about weight. Baseweight is an attempt to make that **a property of the software rather than a tone of voice**: the number is defined, its source is attached, and the tool that publishes it will not let go of either.
+</Lede>
+
+## The live prototype
+
+Launch it and you land on the shop. Four surfaces sit in the window chrome: the **Shop**, the **Kit builder** where the argument is clearest, the **Back office** the shop is run from, and an **index of every screen**, because a claim about how much is built should be checkable rather than asserted.
+
+<Margin label="Try this">
+  Open a product, follow *Every measurement on file*, and add a reading of your own. The published figure recomputes in front of you, because it is a median over every measurement rather than a number somebody typed.
+</Margin>
+
+The back office is the half a portfolio usually leaves out. It is unlinked from the storefront, so the tab above is the only signposted way in. Go to the catalogue, open a draft product, and try to publish it: the button refuses, and says exactly which of its six checks failed.
+
+<Stats>
+  <Stat value="83" label="Screens, clickable end to end" />
+  <Stat value="26" label="Of them behind the counter" />
+  <Stat value="42" label="Products, 20 on our own scales" />
+  <Stat value="0" label="Paid placements, ever" />
+</Stats>
+
+## A number you cannot flatter
+
+Base weight is the figure this whole category competes on, and it is trivially gameable: move an item from *carried* to *worn* and the headline drops without a gram leaving the pack.
+
+So the planner refuses the ambiguity. It shows four totals at once, and labels two of them **(excluded)** in the same breath as printing them.
+
+<Shot
+  src="/images/work/baseweight/plan-kit.png"
+  domain="baseweight.co.uk/plan-kit"
+  align="left"
+  aspect="64 / 45"
+  caption="Base weight, worn, consumable and skin-out, side by side. The sentence underneath says which items are in the headline figure and which are not, so the definition travels with the number."
+/>
+
+Every row carries its provenance in the same glance: *Durston, weighed by us* sits directly above *MSR, manufacturer*. The difference between those two is the entire product.
+
+## Where the maker disagrees, both numbers stay
+
+The easy version of this feature shows whichever figure flatters the shop. Baseweight prints both whenever they differ, including when its own measurement is the heavier one.
+
+<Shot
+  src="/images/work/baseweight/pdp-recon.png"
+  domain="baseweight.co.uk/p/x-mid"
+  align="right"
+  aspect="8 / 5"
+  caption="The maker's figure and the shop's, side by side, with the gap stated rather than resolved. Nothing here picks the kinder number."
+/>
+
+The measurement record goes further and declines to average. Each reading is kept with who took it and how, and the published figure is a median over the set, so the spread stays visible instead of collapsing into one confident-looking number.
+
+<Aside label="Why the spread is the point">
+  A single averaged weight implies a precision that repeated weighings do not support. Publishing the distribution is the honest form of the same information, and it is also the more useful one: a reader can see whether the disagreement is 4 g or 40.
+</Aside>
+
+## The rule is enforced where the numbers are made
+
+Everything above is a storefront promise, and a storefront promise is worth nothing if the tool behind it lets an operator type whatever they like. So the same rule is compiled into the catalogue.
+
+<Shot
+  src="/images/work/baseweight/publish-gate.png"
+  domain="baseweight.co.uk/admin"
+  align="left"
+  aspect="8 / 5"
+  caption="The publish gate, blocked. Six checks, and only the quality score can be overridden, by a lead, in writing. The reason given for the failing one is the thesis in a sentence: a number with no provenance is the thing this catalogue exists to avoid."
+/>
+
+The strongest parts of the back office are the things that are missing. There is no field for a "was" price, so the phrase *You saved £X* exists nowhere in the build except as the name of a component deliberately not made. The urgency patterns a shop reaches for when a quarter is going badly have no components to reach for.
+
+<Shot
+  src="/images/work/baseweight/promotion-absences.png"
+  domain="baseweight.co.uk/admin/promotion"
+  align="right"
+  aspect="8 / 5"
+  caption="The merchandising screen lists what was not built and why. An ethical position held as absent components survives a change of management in a way a policy document does not."
+/>
+
+## Scope, honestly
+
+<Aside label="What this is, and what it is not">
+  The brands are real and the data is not. Durston, Tarptent, MSR and twenty-nine others are currently shipping products carrying invented weights, prices and scale certificates; Baseweight is not affiliated with any of them, and the reconciliation gaps it reconciles are generated rather than measured. All seventy-one photographs are third-party Unsplash images, credited in full on the prototype's own credits screen, and none of them are mine. The back office runs on fixture data and resets on reload, and it is ungated by design: no route consults a role, and the shell says so rather than implying an auth model exists.
+</Aside>
+
+Two defects turned up while writing this, both now closed. The sign-in screen was still printing *2,411 items weighed in-house* and *38,000 owner reports*, statistics the home page had already retired in favour of counting its actual catalogue, and a comment in the source names the failure better than I could: *a statistic about our honesty that is not itself true is the worst line on the site.* Those two figures are now counted from the same source as the home band. Separately, checkout was the one unbuilt surface that did not say so while looking the most like the real thing, and it now leads with the fact that no payment is taken.

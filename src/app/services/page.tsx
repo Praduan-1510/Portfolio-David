@@ -59,6 +59,10 @@ const OFFERS = [
     body:
       "Not a clickable mockup: a working build that enforces its own rules, so the question stops being whether the model reads well and becomes whether it survives contact. The cheapest way to find out a model is incoherent, while that still costs a fortnight instead of a quarter.",
     proof: "omnistock",
+    // A claim this specific is worth backing twice. Baseweight's catalogue tool
+    // refuses to publish a value with no source and cannot be overridden on five
+    // of its six checks, which is the same argument from the operator's side.
+    proof2: "baseweight",
     good: "A model nobody can agree on, a spec that keeps growing, or a decision that keeps getting deferred because no artefact settles it.",
     shot: {
       src: "/images/work/omnistock/variance.png",
@@ -205,6 +209,8 @@ export default function ServicesPage() {
         <StaggerGroup as="ol" from="below">
           {OFFERS.map((offer, i) => {
             const project = getProjectBySlug(offer.proof);
+            // Only one offer carries a second proof, so the union needs an "in" guard.
+            const second = "proof2" in offer ? getProjectBySlug(offer.proof2) : null;
             return (
               <li
                 key={offer.id}
@@ -259,6 +265,20 @@ export default function ServicesPage() {
                         <span
                           aria-hidden="true"
                           className="transition-transform duration-base ease-out-quad group-hover:translate-x-1"
+                        >
+                          &rarr;
+                        </span>
+                      </NextLink>
+                    )}
+                    {second && (
+                      <NextLink
+                        href={`/work/${second.meta.slug}`}
+                        className="group mt-space-3 block font-mono text-[0.8125rem] uppercase tracking-[0.1em] text-muted transition-colors duration-fast ease-out-quad hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg"
+                      >
+                        <span className="text-muted">And:</span> {second.meta.title}
+                        <span
+                          aria-hidden="true"
+                          className="ml-space-2 inline-block transition-transform duration-base ease-out-quad group-hover:translate-x-1"
                         >
                           &rarr;
                         </span>

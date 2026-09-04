@@ -1,4 +1,13 @@
 {
+  "/images/work/baseweight/app-kit.png": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAADQAQCdASoMAAgAA4BaJaQAAudNb2ooAAD+84o5n4b5OZ6fGkYmAAAA",
+  "/images/work/baseweight/cover.png": "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAADQAQCdASoMAAcAA4BaJaQAAud1ci+kAADMo9Y6YC/PPmy4sOYQoyhy+d+NkC7V0CQPoYIfUwQeAAAA",
+  "/images/work/baseweight/every-screen.png": "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAACwAQCdASoMAAgAA4BaJZwAAxf7+nQAAP7x6ZfTRdeVpJ+gAAA=",
+  "/images/work/baseweight/home.png": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAACQAQCdASoMAAgAA4BaJZwAAuabePAAzKPWTmhZVCNnf1nKNbTFxZwLr3TmpDNeX93Kq9gPEEoY4SqbYWHY2VTrPHAAAA==",
+  "/images/work/baseweight/pdp-recon.png": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAADQAQCdASoMAAgAA4BaJZQAAu10NPzKgAD+1/+Su6LjZiqtfFr+7aX/Fv4sgel4N5xB3LRZAWeQVKQ9xmP2iJB0AAA=",
+  "/images/work/baseweight/plan-kit.png": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAQCdASoMAAgAA4BaJaQAAt0IkVwAAP7zqTzjK6rfhL5AZ3ZAAA==",
+  "/images/work/baseweight/promotion-absences.png": "data:image/webp;base64,UklGRi4AAABXRUJQVlA4ICIAAACQAQCdASoMAAgAA4BaJaQAAp0hYoAA/vJWUrhQEwFVgwAA",
+  "/images/work/baseweight/publish-gate.png": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAQCdASoMAAgAA4BaJZwAApz87CwAAP7yVlK4jpK43Ql1BwAAAA==",
+  "/images/work/baseweight/weight-record.png": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAQCdASoMAAgAA4BaJaQAAude5qrAAP7x+8chR/t/0svcIBMsIAAA",
   "/images/work/carebridge/app-home.png": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACwAQCdASoMAAgAA4BaJZQAAudGpbAAAP7wS+up/5iF2EYL7DM9Tx+muAyYUAAA",
   "/images/work/carebridge/clinician.png": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACwAQCdASoMAAgAA4BaJZQAAxZgjyZAAP71I0TTgY7/WR0JdoazQb9kmMFwQAAA",
   "/images/work/carebridge/cover.png": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAACwAQCdASoMAAcAA4BaJZQC7AEPAzS4AP7yPT/CXpuWm+wUyTWebl3+ATM6EyYNKeIMEwATgezgAA==",

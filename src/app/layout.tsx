@@ -16,7 +16,7 @@ import "./globals.css";
 
 /*
  * Self-hosted fonts via next/font/google: downloaded at build time and served
- * from our own origin (zero layout shift, no external requests). Each is wired
+ * from our own origin (no external requests). Each is wired
  * to a CSS variable consumed by globals.css + tailwind.config.ts fontFamily.
  * Loaded as variable fonts so the full weight axis ships in one file.
  */
@@ -32,10 +32,22 @@ const body = Inter({
   display: "swap",
 });
 
+// The `fallback` list is load-bearing, not decoration. next/font synthesises a
+// metric-adjusted fallback from the FIRST family in this list; left to itself it
+// picks Arial and lands on size-adjust:134.59%, because JetBrains Mono's fixed
+// advance is far wider than Arial's average. That average is the problem: on
+// UPPERCASE mono — which is most of this site's metadata — scaled Arial caps run
+// ~40% wider than the real font, and the hero eyebrow "PRODUCT DESIGNER ·
+// FRONT-END" wrapped to two lines before the webfont arrived and snapped back to
+// one after it. That single re-wrap was an 18px collapse of the hero, which
+// shoved the near-full-viewport reel stage and measured CLS 0.208 on every cold
+// mobile load. Falling back to a real monospace keeps the advance width right,
+// so the line count cannot change. Measured, not assumed — see the commit.
 const mono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
   display: "swap",
+  fallback: ["ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"],
 });
 
 // Signature script: used ONCE (the hero's hand-signed counter-mark to the

@@ -70,6 +70,15 @@ export function TextReveal({
         type: by,
         mask: by,
         autoSplit: true,
+        // SplitText's default aria handling writes aria-label onto the host and
+        // aria-hidden onto the pieces. On a <p> or <span> that is a SERIOUS axe
+        // violation (aria-prohibited-attr): ARIA forbids aria-label on the
+        // generic and paragraph roles, which is what those elements map to.
+        // Turning it off is safe HERE specifically because this component only
+        // ever splits by lines or words — never chars — so the pieces are still
+        // whole words in document order and a screen reader reads them normally.
+        // If a `chars` caller is ever added, it needs an sr-only twin instead.
+        aria: "none",
         onSplit: (self) => {
           const targets =
             by === "chars" ? self.chars : by === "words" ? self.words : self.lines;

@@ -1,10 +1,15 @@
 "use client";
 
-import Image from "next/image";
 import { useCallback, useId, useRef, useState } from "react";
 import { cn } from "@/lib/utils/cn";
 import { Text } from "@/components/primitives";
-import { FlapText, StaggerGroup, TextReveal } from "@/components/motion";
+import { StaggerGroup, TextReveal } from "@/components/motion";
+import {
+  Byline,
+  Portrait,
+  ProvenanceStamp,
+  QuoteMark,
+} from "@/components/testimonials/parts";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import type { Testimonial } from "@/lib/content/testimonials";
@@ -35,152 +40,12 @@ import type { Testimonial } from "@/lib/content/testimonials";
  * Portraits are the one piece of ornament, and they are load-bearing: a face
  * with a name under it is the difference between a quote and a person. They are
  * optional per entry and every layout here reads correctly without them.
- */
-
-/* ── Provenance ─────────────────────────────────────────────────────────── */
-
-/** Deterministic (locale- and timezone-independent) so SSR and client agree. */
-const MONTHS = [
-  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-];
-function formatReceived(iso: string): string {
-  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso.trim());
-  if (!m) return iso;
-  return `${MONTHS[Number(m[2]) - 1]} ${m[1]}`;
-}
-
-/*
- * The stamp. Two states, both stated plainly:
  *
- *   public   → the interaction colour and an outbound arrow, because there is
- *              somewhere to go and the reader should feel that.
- *   on-file  → grey, a hollow ring instead of a filled dot, and the literal
- *              record held. Deliberately NOT dressed up to look clickable: the
- *              gap between "you can check this" and "you are taking my word"
- *              is the whole point, so it is rendered, not hidden.
+ * The stamp, portrait, quote mark and byline all live in
+ * components/testimonials/parts, shared with the /services wall — the rule that
+ * a quote cannot render without saying what backs it has one implementation,
+ * not two.
  */
-function ProvenanceStamp({ t, className }: { t: Testimonial; className?: string }) {
-  const p = t.provenance;
-  const base =
-    "inline-flex items-center gap-space-2 font-mono text-[0.625rem] uppercase tracking-[0.16em]";
-
-  if (p.kind === "public") {
-    return (
-      <a
-        href={p.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`Read ${t.name}'s ${p.source ?? "recommendation"} in full (opens in a new tab)`}
-        className={cn(
-          base,
-          "group/stamp text-signal transition-opacity duration-fast ease-out-quad hover:opacity-80",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-4 focus-visible:ring-offset-bg",
-          className,
-        )}
-      >
-        <span aria-hidden="true" className="h-[5px] w-[5px] rounded-full bg-signal" />
-        {p.source ?? "Public record"}
-        <span
-          aria-hidden="true"
-          className="transition-transform duration-base ease-out-quad group-hover/stamp:translate-x-[3px]"
-        >
-          ↗
-        </span>
-      </a>
-    );
-  }
-
-  return (
-    <span className={cn(base, "text-muted", className)}>
-      <span aria-hidden="true" className="h-[5px] w-[5px] rounded-full border border-current" />
-      {p.medium}
-      {p.received && (
-        <>
-          <span aria-hidden="true">·</span>
-          <time dateTime={p.received}>{formatReceived(p.received)}</time>
-        </>
-      )}
-    </span>
-  );
-}
-
-/* ── Shared pieces ──────────────────────────────────────────────────────── */
-
-/*
- * The portrait. Greyscale at rest and full colour when the record is live: on a
- * near-black page five colour photographs at once pull harder than anything
- * else in the section, and the one that matters stops being obvious. Desaturating
- * the rest turns that into the selection cue.
- *
- * `alt=""` throughout: the person's name is right beside the image in text, so
- * announcing it again would only make a screen reader say it twice.
- */
-function Portrait({
-  t,
-  size,
-  live = true,
-  className,
-}: {
-  t: Testimonial;
-  size: number;
-  live?: boolean;
-  className?: string;
-}) {
-  if (!t.portrait) return null;
-  return (
-    <span
-      className={cn(
-        "relative block shrink-0 overflow-hidden rounded-[2px] border transition-[filter,border-color] duration-slow ease-out-quad",
-        live ? "border-line-strong grayscale-0" : "border-line grayscale",
-        className,
-      )}
-      style={{ width: size, height: size }}
-    >
-      <Image
-        src={t.portrait}
-        alt=""
-        fill
-        sizes={`${size}px`}
-        className="object-cover"
-      />
-    </span>
-  );
-}
-
-/** The hanging spectrum quote mark. Absolute, never a float: a float shortens
- *  the line boxes GSAP's SplitText has already measured, which wraps the first
- *  lines wrong on re-split. */
-function QuoteMark({ className }: { className?: string }) {
-  return (
-    <span
-      aria-hidden="true"
-      className={cn("absolute left-0 select-none font-display leading-none text-spectrum", className)}
-    >
-      &ldquo;
-    </span>
-  );
-}
-
-/** Who is speaking. The company flutters on hover — the departure-board tell,
- *  reused where the claim is about a real organisation. */
-function Byline({ t, className }: { t: Testimonial; className?: string }) {
-  return (
-    <span
-      className={cn(
-        "flex flex-wrap items-baseline gap-x-space-5 gap-y-space-2 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted",
-        className,
-      )}
-    >
-      <span className="text-fg">{t.name}</span>
-      <span>{t.role}</span>
-      <span className="text-fg" data-flap-hover>
-        <FlapText text={t.company.toUpperCase()} trigger="hover" flips={2} colorMode="mono" />
-      </span>
-      {t.context && <span>{t.context}</span>}
-    </span>
-  );
-}
 
 /* ── Variant A: the stack (SSR baseline / mobile / reduced motion) ──────── */
 

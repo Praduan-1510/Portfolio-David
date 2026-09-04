@@ -3,6 +3,7 @@ import NextLink from "next/link";
 import { Container, Text, Button, BrowserMockup } from "@/components/primitives";
 import { Reveal, TextReveal, AnimatedDivider, StaggerGroup, Magnetic } from "@/components/motion";
 import { getProjectBySlug } from "@/lib/content/work";
+import { ServicesTestimonials } from "@/components/sections/ServicesTestimonials";
 
 export const metadata: Metadata = {
   title: "Services",
@@ -343,6 +344,22 @@ export default function ServicesPage() {
                 scope, deliverables, timeline, price. If the shape does not fit
                 a fixed price, I will say that too.
               </Text>
+              {/* There is no rate card on this page on purpose: the same
+                  deliverable is a different job at three different companies,
+                  and a number without a scope attached is a number that gets
+                  quoted back at me. What the page owes the reader instead is a
+                  direct route to a real one, rather than leaving them to work
+                  out that they are supposed to go and ask. */}
+              <Text variant="body" className="mt-space-4 max-w-[var(--measure)] text-muted">
+                No rate card here: the same deliverable is a different job at
+                different companies, and a price only means something with a
+                scope attached to it. Ask, and you get both.
+              </Text>
+              <Magnetic className="mt-space-5 inline-block">
+                <Button href="/contact" variant="secondary">
+                  Ask what yours would cost
+                </Button>
+              </Magnetic>
             </div>
           </div>
         </div>
@@ -377,6 +394,11 @@ export default function ServicesPage() {
           </StaggerGroup>
         </div>
       </Container>
+
+      {/* ── What clients said ──
+          Third-party evidence, placed where it does the most work: right after
+          the declines it corroborates, and right before the ask. */}
+      <ServicesTestimonials />
 
       {/* ── CTA ── */}
       <Container as="section" className="pb-space-10">

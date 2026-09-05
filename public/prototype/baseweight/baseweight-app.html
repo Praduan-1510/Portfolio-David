@@ -1217,6 +1217,38 @@
 /* ------------------------------------------------------------------ RESET */
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
+
+/* ── scrollbars ───────────────────────────────────────────────────────────
+   This document is shown at a real 390px inside a phone frame on the case
+   study, and the browser running that frame is a desktop one — so it drew its
+   own classic scrollbar: a ~15px light track down the right edge of the
+   "phone", which is a thing no phone has ever displayed. It read as a bug in
+   the app rather than as furniture belonging to the machine outside it.
+
+   Thin and self-coloured on both engines, so it looks like the overlay bar the
+   device itself would draw, and stays unobtrusive when the same document is
+   opened full-width on a desktop.
+
+   Safe against the full-bleed maths: measureScrollbar() reads the REAL width
+   at runtime (innerWidth - clientWidth) into --bw-sbw and x-core.css subtracts
+   it back, so a narrower bar simply measures narrower. Nothing here assumes a
+   fixed 15px. And the specificity is deliberately the lowest possible, so the
+   places that already hide their own scrollbar — the account chip strip — keep
+   winning without needing !important. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--color-border-strong) 85%, transparent) transparent;
+}
+::-webkit-scrollbar { inline-size: 8px; block-size: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-border-strong) 85%, transparent);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-strong);
+}
+::-webkit-scrollbar-corner { background: transparent; }
 body {
   margin: 0;
   background: var(--color-surface-page);
@@ -2627,42 +2659,43 @@ body { font-variant-numeric: tabular-nums; }
   background:var(--color-action-primary-bg); color:var(--color-action-primary-text);
   font:var(--type-caption-2); font-weight:700; display:grid; place-items:center; }
 /* ── the header on a phone ────────────────────────────────────────────────
-   It wrapped into THREE rows — brand + controls, then the kit chip stranded on
-   a line of its own with the rest of the width empty beside it, then search —
-   and stood 189px tall on a 390px phone. That is 22% of the viewport, spent
-   permanently, on a bar that is sticky.
-   Two things were wrong. The kit chip had nothing to share its line with,
-   because search was pinned to flex-basis:100% and took a whole row by itself.
-   And the header was offering Account, Cart and Kit while .tabbar was offering
-   Kit, Cart and Account fifty pixels below — the same three destinations twice,
-   at the same level of the hierarchy.
-   So: one explicit line break, search and the kit chip sharing the second row,
-   and the account icon dropped on phones only, where the tab bar already has
-   it. What stays in the header is what the tab bar does NOT carry — the
-   departments menu (six of seven departments are reachable no other way),
-   search (the tab bar has no search at all), the cart's live count, and the
-   kit's weight, which is the one number this whole shop is named after. */
-@media (max-width:767px){
-  .nav__in { gap: var(--space-3) var(--space-4); }
-  /* An explicit flex line break. Ordered between the icon row and the search
-     row so the break is a stated fact rather than an accident of how wide the
-     brand happens to render — which is what made the chip's position move
-     about between devices. */
-  .nav__in::before { content:""; order:9; flex-basis:100%; block-size:0; margin:0; }
-  /* A SMALL basis, not `auto`. With basis:auto the input's intrinsic content
-     width is what the line is measured against, so on a 360px phone search
-     claimed the whole row and pushed the kit chip back onto a third line —
-     which was the original bug wearing a different hat. 8rem lets search
-     shrink to whatever is left once the chip has its width, and grow to fill
-     when there is room. min-inline-size:0 (set on the base rule) is what
-     permits an input to shrink below its intrinsic size at all. */
-  .hsearch { order:10; flex:1 1 8rem; max-inline-size:none; }
-  .kitchip { order:11; flex:none; }
-  /* Account is in the tab bar, has no live figure to show, and is the one
-     control here that is never urgent. The cart keeps its place because it
-     carries a count the tab bar does not. */
-  .nav__icon[href="#/account"] { display:none; }
+   It wrapped into THREE rows — brand and controls, the kit chip stranded on a
+   line of its own, then search — and stood 189px tall on a 390px phone: 22% of
+   the viewport, spent permanently, on a sticky bar. A pass of flex ordering got
+   that to two rows; taking search and the kit chip OUT of the bar gets it to
+   one, which is what a phone header should have been all along.
+
+   Search becomes an icon that opens a panel (the same disclosure the seven
+   departments use), so the field is a tap away instead of a permanent row. The
+   kit chip and the account icon are both in the tab bar fifty pixels below, and
+   the header was offering the same destinations twice at the same level of the
+   hierarchy. What is left is the brand, the departments menu — six of seven
+   departments are reachable no other way — search, and the cart's live count. */
+@media (max-width: 767px) {
+  .nav__in { gap: var(--space-3); flex-wrap: nowrap; }
+  .hsearch { display: none; }
+  .kitchip { display: none; }
+  .nav__icon[href="#/account"] { display: none; }
 }
+/* The trigger is the phone's only route into search, so it exists only where
+   the header field does not. */
+.nav__searchbtn { display: none; flex: none; }
+@media (max-width: 767px) { .nav__searchbtn { display: inline-grid; } }
+/* Same escape hatch the departments button has: a window dragged past the
+   breakpoint with the panel open must not delete the control that closes it,
+   and Escape returns focus here — which a display:none element cannot take. */
+.nav__searchbtn[aria-expanded="true"] { display: inline-grid; }
+
+.searchpanel__form { display: flex; gap: var(--space-2); align-items: center; }
+.searchpanel__form input {
+  flex: 1 1 auto; min-inline-size: 0; min-block-size: var(--target-min);
+  padding-inline: var(--space-3);
+  border: 1px solid var(--color-border-field); border-radius: var(--radius-button);
+  background: var(--color-surface-field); color: var(--color-text-primary);
+  font: var(--type-subhead);
+}
+.searchpanel__form .bw-btn { flex: none; min-block-size: var(--target-min); }
+.searchpanel__hint { margin-block-start: var(--space-3); }
 
 /* studio product art — fills the same box a photo would, so swapping in real
    photography later changes nothing about the layout */
@@ -5720,6 +5753,11 @@ td .adm-inline, th .adm-inline { margin-block: calc(var(--space-1) * -1); }
     <button class="nav__menu" id="nav-menu-btn" type="button" data-act="nav-menu"
             aria-expanded="false" aria-controls="nav-menu" aria-label="Departments"
       ><svg class="ic" aria-hidden="true"><use href="#i-menu"/></svg></button>
+    <!-- Phone-only. Above 768px the search field is in the header itself and
+         this would be the same affordance offered twice. -->
+    <button class="nav__icon nav__searchbtn" id="nav-search-btn" type="button" data-act="nav-search"
+            aria-expanded="false" aria-controls="nav-search-panel" aria-label="Search"
+      ><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></button>
     <nav class="nav__links" aria-label="Primary">
       <a class="nav__link" href="#/c/shelters" data-cat="shelters">Shelters</a>
       <a class="nav__link" href="#/c/packs"    data-cat="packs">Packs</a>
@@ -5740,6 +5778,28 @@ td .adm-inline, th .adm-inline { margin-block: calc(var(--space-1) * -1); }
             ><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
         </div>
         <div class="navmenu__l" id="nav-menu-list"></div>
+      </div>
+    </div>
+    <!-- Same disclosure contract as the departments panel above: not a modal,
+         nothing behind it is made inert, no focus trap. Escape closes it and
+         hands focus back to the button, as does a click outside it and any
+         navigation. -->
+    <div class="navmenu searchpanel" id="nav-search-panel" hidden>
+      <div class="navmenu__in">
+        <div class="navmenu__hd">
+          <p class="t-headline">Search</p>
+          <button class="navmenu__close" type="button" data-act="nav-search-close" aria-label="Close"
+            ><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
+        </div>
+        <!-- data-search, so it submits through the same handler as every other
+             search box on the site and lands on #/s/<query>. -->
+        <form class="searchpanel__form" role="search" data-search>
+          <label class="visually-hidden" for="nav-search-q">Search gear, brands and specs</label>
+          <input id="nav-search-q" type="search" enterkeyhint="search" autocomplete="off"
+                 placeholder="Search gear, brands, specs…">
+          <button class="bw-btn bw-btn--primary" type="submit"><span class="bw-btn__label">Search</span></button>
+        </form>
+        <p class="note searchpanel__hint">Try a category, a brand, or a figure — “tent”, “2 kg”, “down”.</p>
       </div>
     </div>
     <form class="hsearch" role="search" data-search>
@@ -14060,6 +14120,7 @@ function route() {
   // Navigating always closes the department panel: a disclosure left open over
   // the screen it just navigated away from is the classic mobile-menu bug.
   closeNavMenu();
+  closeSearchPanel();
   /* The checkout's fields are filled here and never from paint(), which runs
      on every state change and would take the caret out of a field mid-typing. */
   if (r.screen === '/checkout') prefillCheckout();
@@ -14215,6 +14276,8 @@ document.addEventListener('click', e => {
   /* ── the department panel ─────────────────────────────────────────────── */
   if (act === 'nav-menu')       { e.preventDefault(); setNavMenu(document.getElementById('nav-menu')?.hidden); return; }
   if (act === 'nav-menu-close') { e.preventDefault(); closeNavMenu(true); return; }
+  if (act === 'nav-search')       { e.preventDefault(); setSearchPanel(document.getElementById('nav-search-panel')?.hidden); return; }
+  if (act === 'nav-search-close') { e.preventDefault(); closeSearchPanel(true); return; }
 
   /* ── kits, plural ─────────────────────────────────────────────────────── */
   if (act === 'kit-new') { e.preventDefault();
@@ -14291,6 +14354,14 @@ document.addEventListener('click', e => {
   if (!panel || panel.hidden) return;
   if (e.target.closest('#nav-menu') || e.target.closest('#nav-menu-btn')) return;
   closeNavMenu();
+});
+/* Same rule for the search panel, and separate for the same reason: most
+   clicks on this page carry no data-act at all. */
+document.addEventListener('click', e => {
+  const panel = document.getElementById('nav-search-panel');
+  if (!panel || panel.hidden) return;
+  if (e.target.closest('#nav-search-panel') || e.target.closest('#nav-search-btn')) return;
+  closeSearchPanel();
 });
 
 /* A destructive control in a list that re-renders under the pointer cannot be
@@ -14420,6 +14491,37 @@ function closeNavMenu(returnFocus) {
   setNavMenu(false);
   if (returnFocus || inside) {
     const btn = document.getElementById('nav-menu-btn');
+    if (onScreen(btn)) btn.focus();
+    else document.activeElement?.blur?.();
+  }
+}
+
+/* ── the search panel ─────────────────────────────────────────────────────
+   The phone header has no room for a permanent search field, and search is the
+   one destination the tab bar does not carry, so it becomes a disclosure on the
+   same contract as the departments panel: not a modal, nothing behind it made
+   inert, no focus trap. Focus moves into the FIELD on open, because a search
+   panel that opens without a caret is a panel you have to tap twice. */
+function setSearchPanel(open) {
+  const panel = document.getElementById('nav-search-panel');
+  const btn = document.getElementById('nav-search-btn');
+  if (!panel || !btn) return;
+  /* Two panels hanging off the same header must not overlap each other. */
+  if (open) closeNavMenu();
+  panel.hidden = !open;
+  btn.setAttribute('aria-expanded', String(!!open));
+  if (open) {
+    const field = document.getElementById('nav-search-q');
+    if (field) { field.focus(); field.select(); }
+  }
+}
+function closeSearchPanel(returnFocus) {
+  const panel = document.getElementById('nav-search-panel');
+  if (!panel || panel.hidden) return;
+  const inside = panel.contains(document.activeElement);
+  setSearchPanel(false);
+  if (returnFocus || inside) {
+    const btn = document.getElementById('nav-search-btn');
     if (onScreen(btn)) btn.focus();
     else document.activeElement?.blur?.();
   }
@@ -14667,7 +14769,9 @@ document.addEventListener('input', e => {
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   const panel = document.getElementById('nav-menu');
-  if (panel && !panel.hidden) { e.preventDefault(); closeNavMenu(true); }
+  if (panel && !panel.hidden) { e.preventDefault(); closeNavMenu(true); return; }
+  const sp = document.getElementById('nav-search-panel');
+  if (sp && !sp.hidden) { e.preventDefault(); closeSearchPanel(true); }
 });
 
 /* Enter saves the kit name, Escape abandons it — the two keys anyone would try

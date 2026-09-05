@@ -2619,7 +2619,43 @@ body { font-variant-numeric: tabular-nums; }
   min-inline-size:17px; block-size:17px; padding-inline:4px; border-radius:var(--radius-pill);
   background:var(--color-action-primary-bg); color:var(--color-action-primary-text);
   font:var(--type-caption-2); font-weight:700; display:grid; place-items:center; }
-@media (max-width:767px){ .hsearch { order:10; flex-basis:100%; max-inline-size:none; } }
+/* ── the header on a phone ────────────────────────────────────────────────
+   It wrapped into THREE rows — brand + controls, then the kit chip stranded on
+   a line of its own with the rest of the width empty beside it, then search —
+   and stood 189px tall on a 390px phone. That is 22% of the viewport, spent
+   permanently, on a bar that is sticky.
+   Two things were wrong. The kit chip had nothing to share its line with,
+   because search was pinned to flex-basis:100% and took a whole row by itself.
+   And the header was offering Account, Cart and Kit while .tabbar was offering
+   Kit, Cart and Account fifty pixels below — the same three destinations twice,
+   at the same level of the hierarchy.
+   So: one explicit line break, search and the kit chip sharing the second row,
+   and the account icon dropped on phones only, where the tab bar already has
+   it. What stays in the header is what the tab bar does NOT carry — the
+   departments menu (six of seven departments are reachable no other way),
+   search (the tab bar has no search at all), the cart's live count, and the
+   kit's weight, which is the one number this whole shop is named after. */
+@media (max-width:767px){
+  .nav__in { gap: var(--space-3) var(--space-4); }
+  /* An explicit flex line break. Ordered between the icon row and the search
+     row so the break is a stated fact rather than an accident of how wide the
+     brand happens to render — which is what made the chip's position move
+     about between devices. */
+  .nav__in::before { content:""; order:9; flex-basis:100%; block-size:0; margin:0; }
+  /* A SMALL basis, not `auto`. With basis:auto the input's intrinsic content
+     width is what the line is measured against, so on a 360px phone search
+     claimed the whole row and pushed the kit chip back onto a third line —
+     which was the original bug wearing a different hat. 8rem lets search
+     shrink to whatever is left once the chip has its width, and grow to fill
+     when there is room. min-inline-size:0 (set on the base rule) is what
+     permits an input to shrink below its intrinsic size at all. */
+  .hsearch { order:10; flex:1 1 8rem; max-inline-size:none; }
+  .kitchip { order:11; flex:none; }
+  /* Account is in the tab bar, has no live figure to show, and is the one
+     control here that is never urgent. The cart keeps its place because it
+     carries a count the tab bar does not. */
+  .nav__icon[href="#/account"] { display:none; }
+}
 
 /* studio product art — fills the same box a photo would, so swapping in real
    photography later changes nothing about the layout */
@@ -14444,8 +14480,17 @@ function finishOAuth(key) {
   state.signedIn = { provider: key, name: 'Alex Whitlow', email: p.account };
   commit();
   toast(`Signed in with ${p.name}`);
-  // A brand-new account goes to onboarding; a returning one goes to the account.
-  location.hash = key === 'apple' ? '#/onboard-units' : '#/account';
+  /* A brand-new account goes to onboarding; a returning one goes to the account.
+     That sentence was already here and the code under it did not implement it:
+     it branched on `key === 'apple'`, so the destination was decided by WHICH
+     BRAND you pressed. Continue with Apple onboarded you; Continue with Google
+     dropped you on the account overview — a profile page for an account that
+     had just been made and had nothing in it yet.
+     Whether somebody is new is a fact the app already holds: state.onboarded is
+     written when the onboarding flow finishes making a kit, and defaults false.
+     Ask that instead. Apple now behaves the same as Google, which is the point:
+     the identity provider has never had anything to do with it. */
+  location.hash = state.onboarded ? '#/account' : '#/onboard-units';
 }
 
 document.addEventListener('click', e => {
@@ -14479,6 +14524,43 @@ document.addEventListener('submit', e => {
   const v = (f.querySelector('input')?.value || '').trim();
   location.hash = v ? '#/s/' + encodeURIComponent(v) : '#/search';
 });
+
+/* The header search box is squeezed from both sides — by the kit chip on a
+   phone, and by seven department links on a desktop — so a fixed placeholder
+   is wrong at one end or the other. It was being cut mid-word to "Search gear,
+   brands, spec" at 390px, and measurement found the full string overflows the
+   desktop box too, at 192px of text in 181px of room. No breakpoint fixes
+   both, because the available width is not a function of the viewport: it is
+   what is left after the chip and the links have taken theirs.
+   So ask the box how wide it actually is, and use the longest phrasing that
+   fits. Measured with canvas against the input's own computed font, re-run on
+   resize, and it degrades to the shortest option rather than ever truncating. */
+(function headerSearchPlaceholder() {
+  var input = document.getElementById('hq');
+  if (!input) return;
+  var OPTIONS = ['Search gear, brands, specs…', 'Search gear and specs', 'Search gear', 'Search'];
+  var ctx = null;
+  try { ctx = document.createElement('canvas').getContext('2d'); } catch (e) {}
+  function apply() {
+    var cs = getComputedStyle(input);
+    var box = input.getBoundingClientRect().width;
+    if (!box) return;                       /* hidden (checkout strips the chrome) */
+    var room = box - parseFloat(cs.paddingInlineStart || cs.paddingLeft || 0)
+                   - parseFloat(cs.paddingInlineEnd || cs.paddingRight || 0)
+                   - 2;                     /* a hair, so it never sits flush */
+    if (!ctx) { input.placeholder = OPTIONS[1]; return; }
+    ctx.font = (cs.fontWeight || '400') + ' ' + (cs.fontSize || '16px') + ' ' + (cs.fontFamily || 'sans-serif');
+    for (var i = 0; i < OPTIONS.length; i++) {
+      if (ctx.measureText(OPTIONS[i]).width <= room) { input.placeholder = OPTIONS[i]; return; }
+    }
+    input.placeholder = OPTIONS[OPTIONS.length - 1];
+  }
+  apply();
+  if (window.ResizeObserver) new ResizeObserver(apply).observe(input);
+  else addEventListener('resize', apply);
+  /* Fonts land after first paint and change every measurement above. */
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(apply).catch(function () {});
+})();
 
 /* The order lookup. It used to arrive pre-filled with your own newest
    reference, render its "Found it" card before anything was typed, and do

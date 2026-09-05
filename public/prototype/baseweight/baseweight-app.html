@@ -1894,6 +1894,13 @@ body { font-variant-numeric: tabular-nums; }
   color:var(--color-action-secondary-text); text-decoration:none; font:var(--type-subhead); }
 
 .screen { display:none; padding-block: var(--space-8) var(--space-16); }
+/* The auth and onboarding screens are [data-enclosed]: they strip the chrome
+   and open with a full-bleed photograph. The generic .screen padding put a
+   32px band of page colour ABOVE that photograph, so the welcome screen began
+   with a grey stripe and the image looked like it had been dropped in slightly
+   too low. Enclosed screens own their own edges — .auth is a 100dvh grid with
+   its own padding — so they take none from here. */
+.screen[data-enclosed] { padding-block: 0; }
 .screen:target, .screen.is-active { display:block; }
 
 /* -- home: the dual entry (02 §2.1) --------------------------------------- */
@@ -2678,7 +2685,7 @@ body { font-variant-numeric: tabular-nums; }
    as its floor, so one unbreakable string in the sidebar — a real buyer's email
    address is the one that reaches this page — would widen the column past the
    viewport and scroll the whole account family sideways. */
-@media (max-width: 900px) { .acct { grid-template-columns: minmax(0, 1fr); gap: var(--space-6); } }
+@media (max-width: 900px) { .acct { grid-template-columns: minmax(0, 1fr); } }
 
 .acct__side { position: sticky; inset-block-start: 84px; }
 @media (max-width: 900px) { .acct__side { position: static; } }
@@ -2715,6 +2722,37 @@ body { font-variant-numeric: tabular-nums; }
 .acct__two { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--space-4); margin-block-start: var(--space-8); }
 .acct__two > .bw-card { padding: var(--space-5); }
+
+/* ── the account family on a narrow screen ───────────────────────────────
+   Collapsing the two columns stacked the SIDEBAR on top of the content, and
+   the sidebar is an identity block, nine links and a Sign out button. On a
+   390x844 phone that is the entire first viewport: you opened your account and
+   saw a menu, with "Afternoon, Alex" and every actual thing — the live order,
+   the kit, the locker — beginning below the fold. Sign out sat above the
+   content too, which puts the one irreversible control on the page in the most
+   prominent position on it.
+   So on a phone the aside stops being a box (display:contents) and its three
+   parts are placed independently: who you are, then the nav as a single
+   horizontal strip of chips instead of a nine-row wall, then the content, then
+   Sign out at the very bottom where a destructive action belongs. */
+@media (max-width: 900px) {
+  .acct { grid-template-columns: minmax(0, 1fr); gap: var(--space-5);
+    padding-block: var(--space-4) var(--space-10); }
+  .acct__side { display: contents; }
+  .acct__who { order: 1; margin-block-end: 0; }
+  .acct__nav { order: 2; flex-direction: row; gap: var(--space-2);
+    overflow-x: auto; overscroll-behavior-inline: contain;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .acct__nav::-webkit-scrollbar { display: none; }
+  .acct__nav a { flex: none; white-space: nowrap; justify-content: flex-start;
+    gap: var(--space-2); padding-inline: var(--space-4);
+    border-radius: var(--radius-pill); background: var(--color-surface-sunken); }
+  .acct__nav a[aria-current] { background: var(--color-action-secondary-bg); }
+  .acct__main { order: 3; }
+  /* The block modifier makes this full-width; the order puts it after the
+     content rather than between the nav and the content. */
+  .acct__side > [data-act="sign-out"] { order: 4; margin-block-start: var(--space-6); }
+}
 
 /* live order card */
 .ordercard { border: 1px solid var(--color-border-subtle); border-radius: var(--radius-lg);
@@ -14489,8 +14527,14 @@ function finishOAuth(key) {
      Whether somebody is new is a fact the app already holds: state.onboarded is
      written when the onboarding flow finishes making a kit, and defaults false.
      Ask that instead. Apple now behaves the same as Google, which is the point:
-     the identity provider has never had anything to do with it. */
-  location.hash = state.onboarded ? '#/account' : '#/onboard-units';
+     the identity provider has never had anything to do with it.
+     And a RETURNING account lands on the shop, not on /account. Signing in is
+     something you do on the way to something else — you have arrived at a shop
+     and proved who you are; being shown a page of your own name, your order
+     count and a Sign out button is a dead end you then have to navigate out of.
+     The account is one tap away in the tab bar for the rare visit that was
+     actually about the account. */
+  location.hash = state.onboarded ? '#/' : '#/onboard-units';
 }
 
 document.addEventListener('click', e => {
@@ -23357,7 +23401,11 @@ renderPlanKitScreen();
       say('Signed in as ' + safe(lEmail) + '. '
         + (keep ? 'You will stay signed in on this device.' : 'For this visit only — closing the browser signs you out.')
         + ' No password was checked: this is a prototype.');
-      location.hash = '#/account';
+      /* The shop, not the account — the same rule the federated path uses. A
+         sign-in that ends on a page about you is a dead end; the tab bar has
+         Account for the visit that was genuinely about the account. Someone who
+         has never finished onboarding still gets onboarding first. */
+      location.hash = state.onboarded ? '#/' : '#/onboard-units';
       return;
     }
     if (kind === 'forgot') {

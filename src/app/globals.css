@@ -1019,8 +1019,27 @@
 }
 
 @layer base {
+  /*
+   * The ground is near-black, so the UA has to be told that: color-scheme is
+   * what paints the window scrollbar, the overscroll gutter behind a rubber-band
+   * bounce, and any native control. Left at `light` (a leftover from the paper
+   * era) the browser drew a white scrollbar track down the right edge of every
+   * dark page, which is the one piece of chrome on the site nobody had designed.
+   * @media print sets it back to light, so the printed document is unaffected.
+   *
+   * The bar itself is then set in the site's own language rather than left to
+   * the UA's default grey: thin, no track, and a thumb at a fixed step of the
+   * foreground so it reads as one more hairline. Both properties INHERIT, so
+   * this single declaration also covers every inner scroller (the prototype
+   * well, the contents rail, code blocks). Deliberately the standard properties
+   * only: a ::-webkit-scrollbar rule would force Safari and iOS to abandon
+   * overlay scrollbars and permanently reserve a gutter, and older engines
+   * already read color-scheme and draw a correct dark bar without it.
+   */
   html {
-    color-scheme: light;
+    color-scheme: dark;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--fg) 26%, transparent) transparent;
     -webkit-text-size-adjust: 100%;
   }
 

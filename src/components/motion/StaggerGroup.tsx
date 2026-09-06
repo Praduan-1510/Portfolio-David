@@ -13,6 +13,15 @@ import { useReducedMotion, prefersReducedMotion } from "@/hooks/useReducedMotion
  * group scrolls into view (or on load, for above-the-fold beats). One ScrollTrigger
  * per group, transform/opacity only.
  *
+ * Ruled entry: a child (or the group itself) may carry a full-width hairline as
+ * `<span aria-hidden data-rule className="absolute inset-x-0 top-0 h-px bg-line" />`
+ * in place of its border-top. When any rule is present the group plays a
+ * timeline instead of the single tween: each rule draws left to right on the
+ * entrance curve, and its row's CONTENT (not the row, so the rule stays visible
+ * while the type is still transparent) rises in one stagger step later, like a
+ * ruling pen ahead of the type. Groups with no rule anywhere keep the original
+ * single tween untouched.
+ *
  * Children are visible by default and only hidden inside the layout effect, so
  * reduced-motion / no-JS never traps content behind the animation (§10). Pairs
  * with the shared motion tokens so its rhythm matches <Reveal> everywhere.
@@ -32,6 +41,9 @@ interface StaggerGroupProps extends React.HTMLAttributes<HTMLElement> {
   /** Direction of the rise: children below (default) or above their resting spot. */
   from?: "below" | "above";
 }
+
+const isRule = (node: Element) => node.hasAttribute("data-rule");
+const ownRule = (item: Element) => item.querySelector<HTMLElement>(":scope > [data-rule]");
 
 export function StaggerGroup({
   as: Tag = "div",
@@ -53,21 +65,69 @@ export function StaggerGroup({
       registerGsap();
       const el = ref.current;
       if (prefersReducedMotion() || !el) return; // visible, no animation
-      const items = Array.from(el.children) as HTMLElement[];
+      const children = Array.from(el.children) as HTMLElement[];
+      // A rule that belongs to the group itself (the spec strip's dl) rather
+      // than to one of its rows.
+      const groupRules = children.filter(isRule);
+      const items = children.filter((child) => !isRule(child));
       if (items.length === 0) return;
 
-      const vars: gsap.TweenVars = {
-        opacity: 0,
-        y: from === "below" ? y : -y,
-        duration,
-        ease: gsapEase.outExpo,
-        stagger,
-        delay,
-      };
-      if (trigger === "inView") {
-        vars.scrollTrigger = { trigger: el, start: "top 82%", once: true };
+      if (groupRules.length === 0 && !items.some(ownRule)) {
+        const vars: gsap.TweenVars = {
+          opacity: 0,
+          y: from === "below" ? y : -y,
+          duration,
+          ease: gsapEase.outExpo,
+          stagger,
+          delay,
+        };
+        if (trigger === "inView") {
+          vars.scrollTrigger = { trigger: el, start: "top 82%", once: true };
+        }
+        gsap.from(items, vars);
+        return;
       }
-      gsap.from(items, vars);
+
+      // Ruled branch: one tween per rule and per row's content, each carrying
+      // the same trigger and a position folded into `delay`. Deliberately NOT a
+      // gsap.timeline({ scrollTrigger }): a tween initialises its trigger lazily
+      // on the next tick, after PageTransition has reset the new route's scroll
+      // position, whereas a timeline creates it synchronously here while the
+      // page may still sit deep in the previous route. A once:true trigger
+      // created past its own end kills itself inside another trigger's init
+      // loop, and that shrinking array is a route-level error.
+      const triggerVars =
+        trigger === "inView"
+          ? ({ trigger: el, start: "top 82%", once: true } as const)
+          : undefined;
+      const scrollTrigger = () => (triggerVars ? { ...triggerVars } : undefined);
+      const drawRule = (rule: HTMLElement, at: number) =>
+        gsap.fromTo(
+          rule,
+          { scaleX: 0, transformOrigin: "left center" },
+          {
+            scaleX: 1,
+            duration: durations.base,
+            ease: gsapEase.outExpo,
+            delay: at,
+            scrollTrigger: scrollTrigger(),
+          },
+        );
+      groupRules.forEach((rule) => drawRule(rule, delay));
+      items.forEach((item, i) => {
+        const at = delay + i * stagger;
+        const rule = ownRule(item);
+        const content = Array.from(item.children).filter((child) => child !== rule);
+        if (rule) drawRule(rule, at);
+        gsap.from(content.length ? content : item, {
+          opacity: 0,
+          y: from === "below" ? y : -y,
+          duration,
+          ease: gsapEase.outExpo,
+          delay: rule ? at + staggerTokens.loose : at,
+          scrollTrigger: scrollTrigger(),
+        });
+      });
     },
     {
       scope: ref,

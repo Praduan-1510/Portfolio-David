@@ -77,6 +77,9 @@ export default function Home() {
 
       {/* Selected work: proof right after the reel. */}
       <Container as="section" id="work" className="scroll-mt-16 py-space-9">
+        {/* Seam between the reel and the work: until now the stage's bottom edge
+            was the only boundary here. Same 96px on each side as the other seams. */}
+        <AnimatedDivider ink="rule" ticks className="mb-space-9" />
         <div className="mb-space-7 flex items-end justify-between gap-space-4">
           <div>
             <TextReveal
@@ -120,7 +123,7 @@ export default function Home() {
       <Testimonials />
 
       <Container>
-        <AnimatedDivider spectrum />
+        <AnimatedDivider ink="rule" ticks />
       </Container>
 
       {/* About teaser: a quiet, type-led editorial beat. The portrait that

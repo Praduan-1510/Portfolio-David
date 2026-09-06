@@ -1,0 +1,656 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Components. Everything here is content-layer, so nothing in this file is glass.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  min-height: var(--layout-min-touch-target);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-xl);
+  font-weight: 600;
+  font-size: var(--text-headline-size);
+  transition:
+    transform var(--duration-micro) var(--ease-liquid),
+    background var(--duration-micro) var(--ease-liquid);
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.btn--primary {
+  background: var(--brand);
+  color: var(--text-on-brand);
+}
+.btn--primary:active {
+  background: var(--brand-pressed);
+}
+.btn--secondary {
+  background: var(--surface-sunken);
+  color: var(--text);
+}
+.btn--ghost {
+  background: transparent;
+  color: var(--brand);
+}
+.btn--block {
+  display: flex;
+  width: 100%;
+}
+.btn--sm {
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-base);
+  font-size: var(--text-subhead-size);
+  border-radius: var(--radius-lg);
+}
+
+/* The pay button carries the amount. Never a bare "Proceed": the number is the promise. */
+.btn--pay {
+  justify-content: space-between;
+  padding-inline: var(--space-lg);
+}
+
+/* ── Chips ────────────────────────────────────────────────────────────────── */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  /* Height comes from the touch minimum, not from padding: 7px was both too short
+     to tap and off the 4px spacing scale. */
+  min-height: 44px;
+  min-width: 44px;
+  justify-content: center;
+  padding: 0 var(--space-base);
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+  color: var(--text-secondary);
+  font-size: var(--text-caption1-size);
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background var(--duration-micro) var(--ease-liquid);
+}
+.chip--on {
+  background: var(--brand-tint);
+  color: var(--brand);
+}
+.chip--outline {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+/* ── Badges ───────────────────────────────────────────────────────────────── */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-caption2-size);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+/* Marigold means one thing only, everywhere in the app: money saved. */
+.badge--deal {
+  background: var(--deal-fill);
+  color: var(--deal-text);
+}
+.badge--new {
+  background: var(--brand-tint);
+  color: var(--brand);
+}
+.badge--rx {
+  background: var(--info-bg);
+  color: var(--info);
+}
+
+/* FSSAI diet marks are a legal requirement on Indian packaging, and shape carries the meaning —
+   colour alone would fail for a colour-blind shopper. */
+.diet {
+  width: 14px;
+  height: 14px;
+  display: grid;
+  place-items: center;
+  border-radius: 2px;
+  flex: none;
+}
+.diet::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.diet--veg {
+  box-shadow: inset 0 0 0 1.5px var(--veg);
+}
+.diet--veg::after {
+  background: var(--veg);
+}
+.diet--non-veg {
+  box-shadow: inset 0 0 0 1.5px var(--non-veg);
+}
+.diet--non-veg::after {
+  background: var(--non-veg);
+  border-radius: 0;
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 7px solid var(--non-veg);
+}
+.diet--egg {
+  box-shadow: inset 0 0 0 1.5px var(--egg);
+}
+.diet--egg::after {
+  background: var(--egg);
+  border-radius: 50%;
+}
+
+/* ── Price ────────────────────────────────────────────────────────────────── */
+
+.price {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+/* The rupee sign is set a touch smaller: Bricolage's ₹ otherwise competes with the number,
+   and the number is the point. */
+.price .sym {
+  font-size: 0.85em;
+  opacity: 0.9;
+}
+.price .mrp {
+  font-family: 'Plex', sans-serif;
+  font-weight: 400;
+  font-size: var(--text-footnote-size);
+  color: var(--mrp);
+  text-decoration: line-through;
+}
+
+/* ── Stepper ──────────────────────────────────────────────────────────────── */
+
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-lg);
+  background: var(--brand);
+  color: var(--text-on-brand);
+  min-width: 112px;
+  /* 44px is the Apple HIG / Material floor for a tap target. This control is tapped more
+     than anything else in a grocery app, and it was 26x34. */
+  height: 44px;
+  overflow: hidden;
+}
+.stepper button {
+  width: 44px;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: inherit;
+  font-size: 17px;
+  line-height: 1;
+}
+.stepper .qty {
+  flex: 1;
+  text-align: center;
+  font-family: 'Bricolage', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  min-width: 2ch;
+}
+.stepper--add {
+  background: transparent;
+  color: var(--brand);
+  box-shadow: inset 0 0 0 1.5px var(--brand);
+  justify-content: center;
+  font-weight: 700;
+  font-size: var(--text-subhead-size);
+  letter-spacing: 0.04em;
+  transition: transform var(--duration-micro) var(--ease-liquid);
+}
+.stepper--add:active {
+  transform: scale(0.94);
+}
+.stepper--sold-out {
+  background: transparent;
+  color: var(--text-tertiary);
+  box-shadow: inset 0 0 0 1.5px var(--border);
+  justify-content: center;
+  font-size: var(--text-caption1-size);
+  pointer-events: none;
+}
+
+/* ── Product card ─────────────────────────────────────────────────────────── */
+
+.pcard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--shape-product-card-pad);
+  border-radius: var(--shape-product-card);
+  background: var(--surface);
+  text-align: left;
+  position: relative;
+}
+/* The tappable region: media, unit and name. The price row below it stays outside so the
+   stepper's own buttons are not nested inside a button. */
+.pcard__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  text-align: left;
+  width: 100%;
+  transition: transform var(--duration-micro) var(--ease-liquid);
+}
+.pcard__body:active {
+  transform: scale(0.97);
+}
+
+.pcard__media {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--shape-product-card-inner);
+  /* Same warm ground as the shelf tiles. The packs are drawn on transparent so that one
+     asset works on paper and on ink; the card supplies the surface it stands on. */
+  background: radial-gradient(120% 100% at 50% 0%, var(--surface) 0%, var(--surface-sunken) 100%);
+  overflow: hidden;
+}
+.pcard__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* The artwork carries its own margin and contact shadow, so the card adds almost none.
+     A fixed value, not a percentage: 2% computed to 2.6px and sat off the 4px scale. */
+  padding: 4px;
+}
+.pcard__badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+}
+/* The veg/non-veg mark belongs on the pack, which is where it is on a real shelf and where
+   the Legal Metrology rules put it. It also buys back a row of card height. */
+.pcard__diet {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: grid;
+}
+.pcard__pricing {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-xs);
+}
+.pcard__eta {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.pcard__name {
+  font-size: var(--text-subhead-size);
+  line-height: 18px;
+  font-weight: 500;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.pcard__foot {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-sm);
+  margin-top: auto;
+}
+/* Side by side, the price and a 44px-tall stepper needed 163px inside a 157px card, so
+   the stepper stayed small to fit. Stacking gives it the full card width — which is also
+   the easiest thing in the layout to hit. */
+.pcard__foot .stepper {
+  width: 100%;
+}
+.pcard--out .pcard__media {
+  opacity: 0.45;
+}
+
+/* ── List row ─────────────────────────────────────────────────────────────── */
+
+.row-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  min-height: 56px;
+  padding: var(--space-md) 0;
+  width: 100%;
+  text-align: left;
+}
+.row-item + .row-item {
+  box-shadow: inset 0 1px 0 var(--border);
+}
+.row-item__chev {
+  color: var(--text-tertiary);
+  flex: none;
+}
+
+/* ── Bill ─────────────────────────────────────────────────────────────────── */
+
+.bill {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.bill__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+.bill__row span:last-child {
+  font-variant-numeric: tabular-nums;
+}
+.bill__row--free span:last-child {
+  color: var(--success-text);
+  font-weight: 600;
+}
+.bill__row--save span:last-child {
+  color: var(--success-text);
+}
+.bill__rule {
+  height: 1px;
+  background: var(--border);
+  margin: 2px 0;
+}
+.bill__total {
+  font-family: 'Bricolage', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+}
+.bill__strike {
+  text-decoration: line-through;
+  color: var(--text-tertiary);
+  margin-right: 6px;
+  font-weight: 400;
+}
+.bill__why {
+  width: 20px;
+  height: 20px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-left: var(--space-xs);
+  vertical-align: -1px;
+}
+
+/* ── Progress ─────────────────────────────────────────────────────────────── */
+
+.progress {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--surface-sunken);
+  overflow: hidden;
+}
+.progress__fill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--brand);
+  transition:
+    width var(--duration-slow) var(--ease-liquid),
+    background var(--duration-base) linear;
+}
+.progress__fill--done {
+  background: var(--deal-fill);
+}
+
+/* ── Section header ───────────────────────────────────────────────────────── */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.section__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+.section__link {
+  font-size: var(--text-caption1-size);
+  font-weight: 600;
+  color: var(--brand);
+}
+
+/* ── Rails ────────────────────────────────────────────────────────────────── */
+
+.rail {
+  display: flex;
+  gap: var(--space-md);
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding-inline: var(--layout-screen-gutter);
+  margin-inline: calc(var(--layout-screen-gutter) * -1);
+  /*
+   * Without this the first card sits flush to the screen edge while its own section heading
+   * sits on the 16px gutter. `scroll-snap-align: start` aligns a child to the *snapport*,
+   * which defaults to the padding box — so snapping cancelled the padding-inline above and
+   * parked card 0 at x=0. scroll-padding insets the snapport to match the gutter.
+   */
+  scroll-padding-inline: var(--layout-screen-gutter);
+}
+.rail > * {
+  scroll-snap-align: start;
+  flex: none;
+}
+.rail .pcard {
+  width: 138px;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-md);
+}
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+.grid4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md) var(--space-sm);
+}
+
+/* ── Toast ────────────────────────────────────────────────────────────────── */
+
+#toast-host {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--layout-dock-height) + var(--layout-cart-bar-height) + 40px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  pointer-events: none;
+  z-index: 60;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 10px var(--space-base);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-subhead-size);
+  animation: toast-in var(--duration-base) var(--ease-liquid);
+  pointer-events: auto;
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.toast--out {
+  animation: toast-out var(--duration-fast) var(--ease-exit) forwards;
+}
+@keyframes toast-out {
+  to {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+}
+
+/* ── Skeleton ─────────────────────────────────────────────────────────────── */
+
+.skeleton {
+  background: var(--skeleton);
+  border-radius: var(--radius-md);
+  position: relative;
+  overflow: hidden;
+}
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, var(--skeleton-sheen), transparent);
+  animation: sheen var(--duration-shimmer) linear infinite;
+}
+@keyframes sheen {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* ── Empty state ──────────────────────────────────────────────────────────── */
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-md);
+  padding: var(--space-xxxl) var(--space-lg);
+}
+.empty svg {
+  width: 132px;
+  height: 132px;
+}
+
+/* ── Product thumbnail ────────────────────────────────────────────────────── */
+
+/* Used wherever a product appears in a list rather than a card: cart lines, order items,
+   the sub-shelf rail. One rule so they never drift apart. */
+.thumb {
+  width: 60px;
+  height: 60px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: radial-gradient(120% 100% at 50% 0%, var(--surface) 0%, var(--surface-sunken) 100%);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+.thumb img {
+  width: 94%;
+  height: 94%;
+  object-fit: contain;
+}
+.thumb--sm {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+}
+
+/* ── Tap area ─────────────────────────────────────────────────────────────── */
+
+/*
+ * Apple HIG and Material both put the floor for a tap target at 44pt / 48dp. Where a
+ * control is deliberately small — a chevron, an inline "?" affordance, a text link beside
+ * a heading — growing the ink is the wrong fix, because the small size is the design.
+ * Growing the *hit* area is the right one, and this does it without touching layout.
+ *
+ * Kept as one selector list rather than a class sprinkled through the markup, so the set
+ * of controls exempted from the visual minimum stays visible in one place.
+ */
+:is(.tap-44, .section__link, .bill__why, .appbar__avatar, .navbar__icon) {
+  position: relative;
+}
+:is(.tap-44, .section__link, .bill__why, .appbar__avatar, .navbar__icon)::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  min-width: 44px;
+  min-height: 44px;
+  transform: translate(-50%, -50%);
+}
+
+/* ── Row card ─────────────────────────────────────────────────────────────── */
+
+/*
+ * A tappable full-width card holding a label, a sub-label and a trailing affordance —
+ * the coupon row, the tip row, the help row, the plan picker. This existed as
+ * `style="padding:14px 16px;…"` copy-pasted into five screens, which is why the vertical
+ * padding was 14px: off the 4px scale, and different from every other card in the app.
+ */
+.rowcard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-base);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  text-align: left;
+}
+.rowcard--sunken {
+  background: var(--surface-sunken);
+}
+.rowcard--brand {
+  background: var(--brand-tint);
+}
+
+/* ── Avatar ───────────────────────────────────────────────────────────────── */
+
+.avatar {
+  flex: none;
+  border-radius: 50%;
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+}
+.avatar--mono {
+  background: var(--brand-tint);
+  color: var(--brand);
+  font-weight: 700;
+  line-height: 1;
+}

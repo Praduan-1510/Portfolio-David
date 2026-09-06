@@ -1,6 +1,8 @@
 import type React from "react";
 import { PhoneFrame } from "@/components/primitives";
-import { Reveal, StaggerGroup, Parallax, FlapDigits } from "@/components/motion";
+import { Reveal, StaggerGroup, Parallax, FlapDigits, AnimatedDivider } from "@/components/motion";
+import { durations } from "@/lib/motion/durations";
+import { stagger } from "@/lib/motion/tokens";
 import { cn } from "@/lib/utils/cn";
 
 /*
@@ -16,6 +18,11 @@ import { cn } from "@/lib/utils/cn";
  *   Design    → <ScreenBeat>   (real screens woven into the narrative)
  *   Craft     → <StatusColourSystem>
  *   Outcome   → <Stats>/<Stat>
+ *
+ * Ruled entry: every structural border-top here is a full-width [data-rule]
+ * span instead (static bg-line by default), so StaggerGroup can draw the rule
+ * a beat before its row's type rises. Standalone rules (the Bleed frame) use
+ * AnimatedDivider the same way. Markup never hides a rule; only the effect does.
  */
 
 /* ── ScreenBeat ─ an inline phone screen beside a decision caption. Alternates
@@ -77,7 +84,8 @@ export function FindingStack({ children }: { children?: React.ReactNode }) {
 
 export function Finding({ title, children }: { title?: string; children?: React.ReactNode }) {
   return (
-    <li className="grid grid-cols-[1.5rem_1fr] gap-x-space-4 gap-y-space-2 border-t border-line pt-space-5 [counter-increment:finding]">
+    <li className="relative grid grid-cols-[1.5rem_1fr] gap-x-space-4 gap-y-space-2 pt-space-5 [counter-increment:finding]">
+      <span aria-hidden="true" data-rule className="absolute inset-x-0 top-0 h-px bg-line" />
       <span
         aria-hidden="true"
         className="font-mono text-caption tabular-nums text-accent before:content-[counter(finding,decimal-leading-zero)]"
@@ -103,7 +111,12 @@ export function DecisionCards({ children }: { children?: React.ReactNode }) {
 
 export function DecisionCard({ title, children }: { title?: string; children?: React.ReactNode }) {
   return (
-    <li className="group/dc relative overflow-hidden rounded-none border-t-2 border-[color:color-mix(in_srgb,var(--accent)_30%,var(--line))] bg-[color:color-mix(in_srgb,var(--surface)_55%,transparent)] p-space-5 [counter-increment:decision]">
+    <li className="group/dc relative overflow-hidden rounded-none bg-[color:color-mix(in_srgb,var(--surface)_55%,transparent)] p-space-5 [counter-increment:decision]">
+      <span
+        aria-hidden="true"
+        data-rule
+        className="absolute inset-x-0 top-0 h-[2px] bg-[color:color-mix(in_srgb,var(--accent)_30%,var(--line))]"
+      />
       <span
         aria-hidden="true"
         className="font-mono text-caption tabular-nums text-accent before:content-[counter(decision,decimal-leading-zero)]"
@@ -141,13 +154,15 @@ const STATUS = [
 
 export function StatusColourSystem() {
   return (
-    <Reveal
+    <StaggerGroup
       as="ul"
+      stagger={stagger.loose}
       className="cs-wide my-space-8 grid grid-cols-1 gap-space-5 lg:grid-cols-3"
       aria-label="Spendee status colour system"
     >
       {STATUS.map((s) => (
-        <li key={s.label} className="border-t border-line pt-space-4">
+        <li key={s.label} className="relative pt-space-4">
+          <span aria-hidden="true" data-rule className="absolute inset-x-0 top-0 h-px bg-line" />
           <span
             aria-hidden="true"
             className="block h-space-6 w-full rounded-none"
@@ -159,7 +174,7 @@ export function StatusColourSystem() {
           <span className="mt-space-1 block text-caption text-muted">{s.meaning}</span>
         </li>
       ))}
-    </Reveal>
+    </StaggerGroup>
   );
 }
 
@@ -180,7 +195,8 @@ export function Stat({ value, label }: { value?: string; label?: string }) {
   return (
     // justify-end packs the value row to the bottom of the cell (flex-col-reverse
     // main axis), so every dd shares one baseline no matter how the label wraps.
-    <div className="flex min-w-0 flex-col-reverse justify-end gap-space-2 border-t border-line pt-space-4">
+    <div className="relative flex min-w-0 flex-col-reverse justify-end gap-space-2 pt-space-4">
+      <span aria-hidden="true" data-rule className="absolute inset-x-0 top-0 h-px bg-line" />
       <dt className="min-w-0 break-words font-mono text-caption uppercase tracking-[0.14em] text-muted">
         {label}
       </dt>
@@ -240,7 +256,12 @@ export function Goal({
   status?: string;
 }) {
   return (
-    <li className="grid gap-space-4 rounded-none border-t-2 border-[color:color-mix(in_srgb,var(--accent)_30%,var(--line))] bg-[color:color-mix(in_srgb,var(--surface)_55%,transparent)] p-space-5 [counter-increment:goal] lg:grid-cols-[1.25fr_1fr] lg:items-start lg:gap-space-6">
+    <li className="relative grid gap-space-4 rounded-none bg-[color:color-mix(in_srgb,var(--surface)_55%,transparent)] p-space-5 [counter-increment:goal] lg:grid-cols-[1.25fr_1fr] lg:items-start lg:gap-space-6">
+      <span
+        aria-hidden="true"
+        data-rule
+        className="absolute inset-x-0 top-0 h-[2px] bg-[color:color-mix(in_srgb,var(--accent)_30%,var(--line))]"
+      />
       <div>
         <span
           aria-hidden="true"
@@ -309,38 +330,52 @@ export function Bleed({
   attribution?: string;
   children?: React.ReactNode;
 }) {
+  // The hairline frame sits on a static shell OUTSIDE the Reveal: the top line
+  // draws from the left and the bottom from the right (AnimatedDivider fires at
+  // 90%, Reveal at 85%), then the field and quote rise into the ruled frame.
+  // The divider paints with bg-line, so the accent tint is mixed once on the
+  // shell (from the inherited --line) and each wrapper remaps --line to it;
+  // a direct self-reference would be a custom-property cycle.
+  const frameLine = "absolute inset-x-0 z-10 block h-px";
+  const frameInk = { "--line": "var(--bleed-line)" } as React.CSSProperties;
   return (
     <div className="cs-wide">
-      <Reveal
-        as="div"
-        className="cs-bleed relative isolate my-space-10 overflow-hidden py-space-10"
+      <div
+        className="cs-bleed relative my-space-10"
+        style={{ "--bleed-line": "color-mix(in srgb, var(--accent) 35%, var(--line))" } as React.CSSProperties}
       >
-        {/* Accent colour-field + hairline frame. */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 -z-10"
-          style={{
-            background:
-              "radial-gradient(90% 120% at 18% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 64%), radial-gradient(80% 100% at 88% 100%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 66%), color-mix(in srgb, var(--surface) 45%, transparent)",
-          }}
-        />
-        <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-[color:color-mix(in_srgb,var(--accent)_35%,var(--line))]" />
-        <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-[color:color-mix(in_srgb,var(--accent)_35%,var(--line))]" />
-        <div className="mx-auto w-full max-w-[90rem] px-[clamp(1.25rem,5vw,6rem)]">
-          {quote ? (
-            <blockquote className="max-w-[24ch] font-display text-display-l leading-[1.1] tracking-[-0.01em] text-fg">
-              {quote}
-              {attribution && (
-                <footer className="mt-space-5 font-mono text-caption uppercase tracking-[0.16em] text-muted">
-                  {attribution}
-                </footer>
-              )}
-            </blockquote>
-          ) : (
-            children
-          )}
-        </div>
-      </Reveal>
+        <span aria-hidden="true" className={cn(frameLine, "top-0")} style={frameInk}>
+          <AnimatedDivider duration={durations.base} />
+        </span>
+        <span aria-hidden="true" className={cn(frameLine, "bottom-0")} style={frameInk}>
+          <AnimatedDivider from="right" duration={durations.base} />
+        </span>
+        <Reveal as="div" className="relative isolate overflow-hidden py-space-10">
+          {/* Accent colour-field. */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 -z-10"
+            style={{
+              background:
+                "radial-gradient(90% 120% at 18% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 64%), radial-gradient(80% 100% at 88% 100%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 66%), color-mix(in srgb, var(--surface) 45%, transparent)",
+            }}
+          />
+          <div className="mx-auto w-full max-w-[90rem] px-[clamp(1.25rem,5vw,6rem)]">
+            {quote ? (
+              <blockquote className="max-w-[24ch] font-display text-display-l leading-[1.1] tracking-[-0.01em] text-fg">
+                {quote}
+                {attribution && (
+                  <footer className="mt-space-5 font-mono text-caption uppercase tracking-[0.16em] text-muted">
+                    {attribution}
+                  </footer>
+                )}
+              </blockquote>
+            ) : (
+              children
+            )}
+          </div>
+        </Reveal>
+      </div>
     </div>
   );
 }

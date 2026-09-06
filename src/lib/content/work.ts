@@ -70,33 +70,16 @@ function assertProjectMeta(
       throw new Error(
         `[content] ${slug}.mdx: "video" needs string "src" and "poster"`,
       );
-    if (p) {
-      if (typeof p.poster !== "string")
-        throw new Error(`[content] ${slug}.mdx: "prototype.poster" must be a string`);
-      // Optional, but it renders as a factual claim on the case-study hero, so a
-      // wrong type here should fail the build rather than print quietly.
-      if (p.launchNote !== undefined && typeof p.launchNote !== "string")
-        throw new Error(`[content] ${slug}.mdx: "prototype.launchNote" must be a string`);
-      if (!Array.isArray(p.surfaces) || p.surfaces.length === 0)
-        throw new Error(
-          `[content] ${slug}.mdx: "prototype" needs a non-empty "surfaces" array`,
-        );
-      for (const [si, surface] of (p.surfaces as unknown[]).entries()) {
-        const s = surface as Record<string, unknown>;
-        if (
-          typeof s?.id !== "string" ||
-          typeof s?.label !== "string" ||
-          typeof s?.src !== "string" ||
-          typeof s?.domain !== "string"
-        )
-          throw new Error(
-            `[content] ${slug}.mdx: prototype.surfaces[${si}] needs string "id", "label", "src" and "domain"`,
-          );
-      }
-    }
+    if (p) assertPrototype(slug, p);
     if (data.liveUrl !== undefined && typeof data.liveUrl !== "string")
       throw new Error(`[content] ${slug}.mdx: "liveUrl" must be a string`);
   }
+
+  // An app study may also ship a playable HTML prototype; it takes the
+  // signature-showcase slot under the hero, as a Figma prototype does, and is
+  // validated exactly like a web study's.
+  if (kind === "app" && data.prototype !== undefined)
+    assertPrototype(slug, data.prototype as Record<string, unknown>);
 
   // App projects require a non-empty `flows`. Any flows present (either kind) are
   // validated: each flow needs a title and a non-empty list of { src, caption }
@@ -139,6 +122,40 @@ function assertProjectMeta(
     throw new Error(
       `[content] ${slug}.mdx: "accent" must be a hex string starting with "#"`,
     );
+}
+
+/** The playable-prototype block, shared by web and app studies. */
+function assertPrototype(slug: string, p: Record<string, unknown>): void {
+  if (typeof p.poster !== "string")
+    throw new Error(`[content] ${slug}.mdx: "prototype.poster" must be a string`);
+  // Optional, but it renders as a factual claim on the case-study hero, so a
+  // wrong type here should fail the build rather than print quietly.
+  if (p.launchNote !== undefined && typeof p.launchNote !== "string")
+    throw new Error(`[content] ${slug}.mdx: "prototype.launchNote" must be a string`);
+  if (
+    p.devices !== undefined &&
+    (!Array.isArray(p.devices) ||
+      p.devices.some((d) => !["desktop", "tablet", "phone"].includes(String(d))))
+  )
+    throw new Error(
+      `[content] ${slug}.mdx: "prototype.devices" may only list "desktop", "tablet" and "phone"`,
+    );
+  if (!Array.isArray(p.surfaces) || p.surfaces.length === 0)
+    throw new Error(
+      `[content] ${slug}.mdx: "prototype" needs a non-empty "surfaces" array`,
+    );
+  for (const [si, surface] of (p.surfaces as unknown[]).entries()) {
+    const s = surface as Record<string, unknown>;
+    if (
+      typeof s?.id !== "string" ||
+      typeof s?.label !== "string" ||
+      typeof s?.src !== "string" ||
+      typeof s?.domain !== "string"
+    )
+      throw new Error(
+        `[content] ${slug}.mdx: prototype.surfaces[${si}] needs string "id", "label", "src" and "domain"`,
+      );
+  }
 }
 
 /** All case-study slugs (filenames without the .mdx extension). */

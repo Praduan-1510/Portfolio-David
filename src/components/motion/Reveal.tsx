@@ -42,6 +42,13 @@ export function Reveal({
     () => {
       registerGsap();
       if (prefersReducedMotion() || !ref.current) return; // visible, no animation
+      // A cover handoff is aiming its clone at a hero inside: leave it still.
+      if (
+        document.documentElement.dataset.handoff &&
+        ref.current.querySelector("[data-handoff-target]")
+      ) {
+        return;
+      }
       const vars: gsap.TweenVars = {
         opacity: 0,
         y,

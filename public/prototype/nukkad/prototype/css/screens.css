@@ -1,0 +1,1001 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   The app shell and per-screen layout.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* ── Device frame ─────────────────────────────────────────────────────────────
+   On a phone the prototype fills the viewport. On a desktop it sits inside a
+   handset-shaped frame, because a 400px-wide app stretched across a 1600px monitor
+   tells a reviewer nothing about how it actually feels.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.stage {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  background: var(--canvas);
+}
+
+.device {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--canvas);
+}
+
+@media (min-width: 880px) {
+  .stage {
+    background:
+      radial-gradient(1200px 600px at 15% -10%, rgba(11, 124, 118, 0.14), transparent 60%),
+      radial-gradient(900px 500px at 100% 110%, rgba(247, 179, 43, 0.12), transparent 60%),
+      var(--canvas);
+    padding: 32px;
+    grid-template-columns: minmax(280px, 380px) auto;
+    gap: 64px;
+    justify-content: center;
+    align-items: center;
+  }
+  .device {
+    width: 402px;
+    height: min(874px, calc(100dvh - 64px));
+    border-radius: 54px;
+    box-shadow:
+      0 0 0 12px #1a1a1c,
+      0 0 0 13px rgba(255, 255, 255, 0.14),
+      0 40px 90px -20px rgba(18, 17, 16, 0.45);
+  }
+  /* The pill cut-out. Small detail, but its absence is what makes a mock look flat. */
+  .device::after {
+    content: '';
+    position: absolute;
+    top: 11px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 108px;
+    height: 30px;
+    border-radius: 16px;
+    background: #0a0a0b;
+    z-index: 90;
+    pointer-events: none;
+  }
+  .device__status {
+    display: flex;
+  }
+}
+
+.side {
+  display: none;
+}
+@media (min-width: 880px) {
+  .side {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 380px;
+  }
+}
+
+/* ── Status bar (desktop frame only) ──────────────────────────────────────── */
+.device__status {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 52px;
+  padding: 16px 30px 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  z-index: 85;
+  pointer-events: none;
+}
+
+/* ── Screen ───────────────────────────────────────────────────────────────── */
+
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--canvas);
+  overflow: hidden;
+}
+.screen__scroll {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  /* Clears the dock, and the cart bar when it is out. */
+  padding-bottom: 132px;
+}
+body[data-cart='on'] .screen__scroll {
+  padding-bottom: 196px;
+}
+body[data-cart='on'] .catalog__grid,
+body[data-cart='on'] .catalog__rail {
+  padding-bottom: 196px;
+}
+.screen--flush .screen__scroll {
+  padding-bottom: 0;
+}
+/* A scrolling flex column must not compress its children. Flex items shrink by default, so
+   once a screen's content grew past the viewport every block on it was squeezed proportionally
+   instead of overflowing — which is what clipped the Circle card on the account screen down to
+   its eyebrow. Content overflows; the container scrolls. */
+.screen__scroll.col > * {
+  flex-shrink: 0;
+}
+
+.screen-enter {
+  animation: screen-in var(--duration-base) var(--ease-liquid);
+}
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── App header ───────────────────────────────────────────────────────────── */
+
+.appbar {
+  position: relative;
+  z-index: 20;
+  padding: calc(var(--frame-top) + var(--space-sm)) var(--layout-screen-gutter) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  transition: background var(--duration-base) var(--ease-liquid);
+}
+/* The header only becomes glass once there is content behind it worth refracting. */
+.appbar--scrolled {
+  position: sticky;
+  top: 0;
+  background: var(--glass-regular-tint);
+  backdrop-filter: blur(var(--glass-regular-blur)) saturate(var(--glass-regular-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-regular-blur)) saturate(var(--glass-regular-saturate));
+  box-shadow: inset 0 -1px 0 var(--glass-regular-border-bottom);
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  min-height: 44px;
+  padding: calc(var(--frame-top) + var(--space-sm)) var(--layout-screen-gutter) var(--space-sm);
+}
+
+/*
+ * A bar at the very top of a screen that is not a navbar — the language and Skip controls on
+ * onboarding. It exists so that anything sitting against the top edge picks up the frame inset
+ * from the same place; the onboarding controls were laid out by hand and slid under the status
+ * bar clock the moment the phone frame was drawn at any width.
+ */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  min-height: 44px;
+  padding: calc(var(--frame-top) + var(--space-md)) var(--layout-screen-gutter) var(--space-sm);
+}
+.navbar__back {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  /* Grew from 36 to 44 for the touch minimum; the offset grows with it so the chevron
+     stays optically on the screen gutter rather than drifting inward. */
+  margin-left: -10px;
+}
+
+/* ── ETA pill + address ───────────────────────────────────────────────────── */
+
+.eta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 8px 14px 8px 10px;
+  border-radius: var(--radius-pill);
+}
+.eta-pill__bolt {
+  color: var(--eta-on-time);
+  flex: none;
+}
+.eta-pill--busy .eta-pill__bolt {
+  color: var(--eta-busy);
+}
+
+.addr {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  gap: 6px;
+  max-width: 100%;
+  text-align: left;
+}
+.addr__text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Search field ─────────────────────────────────────────────────────────── */
+
+.searchfield {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  height: 46px;
+  padding: 0 var(--space-base);
+  border-radius: var(--shape-search-field);
+  width: 100%;
+  text-align: left;
+  color: var(--text-secondary);
+}
+.searchfield input {
+  border: 0;
+  outline: 0;
+  background: none;
+  flex: 1;
+  align-self: stretch;
+  font: inherit;
+  color: var(--text);
+}
+/* The placeholder rotates through what people actually type: "doodh", "atta", "chai". */
+.rotator {
+  display: block;
+  overflow: hidden;
+}
+.rotator span {
+  display: block;
+  animation: rotate-word 420ms var(--ease-liquid);
+}
+@keyframes rotate-word {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Floating chrome: dock + cart bar ─────────────────────────────────────── */
+
+.chrome {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0 var(--layout-screen-gutter) var(--space-base);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  z-index: 50;
+  pointer-events: none;
+}
+.chrome > * {
+  pointer-events: auto;
+}
+
+.cartbar {
+  height: var(--layout-cart-bar-height);
+  border-radius: var(--shape-cart-bar);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px 0 var(--space-base);
+  /* Buds out of the dock rather than fading in beside it. */
+  animation: bud var(--duration-slow) var(--spring-gentle);
+  transform-origin: 50% 100%;
+}
+@keyframes bud {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scaleX(0.72) scaleY(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.cartbar--hidden {
+  display: none;
+}
+.cartbar__cta {
+  height: 44px;
+  padding: 0 var(--space-base);
+  border-radius: var(--shape-cart-bar-inner);
+  background: var(--brand);
+  color: var(--text-on-brand);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-weight: 600;
+}
+
+.dock {
+  height: var(--layout-dock-height);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 6px;
+  transition: height var(--duration-base) var(--ease-liquid);
+}
+.dock__items {
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+.dock__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 0;
+  border-radius: var(--shape-dock-inner);
+  color: var(--text-tertiary);
+  transition:
+    color var(--duration-fast) var(--ease-liquid),
+    background var(--duration-fast) var(--ease-liquid);
+}
+.dock__item[aria-current='page'] {
+  color: var(--brand);
+  background: var(--brand-tint);
+}
+.dock__item svg {
+  width: 24px;
+  height: 24px;
+}
+.dock__label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* Search sits apart from the tabs, the way iOS 26 separates a search role. */
+.dock__search {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-pill);
+  display: grid;
+  place-items: center;
+  color: var(--brand);
+  flex: none;
+}
+
+/* Minimised dock: on a long scroll it collapses to the active tab and gets out of the way. */
+.chrome--min .dock {
+  height: 50px;
+}
+.chrome--min .dock__item:not([aria-current='page']) {
+  opacity: 0;
+  pointer-events: none;
+}
+.chrome--min .dock__label {
+  display: none;
+}
+
+/* ── Sheets ───────────────────────────────────────────────────────────────── */
+
+.sheet-scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim);
+  z-index: 70;
+  animation: fade-in var(--duration-fast) linear;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 92%;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--shape-sheet) var(--shape-sheet) 0 0;
+  background: var(--surface);
+  z-index: 75;
+  animation: sheet-up var(--duration-slow) var(--spring-sheet);
+  overflow: hidden;
+}
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+.sheet--out {
+  animation: sheet-down var(--duration-base) var(--ease-exit) forwards;
+}
+@keyframes sheet-down {
+  to {
+    transform: translateY(100%);
+  }
+}
+
+.sheet__grab {
+  width: 38px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border-strong);
+  margin: 10px auto 4px;
+  flex: none;
+}
+.sheet__body {
+  overflow-y: auto;
+  padding: var(--space-sm) var(--layout-screen-gutter) var(--space-xl);
+}
+.sheet__foot {
+  padding: var(--space-md) var(--layout-screen-gutter) var(--space-lg);
+  box-shadow: inset 0 1px 0 var(--border);
+  flex: none;
+}
+
+/* ── Hero ─────────────────────────────────────────────────────────────────── */
+
+.hero {
+  padding: var(--space-lg) var(--layout-screen-gutter) var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.hero__promise {
+  color: var(--text-secondary);
+  max-width: 30ch;
+}
+
+/* ── Category tiles ───────────────────────────────────────────────────────── */
+
+.cattile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.cattile__art {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--radius-lg);
+  display: grid;
+  place-items: center;
+  /* A warm wash rather than flat grey: packshots are drawn on transparent, so the tile is
+     the only thing giving them a ground, and grey drains the warmth out of the palette. */
+  background: radial-gradient(120% 100% at 50% 0%, var(--surface) 0%, var(--surface-sunken) 100%);
+  box-shadow: inset 0 0 0 1px var(--border);
+  overflow: hidden;
+  transition: transform var(--duration-micro) var(--ease-liquid);
+}
+.cattile:active .cattile__art {
+  transform: scale(0.95);
+}
+.cattile__art > img {
+  width: 88%;
+  height: 88%;
+  object-fit: contain;
+}
+
+/* Three packs fanned, so a shelf tile reads as a shelf and not as one arbitrary product. */
+/* The offsets look extreme because each packshot is drawn on a 512 canvas with the object
+   occupying only the middle ~47%. Positioning the frames edge-to-edge is what puts the
+   objects themselves side by side; anything tighter piles them on top of each other. */
+.cattile__fan {
+  position: absolute;
+  bottom: 2%;
+  width: 46%;
+  object-fit: contain;
+}
+.cattile__fan--a {
+  left: -7%;
+  transform: rotate(-9deg);
+}
+.cattile__fan--c {
+  right: -7%;
+  transform: rotate(9deg);
+}
+.cattile__fan--b {
+  bottom: 0;
+  left: 50%;
+  width: 56%;
+  transform: translateX(-50%);
+}
+
+.cattile__name {
+  font-size: 11px;
+  line-height: 14px;
+  /* Two lines' worth, always. Letting the label size itself makes every row in the grid
+     start at a different height, and the grid stops reading as a grid. */
+  min-height: 28px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ── Category screen: sticky shelf rail beside the grid ───────────────────── */
+
+.catalog {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+.catalog__rail {
+  width: 84px;
+  flex: none;
+  overflow-y: auto;
+  background: var(--surface-sunken);
+  padding-bottom: 140px;
+}
+.catalog__rail button {
+  width: 100%;
+  padding: var(--space-md) 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 10px;
+  line-height: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-align: center;
+  position: relative;
+}
+.catalog__rail button[aria-current='true'] {
+  background: var(--canvas);
+  color: var(--brand);
+}
+.catalog__rail button[aria-current='true']::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--brand);
+}
+.catalog__grid {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  padding: var(--space-md) var(--layout-screen-gutter) 150px;
+}
+
+/* ── Tracking map ─────────────────────────────────────────────────────────── */
+
+.map {
+  position: relative;
+  height: 46%;
+  min-height: 260px;
+  background: var(--surface-sunken);
+  overflow: hidden;
+  flex: none;
+}
+.map svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.map__rider {
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  margin: -19px 0 0 -19px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: var(--text-on-brand);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 6px 16px -4px rgba(11, 124, 118, 0.6);
+  transition:
+    left 1s linear,
+    top 1s linear;
+  z-index: 3;
+}
+.map__pin {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+}
+.map__overlay {
+  position: absolute;
+  top: calc(var(--frame-top) + var(--space-md));
+  right: var(--space-md);
+  z-index: 4;
+}
+
+/* ── Order status stepper ─────────────────────────────────────────────────── */
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.step {
+  display: flex;
+  gap: var(--space-md);
+}
+.step__gutter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 22px;
+  flex: none;
+}
+.step__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--surface-sunken);
+  box-shadow: inset 0 0 0 2px var(--border-strong);
+  margin-top: var(--space-xs);
+  flex: none;
+  transition: background var(--duration-base) var(--ease-liquid);
+}
+.step__line {
+  width: 2px;
+  flex: 1;
+  background: var(--border);
+  min-height: 26px;
+}
+.step--done .step__dot {
+  background: var(--brand);
+  box-shadow: none;
+}
+.step--done .step__line {
+  background: var(--brand);
+}
+.step--now .step__dot {
+  background: var(--brand);
+  box-shadow: 0 0 0 4px var(--brand-tint);
+  animation: breathe 1.6s var(--ease-liquid) 2;
+}
+@keyframes breathe {
+  50% {
+    box-shadow: 0 0 0 8px var(--brand-tint);
+  }
+}
+.step__body {
+  padding-bottom: var(--space-lg);
+  flex: 1;
+}
+
+/* ── Fly-to-cart ──────────────────────────────────────────────────────────── */
+
+.flyer {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: 0 8px 20px -6px rgba(18, 17, 16, 0.3);
+  z-index: 80;
+  pointer-events: none;
+  overflow: hidden;
+}
+.flyer img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
+}
+
+/* ── Banners ──────────────────────────────────────────────────────────────── */
+
+.banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-base);
+  border-radius: var(--radius-xl);
+  background: var(--warning-bg);
+  color: var(--warning-text);
+}
+.banner--info {
+  background: var(--info-bg);
+  color: var(--info);
+}
+.banner--success {
+  background: var(--success-bg);
+  color: var(--success-text);
+}
+
+/* ── OTP ──────────────────────────────────────────────────────────────────── */
+
+.otp {
+  display: flex;
+  gap: var(--space-sm);
+}
+.otp input {
+  width: 46px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-sunken);
+  border: 1.5px solid transparent;
+  text-align: center;
+  font-family: 'Bricolage', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  outline: none;
+  font-variant-numeric: tabular-nums;
+}
+.otp input:focus {
+  border-color: var(--brand);
+  background: var(--surface);
+}
+.shake {
+  animation: shake 340ms var(--ease-standard);
+}
+@keyframes shake {
+  10%,
+  90% {
+    transform: translateX(-2px);
+  }
+  20%,
+  80% {
+    transform: translateX(4px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-6px);
+  }
+  40%,
+  60% {
+    transform: translateX(6px);
+  }
+}
+
+/* ── Membership card ──────────────────────────────────────────────────────── */
+
+.circlecard {
+  border-radius: var(--radius-3xl);
+  background: var(--gradient-peacock-dusk);
+  color: #fbf9f5;
+  padding: var(--space-base);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  position: relative;
+  overflow: hidden;
+}
+.circlecard::after {
+  content: '';
+  position: absolute;
+  right: -30px;
+  top: -40px;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* ── Payment rows ─────────────────────────────────────────────────────────── */
+
+.payrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  width: 100%;
+  text-align: left;
+  box-shadow: inset 0 0 0 1.5px transparent;
+  transition: box-shadow var(--duration-fast) var(--ease-liquid);
+}
+.payrow[aria-checked='true'] {
+  box-shadow: inset 0 0 0 1.5px var(--brand);
+}
+/*
+ * A logo plate, not a square icon. Payment marks are mostly wordmarks — Google Pay is 5.6:1,
+ * HDFC Bank 5.8:1 — and squeezing those into a 36px square either crops them or shrinks them
+ * to an illegible smudge. A wide plate with the mark contained inside is what every real
+ * checkout uses, and it keeps every row's text starting at the same x.
+ */
+.payrow__logo {
+  /* Square, because what sits here now is the brand's icon rather than its full lockup: the
+     four-colour G, the PhonePe roundel, the HDFC block. Paytm is the exception — it has no
+     symbol, so its wordmark sits centred in the same square and reads a little smaller. */
+  width: 44px;
+  height: 44px;
+  padding: var(--space-xs);
+  border-radius: var(--radius-md);
+  display: grid;
+  place-items: center;
+  background: var(--surface-sunken);
+  flex: none;
+}
+.payrow__radio {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--border-strong);
+  flex: none;
+  display: grid;
+  place-items: center;
+}
+.payrow[aria-checked='true'] .payrow__radio {
+  box-shadow: inset 0 0 0 6px var(--brand);
+}
+
+/* ── Spinner ──────────────────────────────────────────────────────────────── */
+
+.spinner {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2.5px solid var(--border);
+  border-top-color: var(--brand);
+  animation: spin 700ms linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Success check ────────────────────────────────────────────────────────── */
+
+.check-draw path {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: draw 520ms var(--ease-liquid) 120ms forwards;
+}
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ── Editorial band ───────────────────────────────────────────────────────── */
+
+/*
+ * A full-bleed tinted section, used once on the home screen for the Tapri sub-brand. It
+ * exists to break the page's rhythm: four product carousels stacked in a row is what makes
+ * a home screen read as generated, and a sub-brand is the natural place to change gear.
+ *
+ * It breaks out of the `.gutter` container with a negative inline margin, then re-applies
+ * the gutter inside, so headings still land on the 16px content edge.
+ */
+.band {
+  margin-inline: calc(var(--layout-screen-gutter) * -1);
+  padding-block: var(--space-xl);
+}
+.band__inner {
+  padding-inline: var(--layout-screen-gutter);
+}
+/* Mixed against the canvas rather than hard-coded, so it tints correctly in both themes. */
+.band--tapri {
+  background: color-mix(in srgb, var(--kulhad-500) 9%, var(--canvas));
+}
+
+/*
+ * Brand marks sit on a fixed light tile in both themes. A payment mark is defined by its
+ * colour — inverting Paytm's navy or Visa's blue for dark mode stops it being the mark, and
+ * every brand's guidelines ask for a light ground. So this tile does not follow the theme.
+ */
+.payrow__logo--brand {
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(18, 17, 16, 0.08);
+}
+/* Two schemes side by side on the "add a card" row. */
+.payrow__accepts {
+  display: flex;
+  gap: var(--space-xs);
+  flex: none;
+}
+/* The card scheme, on the trailing edge — issuing bank leads, scheme follows, as on the card. */
+.payrow__network {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 28px;
+  padding: var(--space-xs);
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(18, 17, 16, 0.08);
+}
+
+/* ── The shop ─────────────────────────────────────────────────────────────── */
+
+/*
+ * The card that replaced the marketing headline. It is deliberately the warmest surface on the
+ * screen — a kulhad-tinted band rather than another white card — because the point it makes is
+ * that you are looking at a shop on your street, not a fulfilment node.
+ */
+.shopcard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  text-align: left;
+  /* The scroll container is not a flex column, so the gap to the next section is set here. */
+  margin: var(--space-sm) var(--layout-screen-gutter) var(--space-xl);
+  width: calc(100% - var(--layout-screen-gutter) * 2);
+  padding: var(--space-base);
+  border-radius: var(--radius-3xl);
+  background: color-mix(in srgb, var(--kulhad-500) 8%, var(--canvas));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--kulhad-500) 16%, transparent);
+}
+.shopcard__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+}
+.shopcard__mark {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+/* The keeper's line for the day. Set as speech, because that is what it is. */
+.shopcard__note {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding-left: var(--space-md);
+  border-left: 2px solid color-mix(in srgb, var(--kulhad-500) 34%, transparent);
+}
+.shopcard__quote {
+  font-family: 'Bricolage', sans-serif;
+  font-size: var(--text-callout-size);
+  line-height: 22px;
+  font-weight: 600;
+}
+
+/* ── Your usual ───────────────────────────────────────────────────────────── */
+
+.usual {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-base);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+}
+.usual__items {
+  display: flex;
+  gap: var(--space-md);
+  overflow-x: auto;
+  scroll-padding-inline: 0;
+}
+/* No captions. The packs are legible enough to name themselves, and "Aashirv…" under a
+   picture of an Aashirvaad atta bag is noise, not information. */
+.usual__item {
+  flex: none;
+}
+.usual__item .thumb {
+  width: 56px;
+  height: 56px;
+}

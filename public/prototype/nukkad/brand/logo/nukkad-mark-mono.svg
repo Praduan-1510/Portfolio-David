@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Nukkad">
+  <title>Nukkad</title>
+  <!--
+    THE TURN — Nukkad's master mark.
+
+    A lowercase 'n' drawn as one road that turns a corner. The right leg stops short and a dot
+    completes it: the destination, just around the corner. The gap between them is half a stroke
+    wide, and that gap is the last minute of the delivery. The arch's negative space is a doorway.
+
+    Two shapes, one colour, no effects — which is why it survives at 16px, under Android's
+    monochrome theming, and inside an iOS 26 tinted icon.
+
+    Geometry is fixed. Do not re-space it:
+      stroke 18, round caps  ·  stems at x=30 and x=70  ·  arc radius 20  ·  dot r=9 at (70,77)
+      optical centre 50,50   ·  gap between leg cap and dot = 9.5 (half a stroke)
+  -->
+  <path d="M30 79V41a20 20 0 0 1 40 0v8" fill="none" stroke="currentColor" stroke-width="18"
+        stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="70" cy="77" r="9" fill="currentColor" />
+</svg>

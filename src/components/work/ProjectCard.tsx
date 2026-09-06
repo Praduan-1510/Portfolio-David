@@ -91,6 +91,8 @@ export function ProjectCard({
           {/* Cover frame: a portrait phone anchored low (app), or a landscape
               browser window centered in the stage (web). */}
           <div
+            // Source for the cover-to-hero handoff (components/motion/HandoffLayer).
+            data-handoff-source={project.slug}
             className={cn(
               "absolute left-1/2 -translate-x-1/2 transition-transform duration-base ease-out-quad will-change-transform",
               isWeb

@@ -358,7 +358,7 @@ export default function About() {
       </Container>
 
       <Container>
-        <AnimatedDivider spectrum />
+        <AnimatedDivider ink="rule" ticks />
       </Container>
 
       {/* ── Approach ─ numbered principles ──────────────────────────────── */}
@@ -442,7 +442,7 @@ export default function About() {
       </Container>
 
       <Container>
-        <AnimatedDivider spectrum />
+        <AnimatedDivider ink="rule" ticks />
       </Container>
 
       {/* ── Experience ─ the timeline draws on scroll ───────────────────── */}

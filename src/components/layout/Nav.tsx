@@ -133,18 +133,24 @@ export function Nav() {
           </span>
         </div>
 
-        {/* Inline nav: md and up. */}
+        {/* Inline nav: md and up. Each link is an armed hairline (.row-arm in
+            globals.css): the current route rests with its rule drawn under the
+            label, hover or focus draws another link's rule from the left, and
+            leaving collapses it to the right. The hue is the link's spectrum
+            position: +1 because the mobile menu numbers from Home, which this
+            row omits, so both menus paint Work, Services... in the same hue. */}
         <nav aria-label="Primary" className="hidden md:block">
           <ul className="flex items-center gap-space-5">
-            {links.slice(1).map((link) => {
+            {links.slice(1).map((link, i) => {
               const active = isActive(pathname, link.href);
               return (
                 <li key={link.href}>
                   <NextLink
                     href={link.href}
                     aria-current={active ? "page" : undefined}
+                    style={{ "--arm": spectrumAt(i + 1) } as React.CSSProperties}
                     className={cn(
-                      "flex h-11 items-center font-sans text-caption transition-colors duration-fast ease-out-quad hover:text-accent",
+                      "relative row-arm row-arm--under flex h-11 items-center font-sans text-caption transition-colors duration-fast ease-out-quad hover:text-accent",
                       active ? "text-fg" : "text-muted",
                     )}
                   >

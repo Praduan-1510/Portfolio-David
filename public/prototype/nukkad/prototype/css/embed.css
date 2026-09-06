@@ -1,0 +1,79 @@
+/*
+ * Embed shell.
+ *
+ * Two jobs: draw the phone frame at every viewport width rather than only above 880px, and
+ * scale the device down to fit whatever container it lands in. The frame rules are duplicated
+ * from the desktop media query in screens.css deliberately — that one is keyed to viewport
+ * width because on a real phone the app should be full-bleed, and this page needs the opposite.
+ */
+
+.embed {
+  margin: 0;
+  background:
+    radial-gradient(1200px 600px at 15% -10%, rgba(11, 124, 118, 0.14), transparent 60%),
+    radial-gradient(900px 500px at 100% 110%, rgba(247, 179, 43, 0.12), transparent 60%),
+    var(--canvas);
+}
+
+/*
+ * The device is taken out of flow and centred absolutely. `transform` scales what is painted
+ * but not what is laid out, so leaving the 874px element in flow made the page grow to 874px
+ * and scroll inside a 760px frame — the scale was correct and the position was not.
+ */
+.embed__stage {
+  position: relative;
+  height: 100dvh;
+  min-height: 100dvh;
+  padding: 0;
+  background: none;
+  overflow: hidden;
+}
+
+.embed .device {
+  width: 402px;
+  height: 874px;
+  flex: none;
+  border-radius: 54px;
+  overflow: hidden;
+  background: var(--canvas);
+  /* Scaled rather than reflowed, so the mock shows this design at its real size. */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* Centred with margins, not translate(-50%). Percentage translations resolve against the
+     unscaled 402x874 box, so they shift by the full half-width however small the scale is and
+     the phone drifts off-centre. Margins are layout, so they centre the box before it shrinks
+     and `scale` about the centre keeps it there. */
+  margin-top: -437px;
+  margin-left: -201px;
+  transform: scale(var(--device-scale, 1));
+  transform-origin: center center;
+  box-shadow:
+    0 0 0 12px #1a1a1c,
+    0 0 0 13px rgba(255, 255, 255, 0.14),
+    0 40px 90px -20px rgba(18, 17, 16, 0.45);
+}
+
+/* The pill cut-out. Small detail, but its absence is what makes a mock look flat. */
+.embed .device::after {
+  content: '';
+  position: absolute;
+  top: 11px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 108px;
+  height: 30px;
+  border-radius: 16px;
+  background: #0a0a0b;
+  z-index: 90;
+  pointer-events: none;
+}
+
+.embed .device__status {
+  display: flex;
+}
+
+/* The context panel does not exist here; make sure nothing reserves room for it. */
+.embed .side {
+  display: none;
+}

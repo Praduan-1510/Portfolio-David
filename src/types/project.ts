@@ -46,7 +46,9 @@ export interface PrototypeSurface {
 
 /** A playable prototype embedded in the case study: the alternative
  *  centerpiece to `video` for a `kind: "web"` study, used when the work IS a
- *  working artefact rather than a shipped site to record. */
+ *  working artefact rather than a shipped site to record. An "app" study may
+ *  carry one too; there it takes the signature-showcase slot under the hero,
+ *  the way a Figma prototype does. */
 export interface ProjectPrototype {
   /** Screenshot shown before the visitor launches the demo. */
   poster: string;
@@ -54,6 +56,11 @@ export interface ProjectPrototype {
   alt?: string;
   /** Frame aspect (w/h) for the desktop viewport. Default 1.6. */
   aspect?: number;
+  /** Device viewports offered by the frame's switcher. Default: all three.
+   *  A phone prototype that only draws its stage above a desktop width and
+   *  is otherwise full-bleed should omit "tablet", where it would show a phone
+   *  layout stretched to tablet width. */
+  devices?: ("desktop" | "tablet" | "phone")[];
   /** One line under the frame: how to actually use the demo. */
   hint?: string;
   /** What this specific prototype does when it opens: the middle sentence of

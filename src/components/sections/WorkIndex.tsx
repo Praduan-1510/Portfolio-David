@@ -62,7 +62,7 @@ export function WorkIndex({ projects }: { projects: ProjectMeta[] }) {
  * work. So they get a labelled shelf: named, dated, honestly framed, one click
  * away, and visibly not the headline.
  *
- * One list at every breakpoint — no board, no preview stage, no media. The
+ * One list at every breakpoint: no board, no preview stage, no media. The
  * absence of imagery IS the demotion; a compact card grid would just be the
  * main tier again at 80% size.
  */
@@ -83,7 +83,11 @@ function ConceptTier({ projects }: { projects: ProjectMeta[] }) {
 
         <StaggerGroup as="ul" from="below" className="mt-space-6 border-t border-line">
           {projects.map((project) => (
-            <li key={project.slug} className="border-b border-line">
+            <li
+              key={project.slug}
+              className="row-arm border-b border-line"
+              style={{ "--arm": project.accent } as React.CSSProperties}
+            >
               <NextLink
                 href={`/work/${project.slug}`}
                 aria-label={`View case study: ${project.title}`}
@@ -106,7 +110,7 @@ function ConceptTier({ projects }: { projects: ProjectMeta[] }) {
                   </span>
                   <span
                     aria-hidden="true"
-                    className="shrink-0 text-fg transition-transform duration-base ease-out-quad group-hover:translate-x-1 group-hover:text-neon"
+                    className="row-arrow shrink-0 text-fg transition-transform duration-base ease-out-quad group-hover:translate-x-1 group-active:translate-x-2 group-hover:text-neon"
                   >
                     →
                   </span>
@@ -179,7 +183,7 @@ function WorkStackRow({
     <li
       data-theme="dark"
       style={accentStyle}
-      className="border-t border-line first:border-t-0"
+      className="row-arm border-t border-line first:border-t-0"
     >
       <NextLink
         href={`/work/${project.slug}`}
@@ -300,7 +304,7 @@ function WorkStackRow({
             View case study
             <span
               aria-hidden="true"
-              className="transition-transform duration-base ease-out-quad group-hover:translate-x-1"
+              className="row-arrow transition-transform duration-base ease-out-quad group-hover:translate-x-1 group-active:translate-x-2"
             >
               →
             </span>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Nukkad — Chowk">
+  <title>Nukkad — Chowk</title>
+  <!--
+    A crossroads seen from above: four blocks with a lane-width gutter between them. The
+    bottom-left block is lit - that is the corner shop. Doubles as a UI system for map pins,
+    category tiles and the loading grid. Carries no food connotation, which helps at the
+    trademark office.
+  -->
+  <g fill="#0B7C76">
+    <rect x="8" y="8" width="38" height="38" rx="11" />
+    <rect x="54" y="8" width="38" height="38" rx="11" />
+    <rect x="54" y="54" width="38" height="38" rx="11" />
+  </g>
+  <rect x="8" y="54" width="38" height="38" rx="11" fill="#F7B32B" />
+</svg>

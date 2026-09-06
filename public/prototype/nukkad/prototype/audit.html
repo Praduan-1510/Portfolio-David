@@ -1,0 +1,307 @@
+<!doctype html>
+<!--
+  Layout audit harness.  Open /prototype/audit.html?target=index.html?screen=cart&seed=1
+
+  Loads the app in a phone-sized iframe and measures computed geometry against the rules
+  that are easy to violate by eye and impossible to violate by measurement:
+
+    1  tap targets below 44x44 (Apple HIG / Material floor), pseudo-element hit
+       expansion taken into account
+    2  anything overflowing the screen edge
+    3  padding, margin and gap values off the 4px spacing scale
+    4  left edges of content blocks, flagging near-misses that read as misalignment
+    5  scroll padding vs the height the floating chrome actually occupies
+    6  horizontally clipped text
+    7  rows that claim align-items: center but are not centred
+    8  tap targets closer than 8px, split into contiguous lists (fine) and floating (not)
+
+  Entrance animations are snapped to their end state first: headless pauses the compositor
+  clock, so without that every measurement comes back mid-transform.
+-->
+<meta charset="utf-8" />
+<title>layout audit</title>
+<style>
+  body {
+    margin: 0;
+    font: 12px monospace;
+  }
+  #f {
+    width: 390px;
+    height: 844px;
+    border: 0;
+  }
+  pre {
+    white-space: pre-wrap;
+  }
+</style>
+<iframe id="f"></iframe>
+<pre id="out">running…</pre>
+<script>
+  const params = new URLSearchParams(location.search);
+  const target = params.get('target') || 'index.html?screen=home&seed=1';
+  const f = document.getElementById('f');
+  const out = document.getElementById('out');
+  const L = [];
+  const say = (s) => L.push(s);
+  const r2 = (n) => Math.round(n * 10) / 10;
+
+  const INTERACTIVE =
+    'button,a,input,select,textarea,[role="button"],[data-go],[data-cat],[data-add],[data-inc],[data-dec],[data-open],[data-sub],[data-tab],[data-term],[data-back]';
+
+  function visible(el, d) {
+    const cs = d.defaultView.getComputedStyle(el);
+    if (cs.display === 'none' || cs.visibility === 'hidden' || cs.opacity === '0') return false;
+    const r = el.getBoundingClientRect();
+    return r.width > 0 && r.height > 0;
+  }
+  const label = (el) => {
+    const cls =
+      (el.className && el.className.baseVal !== undefined ? el.className.baseVal : el.className) ||
+      '';
+    const c = String(cls).trim().split(/\s+/).filter(Boolean).slice(0, 3).join('.');
+    const txt = (el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 22);
+    return `${el.tagName.toLowerCase()}${c ? '.' + c : ''}${txt ? ` "${txt}"` : ''}`;
+  };
+
+  /* Headless pauses the compositor clock, so entrance animations sit frozen mid-transform and
+   every measurement comes back scaled. Snap them to their end state and measure steady-state. */
+  function finishAnimations() {
+    const d = f.contentDocument;
+    d.getAnimations().forEach((a) => {
+      try {
+        a.finish();
+      } catch (e) {
+        /* infinite loops */
+      }
+    });
+  }
+
+  function run() {
+    const d = f.contentDocument,
+      w = f.contentWindow;
+    const screen = d.querySelector('.screen') || d.body;
+    const sr = screen.getBoundingClientRect();
+    say(`### ${target}`);
+    say(`viewport 390x844  screen ${r2(sr.width)}x${r2(sr.height)} @ x=${r2(sr.left)}`);
+
+    // --- 1. Touch targets (skill §2 touch-target-size: min 44x44) --------------
+    const small = [];
+    d.querySelectorAll(INTERACTIVE).forEach((el) => {
+      if (!visible(el, d)) return;
+      const r = el.getBoundingClientRect();
+      // A control may be visually small but carry a ::after hit-area expansion.
+      const a = w.getComputedStyle(el, '::after');
+      const grown = a && a.content && a.content !== 'none';
+      const hitW = grown ? Math.max(r.width, parseFloat(a.minWidth) || 0) : r.width;
+      const hitH = grown ? Math.max(r.height, parseFloat(a.minHeight) || 0) : r.height;
+      if (hitW < 43.5 || hitH < 43.5) {
+        small.push(
+          `${r2(r.width)}x${r2(r.height)}${grown ? ` (hit ${r2(hitW)}x${r2(hitH)})` : ''}  ${label(el)}`,
+        );
+      }
+    });
+    say(`\n[1] TOUCH TARGETS < 44x44 — ${small.length}`);
+    small.slice(0, 24).forEach((s) => say('    ' + s));
+
+    // --- 2. Horizontal overflow past the screen edge (§5 horizontal-scroll) ----
+    const over = [];
+    d.querySelectorAll('.screen *').forEach((el) => {
+      if (!visible(el, d)) return;
+      const r = el.getBoundingClientRect();
+      if (r.right > sr.right + 0.5 || r.left < sr.left - 0.5) {
+        const cs = w.getComputedStyle(el);
+        if (cs.position === 'fixed' || cs.position === 'absolute') return;
+        // An element that overflows an ancestor which clips it is not a horizontal-scroll
+        // bug: that is what a carousel, a rail and a scroller all are. Walk up to the screen
+        // looking for anything that actually clips or scrolls on the x axis.
+        let clipped = false;
+        for (let a = el.parentElement; a && a !== screen.parentElement; a = a.parentElement) {
+          const ox = w.getComputedStyle(a).overflowX;
+          if (ox === 'hidden' || ox === 'auto' || ox === 'scroll') {
+            clipped = true;
+            break;
+          }
+        }
+        if (clipped) return;
+        over.push(`L${r2(r.left - sr.left)} R+${r2(r.right - sr.right)}  ${label(el)}`);
+      }
+    });
+    say(`\n[2] OVERFLOWS SCREEN EDGE — ${over.length}`);
+    over.slice(0, 18).forEach((s) => say('    ' + s));
+
+    // --- 3. Spacing off the 4px grid (§5 spacing-scale) ------------------------
+    const bad = new Map();
+    const props = [
+      'paddingTop',
+      'paddingRight',
+      'paddingBottom',
+      'paddingLeft',
+      'marginTop',
+      'marginBottom',
+      'rowGap',
+      'columnGap',
+    ];
+    d.querySelectorAll('.screen *').forEach((el) => {
+      if (!visible(el, d)) return;
+      const cs = w.getComputedStyle(el);
+      props.forEach((p) => {
+        const v = parseFloat(cs[p]);
+        if (!v || v <= 0 || Number.isNaN(v)) return;
+        if (v % 4 !== 0 && v !== 1 && v !== 2 && v !== 6 && v !== 10 && v !== 14 && v !== 18) {
+          const k = `${p}:${r2(v)}  ${label(el).split(' "')[0]}`;
+          bad.set(k, (bad.get(k) || 0) + 1);
+        }
+      });
+    });
+    say(`\n[3] SPACING OFF THE 4px GRID — ${bad.size} distinct`);
+    [...bad.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 18)
+      .forEach(([k, n]) => say(`    x${n}  ${k}`));
+
+    // --- 4. Left-edge alignment of content blocks (§5 visual-hierarchy) --------
+    const scroll = d.querySelector('.screen__scroll');
+    const edges = new Map();
+    if (scroll) {
+      const walk = (node, depth) => {
+        [...node.children].forEach((el) => {
+          if (!visible(el, d)) return;
+          const cs = w.getComputedStyle(el);
+          if (cs.position === 'fixed' || cs.position === 'absolute') return;
+          const r = el.getBoundingClientRect();
+          if (r.width < 120) return;
+          const x = r2(r.left - sr.left);
+          if (!edges.has(x)) edges.set(x, []);
+          edges.get(x).push(label(el));
+          if (depth < 2) walk(el, depth + 1);
+        });
+      };
+      walk(scroll, 0);
+    }
+    const xs = [...edges.keys()].sort((a, b) => a - b);
+    say(`\n[4] LEFT EDGES of wide blocks — ${xs.length} distinct: ${xs.join(', ')}`);
+    xs.forEach((x) => say(`    @${x}px  ${edges.get(x).slice(0, 3).join(' | ')}`));
+    // near-misses: two edges within 6px but not equal = misalignment
+    for (let i = 1; i < xs.length; i += 1) {
+      if (xs[i] - xs[i - 1] <= 6) {
+        say(`    NEAR-MISS ${xs[i - 1]} vs ${xs[i]}:`);
+        say(
+          `      @${xs[i - 1]}  ${edges
+            .get(xs[i - 1])
+            .slice(0, 2)
+            .join(' | ')}`,
+        );
+        say(`      @${xs[i]}  ${edges.get(xs[i]).slice(0, 2).join(' | ')}`);
+      }
+    }
+
+    // --- 5. Content hidden behind fixed chrome (§5 fixed-element-offset) -------
+    const chromeHost = d.querySelector('#chrome');
+    const chrome = chromeHost ? [...chromeHost.children].filter((el) => visible(el, d)) : [];
+    say(`\n[5] FIXED CHROME vs SCROLL PADDING`);
+    if (scroll) {
+      const pb = parseFloat(w.getComputedStyle(scroll).paddingBottom);
+      const topMost = chrome.length
+        ? Math.min(...chrome.map((el) => el.getBoundingClientRect().top))
+        : sr.bottom;
+      const needed = r2(sr.bottom - topMost);
+      say(
+        `    scroll padding-bottom ${pb}px  |  chrome occupies bottom ${needed}px  |  ${pb >= needed ? 'OK' : 'SHORT by ' + r2(needed - pb) + 'px'}`,
+      );
+      chrome.forEach((el) =>
+        say(
+          `    chrome: ${label(el).split(' "')[0]} top=${r2(el.getBoundingClientRect().top - sr.top)} h=${r2(el.getBoundingClientRect().height)}`,
+        ),
+      );
+    }
+
+    // --- 6. Clipped text (§6 truncation-strategy) ------------------------------
+    const clipped = [];
+    d.querySelectorAll('.screen *').forEach((el) => {
+      if (!visible(el, d) || el.children.length) return;
+      const cs = w.getComputedStyle(el);
+      if (cs.overflowX === 'auto' || cs.overflowX === 'scroll') return;
+      // A hit-area pseudo is 44px wide by design and inflates scrollWidth on a control that is
+      // deliberately smaller. Nothing is clipped — the pseudo has no content and does not
+      // scroll — so it is measured the same way check 1 measures it.
+      const after = w.getComputedStyle(el, '::after');
+      if (after && after.content !== 'none' && parseFloat(after.minWidth) >= 44) return;
+      if (el.scrollWidth > el.clientWidth + 1 && el.clientWidth > 0) {
+        clipped.push(`${el.scrollWidth}>${el.clientWidth}  ${label(el)}`);
+      }
+    });
+    say(`\n[6] TEXT CLIPPED HORIZONTALLY — ${clipped.length}`);
+    clipped.slice(0, 14).forEach((s) => say('    ' + s));
+
+    // --- 7. Vertical centring inside .row (alignment) --------------------------
+    const rows = [];
+    d.querySelectorAll('.screen .row').forEach((el) => {
+      if (!visible(el, d)) return;
+      const cs = w.getComputedStyle(el);
+      if (cs.alignItems !== 'center') return;
+      const kids = [...el.children].filter((k) => visible(k, d));
+      if (kids.length < 2) return;
+      const centres = kids.map((k) => {
+        const r = k.getBoundingClientRect();
+        return r.top + r.height / 2;
+      });
+      const spread = Math.max(...centres) - Math.min(...centres);
+      if (spread > 2)
+        rows.push(
+          `spread ${r2(spread)}px  ${label(el).split(' "')[0]}  kids=${kids.map((k) => k.tagName.toLowerCase()).join(',')}`,
+        );
+    });
+    say(`\n[7] ROWS NOT VERTICALLY CENTRED (>2px) — ${rows.length}`);
+    rows.slice(0, 12).forEach((s) => say('    ' + s));
+
+    // --- 8. Gap between adjacent tap targets (skill §2 touch-spacing: 8px min) ---
+    const targets = [...d.querySelectorAll(INTERACTIVE)].filter((el) => visible(el, d));
+    const tight = [];
+    for (let i = 0; i < targets.length; i += 1) {
+      for (let j = i + 1; j < targets.length; j += 1) {
+        const a = targets[i],
+          b = targets[j];
+        if (a.contains(b) || b.contains(a)) continue;
+        // Fixed chrome floats over the page; a gap measured across that boundary is not
+        // an adjacency a thumb can mis-hit.
+        if (!!a.closest('#chrome-host') !== !!b.closest('#chrome-host')) continue;
+        const ra = a.getBoundingClientRect(),
+          rb = b.getBoundingClientRect();
+        const dx = Math.max(ra.left - rb.right, rb.left - ra.right);
+        const dy = Math.max(ra.top - rb.bottom, rb.top - ra.bottom);
+        if (dx > 0 && dy > 0) continue; // diagonal neighbours, not adjacent
+        const gap = Math.max(dx, dy);
+        if (gap >= 0 && gap < 7.5) {
+          const sameList = a.parentElement === b.parentElement;
+          const par = a.parentElement ? label(a.parentElement).split(' "')[0] : '?';
+          tight.push(
+            `${r2(gap)}px  ${sameList ? 'LIST' : 'FLOAT'} in ${par}: ${label(a).split(' "')[0]} <-> ${label(b).split(' "')[0]}`,
+          );
+        }
+      }
+    }
+    say(`\n[8] TAP TARGETS CLOSER THAN 8px — ${tight.length}`);
+    [...new Set(tight)].slice(0, 14).forEach((t) => say('    ' + t));
+
+    out.textContent = L.join('\n');
+  }
+
+  f.addEventListener('load', () => {
+    let tries = 0;
+    const tick = () => {
+      tries += 1;
+      const d = f.contentDocument;
+      const ready = d && d.querySelector('#screen') && d.querySelector('#screen').children.length;
+      if (ready || tries > 60) {
+        try {
+          finishAnimations();
+          run();
+        } catch (e) {
+          out.textContent = 'AUDIT ERROR: ' + e.stack;
+        }
+      } else requestAnimationFrame(tick);
+    };
+    setTimeout(tick, 1200);
+  });
+  f.src = target;
+</script>

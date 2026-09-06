@@ -22,6 +22,7 @@ import {
   RouteProgressAccent,
   AuroraEmber,
   FlapText,
+  HandoffTarget,
 } from "@/components/motion";
 import { mdxComponents } from "@/components/mdx/mdx-components";
 import { FigmaPrototype } from "@/components/FigmaPrototype";
@@ -103,8 +104,12 @@ export default async function CaseStudy({
   // position on the page goes to the one thing a reader can operate. Studies
   // without one (Voyager, Decathlon) keep the trio exactly as before.
   const showFigmaShowcase = Boolean(meta.figma);
+  // An app study with a playable HTML build (Nukkad) gets the same treatment:
+  // the working thing takes the slot. Web studies already hold theirs in the
+  // hero, so this is app-only.
+  const showLiveShowcase = !showFigmaShowcase && !isWeb && Boolean(meta.prototype);
   const showScreenTrio =
-    !showFigmaShowcase && meta.kind !== "web" && heroScreens.length === 3;
+    !showFigmaShowcase && !showLiveShowcase && meta.kind !== "web" && heroScreens.length === 3;
 
   // Narrative sections (the MDX h2s) for the sticky "Contents" rail: extracted
   // from the raw MDX so the ids match the slugs the heading renderer sets.
@@ -296,6 +301,10 @@ export default async function CaseStudy({
                     "radial-gradient(58% 64% at 50% 46%, color-mix(in srgb, var(--accent) 15%, transparent), transparent 76%)",
                 }}
               />
+              {/* HandoffTarget: the gate the clicked cover flies into on a client
+                  navigation (components/motion/HandoffLayer). A plain block on
+                  hard loads, so the LCP poster paints immediately. */}
+              <HandoffTarget slug={slug}>
               {meta.prototype ? (
                 /* When the deliverable IS a working artefact, the showpiece slot
                    holds the artefact itself rather than a recording of one; the
@@ -329,6 +338,7 @@ export default async function CaseStudy({
                   sizes="(min-width: 768px) 78rem, 92vw"
                 />
               )}
+              </HandoffTarget>
             </Container>
 
             {/* Spec strip below the capture: instrument fact sheet. */}
@@ -468,13 +478,15 @@ export default async function CaseStudy({
                   }
                 />
               ) : (
-                <PhoneFrame
-                  src={meta.cover}
-                  alt={`${meta.title}, cover screen`}
-                  priority
-                  sizes="17rem"
-                  imgClassName="object-top"
-                />
+                <HandoffTarget slug={slug}>
+                  <PhoneFrame
+                    src={meta.cover}
+                    alt={`${meta.title}, cover screen`}
+                    priority
+                    sizes="17rem"
+                    imgClassName="object-top"
+                  />
+                </HandoffTarget>
               )}
             </Reveal>
           </Container>
@@ -488,7 +500,7 @@ export default async function CaseStudy({
           above, so re-showing it here reads as a duplicate: instead mobile drops
           the cover and reveals the two OTHER screens as a balanced pair, so the
           beat shows fresh work at every size. Woven parallax; reduced-motion-safe. */}
-      {(showFigmaShowcase || showScreenTrio) && (
+      {(showFigmaShowcase || showLiveShowcase || showScreenTrio) && (
         <section className="relative isolate overflow-hidden border-b border-line py-space-10">
           <div
             aria-hidden="true"
@@ -519,6 +531,26 @@ export default async function CaseStudy({
                   title={`${meta.title}, interactive Figma prototype`}
                   aspectRatio={meta.figma!.aspect ?? "390 / 844"}
                   caption={meta.figma!.caption}
+                />
+              </Reveal>
+            ) : showLiveShowcase ? (
+              /* The playable HTML build, framed in the house browser chrome with
+                 its device switcher, in the same slot for the same reason. Not
+                 the LCP (the hero cover above is), so no priority. */
+              <Reveal>
+                <LivePrototype
+                  tabs={meta.prototype!.surfaces}
+                  poster={meta.prototype!.poster}
+                  alt={
+                    meta.prototype!.alt ??
+                    `${meta.title}, the prototype before launching it`
+                  }
+                  title={meta.title}
+                  desktopAspect={meta.prototype!.aspect}
+                  devices={meta.prototype!.devices}
+                  hint={meta.prototype!.hint}
+                  launchNote={meta.prototype!.launchNote}
+                  className="my-0"
                 />
               </Reveal>
             ) : (
@@ -752,6 +784,7 @@ export default async function CaseStudy({
                 </span>
               </Reveal>
               <div
+                data-handoff-source={next.slug}
                 className={`hidden shrink-0 sm:block ${
                   next.kind === "web" ? "w-[14rem] lg:w-[19rem]" : "w-[8rem] lg:w-[10rem]"
                 }`}

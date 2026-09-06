@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-glass="on">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Nukkad — prototype</title>
+
+    <!--
+      The prototype on its own, framed as a phone, for embedding in a portfolio.
+
+      index.html pairs the device with a desktop context panel and only draws the frame above
+      880px — below that the app goes full-bleed, which is right for a real phone and wrong for
+      a portfolio column 420px wide. This page always draws the frame and scales the whole
+      device to fit whatever box it is given, so the mock survives being put in an iframe of
+      any size.
+
+      It takes the same deep-link parameters as index.html:
+        ?screen=cart          any route: home categories category search cart checkout payment
+                              placed track orders account circle addresses wallet giftcards
+                              referral coupons help settings
+        &seed=1               a signed-in account with a basket already in it
+        &cat=dairy            which shelf, when screen=category
+        &open=maggi-70        opens that product's sheet
+        &theme=dark  &lang=hi  &glass=off
+    -->
+
+    <link rel="icon" href="../public/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="fonts/Bricolage-800.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="fonts/Plex-400.ttf" as="font" type="font/ttf" crossorigin />
+
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/glass.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/screens.css" />
+    <link rel="stylesheet" href="css/account.css" />
+    <link rel="stylesheet" href="css/embed.css" />
+  </head>
+  <body class="embed">
+    <!-- The refraction filter glass.css references. Chromium only; other engines get blur. -->
+    <svg width="0" height="0" aria-hidden="true" style="position: absolute">
+      <defs>
+        <filter id="nk-refract" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.008 0.012"
+            numOctaves="2"
+            seed="7"
+            result="noise" />
+          <feGaussianBlur in="noise" stdDeviation="1.4" result="soft" />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="soft"
+            scale="16"
+            xChannelSelector="R"
+            yChannelSelector="G" />
+        </filter>
+      </defs>
+    </svg>
+
+    <div class="stage embed__stage">
+      <div class="device" id="device">
+        <div class="device__status">
+          <span>9:41</span>
+          <span class="row gap-xs" aria-hidden="true">
+            <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor">
+              <rect x="0" y="7" width="3" height="4" rx="1" />
+              <rect x="4.5" y="5" width="3" height="6" rx="1" />
+              <rect x="9" y="2.5" width="3" height="8.5" rx="1" />
+              <rect x="13.5" y="0" width="3" height="11" rx="1" />
+            </svg>
+            <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
+              <rect
+                x="0.5"
+                y="0.5"
+                width="21"
+                height="11"
+                rx="3.5"
+                stroke="currentColor"
+                opacity=".4" />
+              <rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor" />
+              <path d="M23 4v4a2 2 0 0 0 0-4z" fill="currentColor" opacity=".5" />
+            </svg>
+          </span>
+        </div>
+
+        <main id="screen" aria-live="polite"></main>
+        <div id="chrome-host"></div>
+        <div id="sheet-host"></div>
+        <div id="toast-host"></div>
+        <div id="fly-host"></div>
+      </div>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+    <script>
+      /*
+       * Scale the whole device to fit its box. A mock has to keep the phone's real pixel size —
+       * reflowing a 402px layout into a 320px column would be a different design, not a smaller
+       * picture of this one — so the frame stays 402x874 and gets transformed down.
+       */
+      (function fitDevice() {
+        const device = document.getElementById('device');
+        const W = 402;
+        const H = 874;
+        const fit = () => {
+          const pad = window.innerWidth < 520 ? 12 : 32;
+          const scale = Math.min(
+            1,
+            (window.innerWidth - pad * 2) / W,
+            (window.innerHeight - pad * 2) / H,
+          );
+          document.body.style.setProperty('--device-scale', scale.toFixed(4));
+        };
+        fit();
+        window.addEventListener('resize', fit, { passive: true });
+        if (window.ResizeObserver) new ResizeObserver(fit).observe(document.documentElement);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-glass="on" data-refract="yes">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nukkad — design system</title>
+    <link rel="icon" href="../public/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/glass.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <style>
+      body {
+        background: var(--canvas);
+        overflow-y: auto;
+        user-select: text;
+        -webkit-user-select: text;
+      }
+      .page {
+        max-width: 940px;
+        margin: 0 auto;
+        padding: 56px 24px 120px;
+      }
+      .head {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 8px;
+      }
+      .lede {
+        max-width: 62ch;
+        color: var(--text-secondary);
+        margin: 0 0 12px;
+      }
+      .block {
+        margin-top: 64px;
+      }
+      .block > h2 {
+        margin: 0 0 6px;
+      }
+      .block > .note {
+        color: var(--text-secondary);
+        max-width: 66ch;
+        margin: 0 0 24px;
+      }
+      .ramp {
+        display: flex;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 10px;
+      }
+      .ramp i {
+        flex: 1;
+        height: 56px;
+        display: grid;
+        place-items: end center;
+        padding-bottom: 6px;
+        font-size: 9px;
+        font-style: normal;
+        font-family: 'Plex';
+        opacity: 0.7;
+      }
+      .swatches {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+      }
+      .swatch {
+        border-radius: 12px;
+        padding: 14px;
+        background: var(--surface);
+        box-shadow: inset 0 0 0 1px var(--border);
+      }
+      .swatch b {
+        display: block;
+        width: 100%;
+        height: 40px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+      }
+      .typerow {
+        padding: 14px 0;
+        box-shadow: inset 0 -1px 0 var(--border);
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 24px;
+      }
+      .glassdemo {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        padding: 34px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: center;
+        background: linear-gradient(
+          120deg,
+          var(--peacock-300),
+          var(--genda-300) 45%,
+          var(--kulhad-300)
+        );
+      }
+      .cols2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
+      }
+      .card {
+        padding: 20px;
+        border-radius: 16px;
+        background: var(--surface);
+        box-shadow: inset 0 0 0 1px var(--border);
+      }
+      .iconwall {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+        gap: 10px;
+      }
+      .iconcell {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 6px;
+        border-radius: 12px;
+        background: var(--surface);
+      }
+      .iconcell span {
+        font-size: 9.5px;
+        color: var(--text-tertiary);
+      }
+      .packwall {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+        gap: 8px;
+      }
+      .packwall img {
+        width: 100%;
+        aspect-ratio: 1;
+        object-fit: contain;
+        background: var(--surface);
+        border-radius: 10px;
+      }
+      .rules {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 12px;
+      }
+      .rule {
+        padding: 14px 16px;
+        border-radius: 12px;
+        background: var(--surface);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .rule.no {
+        box-shadow: inset 3px 0 0 var(--danger);
+      }
+      .rule.yes {
+        box-shadow: inset 3px 0 0 var(--success);
+      }
+      .toolbar {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        display: flex;
+        gap: 8px;
+        padding: 12px 0;
+        background: var(--canvas);
+      }
+      a {
+        color: var(--brand);
+      }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" aria-hidden="true" style="position: absolute">
+      <defs>
+        <filter id="nk-refract" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.008 0.012"
+            numOctaves="2"
+            seed="7"
+            result="noise" />
+          <feGaussianBlur in="noise" stdDeviation="1.4" result="soft" />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="soft"
+            scale="16"
+            xChannelSelector="R"
+            yChannelSelector="G" />
+        </filter>
+      </defs>
+    </svg>
+
+    <div class="page">
+      <div class="toolbar">
+        <button class="chip" id="theme">Dark mode</button>
+        <button class="chip" id="glass">Reduce glass</button>
+        <a class="chip" href="index.html" style="text-decoration: none">← Back to the app</a>
+      </div>
+
+      <div class="head">
+        <img src="../brand/logo/nukkad-mark.svg" alt="" width="52" height="52" />
+        <div>
+          <h1 class="t-large-title" style="margin: 0">Nukkad design system</h1>
+          <p class="t-caption dim" style="margin: 0">Everything, a corner away</p>
+        </div>
+      </div>
+      <p class="lede t-callout">
+        One idea holds this together: <b>edge-of-glass teal</b>. Float glass is clear face-on but
+        glows green-teal at its cut edge, so the brand colour is the material's own edge colour. It
+        also lands in the one hue band no Indian quick-commerce app occupies — Zepto owns violet,
+        Blinkit yellow, Instamart orange, Zomato red, BigBasket lime.
+      </p>
+
+      <!-- ── Logo ─────────────────────────────────────────────────────────── -->
+      <section class="block">
+        <h2 class="t-title2">The mark</h2>
+        <p class="note t-callout">
+          A lowercase <b>n</b> drawn as one road that turns a corner. The right leg stops short and
+          a dot completes it: the destination, just around the corner. The gap between them is half
+          a stroke wide, and that gap is the last minute of the delivery. Two shapes, one colour —
+          which is why it survives at 16px and under Android's monochrome theming.
+        </p>
+        <div class="cols2">
+          <div class="card" style="display: flex; align-items: center; gap: 20px">
+            <img src="../brand/logo/nukkad-mark.svg" width="72" height="72" alt="Nukkad mark" />
+            <img
+              src="../public/icons/icon-192.png"
+              width="64"
+              height="64"
+              alt=""
+              style="border-radius: 22.3%" />
+            <img src="../brand/logo/nukkad-mark.svg" width="32" height="32" alt="" />
+            <img src="../brand/logo/nukkad-mark.svg" width="16" height="16" alt="" />
+          </div>
+          <div
+            class="card"
+            style="background: var(--ink-950); display: flex; align-items: center; gap: 20px">
+            <img src="../brand/logo/nukkad-mark-onDark.svg" width="72" height="72" alt="" />
+            <img
+              src="../assets/images/icon-dark.png"
+              width="64"
+              height="64"
+              alt=""
+              style="border-radius: 22.3%" />
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Colour ───────────────────────────────────────────────────────── -->
+      <section class="block">
+        <h2 class="t-title2">Colour</h2>
+        <p class="note t-callout">
+          Peacock leads. Genda means exactly one thing everywhere in the app — money saved — and
+          kulhad belongs to Tapri. Light mode is warm paper, never pure white; dark mode is
+          teal-cast ink, never pure black.
+        </p>
+        <div id="ramps"></div>
+      </section>
+
+      <!-- ── Type ─────────────────────────────────────────────────────────── -->
+      <section class="block">
+        <h2 class="t-title2">Type</h2>
+        <p class="note t-callout">
+          Bricolage Grotesque carries numbers and headlines, IBM Plex Sans carries words, and Plex
+          Devanagari carries Hindi so a bilingual line does not look like a fallback. Deliberately
+          not Inter, Poppins or Manrope — the default stack of generated interfaces.
+        </p>
+        <div class="typerow">
+          <span class="t-large-title">Everything, a corner away</span
+          ><span class="t-caption2 dim">Large title · Bricolage 700</span>
+        </div>
+        <div class="typerow">
+          <span class="t-title2">Arriving in 12 minutes</span
+          ><span class="t-caption2 dim">Title 2 · 600</span>
+        </div>
+        <div class="typerow">
+          <span class="t-headline">Amul Taaza Toned Milk</span
+          ><span class="t-caption2 dim">Headline · Plex 600</span>
+        </div>
+        <div class="typerow">
+          <span class="t-body">One fee. Free over ₹99. Nothing added later.</span
+          ><span class="t-caption2 dim">Body · Plex 400</span>
+        </div>
+        <div class="typerow">
+          <span class="deva-display" style="font-size: 28px"
+            >नुक्कड़ · सब कुछ, बस एक नुक्कड़ दूर</span
+          ><span class="t-caption2 dim">Anek Devanagari 700</span>
+        </div>
+        <div class="typerow">
+          <span class="row gap-lg">
+            <span class="price t-price-l"
+              ><span><span class="sym">₹</span>1,24,999</span></span
+            >
+            <span class="price t-price-m"
+              ><span><span class="sym">₹</span>27</span><span class="mrp">₹32</span></span
+            >
+            <span class="t-eta">10–14</span>
+          </span>
+          <span class="t-caption2 dim">Prices · tabular, Indian grouping</span>
+        </div>
+      </section>
+
+      <!-- ── Glass ────────────────────────────────────────────────────────── -->
+      <section class="block">
+        <h2 class="t-title2">Liquid Glass</h2>
+        <p class="note t-callout">
+          Glass belongs to the floating control layer and nowhere else. Putting it on product cards
+          is the fastest way to look like generic glassmorphism, so the content layer here stays
+          opaque and the chrome does the refracting. Chromium gets a real SVG displacement filter
+          inside
+          <code>backdrop-filter</code>; Safari and Firefox get blur and saturation; Reduce
+          Transparency gets an opaque surface.
+        </p>
+        <div class="glassdemo">
+          <span class="glass glass--pill" style="padding: 10px 18px">Regular · carries text</span>
+          <span class="glass glass--clear glass--pill" style="padding: 10px 18px; color: #fff"
+            >Clear · icons only</span
+          >
+          <span class="glass glass--brand glass--pill" style="padding: 10px 18px"
+            >Brand tint · the one action</span
+          >
+          <span class="glass" style="padding: 14px 18px; border-radius: 20px"
+            >Regular, 20px radius</span
+          >
+        </div>
+        <div class="rules" style="margin-top: 20px">
+          <div class="rule yes">
+            <b>Yes</b> — dock, cart bar, ETA pill, search field, sheet headers, toasts.
+          </div>
+          <div class="rule no">
+            <b>Never</b> — product cards, the bill, forms, list rows, long text.
+          </div>
+          <div class="rule no">
+            <b>Never</b> — glass stacked on glass, or more than four surfaces at once.
+          </div>
+          <div class="rule yes"><b>Always</b> — a readable fallback under Reduce Transparency.</div>
+        </div>
+      </section>
+
+      <!-- ── Components ───────────────────────────────────────────────────── -->
+      <section class="block">
+        <h2 class="t-title2">Components</h2>
+        <p class="note t-callout">
+          Every control here is content-layer, so nothing in this section is glass.
+        </p>
+        <div class="cols2">
+          <div class="card">
+            <p class="t-eyebrow dim" style="margin-bottom: 12px">Buttons</p>
+            <div class="col gap-sm">
+              <button class="btn btn--primary btn--block btn--pay">
+                <span>Pay ₹412</span><span class="t-subhead">Continue ›</span>
+              </button>
+              <button class="btn btn--secondary btn--block">Secondary</button>
+              <button class="btn btn--ghost btn--block">Ghost</button>
+            </div>
+          </div>
+          <div class="card">
+            <p class="t-eyebrow dim" style="margin-bottom: 12px">Steppers, badges, marks</p>
+            <div class="row wrap gap-md">
+              <button class="stepper stepper--add">ADD</button>
+              <span class="stepper"
+                ><button>−</button><span class="qty">2</span><button>+</button></span
+              >
+              <span class="badge badge--deal">12% OFF</span>
+              <span class="badge badge--new">New</span>
+              <span class="row gap-xs"
+                ><span class="diet diet--veg"></span><span class="t-caption dim">Veg</span></span
+              >
+              <span class="row gap-xs"
+                ><span class="diet diet--non-veg"></span
+                ><span class="t-caption dim">Non-veg</span></span
+              >
+            </div>
+          </div>
+          <div class="card">
+            <p class="t-eyebrow dim" style="margin-bottom: 12px">The bill</p>
+            <div class="bill">
+              <div class="bill__row"><span class="muted">Item total</span><span>₹412</span></div>
+              <div class="bill__row bill__row--save">
+                <span class="muted">Savings on MRP</span><span>− ₹49</span>
+              </div>
+              <div class="bill__row bill__row--free">
+                <span class="muted">Delivery</span
+                ><span><span class="bill__strike">₹30</span>FREE</span>
+              </div>
+              <div class="bill__rule"></div>
+              <div class="bill__row">
+                <span class="bill__total">To pay</span><span class="bill__total">₹363</span>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <p class="t-eyebrow dim" style="margin-bottom: 12px">Progress and chips</p>
+            <div class="col gap-md">
+              <div class="progress"><div class="progress__fill" style="width: 64%"></div></div>
+              <div class="row wrap gap-sm">
+                <span class="chip chip--on">Selected</span>
+                <span class="chip">Default</span>
+                <span class="chip chip--outline">Outline</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Icons ────────────────────────────────────────────────────────── -->
+      <section class="block">
+        <h2 class="t-title2">Icons</h2>
+        <p class="note t-callout">
+          The marks that carry meaning are drawn for Nukkad: a shopfront with a half-rolled shutter,
+          a jaali screen with one cell lit, a cloth jhola, a door nameplate, and a bolt whose lower
+          half turns ninety degrees — the corner.
+        </p>
+        <div class="iconwall" id="icons"></div>
+      </section>
+
+      <!-- ── Product art ──────────────────────────────────────────────────── -->
+      <section class="block">
+        <h2 class="t-title2">Product art</h2>
+        <p class="note t-callout">
+          Eighty-six packs, all generated from source. Each is a silhouette archetype chosen by
+          shelf (carton, sack, tin, tube, blister), a hue keyed to the brand, and a contact shadow.
+          Open packshot databases do cover Indian SKUs, but a mix of studio shots and phone photos
+          taken on kitchen floors reads as scraped — one illustrated system reads as a shop with a
+          shelf standard.
+        </p>
+        <div class="packwall" id="packs"></div>
+      </section>
+    </div>
+
+    <script type="module">
+      import { products } from '../prototype/data/catalog.js';
+      import { icons } from './js/icons.js';
+
+      const RAMPS = {
+        peacock: [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950],
+        kulhad: [50, 100, 200, 300, 400, 500, 600, 700, 800, 900],
+        genda: [50, 100, 200, 300, 400, 500, 600, 700],
+        paper: [0, 50, 100, 200, 300, 400, 500, 600, 700],
+        ink: [950, 900, 800, 700, 600, 500, 400, 300, 200, 100, 50],
+      };
+      const css = getComputedStyle(document.documentElement);
+      document.getElementById('ramps').innerHTML = Object.entries(RAMPS)
+        .map(
+          ([name, steps]) => `
+    <p class="t-eyebrow dim" style="margin:18px 0 6px">${name}</p>
+    <div class="ramp">${steps
+      .map((step) => {
+        const value = css.getPropertyValue(`--${name}-${step}`).trim();
+        const dark = step >= 500 || (name === 'ink' && step >= 500);
+        return `<i style="background:${value};color:${dark ? '#fff' : '#121110'}">${step}</i>`;
+      })
+      .join('')}</div>`,
+        )
+        .join('');
+
+      document.getElementById('icons').innerHTML = Object.keys(icons)
+        .map(
+          (name) => `<div class="iconcell">${icons[name]({ size: 24 })}<span>${name}</span></div>`,
+        )
+        .join('');
+
+      document.getElementById('packs').innerHTML = products
+        .map(
+          (p) =>
+            `<img src="${p.image.replace('../', '../')}" alt="${p.name}" title="${p.name}" loading="lazy" />`,
+        )
+        .join('');
+
+      document.getElementById('theme').addEventListener('click', (e) => {
+        const dark = document.documentElement.dataset.theme === 'dark';
+        document.documentElement.dataset.theme = dark ? 'light' : 'dark';
+        e.target.textContent = dark ? 'Dark mode' : 'Light mode';
+        e.target.classList.toggle('chip--on', !dark);
+      });
+      document.getElementById('glass').addEventListener('click', (e) => {
+        const off = document.documentElement.dataset.glass === 'off';
+        document.documentElement.dataset.glass = off ? 'on' : 'off';
+        e.target.textContent = off ? 'Reduce glass' : 'Glass on';
+        e.target.classList.toggle('chip--on', !off);
+      });
+    </script>
+  </body>
+</html>

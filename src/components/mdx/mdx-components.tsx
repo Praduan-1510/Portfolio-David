@@ -1,5 +1,7 @@
 import { Text, Link, BrowserMockup, LivePrototype } from "@/components/primitives";
 import { FigmaPrototype } from "@/components/FigmaPrototype";
+import { AnimatedDivider } from "@/components/motion";
+import { durations } from "@/lib/motion/durations";
 import { slugify } from "@/lib/utils/slugify";
 import { cn } from "@/lib/utils/cn";
 import {
@@ -64,6 +66,11 @@ export const mdxComponents = {
   // h2: section head with an accent tick. Generous top space so sections
   // breathe; the tick is a short --accent rule that anchors the heading and
   // threads the project colour through the column (decorative → aria-hidden).
+  // The tick is an AnimatedDivider, so it draws left to right just before the
+  // heading scrolls into place (ruled entry). The divider paints with bg-line,
+  // so the wrapper remaps the --line token to the accent for its subtree, and
+  // lifts the 1px root to the tick's 2px by specificity (cn() does not merge
+  // classes). Without JS or under reduced motion it is the static tick as before.
   h2: ({ children, ...props }: Props & { children?: React.ReactNode }) => (
     <Text
       as="h2"
@@ -74,8 +81,11 @@ export const mdxComponents = {
     >
       <span
         aria-hidden="true"
-        className="relative top-[-0.18em] h-[2px] w-space-5 shrink-0 rounded-full bg-accent"
-      />
+        className="relative top-[-0.18em] block h-[2px] w-space-5 shrink-0 overflow-hidden rounded-full [&>div]:h-full"
+        style={{ "--line": "var(--accent)" } as React.CSSProperties}
+      >
+        <AnimatedDivider duration={durations.base} />
+      </span>
       <span>{children}</span>
     </Text>
   ),

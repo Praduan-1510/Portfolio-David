@@ -721,6 +721,73 @@
   }
 
   /*
+   * Armed hairline. An interactive row (board row, concept tier, work stack,
+   * desktop nav link) redraws its structural rule in its own accent: drawn from
+   * the LEFT on hover or focus, collapsed to the RIGHT on leave. The origin swap
+   * does both directions with one transform, so the line reads as continuing
+   * past the row rather than retracting. A press snaps it to full at double
+   * weight (a scale, never a height) and nudges the row's `.row-arrow`. Colour
+   * comes from `--arm`, falling back to the local --accent. Transform and
+   * opacity only, no JS, so server-rendered rows get it for free; the global
+   * reduced-motion rule collapses the transitions to an instant state change.
+   */
+  .row-arm {
+    position: relative;
+  }
+  .row-arm::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -1px;
+    height: 1px;
+    background: var(--arm, var(--accent));
+    transform: scaleX(0);
+    transform-origin: right center;
+    opacity: 0.9;
+    transition:
+      transform var(--dur-fast) var(--ease-out-quad),
+      opacity var(--dur-fast) var(--ease-out-quad);
+    pointer-events: none;
+  }
+  @media (hover: hover) {
+    .row-arm:hover::before {
+      transform: scaleX(1);
+      transform-origin: left center;
+      transition-duration: var(--dur-base);
+    }
+  }
+  .row-arm:focus-within::before,
+  .row-arm:focus-visible::before {
+    transform: scaleX(1);
+    transform-origin: left center;
+    transition-duration: var(--dur-base);
+  }
+  /* Nav: the current route rests with its rule drawn, quieter than a hover. */
+  .row-arm[aria-current="page"]::before {
+    transform: scaleX(1);
+    opacity: 0.55;
+  }
+  .row-arm:active::before {
+    transform: scale(1, 2);
+    transform-origin: left top;
+    opacity: 1;
+    transition-duration: var(--dur-instant);
+  }
+  .row-arm:active .row-arrow {
+    transform: translateX(0.5rem);
+    transition-duration: var(--dur-instant);
+  }
+  /* Under variant (nav links): the rule sits on the bottom edge instead. */
+  .row-arm--under::before {
+    top: auto;
+    bottom: 0;
+  }
+  .row-arm--under:active::before {
+    transform-origin: left bottom;
+  }
+
+  /*
    * Reel board, portrait layout (below lg): the broadcast lower-third.
    *
    * Below lg the film runs FULL-BLEED behind the board, so legibility here is
@@ -1065,6 +1132,27 @@ html.lenis body {
   }
 }
 
+/* Contact panel busy light (ContactForm.tsx / contact/page.tsx): a bright
+   28%-wide segment of the spectrum crown sweeps the panel's top hairline while
+   a send is in flight. The form island flags the panel data-busy; at rest the
+   segment is parked off-canvas (-translate-x-full) and clipped by the crown.
+   460% = the 28% segment's left edge landing past the crown's right end
+   (100 / 28 is 357%) with room to clear the mask fade. Transform only, and
+   inside the no-preference block so it never starts under reduced motion. */
+@keyframes crown-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(460%);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-busy] .crown-sweep {
+    animation: crown-sweep var(--dur-ambient) var(--ease-linear) infinite;
+  }
+}
+
 /* Hero background map: a barely-perceptible slow drift (gentle zoom + pan) so the
    decorative map feels alive without ever competing with the headline. The map
    wrapper is oversized (-inset) so the drift never reveals an edge. Gated to
@@ -1234,25 +1322,47 @@ html.lenis body {
   transition: transform var(--dur-base) var(--ease-out-quad);
   will-change: transform;
 }
+/* The armed shutter's rest is off-screen; the no-preference block below (later
+   in source, same specificity) raises it over the screen. So a runtime switch to
+   reduced motion uncovers the screen even before JS drops the shutter. */
+.bm-shutter-armed { transform: translateY(100%); }
 @media (prefers-reduced-motion: no-preference) {
-  .browser-slab[data-boot] .bm-dot {
+  /* The boot sequence itself, shared by the hero (data-boot="") and the in-view
+     boot on still frames (data-boot="inView"). Only the delays differ, below. */
+  [data-boot] .bm-dot {
     animation: bm-pop 0.4s var(--ease-out-back) both;
   }
+  [data-boot] .bm-url {
+    animation: bm-url-in 0.5s var(--ease-out-expo) both;
+  }
+  [data-boot] .bm-shutter {
+    animation: bm-shutter 0.85s var(--ease-in-out-quart) both;
+  }
+  [data-boot] .bm-badge {
+    animation: bm-blink 0.5s var(--ease-out-back) both;
+  }
+  /* Hero: the chrome waits for the slab to land (browser-land) before it lights
+     up, so every delay leads with the landing. */
   .browser-slab[data-boot] .bm-dot:nth-child(1) { animation-delay: 0.42s; }
   .browser-slab[data-boot] .bm-dot:nth-child(2) { animation-delay: 0.49s; }
   .browser-slab[data-boot] .bm-dot:nth-child(3) { animation-delay: 0.56s; }
-  .browser-slab[data-boot] .bm-url {
-    animation: bm-url-in 0.5s var(--ease-out-expo) both;
-    animation-delay: 0.58s;
-  }
-  .browser-slab[data-boot] .bm-shutter {
-    animation: bm-shutter 0.85s var(--ease-in-out-quart) both;
-    animation-delay: 0.72s;
-  }
-  .browser-slab[data-boot] .bm-badge {
-    animation: bm-blink 0.5s var(--ease-out-back) both;
-    animation-delay: 1.55s;
-  }
+  .browser-slab[data-boot] .bm-url { animation-delay: 0.58s; }
+  .browser-slab[data-boot] .bm-shutter { animation-delay: 0.72s; }
+  .browser-slab[data-boot] .bm-badge { animation-delay: 1.55s; }
+  /* In-view boot: a still frame powers on as it is reached. No landing to wait
+     for, so the chrome lights the moment the frame arrives. */
+  [data-boot="inView"] .bm-dot:nth-child(1) { animation-delay: 0s; }
+  [data-boot="inView"] .bm-dot:nth-child(2) { animation-delay: 0.07s; }
+  [data-boot="inView"] .bm-dot:nth-child(3) { animation-delay: 0.14s; }
+  [data-boot="inView"] .bm-url { animation-delay: 0.16s; }
+  [data-boot="inView"] .bm-shutter { animation-delay: 0.3s; }
+  /* Armed, not yet booted: the device is off. Dots and pill rest at their
+     keyframes' `from` so the boot picks up without a jump, and the shutter
+     covers the screen. JS sets this only on frames below the fold (never on one
+     already in view, so nothing ever flashes dark) and only with motion allowed. */
+  [data-armed] .bm-dot { opacity: 0; transform: scale(0); }
+  [data-armed] .bm-url { opacity: 0; transform: translateY(-5px); }
+  .bm-shutter-armed { transform: translateY(0); }
 }
 @keyframes bm-pop {
   from { opacity: 0; transform: scale(0); }
@@ -1534,6 +1644,15 @@ html.lenis body {
   55% {
     box-shadow: 0 0 0 10px color-mix(in srgb, var(--accent) 0%, transparent);
   }
+}
+
+/* The ignition scanline (LivePrototype): the 2px accent line that rides the
+   poster's cut edge when the iframe has loaded. Same recipe as the boot
+   shutter's line in BrowserMockup (inline there); a class here so the JS wipe
+   only ever moves it and fades it. */
+.lp-scan {
+  background: var(--accent);
+  box-shadow: 0 0 16px 1px color-mix(in srgb, var(--accent) 75%, transparent);
 }
 
 /* ── Figma prototype frame (FigmaPrototype.tsx) ──────────────────────────────

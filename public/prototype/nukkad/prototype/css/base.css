@@ -1,0 +1,380 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Nukkad — foundations.
+   Typefaces are vendored so the prototype opens offline, straight from disk.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@font-face {
+  font-family: 'Bricolage';
+  src: url('../fonts/Bricolage-600.ttf') format('truetype');
+  font-weight: 600;
+  font-display: block;
+}
+@font-face {
+  font-family: 'Bricolage';
+  src: url('../fonts/Bricolage-700.ttf') format('truetype');
+  font-weight: 700;
+  font-display: block;
+}
+@font-face {
+  font-family: 'Bricolage';
+  src: url('../fonts/Bricolage-800.ttf') format('truetype');
+  font-weight: 800;
+  font-display: block;
+}
+@font-face {
+  font-family: 'Plex';
+  src: url('../fonts/Plex-400.ttf') format('truetype');
+  font-weight: 400;
+  font-display: block;
+}
+@font-face {
+  font-family: 'Plex';
+  src: url('../fonts/Plex-500.ttf') format('truetype');
+  font-weight: 500;
+  font-display: block;
+}
+@font-face {
+  font-family: 'Plex';
+  src: url('../fonts/Plex-600.ttf') format('truetype');
+  font-weight: 600;
+  font-display: block;
+}
+@font-face {
+  font-family: 'PlexDeva';
+  src: url('../fonts/PlexDeva-400.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PlexDeva';
+  src: url('../fonts/PlexDeva-500.ttf') format('truetype');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'AnekDeva';
+  src: url('../fonts/AnekDeva-700.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family:
+    'Plex',
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    sans-serif;
+  font-size: var(--text-body-size);
+  line-height: var(--text-body-line);
+  color: var(--text);
+  background: var(--canvas);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* A shopping surface, not a document: no accidental selection while tapping steppers. */
+  user-select: none;
+  -webkit-user-select: none;
+  overscroll-behavior: none;
+}
+
+input,
+textarea {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+* {
+  scrollbar-width: none;
+}
+
+/* ── Type scale ────────────────────────────────────────────────────────────
+   Bricolage carries numbers and headlines; Plex carries words. Prices, ETAs,
+   quantities and timers are all tabular so nothing shifts as digits change.
+   ──────────────────────────────────────────────────────────────────────── */
+
+.t-display,
+.t-large-title,
+.t-title1,
+.t-title2,
+.t-title3,
+.t-price-l,
+.t-price-m,
+.t-price-s,
+.t-eta {
+  font-family: 'Bricolage', 'Plex', sans-serif;
+  margin: 0;
+}
+
+.t-display {
+  font-size: var(--text-display-size);
+  line-height: var(--text-display-line);
+  letter-spacing: -0.02em;
+  font-weight: 800;
+}
+.t-large-title {
+  font-size: var(--text-large-title-size);
+  line-height: var(--text-large-title-line);
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+.t-title1 {
+  font-size: var(--text-title1-size);
+  line-height: var(--text-title1-line);
+  letter-spacing: -0.015em;
+  font-weight: 700;
+}
+.t-title2 {
+  font-size: var(--text-title2-size);
+  line-height: var(--text-title2-line);
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+.t-title3 {
+  font-size: var(--text-title3-size);
+  line-height: var(--text-title3-line);
+  font-weight: 600;
+}
+
+.t-headline {
+  font-size: var(--text-headline-size);
+  line-height: var(--text-headline-line);
+  font-weight: 600;
+  margin: 0;
+}
+.t-body {
+  font-size: var(--text-body-size);
+  line-height: var(--text-body-line);
+  margin: 0;
+}
+.t-callout {
+  font-size: var(--text-callout-size);
+  line-height: var(--text-callout-line);
+  margin: 0;
+}
+.t-subhead {
+  font-size: var(--text-subhead-size);
+  line-height: var(--text-subhead-line);
+  font-weight: 500;
+  margin: 0;
+}
+.t-footnote {
+  font-size: var(--text-footnote-size);
+  line-height: var(--text-footnote-line);
+  margin: 0;
+}
+.t-caption {
+  font-size: var(--text-caption1-size);
+  line-height: var(--text-caption1-line);
+  font-weight: 500;
+  margin: 0;
+}
+.t-caption2 {
+  font-size: var(--text-caption2-size);
+  line-height: var(--text-caption2-line);
+  font-weight: 500;
+  margin: 0;
+}
+
+.t-eyebrow {
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.t-price-l {
+  font-size: var(--text-price-l-size);
+  line-height: var(--text-price-l-line);
+  font-weight: 800;
+}
+.t-price-m {
+  font-size: var(--text-price-m-size);
+  line-height: var(--text-price-m-line);
+  font-weight: 700;
+}
+.t-price-s {
+  font-size: var(--text-price-s-size);
+  line-height: var(--text-price-s-line);
+  font-weight: 700;
+}
+.t-eta {
+  font-size: var(--text-eta-size);
+  line-height: var(--text-eta-line);
+  font-weight: 800;
+}
+
+.tnum,
+.t-price-l,
+.t-price-m,
+.t-price-s,
+.t-eta {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* Hindi has to be told which family to use — no font falls back per-glyph reliably. */
+.deva {
+  font-family: 'PlexDeva', 'Plex', sans-serif;
+}
+.deva-display {
+  font-family: 'AnekDeva', 'PlexDeva', sans-serif;
+  font-weight: 700;
+}
+
+.muted {
+  color: var(--text-secondary);
+}
+.dim {
+  color: var(--text-tertiary);
+}
+.brandc {
+  color: var(--brand);
+}
+.danger {
+  color: var(--danger-text);
+}
+.success {
+  color: var(--success-text);
+}
+
+/* ── Layout helpers ──────────────────────────────────────────────────────── */
+.row {
+  display: flex;
+  align-items: center;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+}
+.between {
+  justify-content: space-between;
+}
+.grow {
+  flex: 1;
+}
+.gap-xs {
+  gap: var(--space-xs);
+}
+.gap-sm {
+  gap: var(--space-sm);
+}
+.gap-md {
+  gap: var(--space-md);
+}
+.gap-base {
+  gap: var(--space-base);
+}
+.gap-lg {
+  gap: var(--space-lg);
+}
+/* Section rhythm on the scrolling screens. These were being used in the markup without ever
+   existing here, so every `col gap-xl` container was collapsing to zero and the home screen's
+   sections ran straight into each other. */
+.gap-xl {
+  gap: var(--space-xl);
+}
+.gap-xxl {
+  gap: var(--space-xxl);
+}
+.wrap {
+  flex-wrap: wrap;
+}
+.center {
+  align-items: center;
+  justify-content: center;
+}
+
+.gutter {
+  padding-inline: var(--layout-screen-gutter);
+}
+
+/*
+ * Any class that sets `display` outranks the user-agent rule for [hidden], so a component
+ * styled `display: flex` stays on screen while its markup says it is hidden. Making the
+ * attribute authoritative here means `el.hidden = true` can be trusted anywhere.
+ */
+/*
+ * How far the app has to start below the top of its container. Zero on a real phone, where the
+ * OS status bar sits outside the page; 52px inside the drawn device frame, where the mock paints
+ * its own clock. Every bar that touches the top edge reads this rather than hard-coding 52.
+ */
+:root {
+  --frame-top: 0px;
+}
+.frame-on {
+  --frame-top: 52px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Wrap to two lines and only then ellipsise. Truncating a product name at the first line
+   hides the part that distinguishes one pack from another ("Parle-G Original Gluco…"). */
+.line-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

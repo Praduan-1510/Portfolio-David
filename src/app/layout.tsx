@@ -7,7 +7,7 @@ import {
 } from "next/font/google";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
-import { ScrollProgress } from "@/components/motion";
+import { ScrollProgress, HandoffLayer } from "@/components/motion";
 import { LenisProvider } from "@/lib/lenis/lenis-provider";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -154,6 +154,9 @@ export default function RootLayout({
         />
         <LenisProvider>
           <ScrollProgress />
+          {/* Cover-to-hero handoff: lives here, outside template.tsx, so the
+              clone survives the route change it is flying across. */}
+          <HandoffLayer />
           <Nav />
           <main id="main-content">{children}</main>
           <Footer />

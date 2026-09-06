@@ -1,0 +1,53 @@
+/* ── Handoff: the clicked cover flies to the case-study hero ─────────────────
+   Imported once by components/motion/HandoffLayer.tsx. Two jobs:
+   1. The clone: a fixed leaf above the route wipe (z 90/91), placed at the
+      source well's rect on the click frame and moved by transform only.
+   2. html[data-handoff] (set at click, removed at dock): keep the hero slabs
+      flat and un-animated while the clone is aimed at them, so the target well
+      is measured square-on and the slab's own transform transition performs the
+      tilt-in the moment the attribute comes off. The boot chain on a web hero
+      is held back the same way so it starts from the dock, not from a fade-in.
+   Both are inert on hard loads and under reduced motion: the attribute is only
+   ever set by the layer, and never there. */
+
+.handoff-clone {
+  position: fixed;
+  z-index: 92;
+  overflow: hidden;
+  pointer-events: none;
+  transform-origin: 50% 0%;
+  will-change: transform, opacity;
+  /* The well's crisp hairline, shared with PhoneFrame / BrowserMockup. No
+     drop shadow during flight: a large blurred shadow re-rasterises under
+     scale; the shadow belongs to the docked slab. */
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+.handoff-clone > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Hold the hero slab flat and skip its landing keyframe while the clone is in
+   the air; the resting tilt returns via the slab's own transform transition. */
+html[data-handoff] .browser-slab,
+html[data-handoff-landed] .browser-slab {
+  animation: none;
+}
+html[data-handoff] .browser-slab,
+html[data-handoff] .browser-slab[data-variant="big"],
+html[data-handoff] .lp-slab:not([data-live]) {
+  transform: none;
+}
+
+/* Boot chain: parked until the dock, then it starts from there. */
+html[data-handoff] .browser-slab[data-boot] .bm-dot,
+html[data-handoff] .browser-slab[data-boot] .bm-url,
+html[data-handoff] .browser-slab[data-boot] .bm-shutter,
+html[data-handoff] .browser-slab[data-boot] .bm-badge {
+  animation: none;
+}
+/* The screen was never dark on a handoff, so no shutter after the dock. */
+html[data-handoff-landed] .browser-slab[data-boot] .bm-shutter {
+  animation: none;
+}

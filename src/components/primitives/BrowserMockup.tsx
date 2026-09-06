@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type React from "react";
 import { cn } from "@/lib/utils/cn";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useReducedMotion, prefersReducedMotion } from "@/hooks/useReducedMotion";
 import blurMap from "@/lib/content/blur-map.json";
 
 const blurFor = (src: string): string | undefined =>
@@ -50,9 +50,13 @@ interface BrowserMockupProps {
   className?: string;
   /** Extra classes on the well (e.g. hover transitions in cards). */
   wellClassName?: string;
-  /** Hero centerpiece: run the orchestrated "boot" intro (chrome lights up, a
-   *  shutter scans the screen in, the badge blinks on). Reduced-motion-safe. */
-  boot?: boolean;
+  /** `true` (hero only): run the orchestrated "boot" intro on load (chrome
+   *  lights up, a shutter scans the screen in, the badge blinks on).
+   *  `"inView"` (still frames): the frame arrives powered off and boots once
+   *  40% of it is in the viewport, so evidence powers on as its claim is read.
+   *  A frame already on screen at hydration is never darkened: it just shows.
+   *  Both are reduced-motion-safe (settled, complete, no shutter). */
+  boot?: boolean | "inView";
   /** Hero centerpiece at full width: a gentler, more frontal resting tilt. */
   big?: boolean;
   /** Screen-well aspect ratio (CSS aspect-ratio). Default "64 / 35": the crop
@@ -106,7 +110,8 @@ export function BrowserMockup({
   const reduced = useReducedMotion();
   const hero = tilt === "hero";
   const showVideo = (hero || playInStill) && !!mp4 && !reduced;
-  const runBoot = hero && boot;
+  const heroBoot = hero && boot === true;
+  const inViewBoot = !hero && boot === "inView";
   const videoRef = useRef<HTMLVideoElement>(null);
   // WCAG 2.2.2: the looping capture needs an on-page pause mechanism. A user
   // pause beats the IntersectionObserver auto-play (ref mirrors state so the IO
@@ -141,6 +146,42 @@ export function BrowserMockup({
     if (!el) return;
     el.style.setProperty("--bm-my", "0deg");
     el.style.setProperty("--bm-mx", "0deg");
+  }, []);
+
+  // In-view boot. `armed` covers the screen with the shutter (and unlights the
+  // chrome) before the first client paint: a layout-effect state update flushes
+  // synchronously, and only frames entirely below the viewport are armed, so a
+  // frame already on screen never goes dark first. `booted` sets data-boot,
+  // which starts the CSS keyframes; the shutter unmounts once it has scanned off.
+  const slabRef = useRef<HTMLDivElement>(null);
+  const [armed, setArmed] = useState(false);
+  const [booted, setBooted] = useState(false);
+  useLayoutEffect(() => {
+    if (!inViewBoot) return;
+    const el = slabRef.current;
+    if (!el || prefersReducedMotion()) {
+      // Runtime switch to reduced motion: drop the shutter, show it settled.
+      setArmed(false);
+      setBooted(false);
+      return;
+    }
+    if (el.getBoundingClientRect().top <= window.innerHeight) return; // on screen: just show
+    setArmed(true);
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        io.disconnect();
+        setBooted(true);
+      },
+      { threshold: 0.4 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [inViewBoot, reduced]);
+
+  const handleShutterEnd = useCallback((e: React.AnimationEvent<HTMLSpanElement>) => {
+    if (e.target !== e.currentTarget) return;
+    setArmed(false); // scanned off: the shutter has no further job
   }, []);
 
   // Play only while in view; pause off-screen. preload="none" + this gate keep the
@@ -187,7 +228,9 @@ export function BrowserMockup({
         onPointerLeave={handleTiltLeave}
       >
       <div
-        data-boot={runBoot ? "" : undefined}
+        ref={slabRef}
+        data-boot={heroBoot ? "" : booted ? "inView" : undefined}
+        data-armed={armed ? "" : undefined}
         data-variant={hero && big ? "big" : undefined}
         className={cn(
           "group/bm relative w-full overflow-hidden rounded-[12px] border border-[color:color-mix(in_srgb,var(--fg)_12%,transparent)] bg-device p-[6px]",
@@ -273,15 +316,20 @@ export function BrowserMockup({
           />
 
           {/* Boot shutter: a dark panel over the screen that scans down off the
-              bottom on load, revealing the capture top→bottom, with a teal scan
-              line riding its leading (top) edge. Parked off-screen at rest, so
+              bottom, revealing the capture top→bottom, with an accent scan line
+              riding its leading (top) edge. Hero: parked off-screen at rest, so
               reduced motion / no-boot shows the screen uncovered (CSS does the
-              motion + gating). */}
-          {runBoot && (
+              motion + gating). In-view: rendered only while armed, covering the
+              screen (.bm-shutter-armed) until data-boot scans it off. */}
+          {(heroBoot || armed) && (
             <span
               aria-hidden="true"
-              className="bm-shutter pointer-events-none absolute inset-0 z-[3] bg-bezel"
-              style={{ transform: "translateY(100%)" }}
+              className={cn(
+                "bm-shutter pointer-events-none absolute inset-0 z-[3] bg-bezel",
+                armed && "bm-shutter-armed",
+              )}
+              style={heroBoot ? { transform: "translateY(100%)" } : undefined}
+              onAnimationEnd={armed ? handleShutterEnd : undefined}
             >
               <span
                 className="bm-scanline absolute inset-x-0 top-0 h-[2px]"

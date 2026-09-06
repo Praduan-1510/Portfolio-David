@@ -9,6 +9,7 @@ import { transitions } from "@/lib/motion/tokens";
 import { ScrollTrigger } from "@/lib/motion/gsap";
 import { useLenis } from "@/lib/lenis/useLenis";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { handoff } from "@/lib/motion/handoff";
 import { FlapText } from "./FlapText";
 import { routeLabel } from "@/lib/utils/routeLabel";
 
@@ -54,6 +55,8 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (lenis) lenis.scrollTo(0, { immediate: true, force: true });
     window.scrollTo(0, 0);
+    // The cover handoff measures its hero only once the page sits at the top.
+    handoff.scrollResetDone(pathname);
     const id = window.setTimeout(() => ScrollTrigger.refresh(), 80);
     return () => window.clearTimeout(id);
   }, [pathname, lenis]);

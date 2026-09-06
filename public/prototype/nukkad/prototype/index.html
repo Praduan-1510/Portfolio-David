@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-glass="on">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+    <title>Nukkad — Everything, a corner away</title>
+    <meta
+      name="description"
+      content="Nukkad: groceries to your door in minutes, with an honest bill. A quick-commerce prototype." />
+    <meta name="theme-color" content="#FBF9F5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0B0F10" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="../public/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="../public/apple-touch-icon.png" />
+
+    <link rel="preload" href="fonts/Bricolage-800.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="fonts/Plex-400.ttf" as="font" type="font/ttf" crossorigin />
+
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/glass.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/screens.css" />
+    <link rel="stylesheet" href="css/account.css" />
+  </head>
+  <body>
+    <!--
+  The refraction filter. feTurbulence builds a noise field; feDisplacementMap uses its red and
+  green channels to push the backdrop's pixels sideways. That push is what reads as light bending
+  through a thick edge, rather than the flat wash a plain blur gives you. Chromium is the only
+  engine that runs an SVG filter inside backdrop-filter, so app.js only opts in when it detects one.
+-->
+    <svg width="0" height="0" aria-hidden="true" style="position: absolute">
+      <defs>
+        <filter id="nk-refract" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.008 0.012"
+            numOctaves="2"
+            seed="7"
+            result="noise" />
+          <feGaussianBlur in="noise" stdDeviation="1.4" result="soft" />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="soft"
+            scale="16"
+            xChannelSelector="R"
+            yChannelSelector="G" />
+        </filter>
+      </defs>
+    </svg>
+
+    <div class="stage">
+      <!-- Desktop-only context panel. On a phone the app fills the screen and this is hidden. -->
+      <aside class="side">
+        <div class="row gap-md">
+          <img src="../brand/logo/nukkad-mark.svg" alt="" width="46" height="46" />
+          <div>
+            <div class="t-title2">nukkad</div>
+            <div class="t-caption dim">Everything, a corner away</div>
+          </div>
+        </div>
+
+        <p class="t-callout muted" style="margin: 0; max-width: 36ch">
+          A quick-commerce prototype built as a direct answer to Zepto, Blinkit and Instamart — with
+          the fee stack, the cancellation traps and the refund runaround designed out.
+        </p>
+
+        <div class="col gap-sm">
+          <div class="t-eyebrow dim">Things worth trying</div>
+          <ol class="col gap-xs t-footnote muted" style="padding-left: 18px; list-style: decimal">
+            <li>
+              Add a few items and open the cart — one fee line, and the amount is on every button.
+            </li>
+            <li>Pay by UPI and watch the rider arrive. Speed it up from the demo panel.</li>
+            <li>
+              Turn on <b>Reduce glass</b> below: the whole chrome falls back to opaque surfaces.
+            </li>
+            <li>Switch to <b>हिन्दी</b>, or flip to dark.</li>
+          </ol>
+        </div>
+
+        <div class="col gap-sm">
+          <div class="t-eyebrow dim">Demo panel</div>
+          <div class="row wrap gap-sm">
+            <button class="chip" data-act="theme">Dark mode</button>
+            <button class="chip" data-act="glass">Reduce glass</button>
+            <button class="chip" data-act="lang">हिन्दी</button>
+            <button class="chip" data-act="speed">Order speed 1×</button>
+            <button class="chip" data-act="busy">Busy store</button>
+            <button class="chip" data-act="reset">Reset</button>
+          </div>
+        </div>
+
+        <div class="t-caption2 dim">
+          Design system, logo and product art all generated from source in this repository.
+          <a href="design.html" style="color: var(--brand)">Open the design system →</a>
+        </div>
+      </aside>
+
+      <!-- The app itself. -->
+      <div class="device" id="device">
+        <div class="device__status">
+          <span>9:41</span>
+          <span class="row gap-xs" aria-hidden="true">
+            <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor">
+              <rect x="0" y="7" width="3" height="4" rx="1" />
+              <rect x="4.5" y="5" width="3" height="6" rx="1" />
+              <rect x="9" y="2.5" width="3" height="8.5" rx="1" />
+              <rect x="13.5" y="0" width="3" height="11" rx="1" />
+            </svg>
+            <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
+              <rect
+                x="0.5"
+                y="0.5"
+                width="21"
+                height="11"
+                rx="3.5"
+                stroke="currentColor"
+                opacity=".4" />
+              <rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor" />
+              <path d="M23 4v4a2 2 0 0 0 0-4z" fill="currentColor" opacity=".5" />
+            </svg>
+          </span>
+        </div>
+
+        <main id="screen" aria-live="polite"></main>
+        <div id="chrome-host"></div>
+        <div id="sheet-host"></div>
+        <div id="toast-host"></div>
+        <div id="fly-host"></div>
+      </div>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>

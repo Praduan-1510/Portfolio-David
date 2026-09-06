@@ -1,0 +1,562 @@
+/*
+ * Styles for the account area (prototype/js/screens/account.js).
+ *
+ * Kept in its own sheet rather than appended to screens.css: these seven screens are a
+ * self-contained area, and everything here is something the shared component set genuinely
+ * did not already have. Anything that could reuse .rowcard, .payrow, .chip or .btn does.
+ */
+
+/* ── addresses ────────────────────────────────────────────────────────────── */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Saved addresses.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * A selectable card that also carries two secondary actions. `.payrow` is select-only and
+ * `.rowcard` is one action, so neither fits: a button cannot contain the Edit and Remove
+ * buttons. The card is the surface, the pick button is the radio, and the actions sit under a
+ * hairline inside it — so it still reads as one row rather than three stacked controls.
+ */
+.addrcard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-base);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  /* Mirrors .payrow: the unselected ring is transparent rather than absent, so a selected and
+     an unselected card differ only in the colour of one property. */
+  box-shadow: inset 0 0 0 1.5px transparent;
+  transition: box-shadow var(--duration-fast) var(--ease-liquid);
+}
+.addrcard--on {
+  box-shadow: inset 0 0 0 1.5px var(--brand);
+}
+
+.addrcard__pick {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  width: 100%;
+  min-height: 44px;
+  text-align: left;
+}
+/* Borrowed from the payment rows: the mark for "this is a choice" should be the same one
+   everywhere in the app, so only its checked rule is restated here. */
+.addrcard--on .payrow__radio {
+  box-shadow: inset 0 0 0 6px var(--brand);
+}
+.addrcard__pick .payrow__radio {
+  margin-top: var(--space-xxs);
+}
+
+.addrcard__acts {
+  padding-top: var(--space-md);
+  box-shadow: inset 0 1px 0 var(--border);
+}
+
+/* ── Destructive buttons ──────────────────────────────────────────────────── */
+
+/*
+ * `.danger` alone cannot do this: base.css loads before components.css, so `.btn--secondary`
+ * wins the colour on a shared-specificity tie. Two classes settle it, and a remove button that
+ * is not red is the one people tap by accident.
+ */
+.btn.btn--danger {
+  color: var(--danger-text);
+}
+/* The confirm-sheet's destructive action: tinted rather than a solid red slab, which keeps it
+   legible on both themes without inheriting --text-on-brand's dark teal in the dark palette. */
+.btn.btn--remove {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+  font-weight: 600;
+}
+.btn.btn--remove:active {
+  background: var(--danger);
+  color: var(--surface);
+}
+
+/* ── Text field ───────────────────────────────────────────────────────────── */
+
+/*
+ * The app's other inputs — search, the phone number, the OTP boxes — all carry a single obvious
+ * meaning, so a placeholder is enough. An address does not: it is the form people fill in
+ * halfway, put down and come back to, and a placeholder that has vanished by then leaves them
+ * re-reading their own half-typed line to work out what it was for. So the label is a real,
+ * permanently visible line above the box.
+ */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+.field input {
+  height: 48px;
+  padding: 0 var(--space-base);
+  border-radius: var(--radius-lg);
+  background: var(--surface-sunken);
+  border: 1.5px solid transparent;
+  outline: none;
+  font: inherit;
+  color: var(--text);
+  transition:
+    border-color var(--duration-fast) var(--ease-liquid),
+    background var(--duration-fast) var(--ease-liquid);
+}
+.field input:focus {
+  border-color: var(--brand);
+  background: var(--surface);
+}
+
+/* ── wallet ────────────────────────────────────────────────────────────── */
+
+/* ── Wallet ───────────────────────────────────────────────────────────────── */
+
+/*
+ * The balance bar. ₹120 is not one thing: part of it is cash that can go back to the bank and
+ * part is credit that cannot, and the two obey different rules. `.progress` was the obvious
+ * class to borrow, but it means "distance to a target" everywhere else in the app — here
+ * nothing is being filled up, a total is being divided. Two segments, brand for the money that
+ * is yours and the marigold that means "money saved" for the credit, so the proportion is read
+ * before the caption under it is.
+ *
+ * The 6px height is `.progress`'s, deliberately: the khata bar sits a screen-scroll below this
+ * one, and two bars of different weights would read as two different kinds of measurement.
+ */
+.wallet-split {
+  display: flex;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  background: var(--surface-sunken);
+}
+.wallet-split > span {
+  height: 100%;
+}
+.wallet-split__cash {
+  background: var(--brand);
+}
+.wallet-split__promo {
+  background: var(--deal-fill);
+}
+
+/*
+ * The destructive button variant. Removing a saved card is the one action in the app that
+ * cannot be undone from the screen it happens on, and the system had no way to say so: `.danger`
+ * is a text colour set in base.css, which loads before components.css gives `.btn--secondary`
+ * and `.btn--primary` theirs, so on a button it silently lost the cascade.
+ *
+ * Tinted rather than red-filled — a red slab beside a saved card reads as an alarm, and the
+ * confirmation sheet is where the weight belongs.
+ */
+.btn--danger {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+}
+
+/* ── giftcards ────────────────────────────────────────────────────────────── */
+
+/* ── Segmented control ────────────────────────────────────────────────────── */
+
+/*
+ * Buy / Redeem / Mine are three views of one object, not three destinations, so they get a
+ * segmented control rather than a nav push. The app had no such control yet: the catalog rail
+ * is vertical and permanent, and chips are a multi-select, which is the wrong promise here.
+ */
+.segment {
+  display: flex;
+  gap: var(--space-xs);
+  padding: var(--space-xs);
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+}
+.segment__item {
+  flex: 1;
+  min-height: 44px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-callout-size);
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition:
+    background var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+}
+/* An inset hairline rather than a drop shadow: the app has no elevation token, and a cast
+   shadow tuned for the light theme turns into a grey smudge on the dark canvas. */
+.segment__item[aria-selected='true'] {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+/* ── The gift card itself ─────────────────────────────────────────────────── */
+
+/*
+ * A brand surface, like .circlecard, and warm where that one is cool: the membership is a
+ * standing arrangement with the app, a gift is something handed over at the counter. Kulhad
+ * over peacock keeps the two from reading as the same card in a different mood.
+ *
+ * Fixed light ink on a fixed gradient, so it looks the same in both themes — a gift card that
+ * inverts with the recipient's appearance setting is not an object, it is a div. The amount on
+ * it is .t-display, so the one number that matters is on the shared type scale.
+ */
+.giftcard {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  min-height: 176px;
+  padding: var(--space-lg);
+  border-radius: var(--radius-3xl);
+  background: var(--gradient-kulhad-warm);
+  color: #fbf9f5;
+}
+/* Two blooms rather than one: the light has to come from somewhere for the panel to read as
+   printed stock instead of a flat fill. */
+.giftcard::before,
+.giftcard::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.giftcard::before {
+  right: -40px;
+  top: -60px;
+  width: 180px;
+  height: 180px;
+  background: rgba(255, 255, 255, 0.09);
+}
+.giftcard::after {
+  left: -48px;
+  bottom: -72px;
+  width: 140px;
+  height: 140px;
+  background: rgba(255, 255, 255, 0.05);
+}
+.giftcard > * {
+  position: relative;
+}
+
+/* ── Code field ───────────────────────────────────────────────────────────── */
+
+/*
+ * Wide-tracked and centred, because a gift code is copied character by character off a phone
+ * screen. Same construction as the OTP boxes; one field rather than twelve, since twelve boxes
+ * would fit nothing and break the paste.
+ */
+.codefield {
+  width: 100%;
+  min-height: 56px;
+  padding: 0 var(--space-base);
+  border-radius: var(--radius-lg);
+  background: var(--surface-sunken);
+  border: 1.5px solid transparent;
+  outline: none;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: 'Bricolage', 'Plex', sans-serif;
+  font-size: var(--text-price-l-size);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--text);
+}
+.codefield::placeholder {
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+.codefield:focus {
+  border-color: var(--brand);
+  background: var(--surface);
+}
+
+/* ── referral ────────────────────────────────────────────────────────────── */
+
+/* ── Refer a neighbour ────────────────────────────────────────────────────── */
+
+/*
+ * The code gets ticket treatment, because that is what it is in use: something read out over
+ * a compound wall or pasted into a building group. Wide tracking so the characters separate
+ * when someone is copying them onto a chit, and the whole tile is the tap target rather than
+ * the eight characters — a code you have to hit precisely is a code you photograph instead.
+ */
+.refcode {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  width: 100%;
+  min-height: 56px;
+  padding: var(--space-md) var(--space-base);
+  border: 1.5px dashed var(--brand);
+  border-radius: var(--radius-xl);
+  background: var(--brand-tint);
+  color: var(--brand);
+  text-align: left;
+}
+.refcode:active {
+  background: color-mix(in srgb, var(--brand) 14%, var(--canvas));
+}
+/* base.css turns selection off for the whole body — a shopping surface, not a document. The
+   code is the one string on this screen someone may have to drag over and copy by hand when
+   both the share sheet and the clipboard are unavailable, so it opts back in. */
+.refcode__value {
+  font-family: 'Bricolage', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: 0.14em;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/*
+ * Invited / joined / credited, side by side, because the gap between the second and third is
+ * the thing being disclosed. Three separate cards rather than one strip: equal weight, and no
+ * implied arrow suggesting the third number follows automatically from the second.
+ */
+.refstat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+/* A neighbour has a name, not a photo we do not have. The initial, on the sunken ground the
+   product thumbnail uses, keeps the row the same height as every other list row in the app. */
+.refavatar {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-sunken);
+  color: var(--text-secondary);
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.refstep__n {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--brand-tint);
+  color: var(--brand);
+  font-family: 'Bricolage', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── coupons ────────────────────────────────────────────────────────────── */
+
+/* ── Coupon ticket ────────────────────────────────────────────────────────── */
+
+/*
+ * The card itself is .rowcard / .rowcard--sunken — the class is geometry, not an element, and
+ * onboarding already hangs it on a <label>. Only the two pieces of the ticket that do not
+ * exist anywhere else live here.
+ */
+
+/*
+ * A tinted stub, so a wallet of four coupons reads as a stack of tickets rather than a stack
+ * of paragraphs. It is 44px because it sits beside a 44px button and the two should agree,
+ * not because anything taps it.
+ */
+.coupon__stub {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--brand-tint);
+  color: var(--brand);
+}
+
+/* A coupon you cannot use keeps its contrast and loses only its colour: the row is mostly a
+   sentence explaining why, and a faded explanation is an explanation withheld. */
+.rowcard--sunken .coupon__stub {
+  background: var(--surface);
+  color: var(--text-tertiary);
+}
+
+/*
+ * Codes are typed, read aloud and compared character by character, so they get the display
+ * family at a wide tracking rather than the body face at a normal one. Not .chip--outline,
+ * which is 44px tall by design because everything wearing it is tappable — this is a label.
+ */
+.coupon__code {
+  font-family: 'Bricolage', sans-serif;
+  font-weight: 700;
+  font-size: var(--text-footnote-size);
+  letter-spacing: 0.06em;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── help ────────────────────────────────────────────────────────────── */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Help & support adds no CSS.
+
+   Every surface it needs already exists: .row-item for the topic and item lists, .rowcard for
+   the two escalation rows, .banner--success for the refund promise, .thumb--sm for the order
+   lines, and .sheet for the answers. The two card shells are inline padding/radius/background,
+   which is the idiom the other screens already use for a one-off container — a new class here
+   would only be .rowcard under a second name, with its own drift.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* ── settings ────────────────────────────────────────────────────────────── */
+
+/* ── Switch ───────────────────────────────────────────────────────────────── */
+
+/*
+ * The one control the app did not already own. Every other binary in Nukkad is a chip, because a
+ * chip is what a filter row wants: it carries a word. A settings line already has its word in the
+ * label, so the control beside it has to show its state as a shape you can read at a glance
+ * across six rows — which a chip that says "Offers" whether it is on or off cannot do.
+ *
+ * The button is 52x44 so the hit area clears the touch minimum while the track stays 28px tall.
+ * Growing the ink to 44 instead would turn a matrix of switches into a wall of buttons.
+ */
+.switch {
+  width: 52px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.switch__track {
+  position: relative;
+  width: 48px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+  box-shadow: inset 0 0 0 1.5px var(--border-strong);
+  transition:
+    background var(--duration-fast) var(--ease-liquid),
+    transform var(--duration-micro) var(--ease-liquid);
+}
+.switch:active .switch__track {
+  transform: scale(0.94);
+}
+/*
+ * Off, the knob is a solid tertiary grey rather than white: on the sunken track it reads in both
+ * themes, where a white knob disappears against cream and a white-on-dark knob shouts "on".
+ */
+.switch__knob {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+  transition:
+    transform var(--duration-fast) var(--ease-liquid),
+    background var(--duration-fast) linear;
+}
+.switch[aria-checked='true'] .switch__track {
+  background: var(--brand);
+  box-shadow: none;
+}
+.switch[aria-checked='true'] .switch__knob {
+  transform: translateX(20px);
+  background: var(--text-on-brand);
+}
+
+/* ── Notification matrix ──────────────────────────────────────────────────── */
+
+/*
+ * Purpose down the side, channel across the top. Two columns rather than one switch per row
+ * because push and WhatsApp are different intrusions: people want the order updates on their
+ * lock screen and nothing at all in the app their family messages them on.
+ */
+.matrix {
+  display: grid;
+  grid-template-columns: 1fr 52px 52px;
+  align-items: center;
+  column-gap: var(--space-sm);
+  row-gap: var(--space-md);
+}
+.matrix__head {
+  text-align: center;
+}
+
+/* ── Destructive buttons ──────────────────────────────────────────────────── */
+
+/*
+ * `.danger` is a colour utility from base.css; `.btn--secondary` sets its own colour and lives in
+ * a sheet that loads after it. At equal specificity the later rule won, so `btn btn--secondary
+ * danger` — sign out, delete account — rendered in ordinary text colour and the warning went
+ * silently missing. Two classes beat one, in any load order.
+ *
+ * Red text on the standard sunken fill rather than a filled red button: the emphatic surface
+ * belongs to the action we want you to take, and on this screen that is "keep it".
+ */
+.btn.danger {
+  color: var(--danger-text);
+}
+
+/* ── Inline field ─────────────────────────────────────────────────────────── */
+
+/*
+ * A field with a fixed prefix beside the input ("+91"). The 44px minimum has to sit on the
+ * input rather than the wrapper: a label that reaches 44px through its own padding still
+ * leaves the input a 24px target, and the input is what a keyboard and a screen reader
+ * actually land on. Same height as `.field input`, so the two read as one control.
+ */
+.field-inline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  padding: 0 var(--space-base);
+  border-radius: var(--radius-xl);
+  background: var(--surface-sunken);
+}
+.field-inline input {
+  flex: 1;
+  min-height: 48px;
+  border: 0;
+  background: none;
+  outline: 0;
+  font: inherit;
+  color: var(--text);
+}
+
+/* ── Profile row ──────────────────────────────────────────────────────────── */
+
+/*
+ * The name and number at the top of the You tab. It was a <div> — readable, and completely
+ * inert, which is the one thing a person's own details should never be.
+ */
+.profilerow {
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-sm) 0;
+}
+.profilerow__avatar {
+  width: 54px;
+  height: 54px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--brand-tint);
+  color: var(--brand);
+  font-weight: 700;
+  font-size: 20px;
+}

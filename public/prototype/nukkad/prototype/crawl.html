@@ -1,0 +1,150 @@
+<!doctype html>
+<!--
+  Interaction crawler.  Open /prototype/crawl.html
+
+  Visits every route, then clicks every interactive element on a freshly loaded copy of that
+  screen and classifies what happened: navigated, opened a sheet, showed a toast, updated the
+  view — or nothing at all. Reports only errors and dead taps.
+
+  Two things worth knowing when reading its output:
+
+  * It hashes #screen and #chrome-host to detect change. An earlier version compared HTML
+    *length*, which cannot see a quantity going 1 -> 2, so every stepper looked dead.
+  * A control that is already selected — the active tab, the current sub-shelf, the default
+    payment method, a disabled button — correctly does nothing, and still lists as DEAD. Those
+    are expected; anything else is a bug.
+-->
+<style>
+  body {
+    font: 11px monospace;
+    margin: 8px;
+  }
+  iframe {
+    width: 390px;
+    height: 844px;
+    border: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+  }
+  pre {
+    white-space: pre-wrap;
+    max-width: 60vw;
+  }
+</style>
+<iframe id="f"></iframe>
+<pre id="o">crawling…</pre>
+<script>
+  const SCREENS = [
+    'home',
+    'categories',
+    'category',
+    'search',
+    'cart',
+    'checkout',
+    'payment',
+    'processing',
+    'placed',
+    'track',
+    'orders',
+    'account',
+    'circle',
+    'onboarding',
+    'phone',
+    'otp',
+    'location',
+    'addresses',
+    'wallet',
+    'giftcards',
+    'referral',
+    'coupons',
+    'help',
+    'settings',
+  ];
+  const SEL =
+    'button,a[href],input,[data-go],[data-tab],[data-cat],[data-open],[data-row],[data-request],[data-stage],[data-sub],[data-method],[data-plan],[data-issue],[data-quick],[data-reorder],[data-schedule],[data-act],[data-help],[data-chat],[data-call],[data-cancel],[data-order]';
+  const f = document.getElementById('f'),
+    out = document.getElementById('o');
+  const L = [];
+  const label = (el) => {
+    const c = String(el.className || '')
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .join('.');
+    const da = [...el.attributes]
+      .filter((a) => a.name.startsWith('data-'))
+      .map((a) => a.name + (a.value ? '=' + a.value : ''))
+      .slice(0, 2)
+      .join(' ');
+    const t = (el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 26);
+    return `${el.tagName.toLowerCase()}${c ? '.' + c : ''}${da ? ' [' + da + ']' : ''}${t ? ` "${t}"` : ''}`;
+  };
+  const load = (url) =>
+    new Promise((res) => {
+      const errs = [];
+      f.onload = () => {
+        f.contentWindow.onerror = (m, s, l) =>
+          errs.push(`${m} @${(s || '').split('/').pop()}:${l}`);
+        f.contentWindow.addEventListener('unhandledrejection', (e) =>
+          errs.push('promise: ' + e.reason),
+        );
+        setTimeout(() => res({ d: f.contentDocument, w: f.contentWindow, errs }), 700);
+      };
+      f.src = url;
+    });
+  const hash = (str) => {
+    let h = 5381;
+    for (let i = 0; i < str.length; i += 1) h = ((h << 5) + h + str.charCodeAt(i)) | 0;
+    return h;
+  };
+  const snap = (d) => ({
+    screen: hash((d.querySelector('#screen') || {}).innerHTML || ''),
+    chrome: hash((d.querySelector('#chrome-host') || {}).innerHTML || ''),
+    head:
+      (
+        d.querySelector('#screen h1,#screen h2,#screen .t-title3,#screen .navbar span') || {}
+      ).textContent?.trim() || '',
+    sheet: (d.querySelector('#sheet-host') || {}).children?.length || 0,
+    toast: (d.querySelector('#toast-host') || {}).children?.length || 0,
+  });
+  (async () => {
+    for (const s of SCREENS) {
+      const url = `index.html?screen=${s}&seed=1${s === 'category' ? '&cat=dairy' : ''}`;
+      let { d, errs } = await load(url);
+      const rendered = (d.querySelector('#screen') || {}).children?.length || 0;
+      L.push(
+        `\n### ${s}   rendered=${rendered ? 'yes' : '*** EMPTY ***'}  errors=${errs.length ? errs.join('; ') : 'none'}`,
+      );
+      if (!rendered) continue;
+      const n = [...d.querySelectorAll(SEL)].filter((e) => e.offsetParent !== null).length;
+      for (let i = 0; i < n; i += 1) {
+        const r = await load(url);
+        const els = [...r.d.querySelectorAll(SEL)].filter((e) => e.offsetParent !== null);
+        const el = els[i];
+        if (!el) continue;
+        const before = snap(r.d);
+        const name = label(el);
+        try {
+          el.click();
+        } catch (e) {
+          r.errs.push('click threw: ' + e.message);
+        }
+        await new Promise((z) => setTimeout(z, 320));
+        const after = snap(r.d);
+        let verdict;
+        if (r.errs.length) verdict = 'ERROR  ' + r.errs.join('; ');
+        else if (after.sheet > before.sheet) verdict = 'sheet';
+        else if (after.head !== before.head) verdict = 'nav -> ' + after.head;
+        else if (after.toast > before.toast) verdict = 'toast';
+        else if (after.screen !== before.screen || after.chrome !== before.chrome)
+          verdict = 'updated';
+        else verdict = '*** DEAD ***';
+        if (verdict.startsWith('ERROR') || verdict.startsWith('***'))
+          L.push(`   ${verdict.padEnd(12)} ${name}`);
+      }
+    }
+    out.textContent = L.join('\n');
+  })();
+</script>

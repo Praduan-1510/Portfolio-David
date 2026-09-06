@@ -20,3 +20,4 @@ export { FlapDigits } from "./FlapDigits";
 export { AuroraEmber } from "./AuroraEmber";
 export { AmbientField } from "./AmbientField";
 export { DrawIn } from "./DrawIn";
+export { HandoffLayer, HandoffTarget } from "./HandoffLayer";

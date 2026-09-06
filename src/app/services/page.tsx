@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import NextLink from "next/link";
-import { Container, Text, Button, BrowserMockup } from "@/components/primitives";
+import { Container, Text, Button, BrowserMockup, PhoneFrame } from "@/components/primitives";
 import { Reveal, TextReveal, AnimatedDivider, StaggerGroup, Magnetic } from "@/components/motion";
+import { distance } from "@/lib/motion/tokens";
 import { getProjectBySlug } from "@/lib/content/work";
 import { ServicesTestimonials } from "@/components/sections/ServicesTestimonials";
 
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
  * /services: the one page on this site written for a CLIENT rather than an
  * employer.
  *
- * Everything else here — the work index, the timeline, the résumé — answers
+ * Everything else here (the work index, the timeline, the résumé) answers
  * "should we hire this person". None of it answers "can I engage you, how does
  * that run, and what will it cost me", which is the question someone with a
  * budget actually arrives with.
@@ -47,6 +48,13 @@ export const metadata: Metadata = {
  * evidence-right, and the shot is chosen to prove the specific sentence above
  * it rather than to decorate the row. The sides alternate so three offers do
  * not read as three identical bands.
+ *
+ * The proof powers on as the claim is reached: each row is its own <Reveal>
+ * (one group stagger fired at the list's top, so rows two and three used to
+ * animate while still off-screen and the entrance was wasted), and the frame
+ * beside it boots (boot="inView") once 40% of it is in the viewport, with the
+ * caption rising as the shutter clears. Under reduced motion all of it renders
+ * settled and complete.
  */
 
 /** Each offer points at work that already demonstrates it. */
@@ -100,15 +108,24 @@ const OFFERS = [
       "Tokens, components, and the accessibility and contrast rules built into the system rather than checked at the end.",
     body:
       "A component library is the easy half. The hard half is the decisions underneath: how many status colours the product is allowed, what contrast every state has to clear, which figures are derived and can never be typed. Systems that hold up put those rules in the tokens, so the wrong thing is hard to build rather than discouraged in a doc.",
-    proof: "meridian",
+    // Nukkad, and only Nukkad: it is the offer's argument in one picture, because
+    // the demo panel beside the handset IS the design system: theme, glass and
+    // language are switches you throw on the running app, not screenshots of
+    // states. Its tokens live in TypeScript and the CSS variables are generated
+    // from them, so the system and the prototype cannot drift apart.
+    proof: "nukkad",
     good: "A product where every new screen restarts the same arguments, or where accessibility keeps arriving as a late fix.",
     shot: {
-      src: "/images/work/meridian/design-system.png",
-      domain: "meridian.app/design-system",
-      aspect: "16 / 10", // 2560x1600 natively: no crop
-      alt: "Meridian's design system page, with each colour swatch carrying its measured contrast ratio",
+      // A PHONE, not a browser. Nukkad is an app, and the other two offers'
+      // evidence is a website and a console, so showing this one in desktop chrome
+      // would have been the only shot on the page that lied about its medium.
+      // `frame` is what the figure below branches on; it is absent on the other
+      // two, so the const union needs an "in" guard before reading it.
+      frame: "phone",
+      src: "/images/work/nukkad/home.png",
+      alt: "The Nukkad home screen: a 10 to 14 minute delivery estimate, the local store's own note, a basket of what the street buys with its price on the button, and the running cart total",
       caption:
-        "Every swatch carries its measured ratio, so the rule lives in the token rather than in a document nobody opens.",
+        "One fee, and the amount on the button before you press it. The system's rules are visible on the screen rather than described beside it.",
     },
   },
 ] as const;
@@ -206,13 +223,15 @@ export default function ServicesPage() {
         <h2 id="offers" className="sr-only">
           What I do
         </h2>
-        <StaggerGroup as="ol" from="below">
+        <ol>
           {OFFERS.map((offer, i) => {
             const project = getProjectBySlug(offer.proof);
-            // Only one offer carries a second proof, so the union needs an "in" guard.
+            // Only offer 01 carries a second proof, so the const union needs an
+            // "in" guard before reading it.
             const second = "proof2" in offer ? getProjectBySlug(offer.proof2) : null;
             return (
-              <li
+              <Reveal
+                as="li"
                 key={offer.id}
                 className="border-t border-line py-space-8 first:border-t-0 first:pt-0"
               >
@@ -287,23 +306,46 @@ export default function ServicesPage() {
                   </div>
 
                   <figure className="min-w-0">
-                    <BrowserMockup
-                      poster={offer.shot.src}
-                      domain={offer.shot.domain}
-                      alt={offer.shot.alt}
-                      tilt="still"
-                      aspect={offer.shot.aspect}
-                      sizes="(min-width: 1024px) 34rem, 92vw"
-                    />
-                    <figcaption className="mt-space-4 max-w-[42ch] border-l-2 border-accent pl-space-4 text-caption leading-relaxed text-muted">
+                    {"frame" in offer.shot ? (
+                      // PhoneFrame is aspect-[9/19.5] on a w-full box, so left
+                      // to fill this column it would render about 600x1300 and
+                      // tower over the copy beside it. Capped and centred: 15rem
+                      // gives a ~520px tall device, close to the browser shots'
+                      // own height, so the three offers still scan as one row of
+                      // evidence rather than one of them being twice the size.
+                      <PhoneFrame
+                        src={offer.shot.src}
+                        alt={offer.shot.alt}
+                        sizes="(min-width: 1024px) 15rem, 60vw"
+                        className="mx-auto max-w-[15rem]"
+                      />
+                    ) : (
+                      <BrowserMockup
+                        poster={offer.shot.src}
+                        domain={offer.shot.domain}
+                        alt={offer.shot.alt}
+                        tilt="still"
+                        boot="inView"
+                        aspect={offer.shot.aspect}
+                        sizes="(min-width: 1024px) 34rem, 92vw"
+                      />
+                    )}
+                    {/* The caption says where to look, so it lands as the
+                        shutter clears the lower third (0.3s + 0.85s scan). */}
+                    <Reveal
+                      as="figcaption"
+                      y={distance.sm}
+                      delay={0.9}
+                      className="mt-space-4 max-w-[42ch] border-l-2 border-accent pl-space-4 text-caption leading-relaxed text-muted"
+                    >
                       {offer.shot.caption}
-                    </figcaption>
+                    </Reveal>
                   </figure>
                 </div>
-              </li>
+              </Reveal>
             );
           })}
-        </StaggerGroup>
+        </ol>
       </Container>
 
       {/* ── How it runs ── */}

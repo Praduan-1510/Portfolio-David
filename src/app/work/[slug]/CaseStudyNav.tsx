@@ -156,13 +156,17 @@ export function CaseStudyNav({
                 aria-current={on ? "true" : undefined}
                 className="group flex w-full items-center gap-space-3 py-space-1 text-left"
               >
+                {/* Tick: a fixed-width rule that extends via scaleX from the left
+                    (the armed-hairline vocabulary), never via width, so the label
+                    beside it stays put and no layout runs when the scroll-spy
+                    moves. Hover only tints it: length stays the "current" signal. */}
                 <span
                   aria-hidden="true"
                   className={cn(
-                    "h-px shrink-0 transition-all duration-base ease-out-quad",
+                    "h-px w-space-6 shrink-0 origin-left transition-[transform,background-color] duration-base ease-out-quad",
                     on
-                      ? "w-space-6 bg-[var(--dot)]"
-                      : "w-space-4 bg-line group-hover:bg-[var(--dot)]",
+                      ? "scale-x-100 bg-[var(--dot)]"
+                      : "scale-x-[0.66] bg-line group-hover:bg-[var(--dot)]",
                   )}
                 />
                 <span

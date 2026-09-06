@@ -70,8 +70,9 @@ const INDEX_HUES = [
  * faint grain give the near-black depth; corner crosshair ticks frame the
  * section like an instrument. Decorative layers are aria-hidden / pointer-none;
  * the indices and panel crown are the tonal ink ramp, and the only real colour
- * is --error on the form's validation messages. Server Component; the form is a client
- * island (ContactForm).
+ * is --error on the form's validation messages. Server Component; the form and
+ * the panel's mono header (the transmission readout) are one client island
+ * (ContactForm), which drives the crown through data attributes on the panel.
  */
 export default function Contact() {
   return (
@@ -176,29 +177,41 @@ export default function Contact() {
             </StaggerGroup>
           </div>
 
-          {/* Right: the message form, framed as an input panel. */}
+          {/* Right: the message form, framed as an input panel. The island
+              flags this panel data-busy while a send is in flight and
+              data-received once it lands; the crown reads both. */}
           <div className="lg:col-span-6 lg:col-start-7">
             <Reveal trigger="load" delay={0.3}>
-              <div className="relative overflow-hidden rounded-[3px] border border-line bg-surface p-space-6 sm:p-space-7">
-                {/* Spectrum crown: the wayfinding signal across the panel top. */}
+              <div
+                data-transmit-panel
+                className="group relative overflow-hidden rounded-[3px] border border-line bg-surface p-space-6 sm:p-space-7"
+              >
+                {/* Spectrum crown: the wayfinding signal across the panel top.
+                    A masked wrapper with two layers: the resting hairline (0.55,
+                    rising to full strength over --dur-slow while data-received
+                    and settling back over --dur-slower) and the busy light, a
+                    bright 28% segment parked off-canvas that sweeps the hairline
+                    while data-busy (crown-sweep, globals.css). */}
                 <span
                   aria-hidden="true"
-                  className="absolute inset-x-0 top-0 h-px"
+                  className="absolute inset-x-0 top-0 h-px overflow-hidden"
                   style={{
-                    background: "var(--spectrum-gradient)",
-                    opacity: 0.55,
                     maskImage:
                       "linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent)",
                     WebkitMaskImage:
                       "linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent)",
                   }}
-                />
-                <p className="font-mono text-caption uppercase tracking-[0.16em] text-muted">
-                  Send a message
-                </p>
-                <div className="mt-space-6">
-                  <ContactForm />
-                </div>
+                >
+                  <span
+                    className="absolute inset-0 opacity-[0.55] transition-opacity duration-slower ease-out-quad group-data-[received]:opacity-100 group-data-[received]:duration-slow"
+                    style={{ background: "var(--spectrum-gradient)" }}
+                  />
+                  <span
+                    className="crown-sweep absolute inset-y-0 left-0 w-[28%] -translate-x-full"
+                    style={{ background: "var(--spectrum-gradient)" }}
+                  />
+                </span>
+                <ContactForm />
               </div>
             </Reveal>
 

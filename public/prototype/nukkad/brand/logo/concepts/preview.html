@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nukkad — logo concepts</title>
+    <style>
+      @font-face {
+        font-family: 'Bricolage';
+        src: url('../../../node_modules/@expo-google-fonts/bricolage-grotesque/800ExtraBold/BricolageGrotesque_800ExtraBold.ttf')
+          format('truetype');
+        font-weight: 800;
+      }
+      @font-face {
+        font-family: 'Anek';
+        src: url('../../../node_modules/@expo-google-fonts/anek-devanagari/700Bold/AnekDevanagari_700Bold.ttf')
+          format('truetype');
+        font-weight: 700;
+      }
+      @font-face {
+        font-family: 'Plex';
+        src: url('../../../node_modules/@expo-google-fonts/ibm-plex-sans/400Regular/IBMPlexSans_400Regular.ttf')
+          format('truetype');
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: 'Plex';
+        src: url('../../../node_modules/@expo-google-fonts/ibm-plex-sans/600SemiBold/IBMPlexSans_600SemiBold.ttf')
+          format('truetype');
+        font-weight: 600;
+      }
+
+      :root {
+        --paper: #fbf9f5;
+        --paper-100: #f4f1eb;
+        --paper-200: #e9e5dd;
+        --ink: #121110;
+        --ink-600: #5c574f;
+        --peacock: #0b7c76;
+        --peacock-300: #55c8bf;
+        --genda: #f7b32b;
+        --page: var(--paper);
+        --text: var(--ink);
+        --muted: var(--ink-600);
+        --card: #fff;
+        --line: rgba(18, 17, 16, 0.1);
+      }
+      body.dark {
+        --page: #0b0f10;
+        --text: #f2f5f6;
+        --muted: #97a5a9;
+        --card: #171e20;
+        --line: rgba(255, 255, 255, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 40px 24px 96px;
+        background: var(--page);
+        color: var(--text);
+        font-family: 'Plex', system-ui, sans-serif;
+        transition: background 0.2s;
+      }
+      .wrap {
+        max-width: 1080px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-family: 'Bricolage';
+        font-size: 34px;
+        letter-spacing: -0.02em;
+        margin: 0 0 4px;
+      }
+      .lede {
+        color: var(--muted);
+        font-size: 15px;
+        margin: 0 0 32px;
+        max-width: 62ch;
+        line-height: 1.5;
+      }
+      .eyebrow {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .concept {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 24px;
+        margin-bottom: 24px;
+      }
+      .concept h2 {
+        font-family: 'Bricolage';
+        font-size: 22px;
+        margin: 6px 0 4px;
+        letter-spacing: -0.01em;
+      }
+      .concept p.why {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.55;
+        margin: 0 0 20px;
+        max-width: 70ch;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 28px;
+        align-items: flex-end;
+      }
+      .cell {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+      .cell span {
+        font-size: 10px;
+        color: var(--muted);
+        letter-spacing: 0.03em;
+      }
+
+      /* iOS 26 squircle. Not a rounded rect — the superellipse is what makes an icon read as native. */
+      .squircle {
+        border-radius: 22.3%;
+        overflow: hidden;
+        display: grid;
+        place-items: center;
+      }
+      .circle {
+        border-radius: 50%;
+        overflow: hidden;
+        display: grid;
+        place-items: center;
+      }
+      .plain {
+        display: grid;
+        place-items: center;
+      }
+
+      .drawer {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: 18px;
+        border-radius: 16px;
+        background: var(--paper-200);
+        margin-top: 8px;
+      }
+      body.dark .drawer {
+        background: #1f282b;
+      }
+      .drawer .app {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        width: 62px;
+      }
+      .drawer .app span {
+        font-size: 9px;
+        color: var(--muted);
+      }
+      .drawer .tile {
+        width: 54px;
+        height: 54px;
+        border-radius: 22.3%;
+        display: grid;
+        place-items: center;
+        font-family: 'Bricolage';
+        font-size: 26px;
+        color: #fff;
+      }
+
+      .lockup {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .word {
+        font-family: 'Bricolage';
+        font-size: 44px;
+        letter-spacing: -0.045em;
+        line-height: 1;
+      }
+      .word .kk {
+        letter-spacing: -0.13em;
+      }
+      .deva {
+        font-family: 'Anek';
+        font-size: 30px;
+        line-height: 1;
+        opacity: 0.78;
+      }
+      .bilingual {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        border-top: 2px solid currentColor;
+        padding-top: 6px;
+      }
+
+      .toggle {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 10;
+        display: flex;
+        gap: 8px;
+      }
+      .toggle button {
+        font-family: 'Plex';
+        font-size: 12px;
+        font-weight: 600;
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: var(--card);
+        color: var(--text);
+        cursor: pointer;
+      }
+      .verdict {
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--muted);
+        border-left: 2px solid var(--genda);
+        padding-left: 12px;
+        margin-top: 18px;
+      }
+      .verdict b {
+        color: var(--text);
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toggle">
+      <button onclick="document.body.classList.toggle('dark')">Light / dark</button>
+    </div>
+
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <defs>
+        <symbol id="turn" viewBox="0 0 100 100">
+          <path
+            d="M30 79V41a20 20 0 0 1 40 0v8"
+            fill="none"
+            stroke="var(--c1)"
+            stroke-width="18"
+            stroke-linecap="round"
+            stroke-linejoin="round" />
+          <circle cx="70" cy="77" r="9" fill="var(--c1)" />
+        </symbol>
+
+        <symbol id="shutter" viewBox="0 0 100 100">
+          <rect width="100" height="100" rx="23" fill="var(--c1)" />
+          <path d="M22 86V74a28 28 0 0 1 56 0v12Z" fill="var(--c2)" />
+          <g fill="var(--c3)">
+            <rect x="18" y="16" width="64" height="7" rx="3.5" />
+            <rect x="18" y="27" width="64" height="7" rx="3.5" />
+            <rect x="18" y="38" width="64" height="7" rx="3.5" />
+          </g>
+          <circle cx="50" cy="72" r="4.5" fill="var(--c1)" />
+        </symbol>
+
+        <symbol id="chowk" viewBox="0 0 100 100">
+          <g fill="var(--c1)">
+            <rect x="8" y="8" width="38" height="38" rx="11" />
+            <rect x="54" y="8" width="38" height="38" rx="11" />
+            <rect x="54" y="54" width="38" height="38" rx="11" />
+          </g>
+          <rect x="8" y="54" width="38" height="38" rx="11" fill="var(--c2)" />
+        </symbol>
+      </defs>
+    </svg>
+
+    <div class="wrap">
+      <p class="eyebrow">Nukkad brand</p>
+      <h1>Three marks, one decision</h1>
+      <p class="lede">
+        Each concept is shown the way it will actually be seen: as a 16px favicon, as an iOS 26
+        squircle, under Android's circular mask, in monochrome for themed icons, and sitting in an
+        app drawer next to the competitors. Pick the one that still reads at 16px and still looks
+        like itself in grey.
+      </p>
+
+      <!-- ── Concept 1 ───────────────────────────────────────────── -->
+      <section class="concept">
+        <p class="eyebrow">Concept 1</p>
+        <h2>The Turn</h2>
+        <p class="why">
+          A lowercase <b>n</b> drawn as one road that turns a corner. The right leg stops short and
+          a dot completes it — the destination, just around the corner. The gap between them is half
+          a stroke wide, and that gap is the last minute of the delivery. The arch's negative space
+          is a doorway. Two shapes total, which is why it survives at 16px.
+        </p>
+        <div class="row">
+          <div class="cell">
+            <div class="squircle" style="width: 180px; height: 180px; background: var(--peacock)">
+              <svg width="180" height="180" style="--c1: #fbf9f5"><use href="#turn" /></svg>
+            </div>
+            <span>iOS icon 180</span>
+          </div>
+          <div class="cell">
+            <div class="squircle" style="width: 120px; height: 120px; background: #0b0f10">
+              <svg width="120" height="120" style="--c1: #55c8bf"><use href="#turn" /></svg>
+            </div>
+            <span>iOS dark</span>
+          </div>
+          <div class="cell">
+            <div class="circle" style="width: 120px; height: 120px; background: var(--peacock)">
+              <svg width="96" height="96" style="--c1: #fbf9f5"><use href="#turn" /></svg>
+            </div>
+            <span>Android circle</span>
+          </div>
+          <div class="cell">
+            <div
+              class="plain"
+              style="
+                width: 120px;
+                height: 120px;
+                background: var(--paper-100);
+                border-radius: 12px;
+              ">
+              <svg width="96" height="96" style="--c1: #121110"><use href="#turn" /></svg>
+            </div>
+            <span>Monochrome</span>
+          </div>
+          <div class="cell">
+            <svg width="64" height="64" style="--c1: var(--peacock)"><use href="#turn" /></svg
+            ><span>64</span>
+          </div>
+          <div class="cell">
+            <svg width="32" height="32" style="--c1: var(--peacock)"><use href="#turn" /></svg
+            ><span>32</span>
+          </div>
+          <div class="cell">
+            <svg width="16" height="16" style="--c1: var(--peacock)"><use href="#turn" /></svg
+            ><span>16 favicon</span>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 26px">
+          <div class="lockup">
+            <svg width="52" height="52" style="--c1: var(--peacock)"><use href="#turn" /></svg>
+            <div class="word">nu<span class="kk">kk</span>ad</div>
+          </div>
+          <div class="lockup">
+            <svg width="52" height="52" style="--c1: var(--peacock)"><use href="#turn" /></svg>
+            <div class="bilingual">
+              <div class="word" style="font-size: 34px">nu<span class="kk">kk</span>ad</div>
+              <div class="deva">नुक्कड़</div>
+            </div>
+          </div>
+        </div>
+        <p class="verdict">
+          <b>Strengths:</b> most distinctive silhouette; no food or category connotation, which
+          matters because "Nukkad" is already registered in the cafe and retail classes.
+          <b>Watch:</b> the dot must not close the gap at 16px — that is the whole idea.
+        </p>
+      </section>
+
+      <!-- ── Concept 2 ───────────────────────────────────────────── -->
+      <section class="concept">
+        <p class="eyebrow">Concept 2</p>
+        <h2>Shutter</h2>
+        <p class="why">
+          The corner shop's rolling shutter, half up, warm light spilling out of the arch below —
+          <i>nukkad khula hai</i>. It animates: on the splash screen the slats roll up and the arch
+          grows to fill the frame. The most emotionally direct of the three, and the only one that
+          says "a shop with a person in it" rather than "a logistics network".
+        </p>
+        <div class="row">
+          <div class="cell">
+            <div class="squircle" style="width: 180px; height: 180px">
+              <svg width="180" height="180" style="--c1: #0b7c76; --c2: #f7b32b; --c3: #fbf9f5">
+                <use href="#shutter" />
+              </svg>
+            </div>
+            <span>iOS icon 180</span>
+          </div>
+          <div class="cell">
+            <div class="squircle" style="width: 120px; height: 120px">
+              <svg width="120" height="120" style="--c1: #171e20; --c2: #f7b32b; --c3: #55c8bf">
+                <use href="#shutter" />
+              </svg>
+            </div>
+            <span>iOS dark</span>
+          </div>
+          <div class="cell">
+            <div class="circle" style="width: 120px; height: 120px">
+              <svg width="120" height="120" style="--c1: #0b7c76; --c2: #f7b32b; --c3: #fbf9f5">
+                <use href="#shutter" />
+              </svg>
+            </div>
+            <span>Android circle</span>
+          </div>
+          <div class="cell">
+            <div
+              class="plain"
+              style="
+                width: 120px;
+                height: 120px;
+                background: var(--paper-100);
+                border-radius: 12px;
+              ">
+              <svg width="96" height="96" style="--c1: #121110; --c2: #121110; --c3: #f4f1eb">
+                <use href="#shutter" />
+              </svg>
+            </div>
+            <span>Monochrome</span>
+          </div>
+          <div class="cell">
+            <svg width="64" height="64" style="--c1: #0b7c76; --c2: #f7b32b; --c3: #fbf9f5">
+              <use href="#shutter" /></svg
+            ><span>64</span>
+          </div>
+          <div class="cell">
+            <svg width="32" height="32" style="--c1: #0b7c76; --c2: #f7b32b; --c3: #fbf9f5">
+              <use href="#shutter" /></svg
+            ><span>32</span>
+          </div>
+          <div class="cell">
+            <svg width="16" height="16" style="--c1: #0b7c76; --c2: #f7b32b; --c3: #fbf9f5">
+              <use href="#shutter" /></svg
+            ><span>16 favicon</span>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 26px">
+          <div class="lockup">
+            <svg width="52" height="52" style="--c1: #0b7c76; --c2: #f7b32b; --c3: #fbf9f5">
+              <use href="#shutter" />
+            </svg>
+            <div class="word">nu<span class="kk">kk</span>ad</div>
+          </div>
+          <div class="lockup">
+            <svg width="52" height="52" style="--c1: #0b7c76; --c2: #f7b32b; --c3: #fbf9f5">
+              <use href="#shutter" />
+            </svg>
+            <div class="bilingual">
+              <div class="word" style="font-size: 34px">nu<span class="kk">kk</span>ad</div>
+              <div class="deva">नुक्कड़</div>
+            </div>
+          </div>
+        </div>
+        <p class="verdict">
+          <b>Strengths:</b> warmest story, best animation, strong on merchandise and rider bags.
+          <b>Watch:</b> three colours in one mark, and at 16px the slats can compress into a battery
+          icon — the arch is what saves it, so it must stay large.
+        </p>
+      </section>
+
+      <!-- ── Concept 3 ───────────────────────────────────────────── -->
+      <section class="concept">
+        <p class="eyebrow">Concept 3</p>
+        <h2>Chowk</h2>
+        <p class="why">
+          The crossroads seen from above: four blocks with a lane-width gutter between them, and the
+          bottom-left block lit — that is the corner shop. It is the only concept that is also a
+          <i>system</i>: the same four-square rhythm becomes map pins, category tiles and the
+          loading grid. Geometric rather than illustrative, so it ages slowly.
+        </p>
+        <div class="row">
+          <div class="cell">
+            <div class="squircle" style="width: 180px; height: 180px; background: var(--paper)">
+              <svg width="180" height="180" style="--c1: #0b7c76; --c2: #f7b32b">
+                <use href="#chowk" />
+              </svg>
+            </div>
+            <span>iOS icon 180</span>
+          </div>
+          <div class="cell">
+            <div class="squircle" style="width: 120px; height: 120px; background: #0b0f10">
+              <svg width="120" height="120" style="--c1: #55c8bf; --c2: #f7b32b">
+                <use href="#chowk" />
+              </svg>
+            </div>
+            <span>iOS dark</span>
+          </div>
+          <div class="cell">
+            <div class="circle" style="width: 120px; height: 120px; background: var(--paper)">
+              <svg width="104" height="104" style="--c1: #0b7c76; --c2: #f7b32b">
+                <use href="#chowk" />
+              </svg>
+            </div>
+            <span>Android circle</span>
+          </div>
+          <div class="cell">
+            <div
+              class="plain"
+              style="
+                width: 120px;
+                height: 120px;
+                background: var(--paper-100);
+                border-radius: 12px;
+              ">
+              <svg width="96" height="96" style="--c1: #121110; --c2: #a9a399">
+                <use href="#chowk" />
+              </svg>
+            </div>
+            <span>Monochrome</span>
+          </div>
+          <div class="cell">
+            <svg width="64" height="64" style="--c1: #0b7c76; --c2: #f7b32b">
+              <use href="#chowk" /></svg
+            ><span>64</span>
+          </div>
+          <div class="cell">
+            <svg width="32" height="32" style="--c1: #0b7c76; --c2: #f7b32b">
+              <use href="#chowk" /></svg
+            ><span>32</span>
+          </div>
+          <div class="cell">
+            <svg width="16" height="16" style="--c1: #0b7c76; --c2: #f7b32b">
+              <use href="#chowk" /></svg
+            ><span>16 favicon</span>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 26px">
+          <div class="lockup">
+            <svg width="52" height="52" style="--c1: #0b7c76; --c2: #f7b32b">
+              <use href="#chowk" />
+            </svg>
+            <div class="word">nu<span class="kk">kk</span>ad</div>
+          </div>
+          <div class="lockup">
+            <svg width="52" height="52" style="--c1: #0b7c76; --c2: #f7b32b">
+              <use href="#chowk" />
+            </svg>
+            <div class="bilingual">
+              <div class="word" style="font-size: 34px">nu<span class="kk">kk</span>ad</div>
+              <div class="deva">नुक्कड़</div>
+            </div>
+          </div>
+        </div>
+        <p class="verdict">
+          <b>Strengths:</b> scales to a whole visual system; safest at small sizes; reads as
+          infrastructure. <b>Watch:</b> four squares is a common icon shape — it risks looking like
+          a generic "apps" or "dashboard" glyph rather than a brand.
+        </p>
+      </section>
+
+      <!-- ── The real test ───────────────────────────────────────── -->
+      <section class="concept">
+        <p class="eyebrow">The real test</p>
+        <h2>In the app drawer</h2>
+        <p class="why">
+          Every incumbent is a wordmark or a letter on a saturated field: Zepto violet, Blinkit
+          yellow, Swiggy orange, Zomato red, BigBasket lime. Teal is the one saturated lane nobody
+          occupies, and a geometric mark is the one shape nobody uses. This strip is where that
+          claim is settled.
+        </p>
+        <div class="drawer">
+          <div class="app">
+            <div class="tile" style="background: #950edb">z</div>
+            <span>Zepto</span>
+          </div>
+          <div class="app">
+            <div class="tile" style="background: #f8cb46; color: #1c1c1c">b</div>
+            <span>Blinkit</span>
+          </div>
+          <div class="app">
+            <div class="tile" style="background: #fe5005">S</div>
+            <span>Instamart</span>
+          </div>
+          <div class="app">
+            <div class="tile" style="background: #e23744">z</div>
+            <span>Zomato</span>
+          </div>
+          <div class="app">
+            <div class="tile" style="background: #a5cd39; color: #1c1c1c">bb</div>
+            <span>bigbasket</span>
+          </div>
+          <div class="app">
+            <div class="tile" style="background: #0b7c76; padding: 0">
+              <svg width="54" height="54" style="--c1: #fbf9f5"><use href="#turn" /></svg>
+            </div>
+            <span>1 Turn</span>
+          </div>
+          <div class="app">
+            <div class="tile" style="padding: 0; background: none">
+              <svg width="54" height="54" style="--c1: #0b7c76; --c2: #f7b32b; --c3: #fbf9f5">
+                <use href="#shutter" />
+              </svg>
+            </div>
+            <span>2 Shutter</span>
+          </div>
+          <div class="app">
+            <div class="tile" style="background: #fbf9f5; padding: 0">
+              <svg width="54" height="54" style="--c1: #0b7c76; --c2: #f7b32b">
+                <use href="#chowk" />
+              </svg>
+            </div>
+            <span>3 Chowk</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

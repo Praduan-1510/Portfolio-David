@@ -1,11 +1,18 @@
 import NextLink from "next/link";
 import Image from "next/image";
 import { Container, Text } from "@/components/primitives";
+import { AnimatedDivider, StaggerGroup } from "@/components/motion";
+import { durations } from "@/lib/motion/durations";
+import { distance, stagger } from "@/lib/motion/tokens";
 import { site } from "@/lib/site";
 
 /*
  * Site footer. Static server component: mark, one-line descriptor, nav, social,
  * copyright. Copy is verbatim from docs/reference/Site.md.
+ *
+ * Its seam IS the closing rule: no border-t. The rule draws from the centre
+ * outward with the register ticks at both gutters, and the two column groups
+ * rise behind it. The copyright line does nothing.
  */
 const nav = [
   { href: "/work", label: "Work" },
@@ -25,24 +32,19 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative mt-space-9 border-t border-line">
-      {/* Closing spectrum thread: the hero opens by resolving the spectrum into
-          the wordmark; the footer lays it back out flat across the top edge as a
-          bookend. Faded ends so it's a thread, not a bar. Decorative. */}
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-px"
-        style={{
-          background: "var(--spectrum-gradient)",
-          opacity: 0.7,
-          maskImage:
-            "linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent)",
-          WebkitMaskImage:
-            "linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent)",
-        }}
-      />
+    <footer className="relative mt-space-9">
+      {/* Closing rule: inside a Container so its ticks land on the same gutter
+          register as every other seam on the page. Slower than a section seam
+          (the site's last beat), ink heaviest in the middle and fading toward
+          both gutters. Decorative. */}
+      <Container as="div" className="pointer-events-none absolute inset-x-0 top-0">
+        <AnimatedDivider ink="rule" from="center" ticks duration={durations.slower} />
+      </Container>
+
       <Container as="div" className="flex flex-col gap-space-8 py-space-9 md:flex-row md:items-start md:justify-between">
-        <div className="max-w-[40ch]">
+        {/* Two groups so the four columns cascade as one sequence: mark,
+            descriptor, then (one stagger step later) nav and social. */}
+        <StaggerGroup y={distance.sm} className="max-w-[40ch]">
           <p className="flex items-center gap-space-2 font-display text-body-l font-semibold tracking-[-0.02em]">
             <Image
               src="/Favicon/icon-512.png"
@@ -57,9 +59,9 @@ export function Footer() {
             Product designer &amp; front-end designer. Clarity, usable systems,
             shipped to production.
           </Text>
-        </div>
+        </StaggerGroup>
 
-        <div className="flex gap-space-9">
+        <StaggerGroup y={distance.sm} delay={stagger.base * 2} className="flex gap-space-9">
           <nav aria-label="Footer">
             <ul>
               {nav.map((item) => (
@@ -93,7 +95,7 @@ export function Footer() {
               ))}
             </ul>
           </nav>
-        </div>
+        </StaggerGroup>
       </Container>
 
       <Container as="div" className="border-t border-line py-space-5">

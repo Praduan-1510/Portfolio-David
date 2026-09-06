@@ -1,0 +1,281 @@
+---
+title: Nukkad
+slug: nukkad
+client: Self-directed
+role: Product Design, Brand Identity & Prototype
+year: 2026
+services: [Product Design, Brand Identity, Design System, Prototyping]
+summary: >-
+  A quick-commerce app for India, built as a direct answer to Zepto, Blinkit
+  and Instamart with the fee stack, the cancellation traps and the refund
+  runaround designed out. One fee, printed on every button. A clock that is a
+  range the store can keep. Free cancellation until the bag is sealed.
+  Twenty-five routes you can use on this page, in English and Hindi, light and
+  dark, with the glass on or off.
+cover: /images/work/nukkad/home.png
+kind: app
+# The playable build takes the signature-showcase slot under the hero, the way a
+# Figma prototype does: the strongest position on the page goes to the one thing
+# a reader can operate. Desktop shows the app in a handset beside its demo panel
+# (index.html draws that stage above 880px); the phone viewport is the app
+# full-bleed, which is simply the app. No tablet: at 834px the prototype has no
+# frame and no panel, so it would show a phone layout stretched to tablet width.
+prototype:
+  poster: /images/work/nukkad/stage.png
+  alt: "The Nukkad prototype on a desktop: the app in a handset beside a demo panel that switches theme, language and glass"
+  aspect: 1.6
+  devices: [desktop, phone]
+  launchNote: >-
+    It opens on the splash and walks you in: any four digits pass the code, and
+    the demo panel beside the phone switches theme, language and glass.
+  hint: "Add items, open the cart, pay by UPI, then watch the rider. Busy store and Order speed are in the panel on the left."
+  surfaces:
+    - id: app
+      label: App
+      shortLabel: App
+      src: /prototype/nukkad/prototype/index.html
+      domain: nukkad.app
+    - id: system
+      label: Design system
+      shortLabel: System
+      src: /prototype/nukkad/prototype/design.html
+      domain: nukkad.app/design
+flows:
+  # Argument order, not journey order: the first two screens here flank the
+  # cover in the hero trio, so the bill and the clock lead the page the way
+  # they lead the product.
+  - title: Three promises
+    note: "The argument in four screens: the bill, the clock, where the money goes when something goes wrong, and the total that never moves."
+    screens:
+      - src: /images/work/nukkad/cart.png
+        caption: "One fee line, expanded by default. ₹208 on the button."
+      - src: /images/work/nukkad/track.png
+        caption: "A range, not a countdown. Cancel free until the bag is sealed."
+      - src: /images/work/nukkad/wallet.png
+        caption: "Refunds go back to source, with the bank reference shown."
+      - src: /images/work/nukkad/payment.png
+        caption: "Pay ₹208. The same total as the cart, and it has not moved."
+  - title: Arrive
+    note: "Under three minutes to a first order, the same shape as the incumbents, with the dark patterns left out."
+    screens:
+      - src: /images/work/nukkad/splash.png
+        caption: "The mark on brand ground. Made for India."
+      - src: /images/work/nukkad/onboarding.png
+        caption: "Three cards, all skippable. Language chips from the first screen."
+      - src: /images/work/nukkad/phone.png
+        caption: "Fixed +91, consent per purpose, WhatsApp as the fallback."
+      - src: /images/work/nukkad/otp.png
+        caption: "Four boxes, filled from the message. Any four digits in the prototype."
+      - src: /images/work/nukkad/location.png
+        caption: "Areas carry live ETA badges. Out of range offers Notify me."
+  - title: Shop
+    note: "The corner shop's shelf, with the shopkeeper still in it."
+    screens:
+      - src: /images/work/nukkad/home.png
+        caption: "The ETA pill, Shankar Stores, what this street buys, today's shelf."
+      - src: /images/work/nukkad/categories.png
+        caption: "Shelves grouped by how a household runs out of things."
+      - src: /images/work/nukkad/shelf-dairy.png
+        caption: "A sticky sub-shelf rail. Sold-out sinks to the bottom."
+      - src: /images/work/nukkad/search-doodh.png
+        caption: "Four results, reading doodh as milk. The translation is visible."
+      - src: /images/work/nukkad/product-sheet.png
+        caption: "Legal Metrology on every listing: net quantity, origin, marketer."
+  - title: Pay
+    note: "Nothing is added after the cart, and the order is placed by an explicit tap."
+    screens:
+      - src: /images/work/nukkad/checkout.png
+        caption: "Delivery instructions the rider has to acknowledge before pickup."
+      - src: /images/work/nukkad/placed.png
+        caption: "Order placed. Add to it until the bag is sealed, with no second fee."
+      - src: /images/work/nukkad/orders.png
+        caption: "An empty state with a job: the first-order code lives here."
+  - title: Account
+    note: "Membership that is never pre-ticked, and settings that mean what they say."
+    screens:
+      - src: /images/work/nukkad/account.png
+        caption: "The Circle card, addresses, wallet, gift cards, a neighbour referral."
+      - src: /images/work/nukkad/circle.png
+        caption: "One plan, three durations. First month ₹29, a reminder three days before."
+      - src: /images/work/nukkad/settings.png
+        caption: "Reduce glass, Hindi, and no notification category that quietly means marketing."
+  - title: Appearance
+    note: "Dark, Hindi and Reduce glass switch live. Hindi swaps the typeface rather than hoping a fallback picks it up."
+    screens:
+      - src: /images/work/nukkad/home-dark.png
+        caption: "Ink: teal-cast dark neutrals, never pure black."
+      - src: /images/work/nukkad/home-hindi.png
+        caption: "Hindi throughout, set in Plex Sans Devanagari and Anek."
+      - src: /images/work/nukkad/home-glass-off.png
+        caption: "Reduce glass: every translucent surface turns opaque."
+      - src: /images/work/nukkad/cart-dark.png
+        caption: "The bill in the dark, tabular figures throughout."
+indexNote: 'The corner-shop one. A quick-commerce app that charges one fee and prints the payable amount on every button, quotes a clock it can keep, and lets you cancel free until the bag is sealed.'
+accent: "#22E0C8" # Nukkad's peacock teal, lifted to the lightness this ground demands. The brand token itself (peacock-600, #0B7C76) measures 3.84:1 on --bg and cannot carry text here, and the product's own rule is that the lit edge of the glass, not the tinted body, is where its colour lives. This value holds the peacock hue at 11.61:1 on --bg and 10.68:1 on --surface. The teal band is the most crowded on the site, so separation was measured rather than assumed: dE00 17.1 from Baseweight (the adjacent row in the index), 19.6 from Keel, 21.5 from Meridian, 15.8 from InsightsTap's spring green four rows down, and 56.4 from the site flame. Every peacock step in the product's own ramp fell inside 13 of Keel or Baseweight, which is why none of them is used as-shipped.
+motif: route
+disclaimer: A design prototype on fictional data. Zepto, Blinkit, Swiggy Instamart and the product brands shown are named for comparison and realism only; there is no affiliation, no real payment, no real map and no real delivery.
+featured: true
+order: -1
+---
+
+<Lede>
+Indian quick commerce solved the front half of the funnel and left the back half alone. The three incumbents sit at 4.4 to 4.7 stars in the app stores and 1.1 to 1.5 on the complaint sites, and that gap is the brief. **Nukkad is built for everything that happens after the money leaves your account.**
+</Lede>
+
+## The live prototype
+
+Launch it and you start where a first-time user starts: the mark on brand ground, three cards you can skip, a phone number, a code that fills itself, and an area chosen from a list that already shows how far away the store is. Then the home screen, which belongs to Shankar Stores on 100 Ft Road, Indiranagar, a shop with a person in it rather than a dark store with a number.
+
+On a desktop the app sits in a handset beside a demo panel. The panel is not decoration: it flips the whole product to dark, to Hindi, or to opaque surfaces with the glass off, marks the store busy so you can watch the clock stretch while the price holds still, and speeds up the order simulation so a delivery takes seconds instead of minutes. On a phone the app fills the frame and is simply the app.
+
+<Margin label="Try this">
+  Add a few things and open the cart: one fee line, and the amount already on the button. Then pay by UPI and watch the rider move. The *Cancel free* control stays on screen for exactly as long as it is true.
+</Margin>
+
+<Stats>
+  <Stat value="25" label="Routes, clickable end to end" />
+  <Stat value="1" label="Fee line, ever" />
+  <Stat value="86" label="Packshots, all generated" />
+  <Stat value="0" label="Backend services" />
+</Stats>
+
+## Why it exists
+
+The specification this came from opens with the complaint clusters shared by all three incumbents, and none of them is about finding things. Refund friction leads at roughly forty percent: five-to-seven-day waits, wallet credit forced instead of cash, claims denied with the photo attached. Then missing items the rider insists were delivered, spoiled goods with no visible best-before, an ETA that says ten minutes against a forty-minute delivery and fires "arrived" from three hundred metres away, cancellation windows that close in seconds, and fee stacks that appear only at checkout.
+
+<Bleed
+  quote="Browsing, searching and adding to cart are excellent, and everything after the money leaves your account is not."
+  attribution="The functional spec, on the category it answers"
+/>
+
+The fee stack is now a regulatory liability as well as a grievance. The consumer protection authority fined Zepto ₹7 lakh for drip pricing, a ₹170 item that cost ₹177.40 at checkout, and for pre-ticking a membership in the cart. A sub-₹99 basket carries about ₹54 in stacked fees on Blinkit and ₹55 on Instamart before any surge: delivery, small-cart, handling. Every one of those numbers is a design decision somebody made, so the product answers with three promises and builds each one into the interface where it cannot be quietly reversed.
+
+## An honest bill
+
+There is exactly one fee: ₹30 on baskets under ₹99, free above it, and free at every size for members. No handling, platform, small-cart, rain, surge or late-night charge exists anywhere in the code, and the bill explainer lists the six of them by name under the heading *What we will never add*. When the store is slammed or it is pouring, the clock gets longer and the home screen says so. The price does not move.
+
+<ScreenBeat
+  src="/images/work/nukkad/cart.png"
+  label="The cart"
+  side="left"
+  caption="The bill is expanded by default, because a bill that has to be tapped open is a bill with something to hide. The savings line and the next unlock sit above the items; the fee comparison sits below them."
+  alt="The cart: five items, a savings banner, a progress bar toward the next discount, and the expanded bill with Pay ₹208 on the button"
+/>
+
+The structural version of the promise is quieter than the copy. Every surface that shows an amount, the cart bar, the cart footer, the checkout button and the payment button, reads from one function, so the number on the button is provably the number in the summary rather than a thing someone has to remember to keep in sync. The payment screen says it out loud: *Pay ₹208. Same total as the cart. It has not moved.*
+
+<ScreenBeat
+  src="/images/work/nukkad/payment.png"
+  label="Payment"
+  side="right"
+  caption="UPI first, cards tokenised, the wallet and the shop's khata below. An explicit tap places the order; nothing is placed by default."
+  alt="The payment screen: Google Pay selected under UPI, a tokenised HDFC card, the Nukkad wallet, and Place order ₹208"
+/>
+
+Discounts follow the same rule. Basket tiers apply on their own, ₹50 off at ₹499 and ₹120 off at ₹999, with no code to enter and one progress bar toward the next unlock only. Tipping is opt-in, defaults to zero, and all of it goes to the rider. Prices are the same on every device and every account, which the bill explainer states as a commitment because the category has been caught charging iPhone users more.
+
+## An honest clock
+
+The ETA is a range, never a single number, and never below eight minutes: ten to fourteen on a normal evening, twenty to twenty-five when the store is busy. After the December strikes and the Labour Ministry's intervention, the category itself stopped advertising ten minutes, so building a brand on a number the market has abandoned would have been a mistake as well as a lie.
+
+<ScreenBeat
+  src="/images/work/nukkad/track.png"
+  label="Tracking"
+  side="left"
+  caption="The rider on the map, a stepper that only advances when something has actually happened, and Cancel free with its own deadline printed under it. Arrived is set by the rider at the door, never by proximity."
+  alt="Order tracking: a street map with the rider, Arriving in 13 minutes, a Cancel free control, and a five-step progress list"
+/>
+
+Two rules do most of the work. Cancellation is free until the bag is sealed, and the control says so for exactly as long as that is true; after sealing it becomes a two-tap support route with no fee. And a delivery more than fifteen minutes past the ETA shown at placement credits ₹25 to the wallet automatically. Nothing to claim, no form. The wallet screen carries the evidence as a ledger line: *Late-delivery credit, NK-3RM8 was 17 minutes late, +₹25.*
+
+<Aside label="Why the credit is automatic">
+  An apology you have to apply for is a policy that most people never collect. Making the credit fire on its own turns lateness from a customer's complaint into the store's cost, which is the only version that changes behaviour upstream.
+</Aside>
+
+## An honest ending
+
+Refunds go to the way you paid, by default, with the bank reference shown in the app. Instant wallet credit is offered as an alternative and is never pre-selected. Missing or damaged items up to ₹200 are approved on the spot for accounts in good standing, with no photo required under ₹100, and the support sheet always exposes a route to a person with a callback inside ten minutes.
+
+<ScreenBeat
+  src="/images/work/nukkad/wallet.png"
+  label="Wallet"
+  side="right"
+  caption="Cash you can withdraw is separated from credit, nothing expires, and the refund destination is a choice you make once. It is set to source because that is the safer of the two."
+  alt="Wallet and payments: ₹120 balance split into ₹95 cash and ₹25 credit, a refund destination toggle, and a ledger of credits and refunds"
+/>
+
+The same logic governs the membership. Nukkad Circle is one plan in three durations, never pre-selected in a cart, cancelled in one tap with benefits running to the end of the paid period, and it sends a renewal reminder three days ahead. If a member saves less in a period than they paid for it, the difference is credited. The incumbent was fined for the opposite of every clause in that rule.
+
+## Searching the way people speak
+
+Nobody in Bengaluru types "milk". They type *doodh*, and a search box that returns nothing for it has failed at the first thing a grocery app is for. The query is expanded through a synonym table before matching, and the results say *reading "doodh" as milk*, so the translation is visible rather than magic and the person can correct it if the guess was wrong.
+
+<ScreenBeat
+  src="/images/work/nukkad/search-doodh.png"
+  label="Search"
+  side="left"
+  caption="Trending chips are the words people actually use: doodh, Maggi, atta, chai. A no-results state offers to stock the item rather than shrugging."
+  alt="Search results for doodh: four results, a note reading doodh as milk, and product cards with add steppers"
+/>
+
+## The rules that constrain the interface
+
+Most of the interesting decisions here are refusals, and the design system is most useful where it forbids things.
+
+<FindingStack>
+  <Finding title="Genda means one thing">
+    Marigold is the colour of money saved, everywhere in the app, and is never used as decoration. The savings banner, the unlock bar and the discount badges are the only places it appears, so the colour keeps its meaning instead of becoming a highlighter.
+  </Finding>
+  <Finding title="Glass belongs to the chrome">
+    Liquid Glass is used for the dock, the cart bar, the ETA pill, the search field and sheet headers, and never for product cards, the bill, forms or long text. At most four glass surfaces exist on a screen at once, because compositing a blur is not free on a four-gigabyte phone.
+  </Finding>
+  <Finding title="Three tiers, and an off switch">
+    Chromium gets real refraction, an SVG displacement map inside the backdrop filter that reads as light bending through a thick edge. Safari and Firefox get blur and saturation with the same tint and rim. Reduce Transparency gets an opaque surface with a hairline, and because most browsers never report that setting, the app ships its own Reduce glass control.
+  </Finding>
+  <Finding title="Nothing is pre-ticked">
+    No membership in the cart, no tip by default, no notification category left on. The settings screen says it plainly: you get what is ticked here and nothing else, and there is no "important updates" category that quietly means marketing.
+  </Finding>
+  <Finding title="Numbers first, and they hold still">
+    Copy leads with the figure: 9 min, ₹412, 6 items. The rupee sign is set at 85 percent so the number stays loudest, grouping is Indian, and every result, price and quantity is tabular, so a count going from 9 to 10 does not shift the row.
+  </Finding>
+</FindingStack>
+
+## Edge-of-glass teal
+
+Float glass is clear when you look through it and glows green-teal at its cut edge, where the iron in it shows. Nukkad's brand colour is the material's own edge colour, which gives a Liquid Glass interface a reason to exist in the brand rather than a style applied over it. It also lands where nobody else is. Zepto owns violet, Blinkit yellow and green, Instamart orange, Zomato red, BigBasket lime, JioMart red: every saturated band on the wheel is taken except this one.
+
+<Shot
+  src="/images/work/nukkad/design-system.png"
+  domain="nukkad.app/design"
+  align="left"
+  aspect="8 / 5"
+  caption="The living design system: the mark and its two rejected siblings, five palettes each nameable in one word, the glass tiers with working toggles, and all 86 packshots."
+/>
+
+The mark is a lowercase n drawn as one road that turns a corner. The right leg stops short and a dot completes it, the destination just around the corner, and the gap between them is half a stroke wide: the last minute of the delivery. Two shapes, one colour, no effects, which is why it holds at sixteen pixels and under Android's monochrome theming. Two other directions were drawn and rejected, a rolling shutter that compressed into a battery at small sizes and four blocks around a crossroads that read as a generic apps glyph. Both are kept in the system next to the comparison harness that decided between them.
+
+The rest of the identity follows the same discipline. Five palettes with one-word names: peacock, kulhad for the terracotta of a clay chai cup, genda, paper and ink. Three gradients exist in the entire system and none of them is allowed on text, a button or a page background. Type is Bricolage Grotesque for headlines and prices, chosen for numerals with enough weight to carry the brand, IBM Plex Sans for the interface, and matched Devanagari faces for Hindi so a bilingual line is a design rather than a fallback. Radii are concentric and never guessed: an inner radius is the outer radius minus the padding between them.
+
+<Aside label="Generated, not downloaded">
+  Nothing visual in the repository was fetched from anywhere. The 86 product images are drawn from silhouette archetypes, a carton, a sack, a tin, a tube, a pillow pack, keyed to a brand hue, with a contact shadow and a transparent background so the same asset sits correctly on paper and on ink. The tokens live in TypeScript and the CSS variables are generated from them, so the design system and the prototype cannot drift apart, which is the mechanism by which design systems usually die.
+</Aside>
+
+## It adapts to the person
+
+Dark mode, Hindi and Reduce glass all switch live, from the settings screen inside the app or from the demo panel beside it. Dark is teal-cast ink rather than pure black, light is warm paper rather than pure white, and contrast is measured against the worst-case backdrop behind a glass surface rather than the average one. Hindi does not just translate the strings: it swaps the typeface, keeps product names in English with Hindi aliases, and lets the shopkeeper's one line on the home screen speak in his own language.
+
+<Margin label="Try this">
+  Open the settings screen in the prototype and turn on *Reduce glass*. Every translucent surface becomes an opaque one, and nothing else about the layout changes, which is the test of whether the glass was ever load-bearing.
+</Margin>
+
+## Scope, honestly
+
+<Aside label="What this is and is not">
+  Every person, shop, address and order is fictional, and the competitor figures come from the project's own research, twelve teardowns written before any code, as of the specification's date. Twenty-five routes are real and clickable, but there is no backend, no real map, no real payment and no real delivery: the order simulation is a timer, refraction runs only in Chromium, and the rider and dark-store apps exist as a specification rather than a build. "Nukkad" is a registered mark in India in several classes, so a real launch would need a formal search and a device mark that carries the distinctiveness on its own. It is a prototype for thinking with, not a shipped product.
+</Aside>
+
+## Outcome
+
+What the build settles is the thing a deck could not: that the fee model, the clock and the refund rules are coherent from the first cart render to the wallet ledger, with one computation feeding every number the customer sees. Adding an item, cancelling inside the window, running the store busy, switching to Hindi mid-order, all of it holds together because the rules live in one place and the interface reads from it.
+
+What it cannot settle is everything the prototype pretends to talk to. Serviceability at scale, the picker and rider surfaces, real inventory reservations and a payments integration are described in the architecture rather than built, and that is where the next fortnight of this project would go: the rider app, so a delivery instruction the customer typed is something a rider is made to acknowledge rather than something that gets read.

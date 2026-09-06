@@ -4307,7 +4307,30 @@ select.kitrow__role {
   border-color: var(--color-border-selected); }
 
 /* ── onboarding ────────────────────────────────────────────────────────── */
-.ob { max-inline-size: 62ch; margin-inline: auto; padding-block: var(--space-8) var(--space-12); }
+/* Enclosed screens have the app gutter removed (body.is-enclosed zeroes
+   #main.wrap's padding), so this has to supply its own or the content runs to
+   the edge of the phone — the same note .co carries above, for the same reason.
+   .ob never got it: all four onboarding steps were rendering their heading,
+   their body copy and their option cards flush to both edges at 390px, with the
+   .ob-bar above them correctly inset by its own padding, which is what made it
+   read as a broken layout rather than a tight one. Measured before the fix:
+   h1 at left:0, width:390 in a 390px viewport. */
+.ob { max-inline-size: 62ch; margin-inline: auto;
+  padding-block: var(--space-8) var(--space-12);
+  padding-inline: var(--space-4); }
+@media (min-width: 768px) { .ob { padding-inline: var(--space-6); } }
+
+/* "Step 1 of 3 · Units" wrapped onto two lines at 390px, which pushed the bar
+   to two rows and left the brand and Save & exit vertically off each other. It
+   is also said twice: the eyebrow immediately below reads "Step 1 of 3 · How
+   numbers are shown" and the three-segment progress bar sits between them. So
+   on a phone the bar keeps the two things that are only there — the way out and
+   the way back — and the step count is left to the two places already carrying
+   it. Below 768px .ob-bar has room for exactly those two. */
+@media (max-width: 767px) {
+  .ob-bar { padding-inline: var(--space-4); }
+  .ob-bar__step { display: none; }
+}
 .ob__steps { display: flex; gap: var(--space-2); margin-block-end: var(--space-6); }
 .ob__step { block-size: 4px; flex: 1; border-radius: var(--radius-pill); background: var(--color-surface-sunken); }
 .ob__step[data-done] { background: var(--color-action-primary-bg); }

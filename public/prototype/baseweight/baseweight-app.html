@@ -1830,7 +1830,8 @@ body { font-variant-numeric: tabular-nums; }
 .bw-tabbar__item { flex: 1; display: grid; justify-items: center; gap: 2px;
   min-block-size: var(--target-min); padding-block: var(--space-1);
   font: var(--type-caption-2); color: var(--color-text-secondary); }
-.bw-tabbar__item[aria-current="page"] { color: var(--color-action-primary-bg); font-weight: 700; }
+/* Same correction as .tabbar above: a button background is not a foreground. */
+.bw-tabbar__item[aria-current="page"] { color: var(--color-text-link); font-weight: 700; }
 
 /* ==================================================== 15. SKELETON ======= */
 /* BR-UX-001: exact final dimensions. This is the CLS budget as a component. */
@@ -2633,7 +2634,15 @@ body { font-variant-numeric: tabular-nums; }
   .tabbar a { flex:1; display:grid; justify-items:center; gap:2px; padding-block:var(--space-2);
     min-block-size:56px; font:var(--type-caption-2); color:var(--color-text-secondary);
     text-decoration:none; }
-  .tabbar a[aria-current] { color:var(--color-action-primary-bg); font-weight:700; }
+  /* --color-text-link, NOT --color-action-primary-bg. The latter is a BUTTON
+     BACKGROUND, designed to carry white text on top of it; used the other way
+     up, as 12px bold FOREGROUND on --color-surface-raised, it measured 3.58:1
+     in the dark theme against a 4.5:1 floor. That is the current-page indicator
+     on the primary mobile navigation, so it is the one label on the phone that
+     most has to be readable. --color-text-link is the token actually tuned to
+     sit on a surface, and it passes in every theme the app ships: 5.52:1 light,
+     8.43:1 dark, 7.92:1 high-contrast. The brand's button colour is untouched. */
+  .tabbar a[aria-current] { color:var(--color-text-link); font-weight:700; }
   .tabbar__g { font-size:18px; line-height:1; }
   main { padding-block-end:72px; }
   .nav__links { display:none; }
@@ -2829,6 +2838,19 @@ body { font-variant-numeric: tabular-nums; }
 /* items awaiting a measured weight */
 .weighlist { display: grid; gap: 1px; background: var(--color-border-subtle);
   border: 1px solid var(--color-border-subtle); border-radius: var(--radius-lg); overflow: hidden; }
+/* This container's background is the HAIRLINE colour: the 1px gaps between rows
+   are the only part of it meant to be seen, because .weighrow paints over the
+   rest. Four different empty states render a bare <p> straight into it, and
+   those sat on the raw hairline grey (#676c73) — 2.82:1 for the note and 2.75:1
+   for its link, against a 4.5:1 floor. They were the last two axe violations in
+   the app. Anything that is not a row gets the row's own surface, so an empty
+   state reads as one row rather than as text dropped on a divider — and so the
+   next empty state added here inherits the fix instead of repeating the bug. */
+.weighlist > :not(.weighrow) {
+  background: var(--color-surface-raised);
+  padding: var(--space-4);
+  margin: 0;
+}
 .weighrow { display: grid; grid-template-columns: 48px minmax(0,1fr) auto auto; gap: var(--space-3);
   align-items: center; padding: var(--space-3) var(--space-4); background: var(--color-surface-raised); }
 .weighrow__art { inline-size: 48px; block-size: 48px; border-radius: var(--radius-sm);
@@ -2894,7 +2916,18 @@ body { font-variant-numeric: tabular-nums; }
   color: var(--color-text-tertiary); background: var(--color-surface-sunken);
   border-block-end: 1px solid var(--color-border-subtle); }
 .lockerrow + .lockerrow { border-block-start: 1px solid var(--color-border-subtle); }
-.lockerrow[data-retired] { opacity: .62; }
+/* Retired rows used to be `opacity: .62` on the whole row. A blanket fade
+   multiplies EVERY colour in it against the page, and the tokens in here are
+   already modest — --color-text-tertiary notes, the provenance chip, the unit
+   on the weight — so ten separate nodes fell under 4.5:1 in both themes. They
+   were every remaining axe violation in the app, and they were all on this one
+   line. Worse, these rows are not disabled: each carries a live Restore button,
+   which was itself being dimmed below the floor.
+   The fade moves to the thumbnail, which carries no text and only has to meet
+   the 3:1 non-text bar. Nothing is lost by that: these rows already sit under
+   their own "Retired" heading in their own section and each says its condition
+   in words, so the state was never resting on the fade to begin with. */
+.lockerrow[data-retired] .weighrow__art { opacity: .62; }
 .lockerrow__id { display: flex; align-items: center; gap: var(--space-3); min-inline-size: 0; }
 .lockerrow__id p { overflow: hidden; text-overflow: ellipsis; }
 @media (max-width: 860px) {
@@ -3193,7 +3226,17 @@ a.hero .hero__kick, a.hero h1, a.hero p { text-decoration: none; }
 .toast__undo {
   background: none; border: 0; cursor: pointer; padding: var(--space-2) var(--space-3);
   margin-inline-end: calc(var(--space-3) * -1);
-  color: var(--color-action-primary-bg); font: var(--type-headline);
+  /* The toast sits on --color-surface-inverse, which FLIPS with the theme: dark
+     under the light theme, light under the dark one. So no page-surface accent
+     can work here — --color-action-primary-bg measured 3.8:1 and 4.04:1 in the
+     two themes, and --color-text-link is worse still at 1.71:1 on the light
+     toast, because both are tuned for the page, not for its inverse. This is
+     the Undo on destructive actions: the recovery path is not a place to be
+     nearly readable. --color-text-inverse is the token PAIRED with this surface
+     and gives 15.99:1 and 15.74:1, and the underline carries "actionable" so
+     the affordance does not rest on colour alone (WCAG 1.4.1). */
+  color: var(--color-text-inverse, #F1F4F6); font: var(--type-headline);
+  text-decoration: underline; text-underline-offset: 3px;
   min-block-size: var(--target-min);
 }
 @media (prefers-reduced-motion: reduce) { .toast { transition: none; } }

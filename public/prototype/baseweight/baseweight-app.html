@@ -5466,14 +5466,30 @@ a.bo-kpi:hover { border-color: var(--color-border-selected); }
    thing, and the bar itself is hidden from assistive tech.
 
    The empty track was surface-sunken, which in the dark theme is #070C11
-   against a #10151B page — an indicator nobody could see. The weight scale's
-   track colour is the one token in the set that is legible on the page ground
-   in BOTH themes, and this is the same kind of object: a track with a fill. */
-.ob__step { background: var(--color-weight-scale-track); }
+   against a #10151B page — an indicator nobody could see. It moved to the
+   weight scale's track colour, and the note here claimed that was "the one
+   token in the set that is legible on the page ground in BOTH themes". It is
+   not, and it never was: measured on the live page, --color-weight-scale-track
+   is #DBE0E6 on a #F6F9FB ground in the light theme (1.26:1) and #2B3137 on
+   #10151B in the dark one (1.39:1). Both are below the 1.5:1 that surface-sunken
+   managed. The first fix moved the problem, it did not solve it.
+
+   What that looks like on the screen is the reason this came back: the current
+   step is drawn as a HALF-filled segment, so at step 1 you see a short blue
+   bar, and then the rest of its track and the two segments after it simply are
+   not there. The bar reads as three broken lines rather than as one-of-three.
+
+   The weight scale is a different object and can stay as it is: it sits inside
+   a card on a raised surface, not on the page ground. This track sits directly
+   on the page, so it needs a colour measured against the page.
+   --color-border-default gives 3.39:1 in light and 3.46:1 in dark — over the
+   3:1 non-text bar in both, and still quiet enough that the unfilled track
+   does not compete with the filled part of it. */
+.ob__step { background: var(--color-border-default); }
 .ob__step[data-done] { background: var(--color-action-primary-bg); }
 .ob__step[data-now] {
   position: relative; overflow: hidden;
-  background: var(--color-weight-scale-track);
+  background: var(--color-border-default);
 }
 /* Half, drawn rather than declared: a gradient with a logical direction is not
    a gradient, and the browser drops the whole background with it. */

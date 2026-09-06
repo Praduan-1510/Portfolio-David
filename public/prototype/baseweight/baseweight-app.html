@@ -4328,8 +4328,12 @@ select.kitrow__role {
    the way back — and the step count is left to the two places already carrying
    it. Below 768px .ob-bar has room for exactly those two. */
 @media (max-width: 767px) {
-  .ob-bar { padding-inline: var(--space-4); }
-  .ob-bar__step { display: none; }
+  /* Only the SECTION name goes. "Step 1 of 3 · Units" wrapped onto two lines at
+     390px and took the whole bar to two rows with it — but hiding the entire
+     label threw away the COUNT in order to fix a width problem, and the count
+     is the only wayfinding a three-step flow has in its chrome. The section
+     name is the h1 directly below it, so that is the half that can be spared. */
+  .ob-bar__sec { display: none; }
 }
 .ob__steps { display: flex; gap: var(--space-2); margin-block-end: var(--space-6); }
 .ob__step { block-size: 4px; flex: 1; border-radius: var(--radius-pill); background: var(--color-surface-sunken); }
@@ -4380,14 +4384,25 @@ body.is-enclosed #main.wrap { max-inline-size: none; padding: 0; }
    every one of those is an invitation to abandon a flow the person is three
    taps from finishing. It keeps a mark, a step count and a way out. */
 .ob-shell { display: flex; flex-direction: column; min-block-size: 100dvh; background: var(--color-surface-page); }
+/* The inline padding has to MATCH .ob's, or the brand in the bar and the h1
+   below it start at different x — which is what an 8px misalignment between a
+   24px bar and a 16px content gutter looked like. Set here rather than in the
+   phone media query above, because that query is written before this rule and
+   would lose to it on source order: the earlier attempt at exactly this fix
+   computed 24px on a phone and I only caught it by reading the computed style
+   back. Same trap the .acct sidebar hit. */
 .ob-bar {
   display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
-  padding: var(--space-4) var(--space-6);
+  padding: var(--space-4);
   border-block-end: 1px solid var(--color-border-subtle);
 }
+@media (min-width: 768px) { .ob-bar { padding-inline: var(--space-6); } }
 .ob-bar__brand { display: inline-flex; align-items: center; gap: var(--space-2);
   font: var(--type-headline); color: var(--color-text-primary); text-decoration: none; }
-.ob-bar__step { font: var(--type-footnote); color: var(--color-text-secondary); }
+/* nowrap so a longer label can never take the bar to two rows again: it will
+   be squeezed by flex or hidden by the rule above, but it will not wrap. */
+.ob-bar__step { font: var(--type-footnote); color: var(--color-text-secondary);
+  white-space: nowrap; }
 
 
 /* The rail sits over the page, so give every screen room to finish above it. */
@@ -6523,7 +6538,7 @@ catch (e) { globalThis.__BW_AUTH_BOOT__ = null; }
   <div class="ob-shell">
     <div class="ob-bar">
       <a class="ob-bar__brand" href="#/"><svg width="24" height="24" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="var(--color-brand-mark)"/><rect x="6" y="8" width="20" height="6" rx="3" fill="var(--color-brand-mark-knockout)"/><rect x="6" y="18" width="12" height="6" rx="3" fill="var(--color-brand-mark-knockout)"/></svg>Baseweight</a>
-      <span class="ob-bar__step">Step 1 of 3 · Units</span>
+      <span class="ob-bar__step">Step 1 of 3<span class="ob-bar__sec"> · Units</span></span>
       <a class="bw-btn bw-btn--sm bw-btn--tertiary" href="#/" data-act="ob-exit"><span class="bw-btn__label">Save &amp; exit</span></a>
     </div>
   <div class="ob">
@@ -6582,7 +6597,7 @@ catch (e) { globalThis.__BW_AUTH_BOOT__ = null; }
   <div class="ob-shell">
     <div class="ob-bar">
       <a class="ob-bar__brand" href="#/"><svg width="24" height="24" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="var(--color-brand-mark)"/><rect x="6" y="8" width="20" height="6" rx="3" fill="var(--color-brand-mark-knockout)"/><rect x="6" y="18" width="12" height="6" rx="3" fill="var(--color-brand-mark-knockout)"/></svg>Baseweight</a>
-      <span class="ob-bar__step">Step 2 of 3 · Trips</span>
+      <span class="ob-bar__step">Step 2 of 3<span class="ob-bar__sec"> · Trips</span></span>
       <a class="bw-btn bw-btn--sm bw-btn--tertiary" href="#/" data-act="ob-exit"><span class="bw-btn__label">Save &amp; exit</span></a>
     </div>
   <div class="ob">
@@ -6632,7 +6647,7 @@ catch (e) { globalThis.__BW_AUTH_BOOT__ = null; }
   <div class="ob-shell">
     <div class="ob-bar">
       <a class="ob-bar__brand" href="#/"><svg width="24" height="24" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="var(--color-brand-mark)"/><rect x="6" y="8" width="20" height="6" rx="3" fill="var(--color-brand-mark-knockout)"/><rect x="6" y="18" width="12" height="6" rx="3" fill="var(--color-brand-mark-knockout)"/></svg>Baseweight</a>
-      <span class="ob-bar__step">Step 3 of 3 · First kit</span>
+      <span class="ob-bar__step">Step 3 of 3<span class="ob-bar__sec"> · First kit</span></span>
       <a class="bw-btn bw-btn--sm bw-btn--tertiary" href="#/" data-act="ob-exit"><span class="bw-btn__label">Save &amp; exit</span></a>
     </div>
   <div class="ob">

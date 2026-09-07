@@ -138,7 +138,11 @@ export interface ProjectMeta {
   cover: string;
   /** Medium. "app" (default) → portrait phone frames; "web" → landscape browser
    *  mockup driven by `video` (a shipped site) or `prototype` (a playable one). */
-  kind?: "app" | "web";
+  /* "graphic" is neither a screen nor a site: 1:1 editorial and campaign
+     artwork, which has no device to be framed in. Forcing it into a phone would
+     crop a square to 9:19.5, and into a browser would put a URL bar over a
+     LinkedIn post — so ProjectCover gives it a plain card instead. */
+  kind?: "app" | "web" | "graphic";
   /** Looping site video shown in the browser mockup. A web project needs this
    *  OR `prototype`. */
   video?: ProjectVideo;

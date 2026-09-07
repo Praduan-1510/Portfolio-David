@@ -1,3 +1,5 @@
+import Image from "next/image";
+import { cn } from "@/lib/utils/cn";
 import { PhoneFrame } from "./PhoneFrame";
 import { BrowserMockup } from "./BrowserMockup";
 import type { ProjectMeta } from "@/types/project";
@@ -33,6 +35,30 @@ export function ProjectCover({
    *  poster (used on the home work grid so the shipped product reads as live). */
   playVideo?: boolean;
 }) {
+  /* Square artwork has no device. A phone frame would crop it to 9:19.5 and a
+     browser frame would claim it is a web page, so it gets the plainest thing
+     that still reads as an object on the page: the art, a hairline, and the
+     same lift the other two frames carry. */
+  if (project.kind === "graphic") {
+    return (
+      <div
+        className={cn(
+          "relative aspect-square w-full overflow-hidden rounded-[10px] border border-line bg-surface shadow-[0_18px_50px_-28px_rgba(0,0,0,0.9)]",
+          className,
+        )}
+      >
+        <Image
+          src={project.cover}
+          alt={`${project.title}, cover graphic`}
+          fill
+          sizes={sizes}
+          priority={priority}
+          className={cn("object-cover", imgClassName)}
+        />
+      </div>
+    );
+  }
+
   if (project.kind === "web") {
     return (
       <BrowserMockup

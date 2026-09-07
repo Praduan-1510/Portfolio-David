@@ -218,16 +218,6 @@ export function AmbientField({ className }: { className?: string }) {
   // Set when the watchdog gives up, so the control can tell the truth.
   const [degraded, setDegraded] = useState(false);
 
-  const toggle = useCallback(() => {
-    const next = !readPaused();
-    try {
-      window.localStorage.setItem(STORAGE_KEY, next ? "1" : "0");
-    } catch {
-      /* private mode: the toggle still works for this session */
-    }
-    window.dispatchEvent(new Event(PAUSE_EVENT));
-  }, []);
-
   useEffect(() => {
     // Reduced motion never creates a context, and neither does the off state.
     if (paused) return;
@@ -421,27 +411,56 @@ export function AmbientField({ className }: { className?: string }) {
         />
       </div>
 
-      {/* WCAG 2.2.2 (Level A) — Pause, Stop, Hide. This moves automatically,
-          runs well past five seconds, and sits alongside content, so an off
-          switch is required, not a courtesy. Hidden only when the field has
-          already given up, because then there is nothing left to stop. */}
-      {!degraded && (
-        <button
-          type="button"
-          onClick={toggle}
-          aria-pressed={paused}
-          className="group fixed bottom-space-4 right-space-4 z-40 inline-flex min-h-[44px] items-center gap-space-2 rounded-[2px] border border-line bg-bg px-space-3 font-mono text-[0.625rem] uppercase tracking-[0.16em] text-muted transition-colors duration-fast ease-out-quad hover:border-line-strong hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
-        >
-          <span
-            aria-hidden="true"
-            className={cn(
-              "inline-block h-[6px] w-[6px] rounded-full transition-colors duration-fast",
-              running ? "bg-signal" : "bg-muted",
-            )}
-          />
-          {paused ? "Motion off" : "Motion on"}
-        </button>
-      )}
     </>
+  );
+}
+
+/*
+ * The field's off switch, as its own component.
+ *
+ * WCAG 2.2.2 (Pause, Stop, Hide) is Level A and applies to anything that moves
+ * automatically for more than five seconds alongside content, which the field
+ * does. So the control is required rather than a courtesy. It used to float in
+ * the bottom-right corner of every page, which put a permanent pill over the
+ * work; it now sits in the footer instead. Same store, same persistence, no
+ * longer in front of the thing it is protecting.
+ */
+export function AmbientFieldToggle({ className }: { className?: string }) {
+  const reduced = useReducedMotion();
+  const paused = useSyncExternalStore(subscribePaused, readPaused, () => false);
+
+  const toggle = useCallback(() => {
+    const next = !readPaused();
+    try {
+      window.localStorage.setItem(STORAGE_KEY, next ? "1" : "0");
+    } catch {
+      /* private mode: the toggle still works for this session */
+    }
+    window.dispatchEvent(new Event(PAUSE_EVENT));
+  }, []);
+
+  // Under reduced motion the field never starts, so an off switch would offer
+  // to stop something that is not running.
+  if (reduced) return null;
+
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      aria-pressed={paused}
+      className={cn(
+        "inline-flex min-h-[44px] items-center gap-space-2 font-mono text-caption text-muted transition-colors duration-fast ease-out-quad hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 focus-visible:ring-offset-bg",
+        className,
+      )}
+    >
+      <span
+        aria-hidden="true"
+        className={cn(
+          "inline-block h-[6px] w-[6px] rounded-full transition-colors duration-fast",
+          paused ? "bg-muted" : "bg-signal",
+        )}
+      />
+      {paused ? "Motion off" : "Motion on"}
+    </button>
   );
 }

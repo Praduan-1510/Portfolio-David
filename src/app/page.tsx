@@ -1,20 +1,20 @@
 import { Container, Button, Link } from "@/components/primitives";
-import { ProjectCard } from "@/components/work/ProjectCard";
 import { Hero } from "@/components/sections/Hero";
 import { HomeAtmosphere } from "@/components/sections/HomeAtmosphere";
 import { CinematicReel } from "@/components/sections/reel/CinematicReel";
+import { GraphicsShowcase } from "@/components/sections/GraphicsShowcase";
+import { WorkDrum } from "@/components/sections/WorkDrum";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { SideNav } from "@/components/layout/SideNav";
 import {
   Reveal,
-  StaggerGroup,
   TextReveal,
   AnimatedDivider,
   Magnetic,
   FlapText,
   AmbientField,
 } from "@/components/motion";
-import { getFeaturedProjectsMeta } from "@/lib/content/work";
+import { getAllProjectsMeta } from "@/lib/content/work";
 
 /*
  * Home (ARCHITECTURE.md §6): the scroll BUILDS instead of decaying: hero, then
@@ -26,12 +26,17 @@ import { getFeaturedProjectsMeta } from "@/lib/content/work";
  * shared motion primitives, reduced-motion-safe, transform/opacity only.
  */
 export default function Home() {
-  // Four features on home. This resolves to the four `order: 0` studies, slug-
-  // sorted: CareBridge, Keel, Meridian, OmniStock — the ones with a prototype a
-  // visitor can open and use. An even count also means the grid closes as a
-  // clean 2×2 with no trailing full-width row. /work carries the full inventory,
-  // so "All work" genuinely adds something rather than duplicating this grid.
-  const featured = getFeaturedProjectsMeta().slice(0, 4);
+  // Every SCREEN project, in the index's own order (Nukkad first at order -1,
+  // the concept tier last). The drum carries the whole body of work rather
+  // than a curated four: a board with two thirds of its rows missing is not a
+  // board, and "All work" stops being a different page from this one.
+  //
+  // The graphics study is deliberately not on it. The drum's whole geometry is
+  // device frames of one height and honest width, and a 1:1 campaign square is
+  // a third medium that would have to be boxed to ride it. It also already
+  // owns the full-bleed section directly below, so a flap here would be the
+  // same work twice in one screenful.
+  const allWork = getAllProjectsMeta().filter((p) => p.kind !== "graphic");
 
   return (
     <>
@@ -94,29 +99,14 @@ export default function Home() {
             <Link href="/work" className="inline-flex min-h-[44px] items-center">All work</Link>
           </Reveal>
         </div>
-        {/* 2-up grid; if the count is odd, the trailing project becomes a
-            full-width feature row (spanning both columns) so the grid never
-            leaves an empty cell. StaggerGroup animates its direct children,
-            the <article>s, so the entrance choreography is unchanged. */}
-        <StaggerGroup
-          as="div"
-          stagger={0.1}
-          className="grid grid-cols-1 gap-space-8 md:grid-cols-2"
-        >
-          {featured.map((project, i) => {
-            const isTrailingOdd =
-              i === featured.length - 1 && featured.length % 2 === 1;
-            return (
-              <div key={project.slug} className={isTrailingOdd ? "md:col-span-2" : undefined}>
-                <ProjectCard
-                  project={project}
-                  layout={isTrailingOdd ? "wide" : "default"}
-                />
-              </div>
-            );
-          })}
-        </StaggerGroup>
+        <WorkDrum projects={allWork} />
       </Container>
+
+      {/* The graphics wall, immediately after the case studies: it is the same
+          answer to "what has this person made", in a medium the grid above
+          cannot hold. Full-bleed and self-contained, so it does not compete
+          with the studies for the page gutter. */}
+      <GraphicsShowcase />
 
       {/* On the record. Renders nothing until a verified quote exists, so the
           divider below stays the seam between work and about either way. */}

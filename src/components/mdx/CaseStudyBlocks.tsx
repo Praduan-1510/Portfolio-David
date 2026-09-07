@@ -1,4 +1,5 @@
 import type React from "react";
+import Image from "next/image";
 import { PhoneFrame } from "@/components/primitives";
 import { Reveal, StaggerGroup, Parallax, FlapDigits, AnimatedDivider } from "@/components/motion";
 import { durations } from "@/lib/motion/durations";
@@ -431,6 +432,80 @@ export function BeforeAfter({
       {note && (
         <figcaption className="mt-space-4 max-w-[52ch] text-body text-muted">
           {note}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
+/* ── Sheet / Plate ─ the contact sheet, for work whose medium is a square.
+   Every other block here assumes a device: a phone, a browser, a flow. Editorial
+   and campaign graphics have none — a 1:1 post is the finished artefact, not a
+   picture of one — so this is deliberately the plainest block in the file: a
+   grid, a hairline, a caption. The caption carries the DECISION, same rule as
+   <Shot>; the art carries itself.
+
+   Sized against the grid rather than the source: these originals are 1080-2160px
+   square and up to 2.4MB each, and `sizes` pins next/image to the rendered
+   column so a 17-piece sheet does not ship 16MB to read a case study. ───── */
+export function Sheet({
+  columns = 3,
+  children,
+}: {
+  /** 2 for the pieces that carry dense type, 3 for the rest. */
+  columns?: 2 | 3;
+  children?: React.ReactNode;
+}) {
+  return (
+    <StaggerGroup
+      as="div"
+      stagger={stagger.tight}
+      className={cn(
+        "cs-wide my-space-9 grid grid-cols-2 gap-space-4 sm:gap-space-5",
+        columns === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2",
+      )}
+    >
+      {children}
+    </StaggerGroup>
+  );
+}
+
+export function Plate({
+  src,
+  alt,
+  caption,
+  columns = 3,
+}: {
+  src?: string;
+  alt?: string;
+  caption?: string;
+  columns?: 2 | 3;
+}) {
+  if (!src) return null;
+  return (
+    <figure className="min-w-0">
+      <div className="relative aspect-square w-full overflow-hidden rounded-[10px] border border-line bg-surface shadow-[0_18px_50px_-28px_rgba(0,0,0,0.9)]">
+        <Image
+          src={src}
+          alt={alt ?? caption ?? ""}
+          fill
+          sizes={
+            columns === 3
+              ? "(min-width: 1024px) 21rem, (min-width: 640px) 44vw, 46vw"
+              : "(min-width: 1024px) 32rem, 46vw"
+          }
+          className="object-cover"
+        />
+        {/* The set runs from near-white editorial to near-black festive; one
+            inset hairline is the only edge that works for both. */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 rounded-[10px] shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--fg)_9%,transparent)]"
+        />
+      </div>
+      {caption && (
+        <figcaption className="mt-space-3 font-mono text-caption leading-relaxed text-muted">
+          {caption}
         </figcaption>
       )}
     </figure>

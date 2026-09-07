@@ -53,8 +53,10 @@ function assertProjectMeta(
   // Medium: "app" (default) tells the story in portrait phone flows; "web" tells
   // it through a landscape browser mockup driven by a video.
   const kind = (data.kind as string | undefined) ?? "app";
-  if (kind !== "app" && kind !== "web")
-    throw new Error(`[content] ${slug}.mdx: "kind" must be "app" or "web"`);
+  if (kind !== "app" && kind !== "web" && kind !== "graphic")
+    throw new Error(
+      `[content] ${slug}.mdx: "kind" must be "app", "web" or "graphic"`,
+    );
 
   if (kind === "web") {
     // A web study's centerpiece is either a recording of a shipped site

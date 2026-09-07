@@ -1140,6 +1140,24 @@ html.lenis body {
 
 /* Mobile-menu link reveal. `both` fill + the global reduced-motion rule means
    it jumps straight to the visible end state under prefers-reduced-motion. */
+/* The work drum's nameplate: the name rises as the drum lands on its station.
+   `both` fill plus the global reduced-motion rule means it jumps straight to
+   the settled name for anyone who asked for less movement. */
+@keyframes nameplate-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.nameplate-in {
+  animation: nameplate-in var(--dur-base) var(--ease-out-expo) both;
+}
+
 @keyframes nav-link-in {
   from {
     opacity: 0;

@@ -20,6 +20,10 @@ import {
   Margin,
   Wide,
   Bleed,
+  // The contact sheet: square editorial/campaign artwork, which has no device
+  // to be framed in. See CaseStudyBlocks.
+  Sheet,
+  Plate,
   BeforeAfter,
 } from "./CaseStudyBlocks";
 import {
@@ -219,6 +223,10 @@ export const mdxComponents = {
   Margin,
   Wide,
   Bleed,
+  // The contact sheet: square editorial/campaign artwork, which has no device
+  // to be framed in. See CaseStudyBlocks.
+  Sheet,
+  Plate,
   BeforeAfter,
   FigmaPrototype,
   // A real, playable HTML prototype in the reading column: the interactive

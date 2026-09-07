@@ -5,6 +5,7 @@ import { AnimatedDivider, StaggerGroup } from "@/components/motion";
 import { durations } from "@/lib/motion/durations";
 import { distance, stagger } from "@/lib/motion/tokens";
 import { site } from "@/lib/site";
+import { AmbientFieldToggle } from "@/components/motion";
 
 /*
  * Site footer. Static server component: mark, one-line descriptor, nav, social,
@@ -98,10 +99,13 @@ export function Footer() {
         </StaggerGroup>
       </Container>
 
-      <Container as="div" className="border-t border-line py-space-5">
+      <Container as="div" className="flex items-center justify-between gap-space-4 border-t border-line py-space-5">
         <span className="font-mono text-caption text-muted">
           © {year} Praduan Saha
         </span>
+        {/* The ambient field's off switch. Required (WCAG 2.2.2, Level A) and
+            kept, but down here rather than floating over the work. */}
+        <AmbientFieldToggle />
       </Container>
     </footer>
   );

@@ -27,6 +27,11 @@ interface MarqueeProps {
   items: React.ReactNode[];
   /** Drift speed in pixels per second: constant regardless of track width. */
   speed?: number;
+  /** Which way the track drifts. Two marquees pointed at each other read as one
+   *  moving field rather than two separate strips, which is the whole point of
+   *  stacking them. Left is the original behaviour and stays the default, so no
+   *  existing caller changes. */
+  direction?: "left" | "right";
   /** Trailing-gap utility applied to every cell (the inter-item spacing). */
   gapClassName?: string;
   /** On-page pause/play control (WCAG 2.2.2: auto-motion over 5s needs a user
@@ -43,6 +48,7 @@ const useIsoLayoutEffect =
 export function Marquee({
   items,
   speed = 40,
+  direction = "left",
   gapClassName = "pr-space-8 sm:pr-space-9",
   pausable = true,
   className,
@@ -85,9 +91,16 @@ export function Marquee({
       const track = trackRef.current;
       if (!wrap || !track || prefersReducedMotion()) return; // static, fully visible
 
-      const distance = track.scrollWidth / 2; // px travelled per -50% loop
+      const distance = track.scrollWidth / 2; // px travelled per 50% loop
+      /* Rightward is the same loop run from the other end: park the track at
+         -50% and tween back to 0. Both directions therefore travel exactly one
+         group width, so the seam stays invisible and `speed` still means the
+         same number of pixels per second either way. */
+      const from = direction === "right" ? -50 : 0;
+      const to = direction === "right" ? 0 : -50;
+      gsap.set(track, { xPercent: from });
       const tween = gsap.to(track, {
-        xPercent: -50,
+        xPercent: to,
         duration: distance / speed,
         ease: "none",
         repeat: -1,
@@ -113,7 +126,7 @@ export function Marquee({
         tweenRef.current = null;
       };
     },
-    { scope: wrapRef, dependencies: [reduced, speed, copies], revertOnUpdate: true },
+    { scope: wrapRef, dependencies: [reduced, speed, direction, copies], revertOnUpdate: true },
   );
 
   // `copies` repetitions of the set; only the first set is read by assistive

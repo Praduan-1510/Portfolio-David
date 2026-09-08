@@ -129,15 +129,17 @@ export function GraphicsShowcase() {
           and running them past both edges is what makes the page feel like it
           opens onto the work rather than listing it.
 
-          overflow-x-clip is load-bearing, not decoration. Marquee's pause
+          overflow-x-clip is load-bearing, not decoration. Marquee's stop
           control extends its 44px hit area with `before:-inset-3`, which reaches
           about 4px past the button. Every other marquee on this site sits inside
           the page gutter, so that overhang lands in the margin and nobody sees
           it. These two are full-bleed to the viewport edge, so it escaped and
-          took the document to 1443px on a 1440px screen — measured against
-          production, which is exactly 1440. Clipped rather than repositioned
-          because the part being cut is off-screen and was never tappable, and
-          `clip` over `hidden` so this does not become a scroll container. */}
+          took the document to 1443px on a 1440px screen, measured against
+          production, which is exactly 1440. The control is clipped to a point
+          until it takes focus now, so the overhang only exists while a keyboard
+          user has it open, but that is exactly when a 3px horizontal scrollbar
+          would be worst. `clip` over `hidden` so this does not become a scroll
+          container. */}
       <div className="mt-space-8 space-y-space-4 overflow-x-clip sm:mt-space-9 sm:space-y-space-5">
         <Marquee items={rowA} speed={31} gapClassName="pr-space-4 sm:pr-space-5" />
         {/* Pointed the other way and slower, so the two rows never lock step. */}

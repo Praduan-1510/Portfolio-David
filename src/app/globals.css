@@ -1018,6 +1018,28 @@
   }
 
   /*
+   * THE MARQUEE'S STOP CONTROL.
+   *
+   * Clipped to nothing until it takes focus. `clip-path` is the whole trick and
+   * it is the same one `sr-only` uses: it removes the control visually AND from
+   * hit-testing (so no invisible tap target sits on the artwork) while leaving
+   * it in the accessibility tree and reachable by Tab. Because it can only be
+   * focused from the keyboard, `:focus` and `:focus-visible` mean the same
+   * thing here and `:focus` is the one screen readers reliably trigger.
+   *
+   * Deliberately just these two declarations: padding, border and colour stay
+   * with the Tailwind utilities on the element, and Tailwind's `utilities`
+   * layer outranks this `components` one, so anything set here would be
+   * silently overridden in one state and not the other.
+   */
+  .marquee-stop {
+    clip-path: inset(50%);
+  }
+  .marquee-stop:focus {
+    clip-path: none;
+  }
+
+  /*
    * THE CONTACT SHEET (work index, graphics beat).
    *
    * A light table: a ground darker than the page so the sheet reads as

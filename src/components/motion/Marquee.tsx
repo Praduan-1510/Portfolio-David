@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, registerGsap } from "@/lib/motion/gsap";
+import { durations } from "@/lib/motion/durations";
 import { useReducedMotion, prefersReducedMotion } from "@/hooks/useReducedMotion";
 import { cn } from "@/lib/utils/cn";
 
@@ -22,6 +23,24 @@ import { cn } from "@/lib/utils/cn";
  * continuous loop reads as broken (§7.1). Paused when off-screen for the perf
  * budget (ARCHITECTURE.md §12). Under reduced motion it renders a static, fully
  * legible row (no tween); the duplicate cells are hidden from assistive tech.
+ *
+ * STOPPING IT. Three mechanisms, and only one of them is ever visible:
+ *
+ *   1. Hover. Putting a pointer over the band glides it to a stop and lets it
+ *      pick back up on the way out (timeScale to 0 and back over `base`, not a
+ *      hard pause: a continuous drift stopping dead reads as a dropped frame).
+ *      This is what a reader who wants to look at something actually does, so
+ *      it is the mechanism that needs no explaining and no chrome.
+ *   2. Focus. Tabbing into the band holds it for the same reason.
+ *   3. An explicit Pause control, which is CLIPPED TO A POINT until it takes
+ *      keyboard focus, then appears (`.marquee-stop` in globals.css). WCAG
+ *      2.2.2 wants a mechanism for auto-motion over five seconds and hover is
+ *      not one for a keyboard user; a pill parked on top of the artwork is not
+ *      a design. Revealing it on focus satisfies both, the way the skip link at
+ *      the top of every page already does.
+ *
+ * A pointer that is not a hovering one (`pointerType: "touch"`) is ignored, so
+ * a tap does not leave the band stopped with no way back.
  */
 interface MarqueeProps {
   items: React.ReactNode[];
@@ -34,9 +53,10 @@ interface MarqueeProps {
   direction?: "left" | "right";
   /** Trailing-gap utility applied to every cell (the inter-item spacing). */
   gapClassName?: string;
-  /** On-page pause/play control (WCAG 2.2.2: auto-motion over 5s needs a user
-   *  mechanism; prefers-reduced-motion only covers users who found the OS
-   *  setting). Default on; the control never renders in the static branch. */
+  /** Render the keyboard-reachable pause/play control (WCAG 2.2.2: auto-motion
+   *  over 5s needs a user mechanism; prefers-reduced-motion only covers users
+   *  who found the OS setting). It is invisible until focused. Default on; the
+   *  control never renders in the static branch. */
   pausable?: boolean;
   className?: string;
 }
@@ -56,11 +76,45 @@ export function Marquee({
   const wrapRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
-  // User pause beats the IntersectionObserver auto-play; the ref mirrors the
-  // state so the IO callback reads it without re-running the GSAP setup.
   const [userPaused, setUserPaused] = useState(false);
-  const userPausedRef = useRef(false);
   const tweenRef = useRef<gsap.core.Tween | null>(null);
+  const speedRef = useRef<gsap.core.Tween | null>(null);
+  /* Four independent reasons to stop, kept apart so releasing one cannot
+     restart a band another still holds: a pointer leaving must not resume a
+     marquee the reader explicitly paused, or one that has scrolled away. Refs
+     rather than state because the IntersectionObserver and the pointer handlers
+     both read them without re-running the GSAP setup. */
+  const holds = useRef({ user: false, offscreen: true, hover: false, focus: false });
+
+  /* The two kinds of stop are deliberately different. `user` and `offscreen`
+     are hard: nobody is looking, or has asked it to stop, so the tween pauses
+     outright and costs nothing. `hover` and `focus` are soft: someone IS
+     looking, so the band decelerates into a stop under the cursor and gets back
+     up to speed on the way out. */
+  const applyHold = useCallback(() => {
+    const tween = tweenRef.current;
+    if (!tween) return;
+    const h = holds.current;
+    speedRef.current?.kill();
+    if (h.user || h.offscreen) {
+      tween.pause();
+      return;
+    }
+    tween.play();
+    speedRef.current = gsap.to(tween, {
+      timeScale: h.hover || h.focus ? 0 : 1,
+      duration: durations.base,
+      ease: "power2.out",
+    });
+  }, []);
+
+  const hold = useCallback(
+    (key: "user" | "offscreen" | "hover" | "focus", on: boolean) => {
+      holds.current[key] = on;
+      applyHold();
+    },
+    [applyHold],
+  );
   // Even count of identical copies → -50% loops seamlessly. 2 is the SSR/no-JS
   // baseline; measured up on the client so half the track ≥ the viewport.
   const [copies, setCopies] = useState(2);
@@ -104,29 +158,36 @@ export function Marquee({
         duration: distance / speed,
         ease: "none",
         repeat: -1,
-        paused: userPausedRef.current,
+        paused: true,
       });
       tweenRef.current = tween;
+      // A resize rebuilds the tween at timeScale 1; re-apply whatever is
+      // currently holding it so a band under the cursor does not jump back to
+      // full speed mid-hover.
+      applyHold();
 
-      // Pause off-screen so the loop never burns frames once scrolled past
-      // (§7.5 / §12). GSAP already throttles on tab-hidden. A user pause always
-      // wins, scrolling away and back must not restart a paused marquee.
+      // Off-screen is a hold like any other, so the loop never burns frames
+      // once scrolled past (§7.5 / §12) and scrolling back cannot restart a
+      // band the reader paused. GSAP already throttles on tab-hidden.
       const io = new IntersectionObserver(
-        ([entry]) =>
-          entry.isIntersecting && !userPausedRef.current
-            ? tween.play()
-            : tween.pause(),
+        ([entry]) => hold("offscreen", !entry.isIntersecting),
         { threshold: 0 },
       );
       io.observe(wrap);
 
       return () => {
         io.disconnect();
+        speedRef.current?.kill();
+        speedRef.current = null;
         tween.kill();
         tweenRef.current = null;
       };
     },
-    { scope: wrapRef, dependencies: [reduced, speed, direction, copies], revertOnUpdate: true },
+    {
+      scope: wrapRef,
+      dependencies: [reduced, speed, direction, copies, applyHold, hold],
+      revertOnUpdate: true,
+    },
   );
 
   // `copies` repetitions of the set; only the first set is read by assistive
@@ -134,17 +195,29 @@ export function Marquee({
   const cells = Array.from({ length: copies }).flatMap(() => items);
 
   const togglePause = () => {
-    const next = !userPausedRef.current;
-    userPausedRef.current = next;
+    const next = !holds.current.user;
     setUserPaused(next);
-    if (next) tweenRef.current?.pause();
-    else tweenRef.current?.play();
+    hold("user", next);
   };
 
   return (
     // The control sits OUTSIDE the masked container: the edge fade would
     // otherwise wash it out at exactly the corner it occupies.
-    <div className={cn("relative", className)}>
+    <div
+      className={cn("relative", className)}
+      // A hovering pointer holds the band; a touch pointer does not, because
+      // there is no matching leave and the reader would be left looking at a
+      // stopped strip with nothing to restart it.
+      onPointerEnter={(e) => e.pointerType !== "touch" && hold("hover", true)}
+      onPointerLeave={(e) => e.pointerType !== "touch" && hold("hover", false)}
+      // A pointer lifted or cancelled over the band (a stylus leaving range, a
+      // gesture taken over by the browser) never fires leave.
+      onPointerCancel={() => hold("hover", false)}
+      onFocusCapture={() => hold("focus", true)}
+      onBlurCapture={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node)) hold("focus", false);
+      }}
+    >
       <div
         ref={wrapRef}
         className="relative overflow-hidden"
@@ -171,8 +244,11 @@ export function Marquee({
         <button
           type="button"
           onClick={togglePause}
-          // ::before extends the 44px hit area past the small visual pill.
-          className="absolute right-space-2 top-1/2 z-10 inline-flex -translate-y-1/2 items-center gap-[5px] rounded-full border border-line bg-[color:color-mix(in_srgb,var(--bg)_78%,transparent)] px-space-2 py-[2px] font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[color:color-mix(in_srgb,var(--fg)_85%,transparent)] opacity-60 backdrop-blur-sm transition-opacity duration-fast ease-out-quad before:absolute before:-inset-3 before:content-[''] hover:opacity-100 focus-visible:opacity-100"
+          // `.marquee-stop` clips this to a point until it takes keyboard focus,
+          // at which point it becomes the pill below. Nothing is drawn over the
+          // artwork at rest, and the ::before hit-area overhang (44px past a
+          // small pill) only exists while it is visible.
+          className="marquee-stop absolute right-space-2 top-space-2 z-10 inline-flex items-center gap-[5px] rounded-full border border-line bg-[color:color-mix(in_srgb,var(--bg)_88%,transparent)] px-space-2 py-[2px] font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[color:color-mix(in_srgb,var(--fg)_85%,transparent)] backdrop-blur-sm before:absolute before:-inset-3 before:content-['']"
         >
           <span
             aria-hidden="true"

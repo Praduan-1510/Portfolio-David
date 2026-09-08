@@ -452,8 +452,13 @@ export function Sheet({
   columns = 3,
   children,
 }: {
-  /** 2 for the pieces that carry dense type, 3 for the rest. */
-  columns?: 2 | 3;
+  /** 1 for a piece whose type has to be readable, 2 for dense, 3 for the rest.
+   *  Accepts a STRING from MDX. next-mdx-remote drops numeric JSX expression
+   *  props here — `columns={2}` arrives as undefined and silently falls back to
+   *  the default, which is how four sheets on the graphics study all rendered
+   *  three-up when two of them asked not to. Written `columns="2"` in MDX and
+   *  normalised below, so both spellings behave. */
+  columns?: 1 | 2 | 3 | "1" | "2" | "3";
   children?: React.ReactNode;
 }) {
   return (
@@ -461,8 +466,12 @@ export function Sheet({
       as="div"
       stagger={stagger.tight}
       className={cn(
-        "cs-wide my-space-9 grid grid-cols-2 gap-space-4 sm:gap-space-5",
-        columns === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2",
+        "cs-wide my-space-9 grid gap-space-4 sm:gap-space-5",
+        String(columns) === "1"
+          ? "mx-auto max-w-[46rem] grid-cols-1"
+          : String(columns) === "2"
+            ? "grid-cols-2 lg:grid-cols-2"
+            : "grid-cols-2 lg:grid-cols-3",
       )}
     >
       {children}
@@ -479,7 +488,8 @@ export function Plate({
   src?: string;
   alt?: string;
   caption?: string;
-  columns?: 2 | 3;
+  /** Same string-from-MDX contract as <Sheet>. */
+  columns?: 1 | 2 | 3 | "1" | "2" | "3";
 }) {
   if (!src) return null;
   return (
@@ -490,9 +500,11 @@ export function Plate({
           alt={alt ?? caption ?? ""}
           fill
           sizes={
-            columns === 3
-              ? "(min-width: 1024px) 21rem, (min-width: 640px) 44vw, 46vw"
-              : "(min-width: 1024px) 32rem, 46vw"
+            String(columns) === "1"
+              ? "(min-width: 1024px) 46rem, 92vw"
+              : String(columns) === "2"
+                ? "(min-width: 1024px) 32rem, 46vw"
+                : "(min-width: 1024px) 21rem, (min-width: 640px) 44vw, 46vw"
           }
           className="object-cover"
         />

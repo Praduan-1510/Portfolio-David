@@ -51,9 +51,10 @@ export default function WorkPage() {
         {/* Supporting copy: quiet rise, no kinetic split. */}
         <Reveal trigger="load" delay={0.18} y={16}>
           <Text variant="body-l" className="mt-space-5 max-w-[var(--measure)] text-muted">
-            Six studies at full weight, then the concept work below. One is
-            live in production, four are working builds you can open and use on
-            this page, and every one is labelled for what it is.
+            Six studies at full weight, a sheet of seventeen graphics, then
+            the concept work below. One is live in production, four are working
+            builds you can open and use on this page, and every one is labelled
+            for what it is.
           </Text>
         </Reveal>
 

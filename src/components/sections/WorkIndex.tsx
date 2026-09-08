@@ -6,6 +6,7 @@ import { StaggerGroup } from "@/components/motion";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { FlightBoard } from "./FlightBoard";
+import { ContactSheet } from "./ContactSheet";
 import { displayTitle } from "@/lib/utils/typography";
 import type { ProjectMeta } from "@/types/project";
 
@@ -26,16 +27,25 @@ export function WorkIndex({ projects }: { projects: ProjectMeta[] }) {
   // get the static WorkStack instead.
   const isDesktop = useMediaQuery("(min-width: 1024px) and (pointer: fine)");
 
-  // Two tiers. `featured` is the A-list; everything else is concept work that
-  // sits below the fold of the argument, in one compact list.
+  // Three tiers. `featured` is the A-list; the graphics get their own beat;
+  // everything left is concept work, in one compact list below the fold of the
+  // argument.
   //
   // The split happens HERE rather than inside each renderer for two reasons:
   // the board's sticky preview and its "01 / 06" counter are indexed off the
   // array it is handed, so feeding it the full set would make the counter
   // promise rows the preview never shows; and the compact tier is identical at
   // every breakpoint, so writing it once beats duplicating it into both.
+  //
+  // Graphics come OUT of the compact tier on purpose. That tier's whole design
+  // is that it carries no imagery, and this is the one body of work that is
+  // nothing but imagery: a text row was the wrong shelf for it, and the tier's
+  // own copy ("unshipped studies") was untrue of client work with live prices
+  // and a live phone number on it. It also read "APP", because a two-way kind
+  // switch had nowhere to put a third kind.
   const main = projects.filter((p) => p.featured);
-  const concepts = projects.filter((p) => !p.featured);
+  const graphics = projects.find((p) => p.kind === "graphic");
+  const concepts = projects.filter((p) => !p.featured && p.kind !== "graphic");
 
   return (
     <>
@@ -47,10 +57,17 @@ export function WorkIndex({ projects }: { projects: ProjectMeta[] }) {
       ) : (
         <WorkStack projects={main} />
       )}
+      {graphics && <ContactSheet project={graphics} />}
       {concepts.length > 0 && <ConceptTier projects={concepts} />}
     </>
   );
 }
+
+const KIND_LABEL: Record<NonNullable<ProjectMeta["kind"]>, string> = {
+  app: "App",
+  web: "Web",
+  graphic: "Graphic",
+};
 
 /*
  * Selected concept work: the compact tier.
@@ -106,7 +123,7 @@ function ConceptTier({ projects }: { projects: ProjectMeta[] }) {
                     line of its own and reads as a stray glyph. */}
                 <span className="flex items-baseline gap-space-3 sm:contents">
                   <span className="shrink-0 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
-                    {project.kind === "web" ? "Web" : "App"} · {project.year}
+                    {KIND_LABEL[project.kind ?? "app"]} · {project.year}
                   </span>
                   <span
                     aria-hidden="true"

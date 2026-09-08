@@ -1016,6 +1016,76 @@
   .font-display.text-heading .text-spectrum {
     vertical-align: bottom;
   }
+
+  /*
+   * THE CONTACT SHEET (work index, graphics beat).
+   *
+   * A light table: a ground darker than the page so the sheet reads as
+   * something laid ON the site rather than printed into it, one faint square
+   * grid at the pitch of the thumbnails, and a slow warm bloom of the project
+   * accent rising behind the plate. All three are on the same pseudo-element,
+   * so the whole atmosphere costs one composited layer and nothing animates.
+   */
+  .contact-sheet {
+    background-color: var(--graphite-950);
+  }
+  .contact-sheet::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      radial-gradient(
+        60% 70% at 22% 55%,
+        color-mix(in srgb, var(--accent) 9%, transparent),
+        transparent 70%
+      ),
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--fg) 4%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--fg) 4%, transparent) 1px,
+        transparent 1px
+      );
+    background-size:
+      100% 100%,
+      64px 64px,
+      64px 64px;
+    /* The grid fades out at the edges so the band has no visible seam where the
+       texture stops; a hard-edged rule of squares reads as a table. */
+    -webkit-mask-image: radial-gradient(120% 100% at 50% 40%, #000 30%, transparent 100%);
+    mask-image: radial-gradient(120% 100% at 50% 40%, #000 30%, transparent 100%);
+  }
+
+  /*
+   * The chinagraph ring. Drawn, not faded in: the stroke runs round the frame
+   * the way a hand does, in a little over half a second, and the ease is the
+   * site's out-expo so it arrives fast and settles. pathLength=1 on the path
+   * means the dash figures are fractions and need no measured perimeter.
+   */
+  @keyframes grease-ring {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  .grease-ring {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    animation: grease-ring 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .grease-ring {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+  }
 }
 
 @layer base {

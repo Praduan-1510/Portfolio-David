@@ -2,6 +2,7 @@ import Image from "next/image";
 import NextLink from "next/link";
 import { Container, Text } from "@/components/primitives";
 import { Marquee, Reveal, TextReveal } from "@/components/motion";
+import { GRAPHICS_ROW_A, GRAPHICS_ROW_B, type GraphicFrame } from "@/lib/content/graphics";
 
 /*
  * GraphicsShowcase — the wall of square work.
@@ -35,86 +36,18 @@ import { Marquee, Reveal, TextReveal } from "@/components/motion";
  * the page is Marquee's own.
  */
 
-interface Graphic {
-  src: string;
-  alt: string;
-}
+/*
+ * Both rows come from the one catalogue in src/lib/content/graphics.ts, which
+ * the work index's contact sheet reads too: two opposite presentations of the
+ * same seventeen squares, and no second copy of the alt text to drift.
+ */
+type Graphic = GraphicFrame;
 
-/* ── Row one: the carousel, in its own order ─────────────────────────────── */
-const ROW_A: Graphic[] = [
-  {
-    src: "/Graphics/slide_01.png",
-    alt: "Carousel cover: “Figma's AI didn't replace designers. It did something worse — smarter,” with “worse” struck through and “smarter” set in orange beside the Figma mark",
-  },
-  {
-    src: "/Graphics/slide_02.png",
-    alt: "Core philosophy slide: “Creative — designs from the gut” against “Corporate — designs from the data,” each illustrated by a phone screen",
-  },
-  {
-    src: "/Graphics/slide_03.png",
-    alt: "The workspace slide: a free-form canvas of shapes beside a component library in a laptop, under the line “Where the work begins”",
-  },
-  {
-    src: "/Graphics/slide_04.png",
-    alt: "How wins are measured: a red “Site of the Day” award card beside a blue analytics card showing a conversion lift after an onboarding redesign",
-  },
-  {
-    src: "/Graphics/slide_05.png",
-    alt: "Why it matters: “The new floor is your old ceiling,” over three panels comparing the same prompt in the manual era, with AI, and with taste plus AI",
-  },
-  {
-    src: "/Graphics/slide_06.png",
-    alt: "Constraints: “The shape of freedom,” an open spiral on an infinite canvas beside two rectangles locked to a twelve-column grid",
-  },
-  {
-    src: "/Graphics/slide_07.png",
-    alt: "Stakeholders: “Who's in the room?” — a three-person studio circle beside a fourteen-person corporate team table",
-  },
-  {
-    src: "/Graphics/slide_08.png",
-    alt: "Evolution: “What pulls you forward,” a list of named colour trends beside an A/B test card comparing two variants",
-  },
-  {
-    src: "/Graphics/slide_09.png",
-    alt: "The takeaway, set on a magenta gradient: “Fluidity over Friction,” with a note that the best designers build the bridge between expression and engineering",
-  },
-];
+/* Row one: the carousel, in its own order. */
+const ROW_A: Graphic[] = GRAPHICS_ROW_A;
 
-/* ── Row two: the standalone posts and the campaign ──────────────────────── */
-const ROW_B: Graphic[] = [
-  {
-    src: "/Graphics/slide_10.png",
-    alt: "Closing slide: “So tell me — where do you design?” with a two-option live poll between The Studio and The Ecosystem",
-  },
-  {
-    src: "/Graphics/standalone_post.png",
-    alt: "Standalone post: “Figma's AI didn't replace designers. It just made being average obsolete,” with “average” struck through",
-  },
-  {
-    src: "/Graphics/post_03_microinteractions.png",
-    alt: "Field Notes volume three: “Six micro-interactions that actually convert,” a six-cell grid covering haptics, optimistic UI, skeleton screens, inline validation, forgiving undo and visible progress",
-  },
-  {
-    src: "/Graphics/ux_2026_linkedin_post.png",
-    alt: "Field Notes volume seven: “Designing for intent, not interfaces,” a six-cell grid of shifts including generative UI, agentic flows, conversational primacy, spatial computing, accessibility by default and designed trust",
-  },
-  {
-    src: "/Graphics/monsoon-01-rain-can-stay.png",
-    alt: "Monsoon campaign for a Kolkata home salon: “The rain can stay. So can you,” set over a rain-streaked window",
-  },
-  {
-    src: "/Graphics/pujo-01-pujo-is-coming.png",
-    alt: "Durga Pujo campaign opener: the Bengali line আসছে দুর্গাপূজা above “Pujo is coming. Let's get you ready,” over a dhunuchi dance in deep maroon and gold",
-  },
-  {
-    src: "/Graphics/pujo-04-pujo-diary.png",
-    alt: "Festival diary: “Five days. Five looks,” a rate card listing Shashthi through Dashami in Bengali and English with a service and a price against each day",
-  },
-  {
-    src: "/Graphics/pujo-08-file-polish.png",
-    alt: "Offer graphic: “Express File & Polish, ₹299,” set in gold over a henna-covered hand",
-  },
-];
+/* Row two: the rest of the deck, the field notes and the campaign. */
+const ROW_B: Graphic[] = GRAPHICS_ROW_B;
 
 function Card({ g }: { g: Graphic }) {
   return (

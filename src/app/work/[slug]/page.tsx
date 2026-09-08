@@ -8,6 +8,7 @@ import {
   Link,
   Button,
   PhoneFrame,
+  GraphicDeck,
   HeroLoopVideo,
   BrowserMockup,
   LivePrototype,
@@ -82,6 +83,10 @@ export default async function CaseStudy({
 
   const { meta, content } = project;
   const isWeb = meta.kind === "web";
+  /* Square editorial/campaign work. It has no device, and the two heroes this
+     template offers are both devices — the phone one was cropping a 1:1 graphic
+     to 9:19.5 and cutting the outer third off each side. See GraphicDeck. */
+  const isGraphic = meta.kind === "graphic";
   // A "reel hero" is an APP study with a hero video (the floating HeroLoopVideo
   // montage). Web studies also carry meta.video (for the BrowserMockup screen),
   // so gate on kind too: insightstap must keep the standard hero treatment.
@@ -444,7 +449,11 @@ export default async function CaseStudy({
                 reelIsLandscape ? "hlv-bleed" : "mx-auto w-full",
                 // Per-aspect vertical lift so the reel centres on the title.
                 reelYShift,
-                !hasReel && "max-w-[17rem]",
+                // 17rem is a phone's width. A fanned deck of squares needs the
+                // room its flanks occupy, or it renders 480px wide inside a
+                // 272px box and runs off the right edge of the page.
+                !hasReel && !isGraphic && "max-w-[17rem]",
+                !hasReel && isGraphic && "max-w-[34rem]",
               )}
               style={hasReel && !reelIsLandscape ? { maxWidth: reelMaxWidth } : undefined}
             >
@@ -479,13 +488,28 @@ export default async function CaseStudy({
                 />
               ) : (
                 <HandoffTarget slug={slug}>
-                  <PhoneFrame
-                    src={meta.cover}
-                    alt={`${meta.title}, cover screen`}
-                    priority
-                    sizes="17rem"
-                    imgClassName="object-top"
-                  />
+                  {isGraphic ? (
+                    /* The cover flanked by one piece from each register — the
+                       light editorial voice and the dark festive one — so the
+                       hero states the study's thesis before the first line of
+                       it is read. */
+                    <GraphicDeck
+                      cover={meta.cover}
+                      coverAlt={`${meta.title}: the carousel cover`}
+                      left="/Graphics/pujo-01-pujo-is-coming.png"
+                      leftAlt="From the festive campaign: “Pujo is coming. Let's get you ready.”"
+                      right="/Graphics/ux_2026_linkedin_post.png"
+                      rightAlt="From the field notes: “Designing for intent, not interfaces.”"
+                    />
+                  ) : (
+                    <PhoneFrame
+                      src={meta.cover}
+                      alt={`${meta.title}, cover screen`}
+                      priority
+                      sizes="17rem"
+                      imgClassName="object-top"
+                    />
+                  )}
                 </HandoffTarget>
               )}
             </Reveal>

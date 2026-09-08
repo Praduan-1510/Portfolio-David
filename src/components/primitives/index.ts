@@ -5,6 +5,7 @@ export { Link } from "./Link";
 export { Button } from "./Button";
 export type { ButtonVariant, ButtonShape, ButtonSize } from "./Button";
 export { PhoneFrame } from "./PhoneFrame";
+export { GraphicDeck } from "./GraphicDeck";
 export { HeroLoopVideo } from "./HeroLoopVideo";
 export { BrowserMockup } from "./BrowserMockup";
 export { LivePrototype } from "./LivePrototype";

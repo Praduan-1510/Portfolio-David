@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Payment Successful</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .page [hidden], .sheet [hidden] { display: none !important; }
+  .result { padding-top: 58px; }
+  .result__ring svg path { stroke-dasharray: 30; stroke-dashoffset: 30; }
+  .result__amount { font-size: 40px; letter-spacing: .3px; }
+  .result__msg b { color: #fff; font-weight: 600; }
+  .paid-chip { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; height: 28px; padding: 0 12px; border-radius: 8px; background: #1c3013; color: #8df15e; font-size: 12.5px; letter-spacing: .3px; }
+  .receipt { margin-top: 26px; padding: 6px 20px; }
+  .receipt .v { display: inline-flex; align-items: center; gap: 8px; }
+  .copy-btn { width: 28px; height: 28px; margin: -6px -6px -6px 0; border-radius: 8px; display: grid; place-items: center; color: #5fb2f1; position: relative; }
+  .copy-btn::after { content: ''; position: absolute; inset: -8px; }
+  .actions { margin-top: 16px; }
+  .actions .btn { height: 50px; font-size: 14px; font-weight: 600; gap: 6px; padding: 0 6px; white-space: nowrap; }
+  /* share sheet */
+  .mini { background: #262626; border-radius: 20px; padding: 18px 18px 16px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); position: relative; overflow: hidden; }
+  .mini::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: linear-gradient(90deg, #8df15e, #5fb2f1); opacity: .7; }
+  .mini__top { display: flex; align-items: center; justify-content: space-between; }
+  .mini__brand { font-size: 13px; font-weight: 600; letter-spacing: .6px; color: #c8e7ff; }
+  .mini__ok { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #8df15e; }
+  .mini__amt { font-size: 30px; font-weight: 600; margin-top: 12px; }
+  .mini__to { font-size: 13.5px; color: #cfcfcf; margin-top: 2px; }
+  .mini__meta { display: flex; justify-content: space-between; margin-top: 14px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,.18); font-size: 11.5px; color: #9a9a9a; }
+  .targets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 22px; }
+  .target { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 4px 0; font-size: 11.5px; color: #d8d8d8; white-space: nowrap; }
+  .target__ic { width: 56px; height: 56px; border-radius: 18px; display: grid; place-items: center; position: relative; box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); }
+  .target__ic.is-busy svg { opacity: 0; }
+  .target__ic.is-busy::after { content: ''; position: absolute; left: 50%; top: 50%; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; border: 2.5px solid rgba(141,241,94,.25); border-top-color: #8df15e; animation: spin 700ms linear infinite; }
+</style>
+</head>
+<body>
+<main class="page page--no-nav" aria-label="Payment successful">
+  <div class="result result--ok enter" role="status" aria-live="polite">
+    <div class="result__ring"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+    <h1 class="result__title">Payment Successful</h1>
+    <p class="result__amount num" id="amt">₹ 28,900</p>
+    <p class="result__msg">Paid to <b id="to">MK Suppliers</b></p>
+    <span class="paid-chip"><svg width="12" height="13" viewBox="0 0 11 12" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="5.2" width="9" height="6" rx="1.4"/><path d="M3 5.2V3.6a2.5 2.5 0 0 1 5 0v1.6"/></svg>Secured by UPI · Yes Bank</span>
+  </div>
+
+  <section class="panel receipt enter" style="--i:1" aria-label="Payment details">
+    <div class="kvs">
+      <div><span class="k">Transaction ID</span><span class="v num">UTR 5139 2201 8842<button class="copy-btn tap" data-toast="Transaction ID copied" aria-label="Copy transaction ID"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg></button></span></div>
+      <div><span class="k">Mode</span><span class="v" id="mode">UPI</span></div>
+      <div><span class="k">From A/c</span><span class="v num">Yes Bank ••7643</span></div>
+      <div><span class="k">Date &amp; time</span><span class="v num">16 Jun 2025, 10:42 AM</span></div>
+      <div><span class="k">Note</span><span class="v" id="note">Bill payment – June order</span></div>
+    </div>
+  </section>
+
+  <div class="banner banner--ok enter" id="linked" style="margin-top:14px;--i:2" hidden>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8df15e" stroke-width="2.4" stroke-linecap="round"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3.2-3.2a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3.2 3.2a4.5 4.5 0 0 0 6.4 6.4l1-1"/></svg>
+    <span>Linked to ledger entry · marked as settled</span>
+  </div>
+
+  <div class="btn-pair actions enter" style="--i:3">
+    <button class="btn btn--ghost tap" data-sheet="shareSheet"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7 8l5-5 5 5"/><path d="M4 13v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6"/></svg><span>Share Receipt</span></button>
+    <a class="btn btn--ghost tap" href="statement.html?highlight=last"><svg width="15" height="18" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><path d="M2.6 1h6.3c.5 0 .9.2 1.3.5l4.1 4.2c.3.3.5.8.5 1.3v10.4A1.6 1.6 0 0 1 13.2 19H2.6A1.6 1.6 0 0 1 1 17.4V2.6A1.6 1.6 0 0 1 2.6 1Z"/><path d="M5 11h6M5 14.5h4"/></svg><span>View in Statement</span></a>
+  </div>
+
+  <div class="cta-bar">
+    <a class="btn btn--primary tap" href="dashboard.html">Done</a>
+  </div>
+</main>
+
+<section class="sheet" id="shareSheet" aria-labelledby="shareTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="shareTitle">Share receipt</p><p class="sheet__sub">Send proof of payment in one tap</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="mini" aria-label="Receipt preview">
+    <div class="mini__top">
+      <span class="mini__brand">SPENDEE</span>
+      <span class="mini__ok"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Paid</span>
+    </div>
+    <p class="mini__amt num" id="miniAmt">₹ 28,900</p>
+    <p class="mini__to">to <span id="miniTo">MK Suppliers</span> · <span id="miniMode">UPI</span></p>
+    <div class="mini__meta num"><span>UTR 5139 2201 8842</span><span>16 Jun 2025, 10:42 AM</span></div>
+  </div>
+  <div class="targets">
+    <button class="target tap" data-share="WhatsApp"><span class="target__ic icon-green"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2A9.8 9.8 0 0 0 3.6 17l-1.4 4.8 5-1.3A9.8 9.8 0 1 0 12 2.2Zm0 1.9a7.9 7.9 0 1 1-4 14.7l-.3-.2-3 .8.8-2.9-.2-.3A7.9 7.9 0 0 1 12 4.1Z"/></svg></span>WhatsApp</button>
+    <button class="target tap" data-share="Messages"><span class="target__ic icon-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12Z"/></svg></span>SMS</button>
+    <button class="target tap" data-share="Mail"><span class="target__ic icon-yellow"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></span>Email</button>
+    <button class="target tap" id="pdf"><span class="target__ic icon-gray"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></span>Download PDF</button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const S = Spendee, $ = (id) => document.getElementById(id);
+    const raw = parseInt(String(S.q('amt') || '').replace(/[^\d]/g, ''), 10);
+    const amt = '₹ ' + S.fmtIN(raw > 0 ? raw : 28900);
+    const to = S.q('to') || 'MK Suppliers';
+    const mode = (S.q('mode') || 'UPI').toUpperCase();
+    const note = S.q('note');
+    $('amt').textContent = amt; $('miniAmt').textContent = amt;
+    $('to').textContent = to; $('miniTo').textContent = to;
+    $('mode').textContent = { UPI: 'UPI · Instant', NEFT: 'NEFT · Bank transfer', IMPS: 'IMPS · Instant' }[mode] || mode;
+    $('miniMode').textContent = mode;
+    if (note) $('note').textContent = note;
+    if (S.q('linked') === '1') $('linked').hidden = false;
+    document.title = 'Spendee · Paid ' + amt;
+    // remember the payment so the statement can surface it at the top
+    S.store.set('lastPayment', { amt: raw > 0 ? raw : 28900, to, mode, ts: Date.now() });
+
+    document.querySelectorAll('[data-share]').forEach((b) => b.addEventListener('click', async () => {
+      S.sheet.close(); await S.wait(260); S.toast('Opening ' + b.dataset.share + '…');
+    }));
+    $('pdf').addEventListener('click', async () => {
+      const ic = $('pdf').querySelector('.target__ic');
+      if (ic.classList.contains('is-busy')) return;
+      ic.classList.add('is-busy'); await S.wait(1100); ic.classList.remove('is-busy');
+      S.sheet.close(); await S.wait(260); S.toast('Saved Spendee_Receipt_8842.pdf');
+    });
+  })();
+</script>
+</body>
+</html>

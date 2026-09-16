@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Cards &amp; Banking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .bank-card { left: 32px; top: 122px; width: 338px; height: 190px; border-radius: 12px; overflow: hidden; font-family: 'Inter', system-ui, sans-serif;
+    background: radial-gradient(circle at 285px 51px, #f0e95a 0, rgba(222,215,85,.8) 8px, rgba(170,168,62,.5) 30px, rgba(110,112,55,.26) 60px, rgba(50,64,52,.1) 90px, rgba(19,36,48,0) 115px), #132430;
+    box-shadow: 0 12px 30px rgba(0,0,0,.45); transform-style: preserve-3d; transition: transform 400ms var(--ease-out); }
+  .bank-card:hover { transform: perspective(900px) rotateX(4deg) rotateY(-6deg) translateY(-2px); }
+  .bank-card .shine { position: absolute; inset: 0; background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.08) 45%, transparent 60%); transform: translateX(-100%); transition: transform 900ms var(--ease-out); }
+  .bank-card:hover .shine { transform: translateX(100%); }
+  .field-box { position: absolute; height: 55px; border-radius: 8px; }
+  .field-box .t:first-child { left: 10px; top: 10.4px; font-size: 10px; letter-spacing: .3px; color: #d2d2d2; }
+  .field-box .t:nth-child(2) { left: 10px; top: 29px; font-size: 14.5px; font-weight: 500; letter-spacing: .3px; }
+  .copy { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); opacity: 0; transition: opacity var(--dur); color: #9ab; }
+  .field-box:hover .copy { opacity: 1; }
+</style>
+</head>
+<body>
+<main class="screen" style="height:1145px;min-height:1145px" aria-label="Cards and banking">
+  <p class="t hdr__eyebrow" style="left:44px;top:43.3px;font-size:12px;letter-spacing:.9px;color:#e0e0e0">Spendee Bank</p>
+  <h1 class="t" style="left:44px;top:63px;font-size:21.5px;font-weight:600;letter-spacing:0">Cards &amp; Banking</h1>
+  <a class="abs chip-btn tap" href="send-money.html" style="left:246px;top:45px;width:122px;height:42px;font-size:17px;letter-spacing:.3px;background:#132430;box-shadow:inset 0 0 0 1px rgba(95,178,241,.35)">Send Money</a>
+
+  <div class="abs bank-card enter" aria-label="RuPay card ending 4887">
+    <span class="shine"></span>
+    <svg class="abs" style="left:19px;top:23px" width="38" height="23" viewBox="0 0 38 23"><rect width="38" height="23" rx="5" fill="#d8d152"/><path d="M13 0v23M25 0v23M0 8h13M25 8h13M0 15.5h13M25 15.5h13M13 11.5h12" stroke="#b1ab43" stroke-width="1"/></svg>
+    <span class="t" style="left:19px;top:89px;font-size:13px;letter-spacing:5px;color:#fff">**** **** **** <span style="letter-spacing:5.6px;font-size:14px">4887</span></span>
+    <span class="t" style="left:20px;top:137.5px;font-size:13.5px;letter-spacing:.1px;color:#a2a2a2">CARD HOLDER</span>
+    <span class="t" style="left:19px;top:155.5px;font-size:16px;font-weight:600;letter-spacing:-.1px">Jayanta Adhikari</span>
+    <span class="t" style="left:167px;top:137.5px;font-size:13.5px;letter-spacing:.1px;color:#a2a2a2">EXPIRES</span>
+    <span class="t" style="left:166px;top:155.5px;font-size:16.5px;font-weight:600">09/28</span>
+    <span class="t" style="left:259px;top:156px;font-size:16.5px;font-weight:700;font-style:italic;letter-spacing:.3px">RuPay</span>
+  </div>
+
+  <section class="abs card enter" style="left:38px;top:335px;width:326px;height:99px;--i:1" aria-label="Available balance">
+    <span class="t" style="left:31px;top:23px;font-size:15px;letter-spacing:1px;color:#7f7f7f">AVAILABLE BALANCE</span>
+    <span class="t num" style="left:21px;top:42px;font-size:33.5px;font-weight:500" data-count="342890" data-prefix="₹ ">₹ 3,42,890</span>
+  </section>
+
+  <a class="abs tile tile--yellow tap enter" href="scan-pay.html" style="left:38px;top:457px;width:74px;height:73px;--i:2">
+    <svg class="abs" style="left:29.5px;top:18px" width="15" height="15" viewBox="0 0 15 17" fill="#f1ea58"><path d="M0 0h6v6H0zM2 2v2h2V2zM9 0h6v6H9zm2 2v2h2V2zM0 9h6v6H0zm2 2v2h2v-2zM8 8h2v2H8zm3 0h4v2h-2v2h-2zM8 11h2v4H8zm3 2h4v4h-2v-2h-2z"/></svg>
+    <span class="t act-lbl" style="left:0;right:0;text-align:center;top:43.5px;font-size:8.5px;letter-spacing:.35px;color:#e3e0b5">UPI</span>
+  </a>
+  <a class="abs tile tile--red tap enter" href="card-controls.html#limits" style="left:122px;top:457px;width:74px;height:73px;--i:3">
+    <svg class="abs" style="left:29px;top:16px" width="16" height="19" viewBox="0 0 17 20" fill="none" stroke="#f15858" stroke-width="1.9" stroke-linejoin="round"><rect x="1.2" y="8" width="14.6" height="10.8" rx="2.2"/><path d="M4.4 8V5.4a4.1 4.1 0 0 1 8.2 0V8"/><path d="M8.5 12.2v2.4" stroke-linecap="round"/></svg>
+    <span class="t" style="left:0;right:0;text-align:center;top:45.5px;font-size:8.5px;letter-spacing:.35px;color:#e8c2c2">Limits</span>
+  </a>
+  <a class="abs tile tile--green tap enter" href="statement.html" style="left:206px;top:457px;width:74px;height:73px;--i:4">
+    <svg class="abs" style="left:28.5px;top:14px" width="17" height="22" viewBox="0 0 20 27" fill="none" stroke="#8df15e" stroke-width="2.3" stroke-linejoin="round"><path d="M3.2 1.2h8.4c.7 0 1.2.3 1.7.7l4.8 4.9c.5.5.7 1.1.7 1.7v14.6a2 2 0 0 1-2 2H3.2a2 2 0 0 1-2-2V3.2a2 2 0 0 1 2-2Z"/></svg>
+    <span class="t" style="left:0;right:0;text-align:center;top:45.5px;font-size:8.5px;letter-spacing:.35px;color:#cfe3c5">Statement</span>
+  </a>
+  <a class="abs tile tile--blue tap enter" href="beneficiaries.html" style="left:290px;top:457px;width:74px;height:73px;--i:5">
+    <svg class="abs" style="left:27px;top:15px" width="20" height="20" viewBox="1 1 24 24" fill="none" stroke="#5fb2f1" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><path d="M2.6 9.2 13 3.4l10.4 5.8H2.6Z"/><path d="M4 11.4h18M4 21.2h18M2.6 23.6h20.8M6.8 11.4v9.8M19.2 11.4v9.8"/><path d="M10.4 14.6v3.6M13 14.6v3.6M15.6 14.6v3.6" stroke-width="2.2"/></svg>
+    <span class="t" style="left:0;right:0;text-align:center;top:45.5px;font-size:8.5px;letter-spacing:.35px;color:#c4d6e4">Transfer</span>
+  </a>
+
+  <section class="abs card enter" style="left:38px;top:553px;width:326px;height:262px;border-radius:22px;--i:5" aria-label="Virtual account">
+    <h2 class="t" style="left:20px;top:21.5px;font-size:10.5px;letter-spacing:.5px;color:#cfcfcf">VIRTUAL ACCOUNT · UPI COLLECTIONS</h2>
+    <button class="field-box tap" style="left:20px;top:48px;width:139px;background:#363636;text-align:left" data-toast="Account number copied">
+      <span class="t">Account No.</span><span class="t num">921005087643</span>
+    </button>
+    <button class="field-box tap" style="left:170px;top:48px;width:140px;background:#363636;text-align:left" data-toast="IFSC copied">
+      <span class="t">IFSC</span><span class="t">YESB0000123</span>
+    </button>
+    <button class="field-box tap" style="left:20px;top:118px;width:290px;background:#31424f;text-align:left" data-toast="UPI ID copied">
+      <span class="t">UPI ID</span><span class="t" style="color:#5fb2f1;font-weight:600;letter-spacing:0">jayanta.a@spendee</span>
+      <svg class="copy" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>
+    </button>
+    <button class="abs btn btn--primary tap" style="left:20px;top:188px;width:290px;gap:10px;font-size:18.5px" data-sheet="shareLinkSheet">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3.2-3.2a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3.2 3.2a4.5 4.5 0 0 0 6.4 6.4l1-1"/></svg>
+      Share Payment Link
+    </button>
+  </section>
+
+  <a class="abs row tap enter" href="transaction-detail.html?name=Dutta%20%26%20Sons&amt=45000&type=credit&mode=UPI&date=16%20Jun%202025&time=10%3A42%20AM" style="left:34px;top:838px;--i:6">
+    <span class="avatar avatar--blue"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg></span>
+    <div class="row__body"><p class="row__name">Dutta &amp; Sons</p><p class="row__meta">UPI Transfer</p></div>
+    <span class="row__amt num" style="position:absolute;right:26px;top:20px;color:#41c405">+₹45,000</span>
+  </a>
+  <a class="abs row tap enter" href="transaction-detail.html?name=MK%20Suppliers&amt=28900&type=debit&mode=NEFT&date=16%20Jun%202025&time=9%3A05%20AM" style="left:34px;top:907px;--i:7">
+    <span class="avatar avatar--yellow"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg></span>
+    <div class="row__body"><p class="row__name">MK Suppliers</p><p class="row__meta">NEFT</p></div>
+    <span class="row__amt num" style="position:absolute;right:26px;top:20px;color:#f15858">−₹28,900</span>
+  </a>
+  <a class="abs row tap enter" href="transaction-detail.html?name=Ghosh%20Traders&amt=15000&type=debit&mode=Net%20Banking&date=15%20Jun%202025&time=6%3A30%20PM" style="left:34px;top:976px;--i:8">
+    <span class="avatar avatar--red"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg></span>
+    <div class="row__body"><p class="row__name">Ghosh Traders</p><p class="row__meta">Net Banking</p></div>
+    <span class="row__amt num" style="position:absolute;right:26px;top:20px;color:#f15858">−₹15,000</span>
+  </a>
+
+  <nav data-tabbar="bank"></nav>
+</main>
+<style>
+  /* Share-link sheet (overlay only — page layout untouched) */
+  .sheet [hidden] { display: none !important; }
+  .sl-qr { display: flex; align-items: center; gap: 16px; padding: 14px; border-radius: 20px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); }
+  .sl-qr__code { position: relative; width: 116px; height: 116px; border-radius: 14px; background: #fff; padding: 7px; flex-shrink: 0; }
+  .sl-qr__code svg { width: 100%; height: 100%; display: block; }
+  .sl-qr__logo { position: absolute; left: 50%; top: 50%; width: 24px; height: 24px; margin: -12px 0 0 -12px; border-radius: 7px; background: #000; color: #c8e7ff; display: grid; place-items: center; font: 700 12px var(--font); box-shadow: 0 0 0 3px #fff; }
+  .sl-link { display: flex; align-items: center; gap: 10px; margin-top: 14px; height: 54px; padding: 0 8px 0 18px; border-radius: 16px; background: #132430; box-shadow: inset 0 0 0 1px rgba(95,178,241,.3); }
+  .sl-link span { flex: 1; min-width: 0; font-size: 16px; font-weight: 600; color: #5fb2f1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sl-copy { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; color: #5fb2f1; background: #1d3548; }
+  .sl-sheet .fg > .label { font-size: 13.5px; margin: 18px 0 8px 10px; }
+  .sl-sheet .field { height: 52px; }
+  .sl-targets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+  .sl-target { display: flex; align-items: center; justify-content: center; gap: 8px; height: 48px; border-radius: 14px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); font-size: 14px; color: #e6e6e6; }
+</style>
+
+<section class="sheet sl-sheet" id="shareLinkSheet" aria-labelledby="slTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="slTitle">Share payment link</p><p class="sheet__sub">Get paid by any UPI app, card or net banking</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="sl-qr">
+    <div class="sl-qr__code"><div id="slQr" style="width:100%;height:100%"></div><span class="sl-qr__logo">S</span></div>
+    <div class="grow">
+      <p style="font-size:17px;font-weight:600">JA Trading Co.</p>
+      <p class="c-blue" style="font-size:13px;font-weight:600;margin-top:3px">jayanta.a@spendee</p>
+      <p class="muted" style="font-size:12px;line-height:1.45;margin-top:8px">Payments land instantly in Yes Bank ••7643 and match to your ledger.</p>
+    </div>
+  </div>
+  <div class="sl-link"><span class="num" id="slUrl">spendee.pay/jayanta</span><button class="sl-copy tap" id="slCopyIcon" aria-label="Copy link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg></button></div>
+  <div class="fg">
+    <label class="label" for="slAmt">Amount <span class="muted">(optional)</span></label>
+    <div class="field field-prefix"><span>₹</span><input id="slAmt" inputmode="numeric" placeholder="Let payer enter amount" class="num"></div>
+  </div>
+  <button class="btn btn--primary tap" id="slCopy" style="margin-top:18px;gap:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3.2-3.2a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3.2 3.2a4.5 4.5 0 0 0 6.4 6.4l1-1"/></svg><span>Copy link</span></button>
+  <div class="sl-targets">
+    <button class="sl-target tap" data-share="WhatsApp"><svg width="17" height="17" viewBox="0 0 24 24" fill="#8df15e"><path d="M12 2.2A9.8 9.8 0 0 0 3.6 17l-1.4 4.8 5-1.3A9.8 9.8 0 1 0 12 2.2Zm0 1.9a7.9 7.9 0 1 1-4 14.7l-.3-.2-3 .8.8-2.9-.2-.3A7.9 7.9 0 0 1 12 4.1Z"/></svg>WhatsApp</button>
+    <button class="sl-target tap" data-share="Messages"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12Z"/></svg>SMS</button>
+    <button class="sl-target tap" data-share="Mail"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#f1ea58" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>Email</button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const S = Spendee, $ = (id) => document.getElementById(id);
+
+    // Card → Card Controls
+    const card = document.querySelector('.bank-card');
+    card.setAttribute('role', 'link'); card.tabIndex = 0; card.style.cursor = 'pointer';
+    card.setAttribute('aria-label', 'RuPay card ending 4887 · open card controls');
+    card.addEventListener('click', () => (location.href = 'card-controls.html'));
+    card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); } });
+
+    // Share payment link sheet
+    function qrSvg(seed, n) {
+      let x = seed; const rnd = () => (x = (x * 1103515245 + 12345) % 2147483648) / 2147483648;
+      const inFinder = (r, c) => (r < 8 && c < 8) || (r < 8 && c >= n - 8) || (r >= n - 8 && c < 8);
+      const mid = Math.floor(n / 2); let d = '';
+      for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) {
+        if (inFinder(r, c) || (Math.abs(r - mid) <= 2 && Math.abs(c - mid) <= 2)) continue;
+        if (r === 6 ? c % 2 === 0 : c === 6 ? r % 2 === 0 : rnd() < 0.48) d += `M${c} ${r}h1v1h-1z`;
+      }
+      const f = (cx, cy) => `<rect x="${cx + .5}" y="${cy + .5}" width="6" height="6" rx="1.6" fill="none" stroke="#000" stroke-width="1"/><rect x="${cx + 2}" y="${cy + 2}" width="3" height="3" rx=".8"/>`;
+      return `<svg viewBox="0 0 ${n} ${n}" shape-rendering="crispEdges" role="img" aria-label="Payment QR code"><g fill="#000"><path d="${d}"/>${f(0, 0)}${f(n - 7, 0)}${f(0, n - 7)}</g></svg>`;
+    }
+    $('slQr').innerHTML = qrSvg(2456, 25);
+    const url = () => { const v = +$('slAmt').value.replace(/\D/g, ''); return 'spendee.pay/jayanta' + (v ? '?am=' + v : ''); };
+    $('slAmt').addEventListener('input', () => { const v = $('slAmt').value.replace(/\D/g, '').slice(0, 9); $('slAmt').value = v ? S.fmtIN(+v) : ''; $('slUrl').textContent = url(); });
+    $('slCopyIcon').addEventListener('click', () => S.toast('Link copied'));
+    $('slCopy').addEventListener('click', async () => {
+      const btn = $('slCopy');
+      try { navigator.clipboard && navigator.clipboard.writeText('https://' + url()).catch(() => {}); } catch (e) {}
+      btn.lastElementChild.textContent = 'Copied'; S.haptic();
+      S.toast('Payment link copied: ' + url());
+      setTimeout(() => (btn.lastElementChild.textContent = 'Copy link'), 1600);
+    });
+    document.querySelectorAll('#shareLinkSheet [data-share]').forEach((b) => b.addEventListener('click', async () => { S.sheet.close(); await S.wait(260); S.toast('Opening ' + b.dataset.share + '…'); }));
+  })();
+</script>
+</body>
+</html>

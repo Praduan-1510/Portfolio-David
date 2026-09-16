@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Help &amp; Support</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .page > .toast { position: fixed; z-index: 1000; }
+  .search input::-webkit-search-cancel-button { -webkit-appearance: none; }
+  .quick { display: grid; grid-template-columns: repeat(4, 74px); justify-content: space-between; }
+  .quick .tile { width: 74px; height: 74px; gap: 9px; font-size: 8.5px; transition: box-shadow var(--dur), transform var(--dur) var(--ease-out); }
+  .quick .tile[aria-pressed="true"] { box-shadow: inset 0 0 0 1px rgba(255,255,255,.16), 0 0 0 2px rgba(255,255,255,.55), 0 4px 10px rgba(0,0,0,.5); }
+  .faq { background: #262626; border-radius: 20px; padding: 4px 0; box-shadow: inset 0 0 0 1px rgba(255,255,255,.13), 0 4px 14px rgba(0,0,0,.45); }
+  .faq__item { position: relative; }
+  .faq__item + .faq__item::before { content: ''; position: absolute; top: 0; left: 10px; right: 10px; height: 1px; background: #868686; opacity: .8; }
+  .faq__q { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; min-height: 56px; padding: 12px 20px; font-size: 15px; color: #f0f0f0; line-height: 1.35; }
+  .faq__q .chev { transition: transform 280ms var(--ease-out); transform: rotate(90deg); margin-left: auto; }
+  .faq__q[aria-expanded="true"] .chev { transform: rotate(-90deg); }
+  .faq__q[aria-expanded="true"] { color: #5fb2f1; }
+  .faq__a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 320ms var(--ease-out); }
+  .faq__a.open { grid-template-rows: 1fr; }
+  .faq__a > div { overflow: hidden; }
+  .faq__a p { padding: 0 20px 16px; font-size: 13.5px; color: #b5b5b5; line-height: 1.6; }
+  .faq__tag { display: inline-block; font-size: 10.5px; letter-spacing: .4px; padding: 2px 7px; border-radius: 6px; margin: 0 0 0 20px; transform: translateY(-8px); }
+  .filter-note { display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: #9a9a9a; margin: -4px 2px 10px; }
+  #faq[hidden], #noResults[hidden], .faq__item[hidden], #filterNote[hidden] { display: none; }
+  mark { background: rgba(95,178,241,.25); color: inherit; border-radius: 3px; padding: 0 1px; }
+  /* chat */
+  #chatSheet { display: flex; flex-direction: column; height: calc(100vh - 60px); max-height: 760px; padding-bottom: 20px; }
+  #chatSheet[hidden] { display: flex; }
+  .chat { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 4px 2px 12px; scrollbar-width: none; }
+  .chat::-webkit-scrollbar { display: none; }
+  .bub { max-width: 80%; padding: 10px 14px; border-radius: 18px; font-size: 14px; line-height: 1.45; animation: rise 260ms var(--ease-out) both; }
+  .bub--them { align-self: flex-start; background: #2c2c2c; color: #eee; border-bottom-left-radius: 6px; }
+  .bub--me { align-self: flex-end; background: #c8e7ff; color: #000; border-bottom-right-radius: 6px; }
+  .bub small { display: block; font-size: 10.5px; opacity: .6; margin-top: 4px; }
+  .day { align-self: center; font-size: 11px; color: #7a7a7a; margin: 4px 0; letter-spacing: .4px; }
+  .typing { align-self: flex-start; background: #2c2c2c; border-radius: 18px; border-bottom-left-radius: 6px; padding: 14px 16px; display: flex; gap: 5px; }
+  .typing i { width: 7px; height: 7px; border-radius: 50%; background: #8a8a8a; animation: blink 1s infinite; }
+  .typing i:nth-child(2) { animation-delay: .15s; } .typing i:nth-child(3) { animation-delay: .3s; }
+  @keyframes blink { 0%, 80%, 100% { opacity: .3; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
+  .suggests { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px 0 10px; }
+  .suggests::-webkit-scrollbar { display: none; }
+  .suggests button { flex-shrink: 0; height: 34px; padding: 0 12px; border-radius: 10px; background: #1c2a36; color: #5fb2f1; box-shadow: inset 0 0 0 1px rgba(95,178,241,.45); font-size: 13px; white-space: nowrap; }
+  .composer { display: flex; gap: 10px; align-items: center; }
+  .composer input { flex: 1; height: 48px; border-radius: 24px; border: 0; outline: 0; background: #fff; color: #000; padding: 0 18px; font: 500 15px var(--font); }
+  .composer input:focus { box-shadow: 0 0 0 3px rgba(95,178,241,.55); }
+  .composer button { width: 48px; height: 48px; border-radius: 50%; background: #5fb2f1; color: #000; display: grid; place-items: center; flex-shrink: 0; transition: opacity var(--dur); }
+  .composer button:disabled { opacity: .4; }
+  .agent { position: relative; }
+  .agent::after { content: ''; position: absolute; right: 0; bottom: 0; width: 11px; height: 11px; border-radius: 50%; background: #8df15e; box-shadow: 0 0 0 2px #1c1c1c; }
+  .sheet .fg > .label { margin-bottom: 8px; font-size: 14px; }
+  .sheet .field { height: 50px; font-size: 16px; padding: 0 18px; }
+  .sheet textarea.field { height: auto; min-height: 110px; padding: 14px 18px; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Help and support">
+  <header class="appbar">
+    <a class="back tap" href="more.html" data-go="back" aria-label="Back"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg></a>
+    <div class="appbar__titles"><span class="appbar__eyebrow">Support</span><h1 class="appbar__title">Help &amp; Support</h1></div>
+  </header>
+
+  <label class="search enter">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#8e8e8e" stroke-width="2" stroke-linecap="round"><circle cx="5.8" cy="5.8" r="4.6"/><path d="m9.3 9.3 3.4 3.4"/></svg>
+    <input id="q" type="search" placeholder="Search FAQs, e.g. GST, refund..." aria-label="Search FAQs" autocomplete="off">
+  </label>
+
+  <p class="section-label">Quick Topics</p>
+  <div class="quick enter" style="--i:1" role="group" aria-label="Quick topics">
+    <button class="tile tile--green tap" data-topic="Payments" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#8df15e" stroke-width="1.9"><circle cx="10" cy="10" r="8.8"/><path d="M7 6h6M7 8.8h6M8.6 6c1.9 0 3 .9 3 2.4s-1.1 2.5-3 2.5H7l4.6 3.6" stroke-linejoin="round" stroke-linecap="round"/></svg>Payments</button>
+    <button class="tile tile--yellow tap" data-topic="GST" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f1ea58" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>GST</button>
+    <button class="tile tile--blue tap" data-topic="Loans" aria-pressed="false"><svg width="20" height="16" viewBox="0 0 17 12" fill="none" stroke="#5fb2f1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 10.5 6 5.5l3 3L15.5 2M10.5 1.5h5v5"/></svg>Loans</button>
+    <button class="tile tile--red tap" data-topic="Account" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f15858" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5v-.8a5.2 5.2 0 0 1 5.2-5.2h4.6a5.2 5.2 0 0 1 5.2 5.2v.8H4.5Z" stroke-linejoin="round"/></svg>Account</button>
+  </div>
+
+  <p class="section-label" id="faqLabel">Frequently Asked</p>
+  <div class="filter-note" id="filterNote" hidden><span id="filterText">Showing Payments</span><button class="text-btn" id="clearFilter" style="padding:6px 0">Clear</button></div>
+  <div class="faq enter" id="faq" style="--i:2"></div>
+  <div class="empty-state" id="noResults" hidden style="padding:28px 12px">
+    <div class="empty-state__icon"><svg width="28" height="28" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="5.8" cy="5.8" r="4.6"/><path d="m9.3 9.3 3.4 3.4"/></svg></div>
+    <h3 id="nrTitle">No answers found</h3>
+    <p>Our team usually replies in about 4 minutes.</p>
+    <button class="btn btn--primary btn--sm tap" data-sheet="chatSheet" style="width:auto;padding:0 20px;margin:0 auto">Chat with us</button>
+  </div>
+
+  <p class="section-label">Contact Us</p>
+  <nav class="menu enter" style="--i:3" aria-label="Contact options">
+    <button class="menu__item tap" data-sheet="chatSheet">
+      <span class="menu__icon icon-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12a8.5 8.5 0 0 1-12.4 7.6L3.5 21l1.4-4.4A8.5 8.5 0 1 1 20.5 12Z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></svg></span>
+      <span class="menu__body"><span class="menu__title">Chat with us</span><span class="menu__sub">24x7 · Avg reply 4 min</span></span>
+      <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+    </button>
+    <button class="menu__item tap" data-sheet="callSheet">
+      <span class="menu__icon icon-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2Z"/></svg></span>
+      <span class="menu__body"><span class="menu__title">Call support</span><span class="menu__sub">Mon–Sat · 9 AM – 8 PM IST</span></span>
+      <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+    </button>
+    <button class="menu__item tap" data-sheet="emailSheet">
+      <span class="menu__icon icon-yellow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></span>
+      <span class="menu__body"><span class="menu__title">Email support</span><span class="menu__sub">support@spendee.com · reply within 24h</span></span>
+      <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+    </button>
+  </nav>
+
+  <p class="section-label">Your Tickets</p>
+  <nav class="menu enter" style="--i:4" aria-label="Your tickets">
+    <button class="menu__item tap" data-sheet="ticketSheet">
+      <span class="menu__icon icon-gray"><svg width="16" height="20" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M2.6 1h6.3c.5 0 .9.2 1.3.5l4.1 4.2c.3.3.5.8.5 1.3v10.4A1.6 1.6 0 0 1 13.2 19H2.6A1.6 1.6 0 0 1 1 17.4V2.6A1.6 1.6 0 0 1 2.6 1Z"/><path d="M5 11h6M5 14.5h4"/></svg></span>
+      <span class="menu__body"><span class="menu__title" id="ticketTitle">1 ticket · all resolved</span><span class="menu__sub" id="ticketSub">#SP-38817 · UPI refund not received</span></span>
+      <span class="status status--done" style="margin-right:4px">Resolved</span>
+      <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+    </button>
+  </nav>
+
+  <p class="dim" style="text-align:center;font-size:12px;margin-top:26px">Spendee v2.4.0 · Terms · Privacy</p>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <nav data-tabbar="more"></nav>
+</main>
+
+<!-- Chat -->
+<section class="sheet" id="chatSheet" aria-labelledby="chatTitle">
+  <div class="sheet__head" style="margin-bottom:10px">
+    <div class="row-flex" style="gap:12px">
+      <span class="agent"><span class="menu__icon icon-blue" style="width:40px;height:40px;border-radius:50%;font-weight:600;font-size:14px">MS</span></span>
+      <div><p class="sheet__title" id="chatTitle" style="font-size:17px">Maya · Spendee Support</p><p class="sheet__sub" style="margin-top:1px" id="chatStatus">Online · replies in ~4 min</p></div>
+    </div>
+    <button class="sheet__close tap" data-close aria-label="Close chat"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="chat" id="chat" role="log" aria-live="polite">
+    <span class="day">TODAY</span>
+    <div class="bub bub--them">Hi Jayanta, I'm Maya from Spendee Support.<small>11:02 AM</small></div>
+    <div class="bub bub--them">I can see your GSTR-3B for May is due on 20 Jun. How can I help you today?<small>11:02 AM</small></div>
+  </div>
+  <div class="suggests" id="suggests">
+    <button>How do I file GSTR-3B?</button>
+    <button>Loan disbursal status</button>
+    <button>Payment failed</button>
+  </div>
+  <form class="composer" id="composer" autocomplete="off">
+    <input id="msg" placeholder="Type a message" aria-label="Message">
+    <button type="submit" id="sendMsg" aria-label="Send message" disabled><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V4M5 11l7-7 7 7"/></svg></button>
+  </form>
+</section>
+
+<!-- Call -->
+<section class="sheet" id="callSheet" aria-labelledby="callTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="callTitle">Call Spendee Support</p><p class="sheet__sub">Toll-free · English, Hindi, Bengali</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <p class="num" style="font-size:28px;font-weight:600;letter-spacing:.5px;text-align:center;margin:6px 0 4px">+91 1800 123 4567</p>
+  <p id="openNow" class="c-green" style="text-align:center;font-size:13px;margin-bottom:12px">Open now · average wait under 2 min</p>
+  <div class="kvs">
+    <div><span class="k">Monday – Saturday</span><span class="v">9:00 AM – 8:00 PM IST</span></div>
+    <div><span class="k">Sunday &amp; holidays</span><span class="v">Chat only</span></div>
+  </div>
+  <p class="muted" style="font-size:12.5px;line-height:1.5;margin:10px 2px 18px">Keep your registered mobile +91 98765 43210 handy. We never ask for your PIN or OTP.</p>
+  <a class="btn btn--primary tap" href="tel:+9118001234567" id="callNow"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2Z"/></svg><span>Call Now</span></a>
+</section>
+
+<!-- Email -->
+<section class="sheet" id="emailSheet" aria-labelledby="emailTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="emailTitle">Email support</p><p class="sheet__sub">We'll reply to jayanta.adhikari@example.com within 24 hours</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <form id="emailForm" novalidate>
+    <div class="fg"><label class="label" for="eSubj">Subject</label><input class="field" id="eSubj" data-validate="required" placeholder="e.g. Refund not received"></div>
+    <div class="fg" style="margin-top:14px"><label class="label" for="eBody">Describe the issue</label><textarea class="field" id="eBody" data-validate="required" placeholder="Include invoice or transaction IDs if any"></textarea></div>
+    <label class="check" style="margin-top:14px"><input type="checkbox" checked id="eLogs"><span>Attach app diagnostics (no financial data)</span></label>
+    <div style="margin-top:18px"><button class="btn btn--primary tap" id="eSend" type="submit"><span>Send</span></button></div>
+  </form>
+</section>
+
+<!-- Ticket -->
+<section class="sheet" id="ticketSheet" aria-labelledby="tTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="tTitle">#SP-38817</p><p class="sheet__sub">UPI refund not received · Payments</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="panel" style="padding:18px 18px 4px">
+    <ol class="timeline">
+      <li class="done">Ticket raised<small>28 May 2025 · ₹ 9,000 debited, payment to Roy Fabrics failed</small></li>
+      <li class="done">Escalated to bank<small>29 May 2025 · Ref YESB-UPI-88213</small></li>
+      <li class="done">Refund credited<small>02 Jun 2025 · ₹ 9,000 back in A/c ••7643</small></li>
+    </ol>
+  </div>
+  <p class="muted" style="font-size:12.5px;margin:14px 2px 16px;line-height:1.5">Was this resolved to your satisfaction?</p>
+  <div class="btn-pair">
+    <button class="btn btn--neutral tap" data-close id="reopen"><span>Still an issue</span></button>
+    <button class="btn btn--primary tap" data-close data-toast="Thanks for the feedback"><span>Yes, thanks</span></button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const S = Spendee, $ = (s) => document.querySelector(s);
+  const FAQ = [
+    ['Payments', 'How long do bank transfers take?', 'IMPS and UPI transfers from Spendee Bank are instant, 24x7. NEFT settles in half-hourly batches, and RTGS (above ₹ 2,00,000) usually completes within 30 minutes during banking hours.'],
+    ['Payments', 'My payment failed but money was debited. What now?', 'Failed UPI or IMPS debits are auto-reversed by the bank within 48 hours. If it has been longer, open the transaction in your Statement and tap "Raise dispute", or chat with us with the reference number.'],
+    ['GST', 'How do I file GSTR-3B from Spendee?', 'Go to GST Center and tap "File & Pay Now". Review the auto-filled return, pay the challan from your Spendee Bank account, then verify with an EVC code. You get an ARN instantly.'],
+    ['GST', 'What if a supplier invoice is missing in GSTR-2B?', 'Spendee flags it before you file. That ITC is kept aside, and you can claim it next month once the supplier files their GSTR-1. You can also send them a reminder from the review sheet.'],
+    ['Loans', 'How is my ledger health score calculated?', 'The score (out of 900) looks at on-time collections and payments, monthly cash inflow, GST filing regularity and outstanding dues over the last 12 months. It updates every Monday.'],
+    ['Loans', 'Can I prepay my working capital loan?', 'Yes. Part-payments and full foreclosure are free after 6 EMIs. Before that, a 2% foreclosure charge applies on the outstanding principal.'],
+    ['Account', 'How do I add my accountant to Spendee?', 'Open More > Team & Roles, tap Invite and choose the Accountant role. They can record entries, file GST and view reports, but cannot send payments.'],
+    ['Account', 'Is my business data secure?', 'Your data is encrypted at rest and in transit, stored in India, and never sold. Sensitive actions need your PIN or biometrics, and you can export or delete your data anytime from Settings.'],
+  ];
+  const TAG = { Payments: 'tone-green', GST: 'tone-yellow', Loans: 'tone-blue', Account: 'tone-red' };
+  const esc = (t) => t.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
+  let topic = null, query = '';
+  const chev = '<svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>';
+
+  $('#faq').innerHTML = FAQ.map(([t, q, a], i) => `<div class="faq__item" data-topic="${t}">
+    <button class="faq__q tap" id="fq${i}" aria-expanded="false" aria-controls="fa${i}"><span class="qt">${q}</span>${chev}</button>
+    <div class="faq__a" id="fa${i}" role="region" aria-labelledby="fq${i}"><div><span class="faq__tag ${TAG[t]}">${t}</span><p class="at">${a}</p></div></div>
+  </div>`).join('');
+
+  $('#faq').addEventListener('click', (e) => {
+    const b = e.target.closest('.faq__q'); if (!b) return;
+    const open = b.getAttribute('aria-expanded') !== 'true';
+    $('#faq').querySelectorAll('.faq__q[aria-expanded="true"]').forEach((x) => { if (x !== b) { x.setAttribute('aria-expanded', 'false'); x.nextElementSibling.classList.remove('open'); } });
+    b.setAttribute('aria-expanded', String(open)); b.nextElementSibling.classList.toggle('open', open);
+  });
+
+  function apply() {
+    const q = query.trim().toLowerCase();
+    let n = 0;
+    $('#faq').querySelectorAll('.faq__item').forEach((it, i) => {
+      const [t, qq, a] = FAQ[i];
+      const match = (!topic || t === topic) && (!q || (qq + ' ' + a + ' ' + t).toLowerCase().includes(q));
+      it.hidden = !match; if (match) n++;
+      const hl = (s) => q ? esc(s).replace(new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig'), '<mark>$1</mark>') : esc(s);
+      it.querySelector('.qt').innerHTML = hl(qq); it.querySelector('.at').innerHTML = hl(a);
+      if (q && match && q.length > 2 && n === 1) { /* keep collapsed; user taps */ }
+    });
+    $('#faq').hidden = !n; $('#noResults').hidden = !!n;
+    $('#nrTitle').textContent = q ? `No answers for “${query.trim()}”` : 'No answers found';
+    $('#filterNote').hidden = !topic && !q;
+    $('#filterText').textContent = q ? `${n} result${n === 1 ? '' : 's'}${topic ? ' in ' + topic : ''}` : `Showing ${topic}`;
+    $('#faqLabel').textContent = topic ? topic + ' FAQs' : 'Frequently Asked';
+    document.querySelectorAll('.quick .tile').forEach((t) => t.setAttribute('aria-pressed', String(t.dataset.topic === topic)));
+  }
+  $('#q').addEventListener('input', (e) => { query = e.target.value; apply(); });
+  document.querySelectorAll('.quick .tile').forEach((t) => t.addEventListener('click', () => {
+    topic = topic === t.dataset.topic ? null : t.dataset.topic; apply(); S.haptic();
+    if (topic) $('#faqLabel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }));
+  $('#clearFilter').addEventListener('click', () => { topic = null; query = ''; $('#q').value = ''; apply(); });
+
+  // ---- Chat ----
+  const chat = $('#chat'), input = $('#msg'), send = $('#sendMsg');
+  const now = () => new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  const scroll = () => { chat.scrollTop = chat.scrollHeight; };
+  const bubble = (who, text) => { const d = document.createElement('div'); d.className = 'bub bub--' + who; d.innerHTML = esc(text) + `<small>${now()}</small>`; chat.appendChild(d); scroll(); };
+  function reply(text) {
+    const t = text.toLowerCase();
+    if (/gst|3b|return|itc|file/.test(t)) return 'You can file GSTR-3B in 3 steps from GST Center > File & Pay Now. Your May return is ready with ₹24,560 payable. Want me to walk you through it?';
+    if (/loan|emi|disburs|credit/.test(t)) return 'Loans are disbursed to Spendee Bank ••7643 within 48 hours of e-signing. I can see your pre-approved limit of ₹ 15,00,000 at 11.5% p.a.';
+    if (/fail|refund|debit|payment|upi/.test(t)) return 'Sorry about that. Failed debits reverse automatically within 48 hours. Could you share the transaction reference so I can check its status?';
+    if (/thank|thanks|ok|great/.test(t)) return 'Happy to help, Jayanta! Anything else I can do for you?';
+    return 'Thanks for the details. I\'m checking this with our team and will update you here in a few minutes.';
+  }
+  let busy = false;
+  async function sendMsg(text) {
+    text = text.trim(); if (!text || busy) return;
+    busy = true; bubble('me', text); input.value = ''; send.disabled = true; $('#suggests').hidden = true;
+    await S.wait(500);
+    $('#chatStatus').textContent = 'Maya is typing…';
+    const ty = document.createElement('div'); ty.className = 'typing'; ty.setAttribute('aria-label', 'Maya is typing'); ty.innerHTML = '<i></i><i></i><i></i>'; chat.appendChild(ty); scroll();
+    await S.wait(1400);
+    ty.remove(); bubble('them', reply(text)); $('#chatStatus').textContent = 'Online · replies in ~4 min'; busy = false;
+  }
+  input.addEventListener('input', () => { send.disabled = !input.value.trim(); });
+  $('#composer').addEventListener('submit', (e) => { e.preventDefault(); sendMsg(input.value); });
+  $('#suggests').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) sendMsg(b.textContent); });
+  $('#chatSheet').addEventListener('sheet:open', () => setTimeout(() => { scroll(); input.focus({ preventScroll: true }); }, 100));
+
+  // ---- Call: hours-aware label ----
+  $('#callNow').addEventListener('click', () => { S.toast('Calling Spendee Support…'); setTimeout(() => S.sheet.close(), 400); });
+
+  // ---- Email ----
+  const eForm = $('#emailForm'), eSend = $('#eSend');
+  eForm.addEventListener('submit', async (e) => {
+    e.preventDefault(); if (!S.validate(eForm)) return;
+    await S.loading(eSend, 1100);
+    const subj = $('#eSubj').value.trim();
+    eForm.reset(); $('#eLogs').checked = true; S.sheet.close();
+    $('#ticketTitle').textContent = '2 tickets · 1 open';
+    $('#ticketSub').textContent = '#SP-40219 · ' + subj;
+    const st = document.querySelector('[data-sheet="ticketSheet"] .status'); st.className = 'status status--pending'; st.style.marginRight = '4px'; st.textContent = 'Open';
+    S.toast('Ticket #SP-40219 created');
+  });
+
+  // ---- Ticket: reopen → chat ----
+  $('#reopen').addEventListener('click', () => setTimeout(() => S.sheet.open('chatSheet'), 320));
+
+  apply();
+  if (S.q('q')) { query = S.q('q'); $('#q').value = query; apply(); }
+  if (S.q('open')) $('#fq' + S.q('open')).click();
+  if (S.q('topic')) document.querySelector(`.quick [data-topic="${S.q('topic')}"]`).click();
+})();
+</script>
+</body>
+</html>

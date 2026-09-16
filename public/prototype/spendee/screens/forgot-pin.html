@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Reset PIN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .hero-icon { width: 64px; height: 64px; border-radius: 18px; background: #132430; box-shadow: inset 0 0 0 1px rgba(95,178,241,.3); display: grid; place-items: center; margin-bottom: 22px; }
+  .page > .toast { position: fixed; }
+  .steps-mini { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+  .steps-mini li { display: flex; align-items: center; gap: 12px; font-size: 14px; color: #d6d6d6; }
+  .steps-mini .n { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 600; background: #283845; color: #5fb2f1; flex-shrink: 0; }
+  .steps-mini li + li { position: relative; }
+  .sign-in-line { text-align: center; font-size: 15px; letter-spacing: .6px; color: #cfcfcf; }
+</style>
+</head>
+<body>
+<main class="page page--no-nav" aria-label="Reset PIN">
+  <header class="appbar">
+    <a class="back tap" href="login.html" data-go="back" aria-label="Back"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg></a>
+    <div class="appbar__titles"><span class="appbar__eyebrow">Reset PIN</span><h1 class="appbar__title">Forgot PIN</h1></div>
+  </header>
+  <div class="stepper" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+  <p class="step-caption">Step 1 of 3 · Verify your number</p>
+
+  <div class="enter" style="margin-top:26px">
+    <div class="hero-icon">
+      <svg width="26" height="28" viewBox="0 0 17 20" fill="none" stroke="#5fb2f1" stroke-width="1.8" stroke-linejoin="round"><rect x="1.2" y="8" width="14.6" height="10.8" rx="2.2"/><path d="M4.4 8V5.4a4.1 4.1 0 0 1 8.2 0V8"/><path d="M8.5 12.2v2.4" stroke-linecap="round"/></svg>
+    </div>
+    <h2 style="font-size:26px;font-weight:600;line-height:1.2">Reset your PIN</h2>
+    <p style="font-size:15px;color:#a8a8a8;line-height:1.55;margin-top:8px">We'll text a 6-digit code to your registered mobile number. Your ledger, invoices and bank data stay untouched.</p>
+  </div>
+
+  <form id="resetForm" class="enter" style="margin-top:28px;--i:1" novalidate>
+    <div class="fg">
+      <label class="label" for="mobile">Registered Mobile Number</label>
+      <div class="field field-prefix">
+        <span>+91</span><span style="margin:0 14px 0 4px;font-weight:400;color:#9b9b9b">|</span>
+        <input id="mobile" name="mobile" type="tel" inputmode="numeric" autocomplete="tel-national" value="98765 43210" maxlength="11" data-validate="required|phone" aria-describedby="mobileHelp">
+      </div>
+      <span class="helper" id="mobileHelp">Linked to JA Trading Co.</span>
+    </div>
+  </form>
+
+  <div class="panel panel--flat enter" style="margin-top:24px;--i:2">
+    <ol class="steps-mini" aria-label="How reset works">
+      <li><span class="n">1</span>Verify this number with an OTP</li>
+      <li><span class="n" style="background:#3a3a3a;color:#cfcfcf">2</span>Enter the 6-digit code we send</li>
+      <li><span class="n" style="background:#3a3a3a;color:#cfcfcf">3</span>Create a new 4-digit PIN</li>
+    </ol>
+  </div>
+
+  <div class="cta-bar">
+    <button class="btn btn--primary tap" id="sendOtp" type="submit" form="resetForm"><span>Send OTP</span></button>
+    <p class="sign-in-line" style="margin-top:16px">Remembered it? <a class="link-green tap" href="login.html">Sign in</a></p>
+  </div>
+  <div class="toast" role="status" aria-live="polite"></div>
+</main>
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const form = document.getElementById('resetForm');
+    const btn = document.getElementById('sendOtp');
+    const input = document.getElementById('mobile');
+    // Format as "98765 43210" while typing
+    input.addEventListener('input', () => {
+      const d = input.value.replace(/\D/g, '').slice(0, 10);
+      input.value = d.length > 5 ? d.slice(0, 5) + ' ' + d.slice(5) : d;
+    });
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!Spendee.validate(form)) { Spendee.haptic(); return; }
+      input.blur();
+      await Spendee.loading(btn, 1000);
+      Spendee.store.set('resetPhone', input.value);
+      location.href = 'otp.html?flow=reset';
+    });
+  })();
+</script>
+</body>
+</html>

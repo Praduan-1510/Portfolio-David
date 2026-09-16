@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Verify Number</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+</head>
+<body>
+<main class="page page--no-nav" aria-label="Verify mobile number">
+  <header class="appbar">
+    <a class="back tap" href="signup.html" data-go="back" aria-label="Back"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg></a>
+    <div class="appbar__titles"><span class="appbar__eyebrow" id="eyebrow">New Account</span><h1 class="appbar__title">Verify Number</h1></div>
+  </header>
+  <div class="stepper" id="stepper" aria-label="Step 2 of 3"><i class="done"></i><i class="on"></i><i></i></div>
+  <p class="step-caption">Step 2 of 3 · Verify your number</p>
+
+  <div class="enter" style="margin-top:34px">
+    <div style="width:64px;height:64px;border-radius:18px;background:#132430;box-shadow:inset 0 0 0 1px rgba(95,178,241,.3);display:grid;place-items:center;margin-bottom:22px">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg>
+    </div>
+    <h2 style="font-size:26px;font-weight:600;line-height:1.2">Enter the 6-digit code</h2>
+    <p style="font-size:15px;color:#a8a8a8;line-height:1.55;margin-top:8px">We sent it by SMS to <b style="color:#fff;font-weight:600" id="phone">+91 98765 43210</b>. <a class="c-blue tap" id="changeLink" href="signup.html" style="font-weight:600">Change</a></p>
+  </div>
+
+  <div class="otp enter" id="otp" data-length="6" style="margin-top:32px;--i:1" aria-label="Verification code"></div>
+  <p id="otpMsg" role="status" aria-live="polite" style="font-size:13px;min-height:20px;margin:12px 0 0 2px;color:#9a9a9a">Tip: use <b style="color:#fff">482916</b> for this demo</p>
+
+  <div class="between enter" style="margin-top:14px;--i:2">
+    <button class="text-btn" data-countdown="30">Resend code</button>
+    <button class="text-btn" data-sheet="helpSheet" style="color:#cfcfcf;font-weight:500">Didn't get it?</button>
+  </div>
+
+  <div class="cta-bar">
+    <button class="btn btn--primary tap is-disabled" id="verify" aria-disabled="true"><span>Verify &amp; Continue</span></button>
+    <p class="secure-note" style="margin-top:14px"><svg width="11" height="12" viewBox="0 0 11 12" fill="none" stroke="#cfcfcf" stroke-width="1.2"><rect x="1" y="5.2" width="9" height="6" rx="1.4"/><path d="M3 5.2V3.6a2.5 2.5 0 0 1 5 0v1.6"/></svg>Codes expire in 10 minutes</p>
+  </div>
+  <div class="toast" role="status" aria-live="polite"></div>
+</main>
+<style>.page > .toast { position: fixed; }</style>
+
+<section class="sheet" id="helpSheet" aria-labelledby="helpTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="helpTitle">Didn't get the code?</p><p class="sheet__sub">Choose another way to receive it</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="options">
+    <button class="option tap" data-close data-toast="Code sent on WhatsApp"><span class="menu__icon icon-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2A9.8 9.8 0 0 0 3.6 17l-1.4 4.8 5-1.3A9.8 9.8 0 1 0 12 2.2Zm0 1.9a7.9 7.9 0 1 1-4 14.7l-.3-.2-3 .8.8-2.9-.2-.3A7.9 7.9 0 0 1 12 4.1Z"/></svg></span><span class="option__body"><span class="option__title">Send on WhatsApp</span><span class="option__sub">Usually instant</span></span></button>
+    <button class="option tap" data-close data-toast="You'll get a call in a few seconds"><span class="menu__icon icon-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2Z"/></svg></span><span class="option__body"><span class="option__title">Get a voice call</span><span class="option__sub">We'll read the code out</span></span></button>
+    <a class="option tap" id="editLink" href="signup.html"><span class="menu__icon icon-yellow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg></span><span class="option__body"><span class="option__title">Edit mobile number</span><span class="option__sub">+91 98765 43210</span></span></a>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const flow = Spendee.q('flow') || 'signup';
+    const next = { signup: 'create-pin.html?flow=signup', reset: 'create-pin.html?flow=reset', login: 'dashboard.html' }[flow];
+    if (flow === 'reset') { document.getElementById('eyebrow').textContent = 'Reset PIN'; document.querySelector('.back').href = 'forgot-pin.html'; document.getElementById('changeLink').href = 'forgot-pin.html'; document.getElementById('editLink').href = 'forgot-pin.html';
+      const ph = Spendee.store.get('resetPhone'); if (ph && ph.replace(/\D/g, '').length === 10) document.getElementById('phone').textContent = '+91 ' + ph; document.getElementById('editLink').querySelector('.option__sub').textContent = document.getElementById('phone').textContent; }
+    const otp = document.getElementById('otp'), btn = document.getElementById('verify'), msg = document.getElementById('otpMsg');
+    const enable = (on) => { btn.classList.toggle('is-disabled', !on); btn.setAttribute('aria-disabled', String(!on)); };
+    otp.addEventListener('input', () => enable(false));
+    otp.addEventListener('complete', (e) => { enable(true); verify(e.detail); });
+    async function verify(code) {
+      await Spendee.loading(btn, 900);
+      if (code !== '482916') {
+        otp.classList.add('is-error'); msg.style.color = '#f15858';
+        msg.textContent = 'That code doesn’t match. Check the SMS and try again.';
+        Spendee.haptic(); setTimeout(() => otp.reset(), 700); return;
+      }
+      otp.classList.add('is-ok'); msg.style.color = '#8df15e'; msg.textContent = 'Number verified';
+      await Spendee.wait(500); location.href = next;
+    }
+    btn.addEventListener('click', () => { const v = [...otp.querySelectorAll('input')].map((i) => i.value).join(''); if (v.length === 6) verify(v); });
+    setTimeout(() => { if (!otp.contains(document.activeElement) && ![...otp.querySelectorAll('input')].some((i) => i.value)) otp.querySelector('input').focus(); }, 400);
+  })();
+</script>
+</body>
+</html>

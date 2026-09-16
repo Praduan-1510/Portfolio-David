@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Reports</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .period { white-space: nowrap; padding: 0; height: 30px; border-radius: 8px; font-size: 11px; font-weight: 600; letter-spacing: 0; }
+  .chart text { font-family: var(--font); font-size: 8px; fill: #8a8a8a; letter-spacing: .2px; }
+  .chart .bar { cursor: pointer; outline: none; }
+  .chart .bar rect { transition: opacity var(--dur) var(--ease-out); }
+  .chart:hover .bar rect, .chart:focus-within .bar rect { opacity: .45; }
+  .chart .bar:hover rect, .chart .bar:focus rect { opacity: 1; }
+  .chart .bar rect { transform-box: fill-box; transform-origin: bottom; }
+  body:not(.capture) .chart .bar rect { animation: grow 700ms var(--ease-out) both; }
+  @keyframes grow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  .tip { position: absolute; pointer-events: none; opacity: 0; transform: translate(-50%, -100%) translateY(-6px); background: #111; color: #fff; font-size: 10.5px; padding: 6px 8px; border-radius: 8px; white-space: nowrap; box-shadow: inset 0 0 0 1px rgba(255,255,255,.15); transition: opacity 150ms; line-height: 1.35; }
+  .tip.show { opacity: 1; }
+  .tip b { font-weight: 600; }
+  .bm .kv > span:first-child { font-size: 14px; }
+  .bm .kv > span:last-child { font-size: 16px; }
+</style>
+</head>
+<body>
+<main class="screen" style="height:967px;min-height:967px" aria-label="Reports">
+  <a class="abs back tap" href="dashboard.html" data-go="back" style="left:34px;top:52px" aria-label="Back">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg>
+  </a>
+  <p class="t hdr__eyebrow" style="left:80px;top:43.3px;font-size:11px;letter-spacing:.9px">Analytics</p>
+  <h1 class="t" style="left:80px;top:64px;font-size:21px;font-weight:600;letter-spacing:.3px">Reports</h1>
+  <button class="abs chip-btn tap" style="left:294px;top:45px;width:74px;height:41px;font-size:17px;letter-spacing:.3px;background:#132430;box-shadow:inset 0 0 0 1px rgba(95,178,241,.35)" data-sheet="exportSheet">Export</button>
+
+  <div class="abs" role="tablist" aria-label="Period" data-group style="left:38px;top:107px;width:326px;height:30px">
+    <button class="abs chip period is-active" role="tab" aria-selected="true" data-value="this" style="left:0;width:82px">This Month</button>
+    <button class="abs chip period" role="tab" aria-selected="false" data-value="last" style="left:97px;width:84px">Last Month</button>
+    <button class="abs chip period" role="tab" aria-selected="false" data-value="quarter" style="left:195px;width:64px">Quarter</button>
+    <button class="abs chip period" role="tab" aria-selected="false" data-value="fy" style="left:274px;width:52px">FY 25</button>
+  </div>
+
+  <section class="abs card enter" style="left:38px;top:161px;width:326px;height:260px;border-radius:22px" aria-label="Profit and loss summary">
+    <h2 class="t" style="left:21px;top:24px;font-size:14.5px;letter-spacing:1px;color:#686868">P&amp;L SUMMARY · JUNE 2025</h2>
+    <div class="abs" style="left:20px;top:55px;width:134px;height:78px;border-radius:9px;background:#3b4f31">
+      <span class="t" style="left:10px;top:11px;font-size:11px;letter-spacing:0;color:#eef2ec">Income</span>
+      <span class="t num" style="left:10px;top:29.4px;font-size:16.5px;font-weight:600;color:#8df15e">₹4,20,000</span>
+      <span class="t" style="left:10px;top:54.5px;font-size:11px;color:#559435;display:flex;gap:4px;align-items:center"><svg width="8" height="11" viewBox="0 0 8 11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10V1M1 4l3-3 3 3"/></svg>18%</span>
+    </div>
+    <div class="abs" style="left:176px;top:55px;width:134px;height:78px;border-radius:9px;background:#4f3030">
+      <span class="t" style="left:10px;top:11px;font-size:11px;letter-spacing:0;color:#ece4e4">Expenses</span>
+      <span class="t num" style="left:10px;top:29.4px;font-size:16.5px;font-weight:600;color:#f15858">₹2,88,000</span>
+      <span class="t" style="left:10px;top:54.5px;font-size:11px;color:#8c4545;display:flex;gap:4px;align-items:center"><svg width="8" height="11" viewBox="0 0 8 11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10V1M1 4l3-3 3 3"/></svg>6%</span>
+    </div>
+    <div class="abs" style="left:20px;top:148px;width:286px;height:92px;border-radius:10px;background:#515151;box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)">
+      <span class="t" style="left:10px;top:12.5px;font-size:13px;letter-spacing:.8px;color:#c4c4c4">Net Profit</span>
+      <span class="t num" style="left:10px;top:32px;font-size:25px;font-weight:600;letter-spacing:.2px" data-count="132000" data-prefix="₹">₹1,32,000</span>
+      <span class="t" style="left:10px;top:64px;font-size:15.5px;letter-spacing:.6px;color:#8df15e">Margin: 31.4%</span>
+    </div>
+  </section>
+
+  <section class="abs card enter" style="left:38px;top:445px;width:326px;height:156px;border-radius:22px;--i:1" aria-label="Cash flow chart">
+    <h2 class="t" style="left:27px;top:16.3px;font-size:18.5px;font-weight:500;letter-spacing:0">Cash Flow: 12 Months</h2>
+    <svg class="abs chart" style="left:0;top:0" width="326" height="156" viewBox="0 0 326 156">
+        <g class="bar" tabindex="0" role="img" aria-label="Jul: income ₹3.10L, expenses ₹2.36L" data-m="Jul" data-i="310" data-e="236"><rect x="14" y="61" width="18" height="27" fill="#8df15e"/><rect x="14" y="88" width="18" height="21" fill="#f15858"/><text x="23" y="122.2" text-anchor="middle">Jul</text></g>
+        <g class="bar" tabindex="0" role="img" aria-label="Aug: income ₹2.95L, expenses ₹2.28L" data-m="Aug" data-i="295" data-e="228"><rect x="40" y="63" width="18" height="26" fill="#8df15e"/><rect x="40" y="89" width="18" height="20" fill="#f15858"/><text x="49" y="122.2" text-anchor="middle">Aug</text></g>
+        <g class="bar" tabindex="0" role="img" aria-label="Sep: income ₹3.32L, expenses ₹2.41L" data-m="Sep" data-i="332" data-e="241"><rect x="65" y="59" width="18" height="29" fill="#8df15e"/><rect x="65" y="88" width="18" height="21" fill="#f15858"/><text x="74" y="122.2" text-anchor="middle">Sep</text></g>
+        <g class="bar" tabindex="0" role="img" aria-label="Oct: income ₹3.68L, expenses ₹2.62L" data-m="Oct" data-i="368" data-e="262"><rect x="90" y="54" width="18" height="32" fill="#8df15e"/><rect x="90" y="86" width="18" height="23" fill="#f15858"/><text x="99" y="122.2" text-anchor="middle">Oct</text></g>
+        <g class="bar" tabindex="0" role="img" aria-label="Nov: income ₹3.51L, expenses ₹2.50L" data-m="Nov" data-i="351" data-e="250"><rect x="116" y="56" width="18" height="31" fill="#8df15e"/><rect x="116" y="87" width="18" height="22" fill="#f15858"/><text x="125" y="122.2" text-anchor="middle">Nov</text></g>
+        <g class="bar" tabindex="0" role="img" aria-label="Dec: income ₹3.22L, expenses ₹2.39L" data-m="Dec" data-i="322" data-e="239"><rect x="141" y="60" width="18" height="28" fill="#8df15e"/><rect x="141" y="88" width="18" height="21" fill="#f15858"/><text x="150" y="122.2" text-anchor="middle">Dec</text></g>
+        <g class="bar" tabindex="0" role="img" aria-label="Jan: income ₹3.05L, expenses ₹2.31L" data-m="Jan" data-i="305" data-e="231"><rect x="166" y="62" width="18" height="27" fill="#8df15e"/><rect x="166" y="89" width="18" height="20" fill="#f15858"/><text x="175" y="122.2" text-anchor="middle">Jan</text></g>
+        <g class="bar" tabindex="0" role="img" aria-label="Feb: income ₹3.18L, expenses ₹2.36L" data-m="Feb" data-i="318" data-e="236"><rect x="192" y="60" width="18" height="28" fill="#8df15e"/><rect x="192" y="88" width="18" height="21" fill="#f15858"/><text x="201" y="122.2" text-anchor="middle">Feb</text></g>
+        <g class="bar" tabindex="0" role="img" aria-label="Mar: income ₹3.92L, expenses ₹2.74L" data-m="Mar" data-i="392" data-e="274"><rect x="217" y="51" width="18" height="34" fill="#8df15e"/><rect x="217" y="85" width="18" height="24" fill="#f15858"/><text x="226" y="122.2" text-anchor="middle">Mar</text></g>
+        <g class="bar" tabindex="0" role="img" aria-label="Apr: income ₹3.38L, expenses ₹2.52L" data-m="Apr" data-i="338" data-e="252"><rect x="242" y="57" width="18" height="30" fill="#8df15e"/><rect x="242" y="87" width="18" height="22" fill="#f15858"/><text x="251" y="122.2" text-anchor="middle">Apr</text></g>
+        <g class="bar" tabindex="0" role="img" aria-label="May: income ₹3.56L, expenses ₹2.72L" data-m="May" data-i="356" data-e="272"><rect x="268" y="54" width="18" height="31" fill="#8df15e"/><rect x="268" y="85" width="18" height="24" fill="#f15858"/><text x="277" y="122.2" text-anchor="middle">May</text></g>
+        <g class="bar" tabindex="0" role="img" aria-label="Jun: income ₹4.20L, expenses ₹2.88L" data-m="Jun" data-i="420" data-e="288"><rect x="293" y="47" width="18" height="37" fill="#8df15e"/><rect x="293" y="84" width="18" height="25" fill="#f15858"/><text x="302" y="122.2" text-anchor="middle">Jun</text></g>
+      <circle cx="16.5" cy="142.5" r="2.8" fill="#8df15e"/><text x="26" y="146" style="font-size:10px;fill:#9a9a9a">Income</text>
+      <circle cx="82.5" cy="142.5" r="2.8" fill="#f15858"/><text x="92" y="146" style="font-size:10px;fill:#9a9a9a">Expenses</text>
+    </svg>
+    <div class="tip" id="tip" role="status" aria-live="polite"></div>
+  </section>
+
+  <section class="abs card bm enter" style="left:34px;top:620px;width:334px;height:184px;border-radius:22px;--i:2" aria-label="Business metrics">
+    <h2 class="t" style="left:34px;top:21.5px;font-size:16px;font-weight:600;letter-spacing:0">Business Metrics</h2>
+    <p class="kv" style="top:63px"><span>Avg. Collection Period</span><span>18 days</span></p>
+    <span class="kv-divider" style="top:91px"></span>
+    <p class="kv" style="top:104px"><span>Working Capital</span><span class="num" style="color:#41c405">₹ 2,63,250</span></p>
+    <span class="kv-divider" style="top:132px"></span>
+    <p class="kv" style="top:145px"><span>Net Profit Margin</span><span>31.4%</span></p>
+  </section>
+
+  <button class="abs mini-btn mini-btn--ui tap" style="left:34px;top:823px;width:159px;background:#132430;color:#60b2f1;box-shadow:inset 0 0 0 1px rgba(95,178,241,.18)" data-action="pdf"><svg width="16" height="18" viewBox="0 0 16 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M3 1h6.2L14 5.8V15.6A1.4 1.4 0 0 1 12.6 17H3A1.4 1.4 0 0 1 1.6 15.6V2.4A1.4 1.4 0 0 1 3 1Z"/><path d="M5.2 13.8v-2.2M8 13.8V9.4M10.8 13.8V7.2"/></svg>P&amp;L PDF</button>
+  <button class="abs mini-btn mini-btn--ui tap" style="left:209px;top:823px;width:159px;background:#333;color:#fff" data-sheet="shareSheet"><svg width="17" height="17" viewBox="0 0 17 17" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="13" cy="3.6" r="2.3"/><circle cx="3.8" cy="8.5" r="2.3"/><circle cx="13" cy="13.4" r="2.3"/><path d="m5.9 7.4 5-2.7M5.9 9.6l5 2.7"/></svg>Share</button>
+
+  <nav data-tabbar="more"></nav>
+</main>
+<section class="sheet" id="exportSheet" aria-labelledby="exTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="exTitle">Export report</p><p class="sheet__sub">JA Trading Co. · GSTIN 19AEYPA4821F1Z5</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <p class="section-label" style="margin:0 0 10px 2px;font-size:13px">Report</p>
+  <div class="options" data-options id="exType">
+    <button class="option tap" data-value="P&amp;L" aria-checked="true"><span class="option__radio"></span><span class="option__body"><span class="option__title">Profit &amp; Loss</span><span class="option__sub">Income, expenses and margin</span></span></button>
+    <button class="option tap" data-value="Balance_Sheet"><span class="option__radio"></span><span class="option__body"><span class="option__title">Balance sheet</span><span class="option__sub">Assets, liabilities, equity</span></span></button>
+    <button class="option tap" data-value="Cash_Flow"><span class="option__radio"></span><span class="option__body"><span class="option__title">Cash flow</span><span class="option__sub">Inflows and outflows by month</span></span></button>
+    <button class="option tap" data-value="GST_Summary"><span class="option__radio"></span><span class="option__body"><span class="option__title">GST summary</span><span class="option__sub">Output tax, ITC and payable</span></span></button>
+  </div>
+  <p class="section-label" style="margin:18px 0 10px 2px;font-size:13px">Format</p>
+  <div class="segmented" id="exFmt"><button data-value="pdf" aria-selected="true">PDF</button><button data-value="xlsx">Excel</button><button data-value="csv">CSV</button></div>
+  <p class="section-label" style="margin:18px 0 10px 2px;font-size:13px">Period</p>
+  <div class="segmented" id="exPeriod"><button data-value="this" aria-selected="true">This Month</button><button data-value="last">Last Month</button><button data-value="quarter">Quarter</button><button data-value="fy">FY 25</button></div>
+  <div class="ex-toggle">
+    <span class="grow"><span class="menu__title">Email a copy</span><span class="menu__sub">jayanta.adhikari@example.com</span></span>
+    <span class="switch" role="switch" id="exEmail" aria-checked="true" aria-label="Email a copy"></span>
+  </div>
+  <div style="margin-top:16px"><button class="btn btn--primary tap" id="exBtn"><span>Export</span></button></div>
+</section>
+
+<section class="sheet" id="shareSheet" aria-labelledby="shTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="shTitle">Share report</p><p class="sheet__sub" id="shSub">P&amp;L · June 2025 · PDF</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="share-grid">
+    <button class="share-app tap" data-close data-toast="Opening WhatsApp…"><span class="menu__icon icon-green"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2A9.8 9.8 0 0 0 3.6 17l-1.4 4.8 5-1.3A9.8 9.8 0 1 0 12 2.2Zm0 1.9a7.9 7.9 0 1 1-4 14.7l-.3-.2-3 .8.8-2.9-.2-.3A7.9 7.9 0 0 1 12 4.1Z"/></svg></span>WhatsApp</button>
+    <button class="share-app tap" data-close data-toast="Report emailed to your CA"><span class="menu__icon icon-yellow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></span>Email CA</button>
+    <button class="share-app tap" data-close data-toast="Link copied"><span class="menu__icon icon-blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3.2-3.2a4.5 4.5 0 0 0-6.4-6.4L12 5.6"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3.2 3.2a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2"/></svg></span>Copy link</button>
+    <button class="share-app tap" data-close data-toast="Saved to Files"><span class="menu__icon icon-gray"><svg width="20" height="20" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 1.5V12M4.5 7.5 9 12l4.5-4.5M1.5 11.5v3.8a1.2 1.2 0 0 0 1.2 1.2h12.6a1.2 1.2 0 0 0 1.2-1.2v-3.8"/></svg></span>Save</button>
+  </div>
+  <button class="btn btn--neutral tap" data-close style="margin-top:18px">Cancel</button>
+</section>
+<style>
+  .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .share-app { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 12px; color: #cfcfcf; padding: 6px 0; }
+  .share-app .menu__icon { width: 52px; height: 52px; border-radius: 16px; }
+  .ex-toggle { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 16px; background: #262626; margin-top: 16px; }
+  #exPeriod button { font-size: 12.5px; }
+  .mini-btn.is-loading { color: transparent !important; pointer-events: none; }
+  .mini-btn.is-loading > * { visibility: hidden; }
+  .mini-btn.is-loading::after { content: ''; position: absolute; left: 50%; top: 50%; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; border: 2px solid rgba(95,178,241,.25); border-top-color: #5fb2f1; animation: spin 700ms linear infinite; }
+  .pl-loading .pl-val { color: transparent !important; background: linear-gradient(90deg, rgba(255,255,255,.08) 0%, rgba(255,255,255,.2) 50%, rgba(255,255,255,.08) 100%); background-size: 200% 100%; animation: shimmer 1s linear infinite; border-radius: 6px; }
+  .pl-loading .pl-val svg { visibility: hidden; }
+  .pl-val { transition: color 200ms; }
+</style>
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const tip = document.getElementById('tip');
+    document.querySelectorAll('.chart .bar').forEach((b, i) => {
+      const r = b.querySelector('rect');
+      r.parentNode.querySelectorAll('rect').forEach((x) => (x.style.animationDelay = i * 40 + 'ms'));
+      const show = () => {
+        tip.innerHTML = '<b>' + b.dataset.m + '</b><br><span style="color:#8df15e">In ₹' + (b.dataset.i / 100).toFixed(2) + 'L</span> · <span style="color:#f15858">Out ₹' + (b.dataset.e / 100).toFixed(2) + 'L</span>';
+        tip.style.left = (+r.getAttribute('x') + 9) + 'px'; tip.style.top = r.getAttribute('y') + 'px'; tip.classList.add('show');
+      };
+      b.addEventListener('mouseenter', show); b.addEventListener('focus', show); b.addEventListener('click', show);
+      b.addEventListener('mouseleave', () => tip.classList.remove('show')); b.addEventListener('blur', () => tip.classList.remove('show'));
+    });
+  })();
+</script>
+<script>
+(function () {
+  const S = Spendee, $ = (s) => document.querySelector(s);
+  const card = document.querySelector('[aria-label="Profit and loss summary"]');
+  const boxes = card.querySelectorAll(':scope > div');
+  const el = {
+    title: card.querySelector('h2'),
+    inc: boxes[0].children[1], incP: boxes[0].children[2],
+    exp: boxes[1].children[1], expP: boxes[1].children[2],
+    net: boxes[2].children[1], margin: boxes[2].children[2],
+  };
+  [el.inc, el.incP, el.exp, el.expP, el.net, el.margin].forEach((x) => x.classList.add('pl-val'));
+  const DATA = {
+    this: { label: 'June 2025', file: 'June_2025', inc: '₹4,20,000', incP: [18, 1], exp: '₹2,88,000', expP: [6, 1], net: 132000, margin: '31.4%' },
+    last: { label: 'May 2025', file: 'May_2025', inc: '₹3,56,000', incP: [5, 1], exp: '₹2,72,000', expP: [8, 1], net: 84000, margin: '23.6%' },
+    quarter: { label: 'Q1 FY26', file: 'Q1_FY26', inc: '₹11,14,000', incP: [10, 1], exp: '₹8,12,000', expP: [10, 1], net: 302000, margin: '27.1%' },
+    fy: { label: 'FY 2024-25', file: 'FY2024-25', inc: '₹38,68,000', incP: [22, 1], exp: '₹28,67,000', expP: [11, 1], net: 1001000, margin: '25.9%' },
+  };
+  let period = 'this', seq = 0;
+  const setPct = (node, [v, up]) => {
+    const svg = node.querySelector('svg'); svg.style.transform = up ? '' : 'rotate(180deg)';
+    [...node.childNodes].filter((n) => n.nodeType === 3).forEach((n) => n.remove());
+    node.appendChild(document.createTextNode(v + '%'));
+  };
+  function countTo(node, to) {
+    const from = parseInt(node.textContent.replace(/\D/g, ''), 10) || 0, t0 = performance.now(), dur = 600;
+    const step = (t) => { const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3); node.textContent = '₹' + S.fmtIN(from + (to - from) * e); if (p < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+  async function setPeriod(v, instant) {
+    period = v; const d = DATA[v], my = ++seq;
+    if (!instant) { card.classList.add('pl-loading'); card.setAttribute('aria-busy', 'true'); await S.wait(450); if (my !== seq) return; }
+    el.title.textContent = 'P&L SUMMARY · ' + d.label.toUpperCase();
+    el.inc.textContent = d.inc; setPct(el.incP, d.incP);
+    el.exp.textContent = d.exp; setPct(el.expP, d.expP);
+    el.margin.textContent = 'Margin: ' + d.margin;
+    card.classList.remove('pl-loading'); card.removeAttribute('aria-busy');
+    if (instant) el.net.textContent = '₹' + S.fmtIN(d.net); else countTo(el.net, d.net);
+    setTimeout(() => { if (my === seq) el.net.textContent = '₹' + S.fmtIN(DATA[period].net); }, 1000);
+    card.setAttribute('aria-label', `Profit and loss summary, ${d.label}: income ${d.inc}, expenses ${d.exp}, net profit ₹${S.fmtIN(d.net)}`);
+    $('#shSub').textContent = 'P&L · ' + d.label + ' · PDF';
+    syncSeg('#exPeriod', v);
+  }
+  const syncSeg = (sel, v) => document.querySelectorAll(sel + ' button').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.value === v)));
+  document.querySelector('[aria-label="Period"][data-group]').addEventListener('change', (e) => { if (e.detail && e.detail !== period) setPeriod(e.detail, document.body.classList.contains('capture')); });
+
+  // P&L PDF
+  const pdf = document.querySelector('[data-action="pdf"]');
+  pdf.addEventListener('click', async () => { await S.loading(pdf, 1100); S.toast(`P&L_${DATA[period].file}.pdf downloaded`); });
+
+  // Export sheet
+  const exBtn = $('#exBtn');
+  $('#exportSheet').addEventListener('sheet:open', () => syncSeg('#exPeriod', period));
+  exBtn.addEventListener('click', async () => {
+    const type = $('#exType [aria-checked="true"]').dataset.value.replace('&amp;', '&');
+    const fmt = $('#exFmt [aria-selected="true"]').dataset.value;
+    const per = DATA[$('#exPeriod [aria-selected="true"]').dataset.value].file;
+    const email = $('#exEmail').getAttribute('aria-checked') === 'true';
+    await S.loading(exBtn, 1300);
+    S.sheet.close();
+    S.toast(`${type}_${per}.${fmt} exported${email ? ' · emailed to you' : ''}`);
+  });
+  if (S.q('period')) { const c = document.querySelector(`[aria-label="Period"] [data-value="${S.q('period')}"]`); c && c.click(); }
+})();
+</script>
+</body>
+</html>

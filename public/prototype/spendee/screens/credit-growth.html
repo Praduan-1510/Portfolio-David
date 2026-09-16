@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Credit &amp; Growth</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .metric { position: absolute; left: 33px; right: 38px; font-size: 14.2px; letter-spacing: .1px; line-height: 1; display: flex; justify-content: space-between; }
+  .divider { position: absolute; left: 10px; width: 313px; height: 1px; background: #868686; }
+  .kpi { position: absolute; top: 88px; width: 92px; height: 59px; border-radius: 10px; background: #515151; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
+  .kpi .t { left: 0; right: 0; text-align: center; }
+  .kpi__l { top: 12.2px; font-size: 11px; letter-spacing: .4px; color: #d6d6d6; }
+  .kpi__v { top: 30.6px; font-size: 17.5px; font-weight: 500; letter-spacing: .3px; }
+  .ring__arc { transition: stroke-dashoffset 1200ms var(--ease-out); }
+  .disc .inv__no { top: 26.6px; font-size: 15px; letter-spacing: .5px; }
+  .disc .inv__date { top: 63.5px; font-size: 15.5px; letter-spacing: 0; }
+  .disc .inv__amt { top: 60px; font-size: 19.5px; letter-spacing: 0; }
+  .disc .inv__btn { top: 93px; }
+</style>
+</head>
+<body>
+<main class="screen" style="height:1189px;min-height:1189px" aria-label="Credit and growth">
+  <a class="abs back tap" href="dashboard.html" data-go="back" style="left:34px;top:52px" aria-label="Back">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg>
+  </a>
+  <p class="t hdr__eyebrow" style="left:80px;top:43.3px;font-size:11px;letter-spacing:.9px">Financing</p>
+  <h1 class="t" style="left:80px;top:64px;font-size:21px;font-weight:600;letter-spacing:.5px">Credit &amp; Growth</h1>
+
+  <section class="abs card enter" style="left:34px;top:99px;width:334px;height:385px;border-radius:22px" aria-label="Ledger health score 782 of 900" data-sheet="healthSheet">
+    <h2 class="t" style="left:0;right:0;text-align:center;top:22.5px;font-size:15.5px;letter-spacing:.5px;color:#8e8e8e">LEDGER HEALTH SCORE</h2>
+    <svg class="abs" style="left:98px;top:60px" width="138" height="138" viewBox="0 0 138 138" aria-hidden="true">
+      <circle cx="69" cy="69.5" r="62.5" fill="none" stroke="#c9c9c9" stroke-width="12"/>
+      <circle class="ring__arc" id="ring" cx="69" cy="69.5" r="62.5" fill="none" stroke="#60b2f1" stroke-width="12" stroke-dasharray="392.7" stroke-dashoffset="51.4" transform="rotate(-90 69 69.5)"/>
+    </svg>
+    <span class="t num" style="left:0;right:0;text-align:center;top:107px;font-size:25px;font-weight:600;letter-spacing:.6px" data-count="782" data-format="raw">782</span>
+    <span class="t" style="left:0;right:0;text-align:center;top:135.5px;font-size:16px;letter-spacing:.8px;color:#9a9a9a">/ 900</span>
+    <span class="abs" style="left:88px;top:209px;width:158px;height:32px;border-radius:8px;background:#32424f;display:grid;place-items:center;color:#60b2f1;font-size:11.3px;font-weight:600;letter-spacing:0">Excellent Credit Profile</span>
+    <p class="metric" style="top:263.5px"><span>On-time payments</span><span style="color:#58c323;font-weight:600;font-size:16.5px;margin-top:-1px">92%</span></p>
+    <span class="divider" style="top:291px"></span>
+    <p class="metric" style="top:303.5px"><span>Monthly inflow</span><span style="font-weight:600;font-size:16.5px;margin-top:-1px;right:-6px;position:relative">₹3.6L</span></p>
+    <span class="divider" style="top:332px"></span>
+    <p class="metric" style="top:345.5px"><span>GST compliance</span><span style="color:#58c323;font-weight:600;font-size:16.5px;margin-top:-1px">100%</span></p>
+  </section>
+
+  <section class="abs card enter" style="left:38px;top:504px;width:326px;height:236px;border-radius:20px;--i:1" aria-label="Working capital offer">
+    <p class="t" style="left:21px;top:25px;font-size:14.5px;letter-spacing:1px;color:#8e8e8e">WORKING CAPITAL</p>
+    <p class="t num" style="left:20px;top:43.5px;font-size:26px;font-weight:500;letter-spacing:.6px;color:#60b2f1">₹15,00,000</p>
+    <span class="abs" style="left:208px;top:26px;width:98px;height:40px;border-radius:9px;background:#31424f;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);display:grid;place-items:center;color:#60b2f1;font-size:17px;letter-spacing:.4px">Approved</span>
+    <div class="kpi" style="left:20px"><span class="t kpi__l">Rate p.a</span><span class="t kpi__v" style="color:#8df15e">11.5%</span></div>
+    <div class="kpi" style="left:119px"><span class="t kpi__l">Tenure</span><span class="t kpi__v" style="color:#d8d023">36m</span></div>
+    <div class="kpi" style="left:218px"><span class="t kpi__l">Disbursal</span><span class="t kpi__v" style="color:#60b2f1">48h</span></div>
+    <button class="abs btn btn--primary tap" style="left:20px;top:162px;width:290px;gap:12px;font-size:18.5px" data-go="loan-apply">
+      Apply in 2 Minutes
+      <svg width="18" height="16" viewBox="0 0 18 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 8h14.5M9.5 1.5 16 8l-6.5 6.5"/></svg>
+    </button>
+  </section>
+
+  <article class="inv card disc enter" style="top:760px;height:146px;--i:2" aria-label="INV-1038, Sharma Textiles, pending, due Jun 10, ₹62,000">
+    <span class="t inv__no">INV-1038</span>
+    <span class="inv__pill tone-yellow" style="top:20px;width:81px;right:19px;font-size:15.5px;letter-spacing:0">Pending</span>
+    <span class="t inv__date" style="color:#c64f4f">Due Jun 10</span>
+    <span class="t inv__amt num" style="color:#f1ea58">₹62,000</span>
+    <button class="inv__btn tone-blue tap" style="left:20px;width:290px" data-href="invoice-discount.html?id=INV-1038">Get ₹62,000 Today</button>
+  </article>
+  <article class="inv card disc enter" style="top:926px;height:146px;--i:3" aria-label="INV-1019, Bose Retail, overdue 12 days, ₹1,15,000">
+    <span class="t inv__no">INV-1019</span>
+    <span class="inv__pill tone-red" style="top:20px;width:84px;right:19px;font-size:15.5px;letter-spacing:0">Overdue</span>
+    <span class="t inv__date" style="color:#c64f4f">Overdue 12 days</span>
+    <span class="t inv__amt num" style="color:#f15858;right:24px">₹1,15,000</span>
+    <button class="inv__btn tone-red tap" style="left:20px;width:290px" data-href="invoice-discount.html?id=INV-1019">Urgent – Discount Now</button>
+  </article>
+
+  <nav data-tabbar="more"></nav>
+</main>
+<section class="sheet" id="healthSheet" aria-labelledby="hsTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="hsTitle">Ledger health 782 / 900</p><p class="sheet__sub">Excellent · top 12% of businesses like yours · updated Monday</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <p class="section-label" style="margin:0 0 10px 2px;font-size:13px">What makes your score</p>
+  <div class="panel panel--flat" style="padding:6px 16px">
+    <div class="hf"><span class="grow"><span class="menu__title">On-time payments</span><span class="menu__sub">35% weight · 46 of 50 bills paid on time</span></span><span class="c-green num hf__v">92%</span><span class="hf__bar"><i style="width:92%;background:#8df15e"></i></span></div>
+    <div class="hf"><span class="grow"><span class="menu__title">GST compliance</span><span class="menu__sub">25% weight · 12 of 12 returns filed on time</span></span><span class="c-green num hf__v">100%</span><span class="hf__bar"><i style="width:100%;background:#8df15e"></i></span></div>
+    <div class="hf"><span class="grow"><span class="menu__title">Monthly inflow</span><span class="menu__sub">20% weight · ₹3.6L avg, steady for 6 months</span></span><span class="c-blue num hf__v">Good</span><span class="hf__bar"><i style="width:74%;background:#5fb2f1"></i></span></div>
+    <div class="hf"><span class="grow"><span class="menu__title">Overdue receivables</span><span class="menu__sub">20% weight · ₹1,53,000 overdue over 10 days</span></span><span class="c-yellow num hf__v">Fair</span><span class="hf__bar"><i style="width:52%;background:#f1ea58"></i></span></div>
+  </div>
+  <p class="section-label" style="margin:20px 0 10px 2px;font-size:13px">Tips to improve</p>
+  <div class="options">
+    <a class="option tap" href="invoice-discount.html?id=INV-1019"><span class="menu__icon icon-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17 9 11l4 4 8-8M15 7h6v6"/></svg></span><span class="option__body"><span class="option__title">Collect or discount INV-1019</span><span class="option__sub">Clears ₹1,15,000 overdue</span></span><span class="menu__meta c-green">+18</span></a>
+    <a class="option tap" href="gst-file.html"><span class="menu__icon icon-yellow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg></span><span class="option__body"><span class="option__title">File GSTR-3B before Jun 20</span><span class="option__sub">Keeps GST compliance at 100%</span></span><span class="menu__meta c-green">+6</span></a>
+    <a class="option tap" href="contact.html"><span class="menu__icon icon-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6.5V12l3.5 3"/></svg></span><span class="option__body"><span class="option__title">Pay MK Suppliers on time</span><span class="option__sub">Avoid a late-payment mark this month</span></span><span class="menu__meta c-green">+9</span></a>
+  </div>
+  <div style="margin-top:16px"><button class="btn btn--primary tap" data-close>Got it</button></div>
+</section>
+<style>
+  .hf { display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 12px; padding: 12px 0; }
+  .hf + .hf { border-top: 1px solid rgba(255,255,255,.1); }
+  .hf__v { font-size: 15px; font-weight: 600; }
+  .hf__bar { grid-column: 1 / -1; height: 5px; border-radius: 3px; background: #333; overflow: hidden; margin-top: 8px; }
+  .hf__bar i { display: block; height: 100%; border-radius: 3px; }
+</style>
+<script src="../assets/js/app.js"></script>
+<script>
+  document.addEventListener('click', (e) => { const el = e.target.closest('[data-href]'); if (el) { e.preventDefault(); location.href = el.dataset.href; } });
+  (function () { const card = document.querySelector('[data-sheet="healthSheet"]'); card.setAttribute('role', 'button'); card.tabIndex = 0; card.style.cursor = 'pointer';
+    card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); Spendee.sheet.open('healthSheet'); } }); })();
+  if (!document.body.classList.contains('capture')) {
+    const r = document.getElementById('ring'); r.style.strokeDashoffset = 392.7;
+    requestAnimationFrame(() => requestAnimationFrame(() => (r.style.strokeDashoffset = 51.4)));
+  }
+</script>
+</body>
+</html>

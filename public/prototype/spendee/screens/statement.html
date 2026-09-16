@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Statement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .page [hidden], .sheet [hidden] { display: none !important; }
+  .appbar { margin-bottom: 22px; }
+  .summary { margin-top: 18px; padding: 18px 20px 18px; }
+  .summary__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 12px; }
+  .summary__k { display: block; font-size: 11px; letter-spacing: .9px; text-transform: uppercase; color: #8a8a8a; }
+  .summary__v { display: flex; align-items: center; gap: 5px; font-size: 18px; font-weight: 600; margin-top: 5px; line-height: 22px; }
+  .summary__closing { grid-column: 1 / -1; display: flex; align-items: flex-end; justify-content: space-between; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.12); }
+  .summary__closing .summary__v { font-size: 26px; font-weight: 500; line-height: 30px; }
+  .flow { display: flex; height: 6px; border-radius: 3px; overflow: hidden; gap: 3px; margin-top: 14px; }
+  .flow i { display: block; height: 100%; border-radius: 3px; transition: flex-grow 500ms var(--ease-out); }
+  .toolbar { display: flex; gap: 10px; margin-top: 18px; }
+  .toolbar .search { flex: 1; padding-left: 18px; }
+  .toolbar .search input { margin-left: 12px; font-size: 15px; }
+  .search__clear[hidden] { display: none; }
+  .search input::-webkit-search-cancel-button { display: none; }
+  .search__clear { width: 44px; height: 54px; display: grid; place-items: center; color: #8a8a8a; }
+  .filter-btn { position: relative; width: 54px; height: 54px; border-radius: 16px; }
+  .filter-btn.is-on { background: #132430; color: #5fb2f1; box-shadow: inset 0 0 0 1px rgba(95,178,241,.45); }
+  .filter-btn .dot-badge { top: -5px; right: -5px; background: #5fb2f1; color: #000; }
+  .date-h { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: #8a8a8a; margin: 24px 2px 10px; }
+  .date-h span:last-child { letter-spacing: .2px; text-transform: none; font-size: 12px; color: #6b6b6b; }
+  .row { cursor: pointer; }
+  .row__meta { color: #a9a9a9; }
+  .row .amt { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 16px; font-weight: 600; letter-spacing: .2px; text-align: right; }
+  .row .amt small { display: block; font-size: 10.5px; font-weight: 500; color: #8a8a8a; letter-spacing: .3px; margin-top: 1px; }
+  .row.is-new { box-shadow: inset 0 0 0 2px #5fb2f1, 0 4px 10px rgba(0,0,0,.55); }
+  .new-pill { display: inline-block; margin-left: 6px; font-size: 10px; font-weight: 600; letter-spacing: .5px; color: #000; background: #5fb2f1; border-radius: 5px; padding: 1px 5px; vertical-align: 2px; }
+  .result-count { font-size: 12.5px; color: #8a8a8a; margin: 14px 2px -10px; }
+  .result-count:empty { display: none; }
+  .empty-state { padding-top: 36px; }
+  .empty-state .btn { width: auto; display: inline-flex; padding: 0 20px; }
+  /* sheets */
+  .sheet .section-label { margin: 22px 0 10px 2px; font-size: 12.5px; }
+  .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .mode-grid .check { align-items: center; min-height: 48px; padding: 0 14px; border-radius: 14px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); font-size: 15px; color: #f0f0f0; }
+  .sheet .field-row .field { padding: 0 16px; }
+  .sheet-actions { display: grid; grid-template-columns: 110px 1fr; gap: 10px; margin-top: 24px; }
+  .fmt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .fmt-grid .option { flex-direction: column; justify-content: center; gap: 6px; min-height: 84px; padding: 10px 6px; text-align: center; }
+  .fmt-grid .option__title { font-size: 14px; font-weight: 600; }
+  .fmt-grid .option__sub { font-size: 11px; margin: 0; }
+  .toggle-row { display: flex; align-items: center; gap: 14px; margin-top: 12px; padding: 12px 16px; border-radius: 16px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .period-row { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 16px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); width: 100%; text-align: left; }
+  .presets { display: flex; gap: 8px; flex-wrap: wrap; }
+  .presets .chip { height: 34px; padding: 0 12px; font-size: 14px; }
+  input[type="date"].field { font-size: 15px; padding: 0 14px; font-family: var(--font); }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Bank statement">
+  <header class="appbar">
+    <a class="back tap" href="bank.html" data-go="back" aria-label="Back"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg></a>
+    <div class="appbar__titles"><span class="appbar__eyebrow">Spendee Bank</span><h1 class="appbar__title">Statement</h1></div>
+    <button class="appbar__action tap" data-sheet="downloadSheet"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>Download</button>
+  </header>
+
+  <div class="chip-row enter" id="months" data-group role="tablist" aria-label="Statement period">
+    <button class="chip" role="tab" data-value="apr">Apr 2025</button>
+    <button class="chip" role="tab" data-value="may">May 2025</button>
+    <button class="chip is-active" role="tab" aria-selected="true" data-value="jun">Jun 2025</button>
+    <button class="chip" role="tab" data-value="custom" id="customChip"><span id="customLbl">Custom</span></button>
+  </div>
+
+  <section class="panel summary enter" style="--i:1" aria-label="Summary">
+    <div class="summary__grid">
+      <div><span class="summary__k">Opening balance</span><span class="summary__v num" id="sOpen">₹ 2,78,040</span></div>
+      <div style="text-align:right;align-self:end"><span class="muted num" style="font-size:12px" id="sCount">10 transactions</span></div>
+      <div><span class="summary__k">Money in</span><span class="summary__v num c-green" id="sIn"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2 2 10M2 4v6h6"/></svg><span>₹ 1,69,050</span></span></div>
+      <div><span class="summary__k">Money out</span><span class="summary__v num c-red" id="sOut"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10 10 2M4 2h6v6"/></svg><span>₹ 1,04,200</span></span></div>
+      <div class="summary__closing">
+        <div><span class="summary__k">Closing balance</span><span class="summary__v num" id="sClose">₹ 3,42,890</span></div>
+      </div>
+    </div>
+    <div class="flow" aria-hidden="true"><i id="fIn" style="background:#8df15e;flex-grow:169"></i><i id="fOut" style="background:#f15858;flex-grow:104"></i></div>
+  </section>
+
+  <div class="toolbar enter" style="--i:2">
+    <label class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="7"/><path d="m20 20-4.5-4.5"/></svg>
+      <input id="q" type="search" placeholder="Search transactions" aria-label="Search transactions" autocomplete="off">
+      <button class="search__clear tap" id="qClear" aria-label="Clear search" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10" fill="#e6e6e6" stroke="none"/><path d="m9 9 6 6M15 9l-6 6" stroke="#555"/></svg></button>
+    </label>
+    <button class="appbar__icon filter-btn tap" id="filterBtn" data-sheet="filterSheet" aria-label="Filter transactions"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span class="dot-badge" id="fCount" hidden>0</span></button>
+  </div>
+
+  <p class="result-count" id="resultCount" role="status" aria-live="polite"></p>
+  <div id="txns"></div>
+
+  <div class="empty-state" id="empty" hidden>
+    <div class="empty-state__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="7"/><path d="m20 20-4.5-4.5M8 10.5h5"/></svg></div>
+    <h3>No transactions found</h3>
+    <p id="emptyMsg">Nothing matches your search or filters for this period.</p>
+    <button class="btn btn--ghost btn--sm tap" id="clearAll">Clear filters</button>
+  </div>
+
+  <nav data-tabbar="bank"></nav>
+</main>
+
+<!-- Filter sheet -->
+<section class="sheet" id="filterSheet" aria-labelledby="filterTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="filterTitle">Filter transactions</p><p class="sheet__sub">Narrow down by type, mode and amount</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <p class="section-label" style="margin-top:0">Type</p>
+  <div class="segmented" id="fType">
+    <button data-value="all" aria-selected="true">All</button>
+    <button data-value="credit">Credit</button>
+    <button data-value="debit">Debit</button>
+  </div>
+  <p class="section-label">Mode</p>
+  <div class="mode-grid" id="fModes">
+    <label class="check"><input type="checkbox" value="UPI" checked>UPI</label>
+    <label class="check"><input type="checkbox" value="NEFT" checked>NEFT</label>
+    <label class="check"><input type="checkbox" value="IMPS" checked>IMPS</label>
+    <label class="check"><input type="checkbox" value="Card" checked>Card</label>
+  </div>
+  <p class="section-label">Amount range</p>
+  <div class="field-row">
+    <div class="fg"><label class="label" for="fMin" style="font-size:13px;margin-bottom:8px">Min</label><div class="field field-prefix"><span>₹</span><input id="fMin" inputmode="numeric" placeholder="0" aria-label="Minimum amount"></div></div>
+    <div class="fg" style="margin-top:0"><label class="label" for="fMax" style="font-size:13px;margin-bottom:8px">Max</label><div class="field field-prefix"><span>₹</span><input id="fMax" inputmode="numeric" placeholder="Any" aria-label="Maximum amount"></div></div>
+  </div>
+  <p id="rangeErr" role="alert" style="font-size:12px;color:#f15858;margin:8px 0 0 10px;min-height:16px"></p>
+  <div class="sheet-actions">
+    <button class="btn btn--neutral tap" id="fReset">Reset</button>
+    <button class="btn btn--primary tap" id="fApply">Apply</button>
+  </div>
+</section>
+
+<!-- Download sheet -->
+<section class="sheet" id="downloadSheet" aria-labelledby="dlTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="dlTitle">Download statement</p><p class="sheet__sub">Yes Bank A/c ••7643 · JA Trading Co.</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <p class="section-label" style="margin-top:0">Format</p>
+  <div class="options fmt-grid" data-options id="fmt">
+    <button class="option tap" data-value="PDF" aria-checked="true"><span class="menu__icon icon-red" style="width:32px;height:32px"><svg width="15" height="18" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M2.6 1h6.3c.5 0 .9.2 1.3.5l4.1 4.2c.3.3.5.8.5 1.3v10.4A1.6 1.6 0 0 1 13.2 19H2.6A1.6 1.6 0 0 1 1 17.4V2.6A1.6 1.6 0 0 1 2.6 1Z"/></svg></span><span class="option__title">PDF</span><span class="option__sub">Bank-stamped</span></button>
+    <button class="option tap" data-value="CSV"><span class="menu__icon icon-blue" style="width:32px;height:32px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></span><span class="option__title">CSV</span><span class="option__sub">Tally ready</span></button>
+    <button class="option tap" data-value="XLSX"><span class="menu__icon icon-green" style="width:32px;height:32px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 3v18"/></svg></span><span class="option__title">Excel</span><span class="option__sub">.xlsx</span></button>
+  </div>
+  <p class="section-label">Period</p>
+  <button class="period-row tap" id="dlPeriodBtn">
+    <span class="menu__icon icon-yellow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg></span>
+    <span class="menu__body"><span class="menu__title" id="dlPeriod">Jun 2025</span><span class="menu__sub" id="dlPeriodSub">01 Jun – 16 Jun 2025 · 10 transactions</span></span>
+    <span class="c-blue" style="font-size:14px;font-weight:600">Change</span>
+  </button>
+  <div class="toggle-row">
+    <span class="menu__icon icon-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></span>
+    <span class="menu__body"><span class="menu__title" style="font-size:14px;white-space:nowrap">Email statement to me</span><span class="menu__sub">PDF password: your PAN</span></span>
+    <span class="switch" role="switch" aria-checked="false" id="dlEmail" aria-label="Email statement to jayanta.adhikari@example.com"></span>
+  </div>
+  <button class="btn btn--primary tap" id="dlGo" style="margin-top:24px"><span id="dlGoLbl">Download PDF</span></button>
+</section>
+
+<!-- Custom range sheet -->
+<section class="sheet" id="rangeSheet" aria-labelledby="rangeTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="rangeTitle">Custom period</p><p class="sheet__sub">Statements are available from 01 Apr 2025</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="presets" id="presets">
+    <button class="chip tap" data-from="2025-06-10" data-to="2025-06-16">Last 7 days</button>
+    <button class="chip tap" data-from="2025-05-18" data-to="2025-06-16">Last 30 days</button>
+    <button class="chip tap" data-from="2025-04-01" data-to="2025-06-16">This quarter</button>
+  </div>
+  <div class="field-row" style="margin-top:20px">
+    <div class="fg"><label class="label" for="rFrom" style="font-size:13px;margin-bottom:8px">From</label><input class="field" type="date" id="rFrom" value="2025-06-01" min="2025-04-01" max="2025-06-16"></div>
+    <div class="fg" style="margin-top:0"><label class="label" for="rTo" style="font-size:13px;margin-bottom:8px">To</label><input class="field" type="date" id="rTo" value="2025-06-16" min="2025-04-01" max="2025-06-16"></div>
+  </div>
+  <p id="rErr" role="alert" style="font-size:12px;color:#f15858;margin:8px 0 0 10px;min-height:16px"></p>
+  <button class="btn btn--primary tap" id="rApply" style="margin-top:14px">Apply period</button>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const S = Spendee, $ = (id) => document.getElementById(id);
+    const MON = { apr: 'Apr', may: 'May', jun: 'Jun' };
+    // Transactions: d = ISO date, t = time, a = signed amount
+    const TX = [
+      { n: 'Dutta & Sons', m: 'UPI', d: '2025-06-16', t: '10:42 AM', a: 45000 },
+      { n: 'MK Suppliers', m: 'NEFT', d: '2025-06-16', t: '9:05 AM', a: -28900 },
+      { n: 'Ghosh Traders', m: 'IMPS', d: '2025-06-15', t: '6:30 PM', a: -15000 },
+      { n: 'AWS India', m: 'Card', d: '2025-06-15', t: '11:02 AM', a: -4300 },
+      { n: 'Das Electricals', m: 'NEFT', d: '2025-06-12', t: '4:48 PM', a: 45000 },
+      { n: 'Pal Hardware', m: 'IMPS', d: '2025-06-12', t: '12:20 PM', a: -36000 },
+      { n: 'Sen Garments', m: 'UPI', d: '2025-06-12', t: '10:05 AM', a: 16500 },
+      { n: 'Kundu Plastics', m: 'NEFT', d: '2025-06-08', t: '3:30 PM', a: 34550 },
+      { n: 'Dye Chemical', m: 'UPI', d: '2025-06-08', t: '11:15 AM', a: -20000 },
+      { n: 'Saha & Co.', m: 'UPI', d: '2025-06-02', t: '2:14 PM', a: 28000 },
+      { n: 'Sharma Textiles', m: 'UPI', d: '2025-05-28', t: '5:12 PM', a: 40000 },
+      { n: 'MK Suppliers', m: 'NEFT', d: '2025-05-24', t: '1:40 PM', a: -38760 },
+      { n: 'Roy Fabrics', m: 'UPI', d: '2025-05-19', t: '9:48 AM', a: 9000 },
+      { n: 'Google Workspace', m: 'Card', d: '2025-05-15', t: '8:00 AM', a: -2800 },
+      { n: 'Mitra Textiles', m: 'IMPS', d: '2025-05-11', t: '4:25 PM', a: 99100 },
+      { n: 'Office Rent · Kolkata', m: 'NEFT', d: '2025-05-05', t: '10:00 AM', a: -47200 },
+      { n: 'Sharma Textiles', m: 'NEFT', d: '2025-04-30', t: '3:05 PM', a: 55000 },
+      { n: 'Dye Chemical', m: 'IMPS', d: '2025-04-18', t: '12:44 PM', a: -41600 },
+      { n: 'Saha & Co.', m: 'UPI', d: '2025-04-09', t: '6:18 PM', a: 38500 },
+      { n: 'Shell Fuel', m: 'Card', d: '2025-04-03', t: '7:52 PM', a: -21800 },
+    ];
+    const OPEN = { apr: 188600, may: 218700, jun: 278040 };
+    const TODAY = '2025-06-16', YEST = '2025-06-15';
+    const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const fmtDate = (iso) => { const [y, m, d] = iso.split('-'); return `${d} ${MONTHS[+m - 1]} ${y}`; };
+    const money = (n) => '₹ ' + S.fmtIN(Math.abs(n));
+    const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+    // Surface the payment just made (from payment-success) at the top of today
+    const last = S.store.get('lastPayment');
+    const fresh = S.q('highlight') === 'last' && last && last.to;
+    if (fresh) TX.unshift({ n: last.to, m: last.mode === 'NEFT' || last.mode === 'IMPS' ? last.mode : 'UPI', d: TODAY, t: 'Just now', a: -Math.abs(+last.amt || 0), isNew: true });
+
+    const state = { period: 'jun', from: null, to: null, q: '', type: 'all', modes: ['UPI', 'NEFT', 'IMPS', 'Card'], min: null, max: null };
+    const PERSON = '<svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg>';
+    const CARD = '<svg width="18" height="14" viewBox="0 0 20 15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="1" y="1" width="18" height="13" rx="2.2"/><path d="M1 5.2h18M4.5 10.5h4" stroke-linecap="round"/></svg>';
+    const tone = { UPI: 'blue', NEFT: 'yellow', IMPS: 'green', Card: 'red' };
+
+    const inPeriod = (tx) => state.period === 'custom' ? tx.d >= state.from && tx.d <= state.to : tx.d.slice(5, 7) === { apr: '04', may: '05', jun: '06' }[state.period];
+    const activeFilters = () => (state.type !== 'all') + (state.modes.length < 4) + (state.min != null || state.max != null);
+
+    function render() {
+      const base = TX.filter(inPeriod);
+      // summary reflects the period (not search/filters)
+      const inSum = base.filter((t) => t.a > 0 && !t.isNew).reduce((s, t) => s + t.a, 0);
+      const outSum = base.filter((t) => t.a < 0 && !t.isNew).reduce((s, t) => s - t.a, 0);
+      const firstDay = state.period === 'custom' ? state.from : null;
+      const open = state.period === 'custom'
+        ? 188600 + TX.filter((t) => !t.isNew && t.d < firstDay).reduce((s, t) => s + t.a, 0)
+        : OPEN[state.period];
+      $('sOpen').textContent = money(open);
+      $('sIn').lastElementChild.textContent = money(inSum);
+      $('sOut').lastElementChild.textContent = money(outSum);
+      $('sClose').textContent = money(open + inSum - outSum);
+      $('sCount').textContent = base.filter((t) => !t.isNew).length + ' transactions';
+      $('fIn').style.flexGrow = inSum || 1; $('fOut').style.flexGrow = outSum || 1;
+
+      const q = state.q.trim().toLowerCase();
+      const rows = base.filter((t) => {
+        if (state.type === 'credit' && t.a < 0) return false;
+        if (state.type === 'debit' && t.a > 0) return false;
+        if (!state.modes.includes(t.m)) return false;
+        const abs = Math.abs(t.a);
+        if (state.min != null && abs < state.min) return false;
+        if (state.max != null && abs > state.max) return false;
+        if (q && !(t.n.toLowerCase().includes(q) || t.m.toLowerCase().includes(q) || String(abs).includes(q.replace(/[^\d]/g, '') || '\u0000'))) return false;
+        return true;
+      });
+
+      const n = activeFilters();
+      $('fCount').hidden = !n; $('fCount').textContent = n;
+      $('filterBtn').classList.toggle('is-on', !!n);
+      $('filterBtn').setAttribute('aria-label', n ? `Filter transactions, ${n} active` : 'Filter transactions');
+      $('resultCount').textContent = (q || n) && rows.length ? `${rows.length} of ${base.length} transactions` : '';
+
+      const groups = [];
+      rows.forEach((t) => { const g = groups[groups.length - 1]; if (g && g.d === t.d) g.items.push(t); else groups.push({ d: t.d, items: [t] }); });
+      let i = 0;
+      $('txns').innerHTML = groups.map((g) => {
+        const label = g.d === TODAY ? 'Today' : g.d === YEST ? 'Yesterday' : fmtDate(g.d);
+        const net = g.items.reduce((s, t) => s + (t.isNew ? 0 : t.a), 0);
+        return `<h2 class="date-h"><span>${label}</span><span class="num">${g.d === TODAY || g.d === YEST ? fmtDate(g.d) : (net >= 0 ? 'Net +' : 'Net −') + money(net)}</span></h2><div class="list">` +
+          g.items.map((t) => {
+            const credit = t.a > 0;
+            const href = 'transaction-detail.html?' + new URLSearchParams({ name: t.n, amt: Math.abs(t.a), type: credit ? 'credit' : 'debit', mode: t.m, date: fmtDate(t.d), time: t.t });
+            return `<a class="row tap${t.isNew ? ' is-new' : ''}" href="${href}" style="animation-delay:${Math.min(i++, 8) * 35}ms" aria-label="${esc(t.n)}, ${credit ? 'received' : 'paid'} ${money(t.a)}, ${t.m}, ${t.t}">
+              <span class="avatar avatar--${tone[t.m]}">${t.m === 'Card' ? CARD : PERSON}</span>
+              <div class="row__body" style="max-width:${t.isNew ? 150 : 170}px"><p class="row__name" style="overflow:hidden;text-overflow:ellipsis">${esc(t.n)}</p><p class="row__meta">${t.m} · ${t.t}${t.isNew ? '<span class="new-pill">NEW</span>' : ''}</p></div>
+              <span class="amt num ${credit ? 'c-green' : 'c-red'}">${credit ? '+' : '−'}${money(t.a)}<small>${credit ? 'Credit' : 'Debit'}</small></span>
+            </a>`;
+          }).join('') + '</div>';
+      }).join('');
+
+      const empty = rows.length === 0;
+      $('empty').hidden = !empty;
+      if (empty) {
+        $('emptyMsg').textContent = q ? `Nothing matches “${state.q.trim()}”${n ? ' with the current filters' : ''} in this period.` : 'No transactions match your filters for this period.';
+        $('clearAll').textContent = q && !n ? 'Clear search' : 'Clear filters';
+      }
+    }
+
+    // Period chips
+    $('months').addEventListener('change', (e) => {
+      if (e.detail === 'custom') { S.sheet.open('rangeSheet'); return; }
+      state.period = e.detail; $('customLbl').textContent = 'Custom';
+      syncDownload(); render();
+    });
+    // Custom range
+    $('presets').addEventListener('click', (e) => { const b = e.target.closest('[data-from]'); if (!b) return; $('rFrom').value = b.dataset.from; $('rTo').value = b.dataset.to; $('presets').querySelectorAll('.chip').forEach((c) => c.classList.toggle('is-active', c === b)); $('rErr').textContent = ''; });
+    $('rApply').addEventListener('click', () => {
+      const f = $('rFrom').value, t = $('rTo').value;
+      if (!f || !t) { $('rErr').textContent = 'Pick both a start and end date'; return; }
+      if (f > t) { $('rErr').textContent = 'Start date must be on or before the end date'; return; }
+      $('rErr').textContent = '';
+      state.period = 'custom'; state.from = f; state.to = t;
+      const short = (iso) => fmtDate(iso).slice(0, 6);
+      $('customLbl').textContent = `${short(f)} – ${short(t)}`;
+      S.sheet.close(); syncDownload(); render();
+    });
+    // if the range sheet is dismissed without a custom period, restore the active chip
+    $('rangeSheet').addEventListener('sheet:close', () => {
+      if (state.period === 'custom') return;
+      document.querySelectorAll('#months .chip').forEach((c) => { const on = c.dataset.value === state.period; c.classList.toggle('is-active', on); c.setAttribute('aria-selected', on); });
+    });
+
+    // Search
+    let h; $('q').addEventListener('input', () => { $('qClear').hidden = !$('q').value; clearTimeout(h); h = setTimeout(() => { state.q = $('q').value; render(); }, 120); });
+    $('qClear').addEventListener('click', (e) => { e.preventDefault(); $('q').value = ''; $('qClear').hidden = true; state.q = ''; render(); $('q').focus(); });
+
+    // Filter sheet — edits are drafted and committed on Apply
+    let draftType = 'all';
+    $('fType').addEventListener('change', (e) => { draftType = e.detail; });
+    const setSeg = (v) => $('fType').querySelectorAll('button').forEach((b) => b.setAttribute('aria-selected', b.dataset.value === v));
+    const num = (v) => { const x = parseInt(String(v).replace(/[^\d]/g, ''), 10); return isNaN(x) ? null : x; };
+    ['fMin', 'fMax'].forEach((id) => $(id).addEventListener('input', () => { const v = num($(id).value); $(id).value = v == null ? '' : S.fmtIN(v); $('rangeErr').textContent = ''; }));
+    $('filterSheet').addEventListener('sheet:open', () => {
+      draftType = state.type; setSeg(state.type);
+      $('fModes').querySelectorAll('input').forEach((c) => (c.checked = state.modes.includes(c.value)));
+      $('fMin').value = state.min == null ? '' : S.fmtIN(state.min); $('fMax').value = state.max == null ? '' : S.fmtIN(state.max);
+      $('rangeErr').textContent = '';
+    });
+    $('fReset').addEventListener('click', () => { draftType = 'all'; setSeg('all'); $('fModes').querySelectorAll('input').forEach((c) => (c.checked = true)); $('fMin').value = ''; $('fMax').value = ''; $('rangeErr').textContent = ''; });
+    $('fApply').addEventListener('click', () => {
+      const modes = [...$('fModes').querySelectorAll('input:checked')].map((c) => c.value);
+      const min = num($('fMin').value), max = num($('fMax').value);
+      if (!modes.length) { $('rangeErr').textContent = 'Select at least one payment mode'; return; }
+      if (min != null && max != null && min > max) { $('rangeErr').textContent = 'Min amount can’t be more than max amount'; $('fMin').closest('.field').style.boxShadow = '0 0 0 2px #f15858'; setTimeout(() => ($('fMin').closest('.field').style.boxShadow = ''), 1600); return; }
+      Object.assign(state, { type: draftType, modes, min, max });
+      S.sheet.close(); render();
+      const n = activeFilters(); if (n) S.toast(`${n} filter${n > 1 ? 's' : ''} applied`);
+    });
+    $('clearAll').addEventListener('click', () => {
+      Object.assign(state, { type: 'all', modes: ['UPI', 'NEFT', 'IMPS', 'Card'], min: null, max: null, q: '' });
+      $('q').value = ''; $('qClear').hidden = true; render(); S.toast('Showing all transactions');
+    });
+
+    // Download sheet
+    const syncDownload = () => {
+      const base = TX.filter((t) => !t.isNew && inPeriod(t)).length;
+      if (state.period === 'custom') { $('dlPeriod').textContent = 'Custom period'; $('dlPeriodSub').textContent = `${fmtDate(state.from)} – ${fmtDate(state.to)} · ${base} transactions`; }
+      else { const m = MON[state.period]; $('dlPeriod').textContent = m + ' 2025'; $('dlPeriodSub').textContent = `01 ${m} – ${state.period === 'jun' ? '16' : state.period === 'may' ? '31' : '30'} ${m} 2025 · ${base} transactions`; }
+    };
+    let fmt = 'PDF';
+    const syncLbl = () => { const email = $('dlEmail').getAttribute('aria-checked') === 'true'; $('dlGoLbl').textContent = email ? `Email ${fmt === 'XLSX' ? 'Excel' : fmt}` : `Download ${fmt === 'XLSX' ? 'Excel' : fmt}`; };
+    $('fmt').addEventListener('select', (e) => { fmt = e.detail; syncLbl(); });
+    $('dlEmail').addEventListener('click', () => setTimeout(syncLbl));
+    // "Change" period hands off to the range sheet, then returns to the download sheet
+    let fromDl = false;
+    $('dlPeriodBtn').addEventListener('click', () => { fromDl = true; S.sheet.open('rangeSheet'); });
+    $('rangeSheet').addEventListener('sheet:close', () => { if (!fromDl) return; fromDl = false; setTimeout(() => S.sheet.open('downloadSheet'), 320); });
+    $('dlGo').addEventListener('click', async () => {
+      const email = $('dlEmail').getAttribute('aria-checked') === 'true';
+      await S.loading($('dlGo'), 1400);
+      S.sheet.close();
+      const name = `Statement_${state.period === 'custom' ? 'Custom' : MON[state.period] + '2025'}.${fmt.toLowerCase()}`;
+      await S.wait(250);
+      S.toast(email ? 'Sent to jayanta.adhikari@example.com' : `${name} downloaded`);
+    });
+
+    syncDownload(); render();
+    if (fresh) setTimeout(() => S.toast('Payment added to today’s statement'), 500);
+  })();
+</script>
+</body>
+</html>

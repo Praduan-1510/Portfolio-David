@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Apply for Loan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .page > .toast { position: fixed; z-index: 1000; }
+  .step[hidden] { display: none; }
+  .step { animation: rise 420ms var(--ease-out) both; }
+  body.capture .step { animation: none; }
+  .step-title { font-size: 24px; font-weight: 600; line-height: 1.2; }
+  .step-lead { font-size: 14px; color: #a8a8a8; line-height: 1.55; margin-top: 6px; }
+  .preapproved { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px; border-radius: 8px; background: #314528; color: #8df15e; font-size: 12.5px; font-weight: 500; letter-spacing: .2px; }
+  .amt-label { font-size: 14.5px; letter-spacing: 1px; color: #8e8e8e; text-transform: uppercase; }
+  .amt-big { font-size: 40px; font-weight: 500; letter-spacing: .4px; color: #5fb2f1; line-height: 1.15; margin-top: 6px; }
+  .range-ends { display: flex; justify-content: space-between; font-size: 12px; color: #8a8a8a; margin-top: 12px; }
+  .emi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+  .kpi2 { border-radius: 10px; background: #515151; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); padding: 11px 12px; }
+  .kpi2 span { display: block; font-size: 11px; letter-spacing: .4px; color: #d6d6d6; }
+  .kpi2 b { display: block; font-size: 17.5px; font-weight: 500; margin-top: 5px; letter-spacing: .2px; }
+  .split { display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 18px; background: #3a3a3a; }
+  .split i { display: block; height: 100%; transition: width 300ms var(--ease-out); }
+  .legend { display: flex; gap: 16px; margin-top: 10px; font-size: 12px; color: #a8a8a8; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .emi-head { display: flex; align-items: baseline; justify-content: space-between; }
+  .emi-head p:first-child { font-size: 13px; letter-spacing: .6px; color: #c4c4c4; }
+  .emi-val { font-size: 30px; font-weight: 600; letter-spacing: .2px; margin-top: 4px; }
+  /* fetch checklist */
+  .src { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 16px; background: #1a1a1a; box-shadow: inset 0 0 0 1px rgba(255,255,255,.16), 0 4px 10px rgba(0,0,0,.45); transition: box-shadow 300ms var(--ease-out); }
+  .src.is-ok { box-shadow: inset 0 0 0 1px rgba(141,241,94,.28), 0 4px 10px rgba(0,0,0,.45); }
+  .src__state { width: 28px; height: 28px; flex-shrink: 0; display: grid; place-items: center; border-radius: 50%; }
+  .src__spin { width: 20px; height: 20px; border-radius: 50%; border: 2.5px solid rgba(95,178,241,.25); border-top-color: #5fb2f1; animation: spin 700ms linear infinite; }
+  .src.is-ok .src__state { background: #314528; color: #8df15e; animation: pop 320ms var(--ease-spring); }
+  .src__tag { font-size: 11px; color: #5fb2f1; margin-top: 2px; display: block; }
+  .src.is-ok .src__tag { color: #8df15e; }
+  .purpose { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .purpose .option { flex-direction: column; align-items: flex-start; gap: 10px; padding: 14px; min-height: 96px; }
+  .purpose .option__title { font-size: 15px; }
+  .purpose .option__sub { margin-top: 0; }
+  .check a { color: #5fb2f1; font-weight: 600; }
+  /* review */
+  .kfs-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 12px; text-align: left; }
+  .kfs-toggle svg.chev { transition: transform 260ms var(--ease-out); transform: rotate(90deg); }
+  .kfs-toggle[aria-expanded="true"] svg.chev { transform: rotate(-90deg); }
+  .collapse { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 320ms var(--ease-out); }
+  .collapse.open { grid-template-rows: 1fr; }
+  .collapse > div { overflow: hidden; }
+  .hint { font-size: 12.5px; color: #8a8a8a; text-align: center; min-height: 18px; }
+</style>
+</head>
+<body>
+<main class="page page--no-nav" aria-label="Apply for working capital loan">
+  <header class="appbar">
+    <a class="back tap" href="credit-growth.html" id="backBtn" aria-label="Back"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg></a>
+    <div class="appbar__titles"><span class="appbar__eyebrow">Working Capital</span><h1 class="appbar__title">Apply for Loan</h1></div>
+  </header>
+  <div class="stepper" id="stepper" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+  <p class="step-caption" id="caption" aria-live="polite">Step 1 of 3 · Choose amount</p>
+
+  <!-- STEP 1 -->
+  <section class="step" data-step="1" aria-label="Choose amount">
+    <span class="preapproved"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>Pre-approved based on ledger health 782</span>
+
+    <div class="panel" style="margin-top:16px">
+      <p class="amt-label">How much do you need?</p>
+      <p class="amt-big num" id="amtOut" aria-live="polite">₹ 15,00,000</p>
+      <input class="range" id="amt" type="range" min="100000" max="1500000" step="10000" value="1500000" data-out="amtOut" data-fmt="inr" aria-label="Loan amount" style="margin-top:22px">
+      <div class="range-ends num"><span>₹ 1,00,000</span><span>₹ 15,00,000</span></div>
+    </div>
+
+    <p class="section-label">Tenure</p>
+    <div class="segmented" id="tenure" aria-label="Tenure in months">
+      <button data-value="12">12 months</button>
+      <button data-value="24">24 months</button>
+      <button data-value="36" aria-selected="true">36 months</button>
+    </div>
+
+    <div class="panel" style="margin-top:20px" aria-live="polite">
+      <div class="emi-head"><p>Monthly EMI</p><p class="c-green" style="font-size:12.5px">11.5% p.a. · reducing</p></div>
+      <p class="emi-val num" id="emi">₹ 49,464</p>
+      <div class="emi-grid">
+        <div class="kpi2"><span>Total interest</span><b class="num c-yellow" id="interest">₹ 2,80,704</b></div>
+        <div class="kpi2"><span>Total payable</span><b class="num" id="payable">₹ 17,80,704</b></div>
+      </div>
+      <div class="split" aria-hidden="true"><i id="splitP" style="background:#5fb2f1;width:84.2%"></i><i id="splitI" style="background:#f1ea58;width:15.8%"></i></div>
+      <div class="legend"><span><i style="background:#5fb2f1"></i>Principal</span><span><i style="background:#f1ea58"></i>Interest</span></div>
+    </div>
+    <p class="muted" style="font-size:12px;line-height:1.5;margin:14px 4px 0">No collateral. No prepayment charges after 6 EMIs. Final terms shown before you sign.</p>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="step" data-step="2" aria-label="Verify business" hidden>
+    <h2 class="step-title">Verify your business</h2>
+    <p class="step-lead">We're pulling your records securely. Nothing to upload.</p>
+
+    <div class="list" id="sources" style="margin-top:20px" aria-live="polite">
+      <div class="src" data-delay="700">
+        <span class="menu__icon icon-yellow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <span class="grow"><span class="menu__title">GST returns · 12 months</span><span class="menu__sub">GSTR-1 &amp; 3B · Jun 2024 – May 2025</span><span class="src__tag">Fetching…</span></span>
+        <span class="src__state"><span class="src__spin"></span></span>
+      </div>
+      <div class="src" data-delay="1300">
+        <span class="menu__icon icon-blue"><svg width="18" height="18" viewBox="1 1 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><path d="M2.6 9.2 13 3.4l10.4 5.8H2.6Z"/><path d="M4 11.4h18M4 21.2h18M6.8 11.4v9.8M19.2 11.4v9.8M13 14.6v3.6"/></svg></span>
+        <span class="grow"><span class="menu__title">Bank statement</span><span class="menu__sub">Spendee Bank · A/c ••7643</span><span class="src__tag">Fetching…</span></span>
+        <span class="src__state"><span class="src__spin"></span></span>
+      </div>
+      <div class="src" data-delay="1850">
+        <span class="menu__icon icon-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17 9 11l4 4 8-8M15 7h6v6"/></svg></span>
+        <span class="grow"><span class="menu__title">Ledger health 782</span><span class="menu__sub">92% on-time · 100% GST compliance</span><span class="src__tag">Fetching…</span></span>
+        <span class="src__state"><span class="src__spin"></span></span>
+      </div>
+      <div class="src" data-delay="2350">
+        <span class="menu__icon icon-gray"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5v-.8a5.2 5.2 0 0 1 5.2-5.2h4.6a5.2 5.2 0 0 1 5.2 5.2v.8H4.5Z" stroke-linejoin="round"/></svg></span>
+        <span class="grow"><span class="menu__title">PAN AEYPA4821F</span><span class="menu__sub">Jayanta Adhikari · matched with GSTIN</span><span class="src__tag">Fetching…</span></span>
+        <span class="src__state"><span class="src__spin"></span></span>
+      </div>
+    </div>
+
+    <p class="section-label">Purpose of loan</p>
+    <div class="options purpose" data-options id="purpose">
+      <button class="option tap" data-value="Inventory"><span class="menu__icon icon-red"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M9 1 1.5 5v10L9 19l7.5-4V5L9 1Z"/><path d="M1.5 5 9 9l7.5-4M9 9v10"/></svg></span><span class="option__body"><span class="option__title">Inventory</span><span class="option__sub">Raw material, stock</span></span></button>
+      <button class="option tap" data-value="Working capital"><span class="menu__icon icon-green"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="10" cy="10" r="8.8"/><path d="M7 6h6M7 8.8h6M8.6 6c1.9 0 3 .9 3 2.4s-1.1 2.5-3 2.5H7l4.6 3.6" stroke-linejoin="round" stroke-linecap="round"/></svg></span><span class="option__body"><span class="option__title">Working capital</span><span class="option__sub">Salaries, rent, bills</span></span></button>
+      <button class="option tap" data-value="Equipment"><span class="menu__icon icon-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></span><span class="option__body"><span class="option__title">Equipment</span><span class="option__sub">Machines, tools</span></span></button>
+      <button class="option tap" data-value="Expansion"><span class="menu__icon icon-yellow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 3 6.5 7 .8-5.2 4.8 1.4 7L12 17.6 5.8 21l1.4-7L2 9.3l7-.8L12 2Z"/></svg></span><span class="option__body"><span class="option__title">Expansion</span><span class="option__sub">New outlet, hiring</span></span></button>
+    </div>
+
+    <label class="check" style="margin-top:22px">
+      <input type="checkbox" id="consent">
+      <span>I consent to Spendee Finance fetching my GST, bank and credit bureau data for this application, and agree to the <a href="#" data-sheet="termsSheet">loan terms</a>.</span>
+    </label>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="step" data-step="3" aria-label="Review and accept" hidden>
+    <h2 class="step-title">Review &amp; accept</h2>
+    <p class="step-lead">Check the details before you e-sign.</p>
+
+    <div class="panel" style="margin-top:20px">
+      <p class="amt-label">You're borrowing</p>
+      <p class="amt-big num" id="rvAmt" style="font-size:34px">₹ 15,00,000</p>
+      <div class="kvs" style="margin-top:10px">
+        <div><span class="k">Tenure</span><span class="v num" id="rvTenure">36 months</span></div>
+        <div><span class="k">Interest rate</span><span class="v">11.5% p.a. reducing</span></div>
+        <div><span class="k">Monthly EMI</span><span class="v num c-blue" id="rvEmi">₹ 49,464</span></div>
+        <div><span class="k">Processing fee (1%)</span><span class="v num" id="rvFee">₹ 15,000</span></div>
+        <div><span class="k">You receive</span><span class="v num c-green" id="rvNet">₹ 14,85,000</span></div>
+        <div><span class="k">First EMI date</span><span class="v">05 Aug 2025</span></div>
+        <div><span class="k">Disbursal</span><span class="v">Within 48h to A/c ••7643</span></div>
+        <div><span class="k">Purpose</span><span class="v" id="rvPurpose">Inventory</span></div>
+      </div>
+    </div>
+
+    <div class="panel panel--flat" style="margin-top:14px;padding:16px 18px">
+      <button class="kfs-toggle tap" id="kfsBtn" aria-expanded="false" aria-controls="kfs">
+        <span class="row-flex" style="gap:12px">
+          <span class="menu__icon icon-blue"><svg width="16" height="20" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M2.6 1h6.3c.5 0 .9.2 1.3.5l4.1 4.2c.3.3.5.8.5 1.3v10.4A1.6 1.6 0 0 1 13.2 19H2.6A1.6 1.6 0 0 1 1 17.4V2.6A1.6 1.6 0 0 1 2.6 1Z"/><path d="M5 11h6M5 14.5h4"/></svg></span>
+          <span><span class="menu__title">Key Fact Statement</span><span class="menu__sub">APR, charges, cooling-off period</span></span>
+        </span>
+        <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+      </button>
+      <div class="collapse" id="kfs"><div>
+        <div class="kvs" style="margin-top:12px">
+          <div><span class="k">Lender</span><span class="v">Spendee Finance Pvt. Ltd. (NBFC)</span></div>
+          <div><span class="k">Annual percentage rate</span><span class="v num" id="kfsApr">12.2%</span></div>
+          <div><span class="k">Total interest</span><span class="v num" id="kfsInt">₹ 2,80,704</span></div>
+          <div><span class="k">Total amount payable</span><span class="v num" id="kfsPay">₹ 17,95,704</span></div>
+          <div><span class="k">Foreclosure</span><span class="v">Nil after 6 EMIs, else 2%</span></div>
+          <div><span class="k">Late payment</span><span class="v">2% p.m. on overdue EMI</span></div>
+          <div><span class="k">Cooling-off period</span><span class="v">3 days, no penalty</span></div>
+          <div><span class="k">Grievance officer</span><span class="v">nodal@spendee.com</span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="banner banner--info" style="margin-top:14px">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg>
+      <span>You'll e-sign the loan agreement with a one-time code sent to <b style="color:#fff;font-weight:600">+91 98765 43210</b>.</span>
+    </div>
+  </section>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <div class="cta-bar">
+    <p class="hint" id="hint" role="status" aria-live="polite"></p>
+    <button class="btn btn--primary tap" id="next"><span>Continue</span><svg width="18" height="16" viewBox="0 0 18 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 8h14.5M9.5 1.5 16 8l-6.5 6.5"/></svg></button>
+    <span class="home-indicator"></span>
+  </div>
+</main>
+
+<section class="sheet" id="termsSheet" aria-labelledby="termsTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="termsTitle">Loan terms</p><p class="sheet__sub">Spendee Finance Pvt. Ltd. · RBI registered NBFC</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="kvs">
+    <div><span class="k">Data we fetch</span><span class="v">GST returns, bank statement, bureau report</span></div>
+    <div><span class="k">Used for</span><span class="v">This application only</span></div>
+    <div><span class="k">Retention</span><span class="v">Deleted after 90 days if declined</span></div>
+    <div><span class="k">Bureau check</span><span class="v">Soft pull, no score impact</span></div>
+    <div><span class="k">Withdraw consent</span><span class="v">Anytime from Settings</span></div>
+  </div>
+  <p class="muted" style="font-size:12.5px;line-height:1.55;margin:14px 2px 20px">Interest is charged on a reducing balance. EMIs are auto-debited from Spendee Bank A/c ••7643 on the 5th of every month. A Key Fact Statement is shared before you sign.</p>
+  <button class="btn btn--primary tap" id="agreeTerms">I Agree</button>
+</section>
+
+<section class="sheet" id="otpSheet" aria-labelledby="otpTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="otpTitle">E-sign with OTP</p><p class="sheet__sub">Enter the 6-digit code sent to +91 98765 43210</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="otp" id="otp" data-length="6" aria-label="E-sign code"></div>
+  <p id="otpMsg" role="status" aria-live="polite" style="font-size:13px;min-height:20px;margin:12px 0 0 2px;color:#9a9a9a">Demo: enter any 6 digits</p>
+  <div class="between" style="margin:6px 0 16px">
+    <button class="text-btn" data-countdown="30">Resend code</button>
+    <span class="secure-note"><svg width="11" height="12" viewBox="0 0 11 12" fill="none" stroke="#cfcfcf" stroke-width="1.2"><rect x="1" y="5.2" width="9" height="6" rx="1.4"/><path d="M3 5.2V3.6a2.5 2.5 0 0 1 5 0v1.6"/></svg>Legally binding e-signature</span>
+  </div>
+  <button class="btn btn--primary tap is-disabled" id="signBtn" aria-disabled="true"><span>Sign &amp; Accept</span></button>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const S = Spendee, $ = (s) => document.querySelector(s);
+  const RATE = 0.115;
+  const state = { step: 1, amount: 1500000, tenure: 36, purpose: null, fetched: false };
+  const inr = (n) => '₹ ' + S.fmtIN(n);
+
+  function calc(P, n) {
+    const r = RATE / 12, f = Math.pow(1 + r, n);
+    const emi = P * r * f / (f - 1);
+    return { emi: Math.round(emi), interest: Math.round(emi * n - P), payable: Math.round(emi * n) };
+  }
+  function apr(P, n, emi) { // annualised rate where PV(EMIs) = P - fee
+    const net = P * 0.99; let lo = 0.0001, hi = 0.05;
+    for (let k = 0; k < 60; k++) { const m = (lo + hi) / 2; const pv = emi * (1 - Math.pow(1 + m, -n)) / m; pv > net ? (lo = m) : (hi = m); }
+    return ((lo + hi) / 2) * 1200;
+  }
+  function renderCalc() {
+    const c = calc(state.amount, state.tenure);
+    $('#emi').textContent = inr(c.emi);
+    $('#interest').textContent = inr(c.interest);
+    $('#payable').textContent = inr(c.payable);
+    const pp = state.amount / c.payable * 100;
+    $('#splitP').style.width = pp + '%'; $('#splitI').style.width = (100 - pp) + '%';
+    $('#rvAmt').textContent = inr(state.amount);
+    $('#rvTenure').textContent = state.tenure + ' months';
+    $('#rvEmi').textContent = inr(c.emi);
+    $('#rvFee').textContent = inr(state.amount * 0.01);
+    $('#rvNet').textContent = inr(state.amount * 0.99);
+    $('#kfsInt').textContent = inr(c.interest);
+    $('#kfsPay').textContent = inr(c.payable + state.amount * 0.01);
+    $('#kfsApr').textContent = apr(state.amount, state.tenure, c.emi).toFixed(1) + '%';
+    state.emi = c.emi;
+  }
+  const amt = $('#amt');
+  amt.addEventListener('update', () => { state.amount = +amt.value; renderCalc(); });
+  $('#tenure').addEventListener('change', (e) => { state.tenure = +e.detail; renderCalc(); S.haptic(); });
+
+  // ---- Steps ----
+  const captions = { 1: 'Choose amount', 2: 'Verify business', 3: 'Review & accept' };
+  const labels = { 1: 'Continue', 2: 'Continue to Review', 3: 'E-sign & Accept' };
+  const next = $('#next'), hint = $('#hint');
+  function show(n, push) {
+    state.step = n;
+    document.querySelectorAll('.step').forEach((s) => (s.hidden = +s.dataset.step !== n));
+    $('#stepper').innerHTML = [1, 2, 3].map((i) => `<i class="${i < n ? 'done' : i === n ? 'on' : ''}"></i>`).join('');
+    $('#caption').textContent = `Step ${n} of 3 · ${captions[n]}`;
+    next.querySelector('span').textContent = labels[n];
+    if (push) history.pushState({ step: n }, '', location.href);
+    window.scrollTo({ top: 0, behavior: document.body.classList.contains('capture') ? 'auto' : 'smooth' });
+    if (n === 2) startFetch();
+    validate();
+  }
+  window.addEventListener('popstate', (e) => show((e.state && e.state.step) || 1, false));
+  $('#backBtn').addEventListener('click', (e) => {
+    e.preventDefault();
+    if (state.step > 1) history.back();
+    else if (history.length > 1) history.back(); else location.href = 'credit-growth.html';
+  });
+
+  // ---- Step 2: fetch simulation ----
+  let fetching = false;
+  function startFetch() {
+    if (fetching || state.fetched) return; fetching = true;
+    const cards = [...document.querySelectorAll('.src')];
+    const instant = document.body.classList.contains('capture') && S.q('fetched');
+    Promise.all(cards.map((c) => S.wait(instant ? 0 : +c.dataset.delay).then(() => {
+      c.classList.add('is-ok');
+      c.querySelector('.src__state').innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
+      c.querySelector('.src__tag').textContent = 'Verified';
+      validate();
+    }))).then(() => { state.fetched = true; fetching = false; validate(); });
+  }
+  $('#purpose').addEventListener('select', (e) => { state.purpose = e.detail; $('#rvPurpose').textContent = e.detail; validate(); });
+  const consent = $('#consent');
+  consent.addEventListener('change', validate);
+  $('#agreeTerms').addEventListener('click', () => { consent.checked = true; S.sheet.close(); validate(); });
+
+  function validate() {
+    let ok = true, msg = '';
+    if (state.step === 2) {
+      if (!state.fetched) { ok = false; msg = 'Verifying your records…'; }
+      else if (!state.purpose) { ok = false; msg = 'Choose a purpose to continue'; }
+      else if (!consent.checked) { ok = false; msg = 'Tick the consent box to continue'; }
+    }
+    hint.textContent = msg; hint.style.display = msg ? '' : 'none';
+    next.classList.toggle('is-disabled', !ok); next.setAttribute('aria-disabled', String(!ok));
+  }
+
+  next.addEventListener('click', async () => {
+    if (next.classList.contains('is-disabled')) return;
+    if (state.step === 1) { await S.loading(next, 600); show(2, true); }
+    else if (state.step === 2) { await S.loading(next, 800); show(3, true); }
+    else { S.sheet.open('otpSheet'); }
+  });
+
+  // ---- KFS collapsible ----
+  $('#kfsBtn').addEventListener('click', () => {
+    const b = $('#kfsBtn'), open = b.getAttribute('aria-expanded') !== 'true';
+    b.setAttribute('aria-expanded', String(open)); $('#kfs').classList.toggle('open', open);
+  });
+
+  // ---- OTP e-sign ----
+  const otp = $('#otp'), sign = $('#signBtn'), msg = $('#otpMsg');
+  let code = '';
+  const enable = (on) => { sign.classList.toggle('is-disabled', !on); sign.setAttribute('aria-disabled', String(!on)); };
+  otp.addEventListener('input', () => { code = ''; enable(false); });
+  otp.addEventListener('complete', (e) => { code = e.detail; enable(true); submit(); });
+  sign.addEventListener('click', () => { if (code.length === 6) submit(); });
+  let busy = false;
+  async function submit() {
+    if (busy) return; busy = true;
+    await S.loading(sign, 1400);
+    otp.classList.add('is-ok'); msg.style.color = '#8df15e'; msg.textContent = 'Signed. Finalising your loan…';
+    S.store.set('loan', { amount: state.amount, tenure: state.tenure, emi: state.emi, purpose: state.purpose });
+    await S.wait(600);
+    location.href = `loan-success.html?amt=${state.amount}&tenure=${state.tenure}&emi=${state.emi}`;
+  }
+  document.getElementById('otpSheet').addEventListener('sheet:open', () => { busy = false; code = ''; enable(false); otp.classList.remove('is-ok'); msg.style.color = '#9a9a9a'; msg.textContent = 'Demo: enter any 6 digits'; setTimeout(() => otp.reset(), 80); });
+
+  // Deep link for captures: ?step=2|3
+  renderCalc();
+  const start = +S.q('step') || 1;
+  if (start > 1) {
+    if (S.q('fetched')) { state.purpose = 'Inventory'; document.querySelector('#purpose .option').setAttribute('aria-checked', 'true'); consent.checked = true; }
+    history.replaceState({ step: 1 }, '', location.href);
+    show(start, false);
+  } else { history.replaceState({ step: 1 }, '', location.href); show(1, false); }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · New Entry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  /* The corrected labels ("You Gave (Credit)" / "You Got (Payment)") are longer than
+     the originals and ran to the button edge at the shared .seg size. */
+  #seg .seg { font-size: 13px; letter-spacing: .2px; gap: 8px; }
+  .entry .field { font-weight: 600; font-size: 18px; }
+  .pm-lbl { font-size: 8.5px; letter-spacing: .35px; line-height: 1.4 !important; }
+</style>
+</head>
+<body>
+<main class="screen entry" style="height:1045px;min-height:1045px" aria-label="New ledger entry">
+  <a class="abs back tap" href="dashboard.html" data-go="back" style="left:34px;top:52px" aria-label="Back">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg>
+  </a>
+  <p class="t hdr__eyebrow" style="left:80px;top:43.3px;font-size:11px;letter-spacing:.9px">Ledger</p>
+  <h1 class="t" style="left:80px;top:65px;font-size:21px;font-weight:600;letter-spacing:.5px">New Entry</h1>
+
+  <div role="radiogroup" aria-label="Entry type" id="seg">
+    <button class="seg seg--gave tap" role="radio" aria-checked="true" style="left:27px;top:117px;width:165px">
+      <svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="8.6"/><path d="M7 6h6M7 8.8h6M8.6 6c1.9 0 3 .9 3 2.4s-1.1 2.5-3 2.5H7l4.6 3.6" stroke-linejoin="round" stroke-linecap="round" stroke-width="1.7"/></svg>
+      You Gave (Credit)
+    </button>
+    <button class="seg seg--got tap" role="radio" aria-checked="false" style="left:200px;top:117px;width:174px">
+      <svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="8.6"/><path d="M7 6h6M7 8.8h6M8.6 6c1.9 0 3 .9 3 2.4s-1.1 2.5-3 2.5H7l4.6 3.6" stroke-linejoin="round" stroke-linecap="round" stroke-width="1.7"/></svg>
+      You Got (Payment)
+    </button>
+  </div>
+
+  <label class="abs card" style="left:38px;top:160px;width:326px;height:79px;border-radius:16px;display:flex;align-items:center;padding-left:20px;font-size:33.5px;font-weight:500">
+    <span style="margin-right:9px">₹</span><input class="amount-input num" id="amount" inputmode="decimal" value="18,500" aria-label="Amount">
+  </label>
+
+  <label class="caps-lbl" for="contact" style="left:44px;top:263px">Contact Name</label>
+  <input class="abs field" id="contact" value="Sharma Textiles" style="left:34px;top:294px;width:334px" autocomplete="name">
+
+  <label class="caps-lbl" for="date" style="left:45px;top:371px">Date</label>
+  <label class="caps-lbl" for="due" style="left:217px;top:371px">Due Date</label>
+  <input class="abs field" id="date" value="04 Jun 2025" style="left:34px;top:402px;width:162px;text-align:center;padding:0 10px">
+  <input class="abs field" id="due" value="30 Jun 2025" style="left:206px;top:402px;width:162px;text-align:center;padding:0 10px">
+
+  <label class="caps-lbl" for="note" style="left:45px;top:479px">Note</label>
+  <input class="abs field" id="note" value="Cotton fabric, 40 rolls" style="left:34px;top:510px;width:334px">
+
+  <p class="caps-lbl" style="left:49px;top:586px">Payment Method</p>
+  <div class="abs" role="radiogroup" aria-label="Payment method" id="pm" style="left:38px;top:616px;width:326px;height:74px">
+    <button class="pm tile tile--yellow tap" role="radio" aria-checked="false" style="left:0">
+      <svg class="abs" style="left:29.5px;top:14px" width="15" height="17" viewBox="0 0 15 17" fill="#f1ea58"><path d="M0 0h6v6H0zM2 2v2h2V2zM9 0h6v6H9zm2 2v2h2V2zM0 9h6v6H0zm2 2v2h2v-2zM8 8h2v2H8zm3 0h4v2h-2v2h-2zM8 11h2v4H8zm3 2h4v4h-2v-2h-2z"/></svg>
+      <span class="t pm-lbl" style="top:45px;color:#e3e0b5">UPI</span>
+    </button>
+    <button class="pm tile tile--red tap" role="radio" aria-checked="false" style="left:84px">
+      <svg class="abs" style="left:28px;top:17px" width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="#f15858" stroke-width="1.8"><rect x="1" y="1" width="16" height="12" rx="2.2"/><path d="M1 5h16M4.5 9.5h3" stroke-linecap="round"/></svg>
+      <span class="t pm-lbl" style="top:42px;color:#e8c2c2">Cards</span>
+    </button>
+    <button class="pm tile tile--green tap" role="radio" aria-checked="false" style="left:168px">
+      <svg class="abs" style="left:27px;top:17px" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#8df15e" stroke-width="1.9"><circle cx="10" cy="10" r="8.8"/><path d="M7 6h6M7 8.8h6M8.6 6c1.9 0 3 .9 3 2.4s-1.1 2.5-3 2.5H7l4.6 3.6" stroke-linejoin="round" stroke-linecap="round" stroke-width="1.8"/></svg>
+      <span class="t pm-lbl" style="top:43px;color:#cfe3c5">Cash on<br>Delivery</span>
+    </button>
+    <button class="pm tile tile--blue tap" role="radio" aria-checked="false" style="left:252px">
+      <svg class="abs" style="left:27px;top:15px" width="20" height="20" viewBox="1 1 24 24" fill="none" stroke="#5fb2f1" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><path d="M2.6 9.2 13 3.4l10.4 5.8H2.6Z"/><path d="M4 11.4h18M4 21.2h18M2.6 23.6h20.8M6.8 11.4v9.8M19.2 11.4v9.8"/><path d="M10.4 14.6v3.6M13 14.6v3.6M15.6 14.6v3.6" stroke-width="2.2"/></svg>
+      <span class="t pm-lbl" style="top:45px;color:#c4d6e4">Bank</span>
+    </button>
+  </div>
+
+  <label class="dropzone" id="drop" style="left:35px;top:710px;width:334px;height:148px">
+    <svg class="dash" width="334" height="148" aria-hidden="true"><rect x=".75" y=".75" width="332.5" height="146.5" rx="19.5" fill="none" stroke="#8c8c8c" stroke-width="1.2" stroke-dasharray="5 4"/></svg>
+    <svg style="margin-top:29px" width="31" height="27" viewBox="0 0 31 27" fill="none" stroke="#cfcfcf" stroke-width="2.3" stroke-linejoin="round"><path d="M3.5 7.5h5l2.3-4.2h9.4l2.3 4.2h5a2.2 2.2 0 0 1 2.2 2.2v12.8a2.2 2.2 0 0 1-2.2 2.2H3.5a2.2 2.2 0 0 1-2.2-2.2V9.7a2.2 2.2 0 0 1 2.2-2.2Z"/><circle cx="15.5" cy="15.5" r="4.6"/></svg>
+    <span id="dropTitle" style="font-size:26.5px;font-weight:500;letter-spacing:.9px;line-height:1;margin-top:7px">Attach Receipt</span>
+    <span id="dropSub" style="font-size:15px;letter-spacing:.9px;color:#b8b8b8;line-height:1;margin-top:8px">OCR auto-extract data</span>
+    <input type="file" accept="image/*,application/pdf" hidden id="file">
+  </label>
+
+  <button class="abs btn btn--primary tap" id="save" style="left:35px;top:878px;width:334px;gap:10px">
+    <svg width="17" height="13" viewBox="0 0 17 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 6.8 4.6 4.4L15.5 1.8"/></svg>
+    Save Entry
+  </button>
+
+  <nav data-tabbar="ledger"></nav>
+</main>
+<style>
+  /* ledger sheets */
+  .sheet-lbl { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #8a8a8a; margin: 20px 0 10px 4px; }
+  .sheet-lbl:first-of-type { margin-top: 4px; }
+  .sheet .search { height: 48px; }
+  .sheet .field { height: 50px; }
+  .sheet .empty-state { padding: 22px 10px 6px; }
+  .sheet .empty-state p { margin-bottom: 14px; }
+  .sheet .options .option { position: relative; }
+  .bubble { position: relative; background: #1d3a26; color: #e3f1dc; border-radius: 16px 16px 16px 4px; padding: 12px 14px 8px; font-size: 13.5px; line-height: 1.5; box-shadow: inset 0 0 0 1px rgba(141,241,94,.14); transition: background var(--dur), color var(--dur); }
+  .bubble.is-sms { background: #1d3548; color: #dbe9f4; box-shadow: inset 0 0 0 1px rgba(95,178,241,.18); }
+  .bubble__meta { display: flex; justify-content: flex-end; align-items: center; gap: 4px; font-size: 10.5px; color: rgba(255,255,255,.5); margin-top: 4px; }
+  .share-doc { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .share-doc__ic { width: 38px; height: 44px; border-radius: 8px; background: #452626; color: #f15858; display: grid; place-items: center; flex-shrink: 0; font: 600 9px/1 var(--font-ui); letter-spacing: .4px; }
+  .share-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 18px; }
+  .share-t { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 4px 0; font-size: 11.5px; color: #d4d4d4; letter-spacing: .2px; text-align: center; white-space: nowrap; }
+  .share-i { position: relative; width: 56px; height: 56px; border-radius: 18px; display: grid; place-items: center; box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); }
+  .share-t.is-busy .share-i svg { opacity: 0; }
+  .share-t.is-busy .share-i::after { content: ''; position: absolute; left: 50%; top: 50%; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; border: 2.5px solid rgba(255,255,255,.2); border-top-color: currentColor; animation: spin 700ms linear infinite; }
+  .undo-toast { position: fixed; left: 50%; bottom: 128px; z-index: 960; display: flex; align-items: center; gap: 14px; padding: 6px 6px 6px 16px; border-radius: 14px; background: rgba(38,38,38,.96); color: #fff; font-size: 13.5px; letter-spacing: .3px; white-space: nowrap; box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 10px 30px rgba(0,0,0,.5); transform: translate(-50%, 16px); opacity: 0; transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out); }
+  .undo-toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .undo-toast button { height: 34px; padding: 0 14px; border-radius: 9px; background: #132430; color: #5fb2f1; font-weight: 600; font-size: 13.5px; box-shadow: inset 0 0 0 1px rgba(95,178,241,.35); }
+  .cust-list { max-height: 420px; overflow-y: auto; scrollbar-width: none; margin: 14px -4px 0; padding: 0 4px 2px; }
+  .cust-list .avatar { width: 38px; height: 38px; }
+  .cust-list .option__meta { font-size: 13px; font-weight: 600; flex-shrink: 0; }
+  .option--danger .option__title { color: #f15858; }
+  .qd { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .qd button { height: 58px; border-radius: 14px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 14px; font-weight: 600; color: #f0f0f0; transition: box-shadow var(--dur), background var(--dur); }
+  .qd button small { font-size: 11px; font-weight: 500; color: #8a8a8a; }
+  .qd button[aria-pressed="true"] { background: #1c2a36; box-shadow: inset 0 0 0 2px #5fb2f1; }
+  .cal { margin-top: 16px; padding: 14px 12px 10px; border-radius: 20px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .cal__head { display: flex; align-items: center; justify-content: space-between; padding: 0 4px 10px; }
+  .cal__month { font-size: 16px; font-weight: 600; }
+  .cal__nav { width: 36px; height: 36px; border-radius: 10px; background: #1a1a1a; color: #5fb2f1; display: grid; place-items: center; }
+  .cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 2px; text-align: center; }
+  .cal__wd { font-size: 11px; color: #6b6b6b; letter-spacing: .6px; padding: 4px 0 8px; }
+  .cal__d { height: 40px; border-radius: 12px; font-size: 15px; color: #e6e6e6; position: relative; font-variant-numeric: tabular-nums; transition: background 160ms; }
+  .cal__d:hover { background: rgba(255,255,255,.05); }
+  .cal__d.is-today::after { content: ''; position: absolute; left: 50%; bottom: 5px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: #5fb2f1; }
+  .cal__d[aria-selected="true"] { background: #c8e7ff; color: #000; font-weight: 600; }
+  .cal__d[aria-selected="true"]::after { background: #000; }
+  .cal__d[disabled] { color: #4a4a4a; pointer-events: none; }
+</style>
+
+<section class="sheet" id="customerSheet" aria-labelledby="custTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="custTitle">Select contact</p><p class="sheet__sub">Search your customers and vendors</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <label class="search">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#8e8e8e" stroke-width="2" stroke-linecap="round"><circle cx="5.8" cy="5.8" r="4.6"/><path d="m9.3 9.3 3.4 3.4"/></svg>
+    <input id="custQ" type="search" placeholder="Search name or business" aria-label="Search contacts" autocomplete="off">
+  </label>
+  <div class="options cust-list" id="custList" role="listbox" aria-label="Contacts"></div>
+  <div class="empty-state" id="custEmpty" style="display:none">
+    <div class="empty-state__icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></div>
+    <h3>No contacts found</h3>
+    <p>Check the spelling, or add them as a new contact.</p>
+  </div>
+  <a class="btn btn--ghost tap" href="add-contact.html" style="margin-top:14px;height:50px;font-size:16px"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 1.5v13M1.5 8h13"/></svg>Add new contact</a>
+</section>
+
+<section class="sheet" id="dateSheet" aria-labelledby="dateTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="dateTitle">Select date</p><p class="sheet__sub" id="dateSub">04 Jun 2025</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="qd" id="quickDates" aria-label="Quick options">
+    <button type="button" class="tap" data-add="0">Today<small></small></button>
+    <button type="button" class="tap" data-add="7">+7 days<small></small></button>
+    <button type="button" class="tap" data-add="15">+15 days<small></small></button>
+    <button type="button" class="tap" data-add="30">+30 days<small></small></button>
+  </div>
+  <div class="cal">
+    <div class="cal__head">
+      <button type="button" class="cal__nav tap" id="calPrev" aria-label="Previous month"><svg width="8" height="14" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m8.5 1.5-7 7 7 7"/></svg></button>
+      <p class="cal__month" id="calMonth" aria-live="polite">June 2025</p>
+      <button type="button" class="cal__nav tap" id="calNext" aria-label="Next month"><svg width="8" height="14" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg></button>
+    </div>
+    <div class="cal__grid" id="calGrid" role="grid"></div>
+  </div>
+</section>
+
+<section class="sheet" id="attachSheet" aria-labelledby="attachTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="attachTitle">Attach receipt</p><p class="sheet__sub">We'll read the amount, date and GST for you</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="options">
+    <a class="option tap" href="receipt-scan.html"><span class="menu__icon icon-blue"><svg width="20" height="18" viewBox="0 0 31 27" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"><path d="M3.5 7.5h5l2.3-4.2h9.4l2.3 4.2h5a2.2 2.2 0 0 1 2.2 2.2v12.8a2.2 2.2 0 0 1-2.2 2.2H3.5a2.2 2.2 0 0 1-2.2-2.2V9.7a2.2 2.2 0 0 1 2.2-2.2Z"/><circle cx="15.5" cy="15.5" r="4.6"/></svg></span><span class="option__body"><span class="option__title">Scan with camera</span><span class="option__sub">Auto-detects edges and extracts details</span></span><svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg></a>
+    <button type="button" class="option tap" id="pickGallery"><span class="menu__icon icon-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3.5" width="18" height="17" rx="2.5"/><circle cx="9" cy="9.5" r="1.8"/><path d="m21 15.5-5-5L5 20.5"/></svg></span><span class="option__body"><span class="option__title">Choose from gallery</span><span class="option__sub">JPG or PNG photo of a bill</span></span></button>
+    <button type="button" class="option tap" id="pickPdf"><span class="menu__icon icon-red"><svg width="16" height="20" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M2.6 1h6.3c.5 0 .9.2 1.3.5l4.1 4.2c.3.3.5.8.5 1.3v10.4A1.6 1.6 0 0 1 13.2 19H2.6A1.6 1.6 0 0 1 1 17.4V2.6A1.6 1.6 0 0 1 2.6 1Z"/><path d="M5 11h6M5 14.5h4"/></svg></span><span class="option__body"><span class="option__title">Upload PDF</span><span class="option__sub">E-invoice or bill up to 10 MB</span></span></button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const radio = (group) => group.querySelectorAll('[role="radio"]').forEach((b) => b.addEventListener('click', () => {
+      group.querySelectorAll('[role="radio"]').forEach((x) => x.setAttribute('aria-checked', 'false'));
+      b.setAttribute('aria-checked', 'true');
+    }));
+    radio(document.getElementById('seg')); radio(document.getElementById('pm'));
+    const file = document.getElementById('file');
+    file.addEventListener('change', () => {
+      if (!file.files[0]) return;
+      document.getElementById('drop').classList.add('has-file');
+      document.getElementById('dropTitle').textContent = 'Receipt Attached';
+      document.getElementById('dropSub').textContent = file.files[0].name.slice(0, 28);
+    });
+  })();
+</script>
+<script>
+  // Demo contacts shared by the customer picker
+  const CONTACTS = [
+    { id: 'sharma-textiles', name: 'Sharma Textiles', business: 'Sharma Textiles', contact: 'Rakesh Sharma', city: 'Kolkata', gstin: '19ABCFS6021K1Z8', phone: '+91 98300 21367', email: 'accounts@sharmatextiles.in', kind: 'Customer', tone: 'yellow', bal: '₹62K', status: 'pending' },
+    { id: 'bose-retail', name: 'Bose Retail', business: 'Bose Retail', contact: 'Sourav Bose', city: 'Kolkata', gstin: '19AAHFB7702M1Z4', phone: '+91 98311 20456', email: 'accounts@boseretail.in', kind: 'Customer', tone: 'red', bal: '₹1.15L', status: 'overdue' },
+    { id: 'mitra-textiles', name: 'Mitra Textiles', business: 'Mitra Textiles', contact: 'Sudip Mitra', city: 'Asansol', gstin: '19AAGFM7310P1Z9', phone: '+91 99330 31844', email: 'sudip@mitratextiles.in', kind: 'Customer', tone: 'yellow', bal: '₹52.5K', status: 'pending' },
+    { id: 'ghosh-traders', name: 'Ghosh Traders', business: 'Ghosh Traders', contact: 'Partha Ghosh', city: 'Siliguri', gstin: '19AAJFG2290Q1Z4', phone: '+91 94340 77231', email: 'partha@ghoshtraders.in', kind: 'Customer', tone: 'red', bal: '₹38K', status: 'overdue' },
+    { id: 'roy-fabrics', name: 'Roy Fabrics', business: 'Roy Fabrics', contact: 'Debashis Roy', city: 'Durgapur', gstin: '19AAHFR6612R1Z1', phone: '+91 94340 58320', email: 'debashis@royfabrics.in', kind: 'Customer', tone: 'yellow', bal: '₹24K', status: 'pending' },
+    { id: 'saha-co', name: 'Saha & Co.', business: 'Saha & Co.', contact: 'Ankit Saha', city: 'Kolkata', gstin: '19AAKFS4418S1Z7', phone: '+91 98300 66102', email: 'ankit@sahaandco.in', kind: 'Customer', tone: 'blue', bal: '₹28K', status: 'done' },
+    { id: 'dutta-sons', name: 'Dutta & Sons', business: 'Dutta & Sons', contact: 'Amit Dutta', city: 'Howrah', gstin: '19AAKFD3417H1Z2', phone: '+91 98310 43210', email: 'accounts@duttasons.in', kind: 'Customer', tone: 'blue', bal: '₹45K', status: 'done' },
+    { id: 'das-electricals', name: 'Das Electricals', business: 'Das Electricals', contact: 'Rahul Das', city: 'Kharagpur', gstin: '19AAFFD9034T1Z5', phone: '+91 98320 44519', email: 'rahul@daselectricals.in', kind: 'Customer', tone: 'blue', bal: '₹12K', status: 'done' },
+    { id: 'mk-suppliers', name: 'MK Suppliers', business: 'MK Suppliers', contact: 'Manoj Kedia', city: 'Howrah', gstin: '19AAECM3321K1Z8', phone: '+91 97480 11408', email: 'billing@mksuppliers.in', kind: 'Vendor', tone: 'blue', bal: '₹18.5K', status: 'done' },
+    { id: 'dye-chemical', name: 'Dye Chemical', business: 'Dye Chemical Works', contact: 'Orders desk', city: 'Durgapur', gstin: '19AAFCD5578L1Z3', phone: '+91 96090 30917', email: 'orders@dyechemical.in', kind: 'Vendor', tone: 'blue', bal: '₹0', status: 'done' },
+  ];
+  const STATUS_LBL = { pending: 'Pending', overdue: 'Overdue', done: 'Settled' };
+  const AMT_CLS = { pending: 'amt--pending', overdue: 'amt--overdue', done: 'amt--done' };
+  const PERSON = '<svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg>';
+  const picker = (function () {
+    const list = document.getElementById('custList'), q = document.getElementById('custQ'), empty = document.getElementById('custEmpty');
+    let selected = null, onPick = () => {};
+    list.innerHTML = CONTACTS.map((c) => `<button type="button" class="option tap" role="option" data-id="${c.id}" aria-selected="false"><span class="avatar avatar--${c.tone}">${PERSON}</span><span class="option__body"><span class="option__title">${c.name}</span><span class="option__sub">${c.kind} · ${c.business} · ${c.city}</span></span><span class="option__meta num ${AMT_CLS[c.status]}">${c.bal}</span></button>`).join('');
+    const rows = [...list.children];
+    const mark = () => rows.forEach((r) => { const on = r.dataset.id === selected; r.setAttribute('aria-checked', on ? 'true' : 'false'); r.setAttribute('aria-selected', on ? 'true' : 'false'); });
+    q.addEventListener('input', () => {
+      const t = q.value.trim().toLowerCase(); let n = 0;
+      rows.forEach((r) => { const c = CONTACTS.find((x) => x.id === r.dataset.id); const ok = (c.name + ' ' + c.business + ' ' + c.city).toLowerCase().includes(t); r.style.display = ok ? '' : 'none'; if (ok) n++; });
+      empty.style.display = n ? 'none' : '';
+    });
+    rows.forEach((r) => r.addEventListener('click', () => {
+      selected = r.dataset.id; mark(); Spendee.haptic();
+      const c = CONTACTS.find((x) => x.id === selected);
+      setTimeout(() => { Spendee.sheet.close(); onPick(c); }, 160);
+    }));
+    document.getElementById('customerSheet').addEventListener('sheet:close', () => { q.value = ''; rows.forEach((r) => (r.style.display = '')); empty.style.display = 'none'; });
+    return {
+      open(cb, current) { onPick = cb; selected = current || null; mark(); Spendee.sheet.open('customerSheet'); },
+      find: (idOrName) => CONTACTS.find((c) => c.id === idOrName || c.name.toLowerCase() === String(idOrName || '').toLowerCase()),
+    };
+  })();
+
+  // Date sheet: quick options + month calendar (demo "today" = 04 Jun 2025)
+  const TODAY = new Date(2025, 5, 4);
+  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const MONTHS_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const fmtD = (d) => String(d.getDate()).padStart(2, '0') + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+  const parseD = (s) => { const m = String(s || '').match(/(\d{1,2})\s+(\w{3})\w*\s+(\d{4})/); if (!m) return null; const mi = MONTHS.indexOf(m[2].slice(0, 1).toUpperCase() + m[2].slice(1, 3).toLowerCase()); return mi < 0 ? null : new Date(+m[3], mi, +m[1]); };
+  const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+  const sameDay = (a, b) => a && b && a.toDateString() === b.toDateString();
+  const datePicker = (function () {
+    const grid = document.getElementById('calGrid'), month = document.getElementById('calMonth');
+    const quick = [...document.querySelectorAll('#quickDates button')];
+    let view = new Date(TODAY.getFullYear(), TODAY.getMonth(), 1), value = TODAY, base = TODAY, min = null, onPick = () => {};
+    const render = () => {
+      month.textContent = MONTHS_LONG[view.getMonth()] + ' ' + view.getFullYear();
+      const first = new Date(view.getFullYear(), view.getMonth(), 1).getDay();
+      const days = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+      let h = ['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d) => `<span class="cal__wd" aria-hidden="true">${d}</span>`).join('');
+      for (let i = 0; i < first; i++) h += '<span></span>';
+      for (let d = 1; d <= days; d++) {
+        const dt = new Date(view.getFullYear(), view.getMonth(), d);
+        const dis = min && dt < min;
+        h += `<button type="button" class="cal__d${sameDay(dt, TODAY) ? ' is-today' : ''}" data-d="${d}" aria-selected="${sameDay(dt, value)}" aria-label="${fmtD(dt)}"${dis ? ' disabled' : ''}>${d}</button>`;
+      }
+      grid.innerHTML = h;
+      document.getElementById('dateSub').textContent = 'Selected: ' + fmtD(value);
+      quick.forEach((b) => { const dt = addDays(base, +b.dataset.add); b.querySelector('small').textContent = String(dt.getDate()).padStart(2, '0') + ' ' + MONTHS[dt.getMonth()]; b.setAttribute('aria-pressed', String(sameDay(dt, value))); b.disabled = !!(min && dt < min); });
+    };
+    const pick = (dt) => { value = dt; view = new Date(dt.getFullYear(), dt.getMonth(), 1); render(); Spendee.haptic(); setTimeout(() => { Spendee.sheet.close(); onPick(dt); }, 200); };
+    grid.addEventListener('click', (e) => { const b = e.target.closest('[data-d]'); if (b) pick(new Date(view.getFullYear(), view.getMonth(), +b.dataset.d)); });
+    quick.forEach((b) => b.addEventListener('click', () => pick(addDays(base, +b.dataset.add))));
+    document.getElementById('calPrev').addEventListener('click', () => { view = new Date(view.getFullYear(), view.getMonth() - 1, 1); render(); });
+    document.getElementById('calNext').addEventListener('click', () => { view = new Date(view.getFullYear(), view.getMonth() + 1, 1); render(); });
+    render();
+    return {
+      open({ title, current, from, minDate, onSelect }) {
+        document.getElementById('dateTitle').textContent = title || 'Select date';
+        value = current || TODAY; base = from || TODAY; min = minDate || null; onPick = onSelect || (() => {});
+        view = new Date(value.getFullYear(), value.getMonth(), 1); render(); Spendee.sheet.open('dateSheet');
+      },
+    };
+  })();
+  // Add entry page logic
+  (function () {
+    const $ = (id) => document.getElementById(id);
+    const amount = $('amount'), contact = $('contact'), date = $('date'), due = $('due'), note = $('note'), drop = $('drop'), file = $('file'), save = $('save');
+    const seg = $('seg'), pm = $('pm');
+    let chosen = picker.find(contact.value);
+
+    // Amount: Indian grouping while typing
+    amount.addEventListener('input', () => { const n = amount.value.replace(/[^\d]/g, '').slice(0, 10); amount.value = n ? Spendee.fmtIN(+n) : ''; amount.closest('label').style.boxShadow = ''; });
+
+    // Contact picker
+    contact.readOnly = true; contact.setAttribute('aria-haspopup', 'dialog'); contact.style.cursor = 'pointer';
+    const openPicker = () => picker.open((c) => { chosen = c; contact.value = c.name; contact.style.boxShadow = ''; }, chosen && chosen.id);
+    contact.addEventListener('click', openPicker);
+    contact.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPicker(); } });
+
+    // Date pickers
+    [[date, 'Entry date'], [due, 'Due date']].forEach(([inp, title]) => {
+      inp.readOnly = true; inp.setAttribute('aria-haspopup', 'dialog'); inp.style.cursor = 'pointer';
+      const open = () => datePicker.open({
+        title, current: parseD(inp.value) || TODAY,
+        from: inp === due ? (parseD(date.value) || TODAY) : TODAY,
+        minDate: inp === due ? parseD(date.value) : null,
+        onSelect: (d) => {
+          inp.value = fmtD(d);
+          if (inp === date && parseD(due.value) && parseD(due.value) < d) { due.value = fmtD(d); Spendee.toast('Due date moved to ' + fmtD(d)); }
+        },
+      });
+      inp.addEventListener('click', open);
+      inp.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+    });
+
+    // Attach receipt → action sheet
+    drop.setAttribute('role', 'button'); drop.tabIndex = 0; drop.setAttribute('aria-haspopup', 'dialog');
+    drop.addEventListener('click', (e) => { if (e.target === file) return; e.preventDefault(); Spendee.sheet.open('attachSheet'); });
+    drop.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); Spendee.sheet.open('attachSheet'); } });
+    const attach = (name) => { drop.classList.add('has-file'); $('dropTitle').textContent = 'Receipt Attached'; $('dropSub').textContent = name.slice(0, 28); };
+    $('pickGallery').addEventListener('click', () => { Spendee.sheet.close(); file.accept = 'image/*'; file.click(); });
+    $('pickPdf').addEventListener('click', () => { Spendee.sheet.close(); file.accept = 'application/pdf'; file.click(); });
+    file.addEventListener('change', () => { if (file.files[0]) { attach(file.files[0].name); Spendee.toast('Receipt attached'); } });
+
+    const setType = (v) => seg.querySelectorAll('[role="radio"]').forEach((b, i) => b.setAttribute('aria-checked', String((v === 'gave') === (i === 0))));
+    const setPm = (label) => pm.querySelectorAll('[role="radio"]').forEach((b) => b.setAttribute('aria-checked', String(b.textContent.replace(/\s+/g, ' ').trim() === label)));
+
+    // Arrivals: from scan or edit
+    const edit = Spendee.q('edit') === '1';
+    if (Spendee.q('scanned') === '1') {
+      const s = Spendee.store.get('scan', null) || { vendor: 'MK Suppliers', amount: 12400, date: '04 Jun 2025', gst: '18%', category: 'Raw material' };
+      amount.value = Spendee.fmtIN(s.amount); contact.value = s.vendor; chosen = picker.find(s.vendor) || { name: s.vendor, kind: 'Vendor', business: s.vendor, tone: 'red' };
+      date.value = s.date; note.value = s.category + ' · GST ' + s.gst; setType('gave');
+      attach('MK_Suppliers_receipt.jpg');
+      setTimeout(() => Spendee.toast('Details filled from receipt'), 450);
+    } else if (edit) {
+      document.querySelector('h1.t').textContent = 'Edit Entry';
+      save.lastChild.textContent = ' Save Changes';
+      amount.value = '62,000'; contact.value = 'Sharma Textiles'; chosen = picker.find('sharma-textiles');
+      date.value = '20 May 2025'; due.value = '10 Jun 2025'; note.value = 'INV-1038 · Cotton fabric, 40 rolls'; setType('got'); setPm('Bank');
+      attach('Receipt_2038.jpg');
+    }
+
+    // Save
+    save.addEventListener('click', async () => {
+      const n = +amount.value.replace(/[^\d]/g, '');
+      if (!n) {
+        const card = amount.closest('label'); card.style.boxShadow = '0 0 0 2px #f15858'; amount.focus();
+        card.animate([{ transform: 'translateX(-5px)' }, { transform: 'translateX(5px)' }, { transform: 'none' }], { duration: 300 });
+        Spendee.haptic(); Spendee.toast('Enter an amount greater than 0'); return;
+      }
+      if (!contact.value.trim()) { contact.style.boxShadow = '0 0 0 2px #f15858'; Spendee.toast('Choose who this entry is with'); openPicker(); return; }
+      await Spendee.loading(save, 1000);
+      if (edit) { location.href = 'transaction-detail.html?id=' + (Spendee.q('id') || 'TX-2038') + '&updated=1'; return; }
+      const type = seg.querySelector('[aria-checked="true"]') === seg.querySelector('[role="radio"]') ? 'gave' : 'got';
+      const pmSel = pm.querySelector('[aria-checked="true"]');
+      const dd = parseD(due.value), days = dd ? Math.round((dd - TODAY) / 864e5) : null;
+      const c = chosen || { name: contact.value, kind: 'Customer', business: '', tone: 'yellow' };
+      Spendee.store.set('lastEntry', {
+        id: 'TX-2044', name: c.name, sub: c.kind + (c.city ? ' · ' + c.city : ''), tone: c.tone || 'yellow',
+        type, amount: n, status: 'pending', date: date.value, due: due.value,
+        method: pmSel ? pmSel.textContent.replace(/\s+/g, ' ').trim() : 'Not set', note: note.value.trim(),
+        dueIn: days == null ? 'No due date' : days > 0 ? 'Due in ' + days + ' days' : days === 0 ? 'Due today' : 'Overdue by ' + -days + ' days',
+      });
+      location.href = 'transaction-detail.html?new=1';
+    });
+  })();
+</script>
+</body>
+</html>

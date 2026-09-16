@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Loan Approved</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .page > .toast { position: fixed; z-index: 1000; }
+  .result { padding-top: 64px; }
+  .page { padding-bottom: 190px; }
+  .timeline li { color: #f0f0f0; }
+  .timeline li.now { color: #5fb2f1; }
+</style>
+</head>
+<body>
+<main class="page page--no-nav" aria-label="Loan approved" style="padding-bottom:190px">
+  <div class="result result--ok enter">
+    <div class="result__ring"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+    <h1 class="result__title">Loan approved</h1>
+    <p class="result__amount num" id="amt">₹ 15,00,000</p>
+    <p class="result__msg" role="status">Disbursal to Spendee Bank ••7643 within 48 hours</p>
+  </div>
+
+  <div class="panel enter" style="margin-top:30px;--i:1">
+    <ol class="timeline" aria-label="Loan progress">
+      <li class="done">Application submitted<small>Today, 11:40 AM</small></li>
+      <li class="done">E-signed<small>Today, 11:42 AM · OTP verified</small></li>
+      <li class="now">Disbursal in progress<small>Now · credit expected within 48 hours</small></li>
+      <li style="padding-bottom:0">First EMI<small>05 Aug 2025 · auto-debit from A/c ••7643</small></li>
+    </ol>
+  </div>
+
+  <div class="panel panel--flat enter" style="margin-top:14px;padding:6px 20px;--i:2">
+    <div class="kvs">
+      <div><span class="k">Loan ID</span><span class="v num">SPL-2507-48213</span></div>
+      <div><span class="k">Monthly EMI</span><span class="v num c-blue" id="emi">₹ 49,464</span></div>
+      <div><span class="k">Tenure</span><span class="v num" id="tenure">36 months</span></div>
+      <div><span class="k">Interest rate</span><span class="v">11.5% p.a.</span></div>
+    </div>
+  </div>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <div class="cta-bar">
+    <button class="btn btn--ghost tap" id="dl"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 1.5V12M4.5 7.5 9 12l4.5-4.5M1.5 11.5v3.8a1.2 1.2 0 0 0 1.2 1.2h12.6a1.2 1.2 0 0 0 1.2-1.2v-3.8"/></svg><span>Download sanction letter</span></button>
+    <a class="btn btn--primary tap" href="dashboard.html"><span>Back to Home</span></a>
+    <span class="home-indicator"></span>
+  </div>
+</main>
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const S = Spendee, stored = S.store.get('loan', {});
+  const amt = +S.q('amt') || stored.amount || 1500000;
+  const n = +S.q('tenure') || stored.tenure || 36;
+  let emi = +S.q('emi') || stored.emi;
+  if (!emi) { const r = 0.115 / 12, f = Math.pow(1 + r, n); emi = Math.round(amt * r * f / (f - 1)); }
+  document.getElementById('amt').textContent = '₹ ' + S.fmtIN(amt);
+  document.getElementById('emi').textContent = '₹ ' + S.fmtIN(emi);
+  document.getElementById('tenure').textContent = n + ' months';
+  const dl = document.getElementById('dl');
+  dl.addEventListener('click', async () => { await S.loading(dl, 1200); S.toast('Sanction_Letter_SPL-2507-48213.pdf downloaded'); });
+})();
+</script>
+</body>
+</html>

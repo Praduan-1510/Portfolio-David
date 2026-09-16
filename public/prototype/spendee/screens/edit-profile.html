@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Edit Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .profile .field { font-weight: 500; font-size: 18px; }
+  .profile .field-tel input { font-weight: 500; }
+  .sec-lbl { font-size: 14.5px; letter-spacing: 1px; color: #555; }
+  .verified { position: absolute; right: 23px; top: 9px; height: 36px; width: 70px; border-radius: 8px; background: #d9f3cd; color: #58c323; font-size: 13px; letter-spacing: .3px; display: grid; place-items: center; font-weight: 500; }
+  .photo { left: 132px; top: 138px; width: 137px; height: 137px; border-radius: 50%; overflow: hidden; cursor: pointer; }
+  .photo img { width: 100%; height: 100%; display: block; transform: scale(1.03); }
+  .photo::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,.35) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='27' viewBox='0 0 31 27' fill='none' stroke='white' stroke-width='2.3' stroke-linejoin='round'%3E%3Cpath d='M3.5 7.5h5l2.3-4.2h9.4l2.3 4.2h5a2.2 2.2 0 0 1 2.2 2.2v12.8a2.2 2.2 0 0 1-2.2 2.2H3.5a2.2 2.2 0 0 1-2.2-2.2V9.7a2.2 2.2 0 0 1 2.2-2.2Z'/%3E%3Ccircle cx='15.5' cy='15.5' r='4.6'/%3E%3C/svg%3E") center no-repeat; opacity: 0; transition: opacity var(--dur); }
+  .photo:hover::after { opacity: 1; }
+</style>
+</head>
+<body>
+<main class="screen profile" style="height:1781px;min-height:1781px" aria-label="Edit profile">
+  <a class="abs back tap" href="settings.html" data-go="back" style="left:44px;top:58px" aria-label="Back">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg>
+  </a>
+  <p class="abs" style="left:94px;top:47px;font-size:14px;letter-spacing:.9px;color:#e0e0e0">Account</p>
+  <h1 class="abs" style="left:93px;top:66px;font-size:27px;font-weight:700;letter-spacing:0;line-height:34px">Edit Profile</h1>
+  <button class="abs tap" id="save" style="left:316px;top:56px;width:52px;height:36px;border-radius:8px;background:#0d2701;box-shadow:inset 0 0 0 1px rgba(141,241,94,.28);color:#6cc24a;font-size:13px;letter-spacing:.3px">Save</button>
+
+  <label class="abs photo tap" aria-label="Change photo">
+    <img src="../assets/img/avatar.png" alt="Jayanta Adhikari" id="photoImg">
+    <input type="file" accept="image/*" hidden id="photoInput">
+  </label>
+  <button class="t tap" style="left:0;right:0;text-align:center;top:293.5px;font-size:15.5px;font-weight:500;letter-spacing:.6px;color:#60b2f1" onclick="document.getElementById('photoInput').click()">Change Photo</button>
+
+  <h2 class="t sec-lbl" style="left:34.5px;top:349.7px">PERSONAL INFO</h2>
+  <div class="form-group enter" style="top:389px;left:34px;width:334px;--i:1">
+    <label class="label">Full Name</label>
+    <input class="field" id="fn" type="text" value="Jayanta Adhikari" autocomplete="name" >
+  </div>
+  <div class="form-group enter" style="top:497px;left:34px;width:334px;--i:2">
+    <label class="label">Mobile Number</label>
+    <div class="field field-tel" style="position:relative"><span>+91</span><input id="mob" type="tel" value="98765 43210" style="margin-left:22px" aria-label="Mobile number" autocomplete="tel-national"><span class="verified">Verified</span></div>
+  </div>
+  <div class="form-group enter" style="top:605px;left:34px;width:334px;--i:3">
+    <label class="label">Email Address</label>
+    <input class="field" id="em" type="email" value="jayanta.adhikari@example.com" autocomplete="email" >
+  </div>
+  <div class="form-group enter" style="top:713px;left:34px;width:334px;--i:4">
+    <label class="label">Date Of Birth</label>
+    <input class="field" id="dob" type="text" value="15 March 1985" autocomplete="bday" >
+  </div>
+
+  <h2 class="t sec-lbl" style="left:34.5px;top:836.7px">BUSINESS INFO</h2>
+  <div class="form-group enter" style="top:876px;left:34px;width:334px;--i:5">
+    <label class="label">Business Name</label>
+    <input class="field" id="bn" type="text" value="JA Trading Co." autocomplete="organization" >
+  </div>
+  <div class="form-group enter" style="top:984px;left:34px;width:334px;--i:6">
+    <label class="label">GSTIN</label>
+    <input class="field" id="gst1" type="text" value="19AEYPA4821F1Z5"  >
+  </div>
+  <div class="form-group enter" style="top:1092px;left:34px;width:334px;--i:7">
+    <label class="label">Business Type</label>
+    <div class="select"><select class="field" id="bt"><option>Regular Taxpayer</option><option>Composition Dealer</option><option>Manufacturing</option><option>Retail &amp; Trading</option></select><svg width="18" height="10" viewBox="0 0 18 10" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="right:18px"><path d="m1.5 1.5 7.5 7 7.5-7"/></svg></div>
+  </div>
+  <div class="form-group enter" style="top:1200px;left:34px;width:334px;--i:8">
+    <label class="label">PAN Number</label>
+    <div class="field field-tel" style="position:relative"><input id="pan" value="AEYPA4821F" aria-label="PAN number"><span class="verified">Verified</span></div>
+  </div>
+  <div class="form-group enter" style="top:1308px;left:34px;width:334px;--i:9">
+    <label class="label">State</label>
+    <input class="field" id="gst2" type="text" value="West Bengal" autocomplete="address-level1" >
+  </div>
+  <div class="form-group enter" style="top:1426px;left:44px;width:152px;--i:10">
+    <label class="label">Language</label>
+    <div class="select"><select class="field" id="lang" style="padding-left:23px"><option>English</option><option>Hindi</option><option>Bengali</option><option>Marathi</option></select><svg width="18" height="10" viewBox="0 0 18 10" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="right:18px"><path d="m1.5 1.5 7.5 7 7.5-7"/></svg></div>
+  </div>
+  <div class="form-group enter" style="top:1426px;left:206px;width:152px;--i:10">
+    <label class="label">Currency</label>
+    <div class="select"><select class="field" id="cur" style="padding-left:23px"><option>₹ INR</option><option>€ EUR</option><option>£ GBP</option></select><svg width="18" height="10" viewBox="0 0 18 10" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="right:18px"><path d="m1.5 1.5 7.5 7 7.5-7"/></svg></div>
+  </div>
+  <div class="form-group enter" style="top:1544px;left:34px;width:334px;--i:11">
+    <label class="label">City / Location</label>
+    <input class="field" id="city" type="text" value="Kolkata, West Bengal" autocomplete="address-level2" >
+  </div>
+
+  <button class="abs btn btn--primary tap" id="cont" style="left:34px;top:1669px;width:334px;gap:12px">
+    Continue
+    <svg width="22" height="18" viewBox="0 0 22 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 9h18.5M12.5 1.5 20 9l-7.5 7.5"/></svg>
+  </button>
+  <p class="abs secure-note" style="left:0;right:0;top:1745px">
+    <svg width="11" height="12" viewBox="0 0 11 12" fill="none" stroke="#cfcfcf" stroke-width="1.2"><rect x="1" y="5.2" width="9" height="6" rx="1.4"/><path d="M3 5.2V3.6a2.5 2.5 0 0 1 5 0v1.6"/><circle cx="5.5" cy="8.2" r=".6" fill="#cfcfcf"/></svg>
+    Your data is encrypted &amp; never sold
+  </p>
+</main>
+<section class="sheet" id="photoSheet" aria-labelledby="phTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="phTitle">Profile photo</p><p class="sheet__sub">Shown to your team and on invoices</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="options">
+    <button class="option tap" id="phTake"><span class="menu__icon icon-blue"><svg width="20" height="18" viewBox="0 0 31 27" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M3.5 7.5h5l2.3-4.2h9.4l2.3 4.2h5a2.2 2.2 0 0 1 2.2 2.2v12.8a2.2 2.2 0 0 1-2.2 2.2H3.5a2.2 2.2 0 0 1-2.2-2.2V9.7a2.2 2.2 0 0 1 2.2-2.2Z"/><circle cx="15.5" cy="15.5" r="4.6"/></svg></span><span class="option__body"><span class="option__title">Take photo</span><span class="option__sub">Use your camera</span></span></button>
+    <button class="option tap" id="phPick"><span class="menu__icon icon-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.8"/><path d="m21 15-5-5L5 21"/></svg></span><span class="option__body"><span class="option__title">Choose from library</span><span class="option__sub">JPG or PNG, up to 5 MB</span></span></button>
+    <button class="option tap" id="phRemove"><span class="menu__icon icon-red"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M5.5 7l1 12.5A1.6 1.6 0 0 0 8.1 21h7.8a1.6 1.6 0 0 0 1.6-1.5L18.5 7M9 7V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V7"/></svg></span><span class="option__body"><span class="option__title" style="color:#f15858">Remove photo</span><span class="option__sub">Show your initials instead</span></span></button>
+  </div>
+  <input type="file" accept="image/*" capture="user" hidden id="cameraInput">
+</section>
+<style>
+  .pe-err { position: absolute; left: 10px; top: 89px; font-size: 11.5px; line-height: 14px; color: #f15858; white-space: nowrap; }
+  .pe-bad { box-shadow: 0 0 0 2px #f15858 !important; }
+  #save.is-loading { color: transparent; pointer-events: none; }
+  #save.is-loading::after { content: ''; position: absolute; left: 50%; top: 50%; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; border: 2px solid rgba(141,241,94,.25); border-top-color: #6cc24a; animation: spin 700ms linear infinite; }
+</style>
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const S = Spendee, $ = (id) => document.getElementById(id);
+    const img = $('photoImg'), inp = $('photoInput'), cam = $('cameraInput');
+    // Restore saved profile
+    const prof = S.store.get('profile');
+    if (prof) {
+      const map = { fn: 'name', em: 'email', bn: 'business', gst1: 'gstin', gst2: 'state', pan: 'pan', mob: 'mobile', dob: 'dob', city: 'city', bt: 'type', lang: 'lang', cur: 'currency' };
+      Object.entries(map).forEach(([id, k]) => { if (prof[k]) $(id).value = prof[k]; });
+      if (prof.photo === 'removed') setInitials();
+    }
+    const fields = ['fn', 'mob', 'em', 'dob', 'bn', 'gst1', 'bt', 'pan', 'gst2', 'lang', 'cur', 'city'];
+    const snapshot = () => fields.map((id) => $(id).value).join('|');
+    const initial = snapshot();
+    let photoChanged = false, photoState = prof && prof.photo;
+    const dirty = () => photoChanged || snapshot() !== initial;
+
+    // ---- Validation ----
+    const RULES = {
+      fn: (v) => v.trim().length >= 2 || 'Enter your full name',
+      mob: (v) => v.replace(/\D/g, '').length === 10 || 'Enter a 10-digit mobile number',
+      em: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) || 'Enter a valid email, e.g. name@business.com',
+      bn: (v) => v.trim().length > 0 || 'Enter your business name',
+      gst1: (v) => /^\d{2}[A-Z]{5}\d{4}[A-Z][A-Z\d]Z[A-Z\d]$/i.test(v.trim()) || 'GSTIN should be 15 characters, e.g. 19AEYPA4821F1Z5',
+      pan: (v) => /^[A-Z]{5}\d{4}[A-Z]$/i.test(v.trim()) || 'PAN should look like ABCDE1234F',
+      gst2: (v) => v.trim().length > 0 || 'Enter your state',
+    };
+    const box = (id) => $(id).closest('.field') || $(id);
+    function setError(id, msg) {
+      const grp = $(id).closest('.form-group');
+      let e = grp.querySelector('.pe-err');
+      box(id).classList.toggle('pe-bad', !!msg);
+      $(id).setAttribute('aria-invalid', msg ? 'true' : 'false');
+      if (!msg) { if (e) e.remove(); return; }
+      if (!e) { e = document.createElement('span'); e.className = 'pe-err'; e.setAttribute('role', 'alert'); e.id = id + '-err'; grp.appendChild(e); $(id).setAttribute('aria-describedby', e.id); }
+      e.textContent = msg;
+    }
+    const check = (id) => { const r = RULES[id]($(id).value); setError(id, r === true ? '' : r); return r === true; };
+    Object.keys(RULES).forEach((id) => {
+      $(id).addEventListener('blur', () => { if ($(id).value) check(id); });
+      $(id).addEventListener('input', () => setError(id, ''));
+    });
+    ['gst1', 'pan'].forEach((id) => $(id).addEventListener('input', () => { const el = $(id), p = el.selectionStart; el.value = el.value.toUpperCase(); el.setSelectionRange(p, p); }));
+
+    async function save(btn) {
+      const bad = Object.keys(RULES).filter((id) => !check(id));
+      if (bad.length) {
+        S.haptic();
+        const first = $(bad[0]); first.focus({ preventScroll: true });
+        first.closest('.form-group').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        S.toast(bad.length === 1 ? 'Fix the highlighted field' : `Fix ${bad.length} highlighted fields`);
+        return;
+      }
+      await S.loading(btn, 1000);
+      S.store.set('profile', { name: $('fn').value.trim(), email: $('em').value.trim(), business: $('bn').value.trim(), gstin: $('gst1').value.trim().toUpperCase(), pan: $('pan').value.trim().toUpperCase(), mobile: $('mob').value.trim(), dob: $('dob').value.trim(), city: $('city').value.trim(), state: $('gst2').value.trim(), type: $('bt').value, lang: $('lang').value, currency: $('cur').value, photo: photoState });
+      S.store.set('flash', 'Profile saved');
+      leaving = true;
+      location.href = 'settings.html';
+    }
+    $('save').addEventListener('click', () => save($('save')));
+    $('cont').addEventListener('click', () => save($('cont')));
+
+    // ---- Photo action sheet ----
+    const photoLabel = document.querySelector('label.photo');
+    const changeBtn = [...document.querySelectorAll('button')].find((b) => b.textContent.trim() === 'Change Photo');
+    changeBtn.onclick = null; changeBtn.removeAttribute('onclick');
+    const openPhoto = (e) => { e.preventDefault(); S.sheet.open('photoSheet'); };
+    photoLabel.addEventListener('click', openPhoto); changeBtn.addEventListener('click', openPhoto);
+    const onFile = (el) => el.addEventListener('change', () => { if (el.files[0]) { img.src = URL.createObjectURL(el.files[0]); photoChanged = true; photoState = 'custom'; S.toast('Photo updated'); } });
+    onFile(inp); onFile(cam);
+    $('phTake').addEventListener('click', () => { S.sheet.close(); cam.click(); });
+    $('phPick').addEventListener('click', () => { S.sheet.close(); inp.click(); });
+    $('phRemove').addEventListener('click', async () => {
+      S.sheet.close();
+      const ok = await S.dialog({ title: 'Remove profile photo?', message: 'Your initials will be shown to your team and on invoices instead.', confirm: 'Remove', tone: 'danger' });
+      if (!ok) return;
+      setInitials(); photoChanged = true; photoState = 'removed'; S.toast('Photo removed');
+    });
+    function setInitials() {
+      const n = ($('fn').value || 'JA').trim().split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
+      img.src = 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="137" height="137"><rect width="137" height="137" fill="#283845"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-family="Kodchasan, sans-serif" font-size="48" font-weight="600" fill="#5fb2f1">${n}</text></svg>`);
+      img.alt = n;
+    }
+
+    // ---- Unsaved changes guard ----
+    let leaving = false;
+    const back = document.querySelector('a.back');
+    back.addEventListener('click', async (e) => {
+      e.preventDefault(); e.stopPropagation();
+      if (dirty()) {
+        const ok = await S.dialog({ title: 'Discard changes?', message: "Your edits to this profile haven't been saved.", confirm: 'Discard', cancel: 'Keep Editing', tone: 'danger' });
+        if (!ok) return;
+      }
+      leaving = true;
+      if (history.length > 1 && /settings\.html/.test(document.referrer)) history.back(); else location.href = 'settings.html';
+    });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Scan &amp; Pay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .page [hidden], .sheet [hidden] { display: none !important; }
+  .page { padding: 0; min-height: 100vh; }
+  body.capture .page { height: 874px; min-height: 874px; overflow: hidden; }
+  .page .toast { bottom: 250px; }
+
+  /* Camera viewport */
+  .cam { position: fixed; top: 0; left: 50%; width: 402px; margin-left: -201px; height: 100vh; min-height: 700px; overflow: hidden; background: #0b0c0d; }
+  body.capture .cam { position: absolute; height: 874px; border-radius: var(--r-screen); }
+  .cam__scene { position: absolute; inset: -20px; filter: blur(14px) saturate(.9); transform: scale(1.04);
+    background:
+      radial-gradient(ellipse 60% 40% at 22% 18%, rgba(120,98,64,.55), transparent 70%),
+      radial-gradient(ellipse 50% 35% at 85% 30%, rgba(60,80,96,.5), transparent 70%),
+      radial-gradient(ellipse 70% 30% at 50% 88%, rgba(78,62,44,.6), transparent 70%),
+      radial-gradient(ellipse 30% 22% at 12% 62%, rgba(40,58,46,.5), transparent 70%),
+      linear-gradient(180deg, #1c1a17 0%, #121212 45%, #181410 100%); }
+  body:not(.capture) .cam__scene { animation: sway 6s ease-in-out infinite alternate; }
+  @keyframes sway { from { transform: scale(1.04) translate(-4px, -3px); } to { transform: scale(1.06) translate(5px, 4px); } }
+  .cam__paper { position: absolute; left: 50%; top: 214px; width: 214px; height: 240px; margin-left: -107px; border-radius: 10px; background: #efece4; transform: rotate(-4deg) translate(6px, 4px); box-shadow: 0 30px 60px rgba(0,0,0,.55); filter: blur(.5px) brightness(.82); padding: 16px 20px; }
+  .cam__paper svg { width: 174px; height: 174px; display: block; }
+  .cam__paper p { font: 600 11px/1 var(--font); color: #30302b; text-align: center; margin-top: 10px; letter-spacing: .3px; }
+  .cam.torch .cam__scene { filter: blur(14px) brightness(1.7) saturate(.9); }
+  .cam.torch .cam__paper { filter: blur(.5px) brightness(1.02); }
+  .cam__torchglow { position: absolute; inset: 0; background: radial-gradient(circle at 50% 40%, rgba(255,250,220,.16), transparent 60%); opacity: 0; transition: opacity 300ms; pointer-events: none; }
+  .cam.torch .cam__torchglow { opacity: 1; }
+
+  /* Finder */
+  .finder { position: absolute; left: 50%; top: 200px; width: 260px; height: 260px; margin-left: -130px; border-radius: 26px; box-shadow: 0 0 0 1200px rgba(0,0,0,.58); }
+  .finder__c { position: absolute; width: 46px; height: 46px; border: 0 solid #fff; transition: border-color 260ms, transform 360ms var(--ease-spring); }
+  .finder__c:nth-child(1) { left: -3px; top: -3px; border-width: 4px 0 0 4px; border-top-left-radius: 28px; }
+  .finder__c:nth-child(2) { right: -3px; top: -3px; border-width: 4px 4px 0 0; border-top-right-radius: 28px; }
+  .finder__c:nth-child(3) { left: -3px; bottom: -3px; border-width: 0 0 4px 4px; border-bottom-left-radius: 28px; }
+  .finder__c:nth-child(4) { right: -3px; bottom: -3px; border-width: 0 4px 4px 0; border-bottom-right-radius: 28px; }
+  body:not(.capture) .cam:not(.is-found) .finder__c { animation: breathe 1.8s var(--ease-out) infinite; }
+  .finder__c:nth-child(1) { --dx: 5px; --dy: 5px; } .finder__c:nth-child(2) { --dx: -5px; --dy: 5px; }
+  .finder__c:nth-child(3) { --dx: 5px; --dy: -5px; } .finder__c:nth-child(4) { --dx: -5px; --dy: -5px; }
+  @keyframes breathe { 0%, 100% { transform: none; } 50% { transform: translate(var(--dx), var(--dy)); } }
+  .finder__line { position: absolute; left: 18px; right: 18px; top: 18px; height: 3px; border-radius: 2px; background: linear-gradient(90deg, transparent, #5fb2f1 20%, #c8e7ff 50%, #5fb2f1 80%, transparent); box-shadow: 0 0 18px 4px rgba(95,178,241,.45); }
+  .finder__line::after { content: ''; position: absolute; left: 0; right: 0; bottom: 3px; height: 60px; background: linear-gradient(180deg, transparent, rgba(95,178,241,.14)); }
+  body:not(.capture) .finder__line { animation: scan 2.2s cubic-bezier(.45,0,.55,1) infinite alternate; }
+  body.capture .finder__line { top: 118px; }
+  @keyframes scan { from { transform: translateY(0); } to { transform: translateY(220px); } }
+  .finder__ok { position: absolute; left: 50%; top: 50%; width: 76px; height: 76px; margin: -38px 0 0 -38px; border-radius: 50%; background: #8df15e; color: #0b1a05; display: grid; place-items: center; transform: scale(0); opacity: 0; transition: transform 420ms var(--ease-spring), opacity 200ms; box-shadow: 0 10px 40px rgba(141,241,94,.45); }
+  .finder__pulse { position: absolute; inset: -3px; border-radius: 28px; box-shadow: 0 0 0 3px #8df15e; opacity: 0; }
+  .cam.is-found .finder__c { border-color: #8df15e; transform: scale(.94); }
+  .cam.is-found .finder__line { opacity: 0; animation: none; }
+  .cam.is-found .finder__ok { transform: scale(1); opacity: 1; }
+  .cam.is-found .finder__pulse { animation: foundPulse 900ms var(--ease-out) forwards; }
+  @keyframes foundPulse { 0% { opacity: .9; transform: scale(1); } 100% { opacity: 0; transform: scale(1.18); } }
+
+  /* Chrome */
+  .topbar { position: absolute; left: 0; right: 0; top: 44px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; z-index: 2; }
+  .glass-btn { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: rgba(40,40,40,.55); box-shadow: inset 0 0 0 1px rgba(255,255,255,.18); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transition: background var(--dur), color var(--dur); }
+  .glass-btn[aria-pressed="true"] { background: #f1ea58; color: #1a1800; box-shadow: 0 0 24px rgba(241,234,88,.45); }
+  .topbar__title { text-align: center; }
+  .topbar__title h1 { font-size: 19px; font-weight: 600; letter-spacing: .3px; line-height: 24px; }
+  .topbar__title p { font-size: 11px; letter-spacing: .9px; color: #cfcfcf; text-transform: uppercase; margin-top: 2px; }
+  .hint { position: absolute; left: 0; right: 0; top: 486px; text-align: center; z-index: 2; }
+  .hint p { font-size: 15px; color: #f0f0f0; letter-spacing: .3px; }
+  .hint small { display: block; font-size: 12.5px; color: #a9a9a9; margin-top: 4px; }
+  .hint .text-btn { margin-top: 4px; font-size: 13.5px; }
+  .dock { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 22px 24px 34px; border-radius: 28px 28px 0 0; background: rgba(22,22,22,.78); box-shadow: inset 0 1px 0 rgba(255,255,255,.12); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+  .dock .btn { height: 52px; font-size: 15px; font-weight: 600; gap: 9px; }
+  .dock .btn--glass { background: rgba(130,178,205,.18); }
+  .dock__row { display: flex; align-items: center; gap: 14px; width: 100%; margin-top: 12px; padding: 10px 14px; border-radius: 16px; background: rgba(255,255,255,.05); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); text-align: left; }
+  .dock .secure-note { margin-top: 14px; }
+  .dock .home-indicator { bottom: 8px; }
+
+  /* Sheets */
+  .payee { display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 20px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); }
+  .initials { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; font-size: 19px; font-weight: 600; letter-spacing: .5px; flex-shrink: 0; }
+  .verified { display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: #8df15e; }
+  .amt-toggle { display: flex; align-items: center; gap: 14px; margin-top: 12px; padding: 12px 16px; border-radius: 16px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .amt-field { margin-top: 12px; }
+  .amt-field .field { font-size: 24px; font-weight: 600; height: 60px; }
+  .myqr { width: 264px; margin: 4px auto 0; padding: 20px 20px 16px; border-radius: 24px; background: #fff; color: #000; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,.5); }
+  .myqr__code { position: relative; width: 224px; height: 224px; }
+  .myqr__code svg { width: 100%; height: 100%; }
+  .myqr__logo { position: absolute; left: 50%; top: 50%; width: 42px; height: 42px; margin: -21px 0 0 -21px; border-radius: 12px; background: #000; color: #c8e7ff; display: grid; place-items: center; font: 700 20px var(--font); box-shadow: 0 0 0 5px #fff; }
+  .myqr__name { font-size: 17px; font-weight: 600; margin-top: 10px; }
+  .myqr__upi { font-size: 13.5px; color: #437da9; font-weight: 600; margin-top: 2px; }
+</style>
+</head>
+<body>
+<main class="page page--no-nav" aria-label="Scan and pay">
+  <div class="cam" id="cam">
+    <div class="cam__scene" aria-hidden="true"></div>
+    <div class="cam__paper" aria-hidden="true"><div id="paperQr"></div><p>Ghosh Traders · Scan to pay</p></div>
+    <div class="cam__torchglow" aria-hidden="true"></div>
+
+    <div class="finder" aria-hidden="true">
+      <span class="finder__c"></span><span class="finder__c"></span><span class="finder__c"></span><span class="finder__c"></span>
+      <span class="finder__line"></span>
+      <span class="finder__pulse"></span>
+      <span class="finder__ok"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
+    </div>
+
+    <header class="topbar">
+      <a class="glass-btn tap" href="bank.html" data-go="back" aria-label="Close scanner"><svg width="14" height="14" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></a>
+      <div class="topbar__title"><h1>Scan &amp; Pay</h1><p>UPI · Bharat QR</p></div>
+      <button class="glass-btn tap" id="torch" aria-pressed="false" aria-label="Torch"><svg width="18" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12v4l-3 4v11a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1V10L6 6V2Z"/><path d="M6 6h12M12 13v3"/></svg></button>
+    </header>
+
+    <div class="hint" role="status" aria-live="polite">
+      <p id="hintText">Align the QR code within the frame</p>
+      <small id="hintSub">Scanning automatically…</small>
+      <button class="text-btn" id="simulate">Simulate scan</button>
+    </div>
+
+    <div class="dock">
+      <div class="btn-pair">
+        <button class="btn btn--glass tap" id="upload"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>Upload QR</button>
+        <button class="btn btn--glass tap" data-sheet="myQrSheet"><svg width="16" height="16" viewBox="0 0 15 17" fill="currentColor"><path d="M0 0h6v6H0zM2 2v2h2V2zM9 0h6v6H9zm2 2v2h2V2zM0 9h6v6H0zm2 2v2h2v-2zM8 8h2v2H8zm3 0h4v2h-2v2h-2zM8 11h2v4H8zm3 2h4v4h-2v-2h-2z"/></svg>Show my QR</button>
+      </div>
+      <a class="dock__row tap" href="send-money.html">
+        <span class="menu__icon icon-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4.5h10M7 9h10M10 4.5c3 0 4.6 1.4 4.6 3.6S13 11.8 10 11.8H7.5l7 7.7"/></svg></span>
+        <span class="menu__body"><span class="menu__title">Pay to UPI ID or number</span><span class="menu__sub">No QR? Enter details manually</span></span>
+        <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+      </a>
+      <p class="secure-note"><svg width="11" height="12" viewBox="0 0 11 12" fill="none" stroke="#cfcfcf" stroke-width="1.2"><rect x="1" y="5.2" width="9" height="6" rx="1.4"/><path d="M3 5.2V3.6a2.5 2.5 0 0 1 5 0v1.6"/></svg>Payments secured by UPI · Yes Bank ••7643</p>
+    </div>
+  </div>
+</main>
+
+<!-- Detected payee -->
+<section class="sheet" id="paySheet" aria-labelledby="payTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="payTitle">Pay Ghosh Traders</p><p class="sheet__sub">ghosh.traders@okaxis</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="payee">
+    <span class="initials icon-yellow">GT</span>
+    <div class="grow">
+      <p style="font-size:18px;font-weight:600">Ghosh Traders</p>
+      <p class="muted num" style="font-size:13px;margin-top:1px">ghosh.traders@okaxis · Axis Bank</p>
+      <p class="verified"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>Name verified by bank: GHOSH TRADERS</p>
+    </div>
+  </div>
+  <div class="amt-toggle">
+    <span class="menu__icon icon-green"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="10" cy="10" r="8.8"/><path d="M7 6h6M7 8.8h6M8.6 6c1.9 0 3 .9 3 2.4s-1.1 2.5-3 2.5H7l4.6 3.6" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg></span>
+    <span class="menu__body"><span class="menu__title">Add amount now</span><span class="menu__sub">Or enter it on the next screen</span></span>
+    <span class="switch" role="switch" aria-checked="false" id="amtSw" aria-label="Add amount now"></span>
+  </div>
+  <div class="fg amt-field" id="amtWrap" hidden>
+    <label class="label" for="amtIn" style="font-size:13px;margin-bottom:8px">Amount</label>
+    <div class="field field-prefix"><span>₹</span><input id="amtIn" inputmode="numeric" placeholder="0" class="num" aria-describedby="amtHelp"></div>
+    <span class="helper" id="amtHelp">Balance ₹ 3,42,890</span>
+    <span class="error-text" role="alert"></span>
+  </div>
+  <button class="btn btn--primary tap" id="continue" style="margin-top:20px">Continue</button>
+  <button class="text-btn" data-close style="display:block;margin:8px auto 0;color:#cfcfcf;font-weight:500">Scan again</button>
+</section>
+
+<!-- My QR -->
+<section class="sheet" id="myQrSheet" aria-labelledby="myQrTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="myQrTitle">Your payment QR</p><p class="sheet__sub">Anyone can scan this with any UPI app</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="myqr">
+    <div class="myqr__code"><div id="myQr" style="width:100%;height:100%"></div><span class="myqr__logo">S</span></div>
+    <p class="myqr__name">JA Trading Co.</p>
+    <p class="myqr__upi">jayanta.a@spendee</p>
+  </div>
+  <div class="btn-pair" style="margin-top:22px">
+    <button class="btn btn--neutral tap" data-toast="UPI ID copied" style="font-size:15px;height:50px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copy UPI ID</button>
+    <button class="btn btn--primary tap" id="shareQr" style="font-size:15px;height:50px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7 8l5-5 5 5"/><path d="M4 13v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6"/></svg><span>Share QR</span></button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const S = Spendee, $ = (id) => document.getElementById(id);
+    const cam = $('cam');
+
+    // Deterministic QR-style matrix rendered as SVG
+    function qrSvg(seed, n, holeMid) {
+      let x = seed; const rnd = () => (x = (x * 1103515245 + 12345) % 2147483648) / 2147483648;
+      const inFinder = (r, c) => (r < 8 && c < 8) || (r < 8 && c >= n - 8) || (r >= n - 8 && c < 8);
+      const mid = Math.floor(n / 2);
+      let d = '';
+      for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) {
+        if (inFinder(r, c)) continue;
+        if (holeMid && Math.abs(r - mid) <= 3 && Math.abs(c - mid) <= 3) continue;
+        const on = r === 6 ? c % 2 === 0 : c === 6 ? r % 2 === 0 : rnd() < 0.48;
+        if (on) d += `M${c} ${r}h1v1h-1z`;
+      }
+      const finder = (cx, cy) => `<rect x="${cx + .5}" y="${cy + .5}" width="6" height="6" rx="1.6" fill="none" stroke="#000" stroke-width="1"/><rect x="${cx + 2}" y="${cy + 2}" width="3" height="3" rx=".8"/>`;
+      return `<svg viewBox="-1 -1 ${n + 2} ${n + 2}" shape-rendering="crispEdges" role="img" aria-label="QR code"><rect x="-1" y="-1" width="${n + 2}" height="${n + 2}" fill="#fff"/><g fill="#000"><path d="${d}"/>${finder(0, 0)}${finder(n - 7, 0)}${finder(0, n - 7)}</g></svg>`;
+    }
+    $('paperQr').innerHTML = qrSvg(7331, 29, false);
+    $('myQr').innerHTML = qrSvg(2456, 33, true);
+
+    // Torch
+    $('torch').addEventListener('click', () => {
+      const on = $('torch').getAttribute('aria-pressed') !== 'true';
+      $('torch').setAttribute('aria-pressed', String(on)); cam.classList.toggle('torch', on);
+      $('torch').setAttribute('aria-label', on ? 'Turn torch off' : 'Turn torch on');
+    });
+
+    // Scanning lifecycle
+    let found = false, autoT = null;
+    const startScan = () => {
+      found = false; cam.classList.remove('is-found');
+      $('hintText').textContent = 'Align the QR code within the frame';
+      $('hintSub').textContent = 'Scanning automatically…';
+      clearTimeout(autoT);
+      if (S.q('capture') !== '1') autoT = setTimeout(detect, 2500);
+    };
+    async function detect(source) {
+      if (found) return; found = true; clearTimeout(autoT);
+      cam.classList.add('is-found'); if (navigator.userActivation && navigator.userActivation.hasBeenActive) S.haptic();
+      $('hintText').textContent = 'QR detected';
+      $('hintSub').textContent = source === 'upload' ? 'Read from your photo' : 'Ghosh Traders · ghosh.traders@okaxis';
+      await S.wait(750);
+      S.sheet.open('paySheet');
+    }
+    $('simulate').addEventListener('click', () => detect());
+    $('upload').addEventListener('click', async () => {
+      if (found) return;
+      clearTimeout(autoT);
+      await S.loading($('upload'), 900);
+      detect('upload');
+    });
+    $('paySheet').addEventListener('sheet:close', () => setTimeout(() => { if (!document.querySelector('.sheet.open')) startScan(); }, 320));
+    $('myQrSheet').addEventListener('sheet:open', () => clearTimeout(autoT));
+    $('myQrSheet').addEventListener('sheet:close', () => { if (!found) startScan(); });
+
+    // Pay sheet
+    $('amtSw').addEventListener('click', () => setTimeout(() => {
+      const on = $('amtSw').getAttribute('aria-checked') === 'true';
+      $('amtWrap').hidden = !on; $('amtWrap').classList.remove('has-error');
+      if (on) $('amtIn').focus();
+    }));
+    $('amtIn').addEventListener('input', () => { const v = $('amtIn').value.replace(/[^\d]/g, ''); $('amtIn').value = v ? S.fmtIN(+v) : ''; });
+    $('continue').addEventListener('click', async () => {
+      const p = new URLSearchParams({ to: 'Ghosh Traders', upi: 'ghosh.traders@okaxis' });
+      if ($('amtSw').getAttribute('aria-checked') === 'true') {
+        const v = +$('amtIn').value.replace(/[^\d]/g, '');
+        const err = !v ? 'Enter an amount greater than 0' : v > 342890 ? 'Amount is more than your balance of ₹ 3,42,890' : '';
+        const fg = $('amtWrap'); fg.classList.toggle('has-error', !!err); fg.querySelector('.error-text').textContent = err;
+        if (err) { $('amtIn').focus(); return; }
+        p.set('amt', v);
+      }
+      await S.loading($('continue'), 600);
+      location.href = 'send-money.html?' + p.toString().replace(/\+/g, '%20');
+    });
+    $('shareQr').addEventListener('click', async () => { await S.loading($('shareQr'), 700); S.sheet.close(); S.toast('QR image ready to share'); });
+
+    // Deep links for captures
+    if (S.q('found') === '1') { found = true; cam.classList.add('is-found'); $('hintText').textContent = 'QR detected'; $('hintSub').textContent = 'Ghosh Traders · ghosh.traders@okaxis'; }
+    else if (S.q('sheet') !== 'paySheet') startScan();
+  })();
+</script>
+</body>
+</html>

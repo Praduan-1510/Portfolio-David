@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Payment Failed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .page [hidden], .sheet [hidden] { display: none !important; }
+  .result { padding-top: 46px; }
+  .result__ring { margin-bottom: 22px; }
+  .result__ring svg path { stroke-dasharray: 20; stroke-dashoffset: 20; }
+  .result__amount { font-size: 40px; letter-spacing: .3px; color: #cfcfcf; }
+  .result__msg b { color: #fff; font-weight: 600; }
+  .not-debited { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; height: 28px; padding: 0 12px; border-radius: 8px; background: #283845; color: #5fb2f1; font-size: 12.5px; letter-spacing: .3px; }
+  .reason { margin-top: 22px; }
+  .reason__head { display: flex; gap: 14px; align-items: flex-start; }
+  .reason__title { font-size: 16px; font-weight: 600; line-height: 1.35; }
+  .reason__sub { font-size: 13px; color: #a8a8a8; line-height: 1.5; margin-top: 4px; }
+  .reassure { display: flex; gap: 10px; align-items: flex-start; margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.12); font-size: 13px; line-height: 1.5; color: #cfcfcf; }
+  .refs { margin-top: 14px; padding: 6px 20px; }
+  .alt { margin-top: 16px; }
+  .alt .btn { height: 50px; font-size: 14.5px; font-weight: 600; gap: 7px; white-space: nowrap; }
+</style>
+</head>
+<body>
+<main class="page page--no-nav" aria-label="Payment failed">
+  <div class="result result--fail enter" role="alert">
+    <div class="result__ring"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M7 7l10 10"/><path d="M17 7 7 17"/></svg></div>
+    <h1 class="result__title">Payment Failed</h1>
+    <p class="result__amount num" id="amt">₹ 28,900</p>
+    <p class="result__msg">Your payment to <b id="to">MK Suppliers</b> could not be completed</p>
+    <span class="not-debited"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>Your money is safe</span>
+  </div>
+
+  <section class="panel reason enter" style="--i:1" aria-label="Reason">
+    <div class="reason__head">
+      <span class="menu__icon icon-red"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v5l3 2"/></svg></span>
+      <div class="grow">
+        <p class="reason__title">Bank server timeout — no money was debited</p>
+        <p class="reason__sub">Yes Bank didn’t respond in time. Retrying in a minute usually works.</p>
+      </div>
+    </div>
+    <p class="reassure"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5fb2f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-top:2px"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5h.01"/></svg><span>If any amount was debited from A/c ••7643, it will be auto-refunded within 48 hours. No action needed.</span></p>
+  </section>
+
+  <section class="panel refs enter" style="--i:2" aria-label="Reference">
+    <div class="kvs">
+      <div><span class="k">Reference ID</span><span class="v num">SPN 7731 0425 9913</span></div>
+      <div><span class="k">Mode</span><span class="v" id="mode">UPI</span></div>
+      <div><span class="k">Date &amp; time</span><span class="v num">16 Jun 2025, 10:42 AM</span></div>
+    </div>
+  </section>
+
+  <div class="btn-pair alt enter" style="--i:3">
+    <a class="btn btn--ghost tap" id="change" href="send-money.html">Change method</a>
+    <a class="btn btn--neutral tap" href="help.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M9.2 9a3 3 0 0 1 5.7 1c0 2-3 2.6-3 4.2M12 17.5h.01"/></svg>Contact Support</a>
+  </div>
+
+  <div class="cta-bar">
+    <a class="btn btn--primary tap" id="retry" href="send-money.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/></svg>Try Again</a>
+  </div>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const S = Spendee, $ = (id) => document.getElementById(id);
+    const raw = parseInt(String(S.q('amt') || '').replace(/[^\d]/g, ''), 10);
+    const n = raw > 0 ? raw : 28900;
+    const to = S.q('to') || 'MK Suppliers';
+    const mode = (S.q('mode') || 'UPI').toUpperCase();
+    $('amt').textContent = '₹ ' + S.fmtIN(n);
+    $('to').textContent = to;
+    $('mode').textContent = mode;
+    const base = new URLSearchParams({ to, amt: n });
+    ['upi', 'note', 'linked'].forEach((k) => S.q(k) != null && base.set(k, S.q(k)));
+    $('retry').href = 'send-money.html?' + base + '&mode=' + mode + '&retry=1';
+    $('change').href = 'send-money.html?' + base + '&pick=method';
+    $('change').setAttribute('aria-label', 'Change payment method');
+  })();
+</script>
+</body>
+</html>

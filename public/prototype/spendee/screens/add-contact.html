@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Add Contact</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  [hidden]:not(.sheet) { display: none !important; }
+  .toast { position: fixed; bottom: 140px; }
+  .label-row { display: flex; align-items: center; justify-content: space-between; margin: 0 4px 12px 10px; }
+  .label-row .label { line-height: 17px; }
+  .label-row .text-btn { padding: 12px 4px; margin: -12px 0; display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; }
+  .opt { color: #6b6b6b; font-size: 12px; letter-spacing: .4px; margin-left: 6px; }
+  .req { color: #5fb2f1; }
+  .field-upper input { text-transform: uppercase; }
+  .toggle-row { display: flex; align-items: center; gap: 14px; margin-top: 16px; }
+  .toggle-row .switch { margin-left: auto; }
+  .seg-caption { font-size: 12px; color: #8a8a8a; margin: 10px 0 0 10px; line-height: 16px; }
+  .pc-list { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; min-height: 120px; }
+  .pc-avatar { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 600; letter-spacing: .4px; flex-shrink: 0; }
+  .sheet .search { height: 48px; }
+  .sheet .empty-state { padding: 26px 10px 10px; }
+</style>
+</head>
+<body>
+<main class="page page--no-nav" aria-label="Add contact">
+  <header class="appbar">
+    <a class="back tap" href="contact.html" data-go="back" aria-label="Back"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg></a>
+    <div class="appbar__titles"><span class="appbar__eyebrow" id="eyebrow">Ledger</span><h1 class="appbar__title" id="title">Add Contact</h1></div>
+  </header>
+
+  <form id="form" novalidate>
+    <div class="segmented enter" id="kind" aria-label="Contact type">
+      <button type="button" data-value="customer" aria-selected="true">Customer</button>
+      <button type="button" data-value="vendor">Vendor</button>
+    </div>
+    <p class="seg-caption enter" id="kindHint" style="--i:1">Customers buy from you. Track what they owe and send reminders.</p>
+
+    <p class="section-label">Contact details</p>
+    <div class="enter" style="--i:2">
+      <div class="fg">
+        <label class="label" for="name">Full name <span class="req" aria-hidden="true">*</span></label>
+        <input class="field" id="name" autocomplete="name" placeholder="e.g. Rakesh Sharma" data-validate="required">
+      </div>
+      <div class="fg">
+        <div class="label-row">
+          <label class="label" for="mobile">Mobile number <span class="req" aria-hidden="true">*</span></label>
+          <button type="button" class="text-btn tap" data-sheet="phoneSheet">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-.5A6.5 6.5 0 0 1 10.5 14h3a6.5 6.5 0 0 1 6.5 6.5V21"/></svg>
+            Import from contacts
+          </button>
+        </div>
+        <label class="field field-prefix"><span>+91</span><input id="mobile" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="98765 43210" maxlength="11" data-validate="required|phone"></label>
+      </div>
+      <div class="fg">
+        <label class="label" for="biz">Business name <span class="opt">Optional</span></label>
+        <input class="field" id="biz" autocomplete="organization" placeholder="e.g. Sharma Textiles">
+      </div>
+      <div class="fg">
+        <label class="label" for="gstin">GSTIN <span class="opt">Optional</span></label>
+        <label class="field field-prefix field-upper"><input id="gstin" maxlength="15" autocapitalize="characters" spellcheck="false" placeholder="19ABCFS6021K1Z8" data-validate="gstin"></label>
+        <span class="helper">Adds tax details to invoices you send them</span>
+      </div>
+      <div class="fg">
+        <label class="label" for="city">City <span class="opt">Optional</span></label>
+        <input class="field" id="city" autocomplete="address-level2" placeholder="e.g. Kolkata">
+      </div>
+    </div>
+
+    <p class="section-label">Opening balance</p>
+    <div class="enter" style="--i:3">
+      <div class="fg">
+        <label class="label" for="opening">Amount <span class="opt">Optional</span></label>
+        <label class="field field-prefix"><span>₹</span><input id="opening" class="num" inputmode="decimal" placeholder="0" autocomplete="off"></label>
+        <span class="helper">Balance carried over from before Spendee</span>
+      </div>
+      <div class="segmented" id="direction" style="margin-top:14px" aria-label="Who owes">
+        <button type="button" data-value="owe-me" aria-selected="true">They owe me</button>
+        <button type="button" data-value="i-owe">I owe them</button>
+      </div>
+    </div>
+
+    <p class="section-label">Reminders</p>
+    <div class="panel panel--tight enter" style="--i:4">
+      <div class="row-flex" style="gap:14px">
+        <span class="menu__icon icon-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2A9.8 9.8 0 0 0 3.6 17l-1.4 4.8 5-1.3A9.8 9.8 0 1 0 12 2.2Zm0 1.9a7.9 7.9 0 1 1-4 14.7l-.3-.2-3 .8.8-2.9-.2-.3A7.9 7.9 0 0 1 12 4.1Z"/></svg></span>
+        <span class="grow"><span class="menu__title" id="waLbl">Send WhatsApp payment reminders</span><span class="menu__sub">3 days before and on the due date</span></span>
+        <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="waLbl" id="wa"></button>
+      </div>
+    </div>
+  </form>
+
+  <div class="cta-bar">
+    <button class="btn btn--primary tap" id="save" type="submit" form="form"><svg width="17" height="13" viewBox="0 0 17 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 6.8 4.6 4.4L15.5 1.8"/></svg><span id="saveLbl">Save Contact</span></button>
+  </div>
+  <div class="toast" role="status" aria-live="polite"></div>
+</main>
+
+<section class="sheet" id="phoneSheet" aria-labelledby="phoneTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="phoneTitle">Import from contacts</p><p class="sheet__sub">Pick someone from your phone</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <label class="search">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#8e8e8e" stroke-width="2" stroke-linecap="round"><circle cx="5.8" cy="5.8" r="4.6"/><path d="m9.3 9.3 3.4 3.4"/></svg>
+    <input id="pcQ" type="search" placeholder="Search name or number" aria-label="Search phone contacts" autocomplete="off">
+  </label>
+  <div class="pc-list" id="pcList">
+    <button class="option tap" data-name="Anita Desai" data-phone="98201 44552"><span class="pc-avatar icon-blue">AD</span><span class="option__body"><span class="option__title">Anita Desai</span><span class="option__sub num">+91 98201 44552</span></span></button>
+    <button class="option tap" data-name="Deepak Mehra" data-phone="99300 11873"><span class="pc-avatar icon-yellow">DM</span><span class="option__body"><span class="option__title">Deepak Mehra</span><span class="option__sub num">+91 99300 11873</span></span></button>
+    <button class="option tap" data-name="Farhan Qureshi" data-phone="97690 22410"><span class="pc-avatar icon-green">FQ</span><span class="option__body"><span class="option__title">Farhan Qureshi</span><span class="option__sub num">+91 97690 22410</span></span></button>
+    <button class="option tap" data-name="Kavya Iyer" data-phone="90040 67321"><span class="pc-avatar icon-red">KI</span><span class="option__body"><span class="option__title">Kavya Iyer</span><span class="option__sub num">+91 90040 67321</span></span></button>
+    <button class="option tap" data-name="Sanjay Kulkarni" data-phone="98921 55008"><span class="pc-avatar icon-blue">SK</span><span class="option__body"><span class="option__title">Sanjay Kulkarni</span><span class="option__sub num">+91 98921 55008</span></span></button>
+    <div class="empty-state" id="pcEmpty" hidden>
+      <div class="empty-state__icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></div>
+      <h3>No matching contacts</h3>
+      <p style="margin-bottom:0">Try a different name, or type the number in manually.</p>
+    </div>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const $ = (id) => document.getElementById(id);
+    const form = $('form'), save = $('save');
+    const edit = Spendee.q('edit') === '1';
+    let kind = 'customer', direction = 'owe-me';
+
+    const fmtPhone = (v) => { const d = v.replace(/\D/g, '').slice(0, 10); return d.length > 5 ? d.slice(0, 5) + ' ' + d.slice(5) : d; };
+    $('mobile').addEventListener('input', (e) => { e.target.value = fmtPhone(e.target.value); });
+    $('gstin').addEventListener('input', (e) => { e.target.value = e.target.value.replace(/[^a-z0-9]/gi, '').toUpperCase(); });
+    $('opening').addEventListener('input', (e) => {
+      const raw = e.target.value.replace(/[^\d]/g, '').slice(0, 10);
+      e.target.value = raw ? Spendee.fmtIN(+raw) : '';
+    });
+
+    $('kind').addEventListener('change', (e) => {
+      kind = e.detail;
+      $('kindHint').textContent = kind === 'vendor'
+        ? 'Vendors supply to you. Track what you owe and when bills are due.'
+        : 'Customers buy from you. Track what they owe and send reminders.';
+      $('biz').placeholder = kind === 'vendor' ? 'e.g. MK Suppliers' : 'e.g. Sharma Textiles';
+    });
+    $('direction').addEventListener('change', (e) => { direction = e.detail; });
+
+    if (edit) {
+      $('eyebrow').textContent = 'Customer'; $('title').textContent = 'Edit Contact'; $('saveLbl').textContent = 'Save Changes';
+      $('name').value = 'Sharma Textiles'; $('mobile').value = '98300 21367'; $('biz').value = 'Sharma Textiles';
+      $('gstin').value = '19ABCFS6021K1Z8'; $('city').value = 'Kolkata'; $('opening').value = '62,000';
+      document.querySelector('.back').href = 'customer-details.html';
+    }
+
+    // Phone contact picker
+    const pcQ = $('pcQ'), rows = [...document.querySelectorAll('#pcList .option')];
+    pcQ.addEventListener('input', () => {
+      const t = pcQ.value.trim().toLowerCase().replace(/\s/g, ''); let n = 0;
+      rows.forEach((r) => { const ok = (r.dataset.name + r.dataset.phone).toLowerCase().replace(/\s/g, '').includes(t); r.style.display = ok ? '' : 'none'; if (ok) n++; });
+      $('pcEmpty').hidden = n > 0;
+    });
+    rows.forEach((r) => r.addEventListener('click', () => {
+      $('name').value = r.dataset.name; $('mobile').value = r.dataset.phone;
+      document.querySelectorAll('.fg.has-error').forEach((fg) => { if (fg.contains($('name')) || fg.contains($('mobile'))) fg.classList.remove('has-error'); });
+      Spendee.sheet.close(); Spendee.haptic();
+      Spendee.toast(r.dataset.name + ' imported');
+    }));
+    document.getElementById('phoneSheet').addEventListener('sheet:close', () => { pcQ.value = ''; rows.forEach((r) => (r.style.display = '')); $('pcEmpty').hidden = true; });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!Spendee.validate(form)) { Spendee.haptic(); return; }
+      await Spendee.loading(save, 1000);
+      Spendee.store.set('newContact', {
+        name: $('name').value.trim(), mobile: '+91 ' + $('mobile').value, business: $('biz').value.trim(),
+        gstin: $('gstin').value.trim(), city: $('city').value.trim(), kind,
+        opening: +($('opening').value.replace(/[^\d]/g, '') || 0), direction,
+        reminders: $('wa').getAttribute('aria-checked') === 'true'
+      });
+      location.href = edit ? 'customer-details.html?updated=1' : 'customer-details.html?new=1';
+    });
+  })();
+</script>
+</body>
+</html>

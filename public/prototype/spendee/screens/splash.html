@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Splash</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .splash { padding: 0; height: 100vh; min-height: 874px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  body.capture .splash { height: 874px; }
+  .splash__glow { position: absolute; left: 50%; top: 50%; width: 360px; height: 360px; margin: -250px 0 0 -180px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(95,178,241,.14) 0%, rgba(241,234,88,.05) 45%, rgba(0,0,0,0) 70%); pointer-events: none; }
+  .splash__brand { position: relative; display: flex; flex-direction: column; align-items: center; margin-top: -60px; }
+  .splash__tile { width: 110px; height: 110px; border-radius: 24px; background: #1a1a1a;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.16), inset 1px 1px 0 rgba(255,255,255,.1), 0 18px 50px rgba(0,0,0,.6);
+    display: grid; place-items: center; animation: logo-in 900ms var(--ease-spring) both; }
+  .splash__word { font-size: 44px; font-weight: 400; letter-spacing: .6px; line-height: 58px; margin-top: 18px; animation: word-in 700ms var(--ease-out) 260ms both; }
+  .splash__tag { font-size: 14px; letter-spacing: .8px; color: #9a9a9a; margin-top: 4px; animation: word-in 700ms var(--ease-out) 420ms both; }
+  .splash__tag b { color: var(--green); font-weight: 600; }
+  .splash__bar { position: absolute; left: 50%; bottom: 128px; width: 120px; height: 3px; margin-left: -60px; border-radius: 2px; background: #1f1f1f; overflow: hidden; animation: fade 400ms 500ms both; }
+  .splash__bar::after { content: ''; position: absolute; top: 0; bottom: 0; left: -50%; width: 50%; border-radius: 2px;
+    background: linear-gradient(90deg, rgba(95,178,241,0), #5fb2f1, rgba(141,241,94,0)); animation: sweep 1100ms var(--ease-out) infinite; }
+  body.capture .splash__bar::after { left: 25%; }
+  .splash__foot { position: absolute; left: 0; right: 0; bottom: 60px; text-align: center; font-size: 12px; letter-spacing: .5px; color: #6b6b6b; display: flex; align-items: center; justify-content: center; gap: 6px; animation: fade 600ms 600ms both; }
+  @keyframes logo-in { from { opacity: 0; transform: scale(.72); } to { opacity: 1; transform: none; } }
+  @keyframes word-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @keyframes sweep { to { left: 100%; } }
+  .splash.leaving .splash__brand, .splash.leaving .splash__bar, .splash.leaving .splash__foot { transition: opacity 260ms var(--ease-out), transform 260ms var(--ease-out); opacity: 0; transform: scale(1.04); }
+</style>
+</head>
+<body>
+<main class="page page--no-nav splash" id="splash" aria-label="Spendee is starting" role="button" tabindex="0">
+  <span class="splash__glow" aria-hidden="true"></span>
+  <div class="splash__brand">
+    <div class="splash__tile" aria-hidden="true">
+      <svg width="110" height="110" viewBox="0 0 110 110">
+        <defs>
+          <linearGradient id="bar" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#9ef25a"/><stop offset=".45" stop-color="#d9e46a"/><stop offset=".7" stop-color="#e3d27a"/><stop offset="1" stop-color="#8ec8f0"/>
+          </linearGradient>
+        </defs>
+        <path d="M74.5 51.5C76 37 65 27 54 27C42.5 27 36 33.5 36 41.5C36 50 44.5 53.2 54 56C64 59 71.5 62.8 71.5 71C71.5 79 63.5 83 53 83C41 83 31.5 75 31.5 63" fill="none" stroke="#e9cf73" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M63.8 14.5L36.2 95" stroke="url(#bar)" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M71.8 16.5L44.2 97" stroke="url(#bar)" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1 class="splash__word">Spendee</h1>
+    <p class="splash__tag">Track effortlessly. <b>Spend wisely.</b></p>
+  </div>
+  <span class="splash__bar" role="progressbar" aria-label="Loading"></span>
+  <p class="splash__foot">
+    <svg width="11" height="12" viewBox="0 0 11 12" fill="none" stroke="#6b6b6b" stroke-width="1.2"><rect x="1" y="5.2" width="9" height="6" rx="1.4"/><path d="M3 5.2V3.6a2.5 2.5 0 0 1 5 0v1.6"/></svg>
+    Bank-grade security · Made for small businesses
+  </p>
+</main>
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const el = document.getElementById('splash');
+    const dest = Spendee.store.get('signedIn') ? 'login.html' : 'welcome.html';
+    let gone = false;
+    const go = () => {
+      if (gone) return; gone = true;
+      el.classList.add('leaving');
+      setTimeout(() => { location.href = dest; }, 240);
+    };
+    el.addEventListener('click', go);
+    el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+    if (!Spendee.q('capture')) setTimeout(go, 1800);
+  })();
+</script>
+</body>
+</html>

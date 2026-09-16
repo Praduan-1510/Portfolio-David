@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Send Money</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .send .field { font-weight: 600; font-size: 18px; }
+  .rail { position: absolute; top: 443px; width: 100px; height: 75px; border-radius: 18px; }
+  .rail .t { left: 0; right: 0; text-align: center; top: 45px; font-size: 13px; letter-spacing: .6px; }
+  .rail[aria-checked="true"] { box-shadow: inset 0 0 0 1px rgba(255,255,255,.3), 0 0 0 2px rgba(255,255,255,.5), 0 4px 10px rgba(0,0,0,.5); }
+</style>
+</head>
+<body>
+<main class="screen send" style="height:874px;min-height:874px" aria-label="Send money">
+  <a class="abs back tap" href="dashboard.html" data-go="back" style="left:34px;top:52px" aria-label="Back">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg>
+  </a>
+  <p class="t hdr__eyebrow" style="left:80px;top:43.3px;font-size:11px;letter-spacing:.9px">Ledger</p>
+  <h1 class="t" style="left:80px;top:65px;font-size:21px;font-weight:600;letter-spacing:.5px">Send Money</h1>
+
+  <label class="abs card enter" style="left:38px;top:119px;width:326px;height:159px;background:#132430;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14),0 4px 14px rgba(0,0,0,.45)">
+    <span class="t" style="left:0;right:0;text-align:center;top:33.6px;font-size:15px;letter-spacing:.9px;color:#d2d8dd">Enter Amount</span>
+    <span class="abs" style="left:0;right:0;top:59px;display:flex;justify-content:center;align-items:center;font-size:33.5px;font-weight:500;color:#5fb2f1;line-height:1">
+      <span style="margin-right:9px">₹</span><input class="amount-input num" id="amt" value="28,900" inputmode="decimal" aria-label="Amount" style="width:150px;color:#5fb2f1">
+    </span>
+    <span class="t num" style="left:0;right:0;text-align:center;top:110.5px;font-size:16px;letter-spacing:.5px;color:#d0d0d0">Balance: ₹ 3,42,890</span>
+  </label>
+
+  <label class="caps-lbl" for="to" style="left:44px;top:301px">Contact Name</label>
+  <input class="abs field" id="to" value="MK Suppliers" style="left:34px;top:332px;width:334px">
+
+  <p class="caps-lbl" style="left:45px;top:413px">Payment Method</p>
+  <div role="radiogroup" aria-label="Transfer rail" id="rails">
+    <button class="rail tile tile--yellow tap" role="radio" aria-checked="false" style="left:34px">
+      <svg class="abs" style="left:43px;top:18px" width="14" height="15" viewBox="0 0 15 17" fill="#f1ea58"><path d="M0 0h6v6H0zM2 2v2h2V2zM9 0h6v6H9zm2 2v2h2V2zM0 9h6v6H0zm2 2v2h2v-2zM8 8h2v2H8zm3 0h4v2h-2v2h-2zM8 11h2v4H8zm3 2h4v4h-2v-2h-2z"/></svg>
+      <span class="t" style="color:#e3e0b5">UPI</span>
+    </button>
+    <button class="rail tile tile--blue tap" role="radio" aria-checked="false" style="left:147px">
+      <svg class="abs" style="left:39px;top:13px" width="22" height="22" viewBox="1 1 24 24" fill="none" stroke="#5fb2f1" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><path d="M2.6 9.2 13 3.4l10.4 5.8H2.6Z"/><path d="M4 11.4h18M4 21.2h18M2.6 23.6h20.8M6.8 11.4v9.8M19.2 11.4v9.8"/><path d="M10.4 14.6v3.6M13 14.6v3.6M15.6 14.6v3.6" stroke-width="2.2"/></svg>
+      <span class="t" style="color:#c4d6e4;top:46px">NEFT</span>
+    </button>
+    <button class="rail tile tile--green tap" role="radio" aria-checked="false" style="left:260px">
+      <svg class="abs" style="left:40px;top:13px" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#8df15e" stroke-width="1.9"><circle cx="10" cy="10" r="8.8"/><path d="M7 6h6M7 8.8h6M8.6 6c1.9 0 3 .9 3 2.4s-1.1 2.5-3 2.5H7l4.6 3.6" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg>
+      <span class="t" style="color:#cfe3c5;top:46px">IMPS</span>
+    </button>
+  </div>
+
+  <label class="caps-lbl" for="memo" style="left:44px;top:545px">Note</label>
+  <input class="abs field" id="memo" value="Bill payment – June order" style="left:34px;top:576px;width:334px;height:55px">
+
+  <div class="abs" style="left:34px;top:645px;width:333px;height:55px;border-radius:16px;background:#fff;color:#000">
+    <span class="abs" style="left:10px;top:10px;width:36px;height:35px;border-radius:8px;background:#d9e5ee;display:grid;place-items:center">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#437da9" stroke-width="2.4" stroke-linecap="round"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3.2-3.2a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3.2 3.2a4.5 4.5 0 0 0 6.4 6.4l1-1"/></svg>
+    </span>
+    <span class="t" style="left:56px;top:12px;font-size:16px;font-weight:500;letter-spacing:.3px">Link to Ledger Entry</span>
+    <span class="t" style="left:56px;top:32.5px;font-size:12px;letter-spacing:.4px;color:#a3a3a3">Auto-match open payable</span>
+    <span class="abs switch" role="switch" aria-checked="true" aria-label="Link to ledger entry" style="left:278px;top:16px;width:45px;height:22px"></span>
+  </div>
+
+  <button class="abs btn btn--primary tap" id="send" style="left:34px;top:709px;width:334px;gap:12px">
+    Send Payment
+    <svg width="18" height="21" viewBox="0 0 18 21" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="1.6" y="8.6" width="14.8" height="10.8" rx="2.2"/><path d="M4.8 8.6V5.8a4.2 4.2 0 0 1 8.4 0v2.8"/><circle cx="9" cy="14" r="1.2" fill="currentColor" stroke="none"/></svg>
+  </button>
+
+  <nav data-tabbar="bank"></nav>
+</main>
+<style>
+  /* Sheets for the payment flow (overlay only — page layout untouched) */
+  .sheet [hidden] { display: none !important; }
+  .sm-search { height: 50px; padding-left: 18px; }
+  .sm-search input { margin-left: 12px; font-size: 15px; }
+  .sm-search input::-webkit-search-cancel-button { display: none; }
+  .sm-label { font-size: 12.5px; letter-spacing: 1px; text-transform: uppercase; color: #636363; margin: 20px 0 10px 2px; }
+  .sm-quick { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+  .sm-quick .option { min-height: 52px; padding: 8px 12px; gap: 10px; }
+  .sm-quick .menu__icon { width: 32px; height: 32px; }
+  .sm-quick .option__title { font-size: 13.5px; white-space: nowrap; }
+  .sm-quick .option { gap: 8px; padding: 8px 10px; }
+  .sm-recent { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; margin: 0 -24px; padding: 0 24px 2px; }
+  .sm-recent::-webkit-scrollbar { display: none; }
+  .sm-recent button { flex-shrink: 0; width: 60px; display: flex; flex-direction: column; align-items: center; gap: 7px; font-size: 12px; color: #dcdcdc; }
+  .sm-ini { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; font-size: 17px; font-weight: 600; letter-spacing: .4px; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .sm-ini--sm { width: 38px; height: 38px; font-size: 13.5px; }
+  .sm-saved .option { min-height: 58px; }
+  .sm-saved .option__sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sm-saved .option[aria-current="true"] { box-shadow: inset 0 0 0 2px #5fb2f1; background: #1c2a36; }
+  .sm-empty { text-align: center; color: #8a8a8a; font-size: 13.5px; padding: 16px 0 6px; }
+  .rv-payee { display: flex; align-items: center; gap: 14px; }
+  .rv-payee .sm-ini { width: 56px; height: 56px; font-size: 19px; }
+  .rv-name { font-size: 19px; font-weight: 600; line-height: 1.25; }
+  .rv-sub { font-size: 13px; color: #a9a9a9; margin-top: 2px; }
+  .rv-verified { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; color: #8df15e; margin-top: 4px; }
+  .rv-amount { text-align: center; margin: 18px 0 6px; padding: 18px 0 16px; border-radius: 20px; background: #132430; box-shadow: inset 0 0 0 1px rgba(95,178,241,.25); }
+  .rv-amount small { display: block; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #9fb4c4; }
+  .rv-amount b { display: block; font-size: 38px; font-weight: 500; color: #5fb2f1; margin-top: 4px; line-height: 1.1; }
+  .rv-kvs { margin-top: 8px; }
+  .rv-kvs > div { padding: 11px 2px; }
+  .rv-kvs .v { display: inline-flex; align-items: center; gap: 6px; }
+  .rv-total { font-size: 16px !important; }
+  .rv-total .k { color: #f0f0f0 !important; font-weight: 600; }
+  .rv-total .v { font-weight: 700 !important; }
+  .pin-head { display: flex; align-items: center; gap: 12px; }
+  .pin-pay { text-align: center; margin: 4px 0 18px; }
+  .pin-pay small { display: block; font-size: 13px; color: #9a9a9a; }
+  .pin-pay b { display: block; font-size: 28px; font-weight: 600; margin-top: 2px; }
+  .pin-note { text-align: center; font-size: 12.5px; color: #8a8a8a; min-height: 18px; margin: 12px 0 14px; }
+  .pin-note.is-error { color: #f15858; }
+  .keypad:focus { outline: none; }
+  .proc { text-align: center; padding: 36px 0 28px; }
+  .proc__ring { position: relative; width: 84px; height: 84px; margin: 0 auto 22px; }
+  .proc__ring::before { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 3px solid rgba(95,178,241,.16); border-top-color: #5fb2f1; animation: spin 850ms linear infinite; }
+  .proc__ring svg { position: absolute; left: 50%; top: 50%; margin: -14px 0 0 -12px; }
+</style>
+
+<!-- Contact picker -->
+<section class="sheet" id="contactSheet" aria-labelledby="ctTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="ctTitle">Pay to</p><p class="sheet__sub">Choose a contact, beneficiary or UPI ID</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <label class="search sm-search">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="7"/><path d="m20 20-4.5-4.5"/></svg>
+    <input id="ctQ" type="search" placeholder="Name, UPI ID or bank" aria-label="Search contacts" autocomplete="off">
+  </label>
+  <div class="sm-quick">
+    <a class="option tap" href="scan-pay.html"><span class="menu__icon icon-yellow"><svg width="15" height="15" viewBox="0 0 15 17" fill="currentColor"><path d="M0 0h6v6H0zM2 2v2h2V2zM9 0h6v6H9zm2 2v2h2V2zM0 9h6v6H0zm2 2v2h2v-2zM8 8h2v2H8zm3 0h4v2h-2v2h-2zM8 11h2v4H8zm3 2h4v4h-2v-2h-2z"/></svg></span><span class="option__body"><span class="option__title">Scan QR</span></span></a>
+    <a class="option tap" href="beneficiaries.html?sheet=addSheet"><span class="menu__icon icon-blue"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 1v12M1 7h12"/></svg></span><span class="option__body"><span class="option__title">New beneficiary</span></span></a>
+  </div>
+  <div id="ctRecentWrap"><p class="sm-label">Recent</p><div class="sm-recent" id="ctRecent"></div></div>
+  <p class="sm-label">Saved</p>
+  <div class="options sm-saved" id="ctSaved"></div>
+  <p class="sm-empty" id="ctEmpty" hidden>No matches. Enter a full UPI ID like name@okaxis, or add a new beneficiary.</p>
+</section>
+
+<!-- Review -->
+<section class="sheet" id="reviewSheet" aria-labelledby="rvTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="rvTitle">Review payment</p><p class="sheet__sub">Check the details before you pay</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="rv-payee">
+    <span class="sm-ini icon-blue" id="rvIni">MK</span>
+    <div class="grow" style="min-width:0">
+      <p class="rv-name" id="rvName">MK Suppliers</p>
+      <p class="rv-sub num" id="rvSub">ICICI Bank ••9082</p>
+      <span class="rv-verified"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg><span id="rvVerified">Name verified by bank</span></span>
+    </div>
+  </div>
+  <div class="rv-amount"><small>You are paying</small><b class="num" id="rvAmt">₹ 28,900</b></div>
+  <div class="kvs rv-kvs">
+    <div><span class="k">Mode</span><span class="v" id="rvMode">UPI · Instant</span></div>
+    <div><span class="k">From</span><span class="v num">Yes Bank ••7643</span></div>
+    <div><span class="k">Note</span><span class="v" id="rvNote">Bill payment – June order</span></div>
+    <div><span class="k">Ledger</span><span class="v" id="rvLedger"></span></div>
+    <div><span class="k">Fee</span><span class="v c-green">Free</span></div>
+    <div class="rv-total"><span class="k">Total debit</span><span class="v num" id="rvTotal">₹ 28,900</span></div>
+  </div>
+  <p class="muted num" style="font-size:12px;text-align:center;margin-top:6px" id="rvAfter">Balance after payment: ₹ 3,13,990</p>
+  <button class="btn btn--primary tap" id="rvPay" style="margin-top:16px;gap:10px"><svg width="16" height="19" viewBox="0 0 18 21" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="1.6" y="8.6" width="14.8" height="10.8" rx="2.2"/><path d="M4.8 8.6V5.8a4.2 4.2 0 0 1 8.4 0v2.8"/></svg><span id="rvPayLbl">Pay ₹ 28,900</span></button>
+  <button class="text-btn" data-close style="display:block;margin:6px auto 0;color:#cfcfcf;font-weight:500">Edit details</button>
+</section>
+
+<!-- UPI PIN -->
+<section class="sheet" id="upiPinSheet" aria-labelledby="pinTitle">
+  <div class="sheet__head" id="pinHead">
+    <div class="pin-head">
+      <span class="menu__icon icon-blue"><svg width="20" height="20" viewBox="1 1 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><path d="M2.6 9.2 13 3.4l10.4 5.8H2.6Z"/><path d="M4 11.4h18M4 21.2h18M2.6 23.6h20.8M6.8 11.4v9.8M19.2 11.4v9.8"/><path d="M10.4 14.6v3.6M13 14.6v3.6M15.6 14.6v3.6" stroke-width="2.2"/></svg></span>
+      <div><p class="sheet__title" id="pinTitle" style="font-size:18px">Yes Bank ••7643</p><p class="sheet__sub" style="margin-top:1px">Enter your 6-digit UPI PIN</p></div>
+    </div>
+    <button class="sheet__close tap" data-close aria-label="Cancel payment"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div id="pinStage" style="display:none">
+    <div class="pin-pay"><small id="pinTo">Paying MK Suppliers</small><b class="num" id="pinAmt">₹ 28,900</b></div>
+    <div class="pin-dots" id="upiDots" aria-hidden="true"></div>
+    <p class="pin-note" id="pinNote" role="status" aria-live="polite">Demo: 000000 simulates a failed payment</p>
+    <div class="keypad" id="upiPad" data-target="upiDots" data-length="6" aria-label="UPI PIN keypad"></div>
+    <p class="secure-note" style="margin-top:14px"><svg width="11" height="12" viewBox="0 0 11 12" fill="none" stroke="#cfcfcf" stroke-width="1.2"><rect x="1" y="5.2" width="9" height="6" rx="1.4"/><path d="M3 5.2V3.6a2.5 2.5 0 0 1 5 0v1.6"/></svg>Your UPI PIN is encrypted and never stored by Spendee</p>
+  </div>
+  <div class="proc" id="proc" hidden role="status" aria-live="assertive">
+    <div class="proc__ring"><svg width="24" height="28" viewBox="0 0 18 21" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linejoin="round"><rect x="1.6" y="8.6" width="14.8" height="10.8" rx="2.2"/><path d="M4.8 8.6V5.8a4.2 4.2 0 0 1 8.4 0v2.8"/><circle cx="9" cy="14" r="1.2" fill="#5fb2f1" stroke="none"/></svg></div>
+    <p style="font-size:20px;font-weight:600">Processing securely…</p>
+    <p class="num" style="font-size:15px;color:#cfcfcf;margin-top:6px" id="procAmt">₹ 28,900 to MK Suppliers</p>
+    <p class="muted" style="font-size:12.5px;margin-top:14px">Please don’t close the app or press back</p>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const S = Spendee, $ = (id) => document.getElementById(id);
+    const BALANCE = 342890;
+    const TINTS = ['icon-blue', 'icon-yellow', 'icon-green'];
+    const initials = (n) => { const w = n.replace(/@.*/, '').split(/[\s._]+/).filter((x) => /^[a-z0-9]/i.test(x)); return (/^[A-Z]{2,3}$/.test(w[0] || '') ? w[0] : w.slice(0, 2).map((x) => x[0]).join('')).toUpperCase() || '?'; };
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const tint = (n) => TINTS[[...n].reduce((s, c) => s + c.charCodeAt(0), 0) % TINTS.length];
+
+    // ---------- Directory: recent UPI contacts + saved bank beneficiaries ----------
+    const CONTACTS = [
+      { name: 'Dutta & Sons', id: 'duttasons@okhdfcbank' },
+      { name: 'Ghosh Traders', id: 'ghosh.traders@okaxis' },
+      { name: 'Sharma Textiles', id: 'sharmatextiles@ybl' },
+      { name: 'Bose Retail', id: 'boseretail@oksbi' },
+      { name: 'Mitra Textiles', id: 'mitra.textiles@okicici' },
+      { name: 'Saha & Co.', id: 'sahaco@paytm' },
+    ];
+    const SAVED = [
+      ...S.store.get('beneficiaries', []).map((b) => ({ name: b.name, id: `${b.bank} ••${b.last4}`, cap: b.cooling && Date.now() - b.cooling < 864e5 ? 50000 : null })),
+      { name: 'Dutta & Sons', id: 'HDFC Bank ••4521' },
+      { name: 'MK Suppliers', id: 'ICICI Bank ••9082' },
+      { name: 'Sharma Textiles', id: 'Axis Bank ••3310' },
+      { name: 'Ghosh Traders', id: 'Kotak Bank ••6675' },
+      { name: 'Dye Chemical', id: 'SBI ••1209' },
+      { name: 'Mitra Textiles', id: 'Yes Bank ••5540' },
+    ];
+    const lookup = (name) => CONTACTS.find((c) => c.name.toLowerCase() === name.toLowerCase()) || SAVED.find((c) => c.name.toLowerCase() === name.toLowerCase());
+
+    // ---------- Page elements ----------
+    const amt = $('amt'), to = $('to'), memo = $('memo'), rails = $('rails'), send = $('send');
+    const card = amt.closest('label');
+    const balance = [...card.querySelectorAll('.t')].find((el) => /Balance/.test(el.textContent));
+    const linkSw = document.querySelector('[role="switch"][aria-label="Link to ledger entry"]');
+    const railBtns = [...rails.querySelectorAll('[role="radio"]')];
+    const railName = (b) => b.querySelector('.t').textContent.trim();
+
+    let recipient = { name: to.value, id: (lookup(to.value) || {}).id || '' };
+    let cap = S.q('cap') ? +S.q('cap') : null;
+
+    // Contact field opens the picker
+    to.readOnly = true; to.setAttribute('aria-haspopup', 'dialog'); to.style.cursor = 'pointer';
+    const openPicker = () => { S.sheet.open('contactSheet'); };
+    to.addEventListener('click', openPicker);
+    to.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPicker(); } });
+
+    // ---------- Params ----------
+    const pTo = S.q('to'), pUpi = S.q('upi'), pAmt = S.q('amt'), pMode = S.q('mode');
+    if (pTo || pUpi) {
+      const known = pTo && lookup(pTo);
+      recipient = { name: pTo || pUpi, id: pUpi || (known ? known.id : ''), cap: known && known.cap };
+      to.value = recipient.name;
+      if (recipient.cap) cap = recipient.cap;
+    }
+    if (pAmt && +String(pAmt).replace(/\D/g, '')) amt.value = S.fmtIN(+String(pAmt).replace(/\D/g, ''));
+    if (S.q('note')) memo.value = S.q('note');
+    if (S.q('linked') === '0') linkSw.setAttribute('aria-checked', 'false');
+    const preset = pMode ? pMode.toUpperCase() : pUpi ? 'UPI' : null;
+
+    // ---------- Payment method (radio) ----------
+    const railErr = document.createElement('p');
+    railErr.className = 't'; railErr.setAttribute('role', 'alert'); railErr.hidden = true;
+    railErr.style.cssText = 'right:35px;top:416px;font-size:12px;letter-spacing:.2px;color:#f15858;display:flex;align-items:center;gap:5px';
+    card.parentNode.insertBefore(railErr, rails);
+    const railError = (msg) => {
+      railErr.hidden = !msg;
+      railErr.innerHTML = msg ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg>${msg}` : '';
+      railBtns.forEach((b) => (b.style.boxShadow = msg ? 'inset 0 0 0 1px rgba(255,255,255,.16), 0 0 0 2px #f15858, 0 4px 10px rgba(0,0,0,.5)' : ''));
+      if (msg) { rails.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(6px)' }, { transform: 'translateX(-3px)' }, { transform: 'translateX(0)' }], { duration: 360 }); S.haptic(); }
+    };
+    const selectRail = (b) => { railBtns.forEach((x) => x.setAttribute('aria-checked', 'false')); b.setAttribute('aria-checked', 'true'); railError(''); };
+    railBtns.forEach((b) => b.addEventListener('click', () => selectRail(b)));
+    if (preset && S.q('pick') !== 'method') { const b = railBtns.find((x) => railName(x) === preset); b && selectRail(b); }
+    if (S.q('pick') === 'method') setTimeout(() => railError('Pick another method'), 400);
+
+    // ---------- Amount ----------
+    const amtValue = () => +amt.value.replace(/[^\d]/g, '') || 0;
+    const balText = balance.textContent;
+    const amountError = (msg) => {
+      balance.textContent = msg || balText;
+      balance.style.color = msg ? '#f15858' : '';
+      card.style.boxShadow = msg ? 'inset 0 0 0 2px #f15858, 0 4px 14px rgba(0,0,0,.45)' : '';
+      balance.setAttribute('role', msg ? 'alert' : '');
+    };
+    amt.addEventListener('input', () => {
+      const v = amt.value.replace(/[^\d]/g, '').slice(0, 9);
+      amt.value = v ? S.fmtIN(+v) : '';
+      amountError('');
+    });
+
+    // ---------- Contact picker ----------
+    const recentBtn = (c) => `<button class="tap" data-pick="${esc(c.name)}" data-id="${esc(c.id)}"><span class="sm-ini ${tint(c.name)}">${initials(c.name)}</span>${esc(c.name.split(' ')[0])}</button>`;
+    const savedBtn = (c) => `<button class="option tap" data-pick="${esc(c.name)}" data-id="${esc(c.id)}"${c.cap ? ' data-cap="' + c.cap + '"' : ''}${recipient.name === c.name && recipient.id === c.id ? ' aria-current="true"' : ''}><span class="sm-ini sm-ini--sm ${tint(c.name)}">${initials(c.name)}</span><span class="option__body"><span class="option__title">${esc(c.name)}</span><span class="option__sub num">${esc(c.id)}${c.cap ? ' · ₹ 50,000 limit today' : ''}</span></span></button>`;
+    function renderPicker() {
+      const q = $('ctQ').value.trim().toLowerCase();
+      const match = (c) => !q || (c.name + ' ' + c.id).toLowerCase().includes(q);
+      const rec = CONTACTS.filter(match), sav = SAVED.filter(match);
+      $('ctRecentWrap').hidden = !!q;
+      $('ctRecent').innerHTML = CONTACTS.map(recentBtn).join('');
+      let html = (q ? [...rec.map((c) => ({ ...c })), ...sav] : sav).map(savedBtn).join('');
+      if (/^[\w.\-]{2,}@[a-z]{2,}$/i.test(q)) html = savedBtn({ name: $('ctQ').value.trim(), id: 'UPI ID · verify on next step' }) + html;
+      $('ctSaved').innerHTML = html;
+      $('ctEmpty').hidden = !!html;
+    }
+    $('ctQ').addEventListener('input', renderPicker);
+    $('contactSheet').addEventListener('sheet:open', () => { $('ctQ').value = ''; renderPicker(); });
+    renderPicker();
+    $('contactSheet').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-pick]'); if (!b) return;
+      const id = b.dataset.id.startsWith('UPI ID ·') ? b.dataset.pick : b.dataset.id;
+      recipient = { name: b.dataset.pick, id };
+      cap = b.dataset.cap ? +b.dataset.cap : null;
+      to.value = recipient.name;
+      if (/@/.test(id)) { const u = railBtns.find((x) => railName(x) === 'UPI'); u && selectRail(u); }
+      S.sheet.close(); S.haptic();
+    });
+
+    // ---------- Send → validate → review ----------
+    send.addEventListener('click', (e) => {
+      e.preventDefault();
+      const v = amtValue();
+      const rail = railBtns.find((b) => b.getAttribute('aria-checked') === 'true');
+      let bad = false;
+      if (!v) { amountError('Enter an amount greater than ₹ 0'); bad = true; }
+      else if (v > BALANCE) { amountError('Exceeds balance of ₹ 3,42,890'); bad = true; }
+      else if (cap && v > cap) { amountError('New beneficiary: max ₹ 50,000 today'); bad = true; }
+      if (!rail) { railError('Select a method'); bad = true; }
+      if (!to.value.trim()) { openPicker(); return; }
+      if (bad) { if (!v || v > BALANCE || (cap && v > cap)) amt.focus(); return; }
+      openReview(v, railName(rail));
+    });
+
+    const money = (n) => '₹ ' + S.fmtIN(n);
+    let pay = null;
+    function openReview(v, mode) {
+      const linked = linkSw.getAttribute('aria-checked') === 'true';
+      pay = { amt: v, to: recipient.name, mode, linked, note: memo.value.trim(), upi: /@/.test(recipient.id) ? recipient.id : '' };
+      $('rvIni').textContent = initials(recipient.name); $('rvIni').className = 'sm-ini ' + tint(recipient.name);
+      $('rvName').textContent = recipient.name;
+      $('rvSub').textContent = recipient.id || 'Account verified on payment';
+      $('rvVerified').textContent = recipient.id ? 'Name verified by bank' : 'New payee · check the name carefully';
+      $('rvAmt').textContent = money(v); $('rvTotal').textContent = money(v); $('rvPayLbl').textContent = 'Pay ' + money(v);
+      $('rvMode').textContent = { UPI: 'UPI · Instant', NEFT: 'NEFT · within 2 hours', IMPS: 'IMPS · Instant' }[mode];
+      $('rvNote').textContent = pay.note || '—';
+      $('rvLedger').innerHTML = linked
+        ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8df15e" stroke-width="2.6" stroke-linecap="round"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3.2-3.2a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3.2 3.2a4.5 4.5 0 0 0 6.4 6.4l1-1"/></svg><span class="c-green">Linked to ledger entry</span>'
+        : '<span class="muted">Not linked</span>';
+      $('rvAfter').textContent = 'Balance after payment: ' + money(BALANCE - v);
+      S.sheet.open('reviewSheet');
+    }
+
+    // ---------- UPI PIN ----------
+    const pad = $('upiPad');
+    let processing = false, hideT;
+    $('rvPay').addEventListener('click', () => {
+      $('pinTo').textContent = 'Paying ' + pay.to; $('pinAmt').textContent = money(pay.amt);
+      S.sheet.open('upiPinSheet');
+    });
+    $('upiPinSheet').addEventListener('sheet:open', () => {
+      clearTimeout(hideT);
+      $('pinStage').style.display = ''; $('proc').hidden = true; pad.reset();
+      $('pinNote').textContent = 'Demo: 000000 simulates a failed payment'; $('pinNote').classList.remove('is-error');
+      setTimeout(() => pad.focus({ preventScroll: true }), 90);
+    });
+    $('upiPinSheet').addEventListener('sheet:close', () => { if (!processing) hideT = setTimeout(() => ($('pinStage').style.display = 'none'), 320); });
+    pad.addEventListener('biometric', () => { $('pinNote').textContent = 'UPI payments need your PIN — biometrics can’t be used'; $('pinNote').classList.add('is-error'); });
+    pad.addEventListener('complete', async (e) => {
+      if (processing || !pay || !$('upiPinSheet').classList.contains('open')) return;
+      processing = true;
+      const pin = e.detail;
+      $('pinStage').style.display = 'none'; $('proc').hidden = false;
+      $('procAmt').textContent = `${money(pay.amt)} to ${pay.to}`;
+      $('pinHead').querySelector('.sheet__close').style.visibility = 'hidden';
+      await S.wait(1600);
+      const q = new URLSearchParams({ amt: pay.amt, to: pay.to, mode: pay.mode });
+      if (pin === '000000') {
+        if (pay.upi) q.set('upi', pay.upi);
+        q.set('linked', pay.linked ? '1' : '0');
+        location.href = 'payment-failed.html?' + q.toString().replace(/\+/g, '%20');
+      } else {
+        q.set('linked', pay.linked ? '1' : '0');
+        if (pay.note) q.set('note', pay.note);
+        location.href = 'payment-success.html?' + q.toString().replace(/\+/g, '%20');
+      }
+    });
+    // While processing, the sheet can't be dismissed
+    document.addEventListener('click', (e) => { if (processing && e.target.closest('.sheet-scrim')) { e.stopPropagation(); e.preventDefault(); } }, true);
+    document.addEventListener('keydown', (e) => { if (processing && e.key === 'Escape') e.stopImmediatePropagation(); }, true);
+    window.addEventListener('pageshow', (e) => { if (e.persisted) { processing = false; S.sheet.close(true); } });
+
+    // Capture helpers: ?review=1 / ?pin=1 open the later stages with current values
+    if (S.q('review') === '1' || S.q('pin') === '1' || S.q('sheet') === 'reviewSheet' || S.q('sheet') === 'upiPinSheet') setTimeout(() => {
+      const r = railBtns.find((b) => b.getAttribute('aria-checked') === 'true') || railBtns[0]; selectRail(r);
+      openReview(amtValue(), railName(r));
+      if (S.q('pin') === '1' || S.q('sheet') === 'upiPinSheet') setTimeout(() => $('rvPay').click(), 120);
+    }, 0);
+  })();
+</script>
+</body>
+</html>

@@ -492,7 +492,12 @@ export function LivePrototype({
                       role="tab"
                       id={`${uid}-tab-${t.id}`}
                       aria-selected={selected}
-                      aria-controls={`${uid}-panel`}
+                      // The tabpanel only exists once the demo is launched
+                      // (`live`); before that there is nothing to control, and a
+                      // reference to a missing id is an axe violation
+                      // (aria-valid-attr-value). aria-controls is optional, so it
+                      // is simply omitted until the panel is in the DOM.
+                      aria-controls={live ? `${uid}-panel` : undefined}
                       onClick={() => launch(t.id)}
                       className={cn(
                         "min-w-0 shrink truncate rounded-[6px] border py-[3px] font-mono text-[0.6875rem] uppercase transition-colors duration-fast ease-out-quad",

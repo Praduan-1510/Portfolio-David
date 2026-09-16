@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Register</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .reg-back { left: 44px; top: 58px; }
+  .reg-eyebrow { left: 94px; top: 47px; font-size: 14px; letter-spacing: .9px; color: #e0e0e0; }
+  .reg-title { left: 93px; top: 67px; font-size: 26px; font-weight: 700; letter-spacing: .6px; line-height: 34px; }
+  .signup .field { font-weight: 600; }
+  .signup select.field { color: #a6a6a6; font-weight: 500; }
+  .signup select.field.chosen { color: #000; font-weight: 600; }
+</style>
+</head>
+<body>
+<main class="screen signup" style="height:874px;min-height:874px" aria-label="Register">
+  <a class="abs back reg-back tap" href="login.html" data-go="back" aria-label="Back">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg>
+  </a>
+  <p class="abs reg-eyebrow">New Account</p>
+  <h1 class="abs reg-title">Register</h1>
+
+  <form id="reg" novalidate>
+    <div class="form-group enter" style="top:165px;--i:0">
+      <label class="label" for="fn">Full Name</label>
+      <input class="field" id="fn" name="name" autocomplete="name" value="Jayanta Adhikari">
+    </div>
+    <div class="form-group enter" style="top:273px;--i:1">
+      <label class="label" for="bn">Business Name</label>
+      <input class="field" id="bn" name="business" autocomplete="organization" value="JA Trading Co.">
+    </div>
+    <div class="form-group enter" style="top:381px;--i:2">
+      <label class="label" for="gst">GSTIN (Optional)</label>
+      <input class="field" id="gst" name="gstin" autocapitalize="characters" value="19AEYPA4821F1Z5">
+    </div>
+    <div class="form-group enter" style="top:489px;--i:3">
+      <label class="label" for="bt">Business Type</label>
+      <div class="select">
+        <select class="field" id="bt" name="type" onchange="this.classList.add('chosen')">
+          <option value="" selected disabled>Select type…</option>
+          <option>Regular Taxpayer</option><option>Composition Dealer</option><option>Manufacturing</option><option>Retail &amp; Trading</option><option>Services</option>
+        </select>
+        <svg width="12" height="8" viewBox="0 0 12 8" fill="none" stroke="#000" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="right:23px;width:11px"><path d="m1.5 1.5 4.5 4.5 4.5-4.5"/></svg>
+      </div>
+    </div>
+    <div class="form-group enter" style="top:597px;--i:4">
+      <label class="label" for="city">City</label>
+      <input class="field" id="city" name="city" autocomplete="address-level2" value="Kolkata, WB">
+    </div>
+
+    <button type="submit" class="abs btn btn--primary tap enter" style="left:34px;top:725px;width:334px;gap:12px;--i:5">
+      Continue
+      <svg width="22" height="18" viewBox="0 0 22 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 9h18.5M12.5 1.5 20 9l-7.5 7.5"/></svg>
+    </button>
+  </form>
+  <p class="abs secure-note" style="left:0;right:0;top:792px">
+    <svg width="11" height="12" viewBox="0 0 11 12" fill="none" stroke="#cfcfcf" stroke-width="1.2"><rect x="1" y="5.2" width="9" height="6" rx="1.4"/><path d="M3 5.2V3.6a2.5 2.5 0 0 1 5 0v1.6"/><circle cx="5.5" cy="8.2" r=".6" fill="#cfcfcf"/></svg>
+    Your data is encrypted &amp; never sold
+  </p>
+</main>
+<section class="sheet" id="typeSheet" aria-labelledby="typeTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="typeTitle">Business Type</p><p class="sheet__sub">We'll tailor GST, invoices and reports to it</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="options" data-options id="typeOptions">
+    <button class="option tap" type="button" data-value="Regular Taxpayer"><span class="option__radio"></span><span class="option__body"><span class="option__title">Regular Taxpayer</span><span class="option__sub">GST registered · files GSTR-1 &amp; 3B</span></span></button>
+    <button class="option tap" type="button" data-value="Composition Dealer"><span class="option__radio"></span><span class="option__body"><span class="option__title">Composition Dealer</span><span class="option__sub">Turnover up to ₹1.5 Cr · flat-rate GST</span></span></button>
+    <button class="option tap" type="button" data-value="Manufacturing"><span class="option__radio"></span><span class="option__body"><span class="option__title">Manufacturing</span><span class="option__sub">Make goods · track raw material stock</span></span></button>
+    <button class="option tap" type="button" data-value="Retail &amp; Trading"><span class="option__radio"></span><span class="option__body"><span class="option__title">Retail &amp; Trading</span><span class="option__sub">Buy &amp; sell goods · shop or wholesale</span></span></button>
+    <button class="option tap" type="button" data-value="Services"><span class="option__radio"></span><span class="option__body"><span class="option__title">Services</span><span class="option__sub">Consulting, agencies, repairs &amp; more</span></span></button>
+    <button class="option tap" type="button" data-value="Unregistered"><span class="option__radio"></span><span class="option__body"><span class="option__title">Unregistered</span><span class="option__sub">No GSTIN yet · add it later</span></span></button>
+  </div>
+</section>
+<style>
+  .su-err { display: none; margin: 3px 0 0 10px; font-size: 11.5px; line-height: 14px; letter-spacing: .2px; color: #f15858; white-space: nowrap; }
+  .form-group.has-err .su-err { display: block; }
+  .form-group.has-err .field { box-shadow: 0 0 0 2px #f15858; }
+</style>
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const form = document.getElementById('reg');
+    const submit = form.querySelector('button[type=submit]');
+    const sel = document.getElementById('bt');
+    const $ = (id) => document.getElementById(id);
+
+    // Inline error slots under each field
+    const errFor = (inp) => {
+      const g = inp.closest('.form-group');
+      let e = g.querySelector('.su-err');
+      if (!e) { e = document.createElement('span'); e.className = 'su-err'; e.id = inp.id + 'Err'; e.setAttribute('role', 'alert'); g.appendChild(e); inp.setAttribute('aria-describedby', e.id); }
+      return e;
+    };
+    const setErr = (inp, msg) => {
+      const g = inp.closest('.form-group');
+      errFor(inp).textContent = msg || '';
+      g.classList.toggle('has-err', !!msg);
+      msg ? inp.setAttribute('aria-invalid', 'true') : inp.removeAttribute('aria-invalid');
+      return !msg;
+    };
+    const RULES = {
+      fn: (v) => (!v.trim() ? 'Enter your full name' : v.trim().length < 2 ? 'Name looks too short' : ''),
+      bn: (v) => (!v.trim() ? 'Enter your business name as on invoices' : ''),
+      gst: (v) => (v.trim() && !/^\d{2}[A-Z]{5}\d{4}[A-Z][A-Z\d]Z[A-Z\d]$/i.test(v.trim()) ? 'GSTIN should be 15 characters, e.g. 19AEYPA4821F1Z5' : ''),
+      bt: (v) => (!v ? 'Choose a business type to continue' : ''),
+    };
+    const check = (id) => setErr($(id), RULES[id]($(id).value));
+    ['fn', 'bn', 'gst'].forEach((id) => {
+      $(id).addEventListener('input', () => $(id).closest('.form-group').classList.remove('has-err'));
+      $(id).addEventListener('blur', () => { if ($(id).value) check(id); });
+    });
+    $('gst').addEventListener('input', () => { const p = $('gst').selectionStart; $('gst').value = $('gst').value.toUpperCase().replace(/\s/g, ''); $('gst').setSelectionRange(p, p); });
+
+    // Business type: native select look, bottom-sheet picker
+    if (![...sel.options].some((o) => o.value === 'Unregistered')) sel.add(new Option('Unregistered', 'Unregistered'));
+    const openPicker = (e) => { if (e) e.preventDefault(); Spendee.sheet.open('typeSheet'); };
+    sel.addEventListener('mousedown', openPicker);
+    sel.addEventListener('touchend', openPicker);
+    sel.addEventListener('keydown', (e) => { if ([' ', 'Enter', 'ArrowDown', 'ArrowUp'].includes(e.key)) openPicker(e); });
+    const opts = $('typeOptions');
+    document.getElementById('typeSheet').addEventListener('sheet:open', () => {
+      opts.querySelectorAll('.option').forEach((o) => o.setAttribute('aria-checked', String(o.dataset.value === sel.value)));
+    });
+    opts.addEventListener('select', async (e) => {
+      sel.value = e.detail; sel.classList.add('chosen'); setErr(sel, '');
+      Spendee.haptic();
+      await Spendee.wait(180); Spendee.sheet.close();
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const ids = ['fn', 'bn', 'gst', 'bt'];
+      const bad = ids.filter((id) => !check(id));
+      if (bad.length) {
+        Spendee.haptic();
+        if (bad[0] === 'bt') { sel.focus({ preventScroll: true }); } else { $(bad[0]).focus(); }
+        return;
+      }
+      document.activeElement && document.activeElement.blur();
+      Spendee.store.set('profile', { name: $('fn').value.trim(), business: $('bn').value.trim(), gstin: $('gst').value.trim(), type: sel.value, city: $('city').value.trim() });
+      await Spendee.loading(submit, 1000);
+      location.href = 'otp.html?flow=signup';
+    });
+    if (Spendee.q('errors')) form.requestSubmit();
+  })();
+</script>
+</body>
+</html>

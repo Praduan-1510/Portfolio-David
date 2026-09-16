@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spendee — Smart Business Ledger</title>
+<meta name="description" content="Spendee: an AI-powered business ledger, banking and GST compliance app. Interactive high-fidelity prototype with 45 screens and 60+ bottom sheets and dialogs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 110 110'%3E%3Crect width='110' height='110' rx='24' fill='%23131313'/%3E%3Cpath d='M74.5 51.5C76 37 65 27 54 27C42.5 27 36 33.5 36 41.5C36 50 44.5 53.2 54 56C64 59 71.5 62.8 71.5 71C71.5 79 63.5 83 53 83C41 83 31.5 75 31.5 63' fill='none' stroke='%23e9cf73' stroke-width='6' stroke-linecap='round'/%3E%3Cpath d='M64 12 36 98M73 14 45 100' stroke='%238df15e' stroke-width='4.5' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #050505;
+    --bg-2: #0c0c0c;
+    --panel: #121212;
+    --line: rgba(255,255,255,.08);
+    --line-2: rgba(255,255,255,.14);
+    --text: #f4f4f4;
+    --muted: #9a9a9a;
+    --dim: #6a6a6a;
+    --green: #8df15e;
+    --blue: #5fb2f1;
+    --yellow: #f1ea58;
+    --red: #f15858;
+    --primary: #c8e7ff;
+    --ease: cubic-bezier(.22,1,.36,1);
+    --spring: cubic-bezier(.34,1.56,.64,1);
+    --font: 'Kodchasan', system-ui, sans-serif;
+    --ui: 'Poppins', system-ui, sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body { overflow-x: clip; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--ui); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+  :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 8px; }
+  .wrap { width: min(1240px, 100% - 48px); margin: 0 auto; }
+
+  /* Ambient backdrop */
+  .aura { position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background:
+      radial-gradient(900px 600px at 85% -10%, rgba(3,85,149,.35), transparent 60%),
+      radial-gradient(700px 520px at 0% 105%, rgba(140,137,10,.22), transparent 60%),
+      var(--bg); }
+  .grain { position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  /* Nav */
+  .nav { position: sticky; top: 0; z-index: 40; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); background: rgba(5,5,5,.6); border-bottom: 1px solid var(--line); }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-family: var(--font); font-size: 22px; letter-spacing: .3px; }
+  .brand-mark { width: 34px; height: 34px; border-radius: 9px; background: #1a1a1a; box-shadow: inset 0 0 0 1px rgba(255,255,255,.12); display: grid; place-items: center; }
+  .nav-links { display: flex; gap: 6px; }
+  .nav-links a { font-size: 14px; color: var(--muted); padding: 8px 14px; border-radius: 999px; transition: color .2s, background .2s; }
+  .nav-links a:hover { color: var(--text); background: rgba(255,255,255,.06); }
+
+  /* Hero */
+  .hero { padding: 64px 0 40px; }
+  .hero .wrap { display: grid; grid-template-columns: 1.05fr .95fr; gap: 56px; align-items: center; }
+  .hero .wrap > * { min-width: 0; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding: 7px 14px 7px 8px; border: 1px solid var(--line-2); border-radius: 999px; background: rgba(255,255,255,.02); }
+  .eyebrow i { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px rgba(141,241,94,.15); }
+  h1 { font-family: var(--font); font-weight: 500; font-size: clamp(40px, 4.3vw, 60px); line-height: 1.02; letter-spacing: -.01em; margin: 22px 0 22px; }
+  h1 em { font-style: normal; font-weight: 700; color: var(--green); display: block; }
+  .lede { font-size: 17px; line-height: 1.65; color: #bdbdbd; max-width: 520px; margin: 0; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .btn { height: 52px; padding: 0 22px; border-radius: 14px; display: inline-flex; align-items: center; gap: 10px; font-family: var(--font); font-size: 17px; font-weight: 700; transition: transform .25s var(--ease), background .25s, box-shadow .25s; }
+  .btn:active { transform: scale(.97); }
+  .btn-primary { background: var(--primary); color: #000; box-shadow: 0 10px 30px rgba(200,231,255,.12); }
+  .btn-primary:hover { box-shadow: 0 14px 40px rgba(200,231,255,.25); transform: translateY(-1px); }
+  .btn-ghost { background: rgba(255,255,255,.05); box-shadow: inset 0 0 0 1px var(--line-2); }
+  .btn-ghost:hover { background: rgba(255,255,255,.09); }
+  .facts { display: grid; grid-template-columns: repeat(4, auto); gap: 28px; margin-top: 44px; padding-top: 28px; border-top: 1px solid var(--line); max-width: 560px; }
+  .facts dt { font-size: 12px; color: var(--dim); letter-spacing: .08em; text-transform: uppercase; }
+  .facts dd { margin: 6px 0 0; font-family: var(--font); font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  /* Device */
+  .stage { position: relative; display: grid; justify-items: center; }
+  .stage::before { content: ''; position: absolute; width: min(520px, 100%); aspect-ratio: 1; top: 12%; border-radius: 50%; background: radial-gradient(circle, rgba(95,178,241,.18), transparent 65%); filter: blur(10px); pointer-events: none; }
+  .device-scale { transform-origin: top center; }
+  .device { position: relative; width: 426px; height: 898px; padding: 12px; border-radius: 62px;
+    background: linear-gradient(145deg, #2c2c2e, #0d0d0e 40%, #1c1c1e);
+    box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.12), inset 0 0 0 5px #050505, 0 50px 100px -20px rgba(0,0,0,.8), 0 30px 60px -30px rgba(0,0,0,.9); }
+  .device::before, .device::after { content: ''; position: absolute; left: -3px; width: 4px; border-radius: 2px 0 0 2px; background: #1f1f21; }
+  .device::before { top: 180px; height: 62px; }
+  .device::after { top: 260px; height: 62px; }
+  .device .side { position: absolute; right: -3px; top: 230px; width: 4px; height: 96px; border-radius: 0 2px 2px 0; background: #1f1f21; }
+  .device iframe { display: block; width: 402px; height: 874px; border: 0; border-radius: 50px; background: #000; }
+  .screen-label { margin-top: 18px; display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); }
+  .screen-label b { color: var(--text); font-weight: 500; }
+  .nav-arrows { display: flex; gap: 6px; }
+  .nav-arrows button { width: 34px; height: 34px; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--line-2); display: grid; place-items: center; transition: background .2s; }
+  .nav-arrows button:hover { background: rgba(255,255,255,.08); }
+
+  /* Flow switcher */
+  .flows { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 30px; }
+  .flow { font-size: 13px; padding: 7px 12px; border-radius: 999px; color: #cfcfcf; box-shadow: inset 0 0 0 1px var(--line-2); transition: background .2s, color .2s, box-shadow .2s; }
+  .flow:hover { background: rgba(255,255,255,.06); }
+  .flow[aria-pressed="true"] { background: var(--text); color: #000; box-shadow: none; }
+
+  /* Sections */
+  section.block { padding: 96px 0; border-top: 1px solid var(--line); }
+  .sec-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 44px; }
+  .sec-head h2 { font-family: var(--font); font-size: clamp(32px, 4vw, 48px); font-weight: 500; margin: 10px 0 0; letter-spacing: -.01em; }
+  .kicker { font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+  .sec-head p { color: var(--muted); max-width: 420px; line-height: 1.6; margin: 0; font-size: 15px; }
+
+  /* Gallery */
+  .group { margin-bottom: 64px; }
+  .group-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; }
+  .group-head h3 { font-family: var(--font); font-size: 22px; font-weight: 600; margin: 0; }
+  .group-head span { font-size: 13px; color: var(--dim); }
+  .rail { display: grid; grid-template-columns: repeat(auto-fill, minmax(214px, 1fr)); gap: 28px 22px; }
+  .thumb { display: block; text-align: left; }
+  .thumb .frame { position: relative; width: 214px; height: 451px; border-radius: 30px; padding: 6px; background: linear-gradient(145deg, #262628, #0e0e0f); box-shadow: inset 0 0 0 1px rgba(255,255,255,.1), 0 20px 40px -20px rgba(0,0,0,.9); transition: transform .45s var(--ease), box-shadow .45s var(--ease); overflow: hidden; }
+  .thumb .viewport { width: 202px; height: 439px; border-radius: 25px; overflow: hidden; position: relative; background: #000; }
+  .thumb iframe { display: block; width: 402px; height: 874px; border: 0; transform: scale(.5025); transform-origin: 0 0; pointer-events: none; opacity: 0; transition: opacity .5s var(--ease); }
+  .thumb iframe.ready { opacity: 1; }
+  .thumb .viewport::before { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, #0b0b0b 30%, #161616 50%, #0b0b0b 70%); background-size: 220% 100%; animation: thumbShimmer 1.6s linear infinite; }
+  .thumb .viewport.loaded::before { display: none; }
+  @keyframes thumbShimmer { to { background-position: -220% 0; } }
+  .thumb:focus-visible { outline: none; }
+  .thumb:focus-visible .frame { box-shadow: 0 0 0 2px var(--blue), 0 0 0 6px rgba(95,178,241,.25), 0 20px 40px -20px rgba(0,0,0,.9); }
+  .thumb:hover .frame { transform: translateY(-6px); box-shadow: inset 0 0 0 1px rgba(255,255,255,.18), 0 30px 60px -20px rgba(0,0,0,.9), 0 0 0 1px rgba(95,178,241,.25); }
+  .thumb .cap { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding: 0 4px; }
+  .thumb .cap b { font-weight: 500; font-size: 14px; }
+  .thumb .cap small { font-size: 12px; color: var(--dim); font-variant-numeric: tabular-nums; display: inline-flex; align-items: center; gap: 8px; }
+  .tag { font-style: normal; font-size: 10.5px; letter-spacing: .04em; padding: 2px 7px; border-radius: 999px; color: #5fb2f1; box-shadow: inset 0 0 0 1px rgba(95,178,241,.35); }
+  .tag--o { color: #8df15e; box-shadow: inset 0 0 0 1px rgba(141,241,94,.35); }
+  .thumb .open { position: absolute; inset: 6px; border-radius: 25px; display: grid; place-items: center; background: rgba(0,0,0,.45); opacity: 0; transition: opacity .3s; }
+  .thumb .open span { font-family: var(--font); font-weight: 700; font-size: 14px; background: var(--primary); color: #000; padding: 10px 16px; border-radius: 12px; transform: translateY(8px); transition: transform .35s var(--spring); }
+  .thumb:hover .open, .thumb:focus-visible .open { opacity: 1; }
+  .thumb:hover .open span { transform: none; }
+
+  /* Design system */
+  .ds { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; }
+  .tile { background: var(--panel); border-radius: 22px; padding: 26px; box-shadow: inset 0 0 0 1px var(--line); }
+  .tile h4 { margin: 0 0 18px; font-size: 12.5px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); }
+  .span-7 { grid-column: span 7; } .span-5 { grid-column: span 5; } .span-12 { grid-column: span 12; } .span-6 { grid-column: span 6; }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 12px; }
+  .sw { border-radius: 14px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--line); background: #0a0a0a; }
+  .sw i { display: block; height: 70px; }
+  .sw div { padding: 10px 12px; font-size: 12px; }
+  .sw div b { display: block; font-weight: 500; font-size: 13px; }
+  .sw div span { color: var(--dim); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; }
+  .type-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 14px 0; border-top: 1px solid var(--line); }
+  .type-row:first-of-type { border-top: 0; padding-top: 0; }
+  .type-row small { color: var(--dim); font-size: 12px; white-space: nowrap; }
+  .comp-grid { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+  .c-btn { height: 54px; padding: 0 26px; border-radius: 16px; font-family: var(--font); font-weight: 700; font-size: 18px; display: inline-flex; align-items: center; }
+  .c-chip { height: 30px; padding: 0 10px; border-radius: 8px; font-family: var(--font); font-weight: 500; font-size: 15px; display: inline-grid; place-items: center; background: #d2d2d2; color: #000; }
+  .c-status { height: 16px; padding: 0 5px; border-radius: 5px; font-family: var(--font); font-size: 12px; display: inline-grid; place-items: center; }
+  .c-tile { width: 74px; height: 74px; border-radius: 20px; display: grid; place-items: center; box-shadow: inset 0 0 0 1px rgba(255,255,255,.16), 0 4px 10px rgba(0,0,0,.5); font-family: var(--font); font-size: 9px; }
+  .c-switch { width: 46px; height: 24px; border-radius: 999px; background: #60b2f1; position: relative; cursor: pointer; transition: background .25s; }
+  .c-switch::after { content: ''; position: absolute; top: 3px; left: 25px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: left .3s var(--spring); }
+  .c-switch[aria-checked="false"] { background: #7a7a7a; }
+  .c-switch[aria-checked="false"]::after { left: 3px; }
+  .principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .principle { padding: 26px; border-radius: 22px; background: var(--panel); box-shadow: inset 0 0 0 1px var(--line); }
+  .principle .ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; margin-bottom: 18px; }
+  .principle h5 { font-family: var(--font); font-size: 20px; font-weight: 600; margin: 0 0 8px; }
+  .principle p { margin: 0; color: var(--muted); line-height: 1.6; font-size: 14.5px; }
+
+  footer { padding: 40px 0 60px; border-top: 1px solid var(--line); color: var(--dim); font-size: 13px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 1020px) {
+    .hero .wrap { grid-template-columns: 1fr; }
+    .stage { order: -1; }
+    .span-7, .span-5, .span-6 { grid-column: span 12; }
+    .principles { grid-template-columns: 1fr; }
+    .sec-head { flex-direction: column; align-items: start; }
+  }
+  @media (max-width: 640px) {
+    .rail { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    .facts dd { font-size: 18px; }
+    .screen-label { flex-wrap: wrap; justify-content: center; text-align: center; }
+    .wrap { width: calc(100% - 32px); }
+    .nav-links a:not(.keep) { display: none; }
+    .facts { grid-template-columns: repeat(2, auto); }
+    .rail { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 22px 14px; }
+    .thumb .frame { width: 100%; height: auto; border-radius: 24px; }
+    .thumb .viewport { width: 100%; height: auto; aspect-ratio: 402 / 874; border-radius: 19px; }
+    .thumb .open { border-radius: 19px; }
+    .thumb .cap { flex-direction: column; align-items: flex-start; gap: 6px; margin-top: 12px; }
+    .thumb .cap b { font-size: 13.5px; line-height: 1.3; }
+    .group-head { flex-direction: column; gap: 4px; }
+    .group { margin-bottom: 48px; }
+    .eyebrow { font-size: 11px; letter-spacing: .08em; }
+    .thumb iframe { transform: scale(var(--s, .36)); }
+    section.block { padding: 64px 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .thumb .viewport::before { animation: none; }
+    * { transition-duration: 1ms !important; animation-duration: 1ms !important; }
+  }
+</style>
+</head>
+<body>
+<div class="aura" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Spendee home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="30" height="30" viewBox="0 0 110 110"><defs><linearGradient id="nb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9ef25a"/><stop offset=".5" stop-color="#d9e46a"/><stop offset="1" stop-color="#8ec8f0"/></linearGradient></defs><path d="M74.5 51.5C76 37 65 27 54 27C42.5 27 36 33.5 36 41.5C36 50 44.5 53.2 54 56C64 59 71.5 62.8 71.5 71C71.5 79 63.5 83 53 83C41 83 31.5 75 31.5 63" fill="none" stroke="#e9cf73" stroke-width="6" stroke-linecap="round"/><path d="M64 12 36 98M73 14 45 100" stroke="url(#nb)" stroke-width="4.5" stroke-linecap="round"/></svg>
+      </span>
+      Spendee
+    </a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#prototype" class="keep">Prototype</a>
+      <a href="#screens">Screens</a>
+      <a href="#system">Design system</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" id="prototype">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow"><i></i>Fintech · iOS app · Interactive prototype</span>
+        <h1>Track effortlessly.<em>Spend wisely.</em></h1>
+        <p class="lede">Spendee is a smart business ledger for small businesses — record sales and purchases, collect payments with built-in banking &amp; UPI, stay GST-compliant on autopilot and unlock credit based on ledger health.</p>
+        <div class="cta">
+          <button class="btn btn-primary" data-load="welcome">
+            Start from the beginning
+            <svg width="18" height="16" viewBox="0 0 18 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 8h14.5M9.5 1.5 16 8l-6.5 6.5"/></svg>
+          </button>
+          <a class="btn btn-ghost" href="#screens">Browse all screens</a>
+        </div>
+
+        <div class="flows" role="group" aria-label="Jump to a flow">
+          <button class="flow" data-load="welcome" aria-pressed="true">Onboarding</button>
+          <button class="flow" data-load="login" aria-pressed="false">Sign in</button>
+          <button class="flow" data-load="dashboard" aria-pressed="false">Home</button>
+          <button class="flow" data-load="contact" aria-pressed="false">Ledger</button>
+          <button class="flow" data-load="invoices" aria-pressed="false">Invoices</button>
+          <button class="flow" data-load="bank" aria-pressed="false">Payments</button>
+          <button class="flow" data-load="gst-center" aria-pressed="false">GST</button>
+          <button class="flow" data-load="credit-growth" aria-pressed="false">Credit</button>
+          <button class="flow" data-load="more" aria-pressed="false">More</button>
+        </div>
+
+        <dl class="facts">
+          <div><dt>Screens</dt><dd>45</dd></div>
+          <div><dt>Sheets &amp; dialogs</dt><dd>60+</dd></div>
+          <div><dt>Flows</dt><dd>7</dd></div>
+          <div><dt>Built with</dt><dd>HTML/CSS</dd></div>
+        </dl>
+      </div>
+
+      <div class="stage">
+        <div class="device-scale" id="deviceScale">
+          <div class="device">
+            <span class="side" aria-hidden="true"></span>
+            <iframe id="phone" name="phone" src="screens/welcome.html" title="Spendee interactive prototype" loading="eager"></iframe>
+          </div>
+        </div>
+        <div class="screen-label" aria-live="polite">
+          <div class="nav-arrows">
+            <button id="prev" aria-label="Previous screen"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2 4 7l5 5"/></svg></button>
+            <button id="next" aria-label="Next screen"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 2 5 5-5 5"/></svg></button>
+          </div>
+          <span>Now viewing <b id="current">Welcome</b> · tap anything inside the phone</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="screens">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <span class="kicker">All screens</span>
+          <h2>45 screens, seven flows</h2>
+        </div>
+        <p>19 <b style="color:#8df15e;font-weight:500">original</b> frames were rebuilt from the Figma file and corrected so every figure reconciles; 26 <b style="color:#5fb2f1;font-weight:500">extended</b> screens complete every journey using the same component system. Select any screen to open it in the live prototype.</p>
+      </div>
+      <div id="gallery"></div>
+    </div>
+  </section>
+
+  <section class="block" id="system">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <span class="kicker">Design system</span>
+          <h2>Dark, glassy, color-coded</h2>
+        </div>
+        <p>A true-black canvas lets money states speak: green for what you receive, red for what you owe, yellow for what's pending, blue for actions.</p>
+      </div>
+
+      <div class="ds">
+        <div class="tile span-7 reveal">
+          <h4>Color</h4>
+          <div class="swatches">
+            <div class="sw"><i style="background:#c8e7ff"></i><div><b>Primary</b><span>#C8E7FF</span></div></div>
+            <div class="sw"><i style="background:#8df15e"></i><div><b>Receivable</b><span>#8DF15E</span></div></div>
+            <div class="sw"><i style="background:#f15858"></i><div><b>Payable</b><span>#F15858</span></div></div>
+            <div class="sw"><i style="background:#f1ea58"></i><div><b>Pending</b><span>#F1EA58</span></div></div>
+            <div class="sw"><i style="background:#5fb2f1"></i><div><b>Action</b><span>#5FB2F1</span></div></div>
+            <div class="sw"><i style="background:#262626"></i><div><b>Surface</b><span>#262626</span></div></div>
+            <div class="sw"><i style="background:#1a1a1a"></i><div><b>Surface 2</b><span>#1A1A1A</span></div></div>
+            <div class="sw"><i style="background:#000;box-shadow:inset 0 -1px 0 rgba(255,255,255,.08)"></i><div><b>Canvas</b><span>#000000</span></div></div>
+          </div>
+        </div>
+        <div class="tile span-5 reveal">
+          <h4>Typography</h4>
+          <div class="type-row"><span style="font-family:var(--font);font-size:44px;line-height:1">Spendee</span><small>Kodchasan 44 / Regular</small></div>
+          <div class="type-row"><span style="font-family:var(--font);font-size:33px;font-weight:500;line-height:1">₹ 2,96,800</span><small>Kodchasan 33 / Medium</small></div>
+          <div class="type-row"><span style="font-family:var(--font);font-size:22px;font-weight:600">Jayanta Adhikari</span><small>Kodchasan 22 / Semibold</small></div>
+          <div class="type-row"><span style="font-family:var(--font);font-size:15px;letter-spacing:.8px;color:#cfcfcf">Mobile Number</span><small>Kodchasan 15 / Label</small></div>
+          <div class="type-row"><span style="font-family:var(--ui);font-size:12px;color:#cfcfcf">Home · Ledger · Bank · More</span><small>Poppins 12 / Tab bar</small></div>
+        </div>
+        <div class="tile span-12 reveal">
+          <h4>Components</h4>
+          <div class="comp-grid">
+            <span class="c-btn" style="background:#c8e7ff;color:#000">Get Started Free</span>
+            <span class="c-btn" style="background:#141f26;color:#fff">Biometrics</span>
+            <span class="c-btn" style="background:#3c1616;color:#f15858;font-weight:500">Sign Out</span>
+            <span class="c-chip" style="background:#60b2f1">All</span>
+            <span class="c-chip">Overdue</span>
+            <span class="c-status" style="background:#314528;color:#3fb40a">Done</span>
+            <span class="c-status" style="background:#454426;color:#d8d023">Pending</span>
+            <span class="c-status" style="background:#452626;color:#f15858">Overdue</span>
+            <span class="c-switch" role="switch" aria-checked="true" tabindex="0" aria-label="Demo toggle"></span>
+            <span class="c-tile" style="background:#48461a;color:#e3e0b5">Add Entry</span>
+            <span class="c-tile" style="background:#481a1a;color:#e8c2c2">Send Money</span>
+            <span class="c-tile" style="background:#2a481c;color:#cfe3c5">Invoice</span>
+            <span class="c-tile" style="background:#1d3548;color:#c4d6e4">Reports</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="principles" style="margin-top:18px">
+        <div class="principle reveal">
+          <div class="ic" style="background:#2a481c"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8df15e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17 9 11l4 4 8-8M15 7h6v6"/></svg></div>
+          <h5>Money at a glance</h5>
+          <p>Net position, receivables and payables lead the home screen, with a cash-velocity gauge that turns 30 days of activity into one number.</p>
+        </div>
+        <div class="principle reveal">
+          <div class="ic" style="background:#48461a"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f1ea58" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg></div>
+          <h5>AI that nudges, not nags</h5>
+          <p>Contextual prompts like "Collect from 3 clients — ₹1.24L this week" pair every insight with a one-tap action.</p>
+        </div>
+        <div class="principle reveal">
+          <div class="ic" style="background:#1d3548"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg></div>
+          <h5>Compliance without dread</h5>
+          <p>GST returns, deadlines and late-fee risk sit in one calm view, with file-and-pay and JSON export built in.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Spendee — product design case study</span>
+    <span>Kodchasan &amp; Poppins · Designed for iPhone 16 Pro (402 × 874)</span>
+  </div>
+</footer>
+
+<script>
+  const O = true; // original designed frame
+  const SCREENS = [
+    { id: 'splash', name: 'Splash', flow: 'Launch & Onboarding' },
+    { id: 'welcome', name: 'Welcome', flow: 'Launch & Onboarding', o: O },
+    { id: 'onboarding-1', name: 'Smart Ledger', flow: 'Launch & Onboarding', o: O },
+    { id: 'onboarding-2', name: 'AI Insights', flow: 'Launch & Onboarding', o: O },
+    { id: 'onboarding-3', name: 'Smart Credit', flow: 'Launch & Onboarding', o: O },
+    { id: 'login', name: 'Sign In', flow: 'Authentication', o: O },
+    { id: 'signup', name: 'Register', flow: 'Authentication', o: O },
+    { id: 'otp', name: 'Verify Number', flow: 'Authentication' },
+    { id: 'create-pin', name: 'Create PIN', flow: 'Authentication' },
+    { id: 'forgot-pin', name: 'Reset PIN', flow: 'Authentication' },
+    { id: 'permissions', name: 'Permissions', flow: 'Authentication' },
+    { id: 'setup-complete', name: 'All Set', flow: 'Authentication' },
+    { id: 'dashboard', name: 'Home', flow: 'Home & Ledger', o: O },
+    { id: 'notifications', name: 'Notifications', flow: 'Home & Ledger', o: O },
+    { id: 'contact', name: 'Contacts', flow: 'Home & Ledger', o: O },
+    { id: 'add-contact', name: 'Add Contact', flow: 'Home & Ledger' },
+    { id: 'customer-details', name: 'Customer', flow: 'Home & Ledger', o: O },
+    { id: 'transaction-detail', name: 'Entry Details', flow: 'Home & Ledger' },
+    { id: 'add-entry', name: 'New Entry', flow: 'Home & Ledger', o: O },
+    { id: 'receipt-scan', name: 'Scan Receipt', flow: 'Home & Ledger' },
+    { id: 'invoices', name: 'Invoices', flow: 'Invoicing', o: O },
+    { id: 'create-invoice', name: 'New Invoice', flow: 'Invoicing' },
+    { id: 'invoice-preview', name: 'Invoice Preview', flow: 'Invoicing' },
+    { id: 'invoice-detail', name: 'Invoice Detail', flow: 'Invoicing' },
+    { id: 'invoice-discount', name: 'Get Paid Early', flow: 'Invoicing' },
+    { id: 'bank', name: 'Cards & Banking', flow: 'Banking & Payments', o: O },
+    { id: 'send-money', name: 'Send Money', flow: 'Banking & Payments', o: O },
+    { id: 'scan-pay', name: 'Scan & Pay', flow: 'Banking & Payments' },
+    { id: 'beneficiaries', name: 'Transfer', flow: 'Banking & Payments' },
+    { id: 'payment-success', name: 'Payment Success', flow: 'Banking & Payments' },
+    { id: 'payment-failed', name: 'Payment Failed', flow: 'Banking & Payments' },
+    { id: 'statement', name: 'Statement', flow: 'Banking & Payments' },
+    { id: 'card-controls', name: 'Card Controls', flow: 'Banking & Payments' },
+    { id: 'credit-growth', name: 'Credit & Growth', flow: 'Growth & Compliance', o: O },
+    { id: 'loan-apply', name: 'Apply for Loan', flow: 'Growth & Compliance' },
+    { id: 'loan-success', name: 'Loan Approved', flow: 'Growth & Compliance' },
+    { id: 'gst-center', name: 'GST Center', flow: 'Growth & Compliance', o: O },
+    { id: 'gst-file', name: 'File GSTR-3B', flow: 'Growth & Compliance' },
+    { id: 'reports', name: 'Reports', flow: 'Growth & Compliance', o: O },
+    { id: 'inventory', name: 'Inventory', flow: 'Growth & Compliance' },
+    { id: 'more', name: 'More', flow: 'Account' },
+    { id: 'settings', name: 'Settings', flow: 'Account', o: O },
+    { id: 'edit-profile', name: 'Edit Profile', flow: 'Account', o: O },
+    { id: 'team', name: 'Team & Roles', flow: 'Account' },
+    { id: 'help', name: 'Help & Support', flow: 'Account' },
+  ];
+  const SHEETS = [
+    { id: 'send-money', sheet: 'reviewSheet', name: 'Review Payment' },
+    { id: 'send-money', sheet: 'upiPinSheet', name: 'UPI PIN' },
+    { id: 'dashboard', sheet: 'collectSheet', name: 'Collect Reminders' },
+    { id: 'create-invoice', sheet: 'itemSheet', name: 'Add Invoice Item' },
+    { id: 'create-invoice', sheet: 'dateSheet', name: 'Date Picker' },
+    { id: 'invoice-detail', sheet: 'paySheet', name: 'Record Payment' },
+    { id: 'customer-details', sheet: 'reminderSheet', name: 'Schedule Reminder' },
+    { id: 'transaction-detail', sheet: 'settleSheet', name: 'Mark as Settled' },
+    { id: 'login', sheet: 'googleSheet', name: 'Google Account' },
+    { id: 'otp', sheet: 'helpSheet', name: "Didn't Get Code" },
+    { id: 'statement', sheet: 'filterSheet', name: 'Filter Transactions' },
+    { id: 'bank', sheet: 'shareLinkSheet', name: 'Share Payment Link' },
+    { id: 'scan-pay', sheet: 'myQrSheet', name: 'My Payment QR' },
+    { id: 'inventory', sheet: 'reorderSheet', name: 'Reorder Stock' },
+    { id: 'team', sheet: 'inviteSheet', name: 'Invite Teammate' },
+    { id: 'help', sheet: 'chatSheet', name: 'Support Chat' },
+    { id: 'reports', sheet: 'exportSheet', name: 'Export Report' },
+    { id: 'gst-file', sheet: 'otpSheet', name: 'EVC Verification' },
+  ];
+  const FLOW_NOTES = {
+    'Launch & Onboarding': 'First impression & value props',
+    'Authentication': 'Sign-in, verification, PIN & permissions',
+    'Home & Ledger': 'Daily money position, contacts & entries',
+    'Invoicing': 'Create, send, track and discount invoices',
+    'Banking & Payments': 'UPI payments, transfers, statement & card',
+    'Growth & Compliance': 'Credit, GST filing, reports & stock',
+    'Account': 'Profile, team, settings & support',
+    'Sheets & Dialogs': 'Bottom sheets and pop-ups used across the app',
+  };
+  const FLOW_CHIP = { splash: 'welcome', welcome: 'welcome', 'onboarding-1': 'welcome', 'onboarding-2': 'welcome', 'onboarding-3': 'welcome',
+    login: 'login', signup: 'login', otp: 'login', 'create-pin': 'login', 'forgot-pin': 'login', permissions: 'login', 'setup-complete': 'login',
+    dashboard: 'dashboard', notifications: 'dashboard',
+    contact: 'contact', 'add-contact': 'contact', 'customer-details': 'contact', 'transaction-detail': 'contact', 'add-entry': 'contact', 'receipt-scan': 'contact',
+    invoices: 'invoices', 'create-invoice': 'invoices', 'invoice-preview': 'invoices', 'invoice-detail': 'invoices', 'invoice-discount': 'invoices',
+    bank: 'bank', 'send-money': 'bank', 'scan-pay': 'bank', beneficiaries: 'bank', 'payment-success': 'bank', 'payment-failed': 'bank', statement: 'bank', 'card-controls': 'bank',
+    'credit-growth': 'credit-growth', 'loan-apply': 'credit-growth', 'loan-success': 'credit-growth', 'gst-center': 'gst-center', 'gst-file': 'gst-center', reports: 'gst-center', inventory: 'gst-center',
+    more: 'more', settings: 'more', 'edit-profile': 'more', team: 'more', help: 'more' };
+
+  let lastId = 'welcome';
+  const phone = document.getElementById('phone');
+  const current = document.getElementById('current');
+  const idOf = (url) => (url.match(/screens\/([\w-]+)\.html/) || [])[1];
+
+  // Splash auto-advances to Welcome inside the live phone; remember that so prev/next never ping-pong on it
+  let splashAt = 0, autoWelcome = false;
+  const setCurrent = (id) => {
+    if (id === 'welcome' && lastId === 'splash' && Date.now() - splashAt < 5000) autoWelcome = true;
+    else if (id !== lastId) autoWelcome = false;
+    lastId = id;
+    const s = SCREENS.find((x) => x.id === id); if (!s) return;
+    current.textContent = s.name;
+    document.querySelectorAll('.flow').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.load === FLOW_CHIP[id])));
+  };
+  function load(id, scroll, query) {
+    lastId = id; autoWelcome = false;
+    if (id === 'splash') splashAt = Date.now();
+    phone.src = 'screens/' + id + '.html' + (query || '');
+    if (scroll) {
+      const far = Math.abs(document.getElementById('prototype').getBoundingClientRect().top) > 2400;
+      const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      document.getElementById('prototype').scrollIntoView({ behavior: far || calm ? 'instant' : 'smooth' });
+    }
+  }
+  function sync() {
+    let id;
+    try { id = idOf(phone.contentWindow.location.pathname); } catch (e) { return; }
+    if (id) setCurrent(id);
+  }
+  phone.addEventListener('load', sync);
+  addEventListener('message', (e) => {
+    if (!e.data || !e.data.spendeeScreen || e.source !== phone.contentWindow) return;
+    setCurrent(e.data.spendeeScreen);
+  });
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-load]');
+    if (b) load(b.dataset.load, b.classList.contains('thumb'), b.dataset.query);
+  });
+  const step = (d) => {
+    let i = SCREENS.findIndex((x) => x.id === lastId);
+    // Going back from a Welcome that Splash auto-advanced into: skip Splash, or it would bounce straight back
+    if (d < 0 && autoWelcome) i = SCREENS.findIndex((x) => x.id === 'splash');
+    load(SCREENS[(i + d + SCREENS.length) % SCREENS.length].id);
+  };
+  document.getElementById('prev').addEventListener('click', () => step(-1));
+  document.getElementById('next').addEventListener('click', () => step(1));
+
+  // Gallery
+  const gallery = document.getElementById('gallery');
+  const flows = [...new Set(SCREENS.map((s) => s.flow))];
+  let n = 0;
+  const thumb = (id, name, query, tag) => {
+    n++;
+    const a = document.createElement('button');
+    a.className = 'thumb'; a.dataset.load = id; if (query) a.dataset.query = query;
+    a.setAttribute('aria-label', 'Open ' + name + ' in prototype');
+    const src = `screens/${id}.html?capture=1${query ? '&' + query.slice(1) : ''}`;
+    a.innerHTML = `<div class="frame"><div class="viewport"><iframe data-src="${src}" loading="lazy" tabindex="-1" aria-hidden="true" title="${name}"></iframe></div><div class="open"><span>Open in prototype</span></div></div><div class="cap"><b>${name}</b><small>${tag ? `<i class="tag ${tag === 'Original' ? 'tag--o' : ''}">${tag}</i>` : ''}${String(n).padStart(2, '0')}</small></div>`;
+    return a;
+  };
+  flows.forEach((flow) => {
+    const g = document.createElement('div'); g.className = 'group reveal';
+    const list = SCREENS.filter((s) => s.flow === flow);
+    g.innerHTML = `<div class="group-head"><h3>${flow}</h3><span>${FLOW_NOTES[flow]} · ${list.length} screens</span></div><div class="rail"></div>`;
+    const rail = g.querySelector('.rail');
+    list.forEach((s) => rail.appendChild(thumb(s.id, s.name, '', s.o ? 'Original' : 'Extended')));
+    gallery.appendChild(g);
+  });
+  {
+    const g = document.createElement('div'); g.className = 'group reveal';
+    g.innerHTML = `<div class="group-head"><h3>Sheets &amp; Dialogs</h3><span>${FLOW_NOTES['Sheets & Dialogs']} · ${SHEETS.length} highlights</span></div><div class="rail"></div>`;
+    const rail = g.querySelector('.rail');
+    SHEETS.forEach((x) => rail.appendChild(thumb(x.id, x.name, '?sheet=' + x.sheet, 'Sheet')));
+    gallery.appendChild(g);
+  }
+
+  // Mount thumbnail iframes only as each group nears the viewport (63 live documents otherwise)
+  const mount = (rail) => rail.querySelectorAll('iframe[data-src]').forEach((f) => {
+    const done = () => { try { if (f.contentWindow.location.href === 'about:blank') return; } catch (e) {} f.classList.add('ready'); f.parentElement.classList.add('loaded'); f.removeEventListener('load', done); };
+    f.addEventListener('load', done);
+    f.src = f.dataset.src; f.removeAttribute('data-src');
+  });
+  if ('IntersectionObserver' in window) {
+    const mio = new IntersectionObserver((entries) => entries.forEach((en) => { if (en.isIntersecting) { mount(en.target); mio.unobserve(en.target); } }), { rootMargin: '900px 0px' });
+    gallery.querySelectorAll('.rail').forEach((r) => mio.observe(r));
+  } else gallery.querySelectorAll('.rail').forEach(mount);
+
+  // Fit device to viewport height
+  const scaleBox = document.getElementById('deviceScale');
+  function fit() {
+    const avail = Math.min(window.innerHeight - 150, 898);
+    const wAvail = Math.min(window.innerWidth - 32, 426);
+    const s = Math.max(.5, Math.min(1, avail / 898, wAvail / 426));
+    scaleBox.style.transform = `scale(${s})`;
+    scaleBox.style.height = 898 * s + 'px';
+    scaleBox.style.width = 426 * s + 'px';
+    scaleBox.firstElementChild.style.transformOrigin = 'top left';
+    document.querySelectorAll('.thumb .viewport').forEach((v) => { const w = v.clientWidth; if (w) v.style.setProperty('--s', w / 402); });
+  }
+  scaleBox.style.transformOrigin = 'top left';
+  addEventListener('resize', fit); fit();
+
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), { rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+  // Demo switch
+  document.querySelectorAll('.c-switch').forEach((sw) => {
+    const t = () => sw.setAttribute('aria-checked', sw.getAttribute('aria-checked') !== 'true');
+    sw.addEventListener('click', t); sw.addEventListener('keydown', (e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); t(); } });
+  });
+</script>
+</body>
+</html>

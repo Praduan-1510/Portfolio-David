@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Create PIN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .page { padding-bottom: 40px; }
+  .page > .toast { position: fixed; }
+  .pin-head { text-align: center; margin-top: 18px; }
+  .pin-icon { width: 60px; height: 60px; border-radius: 18px; margin: 0 auto 18px; display: grid; place-items: center; background: #132430; box-shadow: inset 0 0 0 1px rgba(95,178,241,.3); color: #5fb2f1; transition: background var(--dur), color var(--dur), box-shadow var(--dur); }
+  .pin-icon.is-ok { background: #314528; color: #8df15e; box-shadow: inset 0 0 0 1px rgba(141,241,94,.3); }
+  .pin-title { font-size: 24px; font-weight: 600; line-height: 1.2; }
+  .pin-sub { font-size: 14.5px; color: #a8a8a8; line-height: 1.5; margin: 6px auto 0; max-width: 320px; min-height: 22px; }
+  .pin-head.swap { animation: rise 360ms var(--ease-out) both; }
+  .pin-dots { margin-top: 26px; }
+  .pin-dots.is-ok i { background: #8df15e; box-shadow: none; }
+  .pin-msg { text-align: center; font-size: 13px; min-height: 20px; margin: 14px 0 0; color: #9a9a9a; }
+  .pin-msg.err { color: #f15858; } .pin-msg.ok { color: #8df15e; }
+  .keypad { margin-top: 18px; }
+  .tips { display: flex; gap: 10px; align-items: flex-start; margin-top: 20px; padding: 12px 14px; border-radius: 14px; background: #1a1a1a; box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); font-size: 12.5px; line-height: 1.45; color: #bdbdbd; }
+  .tips svg { margin-top: 1px; }
+  .change-cap { margin: -12px 0 0; }
+</style>
+</head>
+<body>
+<main class="page page--no-nav" aria-label="Create PIN">
+  <header class="appbar">
+    <a class="back tap" id="back" href="otp.html" aria-label="Back"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg></a>
+    <div class="appbar__titles"><span class="appbar__eyebrow" id="eyebrow">New Account</span><h1 class="appbar__title" id="barTitle">Set Your PIN</h1></div>
+  </header>
+  <div class="stepper" id="stepper" aria-hidden="true"><i class="done"></i><i class="done"></i><i class="on"></i></div>
+  <p class="step-caption" id="caption" aria-live="polite">Step 3 of 3 · Create PIN</p>
+
+  <div class="pin-head" id="head">
+    <div class="pin-icon" id="icon" aria-hidden="true">
+      <svg width="24" height="27" viewBox="0 0 17 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="1.2" y="8" width="14.6" height="10.8" rx="2.2"/><path d="M4.4 8V5.4a4.1 4.1 0 0 1 8.2 0V8"/><path d="M8.5 12.2v2.4" stroke-linecap="round"/></svg>
+    </div>
+    <h2 class="pin-title" id="title">Create a 4-digit PIN</h2>
+    <p class="pin-sub" id="sub">Use it to sign in and approve payments.</p>
+  </div>
+
+  <div class="pin-dots" id="dots" role="img" aria-label="PIN entry, 0 of 4 digits"></div>
+  <p class="pin-msg" id="msg" role="status" aria-live="polite"></p>
+  <div class="keypad" id="pad" data-target="dots" data-length="4" aria-label="PIN keypad"></div>
+
+  <p class="tips" id="tips">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f1ea58" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 1.1 1 1.8V16h5v-.3c0-.7.4-1.4 1-1.8A6 6 0 0 0 12 3Z"/></svg>
+    <span><b style="color:#f0f0f0;font-weight:600">Tip:</b> avoid easy guesses like 1234, 0000 or your birthday. Never share your PIN — Spendee will never ask for it.</span>
+  </p>
+  <div class="toast" role="status" aria-live="polite"></div>
+</main>
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const $ = (id) => document.getElementById(id);
+    const flow = ['signup', 'reset', 'change'].includes(Spendee.q('flow')) ? Spendee.q('flow') : 'signup';
+    const CURRENT_PIN = '1234';
+    const pad = $('pad'), dots = $('dots'), msg = $('msg');
+
+    const STEPS = {
+      current: { title: 'Enter current PIN', sub: 'Verify it’s you to continue.' },
+      create: { title: 'Create a 4-digit PIN', sub: 'Use it to sign in and approve payments.' },
+      createNew: { title: 'Create new PIN', sub: 'Must differ from your current PIN.' },
+      confirm: { title: 'Confirm your PIN', sub: 'Enter the same 4 digits again.' },
+    };
+    const CFG = {
+      signup: { eyebrow: 'New Account', bar: 'Set Your PIN', steps: ['create', 'confirm'], back: 'otp.html?flow=signup' },
+      reset: { eyebrow: 'Reset PIN', bar: 'New PIN', steps: ['create', 'confirm'], back: 'otp.html?flow=reset' },
+      change: { eyebrow: 'Security', bar: 'Change PIN', steps: ['current', 'createNew', 'confirm'], back: 'settings.html' },
+    }[flow];
+
+    $('eyebrow').textContent = CFG.eyebrow;
+    $('barTitle').textContent = CFG.bar;
+    document.title = 'Spendee · ' + CFG.bar;
+    if (flow === 'change') { $('stepper').remove(); $('caption').classList.add('change-cap'); }
+
+    let idx = 0, attempts = 5, firstPin = '';
+    const failCount = { n: 0 };
+
+    const setMsg = (text, tone) => { msg.textContent = text || ''; msg.className = 'pin-msg' + (tone ? ' ' + tone : ''); };
+    const render = (animate) => {
+      const key = CFG.steps[idx];
+      $('title').textContent = STEPS[key].title;
+      $('sub').textContent = STEPS[key].sub;
+      const label = key === 'current' ? 'Current PIN' : key === 'confirm' ? 'Confirm PIN' : 'Create PIN';
+      $('caption').textContent = flow === 'change'
+        ? `Step ${idx + 1} of 3 · ${label}`
+        : `Step 3 of 3 · ${label}`;
+      $('back').setAttribute('aria-label', idx > 0 ? 'Back to previous step' : 'Back');
+      if (animate) { const h = $('head'); h.classList.remove('swap'); void h.offsetWidth; h.classList.add('swap'); }
+      pad.reset();
+      dots.setAttribute('aria-label', `${label}, 0 of 4 digits`);
+    };
+
+    // live dot count for screen readers
+    pad.addEventListener('click', () => setTimeout(() => {
+      const n = dots.querySelectorAll('i.on').length;
+      dots.setAttribute('aria-label', `${$('title').textContent}, ${n} of 4 digits`);
+      if (n > 0 && msg.classList.contains('err')) setMsg('');
+    }, 0));
+
+    const fail = (text, backTo) => {
+      pad.error(); setMsg(text, 'err');
+      if (backTo != null) setTimeout(() => { idx = backTo; firstPin = ''; render(true); }, 440);
+    };
+
+    pad.addEventListener('complete', async (e) => {
+      const pin = e.detail, key = CFG.steps[idx];
+      if (key === 'current') {
+        if (pin !== CURRENT_PIN) {
+          attempts -= 1;
+          fail(attempts > 0 ? `Incorrect PIN. ${attempts} attempt${attempts === 1 ? '' : 's'} left.` : 'Too many attempts. Reset your PIN via OTP.');
+          if (attempts <= 0) {
+            pad.style.pointerEvents = 'none';
+            const reset = await Spendee.dialog({ title: 'Too many attempts', message: 'For your security, PIN changes are locked. Reset your PIN with an OTP sent to +91 98765 43210.', confirm: 'Reset via OTP', cancel: 'Not now', tone: 'danger' });
+            location.href = reset ? 'forgot-pin.html' : 'settings.html';
+          }
+          return;
+        }
+        setMsg(''); idx += 1; return render(true);
+      }
+      if (key === 'create' || key === 'createNew') {
+        if (flow === 'change' && pin === CURRENT_PIN) return fail('New PIN must be different from your current PIN.');
+        firstPin = pin; setMsg(''); idx += 1; return render(true);
+      }
+      // confirm
+      if (pin !== firstPin) {
+        failCount.n += 1;
+        return fail('PINs don’t match. Create your PIN again.', CFG.steps.indexOf(flow === 'change' ? 'createNew' : 'create'));
+      }
+      await success();
+    });
+
+    pad.addEventListener('biometric', () => Spendee.toast(flow === 'change' ? 'Manage Face ID in Settings' : 'Set up biometrics after PIN'));
+
+    async function success() {
+      dots.classList.add('is-ok'); $('icon').classList.add('is-ok');
+      pad.style.pointerEvents = 'none';
+      Spendee.haptic();
+      if (flow === 'signup') {
+        setMsg('PIN created', 'ok');
+        Spendee.store.set('pinSet', true);
+        await Spendee.wait(750);
+        location.href = 'permissions.html';
+        return;
+      }
+      setMsg(flow === 'reset' ? 'PIN updated' : 'PIN changed', 'ok');
+      await Spendee.wait(350);
+      await Spendee.dialog(flow === 'reset'
+        ? { title: 'PIN reset successfully', message: 'Use your new 4-digit PIN to sign in. For safety, other devices have been signed out.', confirm: 'Sign In', cancel: '', tone: 'ok' }
+        : { title: 'PIN changed', message: 'Your new PIN is active. Use it next time you sign in or approve a payment.', confirm: 'Done', cancel: '', tone: 'ok' });
+      location.href = flow === 'reset' ? 'login.html?reset=1' : 'settings.html';
+    }
+
+    // Back: previous step inside the flow first, then leave
+    $('back').href = CFG.back;
+    $('back').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (idx > 0) { idx -= 1; firstPin = ''; setMsg(''); render(true); return; }
+      if (history.length > 1) history.back(); else location.href = CFG.back;
+    });
+
+    render(false);
+
+    // Gallery captures: ?step=confirm|current|error
+    const st = Spendee.q('step');
+    if (st && CFG.steps.includes(st)) { idx = CFG.steps.indexOf(st); render(false); }
+    if (st === 'error') { dots.classList.add('is-error'); dots.querySelectorAll('i').forEach((d) => d.classList.add('on')); setMsg('PINs don’t match. Create your PIN again.', 'err'); }
+  })();
+</script>
+</body>
+</html>

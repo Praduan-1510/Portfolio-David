@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .qa-lbl { font-size: 8.5px; letter-spacing: .35px; }
+  .stat-lbl { font-family: var(--font-ui); font-size: 12px; letter-spacing: .4px; color: #b3b3b3; }
+  .stat-sub { font-family: var(--font-ui); font-size: 11px; color: #e8e8e8; }
+</style>
+</head>
+<body>
+<main class="screen" style="height:1320px;min-height:1320px" aria-label="Home dashboard">
+  <!-- Header -->
+  <p class="t enter" style="left:44px;top:47px;font-size:12.5px;letter-spacing:.5px;color:#bfbfbf">Good Morning</p>
+  <h1 class="t enter" style="left:44px;top:65.5px;font-size:22px;font-weight:600;letter-spacing:.1px">Jayanta Adhikari</h1>
+  <a class="abs circle-btn tap" href="notifications.html" style="left:288px;top:47px" aria-label="Notifications">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f2ea58" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 17V11a6 6 0 0 1 12 0v6l1.6 1.8H4.4L6 17Z"/><path d="M10 21.2a2.2 2.2 0 0 0 4 0"/><path d="M12 3.2V5"/></svg>
+  </a>
+  <a class="abs circle-btn tap" href="settings.html" style="left:333px;top:47px;width:35px;height:35px" aria-label="Profile">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5v-.8a5.2 5.2 0 0 1 5.2-5.2h4.6a5.2 5.2 0 0 1 5.2 5.2v.8H4.5Z" stroke-linejoin="round"/></svg>
+  </a>
+
+  <!-- Net position -->
+  <section class="abs card enter" style="left:38px;top:119px;width:326px;height:159px;--i:1" aria-label="Net position">
+    <p class="t" style="left:21px;top:22.7px;font-size:14.5px;letter-spacing:1px;color:#e4e4e4">Net Position</p>
+    <p class="t num" style="left:20px;top:58px;font-size:33.5px;font-weight:500;letter-spacing:0">₹ <span data-count="296800">2,96,800</span></p>
+    <div class="abs tint-pill" style="left:19px;top:111px;width:175px;height:28px;background:#3b4f31;padding-left:10px;gap:9px">
+      <svg width="11" height="16" viewBox="0 0 11 16" fill="none" stroke="#8df15e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 15V1.5M1 6l4.5-4.5L10 6"/></svg>
+      <span style="font-size:16.5px;font-weight:500;color:#8df15e;letter-spacing:.1px;line-height:1">14.2% this month</span>
+    </div>
+  </section>
+
+  <!-- To get / To give -->
+  <a class="abs card tap enter" href="contact.html?filter=pending" style="left:38px;top:289px;width:151px;height:106px;--i:2" aria-label="To get">
+    <span class="t" style="left:14px;top:14.2px;font-size:11px;color:#c7c7c7;letter-spacing:.3px">To Get</span>
+    <span class="t num" style="left:14px;top:39.4px;font-size:22.5px;font-weight:500;color:#8df15e">₹ 4,15,200</span>
+    <span class="t" style="left:14px;top:76.2px;font-size:11px;font-weight:500;color:#e8e8e8">+8.4% this month</span>
+  </a>
+  <a class="abs card tap enter" href="contact.html" style="left:213px;top:289px;width:151px;height:106px;--i:2" aria-label="To give">
+    <span class="t" style="left:14px;top:14.2px;font-size:11px;color:#c7c7c7;letter-spacing:.3px">To Give</span>
+    <span class="t num" style="left:14px;top:39.4px;font-size:22.5px;font-weight:500;color:#f15858">₹ 1,18,400</span>
+    <span class="t" style="left:14px;top:76.2px;font-size:11px;font-weight:500;color:#e8e8e8">−2.1% this month</span>
+  </a>
+
+  <!-- AI nudge -->
+  <section class="abs card enter" style="left:39px;top:405px;width:326px;height:79px;--i:3" aria-label="Spendee suggestion">
+    <div class="abs" style="left:13px;top:20px;width:38px;height:39px;border-radius:50%;background:#4f4d30;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);display:grid;place-items:center">
+      <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#f1ea58" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+    </div>
+    <span class="t" style="left:62px;top:14.5px;font-size:11px;color:#67a549;letter-spacing:.2px">Spendee</span>
+    <span class="t" style="left:62px;top:28px;font-size:15.3px;font-weight:500;color:#fff;letter-spacing:.1px">Collect from 3 clients</span>
+    <span class="t" style="left:62px;top:46px;font-size:17px;font-weight:500;color:#8df15e;letter-spacing:.2px">₹1.24L this week</span>
+    <a class="abs tap" href="#" data-sheet="collectSheet" aria-label="Act: collect from 3 clients" style="left:244px;top:19px;width:70px;height:40px;border-radius:10px;background:#32434f;box-shadow:inset 0 0 0 1px rgba(95,178,241,.28);display:flex;align-items:center;justify-content:center;gap:4px;color:#5fb2f1;font-size:17px;font-weight:500">
+      Act <svg width="19" height="14" viewBox="0 0 19 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 7h15.5M11 1.5 17 7l-6 5.5"/></svg>
+    </a>
+  </section>
+
+  <!-- Quick actions -->
+  <h2 class="t" style="left:47px;top:508px;font-size:14.5px;letter-spacing:.8px;color:#d6d6d6">Quick Actions</h2>
+  <a class="abs tile tile--yellow tap enter" href="add-entry.html" style="left:37px;top:538px;width:74px;height:74px;--i:4">
+    <svg class="abs" style="left:30px;top:17px" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#f1ea58" stroke-width="2.2" stroke-linecap="round"><path d="M7 1v12M1 7h12"/></svg>
+    <span class="t qa-lbl" style="left:0;right:0;text-align:center;top:46px;color:#e3e0b5">Add Entry</span>
+  </a>
+  <a class="abs tile tile--red tap enter" href="send-money.html" style="left:121px;top:538px;width:74px;height:74px;--i:5">
+    <svg class="abs" style="left:30px;top:17px" width="14" height="18" viewBox="0 0 14 18" fill="none" stroke="#f15858" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17V1.5M1.5 7 7 1.5 12.5 7"/></svg>
+    <span class="t qa-lbl" style="left:0;right:0;text-align:center;top:46.5px;color:#e8c2c2">Send Money</span>
+  </a>
+  <a class="abs tile tile--green tap enter" href="invoices.html" style="left:205px;top:538px;width:74px;height:74px;--i:6">
+    <svg class="abs" style="left:27px;top:9px" width="20" height="27" viewBox="0 0 20 27" fill="none" stroke="#8df15e" stroke-width="2.1" stroke-linejoin="round"><path d="M3.2 1.2h8.4c.7 0 1.2.3 1.7.7l4.8 4.9c.5.5.7 1.1.7 1.7v14.6a2 2 0 0 1-2 2H3.2a2 2 0 0 1-2-2V3.2a2 2 0 0 1 2-2Z"/></svg>
+    <span class="t qa-lbl" style="left:0;right:0;text-align:center;top:46px;color:#cfe3c5">Invoice</span>
+  </a>
+  <a class="abs tile tile--blue tap enter" href="reports.html" style="left:289px;top:538px;width:74px;height:74px;--i:7">
+    <svg class="abs" style="left:29px;top:19px" width="17" height="12" viewBox="0 0 17 12" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 10.5 6 5.5l3 3L15.5 2M10.5 1.5h5v5"/></svg>
+    <span class="t qa-lbl" style="left:0;right:0;text-align:center;top:41px;color:#c4d6e4">Reports</span>
+  </a>
+
+  <!-- Cash velocity -->
+  <a class="abs card card--flat tap enter" href="credit-growth.html" style="left:38px;top:629px;width:326px;height:195px;--i:8" aria-label="Cash velocity 78 of 100">
+    <span class="t" style="left:20px;top:21.7px;font-size:16px;letter-spacing:.5px;color:#e6e6e6">Cash Velocity</span>
+    <span class="t" style="left:20px;top:46px;font-size:11px;letter-spacing:.3px;color:#a5a5a5">30-day momentum</span>
+    <span class="abs" style="left:242px;top:20px;width:74px;height:36px;border-radius:8px;background:#2f485b;display:grid;place-items:center;color:#59a5de;font-size:14px;letter-spacing:.3px">78 / 100</span>
+    <svg class="abs" style="left:57px;top:56px" width="212" height="100" viewBox="0 0 212 100" aria-hidden="true">
+      <defs>
+        <linearGradient id="g-arc" gradientUnits="userSpaceOnUse" x1="12" y1="80" x2="105" y2="10">
+          <stop offset="0" stop-color="#f23f3f"/><stop offset=".35" stop-color="#e3862d"/><stop offset=".65" stop-color="#c3b52a"/><stop offset="1" stop-color="#8ce31c"/>
+        </linearGradient>
+      </defs>
+      <path d="M12 77.9A98.3 98.3 0 0 1 199 77.9" fill="none" stroke="#ececec" stroke-width="8" stroke-linecap="round"/>
+      <path class="gauge__fill" d="M12 77.9A98.3 98.3 0 0 1 105.5 10" fill="none" stroke="url(#g-arc)" stroke-width="8" stroke-linecap="butt"/>
+      <circle cx="12" cy="77.9" r="4" fill="#f23f3f"/>
+      <g class="gauge__needle">
+        <path d="M105 62V24M96.2 35.5 105 24l8.8 11.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="105" cy="76.7" r="10.8" fill="#000" stroke="#fff" stroke-width="7.4"/>
+      </g>
+    </svg>
+    <span class="abs" style="left:87px;top:154px;width:152px;height:30px;border-radius:8px;background:#314528;display:grid;place-items:center;color:#76c651;font-size:14px;letter-spacing:.4px">Strong Performance</span>
+  </a>
+
+  <!-- Recent -->
+  <h2 class="t" style="left:48px;top:854.5px;font-size:15.5px;letter-spacing:.6px;color:#dedede">Recent</h2>
+  <a class="t tap" href="contact.html" style="left:318px;top:855.5px;font-size:13.5px;letter-spacing:.4px;color:#4a86b8">See all</a>
+
+  <a class="abs row tap enter" href="transaction-detail.html?id=TX-2041" style="left:37px;top:886px;--i:9">
+    <span class="avatar avatar--blue"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg></span>
+    <div class="row__body"><p class="row__name">Dutta &amp; Sons</p><p class="row__meta">2h ago · Settled</p></div>
+    <div class="row__right" style="right:22px"><span class="row__amt amt--done">₹45,000</span><span class="status status--done">Done</span></div>
+  </a>
+  <a class="abs row tap enter" href="transaction-detail.html?id=TX-2038" style="left:37px;top:955px;--i:10">
+    <span class="avatar avatar--yellow"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg></span>
+    <div class="row__body"><p class="row__name">Sharma Textiles</p><p class="row__meta">INV-1038 · Pending</p></div>
+    <div class="row__right" style="right:22px"><span class="row__amt amt--pending">₹62,000</span><span class="status status--pending">Pending</span></div>
+  </a>
+  <a class="abs row tap enter" href="transaction-detail.html?id=TX-2019" style="left:37px;top:1024px;--i:11">
+    <span class="avatar avatar--red"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg></span>
+    <div class="row__body"><p class="row__name">Bose Retail</p><p class="row__meta">Overdue 12 days</p></div>
+    <div class="row__right" style="right:22px"><span class="row__amt amt--overdue">₹1,15,000</span><span class="status status--overdue">Overdue</span></div>
+  </a>
+
+  <!-- Compliance + stock -->
+  <a class="abs card tap enter" href="gst-center.html" style="left:38px;top:1108px;width:151px;height:106px;--i:12">
+    <span class="t stat-lbl" style="left:14px;top:14.2px">GST DUE</span>
+    <span class="t" style="left:14px;top:38.5px;font-size:22px;font-weight:500;color:#8df15e">11d</span>
+    <span class="t stat-sub" style="left:14px;top:76.3px">₹24,560 payable</span>
+  </a>
+  <a class="abs card tap enter" href="inventory.html" style="left:213px;top:1108px;width:151px;height:106px;--i:12">
+    <span class="t stat-lbl" style="left:14px;top:14.2px">LOW STOCK</span>
+    <span class="t" style="left:14px;top:38.5px;font-size:22px;font-weight:500;color:#f15858">5 SKUs</span>
+    <span class="t stat-sub" style="left:14px;top:76.3px">Reorder needed</span>
+  </a>
+
+  <nav data-tabbar="home"></nav>
+</main>
+<section class="sheet" id="collectSheet" aria-labelledby="collectTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="collectTitle">Collect ₹1.24L this week</p><p class="sheet__sub">Spendee picked the clients most likely to pay if reminded now</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="options" id="collectList">
+    <label class="option tap" style="cursor:pointer"><span class="check"><input type="checkbox" checked data-amt="38000" aria-label="Ghosh Traders"></span><span class="avatar avatar--red"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg></span><span class="option__body"><span class="option__title">Ghosh Traders</span><span class="option__sub">Overdue 1 month · promised to pay today</span></span><span class="num c-red" style="font-weight:600">₹38,000</span></label>
+    <label class="option tap" style="cursor:pointer"><span class="check"><input type="checkbox" checked data-amt="62000" aria-label="Sharma Textiles"></span><span class="avatar avatar--yellow"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg></span><span class="option__body"><span class="option__title">Sharma Textiles</span><span class="option__sub">Due Jun 10 · usually pays after 1 reminder</span></span><span class="num c-yellow" style="font-weight:600">₹62,000</span></label>
+    <label class="option tap" style="cursor:pointer"><span class="check"><input type="checkbox" checked data-amt="24000" aria-label="Roy Fabrics"></span><span class="avatar avatar--yellow"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg></span><span class="option__body"><span class="option__title">Roy Fabrics</span><span class="option__sub">Due Jun 15 · opens WhatsApp messages fast</span></span><span class="num c-yellow" style="font-weight:600">₹24,000</span></label>
+  </div>
+  <p class="section-label" style="margin-top:20px">Send via</p>
+  <div class="segmented" id="collectVia"><button aria-selected="true" data-value="WhatsApp">WhatsApp</button><button data-value="SMS">SMS</button><button data-value="Both">Both</button></div>
+  <div class="banner banner--info" style="margin-top:16px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5h.01"/></svg><span>Each message includes a UPI payment link to jayanta.a@spendee.</span></div>
+  <button class="btn btn--primary tap" id="collectSend" style="margin-top:18px"><span id="collectLabel">Send 3 Reminders · ₹1,24,000</span></button>
+</section>
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const list = document.getElementById('collectList'), label = document.getElementById('collectLabel'), btn = document.getElementById('collectSend');
+    const upd = () => { const on = [...list.querySelectorAll('input:checked')]; const tot = on.reduce((a, i) => a + +i.dataset.amt, 0);
+      label.textContent = on.length ? `Send ${on.length} Reminder${on.length > 1 ? 's' : ''} · ₹${Spendee.fmtIN(tot)}` : 'Select at least one client';
+      btn.classList.toggle('is-disabled', !on.length); };
+    list.addEventListener('change', upd); upd();
+    btn.addEventListener('click', async () => {
+      const n = list.querySelectorAll('input:checked').length; if (!n) return;
+      await Spendee.loading(btn, 1100); Spendee.sheet.close();
+      const via = document.querySelector('#collectVia [aria-selected="true"]').dataset.value;
+      Spendee.toast(`${n} reminder${n > 1 ? 's' : ''} sent on ${via}`);
+    });
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Transfer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .page [hidden], .sheet [hidden] { display: none !important; }
+  .appbar { margin-bottom: 22px; }
+  .search { padding-left: 20px; }
+  .search input { margin-left: 14px; font-size: 15px; }
+  .search input::-webkit-search-cancel-button { display: none; }
+  .recent { display: flex; gap: 14px; overflow-x: auto; scrollbar-width: none; margin: 0 -34px; padding: 2px 34px 4px; }
+  .recent::-webkit-scrollbar { display: none; }
+  .recent a { flex-shrink: 0; width: 62px; display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 12.5px; color: #dcdcdc; text-align: center; }
+  .initials { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; font-size: 18px; font-weight: 600; letter-spacing: .5px; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .initials--sm { width: 40px; height: 40px; font-size: 14px; }
+  .recent .scan { background: #132430; color: #5fb2f1; box-shadow: inset 0 0 0 1px rgba(95,178,241,.4); }
+  .count { font-size: 13px; letter-spacing: .3px; color: #8a8a8a; text-transform: none; }
+  .ben .menu__item { min-height: 66px; }
+  .ben .menu__title { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ben .menu__sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nick { font-size: 12px; color: #8a8a8a; font-weight: 400; }
+  #bIfsc::placeholder { text-transform: none; letter-spacing: 0; }
+  .ben mark { background: rgba(95,178,241,.28); color: inherit; border-radius: 3px; padding: 0 1px; }
+  .tag { display: inline-block; margin-left: 6px; font-size: 10px; font-weight: 600; letter-spacing: .4px; padding: 1px 6px; border-radius: 5px; vertical-align: 2px; }
+  .tag--cool { background: #454426; color: #f1ea58; }
+  .ben .menu__item.is-new { animation: newflash 1.6s var(--ease-out); }
+  @keyframes newflash { 0%, 40% { background: rgba(95,178,241,.16); } 100% { background: transparent; } }
+  .add-btn { margin-top: 14px; }
+  .empty-state .btn { width: auto; display: inline-flex; padding: 0 20px; }
+  /* add sheet */
+  .sheet .fg + .fg { margin-top: 16px; }
+  .sheet .fg > .label { font-size: 13.5px; margin-bottom: 8px; }
+  .sheet .field { height: 52px; font-size: 16.5px; padding: 0 18px; }
+  .ok-text { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #8df15e; margin: 8px 0 0 10px; }
+  .bank-found { display: flex; align-items: center; gap: 12px; margin-top: 10px; padding: 10px 14px; border-radius: 14px; background: #132430; box-shadow: inset 0 0 0 1px rgba(95,178,241,.25); }
+  .bank-found .menu__title { font-size: 14px; }
+  .done-hero { text-align: center; padding: 6px 0 4px; }
+  .done-hero .result__ring { width: 84px; height: 84px; margin-bottom: 18px; }
+  .done-hero .result__ring::before { inset: -10px; }
+  .done-hero .result__ring svg path { stroke-dasharray: 30; stroke-dashoffset: 30; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Transfer to beneficiaries">
+  <header class="appbar">
+    <a class="back tap" href="bank.html" data-go="back" aria-label="Back"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg></a>
+    <div class="appbar__titles"><span class="appbar__eyebrow">Spendee Bank</span><h1 class="appbar__title">Transfer</h1></div>
+    <button class="appbar__action tap" data-sheet="addSheet" aria-label="Add beneficiary"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 1v12M1 7h12"/></svg>Add</button>
+  </header>
+
+  <label class="search enter">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="7"/><path d="m20 20-4.5-4.5"/></svg>
+    <input id="q" type="search" placeholder="Search name, bank or A/c" aria-label="Search beneficiaries" autocomplete="off">
+  </label>
+
+  <div id="recentBlock">
+    <p class="section-label" style="margin-top:26px">Recent</p>
+    <div class="recent enter" style="--i:1" id="recent" aria-label="Recent payees"></div>
+  </div>
+
+  <p class="section-label between" style="margin-top:26px"><span>Saved beneficiaries</span><span class="count num" id="count">6</span></p>
+  <nav class="menu ben enter" style="--i:2" id="list" aria-label="Saved beneficiaries"></nav>
+
+  <div class="empty-state" id="empty" hidden>
+    <div class="empty-state__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="7"/><path d="m20 20-4.5-4.5M8 10.5h5"/></svg></div>
+    <h3>No beneficiaries found</h3>
+    <p id="emptyMsg">Check the spelling or add them as a new beneficiary.</p>
+    <div class="row-flex" style="justify-content:center;gap:10px">
+      <button class="btn btn--neutral btn--sm tap" id="clearQ">Clear search</button>
+      <button class="btn btn--ghost btn--sm tap" data-sheet="addSheet">Add beneficiary</button>
+    </div>
+  </div>
+
+  <button class="btn btn--ghost tap add-btn enter" style="--i:3" id="addBtn" data-sheet="addSheet"><svg width="16" height="16" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 1v12M1 7h12"/></svg>Add beneficiary</button>
+
+  <p class="secure-note" style="margin-top:18px"><svg width="11" height="12" viewBox="0 0 11 12" fill="none" stroke="#cfcfcf" stroke-width="1.2"><rect x="1" y="5.2" width="9" height="6" rx="1.4"/><path d="M3 5.2V3.6a2.5 2.5 0 0 1 5 0v1.6"/></svg>New beneficiaries have a 24-hour cooling period</p>
+
+  <nav data-tabbar="bank"></nav>
+</main>
+
+<!-- Add beneficiary -->
+<section class="sheet" id="addSheet" aria-labelledby="addTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="addTitle">Add beneficiary</p><p class="sheet__sub" id="addSub">Bank account details for NEFT / IMPS</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+
+  <form id="addForm" novalidate>
+    <div class="fg"><label class="label" for="bName">Account holder name</label><input class="field" id="bName" autocomplete="name" placeholder="As per bank records"><span class="error-text" role="alert"></span></div>
+    <div class="fg"><label class="label" for="bAcc">Account number</label><input class="field num" id="bAcc" inputmode="numeric" autocomplete="off" placeholder="9 to 18 digits" style="-webkit-text-security:disc"><span class="error-text" role="alert"></span></div>
+    <div class="fg"><label class="label" for="bAcc2">Confirm account number</label><input class="field num" id="bAcc2" inputmode="numeric" autocomplete="off" placeholder="Re-enter account number"><span class="error-text" role="alert"></span><span class="ok-text" id="accOk" hidden><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Account numbers match</span></div>
+    <div class="fg"><label class="label" for="bIfsc">IFSC</label><input class="field" id="bIfsc" autocomplete="off" autocapitalize="characters" maxlength="11" placeholder="e.g. YESB0000123" style="text-transform:uppercase;letter-spacing:.8px"><span class="helper">11 characters · 5th character is always 0</span><span class="error-text" role="alert"></span>
+      <div class="bank-found" id="bankFound" hidden role="status" aria-live="polite">
+        <span class="menu__icon icon-blue"><svg width="18" height="18" viewBox="1 1 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><path d="M2.6 9.2 13 3.4l10.4 5.8H2.6Z"/><path d="M4 11.4h18M4 21.2h18M2.6 23.6h20.8M6.8 11.4v9.8M19.2 11.4v9.8"/></svg></span>
+        <span class="menu__body"><span class="menu__title" id="bankName">Yes Bank</span><span class="menu__sub" id="bankBranch">Kolkata branch</span></span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8df15e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+      </div>
+    </div>
+    <div class="fg"><label class="label" for="bNick">Nickname <span class="muted">(optional)</span></label><input class="field" id="bNick" placeholder="e.g. Fabric vendor"></div>
+    <button class="btn btn--primary tap" id="addGo" type="submit" style="margin-top:22px"><span>Add beneficiary</span></button>
+  </form>
+
+  <div id="addDone" hidden>
+    <div class="done-hero result result--ok" style="padding-top:0">
+      <div class="result__ring"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+      <p style="font-size:21px;font-weight:600" id="doneName">Beneficiary added</p>
+      <p class="muted num" style="font-size:13.5px;margin-top:4px" id="doneMeta">Yes Bank ••1234 · YESB0000123</p>
+    </div>
+    <div class="banner banner--warn" style="margin-top:20px">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f1ea58" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v5l3 2"/></svg>
+      <span><b style="color:#fff;font-weight:600">Cooling period active.</b> You can send up to ₹&nbsp;50,000 in the first 24 hours. Full limits unlock at <span id="unlockAt">10:48 AM tomorrow</span>.</span>
+    </div>
+    <div class="btn-pair" style="margin-top:20px">
+      <button class="btn btn--neutral tap" data-close>Done</button>
+      <a class="btn btn--primary tap" id="payNew" href="send-money.html">Pay now</a>
+    </div>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const S = Spendee, $ = (id) => document.getElementById(id);
+    const TINTS = ['icon-blue', 'icon-yellow', 'icon-green', 'icon-red'];
+    const initials = (n) => { const w = n.split(/\s+/).filter((x) => /^[a-z0-9]/i.test(x)); return (/^[A-Z]{2,3}$/.test(w[0] || '') ? w[0] : w.slice(0, 2).map((x) => x[0]).join('')).toUpperCase(); };
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const BANKS = { YESB: 'Yes Bank', HDFC: 'HDFC Bank', ICIC: 'ICICI Bank', SBIN: 'SBI', UTIB: 'Axis Bank', KKBK: 'Kotak Bank', PUNB: 'Punjab National Bank', BARB: 'Bank of Baroda', IDFB: 'IDFC First Bank', INDB: 'IndusInd Bank' };
+
+    const SEED = [
+      { name: 'Dutta & Sons', bank: 'HDFC Bank', last4: '4521', ifsc: 'HDFC0001234' },
+      { name: 'MK Suppliers', bank: 'ICICI Bank', last4: '9082', ifsc: 'ICIC0004567', nick: 'Fabric vendor' },
+      { name: 'Sharma Textiles', bank: 'Axis Bank', last4: '3310', ifsc: 'UTIB0000789' },
+      { name: 'Ghosh Traders', bank: 'Kotak Bank', last4: '6675', ifsc: 'KKBK0000456' },
+      { name: 'Dye Chemical', bank: 'SBI', last4: '1209', ifsc: 'SBIN0012345' },
+      { name: 'Mitra Textiles', bank: 'Yes Bank', last4: '5540', ifsc: 'YESB0000321' },
+    ];
+    const added = S.store.get('beneficiaries', []);
+    let list = [...added, ...SEED];
+    const RECENT = ['Dutta & Sons', 'Ghosh Traders', 'Sharma Textiles', 'Bose Retail', 'Mitra Textiles', 'Saha & Co.'];
+    const payHref = (name) => 'send-money.html?to=' + encodeURIComponent(name);
+
+    $('recent').innerHTML = `<a class="tap" href="scan-pay.html"><span class="initials scan"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3M7 12h10"/></svg></span>Scan QR</a>` +
+      RECENT.map((n, i) => `<a class="tap" href="${payHref(n)}" aria-label="Pay ${n}"><span class="initials ${TINTS[i % 4]}">${initials(n)}</span>${n.split(' ')[0]}</a>`).join('');
+
+    const hl = (text, q) => { const t = esc(text); if (!q) return t; const i = text.toLowerCase().indexOf(q); return i < 0 ? t : esc(text.slice(0, i)) + '<mark>' + esc(text.slice(i, i + q.length)) + '</mark>' + esc(text.slice(i + q.length)); };
+    function render(newName) {
+      const q = $('q').value.trim().toLowerCase();
+      const rows = list.filter((b) => !q || [b.name, b.bank, b.last4, b.ifsc, b.nick || ''].join(' ').toLowerCase().includes(q));
+      $('count').textContent = q ? `${rows.length} of ${list.length}` : list.length;
+      $('recentBlock').hidden = !!q;
+      $('list').innerHTML = rows.map((b, i) => `
+        <a class="menu__item tap${b.name === newName ? ' is-new' : ''}" href="${payHref(b.name)}" aria-label="Pay ${esc(b.name)}, ${esc(b.bank)} ending ${b.last4}">
+          <span class="initials initials--sm ${TINTS[list.indexOf(b) % 4]}">${initials(b.name)}</span>
+          <span class="menu__body"><span class="menu__title">${hl(b.name, q)}${b.nick ? ' <span class="nick">· ' + hl(b.nick, q) + '</span>' : ''}${b.cooling && Date.now() - b.cooling < 864e5 ? '<span class="tag tag--cool">24h limit</span>' : ''}</span>
+          <span class="menu__sub num">${hl(b.bank, q)} ••${hl(b.last4, q)} · ${hl(b.ifsc, q)}</span></span>
+          <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+        </a>`).join('');
+      const empty = rows.length === 0;
+      $('list').hidden = empty; $('empty').hidden = !empty; $('addBtn').hidden = empty;
+      if (empty) $('emptyMsg').textContent = `No saved beneficiary matches “${$('q').value.trim()}”. Check the spelling or add them.`;
+    }
+    $('q').addEventListener('input', () => render());
+    $('clearQ').addEventListener('click', () => { $('q').value = ''; render(); $('q').focus(); });
+
+    // ---------- Add beneficiary form ----------
+    const setErr = (id, msg) => {
+      const fg = $(id).closest('.fg'); fg.classList.toggle('has-error', !!msg);
+      fg.querySelector('.error-text').textContent = msg || '';
+      return !msg;
+    };
+    const IFSC_RE = /^[A-Z]{4}0[A-Z0-9]{6}$/;
+    const rules = {
+      bName: (v) => v.trim().length < 3 ? 'Enter the full name as per bank records' : /[^a-zA-Z .&'-]/.test(v) ? 'Use letters only (no numbers or symbols)' : '',
+      bAcc: (v) => !/^\d{9,18}$/.test(v) ? 'Account number should be 9 to 18 digits' : '',
+      bAcc2: (v) => !v ? 'Re-enter the account number to confirm' : v !== $('bAcc').value ? 'Account numbers don’t match. Check both fields.' : '',
+      bIfsc: (v) => !v ? 'Enter the 11-character IFSC' : !IFSC_RE.test(v) ? 'IFSC looks like YESB0000123 (4 letters, 0, then 6 characters)' : !BANKS[v.slice(0, 4)] ? 'We couldn’t find this bank. Check the IFSC on a cheque or passbook.' : '',
+    };
+    ['bAcc', 'bAcc2'].forEach((id) => $(id).addEventListener('input', () => {
+      $(id).value = $(id).value.replace(/\D/g, '').slice(0, 18);
+      const a = $('bAcc').value, b = $('bAcc2').value;
+      $('accOk').hidden = !(b && a === b && /^\d{9,18}$/.test(a));
+      // defer so app.js's generic "clear error on input" handler runs first
+      setTimeout(() => { if (b && a.length >= b.length && !a.startsWith(b)) setErr('bAcc2', 'Account numbers don’t match. Check both fields.'); });
+    }));
+    $('bIfsc').addEventListener('input', () => {
+      const v = $('bIfsc').value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 11);
+      $('bIfsc').value = v;
+      const ok = IFSC_RE.test(v) && BANKS[v.slice(0, 4)];
+      $('bankFound').hidden = !ok;
+      if (ok) { $('bankName').textContent = BANKS[v.slice(0, 4)]; $('bankBranch').textContent = (v === 'YESB0000123' || v.startsWith('YESB') ? 'Kolkata branch' : 'Kolkata Main branch') + ' · ' + v; setErr('bIfsc', ''); }
+      else if (v.length === 11) setTimeout(() => setErr('bIfsc', rules.bIfsc(v)));
+    });
+    Object.keys(rules).forEach((id) => $(id).addEventListener('blur', () => { if ($(id).value) setErr(id, rules[id]($(id).value)); }));
+
+    $('addForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      let first = null;
+      Object.keys(rules).forEach((id) => { if (!setErr(id, rules[id]($(id).value)) && !first) first = id; });
+      if (first) { $(first).focus(); S.haptic(); return; }
+      await S.loading($('addGo'), 1400);
+      const ifsc = $('bIfsc').value;
+      const b = { name: $('bName').value.trim().replace(/\s+/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()), bank: BANKS[ifsc.slice(0, 4)], last4: $('bAcc').value.slice(-4), ifsc, nick: $('bNick').value.trim(), cooling: Date.now() };
+      list = [b, ...list.filter((x) => x.name !== b.name)];
+      S.store.set('beneficiaries', [b, ...S.store.get('beneficiaries', []).filter((x) => x.name !== b.name)].slice(0, 10));
+      $('doneName').textContent = b.name + ' added';
+      $('doneMeta').textContent = `${b.bank} ••${b.last4} · ${b.ifsc}`;
+      $('payNew').href = payHref(b.name) + '&cap=50000';
+      $('addForm').hidden = true; $('addDone').hidden = false;
+      $('addTitle').textContent = 'Beneficiary added'; $('addSub').textContent = 'Ready for transfers';
+      $('q').value = ''; render(b.name); pendingToast = b.name;
+    });
+    let pendingToast = null;
+    $('addSheet').addEventListener('sheet:close', () => {
+      if (pendingToast) { S.toast(`${pendingToast} saved as beneficiary`); pendingToast = null; }
+      setTimeout(() => {
+        $('addForm').reset(); $('addForm').hidden = false; $('addDone').hidden = true; $('bankFound').hidden = true; $('accOk').hidden = true;
+        $('addForm').querySelectorAll('.fg').forEach((fg) => fg.classList.remove('has-error'));
+        $('addTitle').textContent = 'Add beneficiary'; $('addSub').textContent = 'Bank account details for NEFT / IMPS';
+      }, 320);
+    });
+
+    render();
+  })();
+</script>
+</body>
+</html>

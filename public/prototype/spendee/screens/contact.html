@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Contacts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+</head>
+<body>
+<main class="screen" style="height:874px;min-height:874px" aria-label="Contacts">
+  <h1 class="t page-title" style="left:45px;top:45.5px">Contact</h1>
+  <p class="t page-sub" style="left:44px;top:76px">42 total · ₹6.5L outstanding</p>
+
+  <a class="abs tap" href="add-contact.html" aria-label="Add contact" style="left:320px;top:41px;width:56px;height:49px;display:grid;place-items:center">
+    <span style="width:40px;height:25px;border-radius:8px;background:#132430;display:grid;place-items:center"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#5fb2f1" stroke-width="2.2" stroke-linecap="round"><path d="M6 1.2v9.6M1.2 6h9.6"/></svg></span>
+  </a>
+
+  <label class="abs search" style="left:34px;top:121px;width:334px">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#8e8e8e" stroke-width="2" stroke-linecap="round"><circle cx="5.8" cy="5.8" r="4.6"/><path d="m9.3 9.3 3.4 3.4"/></svg>
+    <input id="q" type="search" placeholder="Search customers, vendors..." aria-label="Search customers and vendors" autocomplete="off">
+  </label>
+
+  <div class="abs chips" role="tablist" aria-label="Filter" data-group data-filter-target="#list" style="left:34px;top:185px;width:334px">
+    <button class="chip is-active" role="tab" aria-selected="true" data-value="all" style="width:39px">All</button>
+    <button class="chip" role="tab" aria-selected="false" data-value="overdue" style="width:85px">Overdue</button>
+    <button class="chip" role="tab" aria-selected="false" data-value="pending" style="width:82px">Pending</button>
+    <button class="chip" role="tab" aria-selected="false" data-value="done" style="width:77px">Settled</button>
+  </div>
+
+  <div class="abs list" id="list" style="left:34px;top:232px;width:334px;bottom:0;overflow-y:auto;padding-bottom:120px;scrollbar-width:none">
+    <a class="row tap" href="customer-details.html?c=bose-retail" data-status="overdue" data-name="bose retail" style="animation-delay:0ms">
+      <span class="avatar avatar--red"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg></span>
+      <div class="row__body"><p class="row__name">Bose Retail</p><p class="row__meta">Overdue 12 days</p></div>
+      <div class="row__right" style="right:17px"><span class="row__amt amt--overdue">₹1,15,000</span><span class="status status--overdue">Overdue</span></div>
+    </a>
+    <a class="row tap" href="customer-details.html?c=dutta-sons" data-status="done" data-name="dutta &amp; sons" style="animation-delay:40ms">
+      <span class="avatar avatar--blue"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg></span>
+      <div class="row__body"><p class="row__name">Dutta &amp; Sons</p><p class="row__meta">2h ago · Settled</p></div>
+      <div class="row__right" style="right:17px"><span class="row__amt amt--done">₹45,000</span><span class="status status--done">Done</span></div>
+    </a>
+    <a class="row tap" href="customer-details.html?c=sharma-textiles" data-status="pending" data-name="sharma textiles" style="animation-delay:80ms">
+      <span class="avatar avatar--yellow"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg></span>
+      <div class="row__body"><p class="row__name">Sharma Textiles</p><p class="row__meta">Due Jun 10 · Invoice sent</p></div>
+      <div class="row__right" style="right:17px"><span class="row__amt amt--pending">₹62,000</span><span class="status status--pending">Pending</span></div>
+    </a>
+    <a class="row tap" href="customer-details.html?c=mk-suppliers" data-status="done" data-name="mk suppliers" style="animation-delay:120ms">
+      <span class="avatar avatar--blue"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg></span>
+      <div class="row__body"><p class="row__name">MK Suppliers</p><p class="row__meta">8h ago · Settled</p></div>
+      <div class="row__right" style="right:17px"><span class="row__amt amt--done">₹18,500</span><span class="status status--done">Done</span></div>
+    </a>
+    <a class="row tap" href="customer-details.html?c=ghosh-traders" data-status="overdue" data-name="ghosh traders" style="animation-delay:160ms">
+      <span class="avatar avatar--red"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg></span>
+      <div class="row__body"><p class="row__name">Ghosh Traders</p><p class="row__meta">Overdue 1 month</p></div>
+      <div class="row__right" style="right:17px"><span class="row__amt amt--overdue">₹38,000</span><span class="status status--overdue">Overdue</span></div>
+    </a>
+    <a class="row tap" href="customer-details.html?c=roy-fabrics" data-status="pending" data-name="roy fabrics" style="animation-delay:200ms">
+      <span class="avatar avatar--yellow"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg></span>
+      <div class="row__body"><p class="row__name">Roy Fabrics</p><p class="row__meta">Due Jun 15</p></div>
+      <div class="row__right" style="right:17px"><span class="row__amt amt--pending">₹24,000</span><span class="status status--pending">Pending</span></div>
+    </a>
+    <a class="row tap" href="customer-details.html?c=saha-co" data-status="done" data-name="saha &amp; co." style="animation-delay:240ms">
+      <span class="avatar avatar--blue"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg></span>
+      <div class="row__body"><p class="row__name">Saha &amp; Co.</p><p class="row__meta">Jun 2 · Settled</p></div>
+      <div class="row__right" style="right:17px"><span class="row__amt amt--done">₹28,000</span><span class="status status--done">Done</span></div>
+    </a>
+    <a class="row tap" href="customer-details.html?c=mitra-textiles" data-status="pending" data-name="mitra textiles" style="animation-delay:280ms">
+      <span class="avatar avatar--yellow"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg></span>
+      <div class="row__body"><p class="row__name">Mitra Textiles</p><p class="row__meta">Due Jun 18</p></div>
+      <div class="row__right" style="right:17px"><span class="row__amt amt--pending">₹52,500</span><span class="status status--pending">Pending</span></div>
+    </a>
+    <p class="empty" hidden>No contacts match your search</p>
+  </div>
+
+  <nav data-tabbar="ledger"></nav>
+</main>
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const q = document.getElementById('q');
+    const list = document.getElementById('list');
+    const chips = document.querySelector('[data-filter-target]');
+    let status = 'all';
+    const apply = () => {
+      const term = q.value.trim().toLowerCase(); let shown = 0;
+      list.querySelectorAll('.row').forEach((r) => {
+        const ok = (status === 'all' || r.dataset.status === status) && r.dataset.name.includes(term);
+        r.style.display = ok ? '' : 'none'; if (ok) shown++;
+      });
+      list.querySelector('.empty').hidden = shown > 0;
+    };
+    chips.addEventListener('change', (e) => { status = e.detail; setTimeout(apply); });
+    q.addEventListener('input', apply);
+    // Deep links: ?filter=pending|overdue|done, ?deleted=1
+    const f = Spendee.q('filter');
+    const chip = f && chips.querySelector('[data-value="' + f + '"]');
+    if (chip) chip.click();
+    if (Spendee.q('deleted') === '1') setTimeout(() => Spendee.toast('Contact deleted'), 400);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Card Controls</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .page [hidden], .sheet [hidden] { display: none !important; }
+  .appbar { margin-bottom: 22px; }
+  /* Bank card — copied from bank.html, placed in flow */
+  .bank-card { position: relative; margin: 0 -2px; width: 338px; height: 190px; border-radius: 12px; overflow: hidden; font-family: 'Inter', system-ui, sans-serif;
+    background: radial-gradient(circle at 285px 51px, #f0e95a 0, rgba(222,215,85,.8) 8px, rgba(170,168,62,.5) 30px, rgba(110,112,55,.26) 60px, rgba(50,64,52,.1) 90px, rgba(19,36,48,0) 115px), #132430;
+    box-shadow: 0 12px 30px rgba(0,0,0,.45); transform-style: preserve-3d; transition: transform 400ms var(--ease-out), filter 400ms var(--ease-out); }
+  .bank-card:hover { transform: perspective(900px) rotateX(4deg) rotateY(-6deg) translateY(-2px); }
+  .bank-card .shine { position: absolute; inset: 0; background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.08) 45%, transparent 60%); transform: translateX(-100%); transition: transform 900ms var(--ease-out); }
+  .bank-card:hover .shine { transform: translateX(100%); }
+  .card-overlay { position: absolute; inset: 0; border-radius: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font-family: var(--font); font-size: 17px; font-weight: 600; letter-spacing: .6px; opacity: 0; pointer-events: none; transition: opacity 360ms var(--ease-out);
+    backdrop-filter: blur(7px) saturate(.7); -webkit-backdrop-filter: blur(7px) saturate(.7); }
+  .card-overlay--frozen { color: #e6f3ff; background: radial-gradient(circle at 20% 15%, rgba(255,255,255,.22), transparent 40%), radial-gradient(circle at 85% 90%, rgba(200,231,255,.18), transparent 45%), rgba(120,170,210,.22); box-shadow: inset 0 0 0 1px rgba(200,231,255,.35); }
+  .card-overlay--blocked { color: #ffd9d9; background: rgba(60,22,22,.62); box-shadow: inset 0 0 0 1px rgba(241,88,88,.4); }
+  .card-overlay span.ic { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.14); box-shadow: inset 0 0 0 1px rgba(255,255,255,.25); }
+  .card-overlay small { font-size: 12px; font-weight: 500; letter-spacing: .3px; opacity: .8; }
+  [data-state="frozen"] .card-overlay--frozen, [data-state="blocked"] .card-overlay--blocked { opacity: 1; }
+  [data-state="frozen"] .card-overlay--frozen .ic svg { animation: spinIn 700ms var(--ease-spring); }
+  @keyframes spinIn { from { transform: rotate(-120deg) scale(.4); } to { transform: none; } }
+  .card-meta { display: flex; align-items: center; justify-content: space-between; margin: 14px 2px 0; font-size: 13px; color: #9a9a9a; }
+  .state-pill { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 500; letter-spacing: .3px; }
+  .state-pill i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .state-pill--active { background: #1c3013; color: #8df15e; }
+  .state-pill--frozen { background: #1d3548; color: #5fb2f1; }
+  .state-pill--blocked { background: #3c1616; color: #f15858; }
+  .state-banner { margin-top: 14px; }
+  .state-banner b { font-weight: 600; color: #fff; }
+  .freeze { margin-top: 16px; }
+  .is-locked { opacity: .45; pointer-events: none; filter: saturate(.4); transition: opacity var(--dur); }
+  .switch[aria-disabled="true"] { opacity: .5; pointer-events: none; }
+  #limits { scroll-margin-top: 24px; margin-top: 28px; }
+  .limit + .limit { margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.12); }
+  .limit__head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+  .limit__t { font-size: 15px; color: #f0f0f0; }
+  .limit__s { display: block; font-size: 11px; color: #8a8a8a; margin-top: 2px; }
+  .limit__v { font-size: 18px; font-weight: 600; color: #5fb2f1; }
+  .limit__scale { display: flex; justify-content: space-between; font-size: 11px; color: #6b6b6b; margin-top: 8px; }
+  .save-row { margin-top: 20px; }
+  .save-hint { font-size: 12px; color: #8a8a8a; text-align: center; margin-top: 10px; min-height: 16px; }
+  .danger-title { color: #f15858 !important; }
+  /* sheets */
+  .keypad:focus { outline: none; }
+  .pad-note { text-align: center; font-size: 13px; color: #9a9a9a; min-height: 20px; margin: 10px 0 18px; }
+  .pad-note.is-error { color: #f15858; }
+  .sheet .stepper { margin: 0 0 18px; }
+  .processing { display: none; text-align: center; padding: 34px 0 30px; }
+  .spinner { width: 54px; height: 54px; margin: 0 auto 18px; border-radius: 50%; border: 3px solid rgba(95,178,241,.18); border-top-color: #5fb2f1; animation: spin 800ms linear infinite; }
+  .secret { background: #262626; border-radius: 20px; padding: 18px 20px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); }
+  .secret__num { font-family: 'Inter', system-ui, sans-serif; font-size: 19px; font-weight: 600; letter-spacing: 1.6px; white-space: nowrap; }
+  .secret__grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 12px; margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.12); }
+  .secret__k { display: block; font-size: 11px; letter-spacing: .8px; text-transform: uppercase; color: #8a8a8a; }
+  .secret__v { display: block; font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 600; margin-top: 4px; }
+  .countdown { margin-top: 16px; }
+  .countdown__bar { height: 4px; border-radius: 2px; background: #333; overflow: hidden; }
+  .countdown__bar i { display: block; height: 100%; background: #f1ea58; transform-origin: left; }
+  .countdown__txt { display: flex; justify-content: space-between; font-size: 12.5px; color: #9a9a9a; margin-top: 8px; }
+  .icon-copy { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; color: #5fb2f1; background: #283845; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Card controls" data-state="active" id="root">
+  <header class="appbar">
+    <a class="back tap" href="bank.html" data-go="back" aria-label="Back"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg></a>
+    <div class="appbar__titles"><span class="appbar__eyebrow">RuPay Debit ••4887</span><h1 class="appbar__title">Card Controls</h1></div>
+  </header>
+
+  <div class="bank-card enter" aria-label="RuPay card ending 4887" id="card">
+    <span class="shine"></span>
+    <svg class="abs" style="left:19px;top:23px" width="38" height="23" viewBox="0 0 38 23"><rect width="38" height="23" rx="5" fill="#d8d152"/><path d="M13 0v23M25 0v23M0 8h13M25 8h13M0 15.5h13M25 15.5h13M13 11.5h12" stroke="#b1ab43" stroke-width="1"/></svg>
+    <span class="t" style="left:19px;top:89px;font-size:13px;letter-spacing:5px;color:#fff">**** **** **** <span style="letter-spacing:5.6px;font-size:14px">4887</span></span>
+    <span class="t" style="left:20px;top:137.5px;font-size:13.5px;letter-spacing:.1px;color:#a2a2a2">CARD HOLDER</span>
+    <span class="t" style="left:19px;top:155.5px;font-size:16px;font-weight:600;letter-spacing:-.1px">Jayanta Adhikari</span>
+    <span class="t" style="left:167px;top:137.5px;font-size:13.5px;letter-spacing:.1px;color:#a2a2a2">EXPIRES</span>
+    <span class="t" style="left:166px;top:155.5px;font-size:16.5px;font-weight:600">09/28</span>
+    <span class="t" style="left:259px;top:156px;font-size:16.5px;font-weight:700;font-style:italic;letter-spacing:.3px">RuPay</span>
+    <div class="card-overlay card-overlay--frozen" aria-hidden="true">
+      <span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M3.3 7l17.4 10M20.7 7 3.3 17"/><path d="m9.5 3.5 2.5 2 2.5-2M9.5 20.5l2.5-2 2.5 2M4 10.5l3-.5-1-3M20 13.5l-3 .5 1 3M20 10.5l-3-.5 1-3M4 13.5l3 .5-1 3"/></svg></span>
+      Frozen<small>Unfreeze anytime below</small>
+    </div>
+    <div class="card-overlay card-overlay--blocked" aria-hidden="true">
+      <span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="m5.7 5.7 12.6 12.6"/></svg></span>
+      Blocked<small>Reported lost · 16 Jun 2025</small>
+    </div>
+  </div>
+
+  <div class="card-meta enter" style="--i:1">
+    <span class="state-pill state-pill--active" id="statePill" role="status" aria-live="polite"><i></i><span>Active</span></span>
+    <span>Yes Bank · A/c ••7643</span>
+  </div>
+
+  <div class="banner banner--info state-banner" id="frozenBanner" hidden>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5fb2f1" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5h.01"/></svg>
+    <span><b>Card is frozen.</b> Payments, ATM and online use are paused. Unfreezing is instant.</span>
+  </div>
+  <div class="state-banner" id="blockedBox" hidden>
+    <div class="banner banner--danger">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f15858" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+      <span><b>Card blocked permanently.</b> No one can use RuPay ••4887. Your account balance is safe; UPI and transfers still work.</span>
+    </div>
+    <button class="btn btn--primary tap" id="orderBtn" style="margin-top:12px"><span>Order replacement</span></button>
+  </div>
+
+  <nav class="menu freeze enter" style="--i:2" aria-label="Freeze" id="freezeMenu">
+    <div class="menu__item">
+      <span class="menu__icon icon-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M3.3 7l17.4 10M20.7 7 3.3 17"/><path d="m9.5 3.5 2.5 2 2.5-2M9.5 20.5l2.5-2 2.5 2"/></svg></span>
+      <span class="menu__body"><span class="menu__title">Freeze card</span><span class="menu__sub" id="freezeSub">Pause all card transactions</span></span>
+      <span class="switch" role="switch" aria-checked="false" id="freezeSw" aria-label="Freeze card"></span>
+    </div>
+  </nav>
+
+  <section id="controls">
+    <p class="section-label" id="limits">Limits</p>
+    <div class="panel enter" style="--i:3">
+      <div class="limit">
+        <div class="limit__head"><label for="lUpi"><span class="limit__t">Daily UPI limit</span><span class="limit__s">Up to ₹ 1,00,000 per day</span></label><output class="limit__v num" id="oUpi" for="lUpi">₹ 1,00,000</output></div>
+        <input class="range" type="range" id="lUpi" min="5000" max="100000" step="5000" value="100000" data-out="oUpi" data-fmt="inr">
+        <div class="limit__scale num"><span>₹ 5,000</span><span>₹ 1,00,000</span></div>
+      </div>
+      <div class="limit">
+        <div class="limit__head"><label for="lAtm"><span class="limit__t">ATM withdrawal</span><span class="limit__s">Per day, any ATM</span></label><output class="limit__v num" id="oAtm" for="lAtm">₹ 50,000</output></div>
+        <input class="range" type="range" id="lAtm" min="0" max="100000" step="5000" value="50000" data-out="oAtm" data-fmt="inr">
+        <div class="limit__scale num"><span>₹ 0</span><span>₹ 1,00,000</span></div>
+      </div>
+      <div class="limit">
+        <div class="limit__head"><label for="lWeb"><span class="limit__t">Online spend</span><span class="limit__s">Websites &amp; apps, per day</span></label><output class="limit__v num" id="oWeb" for="lWeb">₹ 2,00,000</output></div>
+        <input class="range" type="range" id="lWeb" min="0" max="500000" step="10000" value="200000" data-out="oWeb" data-fmt="inr">
+        <div class="limit__scale num"><span>₹ 0</span><span>₹ 5,00,000</span></div>
+      </div>
+      <div class="save-row">
+        <button class="btn btn--primary tap" id="saveLimits" disabled><span>Save limits</span></button>
+        <p class="save-hint" id="saveHint" aria-live="polite">Move a slider to change a limit</p>
+      </div>
+    </div>
+
+    <p class="section-label">Usage</p>
+    <nav class="menu enter" style="--i:4" aria-label="Usage" id="usage">
+      <div class="menu__item">
+        <span class="menu__icon icon-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>
+        <span class="menu__body"><span class="menu__title">Online payments</span><span class="menu__sub">E-commerce, apps, subscriptions</span></span>
+        <span class="switch" role="switch" aria-checked="true" data-usage="Online payments" aria-label="Online payments"></span>
+      </div>
+      <div class="menu__item">
+        <span class="menu__icon icon-yellow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c2.8 3 2.8 16 0 19M12 2.5c-2.8 3-2.8 16 0 19"/></svg></span>
+        <span class="menu__body"><span class="menu__title">International</span><span class="menu__sub">Outside India · 3.5% markup</span></span>
+        <span class="switch" role="switch" aria-checked="false" data-usage="International payments" aria-label="International payments"></span>
+      </div>
+      <div class="menu__item">
+        <span class="menu__icon icon-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 8.5a5 5 0 0 1 0 7M11 6a8.5 8.5 0 0 1 0 12M15 3.5a12 12 0 0 1 0 17"/></svg></span>
+        <span class="menu__body"><span class="menu__title">Contactless / Tap to pay</span><span class="menu__sub">Up to ₹ 5,000 without PIN</span></span>
+        <span class="switch" role="switch" aria-checked="true" data-usage="Tap to pay" aria-label="Contactless, tap to pay"></span>
+      </div>
+      <div class="menu__item">
+        <span class="menu__icon icon-gray"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 9.5v5M18 9.5v5"/></svg></span>
+        <span class="menu__body"><span class="menu__title">ATM withdrawals</span><span class="menu__sub">Cash at any RuPay ATM</span></span>
+        <span class="switch" role="switch" aria-checked="true" data-usage="ATM withdrawals" aria-label="ATM withdrawals"></span>
+      </div>
+    </nav>
+  </section>
+
+  <p class="section-label">Security</p>
+  <nav class="menu enter" style="--i:5" aria-label="Security" id="security">
+    <button class="menu__item tap" id="pinItem" data-sheet="pinSheet">
+      <span class="menu__icon icon-yellow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4.5"/><path d="m11.2 11.8 9.3-9.3M17 6l3 3M14.5 8.5l2 2"/></svg></span>
+      <span class="menu__body"><span class="menu__title">Change card PIN</span><span class="menu__sub">Used at ATMs and card machines</span></span>
+      <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+    </button>
+    <button class="menu__item tap" id="detailsItem" data-sheet="detailsSheet">
+      <span class="menu__icon icon-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></span>
+      <span class="menu__body"><span class="menu__title">View card details</span><span class="menu__sub">Full number, expiry and CVV</span></span>
+      <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+    </button>
+    <button class="menu__item tap" id="reportItem">
+      <span class="menu__icon icon-red"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></span>
+      <span class="menu__body"><span class="menu__title danger-title">Report lost or stolen</span><span class="menu__sub">Blocks this card permanently</span></span>
+      <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+    </button>
+  </nav>
+
+  <nav data-tabbar="bank"></nav>
+</main>
+
+<!-- Change PIN -->
+<section class="sheet" id="pinSheet" aria-labelledby="pinTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="pinTitle">Change card PIN</p><p class="sheet__sub" id="pinSub">Step 1 of 2 · Enter a new 4-digit PIN</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="pad-stage" id="pinStage" style="display:none">
+    <div class="stepper" id="pinStepper"><i class="on"></i><i></i></div>
+    <div class="pin-dots" id="pinDots" aria-hidden="true"></div>
+    <p class="pad-note" id="pinNote" role="status" aria-live="polite">Avoid easy PINs like 1234 or your birth year</p>
+    <div class="keypad" id="pinPad" data-target="pinDots" data-length="4" aria-label="PIN keypad"></div>
+  </div>
+  <div class="processing" id="pinProc" role="status" aria-live="polite"><div class="spinner"></div><p style="font-size:17px;font-weight:600">Updating your PIN…</p><p class="muted" style="font-size:13px;margin-top:6px">Securely syncing with Yes Bank</p></div>
+</section>
+
+<!-- View details -->
+<section class="sheet" id="detailsSheet" aria-labelledby="detTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="detTitle">View card details</p><p class="sheet__sub" id="detSub">Enter your 4-digit card PIN to continue</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="pad-stage" id="detStage" style="display:none">
+    <div class="pin-dots" id="detDots" aria-hidden="true" style="margin-top:6px"></div>
+    <p class="pad-note" id="detNote" role="status" aria-live="polite">Demo: any 4 digits except 0000</p>
+    <div class="keypad" id="detPad" data-target="detDots" data-length="4" aria-label="PIN keypad"></div>
+  </div>
+  <div id="detReveal" hidden>
+    <div class="secret">
+      <div class="between">
+        <div><span class="secret__k">Card number</span><span class="secret__num num" style="display:block;margin-top:6px">6071 8812 0931 4887</span></div>
+        <button class="icon-copy tap" data-toast="Card number copied · clears in 60s" aria-label="Copy card number"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg></button>
+      </div>
+      <div class="secret__grid">
+        <div><span class="secret__k">Name</span><span class="secret__v">Jayanta Adhikari</span></div>
+        <div><span class="secret__k">Expiry</span><span class="secret__v num">09/28</span></div>
+        <div><span class="secret__k">CVV</span><span class="secret__v num" style="color:#f1ea58">382</span></div>
+      </div>
+    </div>
+    <div class="countdown" aria-live="off">
+      <div class="countdown__bar"><i id="cdBar"></i></div>
+      <div class="countdown__txt"><span>Details hide automatically</span><span class="num" id="cdTxt">Hiding in 30s</span></div>
+    </div>
+    <div class="banner banner--warn" style="margin-top:16px">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f1ea58" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/></svg>
+      <span>Spendee or Yes Bank will never ask for your CVV or PIN on a call.</span>
+    </div>
+    <button class="btn btn--neutral tap" data-close style="margin-top:18px">Hide details</button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const S = Spendee, $ = (id) => document.getElementById(id);
+    const root = $('root');
+
+    // ---------- Card state: active | frozen | blocked ----------
+    function setState(st) {
+      root.dataset.state = st;
+      const pill = $('statePill');
+      pill.className = 'state-pill state-pill--' + st;
+      pill.lastElementChild.textContent = { active: 'Active', frozen: 'Frozen', blocked: 'Blocked' }[st];
+      $('frozenBanner').hidden = st !== 'frozen';
+      $('blockedBox').hidden = st !== 'blocked';
+      $('freezeSw').setAttribute('aria-checked', String(st === 'frozen'));
+      $('freezeSub').textContent = st === 'frozen' ? 'Frozen · tap to unfreeze instantly' : st === 'blocked' ? 'Unavailable for a blocked card' : 'Pause all card transactions';
+      $('freezeSw').setAttribute('aria-disabled', String(st === 'blocked'));
+      $('controls').classList.toggle('is-locked', st === 'blocked');
+      $('controls').setAttribute('aria-disabled', String(st === 'blocked'));
+      ['pinItem', 'detailsItem', 'reportItem'].forEach((id) => $(id).classList.toggle('is-locked', st === 'blocked'));
+    }
+
+    // Intercept the freeze switch before app.js toggles it, so freezing can be confirmed
+    document.addEventListener('click', async (e) => {
+      if (!e.target.closest('#freezeSw')) return;
+      e.stopPropagation(); e.preventDefault();
+      if (root.dataset.state === 'blocked') return;
+      if (root.dataset.state === 'frozen') { setState('active'); S.haptic(); S.toast('Card unfrozen · ready to use'); return; }
+      const ok = await S.dialog({ title: 'Freeze RuPay ••4887?', message: 'Card payments, ATM withdrawals and online use will be paused until you unfreeze. UPI and bank transfers are not affected.', confirm: 'Freeze card', cancel: 'Cancel', tone: 'info',
+        icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M3.3 7l17.4 10M20.7 7 3.3 17"/><path d="m9.5 3.5 2.5 2 2.5-2M9.5 20.5l2.5-2 2.5 2"/></svg>' });
+      if (!ok) return;
+      setState('frozen'); S.haptic(); S.toast('Card frozen');
+    }, true);
+
+    // ---------- Limits ----------
+    const sliders = ['lUpi', 'lAtm', 'lWeb'].map($);
+    let saved = sliders.map((s) => s.value);
+    const dirty = () => sliders.some((s, i) => s.value !== saved[i]);
+    sliders.forEach((s) => s.addEventListener('input', () => {
+      const d = dirty();
+      $('saveLimits').disabled = !d;
+      $('saveHint').textContent = d ? 'Unsaved changes' : 'Move a slider to change a limit';
+    }));
+    $('saveLimits').addEventListener('click', async () => {
+      const btn = $('saveLimits');
+      await S.loading(btn, 1100);
+      saved = sliders.map((s) => s.value);
+      btn.disabled = true; $('saveHint').textContent = 'Saved · limits apply immediately';
+      S.toast('Limits updated');
+    });
+
+    // ---------- Usage toggles ----------
+    document.querySelectorAll('[data-usage]').forEach((sw) => sw.addEventListener('click', () => {
+      setTimeout(() => S.toast(`${sw.dataset.usage} ${sw.getAttribute('aria-checked') === 'true' ? 'enabled' : 'disabled'}`));
+    }));
+
+    // ---------- Report lost / stolen ----------
+    $('reportItem').addEventListener('click', async () => {
+      const ok = await S.dialog({ title: 'Block this card permanently?', message: 'RuPay ••4887 will stop working right away and can’t be unblocked. You can order a free replacement next.', confirm: 'Block card', cancel: 'Cancel', tone: 'danger' });
+      if (!ok) return;
+      setState('blocked'); S.haptic(); S.toast('Card blocked');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    $('orderBtn').addEventListener('click', async () => {
+      const btn = $('orderBtn');
+      await S.loading(btn, 1300);
+      btn.disabled = true; btn.firstElementChild.textContent = 'Replacement ordered';
+      S.toast('New card arrives in 5–7 days');
+    });
+
+    // Keypads only listen to the keyboard while their sheet is on screen
+    const bindStage = (sheetId, stageId, onOpen) => {
+      let h;
+      const focusPad = () => setTimeout(() => { const pad = $(stageId).querySelector('.keypad'); pad && pad.focus({ preventScroll: true }); }, 90);
+      $(sheetId).addEventListener('sheet:open', () => { clearTimeout(h); $(stageId).style.display = ''; onOpen(); focusPad(); });
+      $(sheetId).addEventListener('sheet:close', () => { h = setTimeout(() => ($(stageId).style.display = 'none'), 320); });
+      if (S.q('sheet') === sheetId) setTimeout(() => { $(stageId).style.display = ''; onOpen(); focusPad(); });
+    };
+
+    // ---------- Change PIN (enter → confirm) ----------
+    const pinPad = $('pinPad');
+    let firstPin = null;
+    const pinStep = (n) => {
+      $('pinSub').textContent = n === 1 ? 'Step 1 of 2 · Enter a new 4-digit PIN' : 'Step 2 of 2 · Re-enter to confirm';
+      $('pinStepper').innerHTML = n === 1 ? '<i class="on"></i><i></i>' : '<i class="done"></i><i class="on"></i>';
+    };
+    const pinNote = (t, err) => { $('pinNote').textContent = t; $('pinNote').classList.toggle('is-error', !!err); };
+    bindStage('pinSheet', 'pinStage', () => { firstPin = null; pinPad.reset(); pinStep(1); pinNote('Avoid easy PINs like 1234 or your birth year'); $('pinProc').style.display = 'none'; });
+    pinPad.addEventListener('biometric', () => pinNote('Enter a new PIN using the keypad'));
+    pinPad.addEventListener('complete', async (e) => {
+      const v = e.detail;
+      if (!firstPin) {
+        if (/^(\d)\1{3}$/.test(v) || ['1234', '4321', '0123', '9876'].includes(v)) { pinPad.error(); pinNote('That PIN is too easy to guess. Try another.', true); return; }
+        firstPin = v; pinPad.reset(); pinStep(2); pinNote('Enter the same 4 digits again'); return;
+      }
+      if (v !== firstPin) { pinPad.error(); firstPin = null; pinStep(1); pinNote('PINs didn’t match. Enter a new PIN again.', true); return; }
+      $('pinStage').style.display = 'none'; $('pinProc').style.display = 'block';
+      await S.wait(1300);
+      S.sheet.close(); await S.wait(250); S.toast('Card PIN changed');
+    });
+
+    // ---------- View details (PIN → reveal with auto-hide) ----------
+    const detPad = $('detPad');
+    let timer = null;
+    const hideReveal = () => { clearInterval(timer); timer = null; $('detReveal').hidden = true; $('detSub').textContent = 'Enter your 4-digit card PIN to continue'; };
+    bindStage('detailsSheet', 'detStage', () => { hideReveal(); detPad.reset(); $('detNote').textContent = 'Demo: any 4 digits except 0000'; $('detNote').classList.remove('is-error'); });
+    $('detailsSheet').addEventListener('sheet:close', hideReveal);
+    detPad.addEventListener('biometric', () => $('detNote').textContent = 'Use your card PIN for this step');
+    detPad.addEventListener('complete', async (e) => {
+      if (e.detail === '0000') { detPad.error(); $('detNote').textContent = 'Incorrect PIN. 2 attempts left.'; $('detNote').classList.add('is-error'); return; }
+      $('detNote').classList.remove('is-error'); $('detNote').textContent = 'Verifying…';
+      await S.wait(600);
+      $('detStage').style.display = 'none'; $('detReveal').hidden = false;
+      $('detSub').textContent = 'Visible only to you · don’t screenshot';
+      let t = 30; const total = 30;
+      const tick = () => {
+        $('cdTxt').textContent = `Hiding in ${t}s`;
+        $('cdBar').style.transform = `scaleX(${t / total})`;
+        $('cdBar').style.transition = 'transform 1s linear';
+        if (t-- <= 0) { S.sheet.close(); S.toast('Card details hidden'); }
+      };
+      tick(); timer = setInterval(tick, 1000);
+    });
+
+    // capture / deep link helpers
+    if (S.q('state')) setState(S.q('state'));
+    if (S.q('reveal') === '1') setTimeout(() => { S.sheet.open('detailsSheet'); setTimeout(() => detPad.dispatchEvent(new CustomEvent('complete', { detail: '1357' })), 50); }, 10);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Team &amp; Roles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .page > .toast { position: fixed; z-index: 1000; }
+  .seats { display: flex; align-items: center; gap: 14px; }
+  .seats__bar { height: 6px; border-radius: 3px; background: #3a3a3a; overflow: hidden; margin-top: 10px; }
+  .seats__bar i { display: block; height: 100%; background: #5fb2f1; border-radius: 3px; transition: width 400ms var(--ease-out); }
+  .member { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; padding: 14px 16px 14px 18px; border-radius: 20px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.13), inset 1px 1px 0 0 rgba(255,255,255,.10), 0 4px 14px rgba(0,0,0,.45); animation: rise 420ms var(--ease-out) both; }
+  body.capture .member { animation: none; }
+  .member-wrap { border-radius: 20px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.13), inset 1px 1px 0 0 rgba(255,255,255,.10), 0 4px 14px rgba(0,0,0,.45); animation: rise 420ms var(--ease-out) both; }
+  body.capture .member-wrap { animation: none; }
+  .member-wrap .member { box-shadow: none; background: transparent; animation: none; padding-bottom: 8px; }
+  .initials { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-size: 15px; font-weight: 600; letter-spacing: .5px; flex-shrink: 0; }
+  .m-name { display: block; font-size: 16px; font-weight: 500; color: #fff; line-height: 20px; }
+  .m-name small { font-size: 12px; color: #8a8a8a; font-weight: 400; }
+  .m-sub { display: block; font-size: 12px; color: #9a9a9a; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .role-pill { flex-shrink: 0; height: 26px; padding: 0 10px; border-radius: 8px; display: inline-flex; align-items: center; font-size: 12.5px; letter-spacing: .2px; }
+  .inv-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 16px 16px 76px; }
+  .inv-actions button { height: 36px; border-radius: 8px; font-family: var(--font-ui); font-size: 12px; font-weight: 600; position: relative; }
+  .inv-actions button.is-loading { color: transparent; pointer-events: none; }
+  .inv-actions button.is-loading::after { content: ''; position: absolute; left: 50%; top: 50%; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; border: 2px solid rgba(95,178,241,.25); border-top-color: #5fb2f1; animation: spin 700ms linear infinite; }
+  .perm-toggle { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; }
+  .perm-toggle .chev { transition: transform 260ms var(--ease-out); transform: rotate(90deg); }
+  .perm-toggle[aria-expanded="true"] .chev { transform: rotate(-90deg); }
+  .collapse { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 320ms var(--ease-out); }
+  .collapse.open { grid-template-rows: 1fr; }
+  .collapse > div { overflow: hidden; }
+  .matrix { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 13px; }
+  .matrix th { font-weight: 500; font-size: 11px; color: #9a9a9a; letter-spacing: .3px; padding: 0 0 10px; text-align: center; }
+  .matrix th:first-child, .matrix td:first-child { text-align: left; }
+  .matrix td { padding: 11px 0; border-top: 1px solid rgba(255,255,255,.12); color: #e8e8e8; }
+  .matrix td:not(:first-child) { text-align: center; width: 46px; }
+  .matrix td svg { margin: 0 auto; }
+  .role-opts .option__title { font-size: 15px; }
+  .sheet .fg > .label { margin-bottom: 8px; font-size: 14px; }
+  .sheet .field { height: 50px; font-size: 16px; padding: 0 18px; }
+  .sheet .section-label { margin: 20px 0 10px 2px; font-size: 13px; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Team and roles">
+  <header class="appbar">
+    <a class="back tap" href="more.html" data-go="back" aria-label="Back"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg></a>
+    <div class="appbar__titles"><span class="appbar__eyebrow">Account</span><h1 class="appbar__title">Team &amp; Roles</h1></div>
+    <button class="appbar__action tap" data-sheet="inviteSheet"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 1.5v13M1.5 8h13"/></svg>Invite</button>
+  </header>
+
+  <div class="panel panel--blue enter" style="box-shadow:inset 0 0 0 1px rgba(95,178,241,.25)">
+    <div class="seats">
+      <span class="menu__icon icon-blue" style="width:44px;height:44px;border-radius:12px"><svg width="22" height="18" viewBox="0 0 22 18" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="4.3" r="2.8"/><circle cx="4.2" cy="6.8" r="2.2"/><circle cx="17.8" cy="6.8" r="2.2"/><path d="M6.4 16.6v-1.4a4.6 4.6 0 0 1 9.2 0v1.4H6.4Z" stroke-linejoin="round"/><path d="M1 16.6v-.9a3.2 3.2 0 0 1 4.3-3M21 16.6v-.9a3.2 3.2 0 0 0-4.3-3" stroke-linecap="round"/></svg></span>
+      <span class="grow"><span style="display:block;font-size:15px;font-weight:600" id="seatText">3 of 5 seats used</span><span style="display:block;font-size:12px;color:#9fb3c3;margin-top:2px" id="seatSub">Pro Plan · 2 active, 1 invited</span></span>
+    </div>
+    <div class="seats__bar"><i id="seatBar" style="width:60%"></i></div>
+  </div>
+
+  <p class="section-label">Members</p>
+  <div class="list" id="members" aria-live="polite"></div>
+
+  <p class="section-label">Access</p>
+  <div class="panel enter" style="--i:3;padding:16px 18px">
+    <button class="perm-toggle tap" id="permBtn" aria-expanded="false" aria-controls="perm">
+      <span class="menu__icon icon-yellow"><svg width="17" height="20" viewBox="0 0 17 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="1.2" y="8" width="14.6" height="10.8" rx="2.2"/><path d="M4.4 8V5.4a4.1 4.1 0 0 1 8.2 0V8"/><path d="M8.5 12.2v2.4" stroke-linecap="round"/></svg></span>
+      <span class="grow"><span class="menu__title">Roles &amp; permissions</span><span class="menu__sub">See what each role can do</span></span>
+      <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+    </button>
+    <div class="collapse" id="perm"><div>
+      <table class="matrix" aria-label="Permissions by role">
+        <thead><tr><th scope="col">Permission</th><th scope="col">Admin</th><th scope="col">Acct.</th><th scope="col">Staff</th><th scope="col">View</th></tr></thead>
+        <tbody id="matrixBody"></tbody>
+      </table>
+      <p class="muted" style="font-size:12px;line-height:1.5;margin-top:10px">Only the Owner can delete the business, change plan or add bank accounts.</p>
+    </div></div>
+  </div>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <nav data-tabbar="more"></nav>
+</main>
+
+<!-- Member sheet -->
+<section class="sheet" id="memberSheet" aria-labelledby="mTitle">
+  <div class="sheet__head">
+    <div class="row-flex" style="gap:14px"><span class="initials" id="mAv">PM</span><div><p class="sheet__title" id="mTitle">Priya Menon</p><p class="sheet__sub" id="mSub">priya.menon@example.com</p></div></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <p class="section-label" style="margin-top:4px">Role</p>
+  <div class="options role-opts" data-options id="mRoles"></div>
+  <div style="margin-top:18px"><button class="btn btn--primary tap" id="saveRole"><span>Save role</span></button></div>
+  <div style="margin-top:10px"><button class="btn btn--danger tap" id="removeBtn"><span>Remove from team</span></button></div>
+</section>
+
+<!-- Invite sheet -->
+<section class="sheet" id="inviteSheet" aria-labelledby="iTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="iTitle">Invite a teammate</p><p class="sheet__sub">They'll get a link to join JA Trading Co.</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <form id="inviteForm" novalidate>
+    <div class="fg"><label class="label" for="iName">Name</label><input class="field" id="iName" data-validate="required" placeholder="e.g. Anita Rao" autocomplete="off"></div>
+    <div class="fg" style="margin-top:14px"><label class="label" for="iContact">Mobile number or email</label><input class="field" id="iContact" placeholder="98765 43210 or name@business.com" autocomplete="off"><span class="helper">We'll send the invite by SMS or email</span></div>
+    <p class="section-label">Role</p>
+    <div class="options role-opts" data-options id="iRoles"></div>
+    <div style="margin-top:18px"><button class="btn btn--primary tap" id="sendInvite" type="submit"><span>Send Invite</span></button></div>
+  </form>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const S = Spendee, $ = (s) => document.querySelector(s);
+  const ROLES = {
+    Admin: 'Everything except billing and deleting the business',
+    Accountant: 'Entries, invoices, GST filing and reports',
+    Staff: 'Record entries and create invoices only',
+    'View only': 'See ledger and reports, no changes',
+  };
+  const TONES = { Owner: ['#283845', '#5fb2f1', 'tone-blue'], Admin: ['#454426', '#f1ea58', 'tone-yellow'], Accountant: ['#314528', '#8df15e', 'tone-green'], Staff: ['#452626', '#f15858', 'tone-red'], 'View only': ['#3a3a3a', '#e0e0e0', ''] };
+  const members = [
+    { id: 'ja', name: 'Jayanta Adhikari', role: 'Owner', contact: 'jayanta.adhikari@example.com', status: 'owner', you: true },
+    { id: 'pm', name: 'Priya Menon', role: 'Accountant', contact: 'priya.menon@example.com', status: 'active', seen: 'Active · 2h ago' },
+    { id: 'rv', name: 'Rahul Verma', role: 'Staff', contact: '+91 98200 11234', status: 'invited', seen: 'Staff · invited 2 days ago' },
+  ];
+  const initials = (n) => n.split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
+  const chev = '<svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>';
+  const pill = (m) => m.status === 'invited' ? '<span class="role-pill tone-yellow">Pending</span>' : `<span class="role-pill ${TONES[m.role][2] || ''}" style="${TONES[m.role][2] ? '' : 'background:#3a3a3a;color:#e0e0e0'}">${m.role}</span>`;
+  const avatar = (m) => m.you ? '<img src="../assets/img/avatar.png" alt="" width="44" height="44" style="border-radius:50%;flex-shrink:0">' : `<span class="initials" style="background:${TONES[m.role][0]};color:${TONES[m.role][1]}">${initials(m.name)}</span>`;
+
+  function render() {
+    $('#members').innerHTML = members.map((m, i) => {
+      const sub = m.you ? m.contact : m.status === 'invited' ? m.seen.replace(/^\w[\w ]*? ·/, m.role + ' ·') : m.seen;
+      const head = `<span class="grow" style="min-width:0"><span class="m-name">${m.name}${m.you ? ' <small>(you)</small>' : ''}</span><span class="m-sub">${sub}</span></span>${pill(m)}`;
+      if (m.you) return `<div class="member" style="animation-delay:${i * 40}ms">${avatar(m)}${head}</div>`;
+      if (m.status === 'invited') return `<div class="member-wrap" style="animation-delay:${i * 40}ms"><button class="member tap" data-id="${m.id}" aria-label="${m.name}, ${m.role}, invite pending">${avatar(m)}${head}</button><div class="inv-actions"><button class="tone-blue tap" data-resend="${m.id}">Resend</button><button class="tone-red tap" data-revoke="${m.id}">Revoke</button></div></div>`;
+      return `<button class="member tap" data-id="${m.id}" style="animation-delay:${i * 40}ms" aria-label="${m.name}, ${m.role}">${avatar(m)}${head}${chev}</button>`;
+    }).join('');
+    const active = members.filter((m) => m.status !== 'invited').length, invited = members.length - active;
+    $('#seatText').textContent = `${members.length} of 5 seats used`;
+    $('#seatSub').textContent = `Pro Plan · ${active} active${invited ? `, ${invited} invited` : ''}`;
+    $('#seatBar').style.width = members.length / 5 * 100 + '%';
+    S.store.set('teamCount', active);
+  }
+
+  // role options builder
+  function roleOptions(el, selected) {
+    el.innerHTML = Object.entries(ROLES).map(([r, d]) => `<button type="button" class="option tap" role="radio" data-value="${r}" aria-checked="${r === selected}"><span class="option__radio"></span><span class="option__body"><span class="option__title">${r}</span><span class="option__sub">${d}</span></span></button>`).join('');
+  }
+  document.addEventListener('click', (e) => {
+    const o = e.target.closest('.role-opts .option'); if (!o) return;
+    o.parentElement.querySelectorAll('.option').forEach((x) => x.setAttribute('aria-checked', String(x === o)));
+  });
+  const selectedRole = (el) => (el.querySelector('[aria-checked="true"]') || {}).dataset?.value;
+
+  // member sheet
+  let current = null;
+  $('#members').addEventListener('click', async (e) => {
+    const rs = e.target.closest('[data-resend]'), rv = e.target.closest('[data-revoke]');
+    if (rs) { const m = members.find((x) => x.id === rs.dataset.resend); rs.classList.add('is-loading'); await S.wait(900); rs.classList.remove('is-loading'); m.seen = m.role + ' · resent just now'; render(); S.toast('Invite resent to ' + m.contact); return; }
+    if (rv) {
+      const m = members.find((x) => x.id === rv.dataset.revoke);
+      if (await S.dialog({ title: `Revoke ${m.name}'s invite?`, message: 'The invite link will stop working. You can invite them again anytime.', confirm: 'Revoke', tone: 'danger' })) {
+        members.splice(members.indexOf(m), 1); render(); S.toast('Invite revoked');
+      }
+      return;
+    }
+    const b = e.target.closest('.member[data-id]'); if (!b) return;
+    current = members.find((x) => x.id === b.dataset.id);
+    const [bg, fg] = TONES[current.role];
+    $('#mAv').textContent = initials(current.name); $('#mAv').style.background = bg; $('#mAv').style.color = fg;
+    $('#mTitle').textContent = current.name; $('#mSub').textContent = current.contact + (current.status === 'invited' ? ' · invite pending' : '');
+    $('#removeBtn span').textContent = current.status === 'invited' ? 'Revoke invite' : 'Remove from team';
+    roleOptions($('#mRoles'), current.role);
+    S.sheet.open('memberSheet');
+  });
+  const saveBtn = $('#saveRole');
+  saveBtn.addEventListener('click', async () => {
+    const r = selectedRole($('#mRoles'));
+    if (r === current.role) { S.sheet.close(); return; }
+    await S.loading(saveBtn, 900);
+    current.role = r; S.sheet.close(); render();
+    S.toast(`${current.name.split(' ')[0]}'s role changed to ${r}`);
+  });
+  $('#removeBtn').addEventListener('click', async () => {
+    const m = current; S.sheet.close();
+    const inv = m.status === 'invited';
+    const ok = await S.dialog(inv
+      ? { title: `Revoke ${m.name}'s invite?`, message: 'The invite link will stop working. You can invite them again anytime.', confirm: 'Revoke', tone: 'danger' }
+      : { title: `Remove ${m.name}?`, message: `They'll lose access to JA Trading Co. immediately. Entries they created stay in your ledger.`, confirm: 'Remove', tone: 'danger' });
+    if (!ok) return;
+    members.splice(members.indexOf(m), 1); render(); S.toast(inv ? 'Invite revoked' : `${m.name} removed from team`);
+  });
+
+  // invite
+  const form = $('#inviteForm'), sendBtn = $('#sendInvite'), contact = $('#iContact');
+  roleOptions($('#iRoles'), 'Staff');
+  function checkContact() {
+    const v = contact.value.trim(), fg = contact.closest('.fg');
+    let msg = '';
+    if (!v) msg = 'Enter a mobile number or email';
+    else if (v.includes('@')) { if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) msg = 'Enter a valid email, e.g. name@business.com'; else if (members.some((m) => m.contact.toLowerCase() === v.toLowerCase())) msg = 'This email is already on your team'; }
+    else if (v.replace(/\D/g, '').replace(/^91(?=\d{10}$)/, '').length !== 10) msg = 'Enter a 10-digit mobile number';
+    else if (members.some((m) => m.contact.replace(/\D/g, '').endsWith(v.replace(/\D/g, '').slice(-10)))) msg = 'This number is already on your team';
+    let et = fg.querySelector('.error-text');
+    if (!et) { et = document.createElement('span'); et.className = 'error-text'; et.setAttribute('role', 'alert'); fg.appendChild(et); }
+    et.textContent = msg; fg.classList.toggle('has-error', !!msg);
+    return !msg;
+  }
+  contact.addEventListener('blur', () => { if (contact.value) checkContact(); });
+  contact.addEventListener('input', () => contact.closest('.fg').classList.remove('has-error'));
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const okName = S.validate(form);
+    const okC = checkContact();
+    if (!okName) return; if (!okC) { contact.focus(); return; }
+    if (members.length >= 5) { S.toast('All 5 seats are used. Upgrade to add more.'); return; }
+    await S.loading(sendBtn, 1100);
+    const v = contact.value.trim(), name = $('#iName').value.trim(), role = selectedRole($('#iRoles'));
+    const pretty = v.includes('@') ? v : '+91 ' + v.replace(/\D/g, '').slice(-10).replace(/(\d{5})(\d{5})/, '$1 $2');
+    members.push({ id: 'n' + Date.now(), name, role, contact: pretty, status: 'invited', seen: role + ' · invited just now' });
+    form.reset(); roleOptions($('#iRoles'), 'Staff'); S.sheet.close(); render();
+    S.toast('Invite sent to ' + pretty);
+  });
+
+  // permissions matrix
+  const yes = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8df15e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-label="Allowed"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
+  const no = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5a5a5a" stroke-width="3" stroke-linecap="round" aria-label="Not allowed"><path d="M6 12h12"/></svg>';
+  const M = [['Record entries', 1, 1, 1, 0], ['Send payments', 1, 0, 0, 0], ['File GST', 1, 1, 0, 0], ['View reports', 1, 1, 0, 1]];
+  $('#matrixBody').innerHTML = M.map(([l, ...c]) => `<tr><td>${l}</td>${c.map((x) => `<td>${x ? yes : no}</td>`).join('')}</tr>`).join('');
+  $('#permBtn').addEventListener('click', () => { const b = $('#permBtn'), open = b.getAttribute('aria-expanded') !== 'true'; b.setAttribute('aria-expanded', String(open)); $('#perm').classList.toggle('open', open); });
+  ['memberSheet'].forEach((id) => { const el = document.getElementById(id); el.tabIndex = -1; el.style.outline = 'none'; el.addEventListener('sheet:open', () => setTimeout(() => el.focus({ preventScroll: true }), 90)); });
+
+  render();
+  if (S.q('perm')) $('#permBtn').click();
+  if (S.q('member')) { const b = document.querySelector(`.member[data-id="${S.q('member')}"]`); b && b.click(); }
+  if (S.q('sheet') === 'memberSheet') { const m = document.querySelector('#members .member[data-id]:not(:first-child)') || document.querySelector('#members .member[data-id]'); m && m.click(); }
+})();
+</script>
+</body>
+</html>

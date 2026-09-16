@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Invoice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  [hidden]:not(.sheet) { display: none !important; }
+  .toast { position: fixed; bottom: 128px; }
+  .dots-btn { width: 48px; height: 44px; margin-right: -4px; display: grid; place-items: center; flex-shrink: 0; }
+  .dots-btn span { width: 40px; height: 25px; border-radius: 8px; background: #132430; display: flex; align-items: center; justify-content: center; gap: 2px; }
+  .dots-btn i { width: 4px; height: 4px; border-radius: 2px; background: #5fb2f1; }
+  .hero { padding: 21px 20px 20px; }
+  .hero__no { font-size: 14px; letter-spacing: .8px; color: #60b2f1; }
+  .hero__name { font-size: 19px; font-weight: 500; letter-spacing: .6px; margin-top: 2px; }
+  .hero .inv__pill { position: static; height: 31px; padding: 0 14px; }
+  .hero__row { display: flex; justify-content: space-between; align-items: baseline; margin-top: 16px; }
+  .hero__date { font-size: 15px; letter-spacing: .2px; }
+  .hero__amt { font-size: 21px; font-weight: 600; letter-spacing: .4px; }
+  .prog { margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.1); }
+  .prog__bar { height: 8px; border-radius: 4px; background: #3a3a3a; overflow: hidden; margin: 8px 0; }
+  .prog__bar i { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #58c323, #8df15e); width: 0; transition: width 900ms var(--ease-out); }
+  .prog .between { font-size: 13px; }
+  .prog b { font-weight: 600; }
+  .act-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+  .act-row .inv__btn { position: static; height: 42px; border-radius: 10px; font-size: 12px; display: flex; gap: 7px; align-items: center; justify-content: center; }
+  .early { display: flex; align-items: center; gap: 14px; margin-top: 12px; width: 100%; text-align: left; background: linear-gradient(120deg, #201f0c, #132430); box-shadow: inset 0 0 0 1px rgba(216,209,82,.22); }
+  .coll { width: 100%; display: flex; align-items: center; gap: 12px; text-align: left; }
+  .coll .chev { transition: transform 260ms var(--ease-out); transform: rotate(90deg); }
+  .coll[aria-expanded="true"] .chev { transform: rotate(-90deg); }
+  .coll-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 320ms var(--ease-out); }
+  .coll-body > div { overflow: hidden; }
+  .coll-body.open { grid-template-rows: 1fr; }
+  .li { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid rgba(255,255,255,.1); font-size: 14px; }
+  .li:first-child { margin-top: 14px; }
+  .li small { display: block; color: #8a8a8a; font-size: 12px; margin-top: 2px; }
+  .li .v { font-weight: 600; white-space: nowrap; }
+  .li.sub { padding: 7px 0; font-size: 13px; color: #9a9a9a; border-top: 0; }
+  .li.sub.first { border-top: 1px solid rgba(255,255,255,.1); padding-top: 12px; }
+  .li.tot { font-size: 15px; font-weight: 600; }
+  .panel .timeline { margin-bottom: -4px; }
+  .mode-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .mode-grid .option { min-height: 48px; padding: 0; justify-content: center; font-size: 14px; }
+  .mode-grid .option__title { font-size: 14px; }
+  .pay-amt { font-size: 24px; }
+  .pay-amt input[readonly] { color: #000; }
+  input[type="date"].field { font-size: 16px; }
+  /* ledger sheets */
+  .sheet-lbl { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #8a8a8a; margin: 20px 0 10px 4px; }
+  .sheet-lbl:first-of-type { margin-top: 4px; }
+  .sheet .search { height: 48px; }
+  .sheet .field { height: 50px; }
+  .sheet .empty-state { padding: 22px 10px 6px; }
+  .sheet .empty-state p { margin-bottom: 14px; }
+  .sheet .options .option { position: relative; }
+  .bubble { position: relative; background: #1d3a26; color: #e3f1dc; border-radius: 16px 16px 16px 4px; padding: 12px 14px 8px; font-size: 13.5px; line-height: 1.5; box-shadow: inset 0 0 0 1px rgba(141,241,94,.14); transition: background var(--dur), color var(--dur); }
+  .bubble.is-sms { background: #1d3548; color: #dbe9f4; box-shadow: inset 0 0 0 1px rgba(95,178,241,.18); }
+  .bubble__meta { display: flex; justify-content: flex-end; align-items: center; gap: 4px; font-size: 10.5px; color: rgba(255,255,255,.5); margin-top: 4px; }
+  .share-doc { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .share-doc__ic { width: 38px; height: 44px; border-radius: 8px; background: #452626; color: #f15858; display: grid; place-items: center; flex-shrink: 0; font: 600 9px/1 var(--font-ui); letter-spacing: .4px; }
+  .share-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 18px; }
+  .share-t { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 4px 0; font-size: 11.5px; color: #d4d4d4; letter-spacing: .2px; text-align: center; white-space: nowrap; }
+  .share-i { position: relative; width: 56px; height: 56px; border-radius: 18px; display: grid; place-items: center; box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); }
+  .share-t.is-busy .share-i svg { opacity: 0; }
+  .share-t.is-busy .share-i::after { content: ''; position: absolute; left: 50%; top: 50%; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; border: 2.5px solid rgba(255,255,255,.2); border-top-color: currentColor; animation: spin 700ms linear infinite; }
+  .undo-toast { position: fixed; left: 50%; bottom: 128px; z-index: 960; display: flex; align-items: center; gap: 14px; padding: 6px 6px 6px 16px; border-radius: 14px; background: rgba(38,38,38,.96); color: #fff; font-size: 13.5px; letter-spacing: .3px; white-space: nowrap; box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 10px 30px rgba(0,0,0,.5); transform: translate(-50%, 16px); opacity: 0; transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out); }
+  .undo-toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .undo-toast button { height: 34px; padding: 0 14px; border-radius: 9px; background: #132430; color: #5fb2f1; font-weight: 600; font-size: 13.5px; box-shadow: inset 0 0 0 1px rgba(95,178,241,.35); }
+  .cust-list { max-height: 420px; overflow-y: auto; scrollbar-width: none; margin: 14px -4px 0; padding: 0 4px 2px; }
+  .cust-list .avatar { width: 38px; height: 38px; }
+  .cust-list .option__meta { font-size: 13px; font-weight: 600; flex-shrink: 0; }
+  .option--danger .option__title { color: #f15858; }
+  .qd { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .qd button { height: 58px; border-radius: 14px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 14px; font-weight: 600; color: #f0f0f0; transition: box-shadow var(--dur), background var(--dur); }
+  .qd button small { font-size: 11px; font-weight: 500; color: #8a8a8a; }
+  .qd button[aria-pressed="true"] { background: #1c2a36; box-shadow: inset 0 0 0 2px #5fb2f1; }
+  .cal { margin-top: 16px; padding: 14px 12px 10px; border-radius: 20px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .cal__head { display: flex; align-items: center; justify-content: space-between; padding: 0 4px 10px; }
+  .cal__month { font-size: 16px; font-weight: 600; }
+  .cal__nav { width: 36px; height: 36px; border-radius: 10px; background: #1a1a1a; color: #5fb2f1; display: grid; place-items: center; }
+  .cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 2px; text-align: center; }
+  .cal__wd { font-size: 11px; color: #6b6b6b; letter-spacing: .6px; padding: 4px 0 8px; }
+  .cal__d { height: 40px; border-radius: 12px; font-size: 15px; color: #e6e6e6; position: relative; font-variant-numeric: tabular-nums; transition: background 160ms; }
+  .cal__d:hover { background: rgba(255,255,255,.05); }
+  .cal__d.is-today::after { content: ''; position: absolute; left: 50%; bottom: 5px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: #5fb2f1; }
+  .cal__d[aria-selected="true"] { background: #c8e7ff; color: #000; font-weight: 600; }
+  .cal__d[aria-selected="true"]::after { background: #000; }
+  .cal__d[disabled] { color: #4a4a4a; pointer-events: none; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Invoice details">
+  <header class="appbar">
+    <a class="back tap" href="invoices.html" data-go="back" aria-label="Back"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg></a>
+    <div class="appbar__titles"><span class="appbar__eyebrow">Billing · Invoice</span><h1 class="appbar__title" id="title">INV-1038</h1></div>
+    <button type="button" class="dots-btn tap" data-sheet="moreSheet" aria-label="More invoice actions" aria-haspopup="dialog"><span><i></i><i></i><i></i></span></button>
+  </header>
+
+  <article class="card hero enter" aria-label="Invoice summary">
+    <div class="between" style="align-items:flex-start">
+      <div class="grow"><p class="hero__no num" id="hNo">INV-1038</p><p class="hero__name" id="hName">Sharma Textiles</p></div>
+      <span class="inv__pill" id="hPill" role="status"></span>
+    </div>
+    <div class="hero__row">
+      <span class="hero__date" id="hDue"></span>
+      <span class="hero__amt num" id="hAmt"></span>
+    </div>
+    <div class="prog" id="prog">
+      <div class="between"><span class="muted">Payment received</span><b class="num" id="pPct">0%</b></div>
+      <div class="prog__bar" role="progressbar" aria-label="Payment received" aria-valuemin="0" aria-valuemax="100" id="pBarWrap"><i id="pBar"></i></div>
+      <div class="between"><span>Paid <b class="num c-green" id="pPaid">₹ 0</b></span><span>Balance <b class="num" id="pBal">₹ 0</b></span></div>
+    </div>
+  </article>
+
+  <div id="banner" class="enter" style="--i:1"></div>
+
+  <button type="button" class="btn btn--primary tap enter" id="recordBtn" data-sheet="paySheet" style="margin-top:20px;--i:1"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="8.6"/><path d="M7 6h6M7 8.8h6M8.6 6c1.9 0 3 .9 3 2.4s-1.1 2.5-3 2.5H7l4.6 3.6" stroke-linejoin="round" stroke-linecap="round" stroke-width="1.7"/></svg><span>Record Payment</span></button>
+
+  <div class="act-row enter" style="--i:2">
+    <button type="button" class="inv__btn tone-red tap" id="remindBtn" data-sheet="reminderSheet"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v5l3 3"/></svg>Send Reminder</button>
+    <button type="button" class="inv__btn tone-blue tap" data-sheet="shareSheet"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3.5M7.5 8 12 3.5 16.5 8"/><path d="M5 12v7.5A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V12"/></svg>Share PDF</button>
+  </div>
+
+  <a class="panel panel--tight early tap enter" id="earlyBtn" href="invoice-discount.html?id=INV-1038" style="--i:3">
+    <span class="menu__icon icon-yellow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2.5 5 13.5h6l-1 8 8-11h-6l1-8Z"/></svg></span>
+    <span class="grow"><span class="menu__title" style="color:#f1ea58;font-weight:600">Get paid early</span><span class="menu__sub" id="earlySub">Get ₹ 62,000 today · 1.2% fee</span></span>
+    <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+  </a>
+
+  <p class="section-label">Items</p>
+  <section class="panel enter" style="--i:4;padding:16px 20px">
+    <button type="button" class="coll tap" id="collBtn" aria-expanded="false" aria-controls="collBody">
+      <span class="menu__icon icon-blue"><svg width="16" height="20" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M2.6 1h6.3c.5 0 .9.2 1.3.5l4.1 4.2c.3.3.5.8.5 1.3v10.4A1.6 1.6 0 0 1 13.2 19H2.6A1.6 1.6 0 0 1 1 17.4V2.6A1.6 1.6 0 0 1 2.6 1Z"/><path d="M5 11h6M5 14.5h4"/></svg></span>
+      <span class="grow"><span class="menu__title" id="itemsTitle">3 items</span><span class="menu__sub" id="itemsSub">Tap to view line items and tax</span></span>
+      <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+    </button>
+    <div class="coll-body" id="collBody"><div id="itemsList"></div></div>
+  </section>
+
+  <p class="section-label">Activity</p>
+  <section class="panel enter" style="--i:5;padding:20px 20px 4px">
+    <ol class="timeline" id="timeline"></ol>
+  </section>
+
+  <nav data-tabbar="ledger"></nav>
+  <div class="toast" role="status" aria-live="polite"></div>
+</main>
+
+<section class="sheet" id="paySheet" aria-labelledby="payTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="payTitle">Record payment</p><p class="sheet__sub" id="paySub">INV-1038 · Sharma Textiles</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="segmented" id="payKind" aria-label="Payment type">
+    <button type="button" data-value="full" aria-selected="true">Full payment</button>
+    <button type="button" data-value="partial">Partial</button>
+  </div>
+  <p class="sheet-lbl" style="margin-top:18px">Amount</p>
+  <div class="fg" id="payFg">
+    <label class="field field-prefix pay-amt"><span>₹</span><input id="payAmt" class="num" inputmode="numeric" aria-label="Payment amount" data-validate="amount" readonly></label>
+    <span class="helper" id="payHelp">Clears the full balance</span>
+  </div>
+  <p class="sheet-lbl">Mode</p>
+  <div class="mode-grid" data-options id="payMode" aria-label="Payment mode">
+    <button type="button" class="option tap" data-value="UPI" aria-checked="true"><span class="option__title">UPI</span></button>
+    <button type="button" class="option tap" data-value="NEFT"><span class="option__title">NEFT</span></button>
+    <button type="button" class="option tap" data-value="Cash"><span class="option__title">Cash</span></button>
+    <button type="button" class="option tap" data-value="Cheque"><span class="option__title">Cheque</span></button>
+  </div>
+  <p class="sheet-lbl">Payment date</p>
+  <input class="field" type="date" id="payDate" value="2025-06-04" max="2025-06-04" aria-label="Payment date">
+  <button type="button" class="btn btn--primary tap" id="payConfirm" style="margin-top:22px"><span id="payLbl">Record ₹ 62,000</span></button>
+</section>
+
+<section class="sheet" id="moreSheet" aria-labelledby="moreTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="moreTitle">INV-1038</p><p class="sheet__sub" id="moreSub">Sharma Textiles · ₹ 62,000</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="options">
+    <button type="button" class="option tap" id="dupBtn"><span class="menu__icon icon-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2.5"/><path d="M16 8V5.5A2.5 2.5 0 0 0 13.5 3h-8A2.5 2.5 0 0 0 3 5.5v8A2.5 2.5 0 0 0 5.5 16H8"/></svg></span><span class="option__body"><span class="option__title">Duplicate</span><span class="option__sub">Start a new invoice with the same items</span></span></button>
+    <button type="button" class="option tap" id="dlBtn"><span class="menu__icon icon-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v11.5M7 10.5l5 5 5-5M4 20.5h16"/></svg></span><span class="option__body"><span class="option__title">Download</span><span class="option__sub">Save as PDF to your phone</span></span></button>
+    <button type="button" class="option option--danger tap" id="cancelBtn"><span class="menu__icon icon-red"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="m8.5 8.5 7 7M15.5 8.5l-7 7"/></svg></span><span class="option__body"><span class="option__title">Cancel invoice</span><span class="option__sub">Void it and notify the customer</span></span></button>
+  </div>
+</section>
+
+<section class="sheet" id="reminderSheet" aria-labelledby="remTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="remTitle">Send a reminder</p><p class="sheet__sub" id="remSub">Sharma Textiles · ₹ 62,000 balance</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <p class="sheet-lbl">Channel</p>
+  <div class="segmented" id="remChannel" aria-label="Reminder channel">
+    <button type="button" data-value="whatsapp" aria-selected="true">WhatsApp</button>
+    <button type="button" data-value="sms">SMS</button>
+  </div>
+  <p class="sheet-lbl">When</p>
+  <div class="options" data-options id="remWhen" aria-label="When to send">
+    <button type="button" class="option tap" data-value="now"><span class="option__radio"></span><span class="option__body"><span class="option__title">Now</span><span class="option__sub">Delivered right away</span></span></button>
+    <button type="button" class="option tap" data-value="tomorrow" aria-checked="true"><span class="option__radio"></span><span class="option__body"><span class="option__title">Tomorrow, 10 AM</span><span class="option__sub">Thu, 05 Jun · best reply rate</span></span></button>
+    <button type="button" class="option tap" data-value="custom"><span class="option__radio"></span><span class="option__body"><span class="option__title">Custom</span><span class="option__sub" id="remCustomSub">Pick a date and time</span></span></button>
+  </div>
+  <input class="field" type="datetime-local" id="remCustom" value="2025-06-06T11:00" min="2025-06-04T00:00" aria-label="Reminder date and time" style="display:none;margin-top:10px;font-size:16px">
+  <p class="sheet-lbl">Message preview</p>
+  <div class="bubble" id="remBubble"><span id="remText">Hi Rakesh, a friendly reminder that ₹ 62,000 is pending on invoice INV-1038, due 10 Jun 2025. Pay via UPI: spendee.link/ja/inv-1038. Regards, Jayanta, JA Trading Co.</span><span class="bubble__meta"><span id="remVia">WhatsApp</span> · 10:00 AM <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="#5fb2f1" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m1 5.5 3 3L10.5 1.5M8 8.5l7-7"/></svg></span></div>
+  <button class="btn btn--primary tap" id="remSend" style="margin-top:22px"><span>Schedule Reminder</span></button>
+</section>
+
+<section class="sheet" id="shareSheet" aria-labelledby="shareTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="shareTitle">Share invoice</p><p class="sheet__sub">Send a copy or save it to your phone</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="share-doc">
+    <span class="share-doc__ic">PDF</span>
+    <span class="grow"><span class="option__title" id="shareDoc">INV-1038.pdf</span><span class="option__sub" id="shareDocSub">Sharma Textiles · 1 page · 128 KB</span></span>
+  </div>
+  <div class="share-grid">
+    <button type="button" class="share-t tap" data-share="WhatsApp"><span class="share-i icon-green"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2A9.8 9.8 0 0 0 3.6 17l-1.4 4.8 5-1.3A9.8 9.8 0 1 0 12 2.2Zm0 1.9a7.9 7.9 0 1 1-4 14.7l-.3-.2-3 .8.8-2.9-.2-.3A7.9 7.9 0 0 1 12 4.1Z"/><path d="M9.2 7.6c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.6 1.1 2.7c.1.2 1.8 2.9 4.5 4 2.2.9 2.7.7 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2l-.5-.3-1.7-.8c-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.4.3-.4v-.5l-.8-2Z"/></svg></span>WhatsApp</button>
+    <button type="button" class="share-t tap" data-share="SMS"><span class="share-i icon-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5h16A1.5 1.5 0 0 1 21.5 6v9.5A1.5 1.5 0 0 1 20 17h-11l-4.5 3.5V17H4a1.5 1.5 0 0 1-1.5-1.5V6A1.5 1.5 0 0 1 4 4.5Z"/><path d="M7.5 9.5h9M7.5 12.5h5.5"/></svg></span>SMS</button>
+    <button type="button" class="share-t tap" data-share="Email"><span class="share-i icon-yellow"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6.5 9 6.5 9-6.5"/></svg></span>Email</button>
+    <button type="button" class="share-t tap" data-share="copy"><span class="share-i icon-gray"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/></svg></span>Copy link</button>
+    <button type="button" class="share-t tap" data-share="pdf"><span class="share-i icon-red"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v11.5M7 10.5l5 5 5-5M4 20.5h16"/></svg></span>PDF</button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  // Reminder sheet
+  (function () {
+    const sh = document.getElementById('reminderSheet'); if (!sh) return;
+    const custom = sh.querySelector('#remCustom'), btn = sh.querySelector('#remSend');
+    let when = 'tomorrow', chan = 'whatsapp';
+    const fmtDT = (v) => { const d = new Date(v); if (isNaN(d)) return 'the selected time'; return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) + ', ' + d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }); };
+    const sync = () => {
+      custom.style.display = when === 'custom' ? '' : 'none';
+      sh.querySelector('#remCustomSub').textContent = when === 'custom' && custom.value ? fmtDT(custom.value) : 'Pick a date and time';
+      btn.querySelector('span').textContent = when === 'now' ? (chan === 'sms' ? 'Send SMS Now' : 'Send on WhatsApp') : 'Schedule Reminder';
+      sh.querySelector('#remBubble').classList.toggle('is-sms', chan === 'sms');
+      sh.querySelector('#remVia').textContent = chan === 'sms' ? 'SMS' : 'WhatsApp';
+    };
+    sh.querySelector('#remWhen').addEventListener('select', (e) => { when = e.detail; sync(); if (when === 'custom') setTimeout(() => custom.focus(), 50); });
+    sh.querySelector('#remChannel').addEventListener('change', (e) => { chan = e.detail; sync(); });
+    custom.addEventListener('input', () => { custom.style.boxShadow = ''; sync(); });
+    btn.addEventListener('click', async () => {
+      if (when === 'custom' && !custom.value) { custom.style.boxShadow = '0 0 0 2px #f15858'; custom.focus(); Spendee.toast('Pick a date and time for the reminder'); return; }
+      await Spendee.loading(btn, 900);
+      Spendee.sheet.close(); Spendee.haptic();
+      const via = chan === 'sms' ? 'SMS' : 'WhatsApp';
+      Spendee.toast(when === 'now' ? 'Reminder sent on ' + via : when === 'tomorrow' ? 'Reminder scheduled for tomorrow, 10 AM' : 'Reminder scheduled for ' + fmtDT(custom.value));
+      sh.dispatchEvent(new CustomEvent('reminder:done', { detail: { via, when } }));
+    });
+    sync();
+  })();
+  // Share sheet
+  (function () {
+    const sh = document.getElementById('shareSheet'); if (!sh) return;
+    sh.querySelectorAll('[data-share]').forEach((b) => b.addEventListener('click', async () => {
+      const k = b.dataset.share;
+      if (k === 'pdf') {
+        b.classList.add('is-busy'); await Spendee.wait(1000); b.classList.remove('is-busy');
+        Spendee.sheet.close(); Spendee.toast('PDF saved to Downloads'); return;
+      }
+      if (k === 'copy') {
+        try { navigator.clipboard && navigator.clipboard.writeText(sh.dataset.link || 'https://spendee.link/ja').catch(() => {}); } catch (e) {}
+        Spendee.sheet.close(); Spendee.toast('Link copied'); return;
+      }
+      Spendee.sheet.close(); Spendee.haptic(); Spendee.toast('Shared via ' + k);
+    }));
+  })();
+  (function () {
+    const $ = (id) => document.getElementById(id);
+    const money = (n) => '₹ ' + Spendee.fmtIN(n);
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const INV = {
+      'INV-1042': { name: 'Dutta & Sons', contact: 'Amit', status: 'paid', date: '21 May 2025', due: '04 Jun 2025', paidOn: '04 Jun 2025', paid: 45000, mode: 'UPI',
+        items: [{ name: 'Denim fabric bale', qty: 30, rate: 1200, gst: 5 }, { name: 'Buttons & rivets', qty: 60, rate: 100, gst: 12 }, { name: 'Freight', qty: 1, rate: 480, gst: 0 }] },
+      'INV-1038': { name: 'Sharma Textiles', contact: 'Rakesh', status: 'pending', date: '27 May 2025', due: '10 Jun 2025', paid: 0,
+        items: [{ name: 'Cotton fabric roll', qty: 40, rate: 1250, gst: 5 }, { name: 'Dye pack — indigo', qty: 9, rate: 850, gst: 12 }, { name: 'Freight', qty: 1, rate: 932, gst: 0 }] },
+      'INV-1019': { name: 'Bose Retail', contact: 'Sourav', status: 'overdue', date: '08 May 2025', due: '23 May 2025', paid: 0,
+        items: [{ name: 'Silk blend yardage', qty: 40, rate: 2400, gst: 5 }, { name: 'Packaging cartons', qty: 200, rate: 45, gst: 18 }, { name: 'Freight', qty: 1, rate: 3580, gst: 0 }] },
+      'INV-1043': { name: 'Sharma Textiles', contact: 'Rakesh', status: 'sent', date: '04 Jun 2025', due: '19 Jun 2025', paid: 0, channel: 'WhatsApp',
+        items: [{ name: 'Cotton fabric roll', qty: 20, rate: 1250, gst: 5 }, { name: 'Dye pack — indigo', qty: 10, rate: 850, gst: 12 }] },
+    };
+    const id = (Spendee.q('id') || 'INV-1038').toUpperCase();
+    let inv = INV[id] || INV['INV-1038'];
+    const draft = Spendee.store.get('invoiceDraft', null);
+    if (id === 'INV-1043' && draft && draft.customer) {
+      inv = Object.assign({}, inv, { name: draft.customer.business || draft.customer.name, contact: (draft.customer.contact || draft.customer.name).split(' ')[0], date: draft.date, due: draft.due, items: draft.items, discount: draft.discount || 0, channel: draft.channel || 'WhatsApp' });
+    }
+    const invId = INV[id] ? id : 'INV-1038';
+    const sub = inv.items.reduce((a, i) => a + i.qty * i.rate, 0);
+    const disc = Math.min(inv.discount || 0, sub), factor = sub ? (sub - disc) / sub : 0;
+    const gst = Math.round(inv.items.reduce((a, i) => a + i.qty * i.rate * i.gst / 100, 0) * factor);
+    const total = sub - disc + gst;
+    const extra = [];
+
+    const PILL = {
+      paid: ['tone-green', '<svg width="10" height="8" viewBox="0 0 10 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m1 4.2 2.6 2.4L9 1.2"/></svg>Paid', '#8df15e'],
+      pending: ['tone-yellow', 'Pending', '#f1ea58'],
+      overdue: ['tone-red', 'Overdue', '#f15858'],
+      sent: ['tone-blue', 'Sent', '#f1ea58'],
+      cancelled: ['', 'Cancelled', '#8a8a8a'],
+    };
+    const short = (d) => { const [dd, mm] = d.split(' '); return mm + ' ' + (+dd); };
+
+    function render() {
+      const bal = Math.max(0, total - inv.paid), pct = Math.round(inv.paid / total * 100);
+      $('title').textContent = invId; $('hNo').textContent = invId; $('hName').textContent = inv.name;
+      document.title = 'Spendee · ' + invId;
+      const p = PILL[inv.status];
+      $('hPill').className = 'inv__pill ' + p[0]; $('hPill').innerHTML = p[1];
+      if (inv.status === 'cancelled') $('hPill').setAttribute('style', 'background:#333;color:#9a9a9a'); else $('hPill').removeAttribute('style');
+      $('hAmt').textContent = money(total); $('hAmt').style.color = p[2];
+      const dueTxt = inv.status === 'paid' ? ['Paid: ' + short(inv.paidOn), '#d6d6d6'] : inv.status === 'overdue' ? ['Overdue: 12 days', '#c64f4f'] : inv.status === 'cancelled' ? ['Cancelled today', '#8a8a8a'] : ['Due: ' + short(inv.due), '#c64f4f'];
+      $('hDue').textContent = dueTxt[0]; $('hDue').style.color = dueTxt[1];
+      $('pPct').textContent = pct + '%'; $('pPaid').textContent = money(inv.paid); $('pBal').textContent = money(bal);
+      $('pBal').style.color = bal ? (inv.status === 'overdue' ? '#f15858' : '#f1ea58') : '#8df15e';
+      $('pBarWrap').setAttribute('aria-valuenow', pct);
+      requestAnimationFrame(() => ($('pBar').style.width = pct + '%'));
+
+      const open = !['paid', 'cancelled'].includes(inv.status);
+      $('recordBtn').hidden = !open; $('remindBtn').hidden = !open; $('earlyBtn').hidden = !open;
+      $('remindBtn').parentElement.style.gridTemplateColumns = open ? '' : '1fr';
+      $('earlyBtn').href = 'invoice-discount.html?id=' + invId;
+      $('earlySub').textContent = 'Get ' + money(bal) + ' today · 1.2% fee';
+      $('banner').innerHTML = inv.status === 'paid'
+        ? `<div class="banner banner--ok" style="margin-top:16px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8df15e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>Paid in full on ${inv.paidOn} via ${inv.mode}. Receipt sent to ${esc(inv.name)}.</span></div>`
+        : inv.status === 'overdue'
+          ? `<div class="banner banner--danger" style="margin-top:16px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f15858" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg><span>Overdue by 12 days. Customers who get a reminder pay 3× faster.</span></div>`
+          : inv.status === 'cancelled'
+            ? `<div class="banner banner--danger" style="margin-top:16px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f15858" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="m8.5 8.5 7 7M15.5 8.5l-7 7"/></svg><span>This invoice was cancelled and ${esc(inv.name)} has been notified.</span></div>`
+            : '';
+
+      // Items
+      $('itemsTitle').textContent = inv.items.length + (inv.items.length === 1 ? ' item' : ' items') + ' · ' + money(total);
+      $('itemsList').innerHTML = inv.items.map((i) => `<div class="li"><span>${esc(i.name)}<small class="num">${Spendee.fmtIN(i.qty)} × ${money(i.rate)} · GST ${i.gst}%</small></span><span class="v num">${money(i.qty * i.rate)}</span></div>`).join('')
+        + `<div class="li sub first"><span>Subtotal</span><span class="num">${money(sub)}</span></div>`
+        + (disc ? `<div class="li sub"><span>Discount</span><span class="num c-green">− ${money(disc)}</span></div>` : '')
+        + `<div class="li sub"><span>CGST ${money(Math.round(gst / 2))} + SGST ${money(gst - Math.round(gst / 2))}</span><span class="num">${money(gst)}</span></div>`
+        + `<div class="li tot"><span>Total</span><span class="num">${money(total)}</span></div>`;
+
+      // Timeline
+      const T = [['done', 'Invoice created', inv.date + ', 10:12 AM · by Jayanta Adhikari'], ['done', 'Sent via ' + (inv.channel || 'WhatsApp'), inv.date + ', 10:14 AM']];
+      if (id === 'INV-1043' && Spendee.q('sent') === '1') { T[0][2] = 'Today, 11:02 AM · by Jayanta Adhikari'; T[1][2] = 'Just now'; }
+      else T.push(['done', 'Viewed by ' + (inv.contact === 'team' ? inv.name + ' accounts' : inv.contact + ', ' + inv.name), inv.date.replace(/^\d+/, (d) => String(+d + 1).padStart(2, '0')) + ', 09:40 AM']);
+      if (inv.partialOn) T.push(['done', 'Partially paid · ' + money(43000), inv.partialOn + ' via UPI']);
+      if (inv.status === 'paid' && inv.paidOn) T.push(['done', 'Paid in full · ' + money(total), inv.paidOn + ' via ' + inv.mode]);
+      T.push(...extra);
+      if (inv.status === 'pending' || inv.status === 'sent') T.push(['now', 'Due', inv.due + ' · balance ' + money(bal)]);
+      if (inv.status === 'overdue') T.push(['now', 'Overdue', 'Since ' + inv.due + ' · 12 days']);
+      $('timeline').innerHTML = T.map(([c, a, b]) => `<li class="${c}">${a}<small>${b}</small></li>`).join('');
+
+      // Sheet copy
+      $('paySub').textContent = invId + ' · ' + inv.name + ' · balance ' + money(bal);
+      $('moreTitle').textContent = invId; $('moreSub').textContent = inv.name + ' · ' + money(total);
+      $('remSub').textContent = inv.name + ' · ' + money(bal) + ' balance';
+      $('remText').textContent = `Hi ${inv.contact === 'team' ? 'team' : inv.contact}, a friendly reminder that ${money(bal)} is pending on invoice ${invId}${inv.status === 'overdue' ? ', now 12 days overdue' : ', due ' + inv.due}. Pay via UPI: spendee.link/ja/${invId.toLowerCase()}. Regards, Jayanta, JA Trading Co.`;
+      $('shareDoc').textContent = invId + '.pdf'; $('shareDocSub').textContent = inv.name + ' · 1 page · 128 KB';
+    }
+    render();
+
+    // Collapsible items
+    $('collBtn').addEventListener('click', () => {
+      const open = $('collBtn').getAttribute('aria-expanded') !== 'true';
+      $('collBtn').setAttribute('aria-expanded', String(open)); $('collBody').classList.toggle('open', open);
+      $('itemsSub').textContent = open ? 'Tap to collapse' : 'Tap to view line items and tax';
+    });
+
+    // Record payment
+    const amt = $('payAmt'); let kind = 'full';
+    const balance = () => Math.max(0, total - inv.paid);
+    const syncPay = () => {
+      const n = +amt.value.replace(/\D/g, '');
+      $('payLbl').textContent = n ? 'Record ' + money(n) : 'Record Payment';
+      $('payHelp').textContent = kind === 'full' ? 'Clears the full balance' : n && n < balance() ? money(balance() - n) + ' will remain due' : 'Enter the amount received';
+    };
+    const setKind = (k) => {
+      kind = k; amt.readOnly = k === 'full';
+      $('payKind').querySelectorAll('button').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.value === k)));
+      amt.value = k === 'full' ? Spendee.fmtIN(balance()) : ''; $('payFg').classList.remove('has-error');
+      if (k === 'partial') setTimeout(() => amt.focus(), 60);
+      syncPay();
+    };
+    $('payKind').addEventListener('change', (e) => setKind(e.detail));
+    document.getElementById('paySheet').addEventListener('sheet:open', () => setKind('full'));
+    setKind('full');
+    amt.addEventListener('input', () => { const n = +amt.value.replace(/\D/g, '').slice(0, 9); amt.value = n ? Spendee.fmtIN(n) : ''; syncPay(); });
+    let mode = 'UPI';
+    $('payMode').addEventListener('select', (e) => { mode = e.detail; });
+    $('payConfirm').addEventListener('click', async (e) => {
+      if (!Spendee.validate($('payFg'))) return;
+      const n = +amt.value.replace(/\D/g, '');
+      if (n > balance()) {
+        $('payFg').classList.add('has-error'); $('payFg').querySelector('.error-text').textContent = 'That’s more than the balance of ' + money(balance()); amt.focus(); return;
+      }
+      await Spendee.loading(e.currentTarget, 1100);
+      Spendee.sheet.close(); Spendee.haptic();
+      const dv = $('payDate').value.split('-'); const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const when = dv.length === 3 ? dv[2] + ' ' + MON[+dv[1] - 1] + ' ' + dv[0] : '04 Jun 2025';
+      inv.paid += n;
+      if (inv.paid >= total) {
+        inv.status = 'paid'; inv.paidOn = when; inv.mode = mode;
+        Spendee.toast('Payment recorded · ' + invId + ' is paid');
+      } else {
+        extra.push(['done', 'Payment received · ' + money(n), when + ' via ' + mode]);
+        if (inv.status === 'overdue' || inv.status === 'sent') inv.status = inv.status === 'sent' ? 'pending' : inv.status;
+        Spendee.toast('Payment of ' + money(n) + ' recorded');
+      }
+      render();
+      $('hPill').animate([{ transform: 'scale(.8)' }, { transform: 'scale(1.08)' }, { transform: 'none' }], { duration: 380, easing: 'ease-out' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Reminder logged in timeline
+    document.getElementById('reminderSheet').addEventListener('reminder:done', (e) => { extra.push(['done', 'Reminder ' + (e.detail.when === 'now' ? 'sent' : 'scheduled') + ' on ' + e.detail.via, 'Just now']); render(); });
+
+    // Overflow actions
+    $('dupBtn').addEventListener('click', () => {
+      Spendee.store.set('invoiceDraft', { status: 'draft', no: 'INV-1044', customer: null, date: '04 Jun 2025', due: '19 Jun 2025', items: inv.items, discount: 0, notes: 'Thank you for your business. Payment due within 15 days of invoice date.', upi: true });
+      Spendee.sheet.close(); Spendee.toast('Duplicated as a new draft');
+      setTimeout(() => (location.href = 'create-invoice.html?edit=1'), 700);
+    });
+    $('dlBtn').addEventListener('click', async () => {
+      const b = $('dlBtn'); b.querySelector('.option__sub').textContent = 'Preparing PDF…';
+      await Spendee.wait(1000); b.querySelector('.option__sub').textContent = 'Save as PDF to your phone';
+      Spendee.sheet.close(); Spendee.toast(invId + '.pdf saved to Downloads');
+    });
+    $('cancelBtn').addEventListener('click', async () => {
+      Spendee.sheet.close();
+      if (inv.status === 'paid') { await Spendee.dialog({ title: 'Can’t cancel a paid invoice', message: 'This invoice is already paid. Issue a credit note from Reports instead.', confirm: 'Got it', cancel: '', tone: 'info' }); return; }
+      if (inv.status === 'cancelled') return;
+      const ok = await Spendee.dialog({ title: 'Cancel ' + invId + '?', message: 'The invoice will be voided and ' + inv.name + ' will be notified. This can’t be undone.', confirm: 'Cancel Invoice', cancel: 'Keep', tone: 'danger' });
+      if (!ok) return;
+      Spendee.toast('Cancelling…'); await Spendee.wait(800);
+      inv.status = 'cancelled'; extra.push(['done', 'Invoice cancelled', 'Just now · customer notified']); render();
+      Spendee.toast(invId + ' cancelled');
+    });
+
+    if (Spendee.q('sent') === '1') setTimeout(() => Spendee.toast('Invoice sent on ' + (inv.channel || 'WhatsApp')), 400);
+  })();
+</script>
+</body>
+</html>

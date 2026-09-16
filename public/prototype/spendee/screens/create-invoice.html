@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · New Invoice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  [hidden]:not(.sheet) { display: none !important; }
+  .page--no-nav { padding-bottom: 150px; }
+  .toast { position: fixed; bottom: 136px; }
+  body .undo-toast { bottom: 136px; }
+  textarea.field { font-family: var(--font); }
+  .picker { gap: 10px; }
+  .picker .pk-val { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .picker .pk-sub { color: #8a8a8a; font-weight: 500; font-size: 15px; }
+  .picker svg { color: #5fb2f1; }
+  .field-row .field { padding: 0 16px; font-size: 16.5px; }
+  .auto-chip { margin-left: auto; height: 24px; padding: 0 8px; border-radius: 6px; background: #283845; color: #5fb2f1; font-size: 12px; display: grid; place-items: center; font-weight: 600; letter-spacing: .3px; }
+  .sec-head { display: flex; align-items: center; justify-content: space-between; margin: 28px 0 12px 2px; }
+  .sec-head .section-label { margin: 0; }
+  .items { display: flex; flex-direction: column; gap: 10px; }
+  .item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 10px 14px 18px; border-radius: 16px; background: #1a1a1a; box-shadow: inset 0 0 0 1px rgba(255,255,255,.19), 0 4px 10px rgba(0,0,0,.55); animation: rise 360ms var(--ease-out) both; }
+  .item__body { flex: 1; min-width: 0; text-align: left; }
+  .item__name { display: block; font-size: 16px; font-weight: 500; line-height: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .item__meta { display: block; font-size: 12.5px; color: #bdbdbd; margin-top: 4px; }
+  .item__gst { display: inline-block; margin-left: 6px; height: 18px; line-height: 18px; padding: 0 6px; border-radius: 5px; background: #283845; color: #5fb2f1; font-size: 11px; }
+  .item__total { font-size: 16px; font-weight: 600; margin-top: 12px; display: block; }
+  .item__rm { width: 44px; height: 44px; margin: -8px 0 0; border-radius: 12px; display: grid; place-items: center; color: #9a9a9a; flex-shrink: 0; }
+  .item__rm span { width: 28px; height: 28px; border-radius: 50%; background: #2c2c2c; display: grid; place-items: center; transition: background var(--dur), color var(--dur); }
+  .item__rm:hover span { background: #452626; color: #f15858; }
+  .add-item { width: 100%; height: 54px; margin-top: 10px; border-radius: 16px; border: 1.5px dashed rgba(95,178,241,.5); color: #5fb2f1; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(19,36,48,.5); }
+  .items-empty { text-align: center; padding: 18px 10px 8px; color: #8a8a8a; font-size: 14px; border-radius: 16px; }
+  .has-error .add-item { border-color: #f15858; }
+  .sum .kvs > div { padding: 10px 0; }
+  .sum .kvs > div:first-child { padding-top: 0; }
+  .sum__total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 6px; padding-top: 14px; border-top: 1px solid #868686; }
+  .sum__total span:first-child { font-size: 16px; font-weight: 600; }
+  .sum__total span:last-child { font-size: 22px; font-weight: 600; color: #8df15e; }
+  .cta-row { display: flex; align-items: center; gap: 16px; }
+  .cta-row .btn { width: 196px; flex-shrink: 0; font-size: 17px; }
+  .cta-total small { display: block; font-size: 12px; color: #9a9a9a; letter-spacing: .4px; }
+  .cta-total b { display: block; font-size: 21px; font-weight: 600; margin-top: 2px; white-space: nowrap; }
+  .sugg { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .sugg .chip { height: 32px; padding: 0 12px; font-size: 13.5px; background: #262626; color: #e6e6e6; box-shadow: inset 0 0 0 1px rgba(255,255,255,.12); }
+  .sugg .chip:hover { background: #2f2f2f; }
+  .qty { display: flex; align-items: center; justify-content: space-between; padding: 0 6px; }
+  .qty button { width: 40px; height: 40px; border-radius: 12px; background: #eef4f9; color: #000; display: grid; place-items: center; }
+  .qty input { width: 60px; text-align: center; border: 0; outline: 0; background: transparent; font: 600 18px var(--font); color: #000; padding: 0; }
+  .line-total { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding: 14px 16px; border-radius: 16px; background: #132430; box-shadow: inset 0 0 0 1px rgba(95,178,241,.25); }
+  .line-total b { font-size: 22px; font-weight: 600; }
+  .sheet .fg + .fg { margin-top: 16px; }
+  .sheet .fg > .label { margin-bottom: 10px; font-size: 14px; }
+  /* ledger sheets */
+  .sheet-lbl { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #8a8a8a; margin: 20px 0 10px 4px; }
+  .sheet-lbl:first-of-type { margin-top: 4px; }
+  .sheet .search { height: 48px; }
+  .sheet .field { height: 50px; }
+  .sheet .empty-state { padding: 22px 10px 6px; }
+  .sheet .empty-state p { margin-bottom: 14px; }
+  .sheet .options .option { position: relative; }
+  .bubble { position: relative; background: #1d3a26; color: #e3f1dc; border-radius: 16px 16px 16px 4px; padding: 12px 14px 8px; font-size: 13.5px; line-height: 1.5; box-shadow: inset 0 0 0 1px rgba(141,241,94,.14); transition: background var(--dur), color var(--dur); }
+  .bubble.is-sms { background: #1d3548; color: #dbe9f4; box-shadow: inset 0 0 0 1px rgba(95,178,241,.18); }
+  .bubble__meta { display: flex; justify-content: flex-end; align-items: center; gap: 4px; font-size: 10.5px; color: rgba(255,255,255,.5); margin-top: 4px; }
+  .share-doc { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .share-doc__ic { width: 38px; height: 44px; border-radius: 8px; background: #452626; color: #f15858; display: grid; place-items: center; flex-shrink: 0; font: 600 9px/1 var(--font-ui); letter-spacing: .4px; }
+  .share-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 18px; }
+  .share-t { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 4px 0; font-size: 11.5px; color: #d4d4d4; letter-spacing: .2px; text-align: center; white-space: nowrap; }
+  .share-i { position: relative; width: 56px; height: 56px; border-radius: 18px; display: grid; place-items: center; box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); }
+  .share-t.is-busy .share-i svg { opacity: 0; }
+  .share-t.is-busy .share-i::after { content: ''; position: absolute; left: 50%; top: 50%; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; border: 2.5px solid rgba(255,255,255,.2); border-top-color: currentColor; animation: spin 700ms linear infinite; }
+  .undo-toast { position: fixed; left: 50%; bottom: 128px; z-index: 960; display: flex; align-items: center; gap: 14px; padding: 6px 6px 6px 16px; border-radius: 14px; background: rgba(38,38,38,.96); color: #fff; font-size: 13.5px; letter-spacing: .3px; white-space: nowrap; box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 10px 30px rgba(0,0,0,.5); transform: translate(-50%, 16px); opacity: 0; transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out); }
+  .undo-toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .undo-toast button { height: 34px; padding: 0 14px; border-radius: 9px; background: #132430; color: #5fb2f1; font-weight: 600; font-size: 13.5px; box-shadow: inset 0 0 0 1px rgba(95,178,241,.35); }
+  .cust-list { max-height: 420px; overflow-y: auto; scrollbar-width: none; margin: 14px -4px 0; padding: 0 4px 2px; }
+  .cust-list .avatar { width: 38px; height: 38px; }
+  .cust-list .option__meta { font-size: 13px; font-weight: 600; flex-shrink: 0; }
+  .option--danger .option__title { color: #f15858; }
+  .qd { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .qd button { height: 58px; border-radius: 14px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 14px; font-weight: 600; color: #f0f0f0; transition: box-shadow var(--dur), background var(--dur); }
+  .qd button small { font-size: 11px; font-weight: 500; color: #8a8a8a; }
+  .qd button[aria-pressed="true"] { background: #1c2a36; box-shadow: inset 0 0 0 2px #5fb2f1; }
+  .cal { margin-top: 16px; padding: 14px 12px 10px; border-radius: 20px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .cal__head { display: flex; align-items: center; justify-content: space-between; padding: 0 4px 10px; }
+  .cal__month { font-size: 16px; font-weight: 600; }
+  .cal__nav { width: 36px; height: 36px; border-radius: 10px; background: #1a1a1a; color: #5fb2f1; display: grid; place-items: center; }
+  .cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 2px; text-align: center; }
+  .cal__wd { font-size: 11px; color: #6b6b6b; letter-spacing: .6px; padding: 4px 0 8px; }
+  .cal__d { height: 40px; border-radius: 12px; font-size: 15px; color: #e6e6e6; position: relative; font-variant-numeric: tabular-nums; transition: background 160ms; }
+  .cal__d:hover { background: rgba(255,255,255,.05); }
+  .cal__d.is-today::after { content: ''; position: absolute; left: 50%; bottom: 5px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: #5fb2f1; }
+  .cal__d[aria-selected="true"] { background: #c8e7ff; color: #000; font-weight: 600; }
+  .cal__d[aria-selected="true"]::after { background: #000; }
+  .cal__d[disabled] { color: #4a4a4a; pointer-events: none; }
+</style>
+</head>
+<body>
+<main class="page page--no-nav" aria-label="Create invoice">
+  <header class="appbar">
+    <a class="back tap" href="invoices.html" data-go="back" aria-label="Back"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg></a>
+    <div class="appbar__titles"><span class="appbar__eyebrow">Billing · Draft</span><h1 class="appbar__title">New Invoice</h1></div>
+    <button type="button" class="appbar__action tap" id="saveDraft">Save</button>
+  </header>
+
+  <section class="enter" aria-label="Customer">
+    <div class="fg" id="custFg">
+      <label class="label" id="custLbl">Bill to</label>
+      <button type="button" class="field picker tap" id="custPick" aria-labelledby="custLbl custVal" aria-haspopup="dialog">
+        <span class="pk-val" id="custVal"><span class="placeholder">Select customer</span></span>
+        <svg width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+      </button>
+      <span class="error-text" role="alert">Choose who this invoice is for</span>
+    </div>
+  </section>
+
+  <section class="enter" style="--i:1;margin-top:20px" aria-label="Invoice details">
+    <div class="fg">
+      <label class="label" for="invNo">Invoice no.</label>
+      <label class="field field--dark field-prefix"><input id="invNo" value="INV-1043" readonly class="num" aria-describedby="invHelp"><span class="auto-chip" style="margin-right:-8px">Auto</span></label>
+      <span class="helper" id="invHelp">Next in series after INV-1042</span>
+    </div>
+    <div class="field-row" style="margin-top:20px">
+      <div class="fg">
+        <label class="label" id="dLbl">Invoice date</label>
+        <button type="button" class="field picker tap" id="datePick" aria-labelledby="dLbl datePickV" aria-haspopup="dialog"><span class="pk-val num" id="datePickV">04 Jun 2025</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></button>
+      </div>
+      <div class="fg" style="margin-top:0">
+        <label class="label" id="ddLbl">Due date</label>
+        <button type="button" class="field picker tap" id="duePick" aria-labelledby="ddLbl duePickV" aria-haspopup="dialog"><span class="pk-val num" id="duePickV">19 Jun 2025</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></button>
+      </div>
+    </div>
+    <p class="helper" id="termsHelp" style="font-size:12px;color:#8a8a8a;margin:8px 0 0 10px">Net 15 · payment due in 15 days</p>
+  </section>
+
+  <section class="enter fg" id="itemsFg" style="--i:2" aria-label="Items">
+    <div class="sec-head"><p class="section-label" id="itemsLbl">Items (2)</p></div>
+    <div class="items" id="items" aria-live="polite"></div>
+    <p class="items-empty" id="itemsEmpty" hidden>No items yet. Add what you're billing for.</p>
+    <button type="button" class="add-item tap" id="addItem"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 1.5v13M1.5 8h13"/></svg>Add item</button>
+    <span class="error-text" role="alert">Add at least one item to preview</span>
+  </section>
+
+  <p class="section-label">Discount</p>
+  <div class="fg enter" style="--i:3">
+    <label class="field field-prefix"><span>₹</span><input id="discount" class="num" inputmode="numeric" placeholder="0" aria-label="Discount amount" autocomplete="off"></label>
+    <span class="helper">Applied before tax</span>
+  </div>
+
+  <p class="section-label">Summary</p>
+  <section class="panel sum enter" style="--i:4" aria-label="Invoice summary">
+    <div class="kvs">
+      <div><span class="k">Subtotal</span><span class="v num" id="sSub">₹ 0</span></div>
+      <div><span class="k">CGST</span><span class="v num" id="sCgst">₹ 0</span></div>
+      <div><span class="k">SGST</span><span class="v num" id="sSgst">₹ 0</span></div>
+      <div><span class="k">Discount</span><span class="v num" id="sDisc">₹ 0</span></div>
+    </div>
+    <div class="sum__total"><span>Total</span><span class="num" id="sTotal">₹ 0</span></div>
+  </section>
+
+  <p class="section-label">Notes &amp; terms</p>
+  <div class="fg">
+    <textarea class="field" id="notes" rows="3" aria-label="Notes and terms">Thank you for your business. Payment due within 15 days of invoice date.</textarea>
+  </div>
+
+  <div class="panel panel--tight" style="margin-top:16px">
+    <div class="row-flex" style="gap:14px">
+      <span class="menu__icon icon-yellow"><svg width="16" height="17" viewBox="0 0 15 17" fill="currentColor"><path d="M0 0h6v6H0zM2 2v2h2V2zM9 0h6v6H9zm2 2v2h2V2zM0 9h6v6H0zm2 2v2h2v-2zM8 8h2v2H8zm3 0h4v2h-2v2h-2zM8 11h2v4H8zm3 2h4v4h-2v-2h-2z"/></svg></span>
+      <span class="grow"><span class="menu__title" id="upiLbl">Accept UPI payment link on invoice</span><span class="menu__sub">Via jayanta.a@spendee</span></span>
+      <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="upiLbl" id="upi"></button>
+    </div>
+  </div>
+
+  <div class="cta-bar">
+    <div class="cta-row">
+      <div class="cta-total grow"><small>Total payable</small><b class="num" id="ctaTotal" aria-live="polite">₹ 0</b></div>
+      <button type="button" class="btn btn--primary tap" id="preview"><span>Preview Invoice</span></button>
+    </div>
+  </div>
+  <div class="toast" role="status" aria-live="polite"></div>
+</main>
+
+<section class="sheet" id="itemSheet" aria-labelledby="itemTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="itemTitle">Add item</p><p class="sheet__sub">Line total updates as you type</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div id="itemForm">
+    <div class="fg">
+      <label class="label" for="iName">Item name</label>
+      <input class="field" id="iName" placeholder="e.g. Cotton fabric roll" autocomplete="off" data-validate="required">
+      <div class="sugg" id="sugg" aria-label="Suggestions">
+        <button type="button" class="chip tap" data-rate="1250" data-gst="5">Cotton fabric roll</button>
+        <button type="button" class="chip tap" data-rate="850" data-gst="12">Dye pack — indigo</button>
+        <button type="button" class="chip tap" data-rate="2400" data-gst="5">Silk blend yardage</button>
+        <button type="button" class="chip tap" data-rate="120" data-gst="12">Polyester thread spool</button>
+        <button type="button" class="chip tap" data-rate="45" data-gst="18">Packaging cartons</button>
+      </div>
+    </div>
+    <div class="field-row" style="margin-top:16px">
+      <div class="fg">
+        <label class="label" id="qLbl">Quantity</label>
+        <div class="field qty" role="group" aria-labelledby="qLbl">
+          <button type="button" class="tap" id="qMinus" aria-label="Decrease quantity"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M2 7h10"/></svg></button>
+          <input id="iQty" class="num" inputmode="numeric" value="1" aria-label="Quantity">
+          <button type="button" class="tap" id="qPlus" aria-label="Increase quantity"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg></button>
+        </div>
+      </div>
+      <div class="fg" style="margin-top:0">
+        <label class="label" for="iRate">Rate</label>
+        <label class="field field-prefix"><span>₹</span><input id="iRate" class="num" inputmode="numeric" placeholder="0" data-validate="amount" autocomplete="off"></label>
+      </div>
+    </div>
+    <p class="sheet-lbl" style="margin-top:18px">GST rate</p>
+    <div class="segmented" id="iGst" aria-label="GST rate">
+      <button type="button" data-value="0">0%</button>
+      <button type="button" data-value="5" aria-selected="true">5%</button>
+      <button type="button" data-value="12">12%</button>
+      <button type="button" data-value="18">18%</button>
+      <button type="button" data-value="28">28%</button>
+    </div>
+    <div class="line-total" aria-live="polite">
+      <span><span class="option__title">Line total</span><span class="option__sub num" id="iBreak">₹ 0 + GST ₹ 0</span></span>
+      <b class="num" id="iTotal">₹ 0</b>
+    </div>
+    <button type="button" class="btn btn--primary tap" id="iSave" style="margin-top:18px"><span id="iSaveLbl">Add to Invoice</span></button>
+  </div>
+</section>
+
+<section class="sheet" id="customerSheet" aria-labelledby="custTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="custTitle">Bill to</p><p class="sheet__sub">Search your customers and vendors</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <label class="search">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#8e8e8e" stroke-width="2" stroke-linecap="round"><circle cx="5.8" cy="5.8" r="4.6"/><path d="m9.3 9.3 3.4 3.4"/></svg>
+    <input id="custQ" type="search" placeholder="Search name or business" aria-label="Search contacts" autocomplete="off">
+  </label>
+  <div class="options cust-list" id="custList" role="listbox" aria-label="Contacts"></div>
+  <div class="empty-state" id="custEmpty" style="display:none">
+    <div class="empty-state__icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></div>
+    <h3>No contacts found</h3>
+    <p>Check the spelling, or add them as a new contact.</p>
+  </div>
+  <a class="btn btn--ghost tap" href="add-contact.html" style="margin-top:14px;height:50px;font-size:16px"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 1.5v13M1.5 8h13"/></svg>Add new contact</a>
+</section>
+
+<section class="sheet" id="dateSheet" aria-labelledby="dateTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="dateTitle">Select date</p><p class="sheet__sub" id="dateSub">04 Jun 2025</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="qd" id="quickDates" aria-label="Quick options">
+    <button type="button" class="tap" data-add="0">Today<small></small></button>
+    <button type="button" class="tap" data-add="7">+7 days<small></small></button>
+    <button type="button" class="tap" data-add="15">+15 days<small></small></button>
+    <button type="button" class="tap" data-add="30">+30 days<small></small></button>
+  </div>
+  <div class="cal">
+    <div class="cal__head">
+      <button type="button" class="cal__nav tap" id="calPrev" aria-label="Previous month"><svg width="8" height="14" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m8.5 1.5-7 7 7 7"/></svg></button>
+      <p class="cal__month" id="calMonth" aria-live="polite">June 2025</p>
+      <button type="button" class="cal__nav tap" id="calNext" aria-label="Next month"><svg width="8" height="14" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg></button>
+    </div>
+    <div class="cal__grid" id="calGrid" role="grid"></div>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  // Demo contacts shared by the customer picker
+  const CONTACTS = [
+    { id: 'sharma-textiles', name: 'Sharma Textiles', business: 'Sharma Textiles', contact: 'Rakesh Sharma', city: 'Kolkata', gstin: '19ABCFS6021K1Z8', phone: '+91 98300 21367', email: 'accounts@sharmatextiles.in', kind: 'Customer', tone: 'yellow', bal: '₹62K', status: 'pending' },
+    { id: 'bose-retail', name: 'Bose Retail', business: 'Bose Retail', contact: 'Sourav Bose', city: 'Kolkata', gstin: '19AAHFB7702M1Z4', phone: '+91 98311 20456', email: 'accounts@boseretail.in', kind: 'Customer', tone: 'red', bal: '₹1.15L', status: 'overdue' },
+    { id: 'mitra-textiles', name: 'Mitra Textiles', business: 'Mitra Textiles', contact: 'Sudip Mitra', city: 'Asansol', gstin: '19AAGFM7310P1Z9', phone: '+91 99330 31844', email: 'sudip@mitratextiles.in', kind: 'Customer', tone: 'yellow', bal: '₹52.5K', status: 'pending' },
+    { id: 'ghosh-traders', name: 'Ghosh Traders', business: 'Ghosh Traders', contact: 'Partha Ghosh', city: 'Siliguri', gstin: '19AAJFG2290Q1Z4', phone: '+91 94340 77231', email: 'partha@ghoshtraders.in', kind: 'Customer', tone: 'red', bal: '₹38K', status: 'overdue' },
+    { id: 'roy-fabrics', name: 'Roy Fabrics', business: 'Roy Fabrics', contact: 'Debashis Roy', city: 'Durgapur', gstin: '19AAHFR6612R1Z1', phone: '+91 94340 58320', email: 'debashis@royfabrics.in', kind: 'Customer', tone: 'yellow', bal: '₹24K', status: 'pending' },
+    { id: 'saha-co', name: 'Saha & Co.', business: 'Saha & Co.', contact: 'Ankit Saha', city: 'Kolkata', gstin: '19AAKFS4418S1Z7', phone: '+91 98300 66102', email: 'ankit@sahaandco.in', kind: 'Customer', tone: 'blue', bal: '₹28K', status: 'done' },
+    { id: 'dutta-sons', name: 'Dutta & Sons', business: 'Dutta & Sons', contact: 'Amit Dutta', city: 'Howrah', gstin: '19AAKFD3417H1Z2', phone: '+91 98310 43210', email: 'accounts@duttasons.in', kind: 'Customer', tone: 'blue', bal: '₹45K', status: 'done' },
+    { id: 'das-electricals', name: 'Das Electricals', business: 'Das Electricals', contact: 'Rahul Das', city: 'Kharagpur', gstin: '19AAFFD9034T1Z5', phone: '+91 98320 44519', email: 'rahul@daselectricals.in', kind: 'Customer', tone: 'blue', bal: '₹12K', status: 'done' },
+    { id: 'mk-suppliers', name: 'MK Suppliers', business: 'MK Suppliers', contact: 'Manoj Kedia', city: 'Howrah', gstin: '19AAECM3321K1Z8', phone: '+91 97480 11408', email: 'billing@mksuppliers.in', kind: 'Vendor', tone: 'blue', bal: '₹18.5K', status: 'done' },
+    { id: 'dye-chemical', name: 'Dye Chemical', business: 'Dye Chemical Works', contact: 'Orders desk', city: 'Durgapur', gstin: '19AAFCD5578L1Z3', phone: '+91 96090 30917', email: 'orders@dyechemical.in', kind: 'Vendor', tone: 'blue', bal: '₹0', status: 'done' },
+  ];
+  const STATUS_LBL = { pending: 'Pending', overdue: 'Overdue', done: 'Settled' };
+  const AMT_CLS = { pending: 'amt--pending', overdue: 'amt--overdue', done: 'amt--done' };
+  const PERSON = '<svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg>';
+  const picker = (function () {
+    const list = document.getElementById('custList'), q = document.getElementById('custQ'), empty = document.getElementById('custEmpty');
+    let selected = null, onPick = () => {};
+    list.innerHTML = CONTACTS.map((c) => `<button type="button" class="option tap" role="option" data-id="${c.id}" aria-selected="false"><span class="avatar avatar--${c.tone}">${PERSON}</span><span class="option__body"><span class="option__title">${c.name}</span><span class="option__sub">${[c.kind, c.business !== c.name ? c.business : '', c.city].filter(Boolean).join(' · ')}</span></span><span class="option__meta num ${AMT_CLS[c.status]}">${c.bal}</span></button>`).join('');
+    const rows = [...list.children];
+    const mark = () => rows.forEach((r) => { const on = r.dataset.id === selected; r.setAttribute('aria-checked', on ? 'true' : 'false'); r.setAttribute('aria-selected', on ? 'true' : 'false'); });
+    q.addEventListener('input', () => {
+      const t = q.value.trim().toLowerCase(); let n = 0;
+      rows.forEach((r) => { const c = CONTACTS.find((x) => x.id === r.dataset.id); const ok = (c.name + ' ' + c.business + ' ' + c.city).toLowerCase().includes(t); r.style.display = ok ? '' : 'none'; if (ok) n++; });
+      empty.style.display = n ? 'none' : '';
+    });
+    rows.forEach((r) => r.addEventListener('click', () => {
+      selected = r.dataset.id; mark(); Spendee.haptic();
+      const c = CONTACTS.find((x) => x.id === selected);
+      setTimeout(() => { Spendee.sheet.close(); onPick(c); }, 160);
+    }));
+    document.getElementById('customerSheet').addEventListener('sheet:close', () => { q.value = ''; rows.forEach((r) => (r.style.display = '')); empty.style.display = 'none'; });
+    return {
+      open(cb, current) { onPick = cb; selected = current || null; mark(); Spendee.sheet.open('customerSheet'); },
+      find: (idOrName) => CONTACTS.find((c) => c.id === idOrName || c.name.toLowerCase() === String(idOrName || '').toLowerCase()),
+    };
+  })();
+
+  // Date sheet: quick options + month calendar (demo "today" = 04 Jun 2025)
+  const TODAY = new Date(2025, 5, 4);
+  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const MONTHS_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const fmtD = (d) => String(d.getDate()).padStart(2, '0') + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+  const parseD = (s) => { const m = String(s || '').match(/(\d{1,2})\s+(\w{3})\w*\s+(\d{4})/); if (!m) return null; const mi = MONTHS.indexOf(m[2].slice(0, 1).toUpperCase() + m[2].slice(1, 3).toLowerCase()); return mi < 0 ? null : new Date(+m[3], mi, +m[1]); };
+  const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+  const sameDay = (a, b) => a && b && a.toDateString() === b.toDateString();
+  const datePicker = (function () {
+    const grid = document.getElementById('calGrid'), month = document.getElementById('calMonth');
+    const quick = [...document.querySelectorAll('#quickDates button')];
+    let view = new Date(TODAY.getFullYear(), TODAY.getMonth(), 1), value = TODAY, base = TODAY, min = null, onPick = () => {};
+    const render = () => {
+      month.textContent = MONTHS_LONG[view.getMonth()] + ' ' + view.getFullYear();
+      const first = new Date(view.getFullYear(), view.getMonth(), 1).getDay();
+      const days = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+      let h = ['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d) => `<span class="cal__wd" aria-hidden="true">${d}</span>`).join('');
+      for (let i = 0; i < first; i++) h += '<span></span>';
+      for (let d = 1; d <= days; d++) {
+        const dt = new Date(view.getFullYear(), view.getMonth(), d);
+        const dis = min && dt < min;
+        h += `<button type="button" class="cal__d${sameDay(dt, TODAY) ? ' is-today' : ''}" data-d="${d}" aria-selected="${sameDay(dt, value)}" aria-label="${fmtD(dt)}"${dis ? ' disabled' : ''}>${d}</button>`;
+      }
+      grid.innerHTML = h;
+      document.getElementById('dateSub').textContent = 'Selected: ' + fmtD(value);
+      quick.forEach((b) => { const dt = addDays(base, +b.dataset.add); b.querySelector('small').textContent = String(dt.getDate()).padStart(2, '0') + ' ' + MONTHS[dt.getMonth()]; b.setAttribute('aria-pressed', String(sameDay(dt, value))); b.disabled = !!(min && dt < min); });
+    };
+    const pick = (dt) => { value = dt; view = new Date(dt.getFullYear(), dt.getMonth(), 1); render(); Spendee.haptic(); setTimeout(() => { Spendee.sheet.close(); onPick(dt); }, 200); };
+    grid.addEventListener('click', (e) => { const b = e.target.closest('[data-d]'); if (b) pick(new Date(view.getFullYear(), view.getMonth(), +b.dataset.d)); });
+    quick.forEach((b) => b.addEventListener('click', () => pick(addDays(base, +b.dataset.add))));
+    document.getElementById('calPrev').addEventListener('click', () => { view = new Date(view.getFullYear(), view.getMonth() - 1, 1); render(); });
+    document.getElementById('calNext').addEventListener('click', () => { view = new Date(view.getFullYear(), view.getMonth() + 1, 1); render(); });
+    render();
+    return {
+      open({ title, current, from, minDate, onSelect }) {
+        document.getElementById('dateTitle').textContent = title || 'Select date';
+        value = current || TODAY; base = from || TODAY; min = minDate || null; onPick = onSelect || (() => {});
+        view = new Date(value.getFullYear(), value.getMonth(), 1); render(); Spendee.sheet.open('dateSheet');
+      },
+    };
+  })();
+  // Toast with an Undo action (tappable, auto-dismisses)
+  const undoToast = (msg, onUndo, ms = 4500) => {
+    document.querySelectorAll('.undo-toast').forEach((t) => t.remove());
+    document.querySelectorAll('.toast.show').forEach((t) => t.classList.remove('show'));
+    const t = document.createElement('div');
+    t.className = 'undo-toast'; t.setAttribute('role', 'status'); t.setAttribute('aria-live', 'polite');
+    t.innerHTML = `<span>${msg}</span><button type="button" class="tap">Undo</button>`;
+    document.body.appendChild(t);
+    requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('show')));
+    const hide = () => { t.classList.remove('show'); setTimeout(() => t.remove(), 260); };
+    const h = setTimeout(hide, ms);
+    t.querySelector('button').addEventListener('click', () => { clearTimeout(h); hide(); onUndo && onUndo(); });
+    return t;
+  };
+  (function () {
+    const $ = (id) => document.getElementById(id);
+    const money = (n) => '₹ ' + Spendee.fmtIN(n);
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const num = (v) => +String(v).replace(/[^\d]/g, '') || 0;
+
+    let state = {
+      no: 'INV-1043', customer: null, date: '04 Jun 2025', due: '19 Jun 2025',
+      items: [
+        { name: 'Cotton fabric roll', qty: 20, rate: 1250, gst: 5 },
+        { name: 'Dye pack — indigo', qty: 10, rate: 850, gst: 12 },
+      ],
+      discount: 0, notes: $('notes').value, upi: true,
+    };
+    const nav = (performance.getEntriesByType('navigation')[0] || {}).type;
+    const saved = Spendee.store.get('invoiceDraft', null);
+    if (saved && saved.status === 'draft' && (Spendee.q('edit') === '1' || nav === 'back_forward')) state = Object.assign(state, saved);
+    if (Spendee.q('customer')) state.customer = picker.find(Spendee.q('customer')) || state.customer;
+
+    const calc = () => {
+      const sub = state.items.reduce((a, i) => a + i.qty * i.rate, 0);
+      const disc = Math.min(state.discount, sub);
+      const factor = sub ? (sub - disc) / sub : 0;
+      const gst = Math.round(state.items.reduce((a, i) => a + i.qty * i.rate * i.gst / 100, 0) * factor);
+      const cgst = Math.round(gst / 2), sgst = gst - cgst;
+      return { sub, disc, cgst, sgst, gst, total: sub - disc + gst };
+    };
+
+    function renderCustomer() {
+      const c = state.customer;
+      $('custVal').innerHTML = c ? `${esc(c.name)} <span class="pk-sub">· ${esc(c.business !== c.name ? c.business : c.city)}</span>` : '<span class="placeholder">Select customer</span>';
+      if (c) $('custFg').classList.remove('has-error');
+    }
+    function renderDates() {
+      $('datePickV').textContent = state.date; $('duePickV').textContent = state.due;
+      const d = Math.round((parseD(state.due) - parseD(state.date)) / 864e5);
+      $('termsHelp').textContent = d <= 0 ? 'Due on receipt' : 'Net ' + d + ' · payment due in ' + d + ' days';
+    }
+    function renderItems() {
+      $('items').innerHTML = state.items.map((i, k) => `
+        <div class="item" data-k="${k}">
+          <button type="button" class="item__body tap" data-edit="${k}" aria-label="Edit ${esc(i.name)}">
+            <span class="item__name">${esc(i.name)}</span>
+            <span class="item__meta num">${Spendee.fmtIN(i.qty)} × ${money(i.rate)}<span class="item__gst">GST ${i.gst}%</span></span>
+            <span class="item__total num">${money(i.qty * i.rate)}</span>
+          </button>
+          <button type="button" class="item__rm tap" data-rm="${k}" aria-label="Remove ${esc(i.name)}"><span><svg width="10" height="10" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></span></button>
+        </div>`).join('');
+      $('itemsEmpty').hidden = state.items.length > 0;
+      $('itemsLbl').textContent = 'Items (' + state.items.length + ')';
+      if (state.items.length) $('itemsFg').classList.remove('has-error');
+      renderTotals();
+    }
+    function renderTotals() {
+      const t = calc();
+      $('sSub').textContent = money(t.sub); $('sCgst').textContent = money(t.cgst); $('sSgst').textContent = money(t.sgst);
+      $('sDisc').textContent = t.disc ? '− ' + money(t.disc) : money(0);
+      $('sDisc').style.color = t.disc ? '#8df15e' : '';
+      $('sTotal').textContent = money(t.total); $('ctaTotal').textContent = money(t.total);
+    }
+    renderCustomer(); renderDates(); renderItems();
+    if (state.discount) $('discount').value = Spendee.fmtIN(state.discount);
+    $('notes').value = state.notes; $('upi').setAttribute('aria-checked', String(state.upi !== false));
+
+    // Customer
+    $('custPick').addEventListener('click', () => picker.open((c) => { state.customer = c; renderCustomer(); }, state.customer && state.customer.id));
+    // Dates
+    $('datePick').addEventListener('click', () => datePicker.open({ title: 'Invoice date', current: parseD(state.date), onSelect: (d) => {
+      const gap = Math.round((parseD(state.due) - parseD(state.date)) / 864e5);
+      state.date = fmtD(d); state.due = fmtD(addDays(d, Math.max(gap, 0))); renderDates();
+    } }));
+    $('duePick').addEventListener('click', () => datePicker.open({ title: 'Due date', current: parseD(state.due), from: parseD(state.date), minDate: parseD(state.date), onSelect: (d) => { state.due = fmtD(d); renderDates(); } }));
+
+    // Discount
+    $('discount').addEventListener('input', (e) => { const n = num(e.target.value); e.target.value = n ? Spendee.fmtIN(n) : ''; state.discount = n; renderTotals(); });
+    $('notes').addEventListener('input', (e) => { state.notes = e.target.value; });
+    $('upi').addEventListener('click', () => setTimeout(() => { state.upi = $('upi').getAttribute('aria-checked') === 'true'; }));
+
+    // Items: remove with undo, tap to edit
+    $('items').addEventListener('click', (e) => {
+      const rm = e.target.closest('[data-rm]'), ed = e.target.closest('[data-edit]');
+      if (rm) {
+        const k = +rm.dataset.rm, removed = state.items[k];
+        const card = rm.closest('.item');
+        card.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateX(-24px)' }], { duration: 200, easing: 'ease-in' }).onfinish = () => {
+          state.items.splice(k, 1); renderItems(); Spendee.haptic();
+          undoToast('Item removed', () => { state.items.splice(Math.min(k, state.items.length), 0, removed); renderItems(); });
+        };
+      } else if (ed) openItem(+ed.dataset.edit);
+    });
+
+    // Item sheet
+    let editing = -1, gst = 5;
+    const iName = $('iName'), iQty = $('iQty'), iRate = $('iRate'), segBtns = [...$('iGst').querySelectorAll('button')];
+    const setGst = (v) => { gst = +v; segBtns.forEach((b) => b.setAttribute('aria-selected', String(+b.dataset.value === gst))); };
+    const live = () => {
+      const q = Math.max(0, num(iQty.value)), r = num(iRate.value), base = q * r, tax = Math.round(base * gst / 100);
+      $('iBreak').textContent = money(base) + ' + GST ' + money(tax); $('iTotal').textContent = money(base + tax);
+    };
+    function openItem(k) {
+      editing = k; const it = state.items[k];
+      $('itemTitle').textContent = it ? 'Edit item' : 'Add item'; $('iSaveLbl').textContent = it ? 'Update Item' : 'Add to Invoice';
+      iName.value = it ? it.name : ''; iQty.value = it ? it.qty : 1; iRate.value = it ? Spendee.fmtIN(it.rate) : ''; setGst(it ? it.gst : 5);
+      document.querySelectorAll('#itemForm .fg').forEach((f) => f.classList.remove('has-error'));
+      filterSugg(); live(); Spendee.sheet.open('itemSheet');
+    }
+    const filterSugg = () => { const t = iName.value.trim().toLowerCase(); $('sugg').querySelectorAll('.chip').forEach((c) => (c.style.display = !t || c.textContent.toLowerCase().includes(t) && c.textContent.toLowerCase() !== t ? '' : 'none')); };
+    $('addItem').addEventListener('click', () => openItem(-1));
+    $('iGst').addEventListener('change', (e) => { gst = +e.detail; live(); });
+    iName.addEventListener('input', filterSugg);
+    $('sugg').addEventListener('click', (e) => {
+      const c = e.target.closest('.chip'); if (!c) return;
+      iName.value = c.textContent; iRate.value = Spendee.fmtIN(+c.dataset.rate); setGst(c.dataset.gst);
+      document.querySelectorAll('#itemForm .fg').forEach((f) => f.classList.remove('has-error'));
+      filterSugg(); live(); iQty.focus(); iQty.select();
+    });
+    const step = (d) => { iQty.value = Math.max(1, Math.min(9999, num(iQty.value) + d)); live(); Spendee.haptic(); };
+    $('qMinus').addEventListener('click', () => step(-1)); $('qPlus').addEventListener('click', () => step(1));
+    iQty.addEventListener('input', () => { iQty.value = String(num(iQty.value)).slice(0, 4); live(); });
+    iQty.addEventListener('blur', () => { if (!num(iQty.value)) iQty.value = 1; live(); });
+    iRate.addEventListener('input', () => { const n = num(iRate.value); iRate.value = n ? Spendee.fmtIN(n) : ''; live(); });
+    $('iSave').addEventListener('click', () => {
+      if (!Spendee.validate($('itemForm'))) return;
+      const it = { name: iName.value.trim(), qty: Math.max(1, num(iQty.value)), rate: num(iRate.value), gst };
+      if (editing >= 0) state.items[editing] = it; else state.items.push(it);
+      Spendee.sheet.close(); renderItems(); Spendee.haptic();
+      Spendee.toast(editing >= 0 ? 'Item updated' : 'Item added');
+    });
+
+    const persist = (status) => Spendee.store.set('invoiceDraft', Object.assign({}, state, { status, totals: calc() }));
+    $('saveDraft').addEventListener('click', async (e) => { persist('draft'); Spendee.haptic(); Spendee.toast('Draft saved'); });
+
+    // Preview: validate customer + at least one item
+    $('preview').addEventListener('click', async () => {
+      let first = null;
+      if (!state.customer) { $('custFg').classList.add('has-error'); first = first || $('custPick'); }
+      if (!state.items.length) { $('itemsFg').classList.add('has-error'); first = first || $('addItem'); }
+      if (first) {
+        Spendee.haptic(); first.focus({ preventScroll: true });
+        first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        document.querySelectorAll('.undo-toast').forEach((t) => t.remove());
+        Spendee.toast(!state.customer ? 'Choose a customer to continue' : 'Add at least one item');
+        return;
+      }
+      await Spendee.loading($('preview'), 800);
+      persist('draft');
+      location.href = 'invoice-preview.html';
+    });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .sec-lbl { font-size: 14.5px; letter-spacing: 1px; color: #636363; }
+  .group { position: absolute; width: 334px; border-radius: 20px; }
+  .set-row { position: absolute; left: 0; right: 0; height: 44px; display: block; }
+  .set-row__t { font-size: 14.2px; letter-spacing: 0; color: #f0f0f0; }
+  .set-row__s { font-size: 9px; letter-spacing: .1px; color: #6b6b6b; }
+  .g-div { position: absolute; left: 10px; width: 314px; height: 1px; background: #868686; }
+</style>
+</head>
+<body>
+<main class="screen" style="height:1145px;min-height:1145px" aria-label="Settings">
+  <a class="abs back tap" href="more.html" data-go="more" style="left:34px;top:40px" aria-label="Back">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg>
+  </a>
+  <h1 class="t" style="left:80px;top:43.5px;font-size:22px;font-weight:600;letter-spacing:0">Settings</h1>
+
+  <a class="abs card tap enter" href="edit-profile.html" style="left:38px;top:102px;width:326px;height:100px" aria-label="Edit profile">
+    <img class="abs" src="../assets/img/avatar.png" alt="Jayanta Adhikari" width="56" height="56" style="left:19.5px;top:21.5px;border-radius:50%">
+    <span class="t" style="left:99px;top:25px;max-width:176px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:19px;font-weight:600;letter-spacing:0">Jayanta Adhikari</span>
+    <span class="t" style="left:99px;top:50.5px;max-width:176px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11.5px;letter-spacing:0;color:#d6d6d6">jayanta.adhikari@example.com</span>
+    <span class="t" style="left:99px;top:66px;font-size:13px;letter-spacing:.3px;color:#4a8ac0">Pro Plan · FY 2025-26</span>
+    <span class="abs" style="left:279px;top:33px;width:27px;height:34px;border-radius:7px;background:#32424f;display:grid;place-items:center">
+      <svg width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+    </span>
+  </a>
+
+  <h2 class="t sec-lbl" style="left:38.5px;top:229px">BUSINESS</h2>
+  <section class="group card enter" style="left:34px;top:259px;height:179px;--i:1">
+      <a class="set-row tap" href="edit-profile.html" style="top:12px"><span class="t set-row__t" style="left:34px;top:9.5px">Business Name</span><span class="t set-row__s" style="left:34px;top:30px">JA Trading Co.</span><span class="abs" style="left:293px;top:15px"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg></span></a>
+      <a class="set-row tap" href="edit-profile.html" style="top:65px"><span class="t set-row__t" style="left:34px;top:9.5px">GSTIN</span><span class="t set-row__s" style="left:34px;top:30px">19AEYPA4821F1Z5</span><span class="abs" style="left:293px;top:15px"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg></span></a>
+      <a class="set-row tap" href="edit-profile.html" style="top:118px"><span class="t set-row__t" style="left:34px;top:9.5px">Business Type</span><span class="t set-row__s" style="left:34px;top:30px">Regular · Trading</span><span class="abs" style="left:293px;top:15px"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg></span></a>
+      <span class="g-div" style="top:62px"></span><span class="g-div" style="top:116px"></span>
+  </section>
+
+  <h2 class="t sec-lbl" style="left:38px;top:465px">PREFERENCES</h2>
+  <section class="group card enter" style="left:33px;top:495px;height:232px;--i:2">
+      <div class="set-row" style="top:11px"><span class="t set-row__t" style="left:33px;top:9.5px">Payment Reminders</span><span class="t set-row__s" style="left:33px;top:30px">Auto-remind overdue clients</span><span class="abs switch" role="switch" aria-checked="true" aria-label="Payment Reminders" style="left:256px;top:13.5px;width:45px;height:24px"></span></div>
+      <div class="set-row" style="top:64px"><span class="t set-row__t" style="left:33px;top:9.5px">GST Filing Alerts</span><span class="t set-row__s" style="left:33px;top:30px">Before filing deadlines</span><span class="abs switch" role="switch" aria-checked="true" aria-label="GST Filing Alerts" style="left:256px;top:13.5px;width:45px;height:24px"></span></div>
+      <div class="set-row" style="top:117px"><span class="t set-row__t" style="left:33px;top:9.5px">Spendee Daily Insights</span><span class="t set-row__s" style="left:33px;top:30px">Business recommendations</span><span class="abs switch" role="switch" aria-checked="true" aria-label="Spendee Daily Insights" style="left:256px;top:13.5px;width:45px;height:24px"></span></div>
+      <div class="set-row" style="top:171px"><span class="t set-row__t" style="left:33px;top:9.5px">Biometric Login</span><span class="t set-row__s" style="left:33px;top:30px">Face ID / Fingerprint</span><span class="abs switch" role="switch" aria-checked="false" aria-label="Biometric Login" style="left:256px;top:13.5px;width:45px;height:24px"></span></div>
+      <span class="g-div" style="top:62px"></span><span class="g-div" style="top:116px"></span><span class="g-div" style="top:169px"></span>
+  </section>
+
+  <h2 class="t sec-lbl" style="left:35px;top:754px">TEAM &amp; SECURITY</h2>
+  <section class="group card enter" style="left:34px;top:782px;height:164px;--i:3">
+      <a class="set-row tap" href="team.html" style="top:14px"><svg class="abs" style="left:32px;top:14px" width="22" height="18" viewBox="0 0 22 18" fill="none" stroke="#d8d023" stroke-width="1.7"><circle cx="11" cy="4.3" r="2.8"/><circle cx="4.2" cy="6.8" r="2.2"/><circle cx="17.8" cy="6.8" r="2.2"/><path d="M6.4 16.6v-1.4a4.6 4.6 0 0 1 9.2 0v1.4H6.4Z" stroke-linejoin="round"/><path d="M1 16.6v-.9a3.2 3.2 0 0 1 4.3-3M21 16.6v-.9a3.2 3.2 0 0 0-4.3-3" stroke-linecap="round"/></svg><span class="t set-row__t" style="left:74px;top:9.5px">Manage Team</span><span class="t set-row__s" style="left:74px;top:30px">2 members active</span><span class="abs" style="left:293px;top:15px"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg></span></a>
+      <a class="set-row tap" href="create-pin.html?flow=change" style="top:64px"><svg class="abs" style="left:32px;top:8px" width="17" height="20" viewBox="0 0 17 20" fill="none" stroke="#f15858" stroke-width="1.8" stroke-linejoin="round"><rect x="1.2" y="8" width="14.6" height="10.8" rx="2.2"/><path d="M4.4 8V5.4a4.1 4.1 0 0 1 8.2 0V8"/><path d="M8.5 12.2v2.4" stroke-linecap="round"/></svg><span class="t set-row__t" style="left:69px;top:9.5px">Change PIN</span><span class="abs" style="left:293px;top:15px"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg></span></a>
+      <a class="set-row tap" href="#" data-sheet="exportAll" style="top:103px"><svg class="abs" style="left:32px;top:12px" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#8df15e" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12V1.5M4.5 6 9 1.5 13.5 6M1.5 11.5v3.8a1.2 1.2 0 0 0 1.2 1.2h12.6a1.2 1.2 0 0 0 1.2-1.2v-3.8"/></svg><span class="t set-row__t" style="left:70px;top:9.5px">Export All Data</span><span class="t set-row__s" style="left:70px;top:30px">CSV, PDF, Tally-compatible</span><span class="abs" style="left:293px;top:15px"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg></span></a>
+      <span class="g-div" style="top:62px"></span><span class="g-div" style="top:100px"></span>
+  </section>
+
+  <a class="abs btn tap" href="login.html" data-action="signout" style="left:34px;top:969px;width:334px;background:#3c1616;color:#f15858;font-weight:500;font-size:17.5px;letter-spacing:.2px">Sign Out</a>
+
+  <nav data-tabbar="more"></nav>
+</main>
+<section class="sheet" id="exportAll" aria-labelledby="eaTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="eaTitle">Export all data</p><p class="sheet__sub">Ledger, invoices, bank and GST records</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="options" data-options id="eaFmt">
+    <button class="option tap" data-value="csv" aria-checked="true"><span class="option__radio"></span><span class="option__body"><span class="option__title">CSV</span><span class="option__sub">One file per ledger · opens in Excel</span></span><span class="menu__icon icon-green"><svg width="16" height="20" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M2.6 1h6.3c.5 0 .9.2 1.3.5l4.1 4.2c.3.3.5.8.5 1.3v10.4A1.6 1.6 0 0 1 13.2 19H2.6A1.6 1.6 0 0 1 1 17.4V2.6A1.6 1.6 0 0 1 2.6 1Z"/><path d="M5 11h6M5 14.5h4"/></svg></span></button>
+    <button class="option tap" data-value="pdf"><span class="option__radio"></span><span class="option__body"><span class="option__title">PDF</span><span class="option__sub">Printable statements and reports</span></span><span class="menu__icon icon-red"><svg width="16" height="20" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M2.6 1h6.3c.5 0 .9.2 1.3.5l4.1 4.2c.3.3.5.8.5 1.3v10.4A1.6 1.6 0 0 1 13.2 19H2.6A1.6 1.6 0 0 1 1 17.4V2.6A1.6 1.6 0 0 1 2.6 1Z"/><path d="M5 11h6M5 14.5h4"/></svg></span></button>
+    <button class="option tap" data-value="xml"><span class="option__radio"></span><span class="option__body"><span class="option__title">Tally XML</span><span class="option__sub">Import vouchers into Tally Prime</span></span><span class="menu__icon icon-blue"><svg width="16" height="20" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M2.6 1h6.3c.5 0 .9.2 1.3.5l4.1 4.2c.3.3.5.8.5 1.3v10.4A1.6 1.6 0 0 1 13.2 19H2.6A1.6 1.6 0 0 1 1 17.4V2.6A1.6 1.6 0 0 1 2.6 1Z"/><path d="M5 11h6M5 14.5h4"/></svg></span></button>
+  </div>
+  <p class="section-label" style="margin:18px 0 10px 2px;font-size:13px">Date range</p>
+  <div class="segmented" id="eaRange"><button data-value="FY2025-26" aria-selected="true">FY 25-26</button><button data-value="FY2024-25">FY 24-25</button><button data-value="All_time">All time</button></div>
+  <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:16px;background:#262626;margin-top:16px">
+    <span style="flex:1;min-width:0"><span class="menu__title">Email when ready</span><span class="menu__sub">jayanta.adhikari@example.com</span></span>
+    <span class="switch" role="switch" id="eaEmail" aria-checked="true" aria-label="Email when ready"></span>
+  </div>
+  <div style="margin-top:16px"><button class="btn btn--primary tap" id="eaBtn"><span>Export</span></button></div>
+</section>
+<style>
+  [data-action="signout"].is-loading::after { border-color: rgba(241,88,88,.25); border-top-color: #f15858; }
+</style>
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const S = Spendee, $ = (s) => document.querySelector(s);
+  // Profile values saved from Edit Profile
+  const prof = S.store.get('profile');
+  if (prof) {
+    const card = document.querySelector('a[aria-label="Edit profile"]'), sp = card.querySelectorAll('span.t');
+    if (prof.name) sp[0].textContent = prof.name;
+    if (prof.email) sp[1].textContent = prof.email;
+    const subs = document.querySelectorAll('.set-row__s');
+    if (prof.business) subs[0].textContent = prof.business;
+    if (prof.gstin) subs[1].textContent = prof.gstin;
+  }
+  const flash = S.store.get('flash');
+  if (flash) { S.store.set('flash', null); setTimeout(() => S.toast(flash), 350); }
+  // Team count from team screen
+  const tc = S.store.get('teamCount'); if (tc) document.querySelector('a[href="team.html"] .set-row__s').textContent = tc + (tc === 1 ? ' member' : ' members') + ' active';
+
+  // Notification preferences: persist + confirm
+  const prefs = S.store.get('notifPrefs', {});
+  ['Payment Reminders', 'GST Filing Alerts', 'Spendee Daily Insights'].forEach((l) => {
+    const sw = document.querySelector(`[role="switch"][aria-label="${l}"]`); if (!sw) return;
+    if (l in prefs) sw.setAttribute('aria-checked', String(prefs[l]));
+    sw.addEventListener('click', () => {
+      const on = sw.getAttribute('aria-checked') === 'true';
+      prefs[l] = on; S.store.set('notifPrefs', prefs); S.haptic();
+      S.toast(`${l} ${on ? 'on' : 'off'}`);
+    });
+  });
+
+  // Biometric enrolment
+  const bio = document.querySelector('[role="switch"][aria-label="Biometric Login"]');
+  if (S.store.get('biometric')) bio.setAttribute('aria-checked', 'true');
+  const faceIcon = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V5.5A2.5 2.5 0 0 1 5.5 3H8M16 3h2.5A2.5 2.5 0 0 1 21 5.5V8M21 16v2.5a2.5 2.5 0 0 1-2.5 2.5H16M8 21H5.5A2.5 2.5 0 0 1 3 18.5V16"/><path d="M9 9v1.5M15 9v1.5M12 9v4h-1M9.5 16a3.5 3.5 0 0 0 5 0"/></svg>';
+  bio.addEventListener('click', async () => {
+    if (bio.getAttribute('aria-checked') !== 'true') { S.store.set('biometric', false); S.toast('Biometric login turned off'); return; }
+    bio.setAttribute('aria-checked', 'false');
+    const ok = await S.dialog({ title: 'Enable Face ID?', message: 'Sign in and approve payments with Face ID on this device. Your PIN still works as a backup.', confirm: 'Enable', cancel: 'Not now', tone: 'info', icon: faceIcon });
+    if (!ok) return;
+    const scan = await S.dialog({ title: 'Look at your iPhone', message: 'Hold steady while we scan your face…', confirm: 'Scanning…', cancel: '', tone: 'info', icon: faceIcon }).catch(() => {});
+    bio.setAttribute('aria-checked', 'true'); S.store.set('biometric', true); S.haptic();
+    S.toast('Face ID enabled for Spendee');
+  });
+  // Auto-advance the scan dialog
+  new MutationObserver(() => {
+    const d = document.querySelector('.dialog-wrap .dialog__title');
+    if (d && d.textContent === 'Look at your iPhone' && !d.dataset.auto) { d.dataset.auto = 1; const b = d.parentElement.querySelector('[data-r="1"]'); b.style.pointerEvents = 'none'; setTimeout(() => b.click(), 1300); }
+  }).observe(document.body, { childList: true });
+
+  // Export all data
+  const ea = $('#eaBtn');
+  ea.addEventListener('click', async () => {
+    const fmt = $('#eaFmt [aria-checked="true"]').dataset.value, range = $('#eaRange [aria-selected="true"]').dataset.value;
+    const email = $('#eaEmail').getAttribute('aria-checked') === 'true';
+    await S.loading(ea, 1400); S.sheet.close();
+    S.toast(`Spendee_${range}.${fmt === 'xml' ? 'xml' : fmt === 'pdf' ? 'pdf' : 'zip'} ready${email ? ' · emailed to you' : ''}`);
+  });
+
+  // Sign out
+  const so = document.querySelector('[data-action="signout"]');
+  so.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const ok = await S.dialog({ title: 'Sign out of Spendee?', message: "You'll need your mobile number and PIN to sign back in on this device.", confirm: 'Sign Out', cancel: 'Cancel', tone: 'danger' });
+    if (!ok) return;
+    await S.loading(so, 900);
+    S.store.set('signedIn', false);
+    location.href = 'login.html';
+  });
+})();
+</script>
+</body>
+</html>

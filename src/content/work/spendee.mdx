@@ -6,86 +6,156 @@ role: UI/UX & Product Design
 year: 2025
 services: [UX Design, UI Design, Design System, Prototyping]
 summary: "A dark-mode finance super-app for Indian small businesses: ledger, GST, invoicing, payments, and credit in one legible interface."
-indexNote: 'The domain study. GST filing mechanics and khata conventions, turned into a ledger whose numbers actually add up: nineteen screens designed in Figma.'
+indexNote: 'The domain study. GST filing mechanics and khata conventions, turned into a ledger whose numbers actually add up across forty-five screens you can click through.'
 cover: /images/work/spendee/dashboard.png
 # Hero reel: a looping 3D montage of the app screens, floated over the hero bg.
 # H.264 MP4 (plays everywhere incl. Safari); opaque near-black surround is cropped
 # + edge-feathered by HeroLoopVideo so it reads as transparent. Reduced motion
-# falls back to the static cover phone.
+# falls back to the static cover phone. Re-rendered from the corrected prototype
+# stills (same helix, 1920x1080, 60fps, 32.5s loop) so the reel agrees with the
+# screens below it; the first cut showed the uncorrected Figma data.
 video:
   src: /videos/Spendee.mp4
-# Clickable Figma prototype. Lives in frontmatter, not the body, because it takes
-# over the signature-showcase slot directly under the hero, the strongest spot on
-# the page, instead of waiting at the bottom of the read. The embed is mounted on
-# click, not on load: as an always-present iframe it cost this route 197 requests
-# to figma.com, the first at +199ms and the last still arriving at +10.4s.
-figma:
-  embedUrl: "https://embed.figma.com/proto/m2IfTGGgJiAhWbMGBgl3Dn/E-Commerce-V1?node-id=250-378&p=f&viewport=-4383%2C-11241%2C0.33&scaling=scale-down&content-scaling=fixed&starting-point-node-id=250%3A378&page-id=20%3A102&embed-host=share"
-  poster: /images/work/spendee/welcome.png
-  alt: Spendee's welcome screen, the prototype's first frame
-  aspect: "390 / 844"
-  caption: "The real Figma prototype: nineteen screens, clickable end to end"
+#
+# The working prototype, 45 screens and 60+ sheets built in HTML/CSS. It lives
+# in frontmatter so it takes the signature-showcase slot directly under the
+# hero, and it replaced the Figma embed that held that slot: the Figma file
+# still carries the uncorrected data, and it cost the route ~197 requests.
+prototype:
+  poster: /images/work/spendee/stage.png
+  alt: "The Spendee prototype: a phone running the app beside flow shortcuts for onboarding, ledger, invoices, payments, GST and credit"
+  aspect: 1.6
+  launchNote: >-
+    It opens on the welcome screen with every flow one tap away. The code
+    screen shows its own demo code, and nothing you enter leaves the page.
+  hint: "Pick a flow beside the phone, or start from the beginning. Browse all screens scrolls to every screen and sheet."
+  surfaces:
+    - id: app
+      label: Prototype
+      shortLabel: App
+      src: /prototype/spendee/index.html
+      domain: spendee.app
+    - id: system
+      label: Design system
+      shortLabel: System
+      src: /prototype/spendee/index.html#system
+      domain: spendee.app/design
 accent: "#A1A329" # Spendee acid lime, DEEPENED. Brand #C2E000's hue held at 105 (brand is 111), but ceding the bright end of lime to OmniStock, whose hi-vis vest #C6FF3D is load-bearing in a way a finance app's lime is not: the whole --hivis token family there is a safety-vest reference and every screenshot in that study is painted with it. The two measured dE 8.7 apart, well inside the 20 the work index needs for two cards sitting side by side, so one had to move and this is the one with the weaker claim on the hue. 7.20:1 on --bg, 6.62:1 on --surface, dE 22.7 from OmniStock and 16.2 from Spendee's own brand. The deep end reads as the brand lime under warehouse light rather than as a second hi-vis.
 motif: ledger
 featured: true
 order: 2
 flows:
-  - title: Onboarding & sign-in
-    note: "A four-step intro frames the value, then mobile-first auth with a PIN, biometrics, and GSTIN capture."
+  - title: Launch & onboarding
+    note: "A splash, then a four-step intro that frames the value (a smart ledger, AI on your cash flow, credit on your books) before handing off to the near-black product."
     screens:
+      - src: /images/work/spendee/splash.png
+        caption: "Splash"
       - src: /images/work/spendee/welcome.png
         caption: "Welcome"
       - src: /images/work/spendee/onboarding-1.png
         caption: "Smart ledger"
       - src: /images/work/spendee/onboarding-2.png
-        caption: "AI cash-flow"
+        caption: "AI insights"
       - src: /images/work/spendee/onboarding-3.png
-        caption: "Credit on your books"
+        caption: "Smart credit"
+  - title: Sign-in & setup
+    note: "Mobile-first auth: number, one-time code, a four-digit PIN, permissions asked for one at a time, and GSTIN captured at registration."
+    screens:
       - src: /images/work/spendee/login.png
         caption: "Sign in"
-      - src: /images/work/spendee/sign-up.png
-        caption: "Sign up + GSTIN"
-  - title: Daily ledger
-    note: "The core loop: see the business at a glance, then record money you gave or got."
+      - src: /images/work/spendee/signup.png
+        caption: "Register + GSTIN"
+      - src: /images/work/spendee/otp.png
+        caption: "Verify number"
+      - src: /images/work/spendee/create-pin.png
+        caption: "Create PIN"
+      - src: /images/work/spendee/forgot-pin.png
+        caption: "Reset PIN"
+      - src: /images/work/spendee/permissions.png
+        caption: "Permissions"
+      - src: /images/work/spendee/setup-complete.png
+        caption: "All set"
+  - title: Home & ledger
+    note: "The core loop: see the business at a glance, then record money you gave or got, with every contact's balance one tap away."
     screens:
       - src: /images/work/spendee/dashboard.png
-        caption: "Dashboard"
-      - src: /images/work/spendee/add-entry.png
-        caption: "Add entry"
-      - src: /images/work/spendee/send-money.png
-        caption: "Send money"
-  - title: Contacts & invoicing
-    note: "Every customer and vendor with their balance: call, invoice, and chase in a tap."
-    screens:
-      - src: /images/work/spendee/contact.png
-        caption: "Contacts"
-      - src: /images/work/spendee/customer-details.png
-        caption: "Customer detail"
-      - src: /images/work/spendee/invoices.png
-        caption: "Invoices"
-  - title: Compliance & reporting
-    note: "GST filing turned into a guided task, plus the metrics owners actually act on."
-    screens:
-      - src: /images/work/spendee/gst-center.png
-        caption: "GST Center"
-      - src: /images/work/spendee/reports.png
-        caption: "Reports"
-  - title: Banking & credit
-    note: "A built-in account and a ledger-health score that turns good books into working capital."
-    screens:
-      - src: /images/work/spendee/spendee-bank.png
-        caption: "Spendee Bank"
-      - src: /images/work/spendee/credit-growth.png
-        caption: "Credit & Growth"
-  - title: Account
-    note: "Prioritised alerts, a settings hub, and the business profile."
-    screens:
+        caption: "Home"
       - src: /images/work/spendee/notifications.png
         caption: "Notifications"
+      - src: /images/work/spendee/contact.png
+        caption: "Contacts"
+      - src: /images/work/spendee/add-contact.png
+        caption: "Add contact"
+      - src: /images/work/spendee/customer-details.png
+        caption: "Customer"
+      - src: /images/work/spendee/transaction-detail.png
+        caption: "Entry details"
+      - src: /images/work/spendee/add-entry.png
+        caption: "New entry"
+      - src: /images/work/spendee/receipt-scan.png
+        caption: "Scan receipt"
+  - title: Invoicing
+    note: "Create, send and chase invoices with the CGST/SGST split worked out, and discount an unpaid one for cash today."
+    screens:
+      - src: /images/work/spendee/invoices.png
+        caption: "Invoices"
+      - src: /images/work/spendee/create-invoice.png
+        caption: "New invoice"
+      - src: /images/work/spendee/invoice-preview.png
+        caption: "Invoice preview"
+      - src: /images/work/spendee/invoice-detail.png
+        caption: "Invoice detail"
+      - src: /images/work/spendee/invoice-discount.png
+        caption: "Get paid early"
+  - title: Banking & payments
+    note: "A built-in account collecting over UPI: pay, scan, transfer, see what failed and why, and a statement whose balances run."
+    screens:
+      - src: /images/work/spendee/bank.png
+        caption: "Cards & banking"
+      - src: /images/work/spendee/send-money.png
+        caption: "Send money"
+      - src: /images/work/spendee/scan-pay.png
+        caption: "Scan & pay"
+      - src: /images/work/spendee/beneficiaries.png
+        caption: "Transfer"
+      - src: /images/work/spendee/payment-success.png
+        caption: "Payment success"
+      - src: /images/work/spendee/payment-failed.png
+        caption: "Payment failed"
+      - src: /images/work/spendee/statement.png
+        caption: "Statement"
+      - src: /images/work/spendee/card-controls.png
+        caption: "Card controls"
+  - title: Growth & compliance
+    note: "GST filing as a guided task, the reports owners act on, stock, and the ledger-health score that turns good books into working capital."
+    screens:
+      - src: /images/work/spendee/credit-growth.png
+        caption: "Credit & growth"
+      - src: /images/work/spendee/loan-apply.png
+        caption: "Apply for loan"
+      - src: /images/work/spendee/loan-success.png
+        caption: "Loan approved"
+      - src: /images/work/spendee/gst-center.png
+        caption: "GST Center"
+      - src: /images/work/spendee/gst-file.png
+        caption: "File GSTR-3B"
+      - src: /images/work/spendee/reports.png
+        caption: "Reports"
+      - src: /images/work/spendee/inventory.png
+        caption: "Inventory"
+  - title: Account
+    note: "The business profile, a two-person team, settings and support."
+    screens:
+      - src: /images/work/spendee/more.png
+        caption: "More"
       - src: /images/work/spendee/settings.png
         caption: "Settings"
       - src: /images/work/spendee/edit-profile.png
         caption: "Edit profile"
+      - src: /images/work/spendee/team.png
+        caption: "Team & roles"
+      - src: /images/work/spendee/help.png
+        caption: "Help & support"
 ---
 
 <Lede>
@@ -207,12 +277,12 @@ The compliance hub, and the screen I'm most proud of: GSTR-3B and GSTR-1 summari
   src="/images/work/spendee/gst-center.png"
   side="left"
   label="GST Center"
-  caption="The detail that matters: the headline figure is ₹24,560 (liability after input-tax credit, not the gross ₹42,800) and the countdown chip tracks the nearer of the two filing dates. The screen does the accountant's subtraction for you."
+  caption="The detail that matters: the headline figure is ₹24,560 (liability after input-tax credit, not the gross ₹42,800) and the countdown chip counts down to the GSTR-3B payment date. The screen does the accountant's subtraction for you."
 />
 
 ### Reports
 
-A P&L summary, a six-month cash-flow chart, and the metrics owners actually act on (average collection period, working capital, gross margin) exportable as a PDF.
+A P&L summary, a twelve-month cash-flow chart, and the metrics owners actually act on (average collection period, working capital, net profit margin) exportable as a PDF.
 
 ### Banking
 
@@ -230,7 +300,7 @@ The payoff of keeping good books: a ledger-health score built from on-time payme
   src="/images/work/spendee/credit-growth.png"
   side="right"
   label="Credit & Growth"
-  caption="Zoom on the middle card: the Get-₹62,000-today action is pinned to one specific overdue invoice (INV-1038), not a generic offer, discounting a receivable you can see is an easier decision than borrowing in the abstract."
+  caption="Zoom on the middle card: the Get-₹62,000-today action is pinned to one specific unpaid invoice (INV-1038), not a generic offer, discounting a receivable you can see is an easier decision than borrowing in the abstract."
 />
 
 ### Notifications & settings
@@ -257,7 +327,7 @@ One dark surface; a status colour system (green / red / amber) that encodes mean
 <StatusColourSystem />
 
 <Aside label="Colophon">
-  Designed in Figma: one component set, one status colour system, nineteen screens. The tool isn't the claim; the arithmetic is. Every figure here reconciles against a single spine: ₹4,15,200 to get, ₹1,18,400 to give, ₹2,96,800 net, and a GST liability of ₹24,560 that holds across all five screens that reference it.
+  Nineteen screens designed in Figma, then rebuilt as a working prototype and extended to forty-five with the same component set and status colour system. The tool isn't the claim; the arithmetic is. Every figure here reconciles against a single spine: ₹4,15,200 to get, ₹1,18,400 to give, ₹2,96,800 net, and a GST liability of ₹24,560 that holds across all five screens that reference it.
 </Aside>
 
 ## Outcome

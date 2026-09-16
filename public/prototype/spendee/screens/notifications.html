@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Notifications</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .sec-lbl { font-size: 14.5px; letter-spacing: 1px; color: #636363; }
+  .group { position: absolute; left: 34px; width: 334px; border-radius: 20px; overflow: hidden; }
+  .notif { position: absolute; left: 0; right: 0; height: 50px; display: block; transition: background var(--dur) var(--ease-out); }
+  .notif:hover { background: rgba(255,255,255,.035); }
+  .notif__t { font-size: 14px; letter-spacing: 0; color: #f0f0f0; }
+  .notif__s { font-size: 9.5px; letter-spacing: 0; color: #8a8a8a; }
+  .notif.unread::after { content: ''; position: absolute; right: 16px; top: 22px; width: 6px; height: 6px; border-radius: 50%; background: #5fb2f1; opacity: 0; transition: opacity var(--dur); }
+  body:not(.capture) .notif.unread::after { opacity: 1; }
+  body.read .notif.unread::after { opacity: 0; }
+  .g-div { position: absolute; left: 10px; width: 314px; height: 1px; background: #868686; }
+</style>
+</head>
+<body>
+<main class="screen" style="height:967px;min-height:967px" aria-label="Notifications">
+  <a class="abs back tap" href="dashboard.html" data-go="back" style="left:34px;top:40px" aria-label="Back">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg>
+  </a>
+  <h1 class="t" style="left:80px;top:43.5px;font-size:22px;font-weight:600;letter-spacing:0">Notifications</h1>
+  <button class="abs chip-btn tap" id="markRead" style="left:263px;top:37px;width:105px;height:36px;font-size:13px;letter-spacing:0;background:#132430;box-shadow:inset 0 0 0 1px rgba(95,178,241,.35)">Mark all read</button>
+
+  <h2 class="t sec-lbl" style="left:35px;top:113px">URGENT · <span id="newCount">3 NEW</span></h2>
+  <section class="group card enter" style="top:141px;height:179px" aria-label="Urgent">
+    <a class="notif tap unread" href="customer-details.html?c=bose-retail" style="top:13px">
+      <span class="abs" style="left:32px;top:15.5px"><svg width="20" height="18" viewBox="0 0 20 18" fill="none" stroke="#d8d023" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M8.3 2 1.3 14.2A2 2 0 0 0 3 17h14a2 2 0 0 0 1.7-2.8L11.7 2a2 2 0 0 0-3.4 0Z"/><path d="M10 6.5v4.3M10 13.8v.1"/></svg></span>
+      <span class="t notif__t" style="left:72px;top:9.8px">Bose Retail overdue 12 days</span>
+      <span class="t notif__s" style="left:72px;top:29px">INV-1019 · ₹1,15,000 · 2 hours ago</span>
+    </a>
+    <a class="notif tap unread" href="gst-center.html" style="top:66px">
+      <span class="abs" style="left:32px;top:14.5px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f15858" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6.5V12l3.5 3"/></svg></span>
+      <span class="t notif__t" style="left:72px;top:9.8px">GSTR-3B due in 11 days</span>
+      <span class="t notif__s" style="left:72px;top:29px">₹24,560 payable · 4 hours ago</span>
+    </a>
+    <a class="notif tap unread" href="inventory.html" style="top:119px">
+      <span class="abs" style="left:33px;top:14.5px"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="#6cc24a" stroke-width="1.5" stroke-linejoin="round"><path d="M9 1 1.5 5v10L9 19l7.5-4V5L9 1Z"/><path d="M1.5 5 9 9l7.5-4M9 9v10M5.2 3l7.5 4v3.4"/></svg></span>
+      <span class="t notif__t" style="left:72px;top:9.8px">Dye Chemical: Critical stock</span>
+      <span class="t notif__s" style="left:72px;top:29px">Stockout in 3 days · 6 hours ago</span>
+    </a>
+    <span class="g-div" style="top:62px"></span><span class="g-div" style="top:115px"></span>
+  </section>
+
+  <h2 class="t sec-lbl" style="left:35px;top:333px">EARLIER</h2>
+  <section class="group card enter" style="top:361px;height:497px;--i:1" aria-label="Earlier">
+    <a class="notif tap" href="bank.html" style="top:13px">
+      <span class="abs" style="left:32px;top:14.5px"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#8df15e" stroke-width="1.9"><circle cx="10" cy="10" r="8.8"/><path d="M7 6h6M7 8.8h6M8.6 6c1.9 0 3 .9 3 2.4s-1.1 2.5-3 2.5H7l4.6 3.6" stroke-linejoin="round" stroke-linecap="round" stroke-width="1.8"/></svg></span>
+      <span class="t notif__t" style="left:72px;top:9.8px">Payment from Dutta &amp; Sons</span>
+      <span class="t notif__s" style="left:72px;top:29px">₹45,000 via UPI · Today</span>
+    </a>
+    <a class="notif tap" href="invoice-detail.html?id=INV-1038" style="top:66px">
+      <span class="abs" style="left:32px;top:14.5px"><svg width="16" height="20" viewBox="0 0 16 20" fill="none" stroke="#d8d023" stroke-width="1.8" stroke-linejoin="round"><path d="M2.6 1h6.3c.5 0 .9.2 1.3.5l4.1 4.2c.3.3.5.8.5 1.3v10.4A1.6 1.6 0 0 1 13.2 19H2.6A1.6 1.6 0 0 1 1 17.4V2.6A1.6 1.6 0 0 1 2.6 1Z"/></svg></span>
+      <span class="t notif__t" style="left:68px;top:9.8px">INV-1038 sent to Sharma Textiles</span>
+      <span class="t notif__s" style="left:68px;top:29px">₹62,000 due Jun 10 · Yesterday</span>
+    </a>
+    <a class="notif tap" href="customer-details.html?c=ghosh-traders" style="top:119px">
+      <span class="abs" style="left:32px;top:14.5px"><svg width="16" height="20" viewBox="0 0 16 20" fill="none" stroke="#d8d023" stroke-width="1.8" stroke-linejoin="round"><path d="M2.6 1h6.3c.5 0 .9.2 1.3.5l4.1 4.2c.3.3.5.8.5 1.3v10.4A1.6 1.6 0 0 1 13.2 19H2.6A1.6 1.6 0 0 1 1 17.4V2.6A1.6 1.6 0 0 1 2.6 1Z"/></svg></span>
+      <span class="t notif__t" style="left:68px;top:9.8px">Reminder sent to Ghosh Traders</span>
+      <span class="t notif__s" style="left:68px;top:29px">Payment follow-up · Yesterday</span>
+    </a>
+    <a class="notif tap" href="gst-center.html" style="top:172px">
+      <span class="abs" style="left:32px;top:14.5px"><svg width="16" height="20" viewBox="0 0 16 20" fill="none" stroke="#5fb2f1" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M2.6 1h6.3c.5 0 .9.2 1.3.5l4.1 4.2c.3.3.5.8.5 1.3v10.4A1.6 1.6 0 0 1 13.2 19H2.6A1.6 1.6 0 0 1 1 17.4V2.6A1.6 1.6 0 0 1 2.6 1Z"/><path d="M5 15.5v-2M8 15.5v-4M11 15.5v-6"/></svg></span>
+      <span class="t notif__t" style="left:68px;top:9.8px">GSTR-1 filing due on the 11th</span>
+      <span class="t notif__s" style="left:68px;top:29px">47 invoices this period · Yesterday</span>
+    </a>
+    <a class="notif tap" href="reports.html" style="top:225px">
+      <span class="abs" style="left:32px;top:14.5px"><svg width="16" height="20" viewBox="0 0 16 20" fill="none" stroke="#5fb2f1" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M2.6 1h6.3c.5 0 .9.2 1.3.5l4.1 4.2c.3.3.5.8.5 1.3v10.4A1.6 1.6 0 0 1 13.2 19H2.6A1.6 1.6 0 0 1 1 17.4V2.6A1.6 1.6 0 0 1 2.6 1Z"/><path d="M5 15.5v-2M8 15.5v-4M11 15.5v-6"/></svg></span>
+      <span class="t notif__t" style="left:68px;top:9.8px">Monthly report is ready</span>
+      <span class="t notif__s" style="left:68px;top:29px">June 2025 P&amp;L · 2 days ago</span>
+    </a>
+    <a class="notif tap" href="credit-growth.html" style="top:278px">
+      <span class="abs" style="left:33px;top:13.5px"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="#f15858" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17.6 8.6a8.3 8.3 0 1 1-4.2-4.2"/><path d="M13.9 10.2a4.6 4.6 0 1 1-2.1-2.1"/><circle cx="10" cy="12" r="1.2" fill="#f15858"/><path d="m10 12 8.2-8.2M15.6 3.4l.3 2.7 2.7.3 2.4-2.4-2.7-.3-.3-2.7Z"/></svg></span>
+      <span class="t notif__t" style="left:76px;top:9.8px">Loan offer: ₹15L pre-approved</span>
+      <span class="t notif__s" style="left:76px;top:29px">Ledger health: 782 · 2 days ago</span>
+    </a>
+    <a class="notif tap" href="bank.html" style="top:331px">
+      <span class="abs" style="left:32px;top:14.5px"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#8df15e" stroke-width="1.9"><circle cx="10" cy="10" r="8.8"/><path d="M7 6h6M7 8.8h6M8.6 6c1.9 0 3 .9 3 2.4s-1.1 2.5-3 2.5H7l4.6 3.6" stroke-linejoin="round" stroke-linecap="round" stroke-width="1.8"/></svg></span>
+      <span class="t notif__t" style="left:72px;top:9.8px">Bank account synced</span>
+      <span class="t notif__s" style="left:72px;top:29px">Balance ₹3,42,890 · 3 days ago</span>
+    </a>
+    <a class="notif tap" href="bank.html" style="top:384px">
+      <span class="abs" style="left:32px;top:14.5px"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#8df15e" stroke-width="1.9"><circle cx="10" cy="10" r="8.8"/><path d="M7 6h6M7 8.8h6M8.6 6c1.9 0 3 .9 3 2.4s-1.1 2.5-3 2.5H7l4.6 3.6" stroke-linejoin="round" stroke-linecap="round" stroke-width="1.8"/></svg></span>
+      <span class="t notif__t" style="left:72px;top:9.8px">Payment to MK Suppliers</span>
+      <span class="t notif__s" style="left:72px;top:29px">₹28,900 via NEFT · 4 days ago</span>
+    </a>
+    <a class="notif tap" href="credit-growth.html" style="top:437px">
+      <span class="abs" style="left:33px;top:13.5px"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="#f15858" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17.6 8.6a8.3 8.3 0 1 1-4.2-4.2"/><path d="M13.9 10.2a4.6 4.6 0 1 1-2.1-2.1"/><circle cx="10" cy="12" r="1.2" fill="#f15858"/><path d="m10 12 8.2-8.2M15.6 3.4l.3 2.7 2.7.3 2.4-2.4-2.7-.3-.3-2.7Z"/></svg></span>
+      <span class="t notif__t" style="left:76px;top:9.8px">Invoice discounting available</span>
+      <span class="t notif__s" style="left:76px;top:29px">INV-1019 · ₹1,15,000 · 5 days ago</span>
+    </a>
+    <span class="g-div" style="top:62px"></span><span class="g-div" style="top:115px"></span><span class="g-div" style="top:169px"></span><span class="g-div" style="top:222px"></span><span class="g-div" style="top:275px"></span><span class="g-div" style="top:327px"></span><span class="g-div" style="top:381px"></span><span class="g-div" style="top:434px"></span>
+  </section>
+
+  <nav data-tabbar="home"></nav>
+</main>
+<script src="../assets/js/app.js"></script>
+<script>
+  document.getElementById('markRead').addEventListener('click', () => {
+    document.body.classList.add('read');
+    document.getElementById('newCount').textContent = '0 NEW';
+    spendeeToast('All caught up');
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · More</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .more-head { padding-top: 45px; margin-bottom: 22px; }
+  .more-head h1 { font-size: 22px; font-weight: 600; letter-spacing: .5px; line-height: 28px; }
+  .more-head p { font-size: 12.5px; letter-spacing: .5px; color: #bfbfbf; margin-top: 4px; }
+  .quick { display: grid; grid-template-columns: repeat(4, 74px); justify-content: space-between; }
+  .quick .tile { width: 74px; height: 74px; gap: 9px; font-size: 8.5px; }
+  .plan { display: flex; align-items: center; gap: 14px; margin-top: 16px; background: linear-gradient(120deg, #201f0c, #132430); box-shadow: inset 0 0 0 1px rgba(216,209,82,.22); }
+</style>
+</head>
+<body>
+<main class="page" aria-label="More">
+  <header class="more-head">
+    <h1>More</h1>
+    <p>JA Trading Co. · Pro Plan</p>
+  </header>
+
+  <a class="panel panel--tight tap row-flex enter" href="settings.html" style="gap:14px;padding:16px 18px" aria-label="Profile and settings">
+    <img src="../assets/img/avatar.png" alt="" width="52" height="52" style="border-radius:50%">
+    <span class="grow">
+      <span style="display:block;font-size:19px;font-weight:600">Jayanta Adhikari</span>
+      <span style="display:block;font-size:13px;color:#cfcfcf;margin-top:2px">jayanta.adhikari@example.com</span>
+    </span>
+    <span style="width:27px;height:34px;border-radius:7px;background:#32424f;display:grid;place-items:center"><svg width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg></span>
+  </a>
+
+  <p class="section-label">Quick Access</p>
+  <div class="quick enter" style="--i:1">
+    <a class="tile tile--green tap" href="invoices.html"><svg width="18" height="23" viewBox="0 0 20 27" fill="none" stroke="#8df15e" stroke-width="2.2" stroke-linejoin="round"><path d="M3.2 1.2h8.4c.7 0 1.2.3 1.7.7l4.8 4.9c.5.5.7 1.1.7 1.7v14.6a2 2 0 0 1-2 2H3.2a2 2 0 0 1-2-2V3.2a2 2 0 0 1 2-2Z"/></svg>Invoices</a>
+    <a class="tile tile--blue tap" href="reports.html"><svg width="20" height="16" viewBox="0 0 17 12" fill="none" stroke="#5fb2f1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 10.5 6 5.5l3 3L15.5 2M10.5 1.5h5v5"/></svg>Reports</a>
+    <a class="tile tile--yellow tap" href="gst-center.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f1ea58" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>GST</a>
+    <a class="tile tile--red tap" href="inventory.html"><svg width="20" height="22" viewBox="0 0 18 20" fill="none" stroke="#f15858" stroke-width="1.6" stroke-linejoin="round"><path d="M9 1 1.5 5v10L9 19l7.5-4V5L9 1Z"/><path d="M1.5 5 9 9l7.5-4M9 9v10"/></svg>Inventory</a>
+  </div>
+
+  <p class="section-label">Business</p>
+  <nav class="menu enter" style="--i:2" aria-label="Business">
+    <a class="menu__item tap" href="credit-growth.html">
+      <span class="menu__icon icon-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17 9 11l4 4 8-8M15 7h6v6"/></svg></span>
+      <span class="menu__body"><span class="menu__title">Credit &amp; Growth</span><span class="menu__sub">₹15L pre-approved · Health 782</span></span>
+      <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+    </a>
+    <a class="menu__item tap" href="contact.html">
+      <span class="menu__icon icon-blue"><svg width="20" height="18" viewBox="0 0 22 18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="4.3" r="2.8"/><circle cx="4.2" cy="6.8" r="2.2"/><circle cx="17.8" cy="6.8" r="2.2"/><path d="M6.4 16.6v-1.4a4.6 4.6 0 0 1 9.2 0v1.4H6.4Z" stroke-linejoin="round"/></svg></span>
+      <span class="menu__body"><span class="menu__title">Customers &amp; Vendors</span><span class="menu__sub">42 contacts · ₹6.5L outstanding</span></span>
+      <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+    </a>
+    <a class="menu__item tap" href="statement.html">
+      <span class="menu__icon icon-yellow"><svg width="16" height="20" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M2.6 1h6.3c.5 0 .9.2 1.3.5l4.1 4.2c.3.3.5.8.5 1.3v10.4A1.6 1.6 0 0 1 13.2 19H2.6A1.6 1.6 0 0 1 1 17.4V2.6A1.6 1.6 0 0 1 2.6 1Z"/><path d="M5 11h6M5 14.5h4"/></svg></span>
+      <span class="menu__body"><span class="menu__title">Bank Statement</span><span class="menu__sub">June 2025 · 128 transactions</span></span>
+      <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+    </a>
+  </nav>
+
+  <p class="section-label">Account</p>
+  <nav class="menu enter" style="--i:3" aria-label="Account">
+    <a class="menu__item tap" href="settings.html">
+      <span class="menu__icon icon-gray"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></span>
+      <span class="menu__body"><span class="menu__title">Settings</span><span class="menu__sub">Business profile, preferences, security</span></span>
+      <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+    </a>
+    <a class="menu__item tap" href="team.html">
+      <span class="menu__icon icon-yellow"><svg width="20" height="18" viewBox="0 0 22 18" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="4.3" r="2.8"/><circle cx="4.2" cy="6.8" r="2.2"/><circle cx="17.8" cy="6.8" r="2.2"/><path d="M6.4 16.6v-1.4a4.6 4.6 0 0 1 9.2 0v1.4H6.4Z" stroke-linejoin="round"/><path d="M1 16.6v-.9a3.2 3.2 0 0 1 4.3-3M21 16.6v-.9a3.2 3.2 0 0 0-4.3-3" stroke-linecap="round"/></svg></span>
+      <span class="menu__body"><span class="menu__title">Team &amp; Roles</span><span class="menu__sub">2 members active</span></span>
+      <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+    </a>
+    <a class="menu__item tap" href="help.html">
+      <span class="menu__icon icon-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M9.2 9a3 3 0 0 1 5.7 1c0 2-3 2.6-3 4.2M12 17.5h.01"/></svg></span>
+      <span class="menu__body"><span class="menu__title">Help &amp; Support</span><span class="menu__sub">FAQs, chat with us · Avg reply 4 min</span></span>
+      <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+    </a>
+  </nav>
+
+  <div class="panel plan enter" style="--i:4">
+    <span class="menu__icon icon-yellow" style="width:44px;height:44px;border-radius:12px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 3 6.5 7 .8-5.2 4.8 1.4 7L12 17.6 5.8 21l1.4-7L2 9.3l7-.8L12 2Z"/></svg></span>
+    <span class="grow"><span style="display:block;font-size:15px;font-weight:600;color:#f1ea58">Pro Plan · FY 2025-26</span><span style="display:block;font-size:12px;color:#bdbdbd;margin-top:2px">Renews 31 Mar 2026 · Unlimited invoices</span></span>
+  </div>
+
+  <p class="dim" style="text-align:center;font-size:12px;margin-top:26px">Spendee v2.4.0 · Made for small businesses</p>
+
+  <nav data-tabbar="more"></nav>
+</main>
+<script src="../assets/js/app.js"></script>
+</body>
+</html>

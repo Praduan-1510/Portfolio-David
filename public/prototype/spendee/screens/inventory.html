@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Inventory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  .page > .toast { position: fixed; z-index: 1000; }
+  .stats { display: grid; grid-template-columns: 94px 94px 1fr; gap: 12px; }
+  .stat { height: 84px; border-radius: 16px; background: #4d4d4d; box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 4px 10px rgba(0,0,0,.4); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .stat span { font-size: 11px; letter-spacing: .3px; color: #dcdcdc; }
+  .stat b { font-size: 18px; font-weight: 600; margin: 5px 0 4px; line-height: 1.1; }
+  .stat small { font-size: 11px; letter-spacing: .3px; color: #e6e6e6; }
+  .search input::-webkit-search-cancel-button { -webkit-appearance: none; }
+  .chips-inv { display: flex; gap: 8px; margin-top: 16px; }
+  .chips-inv .chip { font-weight: 600; padding: 0 12px; display: inline-flex; align-items: center; }
+  .chip .cnt { font-weight: 500; opacity: .6; margin-left: 4px; }
+  .item { display: block; width: 100%; text-align: left; padding: 16px 18px 15px; border-radius: 20px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.13), inset 1px 1px 0 0 rgba(255,255,255,.10), 0 4px 14px rgba(0,0,0,.45); animation: rise 420ms var(--ease-out) both; }
+  body.capture .item { animation: none; }
+  .item__top { display: flex; align-items: flex-start; gap: 10px; }
+  .item__name { font-size: 17px; font-weight: 500; letter-spacing: .3px; line-height: 1.25; color: #fff; }
+  .item__sub { font-size: 11.5px; color: #8a8a8a; margin-top: 3px; letter-spacing: .2px; }
+  .pill { margin-left: auto; flex-shrink: 0; height: 26px; padding: 0 9px; border-radius: 8px; display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; letter-spacing: .2px; white-space: nowrap; }
+  .bar { height: 6px; border-radius: 3px; background: #3a3a3a; overflow: hidden; margin-top: 14px; }
+  .bar i { display: block; height: 100%; border-radius: 3px; transition: width 400ms var(--ease-out); }
+  .item__foot { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12.5px; color: #cfcfcf; }
+  .item__foot .muted { font-size: 12px; }
+  #emptyState[hidden], #list[hidden] { display: none; }
+  /* sheets */
+  .mini-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .mini-stats div { border-radius: 12px; background: #262626; padding: 10px 12px; }
+  .mini-stats span { display: block; font-size: 11px; color: #9a9a9a; }
+  .mini-stats b { display: block; font-size: 16px; font-weight: 600; margin-top: 3px; }
+  .hist { display: flex; align-items: center; gap: 12px; padding: 11px 0; }
+  .hist + .hist { border-top: 1px solid rgba(255,255,255,.1); }
+  .hist .menu__icon { width: 32px; height: 32px; border-radius: 9px; }
+  .stepper-qty { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #262626; border-radius: 16px; padding: 8px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .stepper-qty button { width: 44px; height: 44px; border-radius: 12px; background: #333; color: #fff; display: grid; place-items: center; }
+  .stepper-qty input { width: 110px; text-align: center; background: transparent; border: 0; outline: 0; color: #fff; font: 600 26px var(--font); }
+  .stepper-qty input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .suggest { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; font-size: 12.5px; color: #9a9a9a; }
+  .sheet .section-label { margin: 20px 0 10px 2px; font-size: 13px; }
+  .sheet .fg + .fg { margin-top: 14px; }
+  .sheet .field { height: 50px; font-size: 16px; padding: 0 18px; }
+  .sheet .fg > .label { margin-bottom: 8px; font-size: 14px; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Inventory">
+  <header class="appbar">
+    <a class="back tap" href="more.html" data-go="back" aria-label="Back"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg></a>
+    <div class="appbar__titles"><span class="appbar__eyebrow">Stock</span><h1 class="appbar__title">Inventory</h1></div>
+    <button class="appbar__action tap" data-sheet="addSheet"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 1.5v13M1.5 8h13"/></svg>Add</button>
+  </header>
+
+  <div class="stats enter">
+    <div class="stat"><span>Total SKUs</span><b class="num" id="skuCount">48</b><small>6 categories</small></div>
+    <div class="stat"><span>Low stock</span><b class="num c-red" id="lowCount">5</b><small>Reorder soon</small></div>
+    <div class="stat"><span>Stock value</span><b class="num" style="font-size:17px">₹ 8,42,300</b><small>At cost</small></div>
+  </div>
+
+  <label class="search enter" style="margin-top:20px;--i:1">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#8e8e8e" stroke-width="2" stroke-linecap="round"><circle cx="5.8" cy="5.8" r="4.6"/><path d="m9.3 9.3 3.4 3.4"/></svg>
+    <input id="q" type="search" placeholder="Search items, SKU, supplier..." aria-label="Search inventory" autocomplete="off">
+  </label>
+
+  <div class="chips-inv enter" role="tablist" aria-label="Filter stock" data-group id="chips" style="--i:2">
+    <button class="chip is-active" role="tab" aria-selected="true" data-value="all">All<span class="cnt" id="cAll"></span></button>
+    <button class="chip" role="tab" aria-selected="false" data-value="low">Low stock<span class="cnt" id="cLow"></span></button>
+    <button class="chip" role="tab" aria-selected="false" data-value="out">Out of stock<span class="cnt" id="cOut"></span></button>
+  </div>
+
+  <p class="section-label" id="listLabel">Items · sorted by urgency</p>
+  <div class="list" id="list" aria-live="polite"></div>
+  <div class="empty-state" id="emptyState" hidden>
+    <div class="empty-state__icon"><svg width="28" height="30" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M9 1 1.5 5v10L9 19l7.5-4V5L9 1Z"/><path d="M1.5 5 9 9l7.5-4M9 9v10"/></svg></div>
+    <h3 id="emptyTitle">No items found</h3>
+    <p id="emptyMsg">Try a different name, SKU or supplier.</p>
+    <button class="chip-btn tap" id="clearBtn" style="height:40px;padding:0 16px;margin:0 auto;font-size:14px">Clear filters</button>
+  </div>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <nav data-tabbar="more"></nav>
+</main>
+
+<!-- Item detail -->
+<section class="sheet" id="itemSheet" aria-labelledby="itTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="itTitle">Dye Chemical</p><p class="sheet__sub" id="itSub">DYE-RR-020 · Dye Chemical Co.</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div id="itBanner"></div>
+  <div class="mini-stats">
+    <div><span>In stock</span><b class="num" id="itQty">3</b></div>
+    <div><span>Reorder at</span><b class="num" id="itRe">10</b></div>
+    <div><span>Unit cost</span><b class="num" id="itCost">₹ 1,850</b></div>
+  </div>
+  <p class="section-label">Stock history</p>
+  <div id="itHist"></div>
+  <div style="margin-top:18px"><button class="btn btn--primary tap" id="reorderBtn"><span>Reorder</span></button></div>
+</section>
+
+<!-- Reorder -->
+<section class="sheet" id="reorderSheet" aria-labelledby="roTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="roTitle">Reorder</p><p class="sheet__sub" id="roSub">Raise a purchase order</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="stepper-qty">
+    <button class="tap" id="qMinus" aria-label="Decrease quantity"><svg width="16" height="16" viewBox="0 0 16 16" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M2 8h12"/></svg></button>
+    <div style="text-align:center"><input id="qty" type="number" inputmode="numeric" min="1" value="37" aria-label="Quantity" class="num"><span class="muted" style="display:block;font-size:11px;margin-top:-2px">units</span></div>
+    <button class="tap" id="qPlus" aria-label="Increase quantity"><svg width="16" height="16" viewBox="0 0 16 16" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg></button>
+  </div>
+  <div class="suggest"><span id="sugText">Suggested 37 units to reach 40</span><button class="text-btn" id="useSug" style="padding:6px 0">Use suggested</button></div>
+
+  <p class="section-label">Supplier</p>
+  <div class="options" data-options id="supplier">
+    <button class="option tap" data-value="MK Suppliers" aria-checked="true"><span class="option__radio"></span><span class="option__body"><span class="option__title">MK Suppliers</span><span class="option__sub" id="supA">Delivers in 2 days</span></span><span class="menu__meta num" id="priceA">₹ 1,850</span></button>
+    <button class="option tap" data-value="Dye Chemical Co."><span class="option__radio"></span><span class="option__body"><span class="option__title">Dye Chemical Co.</span><span class="option__sub" id="supB">Delivers in 4 days</span></span><span class="menu__meta num" id="priceB">₹ 1,760</span></button>
+  </div>
+
+  <div class="kvs" style="margin-top:12px" aria-live="polite">
+    <div><span class="k">Expected delivery</span><span class="v" id="roDate">11 Jun 2025</span></div>
+    <div><span class="k">Subtotal</span><span class="v num" id="roSub1">₹ 68,450</span></div>
+    <div><span class="k">GST 18%</span><span class="v num" id="roGst">₹ 12,321</span></div>
+    <div><span class="k" style="color:#f0f0f0;font-size:15px">Total cost</span><span class="v num" id="roTotal" style="font-size:18px;font-weight:600">₹ 80,771</span></div>
+  </div>
+  <div style="margin-top:14px"><button class="btn btn--primary tap" id="placeBtn"><span>Place Order</span></button></div>
+</section>
+
+<!-- Add item -->
+<section class="sheet" id="addSheet" aria-labelledby="addTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="addTitle">Add item</p><p class="sheet__sub">Track stock and get low-stock alerts</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <form id="addForm" novalidate>
+    <div class="fg"><label class="label" for="fName">Item name</label><input class="field" id="fName" data-validate="required" placeholder="e.g. Cotton lining roll" autocomplete="off"></div>
+    <div class="fg"><label class="label" for="fSku">SKU</label><input class="field" id="fSku" data-validate="required" placeholder="FAB-LN-040" autocomplete="off" style="text-transform:uppercase"></div>
+    <div class="field-row" style="margin-top:14px">
+      <div class="fg"><label class="label" for="fQty">Stock qty</label><input class="field" id="fQty" type="number" inputmode="numeric" data-validate="required" placeholder="0"></div>
+      <div class="fg" style="margin-top:0"><label class="label" for="fRe">Reorder level</label><input class="field" id="fRe" type="number" inputmode="numeric" data-validate="required" placeholder="10"></div>
+    </div>
+    <div class="fg" style="margin-top:14px"><label class="label" for="fCost">Unit cost</label><div class="field field-prefix"><span>₹</span><input id="fCost" inputmode="decimal" data-validate="amount" placeholder="0" aria-label="Unit cost"></div></div>
+    <div style="margin-top:20px"><button class="btn btn--primary tap" id="addBtn" type="submit"><span>Add Item</span></button></div>
+  </form>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const S = Spendee, $ = (s) => document.querySelector(s);
+  const inr = (n) => '₹ ' + S.fmtIN(n);
+  const items = [
+    { id: 'dye', name: 'Dye Chemical', sku: 'DYE-RR-020', supplier: 'Dye Chemical Co.', qty: 3, max: 40, re: 10, cost: 1850, alt: 1760, note: 'Stockout in 3 days' },
+    { id: 'cot', name: 'Cotton fabric roll 60"', sku: 'FAB-CT-060', supplier: 'MK Suppliers', qty: 12, max: 50, re: 15, cost: 4200, alt: 4050, note: 'Lasts ~9 days' },
+    { id: 'ind', name: 'Indigo dye pack 5 kg', sku: 'DYE-IN-005', supplier: 'Dye Chemical Co.', qty: 8, max: 30, re: 10, cost: 2650, alt: 2590, note: 'Lasts ~12 days' },
+    { id: 'zip', name: 'Zip fasteners 8"', sku: 'ZIP-08-BK', supplier: 'MK Suppliers', qty: 140, max: 500, re: 150, cost: 6, alt: 5, note: 'Lasts ~14 days' },
+    { id: 'ndl', name: 'Sewing needles (box)', sku: 'NDL-90-BX', supplier: 'MK Suppliers', qty: 9, max: 50, re: 12, cost: 240, alt: 225, note: 'Lasts ~16 days' },
+    { id: 'pkg', name: 'Packaging cartons (L)', sku: 'PKG-CT-L', supplier: 'MK Suppliers', qty: 0, max: 400, re: 80, cost: 38, alt: 36, note: 'Out since 07 Jun' },
+    { id: 'els', name: 'Elastic band 1"', sku: 'ELS-01-WH', supplier: 'MK Suppliers', qty: 0, max: 200, re: 40, cost: 95, alt: 90, note: 'Out since 05 Jun' },
+    { id: 'pol', name: 'Polyester thread', sku: 'THR-PL-500', supplier: 'MK Suppliers', qty: 64, max: 120, re: 30, cost: 310, alt: 295, note: 'Healthy' },
+    { id: 'lbl', name: 'Woven labels', sku: 'LBL-WV-001', supplier: 'MK Suppliers', qty: 3200, max: 5000, re: 1000, cost: 2, alt: 2, note: 'Healthy' },
+  ];
+  const onOrder = S.store.get('invOnOrder', {});
+  let filter = 'all', query = '', current = null, poNo = S.store.get('invPoNo', 2231);
+
+  const status = (it) => onOrder[it.id] ? 'order' : it.qty === 0 ? 'out' : it.qty <= it.re ? (it.qty <= it.re / 3 ? 'critical' : 'low') : 'ok';
+  const PILL = {
+    critical: ['tone-red', '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>Critical'],
+    low: ['tone-yellow', 'Low stock'],
+    out: ['tone-red', 'Out of stock'],
+    order: ['tone-blue', '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v5l3 3"/></svg>On order'],
+    ok: ['tone-green', 'In stock'],
+  };
+  const rank = { critical: 0, out: 1, low: 2, order: 3, ok: 4 };
+  const barColor = (st) => ({ critical: '#f15858', out: '#f15858', low: '#f1ea58', order: '#5fb2f1', ok: '#8df15e' })[st];
+
+  function card(it) {
+    const st = status(it), [tone, label] = PILL[st];
+    const pct = Math.max(st === 'out' ? 0 : 4, Math.min(100, it.qty / it.max * 100));
+    const foot = st === 'order' ? `<span class="c-blue">${onOrder[it.id].po} · arrives ${onOrder[it.id].eta}</span>` : st === 'critical' ? `<span class="c-red">${it.note}</span>` : st === 'out' ? `<span class="c-red">${it.note}</span>` : `<span class="muted">Reorder at ${S.fmtIN(it.re)}</span>`;
+    return `<button class="item tap" data-id="${it.id}" aria-label="${it.name}, ${S.fmtIN(it.qty)} of ${S.fmtIN(it.max)} units, ${label.replace(/<[^>]+>/g, '')}">
+      <span class="item__top"><span class="grow"><span class="item__name" style="display:block">${it.name}</span><span class="item__sub" style="display:block">${it.sku} · ${it.supplier}</span></span><span class="pill ${tone}">${label}</span></span>
+      <span class="bar" style="display:block"><i style="width:${pct}%;background:${barColor(st)}"></i></span>
+      <span class="item__foot"><span class="num">${S.fmtIN(it.qty)} / ${S.fmtIN(it.max)} units</span>${foot}</span>
+    </button>`;
+  }
+  function render() {
+    const q = query.trim().toLowerCase();
+    const counts = { all: items.length, low: items.filter((i) => ['low', 'critical'].includes(status(i))).length, out: items.filter((i) => status(i) === 'out').length };
+    $('#cAll').textContent = counts.all; $('#cLow').textContent = counts.low; $('#cOut').textContent = counts.out;
+    const shown = items.filter((it) => {
+      const st = status(it);
+      if (filter === 'low' && !['low', 'critical'].includes(st)) return false;
+      if (filter === 'out' && st !== 'out') return false;
+      return !q || (it.name + ' ' + it.sku + ' ' + it.supplier).toLowerCase().includes(q);
+    }).sort((a, b) => rank[status(a)] - rank[status(b)]);
+    $('#list').innerHTML = shown.map(card).join('');
+    [...$('#list').children].forEach((c, i) => (c.style.animationDelay = Math.min(i, 6) * 35 + 'ms'));
+    $('#list').hidden = !shown.length; $('#emptyState').hidden = !!shown.length; $('#listLabel').hidden = !shown.length;
+    if (!shown.length) {
+      $('#emptyTitle').textContent = q ? `No items match “${query.trim()}”` : filter === 'out' ? 'Nothing is out of stock' : 'No low-stock items';
+      $('#emptyMsg').textContent = q ? 'Try a different name, SKU or supplier.' : 'Great, your stock levels are healthy.';
+    }
+  }
+  $('#q').addEventListener('input', (e) => { query = e.target.value; render(); });
+  $('#chips').addEventListener('change', (e) => { filter = e.detail; render(); });
+  $('#clearBtn').addEventListener('click', () => { query = ''; $('#q').value = ''; filter = 'all'; $('#chips [data-value="all"]').click(); render(); });
+
+  // ---- Item sheet ----
+  const HIST = (it) => [
+    ['out', `−${Math.max(2, Math.round(it.max / 8))}`, 'Used in production', '08 Jun'],
+    ['out', `−${Math.max(1, Math.round(it.max / 10))}`, 'Used in production', '05 Jun'],
+    ['in', `+${Math.round(it.max * .7)}`, 'PO-2198 received', '28 May'],
+    ['out', `−${Math.max(1, Math.round(it.max / 6))}`, 'Sold · INV-1031', '22 May'],
+  ];
+  $('#list').addEventListener('click', (e) => { const b = e.target.closest('.item'); if (b) openItem(b.dataset.id); });
+  function openItem(id) {
+    const it = items.find((x) => x.id === id); if (!it) return; current = it;
+    const st = status(it);
+    $('#itTitle').textContent = it.name; $('#itSub').textContent = `${it.sku} · ${it.supplier}`;
+    $('#itQty').textContent = S.fmtIN(it.qty); $('#itQty').className = 'num ' + (st === 'ok' ? '' : st === 'low' ? 'c-yellow' : st === 'order' ? 'c-blue' : 'c-red');
+    $('#itRe').textContent = S.fmtIN(it.re); $('#itCost').textContent = inr(it.cost);
+    $('#itBanner').innerHTML = st === 'order'
+      ? `<div class="banner banner--info" style="margin-bottom:14px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5fb2f1" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v5l3 3"/></svg><span>${onOrder[it.id].po} placed with ${onOrder[it.id].supplier} for ${onOrder[it.id].qty} units · arrives ${onOrder[it.id].eta}</span></div>`
+      : st === 'critical' || st === 'out' ? `<div class="banner banner--danger" style="margin-bottom:14px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f15858" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg><span>${it.note}. Reorder now to avoid halting production.</span></div>` : '';
+    $('#itHist').innerHTML = (it.hist || HIST(it)).map(([d, q, t, when]) => `<div class="hist"><span class="menu__icon ${d === 'in' ? 'icon-green' : 'icon-red'}"><svg width="14" height="14" viewBox="0 0 11 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(${d === 'in' ? 0 : 180}deg)"><path d="M5.5 15V1.5M1 6l4.5-4.5L10 6"/></svg></span><span class="grow"><span class="menu__title" style="font-size:14px">${t}</span><span class="menu__sub">${when} 2025</span></span><span class="menu__meta num ${d === 'in' ? 'c-green' : ''}">${q}</span></div>`).join('');
+    const rb = $('#reorderBtn');
+    rb.classList.toggle('is-disabled', st === 'order'); rb.querySelector('span').textContent = st === 'order' ? 'Already on order' : 'Reorder';
+    S.sheet.open('itemSheet');
+  }
+  $('#reorderBtn').addEventListener('click', () => { if (current && status(current) !== 'order') openReorder(); });
+
+  // ---- Reorder sheet ----
+  const qty = $('#qty');
+  let supplier = 'MK Suppliers';
+  const addDays = (d) => { const dt = new Date(2025, 5, 9 + d); return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }); };
+  const suggested = () => Math.max(1, current.max - current.qty);
+  function openReorder() {
+    const it = current;
+    $('#roTitle').textContent = 'Reorder ' + it.name.replace(/\s*\(.*\)/, '');
+    $('#roSub').textContent = `${S.fmtIN(it.qty)} in stock · reorder level ${S.fmtIN(it.re)}`;
+    qty.value = suggested();
+    $('#sugText').textContent = `Suggested ${S.fmtIN(suggested())} units to reach ${S.fmtIN(it.max)}`;
+    const opts = [...document.querySelectorAll('#supplier .option')];
+    supplier = it.supplier === 'Dye Chemical Co.' ? 'Dye Chemical Co.' : 'MK Suppliers';
+    opts.forEach((o) => o.setAttribute('aria-checked', String(o.dataset.value === supplier)));
+    $('#priceA').textContent = inr(it.cost) + '/u'; $('#priceB').textContent = inr(it.alt) + '/u';
+    $('#supA').textContent = 'Delivers in 2 days · ' + addDays(2); $('#supB').textContent = 'Delivers in 4 days · ' + addDays(4);
+    calcPO();
+    S.sheet.open('reorderSheet');
+  }
+  function calcPO() {
+    const n = Math.max(1, Math.round(+qty.value || 0));
+    const price = supplier === 'MK Suppliers' ? current.cost : current.alt;
+    const sub = n * price, gst = Math.round(sub * 0.18);
+    $('#roSub1').textContent = inr(sub); $('#roGst').textContent = inr(gst); $('#roTotal').textContent = inr(sub + gst);
+    $('#roDate').textContent = addDays(supplier === 'MK Suppliers' ? 2 : 4);
+    $('#qMinus').disabled = n <= 1; $('#qMinus').style.opacity = n <= 1 ? .4 : 1;
+  }
+  qty.addEventListener('input', calcPO);
+  qty.addEventListener('blur', () => { qty.value = Math.max(1, Math.round(+qty.value || 1)); calcPO(); });
+  const step = (d) => { const big = current.max >= 200 ? 10 : 1; qty.value = Math.max(1, (+qty.value || 0) + d * big); S.haptic(); calcPO(); };
+  $('#qMinus').addEventListener('click', () => step(-1));
+  $('#qPlus').addEventListener('click', () => step(1));
+  $('#useSug').addEventListener('click', () => { qty.value = suggested(); calcPO(); });
+  $('#supplier').addEventListener('select', (e) => { supplier = e.detail; calcPO(); });
+  const place = $('#placeBtn');
+  place.addEventListener('click', async () => {
+    const n = Math.max(1, Math.round(+qty.value || 0));
+    await S.loading(place, 1300);
+    const po = 'PO-' + poNo; poNo++; S.store.set('invPoNo', poNo);
+    onOrder[current.id] = { po, supplier, qty: n, eta: addDays(supplier === 'MK Suppliers' ? 2 : 4).slice(0, 6) };
+    S.store.set('invOnOrder', onOrder);
+    S.sheet.close(); render();
+    S.toast(`${po} sent to ${supplier}`);
+    const el = document.querySelector(`.item[data-id="${current.id}"]`);
+    if (el) { el.animate([{ boxShadow: 'inset 0 0 0 2px #5fb2f1' }, { boxShadow: 'inset 0 0 0 1px rgba(255,255,255,.13)' }], { duration: 1400 }); }
+  });
+
+  // ---- Add item ----
+  const form = $('#addForm'), addBtn = $('#addBtn');
+  const numCheck = (id, msg) => { const inp = $(id), fg = inp.closest('.fg'); const bad = inp.value !== '' && (+inp.value < 0 || !Number.isFinite(+inp.value)); if (bad) { fg.classList.add('has-error'); let et = fg.querySelector('.error-text'); if (!et) { et = document.createElement('span'); et.className = 'error-text'; et.setAttribute('role', 'alert'); fg.appendChild(et); } et.textContent = msg; } return !bad; };
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    let ok = S.validate(form);
+    ok = numCheck('#fQty', 'Enter 0 or more units') && ok;
+    ok = numCheck('#fRe', 'Enter 0 or more units') && ok;
+    const sku = $('#fSku').value.trim().toUpperCase();
+    if (ok && items.some((i) => i.sku === sku)) { const fg = $('#fSku').closest('.fg'); fg.classList.add('has-error'); fg.querySelector('.error-text').textContent = 'This SKU already exists. Use a unique code.'; $('#fSku').focus(); ok = false; }
+    if (!ok) { S.haptic(); return; }
+    await S.loading(addBtn, 1000);
+    const q = Math.round(+$('#fQty').value), re = Math.round(+$('#fRe').value);
+    const it = { id: 'n' + Date.now(), name: $('#fName').value.trim(), sku, supplier: 'MK Suppliers', qty: q, re, max: Math.max(q, re * 3, 10), cost: parseFloat($('#fCost').value.replace(/[^\d.]/g, '')), note: q === 0 ? 'Out of stock' : 'New item', hist: [['in', '+' + q, 'Opening stock', '09 Jun']] };
+    it.alt = it.cost;
+    items.unshift(it);
+    $('#skuCount').textContent = 48 + items.filter((i) => i.id[0] === 'n').length;
+    form.reset(); S.sheet.close();
+    query = ''; $('#q').value = ''; if (filter !== 'all') $('#chips [data-value="all"]').click();
+    render(); window.scrollTo({ top: 0, behavior: 'smooth' });
+    S.toast(`${it.name} added · ${sku}`);
+  });
+
+  ['itemSheet', 'reorderSheet'].forEach((id) => { const el = document.getElementById(id); el.tabIndex = -1; el.style.outline = 'none'; el.addEventListener('sheet:open', () => setTimeout(() => el.focus({ preventScroll: true }), 90)); });
+  render();
+  if (S.q('filter')) { const c = $(`#chips [data-value="${S.q('filter')}"]`); c && c.click(); }
+  if (S.q('item')) { openItem(S.q('item')); if (S.q('reorder')) { S.sheet.close(true); openReorder(); } }
+  if (S.q('sheet') === 'itemSheet' || S.q('sheet') === 'reorderSheet') { const crit = items.find((x) => /dye chemical/i.test(x.name)) || items[0]; openItem(crit.id); if (S.q('sheet') === 'reorderSheet') { S.sheet.close(true); openReorder(); } }
+})();
+</script>
+</body>
+</html>

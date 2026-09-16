@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Entry Details</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  [hidden]:not(.sheet) { display: none !important; }
+  .toast { position: fixed; bottom: 128px; }
+  .hero { text-align: center; padding: 22px 20px 0; }
+  .pills { display: flex; justify-content: center; gap: 8px; }
+  .pill { height: 28px; padding: 0 10px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; letter-spacing: .3px; white-space: nowrap; }
+  .hero__amt { font-size: 40px; font-weight: 500; letter-spacing: .4px; margin-top: 16px; line-height: 1.1; transition: color var(--dur); }
+  .hero__cap { font-size: 14px; margin-top: 6px; color: #bdbdbd; }
+  .hero__contact { display: flex; align-items: center; gap: 12px; margin: 20px -20px 0; padding: 14px 20px; border-top: 1px solid rgba(255,255,255,.1); text-align: left; border-radius: 0 0 20px 20px; }
+  .hero__contact .avatar { width: 40px; height: 40px; }
+  .acts { display: grid; grid-template-columns: repeat(4, 74px); justify-content: space-between; margin-top: 20px; }
+  .acts .tile { width: 74px; height: 74px; gap: 9px; font-size: 8.5px; position: relative; }
+  .acts .tile.is-busy svg { opacity: 0; }
+  .acts .tile[disabled] { opacity: .6; pointer-events: none; }
+  .acts .tile.is-busy::after { content: ''; position: absolute; left: 50%; top: 18px; width: 20px; height: 20px; margin-left: -10px; border-radius: 50%; border: 2.5px solid rgba(255,255,255,.2); border-top-color: #f15858; animation: spin 700ms linear infinite; }
+  .panel .kvs > div:first-child { padding-top: 2px; }
+  .panel .kvs > div:last-child { padding-bottom: 2px; }
+  .kvs .v { max-width: 190px; }
+  .receipt { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; }
+  .thumb { width: 64px; height: 80px; border-radius: 10px; background: #111; overflow: hidden; flex-shrink: 0; position: relative; box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); }
+  .thumb .slip { position: absolute; left: 9px; top: 6px; transform: scale(.17) rotate(-3deg); transform-origin: top left; }
+  .slip { width: 272px; background: #f3f0e8; color: #2b2b2b; font: 500 13px/1.55 ui-monospace, 'SF Mono', Menlo, monospace; padding: 22px 20px 30px; box-shadow: 0 10px 30px rgba(0,0,0,.55);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), 95% 100%, 90% calc(100% - 8px), 85% 100%, 80% calc(100% - 8px), 75% 100%, 70% calc(100% - 8px), 65% 100%, 60% calc(100% - 8px), 55% 100%, 50% calc(100% - 8px), 45% 100%, 40% calc(100% - 8px), 35% 100%, 30% calc(100% - 8px), 25% 100%, 20% calc(100% - 8px), 15% 100%, 10% calc(100% - 8px), 5% 100%, 0 calc(100% - 8px)); }
+  .slip h4 { margin: 0; text-align: center; font-size: 15px; letter-spacing: 1px; }
+  .slip .c { text-align: center; color: #6d6d6d; font-size: 11.5px; }
+  .slip .hr { border-top: 1.5px dashed #9c9a94; margin: 10px 0; }
+  .slip .ln { display: flex; justify-content: space-between; gap: 10px; }
+  .slip .tot { font-size: 16px; font-weight: 700; }
+  .slip .bars { height: 34px; margin-top: 12px; background: repeating-linear-gradient(90deg, #2b2b2b 0 2px, transparent 2px 4px, #2b2b2b 4px 5px, transparent 5px 8px, #2b2b2b 8px 11px, transparent 11px 12px); }
+  .viewer { border-radius: 20px; background: radial-gradient(120% 90% at 50% 20%, #2a2a2a, #121212); padding: 26px 0 30px; display: grid; place-items: center; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .mode-grid .option { min-height: 52px; padding: 8px 12px; gap: 10px; }
+  .settle-amt { font-size: 24px; }
+  /* ledger sheets */
+  .sheet-lbl { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #8a8a8a; margin: 20px 0 10px 4px; }
+  .sheet-lbl:first-of-type { margin-top: 4px; }
+  .sheet .search { height: 48px; }
+  .sheet .field { height: 50px; }
+  .sheet .empty-state { padding: 22px 10px 6px; }
+  .sheet .empty-state p { margin-bottom: 14px; }
+  .sheet .options .option { position: relative; }
+  .bubble { position: relative; background: #1d3a26; color: #e3f1dc; border-radius: 16px 16px 16px 4px; padding: 12px 14px 8px; font-size: 13.5px; line-height: 1.5; box-shadow: inset 0 0 0 1px rgba(141,241,94,.14); transition: background var(--dur), color var(--dur); }
+  .bubble.is-sms { background: #1d3548; color: #dbe9f4; box-shadow: inset 0 0 0 1px rgba(95,178,241,.18); }
+  .bubble__meta { display: flex; justify-content: flex-end; align-items: center; gap: 4px; font-size: 10.5px; color: rgba(255,255,255,.5); margin-top: 4px; }
+  .share-doc { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .share-doc__ic { width: 38px; height: 44px; border-radius: 8px; background: #452626; color: #f15858; display: grid; place-items: center; flex-shrink: 0; font: 600 9px/1 var(--font-ui); letter-spacing: .4px; }
+  .share-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 18px; }
+  .share-t { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 4px 0; font-size: 11.5px; color: #d4d4d4; letter-spacing: .2px; text-align: center; white-space: nowrap; }
+  .share-i { position: relative; width: 56px; height: 56px; border-radius: 18px; display: grid; place-items: center; box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); }
+  .share-t.is-busy .share-i svg { opacity: 0; }
+  .share-t.is-busy .share-i::after { content: ''; position: absolute; left: 50%; top: 50%; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; border: 2.5px solid rgba(255,255,255,.2); border-top-color: currentColor; animation: spin 700ms linear infinite; }
+  .undo-toast { position: fixed; left: 50%; bottom: 128px; z-index: 960; display: flex; align-items: center; gap: 14px; padding: 6px 6px 6px 16px; border-radius: 14px; background: rgba(38,38,38,.96); color: #fff; font-size: 13.5px; letter-spacing: .3px; white-space: nowrap; box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 10px 30px rgba(0,0,0,.5); transform: translate(-50%, 16px); opacity: 0; transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out); }
+  .undo-toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .undo-toast button { height: 34px; padding: 0 14px; border-radius: 9px; background: #132430; color: #5fb2f1; font-weight: 600; font-size: 13.5px; box-shadow: inset 0 0 0 1px rgba(95,178,241,.35); }
+  .cust-list { max-height: 420px; overflow-y: auto; scrollbar-width: none; margin: 14px -4px 0; padding: 0 4px 2px; }
+  .cust-list .avatar { width: 38px; height: 38px; }
+  .cust-list .option__meta { font-size: 13px; font-weight: 600; flex-shrink: 0; }
+  .option--danger .option__title { color: #f15858; }
+  .qd { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .qd button { height: 58px; border-radius: 14px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 14px; font-weight: 600; color: #f0f0f0; transition: box-shadow var(--dur), background var(--dur); }
+  .qd button small { font-size: 11px; font-weight: 500; color: #8a8a8a; }
+  .qd button[aria-pressed="true"] { background: #1c2a36; box-shadow: inset 0 0 0 2px #5fb2f1; }
+  .cal { margin-top: 16px; padding: 14px 12px 10px; border-radius: 20px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .cal__head { display: flex; align-items: center; justify-content: space-between; padding: 0 4px 10px; }
+  .cal__month { font-size: 16px; font-weight: 600; }
+  .cal__nav { width: 36px; height: 36px; border-radius: 10px; background: #1a1a1a; color: #5fb2f1; display: grid; place-items: center; }
+  .cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 2px; text-align: center; }
+  .cal__wd { font-size: 11px; color: #6b6b6b; letter-spacing: .6px; padding: 4px 0 8px; }
+  .cal__d { height: 40px; border-radius: 12px; font-size: 15px; color: #e6e6e6; position: relative; font-variant-numeric: tabular-nums; transition: background 160ms; }
+  .cal__d:hover { background: rgba(255,255,255,.05); }
+  .cal__d.is-today::after { content: ''; position: absolute; left: 50%; bottom: 5px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: #5fb2f1; }
+  .cal__d[aria-selected="true"] { background: #c8e7ff; color: #000; font-weight: 600; }
+  .cal__d[aria-selected="true"]::after { background: #000; }
+  .cal__d[disabled] { color: #4a4a4a; pointer-events: none; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Ledger entry details">
+  <header class="appbar">
+    <a class="back tap" href="customer-details.html" data-go="back" aria-label="Back"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg></a>
+    <div class="appbar__titles"><span class="appbar__eyebrow" id="eyebrow">Ledger · TX-2038</span><h1 class="appbar__title">Entry Details</h1></div>
+  </header>
+
+  <section class="panel enter hero" aria-label="Entry summary" style="padding-bottom:0">
+    <div class="pills">
+      <span class="pill" id="typePill"></span>
+      <span class="pill" id="statusPill" role="status"></span>
+    </div>
+    <p class="hero__amt num" id="amount">₹ 62,000</p>
+    <p class="hero__cap" id="caption"></p>
+    <a class="hero__contact tap" id="contactRow" href="customer-details.html">
+      <span class="avatar" id="avatar"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="5.6" r="4"/><path d="M1.5 18.5v-.4a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v.4H1.5Z" stroke-linejoin="round"/></svg></span>
+      <span class="grow"><span class="menu__title" id="cName" style="font-size:16px;font-weight:500">Sharma Textiles</span><span class="menu__sub" id="cSub">Customer · Kolkata</span></span>
+      <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+    </a>
+  </section>
+
+  <div class="acts enter" style="--i:1">
+    <button type="button" class="tile tile--blue tap" id="remindBtn" data-sheet="reminderSheet"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5fb2f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v5l3 3"/></svg>Remind</button>
+    <button type="button" class="tile tile--green tap" data-sheet="shareSheet"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8df15e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3.5M7.5 8 12 3.5 16.5 8"/><path d="M5 12v7.5A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V12"/></svg>Share</button>
+    <a class="tile tile--yellow tap" id="editBtn" href="add-entry.html?edit=1"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f1ea58" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>Edit</a>
+    <button type="button" class="tile tile--red tap" id="deleteBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f15858" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg>Delete</button>
+  </div>
+
+  <button type="button" class="btn btn--primary tap enter" id="settleBtn" data-sheet="settleSheet" style="margin-top:20px;--i:2"><svg width="17" height="13" viewBox="0 0 17 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 6.8 4.6 4.4L15.5 1.8"/></svg><span>Mark as Settled</span></button>
+
+  <p class="section-label">Details</p>
+  <section class="panel enter" style="--i:3;padding:10px 20px">
+    <div class="kvs">
+      <div><span class="k">Date</span><span class="v" id="kDate"></span></div>
+      <div><span class="k">Due date</span><span class="v" id="kDue"></span></div>
+      <div><span class="k">Payment method</span><span class="v" id="kMethod"></span></div>
+      <div><span class="k">Note</span><span class="v" id="kNote"></span></div>
+      <div><span class="k">Entry ID</span><span class="v num" id="kId"></span></div>
+      <div><span class="k">Created by</span><span class="v">Jayanta Adhikari (You)</span></div>
+    </div>
+  </section>
+
+  <p class="section-label">Receipt</p>
+  <section class="panel panel--tight enter" style="--i:4">
+    <button type="button" class="receipt tap" data-sheet="receiptSheet" aria-label="View receipt image">
+      <span class="thumb" aria-hidden="true"><span class="slip slip-src"></span></span>
+      <span class="grow"><span class="menu__title" id="rName">Receipt_0603.jpg</span><span class="menu__sub">Scanned · 312 KB · Tap to view</span></span>
+      <svg class="chev" width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="#5fb2f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg>
+    </button>
+  </section>
+
+  <p class="section-label">Activity</p>
+  <section class="panel enter" style="--i:5;padding:20px 20px 4px">
+    <ol class="timeline" id="timeline"></ol>
+  </section>
+
+  <nav data-tabbar="ledger"></nav>
+  <div class="toast" role="status" aria-live="polite"></div>
+</main>
+
+<section class="sheet" id="settleSheet" aria-labelledby="settleTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="settleTitle">Mark as settled</p><p class="sheet__sub" id="settleSub">Sharma Textiles · TX-2038</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <p class="sheet-lbl" id="settleLbl">Amount received</p>
+  <div class="fg">
+    <label class="field field-prefix settle-amt"><span>₹</span><input id="settleAmt" class="num" inputmode="numeric" aria-label="Amount received" data-validate="amount"></label>
+    <span class="helper" id="settleHelp">Full balance. Lower it to record a part payment.</span>
+  </div>
+  <p class="sheet-lbl">Payment mode</p>
+  <div class="mode-grid" data-options id="settleMode" aria-label="Payment mode">
+    <button type="button" class="option tap" data-value="UPI" aria-checked="true"><span class="option__radio"></span><span class="option__title">UPI</span></button>
+    <button type="button" class="option tap" data-value="Cash"><span class="option__radio"></span><span class="option__title">Cash</span></button>
+    <button type="button" class="option tap" data-value="Bank transfer"><span class="option__radio"></span><span class="option__title">Bank transfer</span></button>
+    <button type="button" class="option tap" data-value="Cheque"><span class="option__radio"></span><span class="option__title">Cheque</span></button>
+  </div>
+  <button type="button" class="btn btn--primary tap" id="settleConfirm" style="margin-top:22px"><span>Confirm Settlement</span></button>
+</section>
+
+<section class="sheet" id="receiptSheet" aria-labelledby="receiptTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="receiptTitle">Receipt</p><p class="sheet__sub" id="receiptSub">Receipt_0603.jpg · 312 KB</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="viewer"><div class="slip slip-src" role="img" aria-label="Scanned receipt"></div></div>
+  <div class="btn-pair" style="margin-top:18px">
+    <a class="btn btn--neutral tap" href="receipt-scan.html">Replace</a>
+    <button type="button" class="btn btn--primary tap" id="dlReceipt"><span>Download</span></button>
+  </div>
+</section>
+
+<section class="sheet" id="reminderSheet" aria-labelledby="remTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="remTitle">Send a reminder</p><p class="sheet__sub" id="remSub">Sharma Textiles · ₹ 62,000 due 10 Jun</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <p class="sheet-lbl">Channel</p>
+  <div class="segmented" id="remChannel" aria-label="Reminder channel">
+    <button type="button" data-value="whatsapp" aria-selected="true">WhatsApp</button>
+    <button type="button" data-value="sms">SMS</button>
+  </div>
+  <p class="sheet-lbl">When</p>
+  <div class="options" data-options id="remWhen" aria-label="When to send">
+    <button type="button" class="option tap" data-value="now"><span class="option__radio"></span><span class="option__body"><span class="option__title">Now</span><span class="option__sub">Delivered right away</span></span></button>
+    <button type="button" class="option tap" data-value="tomorrow" aria-checked="true"><span class="option__radio"></span><span class="option__body"><span class="option__title">Tomorrow, 10 AM</span><span class="option__sub">Thu, 05 Jun · best reply rate</span></span></button>
+    <button type="button" class="option tap" data-value="custom"><span class="option__radio"></span><span class="option__body"><span class="option__title">Custom</span><span class="option__sub" id="remCustomSub">Pick a date and time</span></span></button>
+  </div>
+  <input class="field" type="datetime-local" id="remCustom" value="2025-06-06T11:00" min="2025-06-04T00:00" aria-label="Reminder date and time" style="display:none;margin-top:10px;font-size:16px">
+  <p class="sheet-lbl">Message preview</p>
+  <div class="bubble" id="remBubble"><span id="remText">Hello Sharma Textiles, a friendly reminder that ₹ 62,000 is due on 10 Jun 2025 for your order with JA Trading Co. Pay via UPI: spendee.link/ja/tx2038. Jayanta</span><span class="bubble__meta"><span id="remVia">WhatsApp</span> · 10:00 AM <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="#5fb2f1" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m1 5.5 3 3L10.5 1.5M8 8.5l7-7"/></svg></span></div>
+  <button class="btn btn--primary tap" id="remSend" style="margin-top:22px"><span>Schedule Reminder</span></button>
+</section>
+
+<section class="sheet" id="shareSheet" aria-labelledby="shareTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="shareTitle">Share entry</p><p class="sheet__sub">Send a copy or save it to your phone</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="share-doc">
+    <span class="share-doc__ic">PDF</span>
+    <span class="grow"><span class="option__title" id="shareDoc">TX-2038 · Sharma Textiles</span><span class="option__sub" id="shareDocSub">Payment record · 1 page · 86 KB</span></span>
+  </div>
+  <div class="share-grid">
+    <button type="button" class="share-t tap" data-share="WhatsApp"><span class="share-i icon-green"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2A9.8 9.8 0 0 0 3.6 17l-1.4 4.8 5-1.3A9.8 9.8 0 1 0 12 2.2Zm0 1.9a7.9 7.9 0 1 1-4 14.7l-.3-.2-3 .8.8-2.9-.2-.3A7.9 7.9 0 0 1 12 4.1Z"/><path d="M9.2 7.6c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.6 1.1 2.7c.1.2 1.8 2.9 4.5 4 2.2.9 2.7.7 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2l-.5-.3-1.7-.8c-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.4.3-.4v-.5l-.8-2Z"/></svg></span>WhatsApp</button>
+    <button type="button" class="share-t tap" data-share="SMS"><span class="share-i icon-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5h16A1.5 1.5 0 0 1 21.5 6v9.5A1.5 1.5 0 0 1 20 17h-11l-4.5 3.5V17H4a1.5 1.5 0 0 1-1.5-1.5V6A1.5 1.5 0 0 1 4 4.5Z"/><path d="M7.5 9.5h9M7.5 12.5h5.5"/></svg></span>SMS</button>
+    <button type="button" class="share-t tap" data-share="Email"><span class="share-i icon-yellow"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6.5 9 6.5 9-6.5"/></svg></span>Email</button>
+    <button type="button" class="share-t tap" data-share="copy"><span class="share-i icon-gray"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/></svg></span>Copy link</button>
+    <button type="button" class="share-t tap" data-share="pdf"><span class="share-i icon-red"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v11.5M7 10.5l5 5 5-5M4 20.5h16"/></svg></span>PDF</button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  // Reminder sheet
+  (function () {
+    const sh = document.getElementById('reminderSheet'); if (!sh) return;
+    const custom = sh.querySelector('#remCustom'), btn = sh.querySelector('#remSend');
+    let when = 'tomorrow', chan = 'whatsapp';
+    const fmtDT = (v) => { const d = new Date(v); if (isNaN(d)) return 'the selected time'; return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) + ', ' + d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }); };
+    const sync = () => {
+      custom.style.display = when === 'custom' ? '' : 'none';
+      sh.querySelector('#remCustomSub').textContent = when === 'custom' && custom.value ? fmtDT(custom.value) : 'Pick a date and time';
+      btn.querySelector('span').textContent = when === 'now' ? (chan === 'sms' ? 'Send SMS Now' : 'Send on WhatsApp') : 'Schedule ' + (sh.dataset.kind || 'Reminder');
+      sh.querySelector('#remBubble').classList.toggle('is-sms', chan === 'sms');
+      sh.querySelector('#remVia').textContent = chan === 'sms' ? 'SMS' : 'WhatsApp';
+    };
+    sh.querySelector('#remWhen').addEventListener('select', (e) => { when = e.detail; sync(); if (when === 'custom') setTimeout(() => custom.focus(), 50); });
+    sh.querySelector('#remChannel').addEventListener('change', (e) => { chan = e.detail; sync(); });
+    custom.addEventListener('input', () => { custom.style.boxShadow = ''; sync(); });
+    btn.addEventListener('click', async () => {
+      if (when === 'custom' && !custom.value) { custom.style.boxShadow = '0 0 0 2px #f15858'; custom.focus(); Spendee.toast('Pick a date and time for the reminder'); return; }
+      await Spendee.loading(btn, 900);
+      Spendee.sheet.close(); Spendee.haptic();
+      const via = chan === 'sms' ? 'SMS' : 'WhatsApp';
+      const kind = sh.dataset.kind || 'Reminder';
+      Spendee.toast(when === 'now' ? kind + ' sent on ' + via : when === 'tomorrow' ? kind + ' scheduled for tomorrow, 10 AM' : kind + ' scheduled for ' + fmtDT(custom.value));
+      sh.dispatchEvent(new CustomEvent('reminder:done', { detail: { via, when } }));
+    });
+    sh.addEventListener('sheet:open', sync);
+    sh._sync = sync;
+    sync();
+  })();
+  // Share sheet
+  (function () {
+    const sh = document.getElementById('shareSheet'); if (!sh) return;
+    sh.querySelectorAll('[data-share]').forEach((b) => b.addEventListener('click', async () => {
+      const k = b.dataset.share;
+      if (k === 'pdf') {
+        b.classList.add('is-busy'); await Spendee.wait(1000); b.classList.remove('is-busy');
+        Spendee.sheet.close(); Spendee.toast('PDF saved to Downloads'); return;
+      }
+      if (k === 'copy') {
+        try { navigator.clipboard && navigator.clipboard.writeText(sh.dataset.link || 'https://spendee.link/ja').catch(() => {}); } catch (e) {}
+        Spendee.sheet.close(); Spendee.toast('Link copied'); return;
+      }
+      Spendee.sheet.close(); Spendee.haptic(); Spendee.toast('Shared via ' + k);
+    }));
+  })();
+  (function () {
+    const $ = (id) => document.getElementById(id);
+    const money = (n) => '₹ ' + Spendee.fmtIN(n);
+    const PERSON = $('avatar').innerHTML;
+    // [name, sub, type, amount, status, date, due, method, note, tone, dueIn]; ids match customer-details.html rows
+    const tx = (a) => ({ name: a[0], sub: a[1], type: a[2], amount: a[3], status: a[4], date: a[5], due: a[6], method: a[7], note: a[8], tone: a[9], dueIn: a[10] });
+    const TX = Object.fromEntries(Object.entries({
+      'TX-2038': ['Sharma Textiles', 'Customer · Kolkata', 'got', 62000, 'pending', '20 May 2025', '10 Jun 2025', 'Bank transfer', 'INV-1038 · Cotton fabric, 40 rolls', 'yellow', 'Due in 6 days'],
+      'TX-2033': ['Sharma Textiles', 'Customer · Kolkata', 'got', 40000, 'done', '28 May 2025', '28 May 2025', 'UPI', 'Payment received · part of INV-1030', 'blue', 'Settled 7 days ago'],
+      'TX-2030': ['Sharma Textiles', 'Customer · Kolkata', 'got', 78000, 'done', '12 May 2025', '12 May 2025', 'Bank transfer', 'INV-1024 · Goods sold', 'blue', 'Settled 23 days ago'],
+      'TX-2027': ['Sharma Textiles', 'Customer · Kolkata', 'got', 55000, 'done', '30 Apr 2025', '30 Apr 2025', 'NEFT', 'Payment received · INV-1017', 'blue', 'Settled 35 days ago'],
+      'TX-2041': ['Dutta & Sons', 'Customer · Howrah', 'got', 45000, 'done', '04 Jun 2025', '04 Jun 2025', 'UPI', 'INV-1042 · paid in full', 'blue', 'Settled 2h ago'],
+      'TX-2036': ['Dutta & Sons', 'Customer · Howrah', 'got', 45000, 'done', '21 May 2025', '04 Jun 2025', 'UPI', 'INV-1042 · Goods sold', 'blue', 'Paid on 04 Jun 2025'],
+      'TX-2022': ['Dutta & Sons', 'Customer · Howrah', 'got', 60000, 'done', '16 May 2025', '16 May 2025', 'NEFT', 'Payment received · INV-1029', 'blue', 'Settled 19 days ago'],
+      'TX-2014': ['Dutta & Sons', 'Customer · Howrah', 'got', 60000, 'done', '02 May 2025', '16 May 2025', 'Bank transfer', 'INV-1029 · Goods sold', 'blue', 'Settled 19 days ago'],
+      'TX-2019': ['Bose Retail', 'Customer · Kolkata', 'got', 115000, 'overdue', '09 May 2025', '23 May 2025', 'Bank transfer', 'INV-1019 · Retail restock', 'red', 'Overdue by 12 days'],
+      'TX-2016': ['Bose Retail', 'Customer · Kolkata', 'got', 70000, 'done', '02 May 2025', '02 May 2025', 'Cheque', 'Payment received · INV-1011', 'blue', 'Settled 33 days ago'],
+      'TX-2011': ['Bose Retail', 'Customer · Kolkata', 'got', 70000, 'done', '14 Apr 2025', '02 May 2025', 'Bank transfer', 'INV-1011 · Goods sold', 'blue', 'Settled 33 days ago'],
+      'TX-2006': ['Bose Retail', 'Customer · Kolkata', 'got', 48000, 'done', '28 Mar 2025', '28 Mar 2025', 'NEFT', 'Payment received · INV-1004', 'blue', 'Settled 68 days ago'],
+      'TX-2009': ['Ghosh Traders', 'Customer · Siliguri', 'got', 38000, 'overdue', '20 Apr 2025', '04 May 2025', 'UPI', 'INV-1009 · Goods sold', 'red', 'Overdue by 1 month'],
+      'TX-2005': ['Ghosh Traders', 'Customer · Siliguri', 'got', 25000, 'done', '22 Apr 2025', '22 Apr 2025', 'UPI', 'Payment received · INV-1003', 'blue', 'Settled 43 days ago'],
+      'TX-2003': ['Ghosh Traders', 'Customer · Siliguri', 'got', 25000, 'done', '03 Apr 2025', '22 Apr 2025', 'Bank transfer', 'INV-1003 · Goods sold', 'blue', 'Settled 43 days ago'],
+      'TX-2001': ['Ghosh Traders', 'Customer · Siliguri', 'got', 18000, 'done', '15 Mar 2025', '15 Mar 2025', 'Cash', 'Payment received · opening balance', 'blue', 'Settled 81 days ago'],
+      'TX-2035': ['Roy Fabrics', 'Customer · Durgapur', 'got', 24000, 'pending', '01 Jun 2025', '15 Jun 2025', 'UPI', 'INV-1035 · Goods sold', 'yellow', 'Due in 11 days'],
+      'TX-2025': ['Roy Fabrics', 'Customer · Durgapur', 'got', 32000, 'done', '20 May 2025', '20 May 2025', 'UPI', 'Payment received · INV-1021', 'blue', 'Settled 15 days ago'],
+      'TX-2021': ['Roy Fabrics', 'Customer · Durgapur', 'got', 32000, 'done', '06 May 2025', '20 May 2025', 'Bank transfer', 'INV-1021 · Goods sold', 'blue', 'Settled 15 days ago'],
+      'TX-2013': ['Roy Fabrics', 'Customer · Durgapur', 'got', 21000, 'done', '18 Apr 2025', '18 Apr 2025', 'NEFT', 'Payment received · INV-1012', 'blue', 'Settled 47 days ago'],
+      'TX-2037': ['Saha & Co.', 'Customer · Kolkata', 'got', 28000, 'done', '02 Jun 2025', '02 Jun 2025', 'UPI', 'Payment received · INV-1031', 'blue', 'Settled 2 days ago'],
+      'TX-2031': ['Saha & Co.', 'Customer · Kolkata', 'got', 28000, 'done', '24 May 2025', '02 Jun 2025', 'Bank transfer', 'INV-1031 · Goods sold', 'blue', 'Settled 2 days ago'],
+      'TX-2018': ['Saha & Co.', 'Customer · Kolkata', 'got', 36000, 'done', '08 May 2025', '08 May 2025', 'NEFT', 'Payment received · INV-1016', 'blue', 'Settled 27 days ago'],
+      'TX-2015': ['Saha & Co.', 'Customer · Kolkata', 'got', 36000, 'done', '25 Apr 2025', '08 May 2025', 'Bank transfer', 'INV-1016 · Goods sold', 'blue', 'Settled 27 days ago'],
+      'TX-2040': ['Mitra Textiles', 'Customer · Asansol', 'got', 52500, 'pending', '03 Jun 2025', '18 Jun 2025', 'Bank transfer', 'INV-1040 · Goods sold', 'yellow', 'Due in 14 days'],
+      'TX-2032': ['Mitra Textiles', 'Customer · Asansol', 'got', 44000, 'done', '26 May 2025', '26 May 2025', 'NEFT', 'Payment received · INV-1026', 'blue', 'Settled 9 days ago'],
+      'TX-2026': ['Mitra Textiles', 'Customer · Asansol', 'got', 44000, 'done', '14 May 2025', '26 May 2025', 'Bank transfer', 'INV-1026 · Goods sold', 'blue', 'Settled 9 days ago'],
+      'TX-2017': ['Mitra Textiles', 'Customer · Asansol', 'got', 38000, 'done', '29 Apr 2025', '29 Apr 2025', 'UPI', 'Payment received · INV-1015', 'blue', 'Settled 36 days ago'],
+      'TX-2039': ['Das Electricals', 'Customer · Kharagpur', 'got', 12000, 'done', '03 Jun 2025', '03 Jun 2025', 'UPI', 'Payment received · INV-1028', 'blue', 'Settled 1 day ago'],
+      'TX-2028': ['Das Electricals', 'Customer · Kharagpur', 'got', 12000, 'done', '19 May 2025', '03 Jun 2025', 'Bank transfer', 'INV-1028 · Goods sold', 'blue', 'Settled 1 day ago'],
+      'TX-2020': ['Das Electricals', 'Customer · Kharagpur', 'got', 9500, 'done', '05 May 2025', '05 May 2025', 'Cash', 'Payment received · INV-1014', 'blue', 'Settled 30 days ago'],
+      'TX-2010': ['Das Electricals', 'Customer · Kharagpur', 'got', 9500, 'done', '21 Apr 2025', '05 May 2025', 'Bank transfer', 'INV-1014 · Goods sold', 'blue', 'Settled 30 days ago'],
+      'TX-2042': ['MK Suppliers', 'Vendor · Howrah', 'gave', 18500, 'done', '04 Jun 2025', '04 Jun 2025', 'UPI', 'Dye stock top-up · paid in full', 'red', 'Paid 8h ago'],
+      'TX-2034': ['MK Suppliers', 'Vendor · Howrah', 'gave', 28900, 'done', '03 Jun 2025', '03 Jun 2025', 'NEFT', 'Bill payment · June order', 'red', 'Paid 1 day ago'],
+      'TX-2029': ['MK Suppliers', 'Vendor · Howrah', 'gave', 47400, 'done', '27 May 2025', '27 May 2025', 'Bank transfer', 'Grey cotton purchase · bill MK/0588', 'red', 'Paid 8 days ago'],
+      'TX-2023': ['MK Suppliers', 'Vendor · Howrah', 'gave', 47400, 'done', '12 May 2025', '12 May 2025', 'NEFT', 'Payment made · April bill', 'red', 'Paid 23 days ago'],
+    }).map(([k, v]) => [k, tx(v)]));
+    let id = Spendee.q('id') || 'TX-2038';
+    let t = TX[id] || TX['TX-2038'];
+    const isNew = Spendee.q('new') === '1';
+    if (isNew) {
+      const e = Spendee.store.get('lastEntry', null);
+      if (e) { id = e.id || 'TX-2044'; t = Object.assign({ sub: 'Customer', tone: 'yellow', status: 'pending', dueIn: 'Due ' + (e.due || '30 Jun 2025') }, e); }
+    }
+    // Bank / statement style: ?name=&amt=&type=credit|debit&mode=&date=&time=
+    const bank = !Spendee.q('id') && !isNew && !!(Spendee.q('name') || Spendee.q('amt') || Spendee.q('type'));
+    if (bank) {
+      const credit = (Spendee.q('type') || 'credit').toLowerCase() !== 'debit';
+      const amtN = +String(Spendee.q('amt') || '45000').replace(/[^\d.]/g, '') || 45000;
+      const time = Spendee.q('time') || '10:24 AM', date = Spendee.q('date') || '04 Jun 2025', mode = Spendee.q('mode') || 'UPI';
+      const nm = Spendee.q('name') || 'Dutta & Sons';
+      id = 'UTR ' + String(5156 + Math.round(amtN) % 9000).padStart(4, '0') + '8' + String(nm.length * 7919).slice(0, 5);
+      t = { bank: true, credit, name: nm, sub: (credit ? 'From' : 'To') + ' · ' + mode, type: credit ? 'got' : 'gave', amount: Math.round(amtN), status: 'done', date, due: time, method: mode,
+        note: (credit ? 'Payment received' : 'Payment sent') + ' · ' + mode, tone: credit ? 'green' : 'red', dueIn: (credit ? 'Received' : 'Paid') + ' · ' + date + ', ' + time };
+    }
+    let extra = [];
+
+    const TYPE = {
+      got: ['I Got · Receivable', 'background:#314528;color:#8df15e', '#8df15e', '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 1.5v9M2 6.5l4 4 4-4"/></svg>'],
+      gave: ['I Gave · Payable', 'background:#452626;color:#f15858', '#f15858', '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10.5v-9M2 5.5l4-4 4 4"/></svg>'],
+    };
+    const STATUS = {
+      pending: ['Pending', 'background:#454426;color:#f1ea58', '#f1ea58'],
+      overdue: ['Overdue', 'background:#452626;color:#f15858', '#f15858'],
+      done: ['Done', 'background:#314528;color:#8df15e', '#8df15e'],
+      partial: ['Part paid', 'background:#454426;color:#f1ea58', '#f1ea58'],
+    };
+
+    const slip = () => t.bank ? `<h4>YES BANK</h4><p class="c">Transaction receipt · A/c ****7643</p><div class="hr"></div>
+      <p class="c" style="color:#2b2b2b;font-weight:700;letter-spacing:1px">${t.credit ? 'CREDIT' : 'DEBIT'} ADVICE</p>
+      <div class="ln"><span>Ref</span><span>${id.replace('UTR ', '')}</span></div><div class="ln"><span>Date</span><span>${t.date}</span></div>
+      <div class="ln"><span>Time</span><span>${t.due}</span></div><div class="ln"><span>${t.credit ? 'From' : 'To'}</span><span>${t.name.slice(0, 18)}</span></div><div class="hr"></div>
+      <div class="ln"><span>Mode</span><span>${t.method}</span></div><div class="ln"><span>Status</span><span>SUCCESS</span></div><div class="hr"></div>
+      <div class="ln tot"><span>AMOUNT</span><span>${money(t.amount)}</span></div>
+      <div class="bars"></div><p class="c" style="margin-top:6px">jayanta.a@spendee</p>` : `<h4>JA TRADING CO.</h4><p class="c">Kolkata, WB · GSTIN 19AEYPA4821F1Z5</p><div class="hr"></div>
+      <p class="c" style="color:#2b2b2b;font-weight:700;letter-spacing:1px">PAYMENT RECEIPT</p>
+      <div class="ln"><span>No.</span><span>R-${id.replace('TX-', '')}</span></div><div class="ln"><span>Date</span><span>${t.date}</span></div>
+      <div class="ln"><span>${t.type === 'gave' ? 'Paid to' : 'From'}</span><span>${t.name}</span></div><div class="hr"></div>
+      <div class="ln"><span>${t.note.split('·')[0].trim().slice(0, 26)}</span><span></span></div>
+      <div class="ln"><span>Mode</span><span>${t.method}</span></div><div class="hr"></div>
+      <div class="ln tot"><span>TOTAL</span><span>${money(t.amount)}</span></div>
+      <div class="bars"></div><p class="c" style="margin-top:6px">Thank you for your business</p>`;
+
+    function render() {
+      $('eyebrow').textContent = 'Ledger · ' + id;
+      const ty = TYPE[t.type] || TYPE.got, st = STATUS[t.status];
+      $('typePill').setAttribute('style', ty[1]); $('typePill').innerHTML = ty[3] + ty[0];
+      $('statusPill').setAttribute('style', st[1]); $('statusPill').textContent = st[0];
+      $('amount').textContent = money(t.amount); $('amount').style.color = ty[2];
+      $('caption').textContent = t.dueIn; $('caption').style.color = t.status === 'overdue' ? '#f15858' : '#bdbdbd';
+      $('cName').textContent = t.name; $('cSub').textContent = t.sub;
+      $('avatar').className = 'avatar avatar--' + t.tone; $('avatar').innerHTML = PERSON;
+      $('kDate').textContent = t.date; $('kDue').textContent = t.due; $('kMethod').textContent = t.method;
+      $('kNote').textContent = t.note || '—'; $('kId').textContent = id;
+      $('settleBtn').hidden = t.status === 'done';
+      if (!t.bank) $('editBtn').href = 'add-entry.html?edit=1&id=' + id;
+      $('settleSub').textContent = t.name + ' · ' + id;
+      $('rName').textContent = 'Receipt_' + id.replace('TX-', '') + '.jpg';
+      $('receiptSub').textContent = $('rName').textContent + ' · 312 KB · ' + t.date;
+      document.querySelectorAll('.slip-src').forEach((s) => (s.innerHTML = slip()));
+      const created = t.date + ', 11:24 AM';
+      let items = isNew
+        ? [['done', 'Entry created', 'Just now · by Jayanta Adhikari'], ['now', t.status === 'done' ? 'Settled' : 'Due', t.due]]
+        : t.status === 'done'
+          ? [['done', 'Entry created', created + ' · by Jayanta Adhikari'], ['done', (t.type === 'gave' ? 'Message' : 'Reminder') + ' sent on WhatsApp', t.due + ', 10:00 AM'], ['done', 'Viewed by ' + (t.type === 'gave' ? 'contact' : 'customer'), t.due + ', 10:42 AM'], ['done', (t.type === 'gave' ? 'Paid via ' : 'Settled via ') + t.method, t.dueIn]]
+          : [['done', 'Entry created', created + ' · by Jayanta Adhikari'], ['done', (t.type === 'gave' ? 'Message' : 'Reminder') + ' sent on WhatsApp', '04 Jun 2025, 10:00 AM'], ['done', 'Viewed by ' + (t.type === 'gave' ? 'contact' : 'customer'), '04 Jun 2025, 10:42 AM'], ['now', t.status === 'overdue' ? 'Overdue' : 'Due', t.due + ' · ' + t.dueIn]];
+      if (t.bank) {
+        $('eyebrow').textContent = 'Bank · ' + id; $('rName').nextElementSibling.textContent = 'Bank advice · 84 KB · Tap to view';
+        $('typePill').innerHTML = TYPE[t.type][3] + (t.credit ? 'Received' : 'Paid');
+        $('statusPill').textContent = t.disputed ? 'Disputed' : 'Completed';
+        if (t.disputed) $('statusPill').setAttribute('style', STATUS.pending[1]);
+        $('amount').textContent = (t.credit ? '+ ' : '− ') + money(t.amount);
+        $('caption').style.color = '#bdbdbd';
+        const K = document.querySelectorAll('.kvs .k'), V = document.querySelectorAll('.kvs .v');
+        K[1].textContent = 'Time'; K[2].textContent = 'Mode'; K[4].textContent = 'Reference'; K[5].textContent = t.credit ? 'Credited to' : 'Debited from';
+        V[5].textContent = 'YES Bank ****7643';
+        $('rName').textContent = 'Bank_receipt.pdf';
+        $('receiptSub').textContent = 'Generated by YES Bank · ' + t.date;
+        items.length = 0;
+        items.push(['done', t.credit ? 'Payment initiated by ' + t.name : 'Payment initiated', t.date + ', ' + t.due + ' · ' + t.method],
+          ['done', t.credit ? 'Credited to ****7643' : 'Debited from ****7643', t.date + ', ' + t.due], ['done', 'Completed', 'Reference ' + id.replace('UTR ', '')]);
+        if (t.disputed) items.push(['now', 'Dispute raised · ticket #SP-4821', 'Just now · resolution in 2–3 working days']);
+      }
+      $('timeline').innerHTML = items.concat(extra).map(([c, a, b]) => `<li class="${c}">${a}<small>${b}</small></li>`).join('');
+    }
+    render();
+
+    // Settle
+    const amt = $('settleAmt');
+    amt.value = Spendee.fmtIN(t.amount);
+    let mode = 'UPI';
+    $('settleMode').addEventListener('select', (e) => { mode = e.detail; });
+    document.getElementById('settleSheet').addEventListener('sheet:open', () => { amt.value = Spendee.fmtIN(t.amount); $('settleHelp').textContent = 'Full balance. Lower it to record a part payment.'; });
+    amt.addEventListener('input', () => {
+      const n = +amt.value.replace(/\D/g, '').slice(0, 9); amt.value = n ? Spendee.fmtIN(n) : '';
+      $('settleHelp').textContent = n && n < t.amount ? 'Part payment · ' + money(t.amount - n) + ' will stay pending' : n > t.amount ? 'More than the balance of ' + money(t.amount) : 'Full balance. Lower it to record a part payment.';
+    });
+    $('settleConfirm').addEventListener('click', async (e) => {
+      if (!Spendee.validate($('settleSheet'))) return;
+      const n = +amt.value.replace(/\D/g, '');
+      if (n > t.amount) { amt.closest('.fg').classList.add('has-error'); let et = amt.closest('.fg').querySelector('.error-text'); et.textContent = 'Amount can’t exceed the balance of ' + money(t.amount); amt.focus(); return; }
+      await Spendee.loading(e.currentTarget, 1000);
+      Spendee.sheet.close(); Spendee.haptic();
+      if (n < t.amount) {
+        t.amount -= n; t.status = 'pending'; t.dueIn = money(n) + (t.type === 'gave' ? ' paid' : ' received') + ' · balance pending';
+        extra.push(['done', 'Part payment via ' + mode, money(n) + ' · just now']);
+        render(); Spendee.toast((t.type === 'gave' ? 'Part payment of ' + money(n) + ' paid' : 'Part payment of ' + money(n) + ' recorded'));
+      } else {
+        t.status = 'done'; t.method = mode; t.dueIn = (t.type === 'gave' ? 'Paid' : 'Settled') + ' just now';
+        extra = [];
+        render();
+        Spendee.toast(t.type === 'gave' ? 'Marked as paid' : 'Marked as settled');
+      }
+      const pill = $('statusPill'); pill.animate([{ transform: 'scale(.8)' }, { transform: 'scale(1.08)' }, { transform: 'none' }], { duration: 380, easing: 'ease-out' });
+    });
+
+    // Bank transactions: repurpose actions (Download / Share / Add to Ledger / Report)
+    if (bank) {
+      const tiles = document.querySelectorAll('.acts .tile');
+      const rem = tiles[0]; rem.removeAttribute('data-sheet');
+      rem.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5fb2f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v11.5M7 10.5l5 5 5-5M4 20.5h16"/></svg>Download';
+      rem.addEventListener('click', async () => { rem.classList.add('is-busy'); await Spendee.wait(900); rem.classList.remove('is-busy'); Spendee.toast('Receipt saved to Downloads'); });
+      $('editBtn').href = 'add-entry.html'; $('editBtn').innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f1ea58" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add to Ledger';
+      $('deleteBtn').innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f15858" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>Report';
+      $('settleBtn').hidden = true;
+      $('contactRow').href = 'bank.html';
+      document.querySelectorAll('.tabbar .tab').forEach((a) => { if (a.getAttribute('href') === 'bank.html') a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+      document.querySelector('.back').href = 'bank.html';
+    }
+    // Delete
+    $('deleteBtn').addEventListener('click', async (e) => {
+      const btn = e.currentTarget;
+      if (bank) {
+        if (t.disputed) return;
+        const ok = await Spendee.dialog({ title: 'Report a problem?', message: 'We’ll raise a dispute with YES Bank for ' + money(t.amount) + ' (' + id + '). Most are resolved in 2–3 working days.', confirm: 'Raise Dispute', cancel: 'Cancel', tone: 'info' });
+        if (!ok) return;
+        btn.classList.add('is-busy'); await Spendee.wait(900); btn.classList.remove('is-busy');
+        t.disputed = true; render();
+        btn.disabled = true; btn.setAttribute('aria-disabled', 'true'); btn.lastChild.textContent = 'Disputed'; btn.setAttribute('aria-label', 'Disputed, ticket SP-4821 open');
+        Spendee.toast('Dispute raised · ticket #SP-4821'); return;
+      }
+      const ok = await Spendee.dialog({ title: 'Delete this entry?', message: money(t.amount) + ' with ' + t.name + ' will be removed from your ledger and balances.', confirm: 'Delete', tone: 'danger' });
+      if (!ok) return;
+      btn.classList.add('is-busy'); await Spendee.wait(900);
+      location.href = 'customer-details.html?deleted=1';
+    });
+
+    // Receipt download
+    $('dlReceipt').addEventListener('click', async (e) => { await Spendee.loading(e.currentTarget, 900); Spendee.sheet.close(); Spendee.toast('Receipt saved to Photos'); });
+
+    // Personalise reminder/share copy
+    // kept in sync after part payments / settlement (called from render)
+    const REMIND_HTML = $('remindBtn').innerHTML;
+    function syncCopy() {
+      const first = t.name.split(' ')[0], link = 'spendee.link/ja/' + id.toLowerCase().replace('-', '');
+      const payable = t.type === 'gave', done = t.status === 'done';
+      const kind = payable ? 'Message' : done ? 'Thank-you note' : 'Reminder';
+      $('reminderSheet').dataset.kind = kind;
+      $('reminderSheet')._sync && $('reminderSheet')._sync();
+      $('remTitle').textContent = payable ? 'Send a message' : done ? 'Send a thank-you note' : 'Send a reminder';
+      $('remSub').textContent = t.name + ' · ' + money(t.amount) + (done ? (payable ? ' paid' : ' settled') : (payable ? ' to pay by ' : ' due ') + t.due.slice(0, 6));
+      const what = (t.note || '').split('·')[0].trim();
+      $('remText').textContent = payable
+        ? (done
+          ? `Hello ${t.name}, confirming we've paid ${money(t.amount)}${what ? ' (' + what.toLowerCase() + ')' : ''} via ${t.method}. Payment details: ${link}. Jayanta, JA Trading Co.`
+          : `Hello ${t.name}, confirming that ${money(t.amount)}${what ? ' (' + what.toLowerCase() + ')' : ''} is scheduled to be paid by ${t.due}. We'll share the payment reference once it's sent. Jayanta, JA Trading Co.`)
+        : done
+          ? `Hello ${t.name}, thank you for settling ${money(t.amount)} with JA Trading Co. Your receipt: ${link}. Jayanta`
+          : `Hello ${t.name}, a friendly reminder that ${money(t.amount)} is due on ${t.due} with JA Trading Co. Pay via UPI: ${link}. Jayanta`;
+      $('shareDoc').textContent = id + ' · ' + t.name;
+      if (!t.bank) { const rb = $('remindBtn'); rb.innerHTML = (payable ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5fb2f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5h16A1.5 1.5 0 0 1 21.5 6v9.5A1.5 1.5 0 0 1 20 17h-11l-4.5 3.5V17H4a1.5 1.5 0 0 1-1.5-1.5V6A1.5 1.5 0 0 1 4 4.5Z"/><path d="M7.5 9.5h9M7.5 12.5h5.5"/></svg>Message' : REMIND_HTML); rb.setAttribute('aria-label', payable ? 'Message ' + t.name : done ? 'Send thank-you note' : 'Send payment reminder'); }
+      // settle sheet wording
+      $('settleTitle').textContent = payable ? 'Mark as paid' : 'Mark as settled';
+      $('settleLbl').textContent = payable ? 'Amount paid' : 'Amount received';
+      $('settleAmt').setAttribute('aria-label', payable ? 'Amount paid' : 'Amount received');
+      $('settleBtn').querySelector('span').textContent = payable ? 'Mark as Paid' : 'Mark as Settled';
+      $('settleConfirm').querySelector('span').textContent = payable ? 'Confirm Payment' : 'Confirm Settlement';
+    }
+    syncCopy();
+    const _render = render; render = function () { _render(); syncCopy(); };
+    document.getElementById('reminderSheet').addEventListener('reminder:done', (e) => { extra.push(['done', ($('reminderSheet').dataset.kind || 'Reminder') + ' ' + (e.detail.when === 'now' ? 'sent' : 'scheduled') + ' on ' + e.detail.via, 'Just now']); render(); });
+
+    if (isNew) setTimeout(() => Spendee.toast('Entry saved'), 400);
+    if (Spendee.q('updated') === '1') setTimeout(() => Spendee.toast('Entry updated'), 400);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Invoice Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  [hidden]:not(.sheet) { display: none !important; }
+  .page--no-nav { padding-bottom: 140px; }
+  .toast { position: fixed; bottom: 128px; }
+  .pv-cap { display: flex; align-items: center; gap: 10px; margin: -8px 2px 14px; font-size: 12.5px; color: #9a9a9a; }
+  .pv-cap .pill { height: 24px; padding: 0 8px; border-radius: 6px; background: #454426; color: #f1ea58; font-size: 12px; display: inline-flex; align-items: center; letter-spacing: .3px; }
+  .pv-cap .grow { text-align: right; }
+
+  /* Paper document */
+  .paper { background: #fff; color: #1d1d1f; border-radius: 14px; padding: 18px 16px 16px; box-shadow: 0 18px 40px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.06); font-size: 9.5px; line-height: 1.4; letter-spacing: .1px; overflow: hidden; position: relative; }
+  .paper::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: linear-gradient(90deg, #5fb2f1, #8df15e); }
+  .pp-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .pp-brand { display: flex; gap: 8px; align-items: flex-start; }
+  .pp-logo { width: 30px; height: 30px; border-radius: 8px; background: #132430; color: #c8e7ff; display: grid; place-items: center; font-weight: 700; font-size: 11px; letter-spacing: .5px; flex-shrink: 0; }
+  .pp-brand b { display: block; font-size: 12.5px; font-weight: 700; line-height: 1.2; color: #000; }
+  .pp-brand small, .pp-title small { display: block; font-size: 8.5px; color: #6b6b6b; line-height: 1.35; }
+  .pp-title { text-align: right; white-space: nowrap; }
+  .pp-brand small { white-space: nowrap; }
+  .pp-title b { display: block; font-size: 11px; font-weight: 700; letter-spacing: 1.4px; color: #2077ba; }
+  .pp-title .no { font-size: 11px; color: #000; font-weight: 600; margin-top: 2px; }
+  .pp-meta { display: grid; grid-template-columns: 1fr 1fr 1.1fr; margin-top: 14px; border-radius: 8px; background: #f3f5f7; }
+  .pp-meta div { padding: 7px 9px; }
+  .pp-meta div + div { border-left: 1px solid #e3e6ea; }
+  .lbl { display: block; font-size: 7.5px; text-transform: uppercase; letter-spacing: .8px; color: #8a8f96; }
+  .pp-meta b { display: block; font-size: 10px; font-weight: 600; color: #000; margin-top: 1px; white-space: nowrap; }
+  .pp-bill { display: grid; grid-template-columns: 1.4fr 1fr; gap: 10px; margin-top: 12px; }
+  .pp-bill b { display: block; font-size: 11px; font-weight: 700; color: #000; margin-top: 2px; }
+  .pp-bill p { color: #4a4a4a; font-size: 9px; }
+  table.pp-items { width: 100%; border-collapse: collapse; margin-top: 12px; font-variant-numeric: tabular-nums; }
+  .pp-items th { font-size: 7.5px; text-transform: uppercase; letter-spacing: .6px; color: #fff; background: #132430; font-weight: 600; padding: 6px 4px; text-align: right; }
+  .pp-items th:first-child { border-radius: 6px 0 0 6px; text-align: left; padding-left: 7px; }
+  .pp-items th:last-child { border-radius: 0 6px 6px 0; padding-right: 7px; }
+  .pp-items th:nth-child(2) { text-align: left; }
+  .pp-items td { padding: 7px 4px; text-align: right; border-bottom: 1px solid #eceef1; vertical-align: top; font-size: 9.5px; color: #1d1d1f; }
+  .pp-items td:first-child { text-align: left; padding-left: 7px; color: #8a8f96; }
+  .pp-items td:nth-child(2) { text-align: left; font-weight: 600; color: #000; }
+  .pp-items td:last-child { padding-right: 7px; font-weight: 600; }
+  .pp-items td small { display: block; font-weight: 400; color: #8a8f96; font-size: 8px; }
+  .pp-sum { display: grid; grid-template-columns: 1fr 150px; gap: 10px; margin-top: 10px; }
+  .pp-words { color: #4a4a4a; font-size: 8.5px; align-self: end; padding-bottom: 4px; }
+  .pp-words b { display: block; color: #000; font-weight: 600; font-size: 9px; margin-top: 2px; }
+  .pp-lines div { display: flex; justify-content: space-between; padding: 2.5px 0; font-variant-numeric: tabular-nums; }
+  .pp-lines span:first-child { color: #6b6b6b; }
+  .pp-lines .tot { margin-top: 4px; padding: 6px 8px; border-radius: 6px; background: #132430; color: #fff; font-weight: 700; font-size: 11px; }
+  .pp-lines .tot span:first-child { color: #c8e7ff; }
+  .pp-foot { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: end; margin-top: 14px; padding-top: 12px; border-top: 1px dashed #d5d9de; }
+  .pp-upi { display: flex; gap: 9px; align-items: center; }
+  .pp-qr { width: 66px; height: 66px; padding: 4px; border-radius: 6px; box-shadow: inset 0 0 0 1px #e3e6ea; flex-shrink: 0; }
+  .pp-upi b { display: block; font-size: 10px; font-weight: 700; color: #000; }
+  .pp-upi small { display: block; color: #6b6b6b; font-size: 8.5px; }
+  .pp-upi .upi-amt { display: inline-block; margin-top: 4px; padding: 2px 6px; border-radius: 4px; background: #e8f5e0; color: #2e7d0e; font-weight: 700; font-size: 9px; }
+  .pp-sign { text-align: center; width: 104px; }
+  .pp-sign svg { margin: 0 auto -2px; }
+  .pp-sign .ln { border-top: 1px solid #1d1d1f; padding-top: 3px; font-size: 8px; color: #4a4a4a; }
+  .pp-sign .for { font-size: 8px; color: #6b6b6b; margin-bottom: 2px; }
+  .pp-notes { margin-top: 12px; font-size: 8.5px; color: #6b6b6b; }
+  .pp-notes b { color: #1d1d1f; font-weight: 600; }
+  .pp-brandline { margin-top: 10px; text-align: center; font-size: 7.5px; color: #a0a4aa; letter-spacing: .4px; }
+
+  .cta-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .cta-pair .btn { font-size: 16px; gap: 7px; }
+  .ch-icon { width: 36px; height: 36px; }
+  .link-row { display: flex; align-items: center; gap: 14px; margin-top: 16px; padding: 12px 16px; border-radius: 16px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .link-row .switch { margin-left: auto; }
+  /* ledger sheets */
+  .sheet-lbl { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #8a8a8a; margin: 20px 0 10px 4px; }
+  .sheet-lbl:first-of-type { margin-top: 4px; }
+  .sheet .search { height: 48px; }
+  .sheet .field { height: 50px; }
+  .sheet .empty-state { padding: 22px 10px 6px; }
+  .sheet .empty-state p { margin-bottom: 14px; }
+  .sheet .options .option { position: relative; }
+  .bubble { position: relative; background: #1d3a26; color: #e3f1dc; border-radius: 16px 16px 16px 4px; padding: 12px 14px 8px; font-size: 13.5px; line-height: 1.5; box-shadow: inset 0 0 0 1px rgba(141,241,94,.14); transition: background var(--dur), color var(--dur); }
+  .bubble.is-sms { background: #1d3548; color: #dbe9f4; box-shadow: inset 0 0 0 1px rgba(95,178,241,.18); }
+  .bubble__meta { display: flex; justify-content: flex-end; align-items: center; gap: 4px; font-size: 10.5px; color: rgba(255,255,255,.5); margin-top: 4px; }
+  .share-doc { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .share-doc__ic { width: 38px; height: 44px; border-radius: 8px; background: #452626; color: #f15858; display: grid; place-items: center; flex-shrink: 0; font: 600 9px/1 var(--font-ui); letter-spacing: .4px; }
+  .share-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 18px; }
+  .share-t { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 4px 0; font-size: 11.5px; color: #d4d4d4; letter-spacing: .2px; text-align: center; white-space: nowrap; }
+  .share-i { position: relative; width: 56px; height: 56px; border-radius: 18px; display: grid; place-items: center; box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); }
+  .share-t.is-busy .share-i svg { opacity: 0; }
+  .share-t.is-busy .share-i::after { content: ''; position: absolute; left: 50%; top: 50%; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; border: 2.5px solid rgba(255,255,255,.2); border-top-color: currentColor; animation: spin 700ms linear infinite; }
+  .undo-toast { position: fixed; left: 50%; bottom: 128px; z-index: 960; display: flex; align-items: center; gap: 14px; padding: 6px 6px 6px 16px; border-radius: 14px; background: rgba(38,38,38,.96); color: #fff; font-size: 13.5px; letter-spacing: .3px; white-space: nowrap; box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 10px 30px rgba(0,0,0,.5); transform: translate(-50%, 16px); opacity: 0; transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out); }
+  .undo-toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .undo-toast button { height: 34px; padding: 0 14px; border-radius: 9px; background: #132430; color: #5fb2f1; font-weight: 600; font-size: 13.5px; box-shadow: inset 0 0 0 1px rgba(95,178,241,.35); }
+  .cust-list { max-height: 420px; overflow-y: auto; scrollbar-width: none; margin: 14px -4px 0; padding: 0 4px 2px; }
+  .cust-list .avatar { width: 38px; height: 38px; }
+  .cust-list .option__meta { font-size: 13px; font-weight: 600; flex-shrink: 0; }
+  .option--danger .option__title { color: #f15858; }
+  .qd { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .qd button { height: 58px; border-radius: 14px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 14px; font-weight: 600; color: #f0f0f0; transition: box-shadow var(--dur), background var(--dur); }
+  .qd button small { font-size: 11px; font-weight: 500; color: #8a8a8a; }
+  .qd button[aria-pressed="true"] { background: #1c2a36; box-shadow: inset 0 0 0 2px #5fb2f1; }
+  .cal { margin-top: 16px; padding: 14px 12px 10px; border-radius: 20px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .cal__head { display: flex; align-items: center; justify-content: space-between; padding: 0 4px 10px; }
+  .cal__month { font-size: 16px; font-weight: 600; }
+  .cal__nav { width: 36px; height: 36px; border-radius: 10px; background: #1a1a1a; color: #5fb2f1; display: grid; place-items: center; }
+  .cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 2px; text-align: center; }
+  .cal__wd { font-size: 11px; color: #6b6b6b; letter-spacing: .6px; padding: 4px 0 8px; }
+  .cal__d { height: 40px; border-radius: 12px; font-size: 15px; color: #e6e6e6; position: relative; font-variant-numeric: tabular-nums; transition: background 160ms; }
+  .cal__d:hover { background: rgba(255,255,255,.05); }
+  .cal__d.is-today::after { content: ''; position: absolute; left: 50%; bottom: 5px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: #5fb2f1; }
+  .cal__d[aria-selected="true"] { background: #c8e7ff; color: #000; font-weight: 600; }
+  .cal__d[aria-selected="true"]::after { background: #000; }
+  .cal__d[disabled] { color: #4a4a4a; pointer-events: none; }
+</style>
+</head>
+<body>
+<main class="page page--no-nav" aria-label="Invoice preview">
+  <header class="appbar">
+    <a class="back tap" href="create-invoice.html?edit=1" data-go="back" aria-label="Back to edit"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg></a>
+    <div class="appbar__titles"><span class="appbar__eyebrow" id="eyebrow">Billing · INV-1043</span><h1 class="appbar__title">Preview</h1></div>
+    <a class="appbar__action tap" href="create-invoice.html?edit=1" data-go="back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>Edit</a>
+  </header>
+
+  <p class="pv-cap enter"><span class="pill">Draft</span><span>Not sent yet</span><span class="grow">Page 1 of 1</span></p>
+
+  <article class="paper enter" style="--i:1" aria-label="Invoice document">
+    <header class="pp-head">
+      <div class="pp-brand">
+        <span class="pp-logo">JA</span>
+        <div><b>JA Trading Co.</b><small>Kolkata, West Bengal</small><small>GSTIN 19AEYPA4821F1Z5</small><small>+91 98765 43210</small></div>
+      </div>
+      <div class="pp-title"><b>TAX INVOICE</b><small class="no" id="pNo">INV-1043</small><small>Original for recipient</small></div>
+    </header>
+
+    <div class="pp-meta">
+      <div><span class="lbl">Invoice date</span><b id="pDate">04 Jun 2025</b></div>
+      <div><span class="lbl">Due date</span><b id="pDue">19 Jun 2025</b></div>
+      <div><span class="lbl">Amount due</span><b id="pDueAmt" style="color:#2077ba">₹ 35,770</b></div>
+    </div>
+
+    <div class="pp-bill">
+      <div><span class="lbl">Bill to</span><b id="pName">Sharma Textiles</b><p id="pBiz">Kolkata</p><p id="pGst">GSTIN 19ABCFS6021K1Z8</p><p id="pPhone">+91 98300 21367</p></div>
+      <div><span class="lbl">Place of supply</span><b id="pPos" style="font-size:10px">West Bengal (19)</b><p>Terms: <span id="pTerms">Net 15</span></p><p>Reverse charge: No</p></div>
+    </div>
+
+    <table class="pp-items">
+      <thead><tr><th>#</th><th>Item</th><th>Qty</th><th>Rate</th><th>GST</th><th>Amount</th></tr></thead>
+      <tbody id="pItems"></tbody>
+    </table>
+
+    <div class="pp-sum">
+      <p class="pp-words">Amount in words<b id="pWords">Thirty-five thousand seven hundred seventy only</b></p>
+      <div class="pp-lines">
+        <div><span>Subtotal</span><span id="pSub">₹ 33,500</span></div>
+        <div id="pDiscRow"><span>Discount</span><span id="pDisc">− ₹ 0</span></div>
+        <div><span>CGST</span><span id="pCgst">₹ 1,135</span></div>
+        <div><span>SGST</span><span id="pSgst">₹ 1,135</span></div>
+        <div class="tot"><span>Total</span><span id="pTotal">₹ 35,770</span></div>
+      </div>
+    </div>
+
+    <div class="pp-foot">
+      <div class="pp-upi" id="pUpi">
+        <svg class="pp-qr" id="qr" viewBox="0 0 29 29" shape-rendering="crispEdges" role="img" aria-label="UPI QR code"></svg>
+        <div><b>Scan to pay with UPI</b><small>jayanta.a@spendee</small><small>GPay · PhonePe · Paytm · BHIM</small><span class="upi-amt" id="pUpiAmt">₹ 35,770</span></div>
+      </div>
+      <div class="pp-sign">
+        <p class="for">For JA Trading Co.</p>
+        <svg width="86" height="30" viewBox="0 0 86 30" fill="none" stroke="#1f3b8a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 22c5-9 9-16 12-15s-4 17-1 17 7-13 10-13-1 11 2 11 5-8 8-8 0 6 3 6c4 0 5-9 9-9 2 0 0 7 3 7 4 0 8-6 14-8M58 8c6 1 14 1 24-2"/></svg>
+        <p class="ln">Authorised Signatory</p>
+      </div>
+    </div>
+    <p class="pp-notes"><b>Notes:</b> <span id="pNotes">Thank you for your business. Payment due within 15 days of invoice date.</span></p>
+    <p class="pp-brandline">Generated with Spendee · This is a computer-generated invoice</p>
+  </article>
+
+  <div class="cta-bar">
+    <div class="cta-pair">
+      <button type="button" class="btn btn--glass tap" id="dl"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v11.5M7 10.5l5 5 5-5M4 20.5h16"/></svg><span>Download PDF</span></button>
+      <button type="button" class="btn btn--primary tap" data-sheet="sendSheet" id="sendOpen"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2.5 10.5 13.5M21.5 2.5l-7 19-4-8-8-4 19-7Z"/></svg><span>Send Invoice</span></button>
+    </div>
+  </div>
+  <div class="toast" role="status" aria-live="polite"></div>
+</main>
+
+<section class="sheet" id="sendSheet" aria-labelledby="sendTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="sendTitle">Send invoice</p><p class="sheet__sub" id="sendSub">INV-1043 · ₹ 35,770 to Sharma Textiles</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <p class="sheet-lbl">Send via</p>
+  <div class="options" data-options id="channel" aria-label="Channel">
+    <button type="button" class="option tap" data-value="WhatsApp" aria-checked="true"><span class="menu__icon icon-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2A9.8 9.8 0 0 0 3.6 17l-1.4 4.8 5-1.3A9.8 9.8 0 1 0 12 2.2Zm0 1.9a7.9 7.9 0 1 1-4 14.7l-.3-.2-3 .8.8-2.9-.2-.3A7.9 7.9 0 0 1 12 4.1Z"/></svg></span><span class="option__body"><span class="option__title">WhatsApp</span><span class="option__sub num" data-to="phone">+91 98300 21367</span></span><span class="option__radio"></span></button>
+    <button type="button" class="option tap" data-value="SMS"><span class="menu__icon icon-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5h16A1.5 1.5 0 0 1 21.5 6v9.5A1.5 1.5 0 0 1 20 17h-11l-4.5 3.5V17H4a1.5 1.5 0 0 1-1.5-1.5V6A1.5 1.5 0 0 1 4 4.5Z"/></svg></span><span class="option__body"><span class="option__title">SMS</span><span class="option__sub num" data-to="phone">+91 98300 21367</span></span><span class="option__radio"></span></button>
+    <button type="button" class="option tap" data-value="Email"><span class="menu__icon icon-yellow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6.5 9 6.5 9-6.5"/></svg></span><span class="option__body"><span class="option__title">Email</span><span class="option__sub" data-to="email">accounts@sharmatextiles.in</span></span><span class="option__radio"></span></button>
+  </div>
+  <p class="sheet-lbl">Message preview</p>
+  <div class="bubble" id="bubble"><span id="msg"></span><span class="bubble__meta"><span id="via">WhatsApp</span> · PDF attached</span></div>
+  <div class="link-row">
+    <span class="menu__icon icon-yellow"><svg width="16" height="17" viewBox="0 0 15 17" fill="currentColor"><path d="M0 0h6v6H0zM2 2v2h2V2zM9 0h6v6H9zm2 2v2h2V2zM0 9h6v6H0zm2 2v2h2v-2zM8 8h2v2H8zm3 0h4v2h-2v2h-2zM8 11h2v4H8zm3 2h4v4h-2v-2h-2z"/></svg></span>
+    <span><span class="option__title" id="plLbl">Attach payment link</span><span class="option__sub">Customer pays by UPI in one tap</span></span>
+    <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="plLbl" id="payLink"></button>
+  </div>
+  <button type="button" class="btn btn--primary tap" id="send" style="margin-top:20px"><span id="sendLbl">Send on WhatsApp</span></button>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const $ = (id) => document.getElementById(id);
+    const money = (n) => '₹ ' + Spendee.fmtIN(n);
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const FALLBACK = {
+      no: 'INV-1043', date: '04 Jun 2025', due: '19 Jun 2025', discount: 0, upi: true, status: 'draft',
+      notes: 'Thank you for your business. Payment due within 15 days of invoice date.',
+      customer: { id: 'sharma-textiles', name: 'Sharma Textiles', business: 'Sharma Textiles', contact: 'Rakesh Sharma', city: 'Kolkata', gstin: '19ABCFS6021K1Z8', phone: '+91 98300 21367', email: 'accounts@sharmatextiles.in' },
+      items: [{ name: 'Cotton fabric roll', qty: 20, rate: 1250, gst: 5 }, { name: 'Dye pack — indigo', qty: 10, rate: 850, gst: 12 }],
+    };
+    const d = Object.assign({}, FALLBACK, Spendee.store.get('invoiceDraft', null) || {});
+    if (!d.customer) d.customer = FALLBACK.customer;
+    if (!d.items || !d.items.length) d.items = FALLBACK.items;
+
+    const sub = d.items.reduce((a, i) => a + i.qty * i.rate, 0);
+    const disc = Math.min(d.discount || 0, sub), factor = sub ? (sub - disc) / sub : 0;
+    const gst = Math.round(d.items.reduce((a, i) => a + i.qty * i.rate * i.gst / 100, 0) * factor);
+    const cgst = Math.round(gst / 2), sgst = gst - cgst, total = sub - disc + gst;
+
+    // Number to words (Indian system)
+    const ONES = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+    const TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+    const two = (n) => n < 20 ? ONES[n] : TENS[Math.floor(n / 10)] + (n % 10 ? '-' + ONES[n % 10] : '');
+    const three = (n) => (n >= 100 ? ONES[Math.floor(n / 100)] + ' hundred' + (n % 100 ? ' ' : '') : '') + (n % 100 ? two(n % 100) : '');
+    const words = (n) => {
+      if (!n) return 'Zero';
+      const parts = []; const crore = Math.floor(n / 1e7), lakh = Math.floor(n / 1e5) % 100, th = Math.floor(n / 1000) % 100, rest = n % 1000;
+      if (crore) parts.push(three(crore) + ' crore'); if (lakh) parts.push(two(lakh) + ' lakh'); if (th) parts.push(two(th) + ' thousand'); if (rest) parts.push(three(rest));
+      const s = parts.join(' '); return s.charAt(0).toUpperCase() + s.slice(1) + ' only';
+    };
+
+    const c = d.customer;
+    $('eyebrow').textContent = 'Billing · ' + d.no; $('pNo').textContent = d.no;
+    $('pDate').textContent = d.date; $('pDue').textContent = d.due; $('pDueAmt').textContent = money(total);
+    $('pName').textContent = c.name; $('pBiz').textContent = [c.business !== c.name ? c.business : '', c.city].filter(Boolean).join(' · ');
+    $('pGst').textContent = c.gstin ? 'GSTIN ' + c.gstin : 'Unregistered (no GSTIN)'; $('pPhone').textContent = c.phone || '';
+    const STATES = { '19': 'West Bengal (19)', '24': 'Gujarat (24)', '27': 'Maharashtra (27)', '33': 'Tamil Nadu (33)', '07': 'Delhi (07)', '08': 'Rajasthan (08)' };
+    $('pPos').textContent = STATES[(c.gstin || '19').slice(0, 2)] || 'West Bengal (19)';
+    const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const pd = (t) => { const m = String(t).match(/(\d+)\s+(\w{3})\w*\s+(\d{4})/); return m ? new Date(+m[3], MON.indexOf(m[2]), +m[1]) : NaN; };
+    const net = Math.round((pd(d.due) - pd(d.date)) / 864e5);
+    const hsn = (n) => /dye|chem/i.test(n) ? '3204' : /thread|poly/i.test(n) ? '5401' : /carton|pack(ag)/i.test(n) ? '4819' : /silk/i.test(n) ? '5007' : /fabric|cotton|roll|yard/i.test(n) ? '5208' : '9988';
+    $('pTerms').textContent = isNaN(net) ? 'Net 15' : net <= 0 ? 'Due on receipt' : 'Net ' + net;
+    $('pItems').innerHTML = d.items.map((i, k) => `<tr><td>${k + 1}</td><td>${esc(i.name)}<small>HSN ${hsn(i.name)}</small></td><td>${Spendee.fmtIN(i.qty)}</td><td>${Spendee.fmtIN(i.rate)}</td><td>${i.gst}%</td><td>${Spendee.fmtIN(i.qty * i.rate)}</td></tr>`).join('');
+    $('pSub').textContent = money(sub); $('pDisc').textContent = '− ' + money(disc); $('pDiscRow').hidden = !disc;
+    $('pCgst').textContent = money(cgst); $('pSgst').textContent = money(sgst); $('pTotal').textContent = money(total);
+    $('pWords').textContent = words(total); $('pUpiAmt').textContent = money(total);
+    $('pNotes').textContent = d.notes || '—';
+    $('pUpi').style.visibility = d.upi === false ? 'hidden' : '';
+
+    // Deterministic QR-style pattern
+    (function () {
+      const N = 29; let seed = 1043; const rnd = () => ((seed = (seed * 9301 + 49297) % 233280) / 233280);
+      let p = '';
+      const finder = (x, y) => { p += `M${x} ${y}h7v7h-7zM${x + 1} ${y + 1}v5h5v-5zM${x + 2} ${y + 2}h3v3h-3z`; };
+      const inFinder = (x, y) => (x < 8 && y < 8) || (x > N - 9 && y < 8) || (x < 8 && y > N - 9);
+      for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) if (!inFinder(x, y) && rnd() > .52) p += `M${x} ${y}h1v1h-1z`;
+      finder(0, 0); finder(N - 7, 0); finder(0, N - 7);
+      $('qr').innerHTML = `<rect width="29" height="29" fill="#fff"/><path fill="#111" fill-rule="evenodd" d="${p}"/>`;
+    })();
+
+    // Download
+    $('dl').addEventListener('click', async (e) => { await Spendee.loading(e.currentTarget, 1100); Spendee.toast(d.no + '.pdf saved to Downloads'); });
+
+    // Send sheet
+    let channel = 'WhatsApp';
+    const first = c.contact ? c.contact.split(' ')[0] : c.name;
+    const phone = c.phone || '+91 98300 21367', email = c.email || 'accounts@' + (c.business || 'customer').toLowerCase().replace(/[^a-z]/g, '') + '.com';
+    document.querySelectorAll('[data-to="phone"]').forEach((el) => (el.textContent = phone));
+    document.querySelector('[data-to="email"]').textContent = email;
+    $('sendSub').textContent = d.no + ' · ' + money(total) + ' to ' + c.name;
+    $('payLink').setAttribute('aria-checked', String(d.upi !== false));
+    const renderMsg = () => {
+      const link = $('payLink').getAttribute('aria-checked') === 'true';
+      const body = channel === 'Email'
+        ? `Subject: Invoice ${d.no} from JA Trading Co.\n\nHi ${first}, please find invoice ${d.no} for ${money(total)} attached, due on ${d.due}.`
+        : `Hi ${first}, here's invoice ${d.no} from JA Trading Co. for ${money(total)}, due ${d.due}.`;
+      $('msg').textContent = body + (link ? ` Pay instantly: spendee.link/ja/${d.no.toLowerCase()}.` : '') + ' Regards, Jayanta, JA Trading Co.';
+      $('msg').style.whiteSpace = 'pre-line';
+      $('via').textContent = channel;
+      $('bubble').classList.toggle('is-sms', channel !== 'WhatsApp');
+      $('sendLbl').textContent = channel === 'Email' ? 'Send Email' : channel === 'SMS' ? 'Send SMS' : 'Send on WhatsApp';
+    };
+    $('channel').addEventListener('select', (e) => { channel = e.detail; renderMsg(); });
+    $('payLink').addEventListener('click', () => setTimeout(renderMsg));
+    renderMsg();
+
+    $('send').addEventListener('click', async (e) => {
+      await Spendee.loading(e.currentTarget, 1300);
+      Spendee.store.set('invoiceDraft', Object.assign({}, d, { status: 'sent', channel, upi: $('payLink').getAttribute('aria-checked') === 'true', totals: { sub, disc, cgst, sgst, gst, total }, sentTo: channel === 'Email' ? email : phone }));
+      location.href = 'invoice-detail.html?id=' + encodeURIComponent(d.no) + '&sent=1';
+    });
+  })();
+</script>
+</body>
+</html>

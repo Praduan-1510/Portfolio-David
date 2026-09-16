@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Scan Receipt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+<style>
+  [hidden]:not(.sheet) { display: none !important; }
+  .toast { position: fixed; bottom: 140px; z-index: 120; }
+  main.page { padding: 0; }
+  /* ---------- Camera ---------- */
+  .cam { position: relative; height: 100vh; min-height: 720px; overflow: hidden; background: #0b0907; }
+  body.capture .cam { height: 874px; border-radius: 46px; }
+  .scene { position: absolute; inset: -20px; background:
+      radial-gradient(60% 45% at 50% 48%, rgba(255,236,200,.16), transparent 70%),
+      repeating-linear-gradient(94deg, rgba(255,255,255,.018) 0 3px, transparent 3px 11px),
+      radial-gradient(130% 90% at 50% 45%, #4a3d2f 0%, #2a2219 50%, #0d0a07 100%);
+    animation: drift 6s ease-in-out infinite alternate; }
+  @keyframes drift { from { transform: translate(-2px, 1px) rotate(-.2deg); } to { transform: translate(2px, -2px) rotate(.2deg); } }
+  .paper { position: absolute; left: 50%; top: 172px; width: 226px; height: 372px; margin-left: -113px; transform: perspective(900px) rotateX(9deg) rotate(-4deg); background: linear-gradient(180deg, #efeadf, #e2dccd); color: #3a3833; box-shadow: 0 30px 50px rgba(0,0,0,.55), 0 4px 10px rgba(0,0,0,.4); padding: 20px 18px; font: 600 10px/1.5 ui-monospace, Menlo, monospace; filter: blur(.25px);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 7px), 94% 100%, 88% calc(100% - 7px), 82% 100%, 76% calc(100% - 7px), 70% 100%, 64% calc(100% - 7px), 58% 100%, 52% calc(100% - 7px), 46% 100%, 40% calc(100% - 7px), 34% 100%, 28% calc(100% - 7px), 22% 100%, 16% calc(100% - 7px), 10% 100%, 4% calc(100% - 7px), 0 100%); }
+  .paper h4 { margin: 0; text-align: center; font-size: 14px; letter-spacing: 1.5px; }
+  .paper .c { text-align: center; color: #77736a; font-size: 8.5px; font-weight: 500; }
+  .paper .hr { border-top: 1.5px dashed #a19c90; margin: 8px 0; }
+  .paper .ln { display: flex; justify-content: space-between; }
+  .paper .tot { font-size: 12.5px; font-weight: 800; margin-top: 2px; }
+  .paper .bars { height: 26px; margin-top: 10px; background: repeating-linear-gradient(90deg, #3a3833 0 2px, transparent 2px 4px, #3a3833 4px 5px, transparent 5px 7px, #3a3833 7px 10px, transparent 10px 11px); }
+  .vignette { position: absolute; inset: 0; background: radial-gradient(110% 80% at 50% 45%, transparent 55%, rgba(0,0,0,.55)); pointer-events: none; }
+  .frame { position: absolute; left: 44px; top: 142px; width: 314px; height: 438px; border-radius: 24px; box-shadow: 0 0 0 1000px rgba(0,0,0,.42); pointer-events: none; }
+  .corner { position: absolute; width: 36px; height: 36px; border: 0 solid #fff; transition: border-color 300ms, transform 400ms var(--ease-spring); }
+  .corner.tl { left: -2px; top: -2px; border-width: 4px 0 0 4px; border-top-left-radius: 24px; }
+  .corner.tr { right: -2px; top: -2px; border-width: 4px 4px 0 0; border-top-right-radius: 24px; }
+  .corner.bl { left: -2px; bottom: -2px; border-width: 0 0 4px 4px; border-bottom-left-radius: 24px; }
+  .corner.br { right: -2px; bottom: -2px; border-width: 0 4px 4px 0; border-bottom-right-radius: 24px; }
+  .cam.detected .corner { border-color: #8df15e; }
+  .cam.detected .corner.tl { transform: translate(6px, 6px); } .cam.detected .corner.tr { transform: translate(-6px, 6px); }
+  .cam.detected .corner.bl { transform: translate(6px, -6px); } .cam.detected .corner.br { transform: translate(-6px, -6px); }
+  .scanline { position: absolute; left: 14px; right: 14px; top: 10px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, transparent, #5fb2f1 20%, #c8e7ff 50%, #5fb2f1 80%, transparent); box-shadow: 0 0 14px 3px rgba(95,178,241,.55); animation: scan 2.4s ease-in-out infinite alternate; }
+  .scanline::after { content: ''; position: absolute; left: 0; right: 0; bottom: 2px; height: 60px; background: linear-gradient(0deg, rgba(95,178,241,.16), transparent); }
+  @keyframes scan { from { top: 10px; } to { top: 424px; } }
+  body.capture .scanline { top: 170px; }
+  .cam.frozen .scanline, .cam.frozen .scene { animation-play-state: paused; }
+  .cam.frozen .scanline { opacity: 0; transition: opacity 300ms; }
+  .topbar { position: absolute; left: 0; right: 0; top: 0; padding: 50px 24px 0; display: flex; align-items: center; justify-content: space-between; z-index: 5; }
+  .glass { width: 44px; height: 44px; border-radius: 50%; background: rgba(20,20,20,.55); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: inset 0 0 0 1px rgba(255,255,255,.14); display: grid; place-items: center; color: #fff; }
+  .glass[aria-pressed="true"] { background: #f1ea58; color: #000; }
+  .topbar__title { text-align: center; }
+  .topbar__title b { display: block; font-size: 17px; font-weight: 600; letter-spacing: .3px; }
+  .topbar__title small { display: block; font-size: 11px; letter-spacing: .9px; text-transform: uppercase; color: #cfcfcf; margin-top: 2px; }
+  .hint { position: absolute; left: 50%; top: 600px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 14px; border-radius: 17px; background: rgba(20,20,20,.6); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12); font-size: 13px; letter-spacing: .3px; white-space: nowrap; z-index: 5; transition: color 300ms; }
+  .hint i { width: 8px; height: 8px; border-radius: 50%; background: #5fb2f1; box-shadow: 0 0 0 4px rgba(95,178,241,.25); animation: pulse 1.4s ease-in-out infinite; }
+  .cam.detected .hint i { background: #8df15e; box-shadow: 0 0 0 4px rgba(141,241,94,.25); }
+  @keyframes pulse { 50% { transform: scale(.7); } }
+  .controls { position: absolute; left: 0; right: 0; bottom: 0; height: 190px; padding: 0 40px 44px; display: flex; align-items: flex-end; justify-content: space-between; background: linear-gradient(180deg, transparent, rgba(0,0,0,.85) 55%); z-index: 5; }
+  .ctl { display: flex; flex-direction: column; align-items: center; gap: 7px; font-size: 11.5px; color: #d4d4d4; width: 60px; }
+  .ctl .glass { width: 52px; height: 52px; border-radius: 16px; }
+  .shutter { width: 82px; height: 82px; border-radius: 50%; box-shadow: inset 0 0 0 4px #fff; display: grid; place-items: center; margin-bottom: 4px; }
+  .shutter span { width: 64px; height: 64px; border-radius: 50%; background: #fff; transition: transform 160ms var(--ease-out); }
+  .shutter:active span { transform: scale(.88); }
+  .flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 20; }
+  .flash.go { animation: flash 420ms ease-out; }
+  @keyframes flash { 0% { opacity: 0; } 15% { opacity: .95; } 100% { opacity: 0; } }
+  .proc { position: absolute; left: 0; right: 0; bottom: 0; z-index: 10; background: #1c1c1c; border-radius: 28px 28px 0 0; padding: 12px 24px 44px; box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 -20px 60px rgba(0,0,0,.6); transform: translateY(105%); transition: transform 420ms cubic-bezier(.32,.72,0,1); }
+  .cam.processing .proc { transform: none; }
+  .cam.processing .controls, .cam.processing .hint { opacity: 0; pointer-events: none; transition: opacity 200ms; }
+  .proc .sheet__grab { cursor: default; }
+  .spin { width: 20px; height: 20px; border-radius: 50%; border: 2.5px solid rgba(95,178,241,.25); border-top-color: #5fb2f1; animation: spin 700ms linear infinite; flex-shrink: 0; }
+  .sk-row { display: flex; flex-direction: column; gap: 8px; }
+  .sk-row + .sk-row { margin-top: 14px; }
+  .proc__steps { font-size: 12.5px; color: #9a9a9a; margin-top: 4px; }
+  /* ---------- Review ---------- */
+  .review { padding: 0 34px 150px; }
+  .shot { display: flex; align-items: center; gap: 14px; }
+  .shot__img { width: 56px; height: 72px; border-radius: 10px; overflow: hidden; position: relative; background: #2a2219; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(255,255,255,.12); }
+  .shot__img .paper { top: 6px; left: 8px; margin: 0; transform: scale(.2) rotate(-3deg); transform-origin: top left; filter: none; }
+  .conf { height: 22px; padding: 0 8px; border-radius: 6px; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; letter-spacing: .2px; white-space: nowrap; }
+  .conf--hi { background: #314528; color: #8df15e; }
+  .conf--mid { background: #454426; color: #f1ea58; }
+  .conf--ai { background: #283845; color: #5fb2f1; }
+  .label-row { display: flex; align-items: center; justify-content: space-between; margin: 0 4px 12px 10px; }
+  .label-row .label { line-height: 17px; }
+  .fg.is-check .field { box-shadow: 0 0 0 2px rgba(241,234,88,.55); }
+  .picker svg { color: #5fb2f1; }
+  .field-row .field { padding: 0 16px; }
+  .cta-pair { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; }
+  .cta-pair .btn { font-size: 16.5px; }
+</style>
+</head>
+<body>
+<main class="page page--no-nav" aria-label="Scan receipt">
+  <section class="cam" id="cam" aria-label="Camera viewfinder">
+    <div class="scene" aria-hidden="true"></div>
+    <div class="paper" aria-hidden="true" id="paperSrc">
+      <h4>MK SUPPLIERS</h4>
+      <p class="c">14 G.T. Road, Salkia, Howrah</p>
+      <p class="c">GSTIN 19AAECM3321K1Z8</p>
+      <div class="hr"></div>
+      <div class="ln"><span>Bill No.</span><span>MK/2025/0612</span></div>
+      <div class="ln"><span>Date</span><span>04-06-2025</span></div>
+      <div class="hr"></div>
+      <div class="ln"><span>Grey cotton 60s</span><span>7,450</span></div>
+      <div class="ln"><span>Reactive dye 5kg</span><span>3,059</span></div>
+      <div class="hr"></div>
+      <div class="ln"><span>Taxable</span><span>10,509</span></div>
+      <div class="ln"><span>CGST+SGST 18%</span><span>1,891</span></div>
+      <div class="ln tot"><span>TOTAL</span><span>12,400.00</span></div>
+      <div class="hr"></div>
+      <p class="c">UPI / Paid · Thank you</p>
+      <div class="bars"></div>
+    </div>
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="frame" aria-hidden="true">
+      <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+      <span class="scanline"></span>
+    </div>
+    <div class="flash" id="flash" aria-hidden="true"></div>
+
+    <div class="topbar">
+      <a class="glass tap" href="add-entry.html" data-go="back" aria-label="Close scanner"><svg width="14" height="14" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></a>
+      <div class="topbar__title"><small>Ledger</small><b>Scan Receipt</b></div>
+      <button type="button" class="glass tap" id="flashBtn" aria-pressed="false" aria-label="Flash"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2.5 5 13.5h6l-1 8 8-11h-6l1-8Z"/></svg></button>
+    </div>
+
+    <p class="hint" id="hint" role="status" aria-live="polite"><i></i><span id="hintText">Auto-detect on · Fit the receipt in the frame</span></p>
+
+    <div class="controls">
+      <label class="ctl tap">
+        <span class="glass"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3.5" width="18" height="17" rx="2.5"/><circle cx="9" cy="9.5" r="1.8"/><path d="m21 15.5-5-5L5 20.5"/></svg></span>
+        Gallery
+        <input type="file" accept="image/*" id="gallery" hidden>
+      </label>
+      <button type="button" class="shutter tap" id="shutter" aria-label="Capture receipt"><span></span></button>
+      <button type="button" class="ctl tap" data-sheet="tipsSheet">
+        <span class="glass"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M9.2 9a3 3 0 0 1 5.7 1c0 2-3 2.6-3 4.2M12 17.5h.01"/></svg></span>
+        Tips
+      </button>
+    </div>
+
+    <div class="proc" id="proc" aria-live="polite">
+      <span class="sheet__grab" aria-hidden="true"></span>
+      <div class="row-flex" style="gap:12px;margin-bottom:18px">
+        <span class="spin" aria-hidden="true"></span>
+        <div><p class="sheet__title" style="font-size:19px">Reading receipt…</p><p class="proc__steps" id="procStep">Straightening edges</p></div>
+      </div>
+      <div class="sk-row"><span class="skeleton" style="width:70px;height:10px"></span><span class="skeleton" style="height:40px;border-radius:12px"></span></div>
+      <div class="sk-row"><span class="skeleton" style="width:90px;height:10px"></span><span class="skeleton" style="height:40px;border-radius:12px;width:70%"></span></div>
+      <div class="sk-row"><span class="skeleton" style="width:60px;height:10px"></span><span class="skeleton" style="height:40px;border-radius:12px;width:85%"></span></div>
+      <div class="sk-row"><span class="skeleton" style="width:80px;height:10px"></span><span class="skeleton" style="height:40px;border-radius:12px;width:55%"></span></div>
+    </div>
+  </section>
+
+  <section class="review" id="review" hidden aria-label="Review extracted details">
+    <header class="appbar">
+      <button type="button" class="back tap" id="reviewBack" aria-label="Retake photo"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg></button>
+      <div class="appbar__titles"><span class="appbar__eyebrow">Scan result</span><h1 class="appbar__title">Review Details</h1></div>
+    </header>
+
+    <div class="panel panel--tight shot enter">
+      <span class="shot__img" id="shotImg" aria-hidden="true"></span>
+      <span class="grow"><span class="menu__title">MK_Suppliers_receipt.jpg</span><span class="menu__sub">Captured just now</span></span>
+      <button type="button" class="text-btn tap retake">Retake</button>
+    </div>
+
+    <div class="banner banner--info enter" style="margin-top:16px;--i:1">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5fb2f1" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5h.01"/></svg>
+      <span>Check the highlighted field. Tap any value to correct it before saving.</span>
+    </div>
+
+    <p class="section-label">Extracted details</p>
+    <form id="form" novalidate class="enter" style="--i:2">
+      <div class="fg">
+        <div class="label-row"><label class="label" for="fVendor">Vendor</label><span class="conf conf--hi">98% match</span></div>
+        <input class="field" id="fVendor" value="MK Suppliers" data-validate="required" autocomplete="off">
+      </div>
+      <div class="fg">
+        <div class="label-row"><label class="label" for="fAmount">Amount</label><span class="conf conf--hi">99% match</span></div>
+        <label class="field field-prefix"><span>₹</span><input id="fAmount" class="num" inputmode="numeric" value="12,400" data-validate="amount"></label>
+      </div>
+      <div class="fg">
+        <div class="label-row"><label class="label" for="fDate">Date</label><span class="conf conf--hi">96% match</span></div>
+        <input class="field num" id="fDate" value="04 Jun 2025" data-validate="required">
+      </div>
+      <div class="fg is-check" id="gstFg">
+        <div class="label-row"><label class="label" for="fGst">GST</label><span class="conf conf--mid" id="gstConf"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 8v5M12 16.5h.01"/><circle cx="12" cy="12" r="10"/></svg>84% · check</span></div>
+        <div class="field-row">
+          <label class="field field-prefix"><input id="fGstRate" class="num" inputmode="numeric" value="18" aria-label="GST rate percent" style="width:34px"><span style="margin:0 0 0 2px">%</span></label>
+          <label class="field field-prefix"><span>₹</span><input id="fGst" class="num" inputmode="numeric" value="1,891" aria-label="GST amount"></label>
+        </div>
+        <span class="helper">Receipt shows CGST + SGST 18% — confirm it matches the bill</span>
+      </div>
+      <div class="fg">
+        <div class="label-row"><label class="label" id="catLbl">Category</label><span class="conf conf--ai">Suggested</span></div>
+        <button type="button" class="field picker tap" data-sheet="catSheet" aria-labelledby="catLbl fCat" aria-haspopup="dialog"><span id="fCat">Raw material</span><svg width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 7 7-7 7"/></svg></button>
+      </div>
+    </form>
+
+    <div class="cta-bar" id="reviewCta">
+      <div class="cta-pair">
+        <button type="button" class="btn btn--neutral tap retake">Retake</button>
+        <button type="button" class="btn btn--primary tap" id="use"><span>Use These Details</span></button>
+      </div>
+    </div>
+  </section>
+  <div class="toast" role="status" aria-live="polite"></div>
+</main>
+
+<section class="sheet" id="tipsSheet" aria-labelledby="tipsTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="tipsTitle">Tips for a clean scan</p><p class="sheet__sub">Better photos mean fewer fixes</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="menu" style="background:#262626">
+    <div class="menu__item"><span class="menu__icon icon-yellow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2.5 5 13.5h6l-1 8 8-11h-6l1-8Z"/></svg></span><span class="menu__body"><span class="menu__title">Use good light</span><span class="menu__sub">Turn on flash in dim rooms, avoid glare</span></span></div>
+    <div class="menu__item"><span class="menu__icon icon-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16"/></svg></span><span class="menu__body"><span class="menu__title">Fit all four corners</span><span class="menu__sub">Corners turn green when we detect the edges</span></span></div>
+    <div class="menu__item"><span class="menu__icon icon-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><span class="menu__body"><span class="menu__title">Flatten the paper</span><span class="menu__sub">Place it on a dark, flat surface</span></span></div>
+  </div>
+  <button type="button" class="btn btn--primary tap" data-close style="margin-top:20px">Got It</button>
+</section>
+
+<section class="sheet" id="catSheet" aria-labelledby="catTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="catTitle">Category</p><p class="sheet__sub">Used for reports and GST input credit</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="options" data-options id="catOpts">
+    <button type="button" class="option tap" data-value="Raw material" aria-checked="true"><span class="option__radio"></span><span class="option__body"><span class="option__title">Raw material</span><span class="option__sub">Suggested from items on the receipt</span></span></button>
+    <button type="button" class="option tap" data-value="Transport"><span class="option__radio"></span><span class="option__body"><span class="option__title">Transport</span><span class="option__sub">Freight, courier, fuel</span></span></button>
+    <button type="button" class="option tap" data-value="Utilities"><span class="option__radio"></span><span class="option__body"><span class="option__title">Utilities</span><span class="option__sub">Power, water, internet</span></span></button>
+    <button type="button" class="option tap" data-value="Office supplies"><span class="option__radio"></span><span class="option__body"><span class="option__title">Office supplies</span><span class="option__sub">Stationery, packaging, small tools</span></span></button>
+    <button type="button" class="option tap" data-value="Rent"><span class="option__radio"></span><span class="option__body"><span class="option__title">Rent</span><span class="option__sub">Shop, godown, equipment lease</span></span></button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const $ = (id) => document.getElementById(id);
+    const cam = $('cam'), review = $('review');
+    const setHint = (t) => { $('hintText').textContent = t; };
+    let detectT = setTimeout(() => { cam.classList.add('detected'); setHint('Receipt detected · Hold steady'); }, 1400);
+    if (document.body.classList.contains('capture')) { clearTimeout(detectT); cam.classList.add('detected'); setHint('Receipt detected · Hold steady'); }
+    $('shotImg').innerHTML = $('paperSrc').outerHTML.replace('id="paperSrc"', '');
+
+    $('flashBtn').addEventListener('click', (e) => {
+      const on = e.currentTarget.getAttribute('aria-pressed') !== 'true';
+      e.currentTarget.setAttribute('aria-pressed', String(on)); Spendee.toast(on ? 'Flash on' : 'Flash off');
+    });
+
+    const showReview = () => {
+      cam.hidden = true; review.hidden = false; window.scrollTo(0, 0);
+      document.querySelector('main').setAttribute('aria-label', 'Review receipt details');
+    };
+    const capture = async () => {
+      clearTimeout(detectT); cam.classList.add('detected', 'frozen'); Spendee.haptic();
+      const f = $('flash'); f.classList.remove('go'); void f.offsetWidth; f.classList.add('go');
+      await Spendee.wait(260);
+      cam.classList.add('processing');
+      const steps = ['Straightening edges', 'Reading text', 'Matching vendor MK Suppliers', 'Checking GST'];
+      for (const s of steps) { $('procStep').textContent = s; await Spendee.wait(520); }
+      showReview();
+      Spendee.toast('5 details found');
+    };
+    $('shutter').addEventListener('click', capture);
+    $('gallery').addEventListener('change', () => { if ($('gallery').files[0]) capture(); });
+
+    const retake = () => {
+      review.hidden = true; cam.hidden = false; cam.classList.remove('frozen', 'processing', 'detected');
+      setHint('Auto-detect on · Fit the receipt in the frame');
+      detectT = setTimeout(() => { cam.classList.add('detected'); setHint('Receipt detected · Hold steady'); }, 1200);
+    };
+    document.querySelectorAll('.retake').forEach((b) => b.addEventListener('click', retake));
+    $('reviewBack').addEventListener('click', retake);
+
+    // Review editing
+    const money = (v) => { const n = +String(v).replace(/[^\d]/g, '').slice(0, 9); return n ? Spendee.fmtIN(n) : ''; };
+    ['fAmount', 'fGst'].forEach((id) => $(id).addEventListener('input', (e) => { e.target.value = money(e.target.value); }));
+    const confirmGst = () => { $('gstFg').classList.remove('is-check'); const c = $('gstConf'); c.className = 'conf conf--hi'; c.textContent = 'Confirmed'; };
+    ['fGstRate', 'fGst'].forEach((id) => $(id).addEventListener('change', confirmGst));
+    $('fGstRate').addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 2);
+      const amt = +$('fAmount').value.replace(/\D/g, ''), r = +e.target.value;
+      if (amt && r >= 0) $('fGst').value = Spendee.fmtIN(Math.round(amt * r / (100 + r)));
+    });
+    $('catOpts').addEventListener('select', (e) => { $('fCat').textContent = e.detail; setTimeout(() => Spendee.sheet.close(), 180); });
+
+    $('use').addEventListener('click', async (e) => {
+      if (!Spendee.validate($('form'))) return;
+      await Spendee.loading(e.currentTarget, 800);
+      Spendee.store.set('scan', {
+        vendor: $('fVendor').value.trim(), amount: +$('fAmount').value.replace(/\D/g, ''), date: $('fDate').value.trim(),
+        gst: ($('fGstRate').value || '0') + '%', gstAmount: +$('fGst').value.replace(/\D/g, ''), category: $('fCat').textContent,
+      });
+      location.href = 'add-entry.html?scanned=1';
+    });
+
+    // Direct states for previews: ?state=processing|review
+    const st = Spendee.q('state');
+    if (st === 'review') showReview();
+    if (st === 'processing') cam.classList.add('frozen', 'processing', 'detected');
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee · Invoices</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/spendee.css">
+</head>
+<body>
+<main class="screen" style="height:874px;min-height:874px" aria-label="Invoices">
+  <a class="abs back tap" href="dashboard.html" data-go="back" style="left:34px;top:52px" aria-label="Back">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9H3M8.5 3 2.5 9l6 6"/></svg>
+  </a>
+  <p class="t hdr__eyebrow" style="left:80px;top:43.3px;font-size:11px;letter-spacing:.9px">Billing</p>
+  <h1 class="t" style="left:80px;top:64px;font-size:22px;font-weight:600;letter-spacing:.5px">Invoices</h1>
+  <button class="abs chip-btn tap" style="left:274px;top:45px;width:94px;height:41px;font-size:17px;letter-spacing:.3px;background:#132430;box-shadow:inset 0 0 0 1px rgba(95,178,241,.35)" data-go="create-invoice" aria-label="Create invoice">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 1.5v13M1.5 8h13"/></svg>Create
+  </button>
+
+  <div class="stat-box enter" style="left:38px">
+    <span class="t" style="top:16.8px;font-size:11px;letter-spacing:.3px;color:#dcdcdc">Total</span>
+    <span class="t" style="top:34.3px;font-size:18px;font-weight:600;color:#fff">47</span>
+    <span class="t" style="top:58.5px;font-size:11px;letter-spacing:.3px;color:#e6e6e6">This month</span>
+  </div>
+  <div class="stat-box enter" style="left:154px;--i:1">
+    <span class="t" style="top:16.8px;font-size:11px;letter-spacing:.3px;color:#dcdcdc">Unpaid</span>
+    <span class="t" style="top:34.3px;font-size:18px;font-weight:600;color:#f1ea58">19</span>
+    <span class="t" style="top:58.5px;font-size:11px;letter-spacing:.3px;color:#e6e6e6">₹8.4L</span>
+  </div>
+  <div class="stat-box enter" style="left:270px;--i:2">
+    <span class="t" style="top:16.8px;font-size:11px;letter-spacing:.3px;color:#dcdcdc">Paid</span>
+    <span class="t" style="top:34.3px;font-size:18px;font-weight:600;color:#8df15e">28</span>
+    <span class="t" style="top:58.5px;font-size:11px;letter-spacing:.3px;color:#e6e6e6">₹7.8L</span>
+  </div>
+
+  <div class="abs chips" role="tablist" aria-label="Invoice status" data-group id="chips" style="left:38px;top:218px;width:326px">
+    <button class="chip chip--sm is-active" role="tab" aria-selected="true" data-value="all" style="width:39px">All</button>
+    <button class="chip chip--sm" role="tab" aria-selected="false" data-value="unpaid" style="width:73px">Unpaid</button>
+    <button class="chip chip--sm" role="tab" aria-selected="false" data-value="paid" style="width:53px">Paid</button>
+    <button class="chip chip--sm" role="tab" aria-selected="false" data-value="overdue" style="width:85px">Overdue</button>
+    <button class="chip chip--sm" role="tab" aria-selected="false" data-value="draft" style="width:60px">Draft</button>
+  </div>
+
+  <div id="invList">
+    <article class="inv card enter" data-status="paid" style="top:266px;height:120px;--i:3">
+      <span class="t inv__no">INV-1042</span>
+      <span class="t inv__name">Dutta &amp; Sons</span>
+      <span class="inv__pill tone-green" style="top:26px;width:73px;right:20px">
+        <svg width="10" height="8" viewBox="0 0 10 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m1 4.2 2.6 2.4L9 1.2"/></svg>Paid
+      </span>
+      <span class="t inv__date" style="color:#d6d6d6">Jun 4, 2025</span>
+      <span class="t inv__amt num" style="color:#8df15e">₹45,000</span>
+    </article>
+
+    <article class="inv card enter" data-status="unpaid" style="top:403px;height:168px;--i:4">
+      <span class="t inv__no">INV-1038</span>
+      <span class="t inv__name" style="top:40.5px">Sharma Textiles</span>
+      <span class="inv__pill tone-yellow" style="top:25px;width:84px;height:31px;right:18px">Pending</span>
+      <span class="t inv__date" style="top:80px;color:#c64f4f">Due: Jun 10</span>
+      <span class="t inv__amt num" style="top:77px;color:#f1ea58">₹ 62,000</span>
+      <button class="inv__btn tone-blue tap" style="left:20px;width:136px" data-sheet="shareSheet">Share PDF</button>
+      <button class="inv__btn tone-red tap" style="left:174px;width:136px" data-sheet="reminderSheet">Reminder</button>
+    </article>
+
+    <article class="inv card enter" data-status="overdue" style="top:589px;height:168px;--i:5">
+      <span class="t inv__no">INV-1019</span>
+      <span class="t inv__name" style="top:40.5px">Bose Retail</span>
+      <span class="inv__pill tone-red" style="top:25px;width:86px;height:31px;right:18px">Overdue</span>
+      <span class="t inv__date" style="top:80px;color:#c64f4f">Overdue: 12 days</span>
+      <span class="t inv__amt num" style="top:77px;right:24px;color:#f15858">₹ 1,15,000</span>
+      <a class="inv__btn tone-red tap" href="invoice-discount.html?id=INV-1019" style="left:20px;width:290px">Discount Invoice for Instant Cash</a>
+    </article>
+  </div>
+
+  <nav data-tabbar="ledger"></nav>
+</main>
+<style>
+  /* ledger sheets */
+  .sheet-lbl { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #8a8a8a; margin: 20px 0 10px 4px; }
+  .sheet-lbl:first-of-type { margin-top: 4px; }
+  .sheet .search { height: 48px; }
+  .sheet .field { height: 50px; }
+  .sheet .empty-state { padding: 22px 10px 6px; }
+  .sheet .empty-state p { margin-bottom: 14px; }
+  .sheet .options .option { position: relative; }
+  .bubble { position: relative; background: #1d3a26; color: #e3f1dc; border-radius: 16px 16px 16px 4px; padding: 12px 14px 8px; font-size: 13.5px; line-height: 1.5; box-shadow: inset 0 0 0 1px rgba(141,241,94,.14); transition: background var(--dur), color var(--dur); }
+  .bubble.is-sms { background: #1d3548; color: #dbe9f4; box-shadow: inset 0 0 0 1px rgba(95,178,241,.18); }
+  .bubble__meta { display: flex; justify-content: flex-end; align-items: center; gap: 4px; font-size: 10.5px; color: rgba(255,255,255,.5); margin-top: 4px; }
+  .share-doc { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .share-doc__ic { width: 38px; height: 44px; border-radius: 8px; background: #452626; color: #f15858; display: grid; place-items: center; flex-shrink: 0; font: 600 9px/1 var(--font-ui); letter-spacing: .4px; }
+  .share-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 18px; }
+  .share-t { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 4px 0; font-size: 11.5px; color: #d4d4d4; letter-spacing: .2px; text-align: center; white-space: nowrap; }
+  .share-i { position: relative; width: 56px; height: 56px; border-radius: 18px; display: grid; place-items: center; box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); }
+  .share-t.is-busy .share-i svg { opacity: 0; }
+  .share-t.is-busy .share-i::after { content: ''; position: absolute; left: 50%; top: 50%; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; border: 2.5px solid rgba(255,255,255,.2); border-top-color: currentColor; animation: spin 700ms linear infinite; }
+  .undo-toast { position: fixed; left: 50%; bottom: 128px; z-index: 960; display: flex; align-items: center; gap: 14px; padding: 6px 6px 6px 16px; border-radius: 14px; background: rgba(38,38,38,.96); color: #fff; font-size: 13.5px; letter-spacing: .3px; white-space: nowrap; box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 10px 30px rgba(0,0,0,.5); transform: translate(-50%, 16px); opacity: 0; transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out); }
+  .undo-toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .undo-toast button { height: 34px; padding: 0 14px; border-radius: 9px; background: #132430; color: #5fb2f1; font-weight: 600; font-size: 13.5px; box-shadow: inset 0 0 0 1px rgba(95,178,241,.35); }
+  .cust-list { max-height: 420px; overflow-y: auto; scrollbar-width: none; margin: 14px -4px 0; padding: 0 4px 2px; }
+  .cust-list .avatar { width: 38px; height: 38px; }
+  .cust-list .option__meta { font-size: 13px; font-weight: 600; flex-shrink: 0; }
+  .option--danger .option__title { color: #f15858; }
+  .qd { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .qd button { height: 58px; border-radius: 14px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 14px; font-weight: 600; color: #f0f0f0; transition: box-shadow var(--dur), background var(--dur); }
+  .qd button small { font-size: 11px; font-weight: 500; color: #8a8a8a; }
+  .qd button[aria-pressed="true"] { background: #1c2a36; box-shadow: inset 0 0 0 2px #5fb2f1; }
+  .cal { margin-top: 16px; padding: 14px 12px 10px; border-radius: 20px; background: #262626; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .cal__head { display: flex; align-items: center; justify-content: space-between; padding: 0 4px 10px; }
+  .cal__month { font-size: 16px; font-weight: 600; }
+  .cal__nav { width: 36px; height: 36px; border-radius: 10px; background: #1a1a1a; color: #5fb2f1; display: grid; place-items: center; }
+  .cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 2px; text-align: center; }
+  .cal__wd { font-size: 11px; color: #6b6b6b; letter-spacing: .6px; padding: 4px 0 8px; }
+  .cal__d { height: 40px; border-radius: 12px; font-size: 15px; color: #e6e6e6; position: relative; font-variant-numeric: tabular-nums; transition: background 160ms; }
+  .cal__d:hover { background: rgba(255,255,255,.05); }
+  .cal__d.is-today::after { content: ''; position: absolute; left: 50%; bottom: 5px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: #5fb2f1; }
+  .cal__d[aria-selected="true"] { background: #c8e7ff; color: #000; font-weight: 600; }
+  .cal__d[aria-selected="true"]::after { background: #000; }
+  .cal__d[disabled] { color: #4a4a4a; pointer-events: none; }
+</style>
+
+<section class="sheet" id="reminderSheet" aria-labelledby="remTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="remTitle">Send a reminder</p><p class="sheet__sub" id="remSub">Sharma Textiles · INV-1038 · ₹ 62,000 due Jun 10</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <p class="sheet-lbl">Channel</p>
+  <div class="segmented" id="remChannel" aria-label="Reminder channel">
+    <button type="button" data-value="whatsapp" aria-selected="true">WhatsApp</button>
+    <button type="button" data-value="sms">SMS</button>
+  </div>
+  <p class="sheet-lbl">When</p>
+  <div class="options" data-options id="remWhen" aria-label="When to send">
+    <button type="button" class="option tap" data-value="now"><span class="option__radio"></span><span class="option__body"><span class="option__title">Now</span><span class="option__sub">Delivered right away</span></span></button>
+    <button type="button" class="option tap" data-value="tomorrow" aria-checked="true"><span class="option__radio"></span><span class="option__body"><span class="option__title">Tomorrow, 10 AM</span><span class="option__sub">Thu, 05 Jun · best reply rate</span></span></button>
+    <button type="button" class="option tap" data-value="custom"><span class="option__radio"></span><span class="option__body"><span class="option__title">Custom</span><span class="option__sub" id="remCustomSub">Pick a date and time</span></span></button>
+  </div>
+  <input class="field" type="datetime-local" id="remCustom" value="2025-06-06T11:00" min="2025-06-04T00:00" aria-label="Reminder date and time" style="display:none;margin-top:10px;font-size:16px">
+  <p class="sheet-lbl">Message preview</p>
+  <div class="bubble" id="remBubble"><span id="remText">Hello Sharma Textiles, a friendly reminder that invoice INV-1038 for ₹ 62,000 is due on 10 Jun 2025. Pay via UPI: spendee.link/ja/inv-1038. JA Trading Co.</span><span class="bubble__meta"><span id="remVia">WhatsApp</span> · 10:00 AM <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="#5fb2f1" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m1 5.5 3 3L10.5 1.5M8 8.5l7-7"/></svg></span></div>
+  <button class="btn btn--primary tap" id="remSend" style="margin-top:22px"><span>Schedule Reminder</span></button>
+</section>
+
+<section class="sheet" id="shareSheet" aria-labelledby="shareTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="shareTitle">Share invoice</p><p class="sheet__sub">Send a copy or save it to your phone</p></div>
+    <button class="sheet__close tap" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="share-doc">
+    <span class="share-doc__ic">PDF</span>
+    <span class="grow"><span class="option__title" id="shareDoc">INV-1038.pdf</span><span class="option__sub" id="shareDocSub">Sharma Textiles · ₹ 62,000 · 1 page · 128 KB</span></span>
+  </div>
+  <div class="share-grid">
+    <button type="button" class="share-t tap" data-share="WhatsApp"><span class="share-i icon-green"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2A9.8 9.8 0 0 0 3.6 17l-1.4 4.8 5-1.3A9.8 9.8 0 1 0 12 2.2Zm0 1.9a7.9 7.9 0 1 1-4 14.7l-.3-.2-3 .8.8-2.9-.2-.3A7.9 7.9 0 0 1 12 4.1Z"/><path d="M9.2 7.6c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.6 1.1 2.7c.1.2 1.8 2.9 4.5 4 2.2.9 2.7.7 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2l-.5-.3-1.7-.8c-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.4.3-.4v-.5l-.8-2Z"/></svg></span>WhatsApp</button>
+    <button type="button" class="share-t tap" data-share="SMS"><span class="share-i icon-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5h16A1.5 1.5 0 0 1 21.5 6v9.5A1.5 1.5 0 0 1 20 17h-11l-4.5 3.5V17H4a1.5 1.5 0 0 1-1.5-1.5V6A1.5 1.5 0 0 1 4 4.5Z"/><path d="M7.5 9.5h9M7.5 12.5h5.5"/></svg></span>SMS</button>
+    <button type="button" class="share-t tap" data-share="Email"><span class="share-i icon-yellow"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6.5 9 6.5 9-6.5"/></svg></span>Email</button>
+    <button type="button" class="share-t tap" data-share="copy"><span class="share-i icon-gray"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/></svg></span>Copy link</button>
+    <button type="button" class="share-t tap" data-share="pdf"><span class="share-i icon-red"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v11.5M7 10.5l5 5 5-5M4 20.5h16"/></svg></span>PDF</button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const cards = [...document.querySelectorAll('#invList .inv')];
+    const tops = cards.map((c) => parseFloat(c.style.top));
+    document.getElementById('chips').addEventListener('change', (e) => {
+      const v = e.detail; let y = 266;
+      cards.forEach((c) => {
+        const show = v === 'all' || c.dataset.status === v || (v === 'unpaid' && c.dataset.status === 'overdue');
+        c.style.display = show ? '' : 'none';
+        if (show) { c.style.top = (v === 'all' ? tops[cards.indexOf(c)] : y) + 'px'; y += c.offsetHeight + 18; }
+      });
+    });
+  })();
+</script>
+<script>
+  // Reminder sheet
+  (function () {
+    const sh = document.getElementById('reminderSheet'); if (!sh) return;
+    const custom = sh.querySelector('#remCustom'), btn = sh.querySelector('#remSend');
+    let when = 'tomorrow', chan = 'whatsapp';
+    const fmtDT = (v) => { const d = new Date(v); if (isNaN(d)) return 'the selected time'; return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) + ', ' + d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }); };
+    const sync = () => {
+      custom.style.display = when === 'custom' ? '' : 'none';
+      sh.querySelector('#remCustomSub').textContent = when === 'custom' && custom.value ? fmtDT(custom.value) : 'Pick a date and time';
+      btn.querySelector('span').textContent = when === 'now' ? (chan === 'sms' ? 'Send SMS Now' : 'Send on WhatsApp') : 'Schedule Reminder';
+      sh.querySelector('#remBubble').classList.toggle('is-sms', chan === 'sms');
+      sh.querySelector('#remVia').textContent = chan === 'sms' ? 'SMS' : 'WhatsApp';
+    };
+    sh.querySelector('#remWhen').addEventListener('select', (e) => { when = e.detail; sync(); if (when === 'custom') setTimeout(() => custom.focus(), 50); });
+    sh.querySelector('#remChannel').addEventListener('change', (e) => { chan = e.detail; sync(); });
+    custom.addEventListener('input', () => { custom.style.boxShadow = ''; sync(); });
+    btn.addEventListener('click', async () => {
+      if (when === 'custom' && !custom.value) { custom.style.boxShadow = '0 0 0 2px #f15858'; custom.focus(); Spendee.toast('Pick a date and time for the reminder'); return; }
+      await Spendee.loading(btn, 900);
+      Spendee.sheet.close(); Spendee.haptic();
+      const via = chan === 'sms' ? 'SMS' : 'WhatsApp';
+      Spendee.toast(when === 'now' ? 'Reminder sent on ' + via : when === 'tomorrow' ? 'Reminder scheduled for tomorrow, 10 AM' : 'Reminder scheduled for ' + fmtDT(custom.value));
+      sh.dispatchEvent(new CustomEvent('reminder:done', { detail: { via, when } }));
+    });
+    sync();
+  })();
+  // Share sheet
+  (function () {
+    const sh = document.getElementById('shareSheet'); if (!sh) return;
+    sh.querySelectorAll('[data-share]').forEach((b) => b.addEventListener('click', async () => {
+      const k = b.dataset.share;
+      if (k === 'pdf') {
+        b.classList.add('is-busy'); await Spendee.wait(1000); b.classList.remove('is-busy');
+        Spendee.sheet.close(); Spendee.toast('PDF saved to Downloads'); return;
+      }
+      if (k === 'copy') {
+        try { navigator.clipboard && navigator.clipboard.writeText(sh.dataset.link || 'https://spendee.link/ja').catch(() => {}); } catch (e) {}
+        Spendee.sheet.close(); Spendee.toast('Link copied'); return;
+      }
+      Spendee.sheet.close(); Spendee.haptic(); Spendee.toast('Shared via ' + k);
+    }));
+  })();
+  // Invoices: card navigation, filters empty state, sheet copy
+  (function () {
+    const cards = [...document.querySelectorAll('#invList .inv')];
+    const IDS = ['INV-1042', 'INV-1038', 'INV-1019'];
+    cards.forEach((c, i) => {
+      const id = IDS[i]; c.dataset.id = id;
+      c.classList.add('tap'); c.setAttribute('role', 'link'); c.tabIndex = 0; c.style.cursor = 'pointer';
+      c.setAttribute('aria-label', id + ' · ' + c.querySelector('.inv__name').textContent + ' · ' + c.querySelector('.inv__amt').textContent.trim() + ' · view details');
+      const go = () => (location.href = 'invoice-detail.html?id=' + id);
+      c.addEventListener('click', (e) => { if (e.target.closest('button, a')) return; go(); });
+      c.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target === c) { e.preventDefault(); go(); } });
+    });
+
+    // Empty state for filters with no invoices (e.g. Draft)
+    const draft = Spendee.store.get('invoiceDraft', null);
+    const hasDraft = draft && draft.status === 'draft';
+    const empty = document.createElement('div');
+    empty.className = 'abs empty-state'; empty.style.cssText = 'left:38px;top:262px;width:326px;display:none';
+    empty.setAttribute('role', 'status');
+    empty.innerHTML = `<div class="empty-state__icon"><svg width="26" height="30" viewBox="0 0 20 27" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.2 1.2h8.4c.7 0 1.2.3 1.7.7l4.8 4.9c.5.5.7 1.1.7 1.7v14.6a2 2 0 0 1-2 2H3.2a2 2 0 0 1-2-2V3.2a2 2 0 0 1 2-2Z"/><path d="M5.5 13h9M5.5 17.5h6" stroke-linecap="round"/></svg></div>
+      <h3>${hasDraft ? '1 draft in progress' : 'No drafts'}</h3>
+      <p>${hasDraft ? (draft.no || 'INV-1043') + (draft.customer ? ' for ' + draft.customer.name : '') + ' is saved but not sent yet.' : 'Invoices you save without sending will show up here.'}</p>
+      <a class="btn btn--primary tap" href="${hasDraft ? 'create-invoice.html?edit=1' : 'create-invoice.html'}" style="width:220px;margin:0 auto;height:48px;font-size:16px">${hasDraft ? 'Continue Draft' : 'Create Invoice'}</a>`;
+    document.querySelector('main').insertBefore(empty, document.querySelector('[data-tabbar]'));
+    document.getElementById('chips').addEventListener('change', () => setTimeout(() => {
+      const shown = cards.filter((c) => c.style.display !== 'none').length;
+      empty.style.display = shown ? 'none' : '';
+    }));
+  })();
+</script>
+</body>
+</html>

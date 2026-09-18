@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · My Trips</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .ghead__title { margin-top: 10px; }
+  .ghead__sub { margin-top: 9px; }
+  .psheet { padding-top: 24px; }
+  .seg { grid-auto-columns: 98px; gap: 11px; margin-left: 9px; }
+  .seg button { font-family: var(--font-2); font-weight: 400; font-size: 13px; }
+  .tlist { margin: 28px 23px 0 9px; }
+  .tcard__actions .tc-next { justify-content: flex-start; padding-left: 18px; }
+  .tcard { position: relative; }
+  .tcard + .tcard { margin-top: 13px; }
+  .tcard__img .badge--upcoming { top: 10px; right: 9px; height: 34px; padding: 0 10px 0 13px; font-size: 13px; letter-spacing: .38em; }
+  .badge--active { color: #2F74C7 !important; }
+  .badge--done { color: var(--text-3) !important; }
+  .badge--cancel { color: var(--danger) !important; }
+  .tcard__body { padding: 16px 14px 10px; }
+  .tcard__name { font-size: 15px; line-height: 18px; }
+  .tcard__meta { margin-top: 1px; }
+  .tcard__price { margin-top: 0; font-size: 13px; }
+  .tcard__actions { grid-template-columns: 128px 128px; gap: 26px; margin-top: 12px; }
+  .tcard__actions .btn { height: 32px; font-size: 13px; font-weight: 600; gap: 8px; }
+  .tcard__actions .btn--white svg { width: 24px; height: 24px; }
+  .tcard__link { position: absolute; inset: 0 0 50px 0; z-index: 0; }
+  .tcard__img, .tcard__body > :not(.tcard__actions) { pointer-events: none; }   /* the photo and text sit over the card link: let taps through to it */
+  .tcard__actions { position: relative; z-index: 1; }
+  .tcard--past .tcard__img img { filter: grayscale(.25) brightness(.95); }
+  .tcard--cancel .tcard__img img { filter: grayscale(1) brightness(.9); }
+  .tcard__ref { position: absolute; left: 10px; top: 10px; height: 22px; padding: 0 8px; border-radius: 11px; background: rgba(20,33,61,.72); color: #fff; font: 500 10.5px/22px var(--font); letter-spacing: .04em; }
+  .sk-card { height: 238px; border-radius: 8px; }
+  .sk-card + .sk-card { margin-top: 12px; }
+  .empty .btn { width: auto; padding: 0 22px; }
+  .list__item { cursor: pointer; }
+  .sheet .list { padding: 0 4px; }
+  .trip-mini { display: flex; gap: 12px; align-items: center; padding: 10px; border-radius: 14px; background: var(--grey-1); margin-bottom: 14px; }
+  .trip-mini__img { width: 56px; height: 56px; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
+  .trip-mini b { display: block; font-size: 15px; }
+  .trip-mini span { font-size: 12px; color: var(--text-3); }
+</style>
+</head>
+<body>
+<main class="page page--tabs" aria-label="My trips">
+  <header class="ghead">
+    <div><h1 class="ghead__title">My Trips</h1><p class="ghead__sub" id="sub">3 Upcoming Adventures</p></div>
+    <a class="avatar-glow tap" href="profile.html" aria-label="Your profile"><span class="ph ph--warm" style="display:block;height:100%"><img src="../assets/img/avatar-alex.jpg" alt=""></span></a>
+  </header>
+
+  <section class="psheet psheet--round">
+    <div class="seg" id="seg" aria-label="Trip status">
+      <button type="button" data-value="upcoming" aria-selected="true" aria-controls="p-upcoming">Upcoming</button>
+      <button type="button" data-value="active" aria-controls="p-active">Active</button>
+      <button type="button" data-value="past" aria-controls="p-past">Past</button>
+    </div>
+    <div class="tlist" data-delegate id="p-upcoming" role="tabpanel" aria-label="Upcoming trips"></div>
+    <div class="tlist" data-delegate id="p-active" role="tabpanel" aria-label="Active trips" hidden></div>
+    <div class="tlist" data-delegate id="p-past" role="tabpanel" aria-label="Past trips" hidden></div>
+  </section>
+
+  <nav data-tabbar="trip"></nav>
+</main>
+
+<section class="sheet" id="manage" aria-labelledby="mT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="mT">Manage trip</p><p class="sheet__sub" id="mSub">Paris City Break · VYG-4892-PAR</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="trip-mini"><span class="trip-mini__img ph"><img id="mImg" src="../assets/img/trip-paris.jpg" alt=""></span><div><b id="mName">Paris City Break</b><span id="mDates">Aug 12–19, 2026 · 2 Adults · Economy</span></div></div>
+  <div class="list list--grey">
+    <a class="list__item" id="mModify" href="modify-booking.html?trip=paris-aug"><span class="list__icon ic-navy" data-icon="calendar"></span><span class="list__body"><span class="list__title">Modify dates &amp; travellers</span><span class="list__sub">No change fee for Gold members</span></span><span class="list__chev" data-icon="chevron-right" data-size="18"></span></a>
+    <a class="list__item" id="mTicket" href="e-ticket.html?ref=VYG-4892-PAR"><span class="list__icon ic-navy" data-icon="ticket"></span><span class="list__body"><span class="list__title">E-ticket &amp; vouchers</span><span class="list__sub">Boarding pass, hotel and transfer</span></span><span class="list__chev" data-icon="chevron-right" data-size="18"></span></a>
+    <a class="list__item" href="documents.html"><span class="list__icon ic-navy" data-icon="passport"></span><span class="list__body"><span class="list__title">Travel documents</span><span class="list__sub">Passport, licence, insurance</span></span><span class="list__chev" data-icon="chevron-right" data-size="18"></span></a>
+    <a class="list__item" href="support.html"><span class="list__icon ic-navy" data-icon="headset"></span><span class="list__body"><span class="list__title">Contact support</span><span class="list__sub">Chat with us 24/7</span></span><span class="list__chev" data-icon="chevron-right" data-size="18"></span></a>
+    <a class="list__item list__item--danger" id="mCancel" href="cancel-trip.html?trip=paris-aug"><span class="list__icon" data-icon="trash"></span><span class="list__body"><span class="list__title">Cancel trip</span><span class="list__sub" id="mRefund">Refund up to $2,398</span></span><span class="list__chev" data-icon="chevron-right" data-size="18"></span></a>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const V = window.Voyager;
+    const $ = (s) => document.querySelector(s);
+    const capture = document.body.classList.contains('capture');
+    const arrow = '<svg class="arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12h17M14 5.5l6.5 6.5-6.5 6.5"/></svg>';
+    const LABEL = { upcoming: ['Upcoming', ''], active: ['Active', 'badge--active'], past: ['Completed', 'badge--done'], cancelled: ['Cancelled', 'badge--cancel'] };
+
+    const card = (t, i) => {
+      const d = V.dest(t.dest) || V.dest('paris');
+      const [lab, cls] = LABEL[t.status] || LABEL.upcoming;
+      const range = V.date.range(t.start, t.end);
+      let actions;
+      if (t.status === 'past') {
+        actions = (t.reviewed
+          ? `<a class="btn btn--manage" href="reviews.html?id=${d.id}">Your Review</a>`
+          : `<a class="btn btn--manage" href="write-review.html?id=${d.id}">Write a Review</a>`) +
+          `<button class="btn btn--white" type="button" data-again="${d.id}">Book Again</button>`;
+      } else if (t.status === 'cancelled') {
+        actions = `<a class="btn btn--manage" href="cancel-trip.html?trip=${t.id}">Refund Details</a><button class="btn btn--white" type="button" data-again="${d.id}">Book Again</button>`;
+      } else {
+        actions = `<button class="btn btn--manage" type="button" data-manage="${t.id}">Manage</button><a class="btn btn--white tc-next" href="itinerary.html?trip=${t.id}"><span>View Details</span>${arrow}</a>`;
+      }
+      const detailHref = t.status === 'cancelled' ? `cancel-trip.html?trip=${t.id}` : `itinerary.html?trip=${t.id}`;
+      return `<article class="tcard ${t.status === 'past' ? 'tcard--past' : ''} ${t.status === 'cancelled' ? 'tcard--cancel' : ''} enter" style="--i:${i}">
+        <a class="tcard__link" href="${detailHref}" aria-label="${V.esc(d.name)}, ${V.esc(range)}, ${lab}" tabindex="-1"></a>
+        <div class="tcard__img ph"><img src="${V.img(t.img || d.img)}" alt=""><span class="badge badge--upcoming ${cls}">${lab.toUpperCase()}</span></div>
+        <div class="tcard__body">
+          <p class="tcard__name">${V.esc(d.name)}</p>
+          <p class="tcard__meta">${V.esc(V.trips.meta(t))}</p>
+          <p class="tcard__price num">${V.esc(range)} · ${V.fmt(t.total)}</p>
+          <div class="tcard__actions">${actions}</div>
+        </div>
+      </article>`;
+    };
+    const EMPTY = {
+      upcoming: ['plane', 'No upcoming trips', 'Your next adventure is a few taps away.', 'search.html', 'Explore Destinations'],
+      active: ['compass', 'Nothing in progress', 'Trips you are currently on will show up here with live updates.', 'search.html', 'Plan a Trip'],
+      past: ['clock', 'No past trips yet', 'Completed trips and reviews will appear here.', 'search.html', 'Find Inspiration'],
+    };
+    const lists = () => ({
+      upcoming: V.trips.list('upcoming').sort((a, b) => a.start.localeCompare(b.start)),
+      active: V.trips.list('active'),
+      past: V.trips.list().filter((t) => t.status === 'past' || t.status === 'cancelled').sort((a, b) => b.start.localeCompare(a.start)),
+    });
+    const SUB = { upcoming: (n) => `${n} Upcoming Adventure${n === 1 ? '' : 's'}`, active: (n) => n ? `${n} Trip${n === 1 ? '' : 's'} In Progress` : 'No Trips In Progress', past: (n) => `${n} Past Trip${n === 1 ? '' : 's'}` };
+    let current = ['upcoming', 'active', 'past'].includes(V.q('tab')) ? V.q('tab') : 'upcoming';
+
+    const render = () => {
+      const L = lists();
+      Object.entries(L).forEach(([k, arr]) => {
+        const el = document.getElementById('p-' + k);
+        if (arr.length) el.innerHTML = arr.map(card).join('');
+        else { const [ic, t, m, href, cta] = EMPTY[k]; el.innerHTML = `<div class="empty"><div class="empty__icon">${V.icon(ic, 30)}</div><p class="empty__title">${t}</p><p class="empty__msg">${m}</p><a class="btn btn--primary btn--inline" href="${href}">${cta}</a></div>`; }
+      });
+      $('#sub').textContent = SUB[current](L[current].length);
+    };
+    const skeleton = () => ['upcoming', 'active', 'past'].forEach((k) => { document.getElementById('p-' + k).innerHTML = '<div class="skeleton sk-card"></div><div class="skeleton sk-card"></div>'; });
+
+    const seg = $('#seg');
+    seg.addEventListener('change', (e) => { current = e.detail; $('#sub').textContent = SUB[current](lists()[current].length); history.replaceState(null, '', `?tab=${current}`); });
+    if (current !== 'upcoming') seg.select(current);
+    if (capture) render(); else { skeleton(); setTimeout(render, 600); }
+    $('#sub').textContent = SUB[current](lists()[current].length);
+
+    // ---- manage sheet
+    document.addEventListener('click', (e) => {
+      const m = e.target.closest('[data-manage]');
+      if (m) {
+        const t = V.trips.get(m.dataset.manage); if (!t) return;
+        const d = V.dest(t.dest);
+        $('#mSub').textContent = `${t.title} · ${t.ref}`;
+        $('#mImg').src = V.img(t.img || d.img);
+        $('#mName').textContent = t.title;
+        $('#mDates').textContent = `${V.date.range(t.start, t.end)}, ${t.start.slice(0, 4)} · ${t.adults + t.children} Traveller${t.adults + t.children === 1 ? '' : 's'} · ${t.cls === 'business' ? 'Business' : 'Economy'}`;
+        $('#mModify').href = `modify-booking.html?trip=${t.id}`;
+        $('#mTicket').href = `e-ticket.html?ref=${t.ref}`;
+        $('#mCancel').href = `cancel-trip.html?trip=${t.id}`;
+        $('#mRefund').textContent = `Refund up to ${V.fmt(V.trips.refund(t))}`;
+        V.sheet.open('manage');
+        return;
+      }
+      const a = e.target.closest('[data-again]');
+      if (a) {
+        V.booking.start(a.dataset.again);
+        a.classList.add('is-loading');
+        V.wait(600).then(() => { location.href = 'book-dates.html'; });
+      }
+    });
+    if (V.q('sheet') === 'manage') { const t = lists().upcoming[0]; if (t) { const fake = document.createElement('button'); fake.dataset.manage = t.id; document.body.appendChild(fake); fake.click(); fake.remove(); } }
+  })();
+</script>
+</body>
+</html>

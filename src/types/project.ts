@@ -112,6 +112,10 @@ export interface ScreenFlow {
   screens: Screen[];
 }
 
+/** Where a piece of work stands, as the project card's status pill states it:
+ *  shipped and running, a working build you can use, or a study on paper. */
+export type ProjectStatus = "live" | "prototype" | "concept";
+
 /** Structured frontmatter for one case study. */
 export interface ProjectMeta {
   /** Project name. */
@@ -131,6 +135,16 @@ export interface ProjectMeta {
   /** /work-specific framing line: a different angle from `summary`, so the
    *  index adds information the home cards don't already carry. Optional. */
   indexNote?: string;
+  /** The one line a project card leads with: what the work actually came to,
+   *  in figures where the study has them. Every claim in it has to be made in
+   *  the study's own body. Required for app and web studies; at most 90
+   *  characters and no em dash (both enforced by the content layer). */
+  outcome?: string;
+  /** Where the work stands. Optional in frontmatter: when absent the content
+   *  layer derives it (a `liveUrl` means live; a `prototype` or `figma` means
+   *  prototype; anything else is a concept), so it only needs writing where
+   *  that derivation would be wrong. Always set on a parsed meta. */
+  status: ProjectStatus;
   /** Case-hero decorative texture: blueprint | ledger | route | grid, so each
    *  study screenshots differently beyond its accent (recipes in globals.css). */
   motif?: "blueprint" | "ledger" | "route" | "grid";

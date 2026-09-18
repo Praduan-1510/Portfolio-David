@@ -65,7 +65,7 @@ export function ProfileHero() {
         <div className="max-w-[40rem]">
           <TextReveal
             as="h1"
-            by="lines"
+            by="words"
             trigger="inView"
             className="max-w-[18ch] font-display text-display-l"
           >
@@ -94,7 +94,7 @@ export function ProfileHero() {
             className="mt-space-7 flex flex-wrap items-center gap-space-4"
           >
             <Magnetic className="inline-block">
-              <Button href="/contact" variant="primary">
+              <Button href="/contact" variant="primary" arrow="right">
                 Get in touch
               </Button>
             </Magnetic>

@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Hotel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .psheet.ht { margin-top: 22px; padding: 0 0 20px; border-radius: var(--r-sheet) var(--r-sheet) 0 0; overflow: hidden; background: #F5F5F5; }
+  .ht__hero { position: relative; height: 290px; }
+  .ht__hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,33,61,.25) 0%, rgba(20,33,61,0) 30%, rgba(245,245,245,0) 65%, #F5F5F5 100%); pointer-events: none; }
+  .ht__btn { position: absolute; top: 39px; z-index: 2; }
+  .ht__back { left: 15px; color: #000; }
+  .ht__share { right: 10px; color: var(--navy); }
+  .ht__photos { position: absolute; right: 12px; bottom: 60px; z-index: 2; display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 14px; background: rgba(11,20,38,.6); color: #fff; font-size: 12px; font-weight: 500; }
+  .ht__body { padding: 0 21px; margin-top: -6px; position: relative; }
+  .ht__tag { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 12px; background: var(--orange-tint); color: #7A4A00; font-size: 11.5px; font-weight: 600; }
+  .ht__title { font-size: 24px; line-height: 29px; font-weight: 700; color: var(--navy); margin-top: 10px; }
+  .ht__loc { display: flex; align-items: center; gap: 5px; font-size: 13px; color: #555; margin-top: 5px; }
+  .ht__rate { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 13px; color: #555; }
+  .ht__rate b { display: inline-grid; place-items: center; height: 24px; padding: 0 7px; border-radius: 6px; background: var(--navy); color: #fff; font-size: 12.5px; }
+  .ht__rate a { color: var(--navy); font-weight: 600; margin-left: auto; padding: 10px 0; }
+  .ht h2 { font-size: 16px; font-weight: 700; color: #333; margin: 28px 0 12px; }
+  .ht__row { display: flex; justify-content: space-between; align-items: baseline; }
+  .ht__row a { font-size: 12px; font-weight: 600; color: var(--navy); padding: 10px 0; }
+  .mini { position: relative; display: block; height: 128px; border-radius: 16px; overflow: hidden; background: url('../assets/img/map-paris.jpg') -438px -331px / 1100px 900px no-repeat, #EEF0E8; }
+  .mini .pin { left: 50%; top: 50%; color: var(--navy); pointer-events: none; }
+  .mini__lbl { position: absolute; left: 10px; bottom: 10px; display: inline-flex; gap: 6px; align-items: center; height: 30px; padding: 0 12px; border-radius: 15px; background: #fff; font-size: 12px; font-weight: 600; box-shadow: var(--shadow-1); }
+  .mini__credit { position: absolute; right: 6px; bottom: 4px; font-size: 8.5px; color: #333; background: rgba(255,255,255,.75); padding: 1px 4px; border-radius: 3px; }
+  .near { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .near span { font-size: 12px; color: #444; background: #fff; border-radius: 10px; padding: 6px 10px; }
+  .near b { color: var(--orange); font-weight: 600; margin-left: 4px; }
+  .amen { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .amen div { background: #fff; border-radius: 14px; padding: 12px 8px 10px; text-align: center; font-size: 11.5px; color: #333; }
+  .amen svg { margin: 0 auto 6px; color: var(--navy); }
+  .rooms .option { align-items: stretch; padding: 10px; gap: 12px; background: #fff; min-height: 96px; }
+  .rooms .option__radio { align-self: center; }
+  .room__img { width: 88px; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
+  .room__meta { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 11.5px; color: var(--text-4); margin-top: 4px; }
+  .room__price { display: block; font-size: 13px; font-weight: 700; color: var(--orange); margin-top: 6px; }
+  .room__price small { font-size: 11px; color: var(--text-4); font-weight: 500; }
+  .acc { background: #fff; border-radius: var(--r-card); padding: 2px 16px; }
+  .acc details + details { border-top: 1px solid #E6E6E6; }
+  .acc summary { list-style: none; display: flex; align-items: center; gap: 12px; min-height: 52px; cursor: pointer; font-size: 14px; font-weight: 600; color: #222; }
+  .acc summary::-webkit-details-marker { display: none; }
+  .acc summary .chev { margin-left: auto; transition: transform var(--dur) var(--ease-out); color: #888; }
+  .acc details[open] summary .chev { transform: rotate(180deg); }
+  .acc summary .ic { width: 32px; height: 32px; border-radius: 10px; background: var(--grey-1); display: grid; place-items: center; color: var(--navy); }
+  .acc p { font-size: 13px; line-height: 1.55; color: #555; padding: 0 0 14px 44px; }
+  .rq { background: #fff; border-radius: var(--r-card); padding: 14px 16px; }
+  .rq + .rq { margin-top: 10px; }
+  .rq__h { display: flex; align-items: center; gap: 10px; }
+  .rq__av { width: 34px; height: 34px; border-radius: 50%; overflow: hidden; }
+  .rq__n { font-size: 13.5px; font-weight: 600; }
+  .rq p { font-size: 12.5px; line-height: 1.5; color: #333; margin-top: 8px; }
+  .ht-bar .cta-bar__in { background: #F5F5F5; }
+  .ht-bar .cta-bar__in::before { top: -25px; background: linear-gradient(to bottom, rgba(245,245,245,0), #F5F5F5); }
+  .ht-bar .buybar { align-items: center; padding: 16px 25px 20px 30px !important; border-top: 1px solid #DCDCDC; }
+  .ht-bar .buybar > * + * { margin-top: 0; }
+  .ht-bar .buybar__v { font-size: 16px; margin-top: 4px; }
+  .ht-bar .btn { width: 170px; height: 44px; font-size: 15px; }
+</style>
+</head>
+<body>
+<main class="page page--cta" aria-label="Hotel details">
+  <section class="psheet ht">
+    <div class="ht__hero ph ph--warm"><img id="heroImg" src="../assets/img/hotel-marais.jpg" alt="Hôtel Le Marais courtyard façade">
+    <a class="ht__photos tap" id="photosLink" href="gallery.html?id=paris"><span data-icon="image" data-size="15" data-sw="2"></span><span>Photos</span></a></div>
+    <a class="icon-btn ht__btn ht__back tap" href="destination.html?id=paris" id="back" data-go="back" aria-label="Back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12H4M11 5 4 12l7 7"/></svg>
+    </a>
+    <button class="icon-btn ht__btn ht__share tap" type="button" id="share" aria-label="Share hotel"><span data-icon="share" data-size="18" data-sw="2"></span></button>
+
+    <div class="ht__body">
+      <span class="ht__tag" id="tag"><span data-icon="check" data-size="12" data-sw="3"></span>Included in Paris City Break</span>
+      <h1 class="ht__title" id="name">Hôtel Le Marais</h1>
+      <p class="ht__loc"><span data-icon="map-pin" data-size="15" data-sw="2"></span><span id="addr">4★ Boutique · Rue De Bretagne, Paris</span></p>
+      <div class="ht__rate"><b id="score">4.8</b><span><span id="stars"></span></span><span id="rc">612 reviews</span><a href="reviews.html?id=paris" id="allRev">Reviews</a></div>
+
+      <div class="ht__row"><h2>Location</h2><a href="map.html?pin=hotel-le-marais" id="mapLink">Open map</a></div>
+      <a class="mini tap" href="map.html?pin=hotel-le-marais" id="mini" aria-label="Open the hotel on the map">
+        <span class="pin" aria-hidden="true"></span>
+        <span class="mini__lbl"><span data-icon="map-pin-fill" data-size="14"></span><span id="miniLbl">Le Marais · 3rd arrondissement</span></span>
+        <span class="mini__credit">© OpenStreetMap contributors</span>
+      </a>
+      <div class="near" id="near"></div>
+
+      <h2>Amenities</h2>
+      <div class="amen" id="amen"></div>
+
+      <h2 id="roomsH">Choose Your Room</h2>
+      <div class="options rooms" id="rooms" data-options aria-labelledby="roomsH"></div>
+
+      <h2>Policies</h2>
+      <div class="acc" id="acc"></div>
+
+      <div class="ht__row"><h2>Guest Reviews</h2><a href="reviews.html?id=paris" id="allRev2">See all</a></div>
+      <div id="rq"></div>
+    </div>
+  </section>
+
+  <div class="cta-bar ht-bar"><div class="cta-bar__in buybar">
+    <div><p class="buybar__k" id="selK">Classic Room · 7 nights</p><p class="buybar__v num" id="selV">Included</p></div>
+    <button class="btn btn--primary" type="button" id="select"><span>Select Room</span></button>
+  </div></div>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const V = window.Voyager; const $ = (s) => document.querySelector(s);
+  const qid = V.q('id');
+  const d = V.dest(qid === 'marais' ? 'paris' : qid) || V.dest('paris'); const id = d.id; const isParis = id === 'paris';
+  const trip = V.trips.list().find((t) => t.dest === id);
+  const name = isParis ? 'Hôtel Le Marais' : (trip && trip.hotel) || V.travel(id).hotel;
+  document.title = 'Voyager · ' + name;
+  $('#name').textContent = name;
+  $('#heroImg').src = V.img(isParis ? 'hotel-marais' : d.img); $('#heroImg').alt = name;
+  $('#tag').lastChild.textContent = `Included in ${d.package.name}`;
+  $('#addr').textContent = isParis ? '4★ Boutique · Rue De Bretagne, Paris' : `${d.hotelStars}★ Hotel · ${d.name}, ${d.country}`;
+  $('#score').textContent = isParis ? '4.8' : (d.rating - 0.1).toFixed(1);
+  $('#stars').innerHTML = V.starsHTML(d.hotelStars, 13);
+  $('#rc').textContent = isParis ? '612 reviews' : `${Math.round(d.reviews / 3)} reviews`;
+  ['#back'].forEach((s) => ($(s).href = `destination.html?id=${id}`));
+  $('#allRev').href = $('#allRev2').href = `reviews.html?id=${id}`;
+  $('#photosLink').href = `gallery.html?id=${id}`;
+  if (!isParis) {
+    // only Paris has the street map — other cities link back to the destination
+    $('#mini').style.background = `url('${V.img(d.img)}') center / cover no-repeat`;
+    $('#miniLbl').textContent = `${d.name} · City centre`;
+    $('#mini').href = $('#mapLink').href = `destination.html?id=${id}`;
+    $('#mapLink').textContent = 'Destination';
+    $('.mini__credit').hidden = true;
+  }
+  $('.mini .pin').innerHTML = V.icon('map-pin-fill', 32);
+  $('#near').innerHTML = (isParis ? [['Picasso Museum', '6 min'], ['Place des Vosges', '9 min'], ['Metro Filles du Calvaire', '3 min']] : [['Old town', '8 min'], ['Metro', '4 min'], ['Airport', '35 min']])
+    .map(([n, t]) => `<span>${n}<b>${t}</b></span>`).join('');
+
+  const AM = [['wifi', 'Free Wi-Fi'], ['cutlery', 'Breakfast'], ['bed', 'King beds'], ['headset', '24h Concierge'], ['car', 'Airport Transfer'], ['shield-check', 'In-room safe']];
+  $('#amen').innerHTML = AM.map(([ic, l]) => `<div>${V.icon(ic, 24, 'stroke-width="1.7"')}${l}</div>`).join('');
+
+  const b = V.booking.get();
+  const sameTrip = b.dest === id;
+  const nights = sameTrip ? Math.max(1, V.date.nights(b.depart, b.ret)) : d.days;   // Paris Aug 12–19 → 7 nights
+  const ROOMS = V.ROOMS.map((r) => V.room(r.id, id));
+  let room = (sameTrip && b.room) || 'classic';
+  $('#rooms').innerHTML = ROOMS.map((r) => `<button class="option" type="button" data-value="${r.id}" aria-checked="${r.id === room}">
+      <span class="option__radio"></span>
+      <span class="room__img ph ph--warm"><img src="${V.img(r.img)}" alt=""></span>
+      <span class="option__body"><span class="option__title">${r.name}</span><span class="room__meta"><span>${r.size}</span><span>${r.bed}</span></span>
+      <span class="room__price">${r.extra ? `+${V.fmt(r.extra)} <small>/night · added to your booking</small>` : 'Included <small>in your package</small>'}</span></span></button>`).join('');
+  V.refresh($('#rooms'));
+  const paintSel = () => {
+    const r = ROOMS.find((x) => x.id === room);
+    $('#selK').textContent = `${r.name} · ${nights} nights`;
+    $('#selV').textContent = r.extra ? `+${V.fmt(r.extra * nights)} in your total` : 'Included';
+  };
+  $('#rooms').addEventListener('select', (e) => { room = e.detail; paintSel(); V.haptic(); });
+  paintSel();
+
+  const POL = [
+    ['clock', 'Check-in & check-out', 'Check-in from 2:00 PM, check-out by 11:00 AM. Early check-in is available on request and free for Voyager Gold members.'],
+    ['shield', 'Cancellation', 'Covered by your package: 90% back up to 14 days before departure, then 50%. Insurance is non-refundable.'],
+    ['user', 'Children & extra beds', 'Children under 12 stay free using existing beds. Cots are available at no charge — add a note in Special Requests.'],
+    ['info', 'Good to know', 'Paris city tax (€3.25 per adult per night) is paid at the hotel. No pets. Non-smoking throughout.'],
+  ];
+  $('#acc').innerHTML = POL.map(([ic, t, p], i) => `<details ${i === 0 ? 'open' : ''}><summary><span class="ic">${V.icon(ic, 17, 'stroke-width="1.9"')}</span>${t}<span class="chev">${V.icon('chevron-down', 16, 'stroke-width="2.2"')}</span></summary><p>${p}</p></details>`).join('');
+
+  $('#rq').innerHTML = [['rev-sarah', 'Sarah L.', 'The courtyard rooms are so quiet you forget you are in the middle of Paris. Breakfast was superb.'], ['rev-daniel', 'Daniel G.', 'Perfect base — the Picasso Museum and the best falafel in the city are a few minutes away.']]
+    .map(([img, n, t]) => `<div class="rq"><div class="rq__h"><span class="rq__av ph ph--warm"><img src="${V.img(img)}" alt=""></span><span><span class="rq__n" style="display:block">${n}</span>${V.starsHTML(5, 11)}</span></div><p>“${t}”</p></div>`).join('');
+
+  $('#share').addEventListener('click', async () => { try { await navigator.clipboard.writeText(`https://voyager.app/hotel/${id}`); } catch (e) {} V.toast('Hotel link copied'); });
+
+  $('#select').addEventListener('click', async (e) => {
+    const cur = V.booking.get();
+    if (cur.dest !== id) V.booking.start(id);
+    V.booking.set({ room });
+    const r = ROOMS.find((x) => x.id === room);
+    await V.loading(e.currentTarget, 700);
+    V.toast(`${r.name} selected`);
+    await V.wait(500);
+    location.href = 'book-dates.html';
+  });
+})();
+</script>
+</body>
+</html>

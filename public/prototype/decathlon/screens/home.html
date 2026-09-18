@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* Hero carousel: first card x14..314 (300x200 r16), second peeks at x337 */
+  .hero { position: absolute; left: 0; top: 160px; width: 393px; height: 200px; }
+  .hero__track { display: flex; gap: 23px; height: 200px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-padding-left: 14px; padding: 0 14px; scrollbar-width: none; overscroll-behavior-x: contain; }
+  .hero__track::-webkit-scrollbar { display: none; }
+  .hero-slide { position: relative; flex: 0 0 300px; height: 200px; border-radius: var(--r-hero); overflow: hidden; scroll-snap-align: start; background: linear-gradient(135deg, #3A5566, #16283A); }
+  .hero-slide img { width: 100%; height: 100%; object-fit: cover; transition: transform 700ms var(--ease-out); }
+  .hero-slide:active img { transform: scale(1.03); }
+  .hero-slide__copy { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 16px 18px 30px; color: #fff; background: linear-gradient(180deg, rgba(1,31,48,0) 35%, rgba(1,31,48,.72)); opacity: 0; transition: opacity 360ms var(--ease-out); }
+  .hero-slide.is-active .hero-slide__copy { opacity: 1; }
+  .hero-slide__eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: #BFE6FA; }
+  .hero-slide__title { font-size: 21px; font-weight: 700; line-height: 1.12; margin-top: 3px; }
+  .hero-slide__cta { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; font-size: 12px; font-weight: 600; }
+  .hero-slide__cta svg { width: 14px; height: 14px; }
+  .hero .dots { position: absolute; left: 14px; width: 300px; top: 184px; pointer-events: none; }
+  .hero .dots i { width: 5px; height: 5px; background: rgba(255,255,255,.5); }
+  .hero .dots i.on { width: 14px; background: #fff; }
+
+  /* Below the fold: continues the Home language on the blue canvas */
+  .more { padding: 800px 14px calc(var(--tabbar-h) + 28px); }
+  .more .section-head { margin: 26px 2px 12px; }
+  .more .section-head:first-child { margin-top: 0; }
+  .more .rail { margin: 0 -14px; padding: 2px 14px 6px; scroll-padding: 0 14px; gap: 11px; }
+  .more .see-all { color: var(--navy); font-weight: 500; }
+  .club { position: relative; display: block; height: 150px; border-radius: var(--r-hero); overflow: hidden; background: linear-gradient(120deg, #012A4A, #0F96DB); color: #fff; }
+  .club img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .club::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(1,42,74,.94) 0%, rgba(1,42,74,.78) 52%, rgba(1,42,74,.12) 100%); }
+  .club__body { position: relative; z-index: 2; padding: 18px 18px 0; max-width: 250px; }
+  .club__eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #9FE08A; }
+  .club__eyebrow svg { width: 14px; height: 14px; }
+  .club__title { font-size: 19px; font-weight: 700; line-height: 1.2; margin-top: 6px; }
+  .club__sub { font-size: 12px; line-height: 1.4; color: #CFE7F4; margin-top: 4px; }
+  .club__cta { position: absolute; z-index: 2; left: 18px; bottom: 16px; display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 12px; border-radius: var(--r); background: #fff; color: var(--navy); font-size: 13px; font-weight: 600; }
+  .club__cta svg { width: 14px; height: 14px; }
+  .brand-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -14px; padding: 2px 14px; }
+  .brand-chips::-webkit-scrollbar { display: none; }
+  .brand-chips .chip { background: #fff; box-shadow: inset 0 0 0 1.5px var(--steel); height: 32px; font-size: 13px; font-weight: 500; }
+  .store-card { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: var(--r-tile); background: #fff; box-shadow: var(--shadow-1); }
+  .store-card .photo { width: 96px; height: 64px; flex-shrink: 0; }
+  .store-card__name { font-size: 14px; font-weight: 600; color: #000; }
+  .store-card__meta { font-size: 12px; color: var(--muted-2); margin-top: 2px; line-height: 1.35; }
+  .store-card__open { display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; font-size: 11.5px; font-weight: 600; color: var(--ok); }
+  .store-card__open::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .store-card__open.is-closed { color: var(--muted-2); }
+  .store-card .chev { color: #000; margin-left: auto; }
+  .perks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 26px; }
+  .perk { background: rgba(255,255,255,.72); border-radius: var(--r); padding: 12px 8px; text-align: center; font-size: 11px; line-height: 1.3; color: var(--navy); }
+  .perk .icon-circle { width: 30px; height: 30px; margin: 0 auto 6px; }
+  .perk .icon-circle svg { width: 16px; height: 16px; }
+  .perk b { display: block; font-weight: 600; font-size: 12px; }
+</style>
+</head>
+<body>
+<main class="screen bg-home" aria-label="Home">
+  <h1 class="sr-only">Decathlon — shop sports gear</h1>
+  <header class="brand-head abs" style="left:0;top:0;width:393px" data-brandhead data-ring="#9FD5F1"></header>
+
+  <!-- Hero carousel -->
+  <section class="hero enter" style="--i:1" aria-label="Offers" aria-roledescription="carousel">
+    <div class="hero__track" id="heroTrack" data-carousel data-auto="5000">
+      <a class="hero-slide tap is-active" href="search-results.html?q=Running%20shoes&amp;sale=1" aria-label="Sale: up to 50% off">
+        <img src="../assets/img/hero-sale.jpg" alt="">
+      </a>
+      <a class="hero-slide tap" href="sport.html?sport=running" aria-label="Run season: up to 55% off running shoes">
+        <img src="../assets/img/hero-running.jpg" alt="" loading="lazy">
+        <span class="hero-slide__copy"><span class="hero-slide__eyebrow">Run season</span><span class="hero-slide__title">Up to 55% off<br>running shoes</span><span class="hero-slide__cta">Shop running <i data-icon="arrow" data-size="14" data-sw="2"></i></span></span>
+      </a>
+      <a class="hero-slide tap" href="sport.html?sport=football" aria-label="Kick off: football gear from ₹1,499">
+        <img src="../assets/img/hero-football.jpg" alt="" loading="lazy">
+        <span class="hero-slide__copy"><span class="hero-slide__eyebrow">Kick off</span><span class="hero-slide__title">Match balls from<br>₹1,499</span><span class="hero-slide__cta">Shop football <i data-icon="arrow" data-size="14" data-sw="2"></i></span></span>
+      </a>
+      <a class="hero-slide tap" href="sport.html?sport=camping" aria-label="Into the wild: camping and trekking gear">
+        <img src="../assets/img/hero-outdoor.jpg" alt="" loading="lazy">
+        <span class="hero-slide__copy"><span class="hero-slide__eyebrow">Into the wild</span><span class="hero-slide__title">Tents that pitch<br>in 2 seconds</span><span class="hero-slide__cta">Shop camping <i data-icon="arrow" data-size="14" data-sw="2"></i></span></span>
+      </a>
+    </div>
+    <div class="dots" data-dots-for="heroTrack" aria-hidden="true"></div>
+  </section>
+
+  <!-- 4 x 4 sport tiles -->
+  <nav aria-label="Shop by sport">
+  <a class="tile abs tap enter" href="sport.html?sport=winter" style="left:14px;top:383px;--i:2" aria-label="Winter wear"><img src="../assets/img/cat-winter.jpg" alt="" loading="eager"></a>
+  <a class="tile abs tap enter" href="sport.html?sport=cycling" style="left:109px;top:383px;--i:2" aria-label="Cycling"><img src="../assets/img/cat-cycling.jpg" alt="" loading="eager"></a>
+  <a class="tile abs tap enter" href="sport.html?sport=football" style="left:204px;top:383px;--i:2" aria-label="Football"><img src="../assets/img/cat-football.jpg" alt="" loading="eager"></a>
+  <a class="tile abs tap enter" href="sport.html?sport=cricket" style="left:299px;top:383px;--i:2" aria-label="Cricket"><img src="../assets/img/cat-cricket.jpg" alt="" loading="eager"></a>
+  <a class="tile abs tap enter" href="sport.html?sport=tennis" style="left:14px;top:482px;--i:3" aria-label="Tennis"><img src="../assets/img/cat-tennis.jpg" alt="" loading="eager"></a>
+  <a class="tile abs tap enter" href="sport.html?sport=badminton" style="left:109px;top:482px;--i:3" aria-label="Badminton"><img src="../assets/img/cat-badminton.jpg" alt="" loading="eager"></a>
+  <a class="tile abs tap enter" href="sport.html?sport=basketball" style="left:204px;top:482px;--i:3" aria-label="Basketball"><img src="../assets/img/cat-basketball.jpg" alt="" loading="eager"></a>
+  <a class="tile abs tap enter" href="sport.html?sport=table-tennis" style="left:299px;top:482px;--i:3" aria-label="Table tennis"><img src="../assets/img/cat-table-tennis.jpg" alt="" loading="eager"></a>
+  <a class="tile abs tap enter" href="sport.html?sport=gym" style="left:14px;top:581px;--i:4" aria-label="Gym &amp; strength"><img src="../assets/img/cat-gym.jpg" alt="" loading="lazy"></a>
+  <a class="tile abs tap enter" href="sport.html?sport=bags" style="left:109px;top:581px;--i:4" aria-label="Sports bags"><img src="../assets/img/cat-gym-bag.jpg" alt="" loading="lazy"></a>
+  <a class="tile abs tap enter" href="sport.html?sport=fitness" style="left:204px;top:581px;--i:4" aria-label="Fitness"><img src="../assets/img/cat-fitness.jpg" alt="" loading="lazy"></a>
+  <a class="tile abs tap enter" href="sport.html?sport=yoga" style="left:299px;top:581px;--i:4" aria-label="Yoga"><img src="../assets/img/cat-yoga.jpg" alt="" loading="lazy"></a>
+  <a class="tile abs tap enter" href="sport.html?sport=football-boots" style="left:14px;top:680px;--i:5" aria-label="Football boots"><img src="../assets/img/cat-football-boots.jpg" alt="" loading="lazy"></a>
+  <a class="tile abs tap enter" href="sport.html?sport=running" style="left:109px;top:680px;--i:5" aria-label="Running"><img src="../assets/img/cat-running.jpg" alt="" loading="lazy"></a>
+  <a class="tile abs tap enter" href="sport.html?sport=skating" style="left:204px;top:680px;--i:5" aria-label="Roller skating"><img src="../assets/img/cat-skating.jpg" alt="" loading="lazy"></a>
+  <a class="tile abs tap enter" href="sport.html?sport=skateboarding" style="left:299px;top:680px;--i:5" aria-label="Skateboarding"><img src="../assets/img/cat-skateboard.jpg" alt="" loading="lazy"></a>
+  </nav>
+
+  <!-- Below the fold -->
+  <div class="more">
+    <div class="section-head"><h2 class="section-title">Trending now</h2><a class="see-all tap" href="search-results.html?q=Running%20shoes">See all</a></div>
+    <div class="rail" id="trending" aria-label="Trending products"></div>
+
+    <div class="section-head"><h2 class="section-title">Decathlon Club</h2></div>
+    <a class="club tap" href="club.html" aria-label="Decathlon Club: you have 2,450 points">
+      <img src="../assets/img/club-banner.jpg" alt="" loading="lazy">
+      <div class="club__body">
+        <span class="club__eyebrow"><i data-icon="trophy" data-size="14" data-sw="2"></i>Club member</span>
+        <p class="club__title"><span class="num" id="clubPts">2,450</span> points to spend</p>
+        <p class="club__sub">Worth <span id="clubRs">₹245</span> on your next order. Free delivery and early sale access.</p>
+      </div>
+      <span class="club__cta">View rewards <i data-icon="chevron" data-size="14" data-sw="2.2"></i></span>
+    </a>
+
+    <div class="section-head"><h2 class="section-title">Deals under ₹1,000</h2><a class="see-all tap" href="search-results.html?q=Under%20%E2%82%B91000">See all</a></div>
+    <div class="rail" id="deals" aria-label="Deals under ₹1,000"></div>
+
+    <div class="section-head"><h2 class="section-title">Shop by brand</h2></div>
+    <div class="brand-chips" id="brands"></div>
+
+    <div class="section-head"><h2 class="section-title">Your nearest store</h2><a class="see-all tap" href="stores.html">All stores</a></div>
+    <a class="store-card tap" href="store-detail.html?id=newtown">
+      <span class="photo"><img src="../assets/img/store-newtown.jpg" alt="" loading="lazy"></span>
+      <span class="grow"><span class="store-card__name" style="display:block">Decathlon New Town</span><span class="store-card__meta" style="display:block">1.4 km · Action Area 1C, New Town</span><span class="store-card__open" id="nearOpen">Open until 10:00 PM</span></span>
+      <i class="chev" data-icon="chevron" data-size="18" data-sw="2"></i>
+    </a>
+
+    <div class="perks">
+      <a class="perk tap" href="help.html?topic=delivery"><span class="icon-circle"><i data-icon="truck" data-size="16" data-sw="1.8"></i></span><b>Free delivery</b>above ₹999</a>
+      <a class="perk tap" href="help.html?topic=returns"><span class="icon-circle"><i data-icon="return" data-size="16" data-sw="1.8"></i></span><b>30-day</b>easy returns</a>
+      <a class="perk tap" href="help.html?topic=warranty"><span class="icon-circle"><i data-icon="shield" data-size="16" data-sw="1.8"></i></span><b>2-year</b>warranty</a>
+    </div>
+  </div>
+
+  <nav data-tabbar="home"></nav>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca;
+    // Rails
+    D.$('#trending').innerHTML = ['racket', 'nike-run-1', 'bicycle', 'tent', 'nike-run-4', 'jacket'].map((id) => D.card(id, { rail: true })).join('');
+    D.$('#deals').innerHTML = D.products.filter((p) => p.price < 1000).sort((a, b) => (a.kind === 'shoe') - (b.kind === 'shoe')).map((p) => D.card(p, { rail: true, add: true })).join('');
+    D.$('#brands').innerHTML = D.brands.map((b) => `<a class="chip tap" href="search-results.html?q=${encodeURIComponent(b)}">${b}</a>`).join('');
+    const u = D.user.get();
+    D.$('#clubPts').textContent = D.fmtNum(u.points);
+    D.$('#clubRs').textContent = D.fmt(Math.floor(u.points / 10));
+    const st = D.storeStatus(D.storeById('newtown'));
+    D.$('#nearOpen').textContent = st.k === 'no' ? `Closed · ${st.sub}` : `Open · ${st.sub}`;
+    D.$('#nearOpen').classList.toggle('is-closed', st.k === 'no');
+    D.hydrate(D.$('.more'));
+    // Hero: reveal the copy of whichever slide is in view
+    const track = D.$('#heroTrack');
+    track.addEventListener('slide', (e) => D.$$('.hero-slide', track).forEach((s, i) => s.classList.toggle('is-active', i === e.detail)));
+  })();
+</script>
+</body>
+</html>

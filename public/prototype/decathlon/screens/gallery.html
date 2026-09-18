@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Photos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  body { background: #0B1620; }
+  .gal { position: relative; width: var(--w); height: 100vh; min-height: 640px; margin: 0 auto; background: #0B1620; color: #fff; overflow: hidden; display: flex; flex-direction: column; padding-bottom: var(--tabbar-h); }
+  body.capture .gal { height: 852px; margin: 0; }
+  .gal__bar { display: flex; align-items: center; gap: 8px; height: 72px; padding: 12px 12px 0; flex-shrink: 0; }
+  .gal__btn { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: rgba(255,255,255,.1); }
+  .gal__btn svg { width: 20px; height: 20px; }
+  .gal__title { flex: 1; min-width: 0; text-align: center; }
+  .gal__name { display: block; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .gal__count { display: block; font-size: 12px; color: #9FB6C4; }
+  .gal__track { flex: 1; min-height: 0; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
+  .gal__track::-webkit-scrollbar { display: none; }
+  .gal__track.is-locked { overflow-x: hidden; }
+  .slide { flex: 0 0 100%; height: 100%; scroll-snap-align: center; overflow: hidden; display: grid; place-items: center; touch-action: pan-x pan-y; position: relative; }
+  .slide img { width: 100%; height: 100%; object-fit: contain; transition: transform 300ms var(--ease-out); transform-origin: 50% 50%; cursor: zoom-in; user-select: none; -webkit-user-drag: none; }
+  .slide.is-zoomed img { transform: scale(2.2); cursor: zoom-out; }
+  .gal__hint { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: #9FB6C4; height: 28px; flex-shrink: 0; transition: opacity 300ms; }
+  .gal__hint svg { width: 14px; height: 14px; }
+  .thumbs { display: flex; gap: 10px; justify-content: center; padding: 6px 16px 14px; flex-shrink: 0; overflow-x: auto; scrollbar-width: none; }
+  .thumbs button { position: relative; width: 58px; height: 58px; border-radius: 8px; overflow: hidden; flex-shrink: 0; opacity: .55; box-shadow: 0 0 0 1px rgba(255,255,255,.15); transition: opacity var(--dur), box-shadow var(--dur), transform 220ms var(--ease-spring); background: #1B2A36; }
+  .thumbs button img { width: 100%; height: 100%; object-fit: cover; }
+  .thumbs button[aria-current="true"] { opacity: 1; box-shadow: 0 0 0 2px #fff; transform: scale(1.04); }
+  .gal__cta { display: flex; gap: 10px; padding: 0 16px 14px; flex-shrink: 0; }
+  .gal__cta .btn { height: 44px; font-size: 16px; }
+  .gal__cta .heart { position: relative; top: auto; right: auto; width: 44px; height: 44px; border-radius: var(--r); background: rgba(255,255,255,.1); color: #fff; flex-shrink: 0; }
+  .gal__cta .heart svg { width: 20px; height: 20px; }
+  .gal__cta .heart.is-on { color: #4FC3FF; }
+  .gal__cta .heart::after { inset: 0; }
+</style>
+</head>
+<body>
+<main class="gal" aria-label="Product photos" aria-roledescription="carousel">
+  <div class="gal__bar">
+    <a class="gal__btn tap" id="close" href="product.html" data-go="back" aria-label="Close photos"><i data-icon="close" data-size="20" data-sw="2"></i></a>
+    <div class="gal__title"><span class="gal__name" id="name">Tennis Racket</span><span class="gal__count" id="count" aria-live="polite">1 of 4</span></div>
+    <button class="gal__btn tap" type="button" data-action="share" aria-label="Share"><i data-icon="share" data-size="20"></i></button>
+  </div>
+  <div class="gal__track" id="track"></div>
+  <p class="gal__hint" id="hint"><i data-icon="expand" data-size="14"></i><span>Double-tap to zoom · swipe for more</span></p>
+  <div class="thumbs" id="thumbs" role="tablist" aria-label="Choose photo"></div>
+  <div class="gal__cta">
+    <button class="heart tap" type="button" id="heart" data-heart="racket" aria-label="Save to wishlist"></button>
+    <a class="btn btn--brand tap" id="toProduct" href="product.html"><span id="ctaTxt">Choose size · ₹12,000</span></a>
+  </div>
+  <nav data-tabbar="categories"></nav>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const p = D.product(D.q('id')) || D.product('racket');
+    const imgs = p.imgs || [p.img];
+    let i = Math.max(0, Math.min(imgs.length - 1, +(D.q('i') || 0)));
+    document.title = 'Decathlon · Photos · ' + p.name;
+    $('#name').textContent = p.name;
+    $('#close').href = `product.html?id=${p.id}`;
+    $('#toProduct').href = `product.html?id=${p.id}`;
+    $('#ctaTxt').textContent = p.sizes.length > 1 ? `Choose size · ${D.fmt(p.price)}` : `View product · ${D.fmt(p.price)}`;
+    $('#heart').dataset.heart = p.id;
+    const track = $('#track');
+    track.innerHTML = imgs.map((s, k) => `<div class="slide" role="group" aria-roledescription="slide" aria-label="Photo ${k + 1} of ${imgs.length}"><img src="${D.img(s)}" alt="${D.esc(p.name)}, photo ${k + 1}" draggable="false"></div>`).join('');
+    $('#thumbs').innerHTML = imgs.length > 1 ? imgs.map((s, k) => `<button type="button" class="tap" role="tab" aria-label="Photo ${k + 1}" aria-current="${k === i}" data-i="${k}"><img src="${D.img(s)}" alt=""></button>`).join('') : '';
+    D.hydrate(document.querySelector('.gal'));
+
+    const slides = $$('.slide', track);
+    const unzoom = () => { slides.forEach((s) => { s.classList.remove('is-zoomed'); $('img', s).style.transformOrigin = ''; }); track.classList.remove('is-locked'); };
+    const mark = (k) => { i = k; $('#count').textContent = `${k + 1} of ${imgs.length}`; $$('#thumbs button').forEach((b, n) => b.setAttribute('aria-current', String(n === k))); const tb = $$('#thumbs button')[k]; tb && tb.scrollIntoView({ block: 'nearest', inline: 'center' }); };
+    const goTo = (k, smooth = true) => { unzoom(); track.scrollTo({ left: k * track.clientWidth, behavior: smooth ? 'smooth' : 'auto' }); mark(k); };
+    let raf; track.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { const k = Math.round(track.scrollLeft / track.clientWidth); if (k !== i) { unzoom(); mark(k); } }); }, { passive: true });
+    $('#thumbs').addEventListener('click', (e) => { const b = e.target.closest('[data-i]'); if (b) goTo(+b.dataset.i); });
+
+    // Double-tap / double-click zoom at the tap point; drag to pan while zoomed
+    const toggleZoom = (slide, x, y) => {
+      const img = $('img', slide); const r = slide.getBoundingClientRect();
+      if (slide.classList.contains('is-zoomed')) { unzoom(); return; }
+      img.style.transformOrigin = `${((x - r.left) / r.width) * 100}% ${((y - r.top) / r.height) * 100}%`;
+      slide.classList.add('is-zoomed'); track.classList.add('is-locked'); $('#hint').style.opacity = '0'; D.haptic(8);
+    };
+    let lastTap = 0;
+    track.addEventListener('pointerup', (e) => { const s = e.target.closest('.slide'); if (!s || dragged) return; const now = Date.now(); if (now - lastTap < 300) { toggleZoom(s, e.clientX, e.clientY); lastTap = 0; } else lastTap = now; });
+    let pan = null, dragged = false;
+    track.addEventListener('pointerdown', (e) => { dragged = false; const s = e.target.closest('.slide.is-zoomed'); if (!s) return; const img = $('img', s); const o = img.style.transformOrigin.split(' ').map(parseFloat); pan = { x: e.clientX, y: e.clientY, ox: o[0] || 50, oy: o[1] || 50, img }; });
+    window.addEventListener('pointermove', (e) => { if (!pan) return; const dx = e.clientX - pan.x, dy = e.clientY - pan.y; if (Math.abs(dx) + Math.abs(dy) > 4) dragged = true; pan.img.style.transformOrigin = `${Math.max(0, Math.min(100, pan.ox - dx / 3))}% ${Math.max(0, Math.min(100, pan.oy - dy / 3))}%`; });
+    window.addEventListener('pointerup', () => { pan = null; setTimeout(() => (dragged = false), 0); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight' && i < imgs.length - 1) goTo(i + 1); if (e.key === 'ArrowLeft' && i > 0) goTo(i - 1); });
+
+    requestAnimationFrame(() => goTo(i, false));
+  })();
+</script>
+</body>
+</html>

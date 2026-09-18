@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Payment methods</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* Card visuals — navy/brand plates in the Welcome gradient family */
+  .cc { position: relative; height: 196px; border-radius: 16px; padding: 18px 20px; color: #fff; overflow: hidden; background: linear-gradient(135deg, #012639 0%, #075881 55%, #0F96DB 100%); box-shadow: 0 10px 24px rgba(1,42,74,.22); isolation: isolate; }
+  .cc--debit { background: linear-gradient(135deg, #001F30 0%, #1C4A63 55%, #61A5C2 100%); }
+  .cc::before { content: ''; position: absolute; right: -60px; top: -70px; width: 220px; height: 220px; border-radius: 50%; background: rgba(255,255,255,.07); z-index: -1; }
+  .cc::after { content: ''; position: absolute; left: -40px; bottom: -90px; width: 200px; height: 200px; border-radius: 50%; border: 26px solid rgba(255,255,255,.05); z-index: -1; }
+  .cc__top { display: flex; justify-content: space-between; align-items: center; }
+  .cc__type { font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: #BFE6FA; }
+  .cc__brand { font-size: 17px; font-weight: 700; font-style: italic; letter-spacing: .5px; }
+  .cc__chip { width: 38px; height: 28px; border-radius: 6px; margin-top: 18px; background: linear-gradient(135deg, #F4D98B, #C9A24A); position: relative; }
+  .cc__chip::after { content: ''; position: absolute; inset: 7px 9px; border: 1px solid rgba(90,60,10,.35); border-radius: 3px; }
+  .cc__num { font-size: 19px; font-weight: 500; letter-spacing: 2px; margin-top: 16px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .cc__foot { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 12px; font-size: 12px; }
+  .cc__foot small { display: block; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #9FD5F1; }
+  .cc__foot b { font-weight: 500; font-size: 13px; }
+  .cc__default { position: absolute; right: 18px; top: 50px; display: inline-flex; align-items: center; gap: 4px; height: 24px; padding: 0 10px; border-radius: 12px; background: #fff; color: var(--navy); font-size: 11px; font-weight: 600; }
+  .cc__default svg { width: 13px; height: 13px; color: var(--ok); }
+  .cc-actions { display: flex; justify-content: space-between; align-items: center; margin: 6px 4px 0; }
+  .cc-wrap + .cc-wrap { margin-top: 18px; }
+  .cc-wrap { animation: rise 360ms var(--ease-out) both; }
+
+  .pref { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; }
+  .pref__t { font-size: 12px; color: var(--muted-2); }
+  .pref__v { font-size: 15px; font-weight: 600; color: #000; }
+  .pref .text-btn { color: var(--brand); font-weight: 600; }
+
+  .row { display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 8px 14px; }
+  .row + .row { border-top: 1px solid var(--divider-soft); }
+  .row__t { font-size: 14px; color: #111; font-weight: 500; }
+  .row__s { font-size: 12px; color: var(--muted-2); margin-top: 1px; }
+  .row .icon-btn { width: 40px; height: 40px; box-shadow: none; color: var(--muted-2); }
+  .row .icon-btn:hover { color: var(--danger); }
+  .wallet-bal { font-size: 16px; font-weight: 700; color: var(--navy); }
+  .linked { font-size: 12px; font-weight: 600; color: var(--ok); display: inline-flex; align-items: center; gap: 4px; }
+  .add-row { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 52px; padding: 0 14px; font-size: 14px; font-weight: 600; color: var(--brand); border-top: 1px solid var(--divider-soft); }
+  .mini-empty { padding: 18px 14px; font-size: 13px; color: var(--muted-2); text-align: center; }
+
+  /* Add card sheet preview */
+  .cc--mini { height: 150px; padding: 14px 16px; margin-bottom: 18px; }
+  .cc--mini .cc__chip { margin-top: 10px; width: 32px; height: 23px; }
+  .cc--mini .cc__num { font-size: 17px; margin-top: 12px; }
+  .cc--mini .cc__foot { margin-top: 8px; }
+  .verified { font-size: 12px; color: var(--ok); font-weight: 600; margin-top: 6px; display: none; align-items: center; gap: 4px; }
+  .verified.show { display: flex; }
+  .segmented button { text-align: center; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Payment methods">
+  <header class="appbar">
+    <a class="back tap" href="account.html" data-go="back" aria-label="Back"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <h1 class="appbar__title">Payment methods</h1>
+    <button class="appbar__action appbar__action--brand tap" type="button" data-sheet="cardSheet">Add card</button>
+  </header>
+  <div class="page-divider"></div>
+
+  <button class="panel panel--profile pref tap enter" style="--i:0;margin-top:20px" type="button" data-sheet="prefSheet">
+    <span class="icon-tile" id="prefIcon"></span>
+    <span class="grow"><span class="pref__t" style="display:block">Preferred at checkout</span><span class="pref__v" style="display:block" id="prefV">Cash on delivery</span></span>
+    <span class="text-btn">Change</span>
+  </button>
+
+  <div class="section-head"><h2 class="section-title">Saved cards</h2><span class="see-all" id="cardCount" style="color:var(--muted-2)"></span></div>
+  <div id="cards" data-delegate></div>
+
+  <div class="section-head"><h2 class="section-title">UPI</h2></div>
+  <div class="panel panel--flush" id="upi" data-delegate></div>
+
+  <div class="section-head"><h2 class="section-title">Wallets</h2></div>
+  <div class="panel panel--flush" id="wallets" data-delegate></div>
+
+  <div class="banner banner--info" style="margin-top:22px"><i data-icon="lock" data-size="18"></i><span>Cards are tokenised as per RBI guidelines. We never store your CVV, and every payment is confirmed with your bank.</span></div>
+
+  <nav data-tabbar="account"></nav>
+</main>
+
+<!-- Add card -->
+<section class="sheet" id="cardSheet" aria-labelledby="cardT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="cardT">Add a card</p><p class="sheet__sub">Visa, Mastercard, RuPay and Amex</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button>
+  </div>
+  <div class="cc cc--mini" id="preview" aria-hidden="true">
+    <div class="cc__top"><span class="cc__type" id="pvType">Credit card</span><span class="cc__brand" id="pvBrand">CARD</span></div>
+    <div class="cc__chip"></div>
+    <p class="cc__num" id="pvNum">•••• •••• •••• ••••</p>
+    <div class="cc__foot"><span><small>Card holder</small><b id="pvName">YOUR NAME</b></span><span><small>Expires</small><b id="pvExp">MM/YY</b></span></div>
+  </div>
+  <form id="cardForm" novalidate>
+    <div class="segmented" id="cardType" style="margin-bottom:16px"><button type="button" data-value="credit" aria-selected="true">Credit</button><button type="button" data-value="debit">Debit</button></div>
+    <div class="fg"><label class="label" for="cNum">Card number <span class="req">*</span></label><input class="field" id="cNum" inputmode="numeric" autocomplete="cc-number" data-mask="card" data-validate="required|card" placeholder="1234 5678 9012 3456"><span class="helper">Try 4111 1111 1111 1111</span></div>
+    <div class="fg"><label class="label" for="cName">Name on card <span class="req">*</span></label><input class="field" id="cName" autocomplete="cc-name" data-validate="required|name" placeholder="As printed on the card"></div>
+    <div class="field-row" style="margin-top:16px">
+      <div class="fg"><label class="label" for="cExp">Expiry <span class="req">*</span></label><input class="field" id="cExp" inputmode="numeric" autocomplete="cc-exp" data-mask="expiry" data-validate="required|expiry" placeholder="MM/YY"></div>
+      <div class="fg"><label class="label" for="cCvv">CVV <span class="req">*</span></label><input class="field" id="cCvv" inputmode="numeric" autocomplete="cc-csc" data-mask="digits" maxlength="4" data-validate="required|cvv" placeholder="123" type="password"></div>
+    </div>
+    <label class="check-row check-row--dark" style="margin-top:12px;font-size:14px"><input type="checkbox" id="cDefault"><span class="check-box"></span>Make this my preferred payment method</label>
+    <div class="sheet__foot"><button class="btn btn--primary btn--lg tap" type="submit" id="cardSave"><span>Save card</span></button></div>
+  </form>
+</section>
+
+<!-- Add UPI -->
+<section class="sheet" id="upiSheet" aria-labelledby="upiT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="upiT">Add a UPI ID</p><p class="sheet__sub">We verify the name with your bank</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button>
+  </div>
+  <div class="fg"><label class="label" for="upiIn">UPI ID <span class="req">*</span></label>
+    <div class="field field-affix"><input id="upiIn" autocomplete="off" autocapitalize="none" data-validate="required|upi" placeholder="name@okaxis"><button class="affix-btn" type="button" id="upiVerify">Verify</button></div>
+    <span class="helper">Found in your UPI app, e.g. Google Pay or PhonePe</span>
+    <p class="verified" id="upiOk" role="status"><i data-icon="check-circle" data-size="15"></i><span>Verified · Aditya Banerjee</span></p>
+  </div>
+  <div class="sheet__foot"><button class="btn btn--primary btn--lg tap" type="button" id="upiSave"><span>Save UPI ID</span></button></div>
+</section>
+
+<!-- Preferred method -->
+<section class="sheet" id="prefSheet" aria-labelledby="prefT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="prefT">Preferred payment method</p><p class="sheet__sub">Pre-selected when you check out. You can change it every time.</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button>
+  </div>
+  <div class="options" id="prefOpts" data-options></div>
+  <div class="sheet__foot"><button class="btn btn--primary btn--lg tap" type="button" id="prefSave"><span>Save</span></button></div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const brandOf = (n) => { const d = String(n).replace(/\D/g, ''); return /^4/.test(d) ? 'Visa' : /^(5[1-5]|2[2-7])/.test(d) ? 'Mastercard' : /^3[47]/.test(d) ? 'Amex' : /^(60|65|81|82|508)/.test(d) ? 'RuPay' : ''; };
+    const defaultCard = () => { const id = D.store.get('defaultCard'); const cs = D.payment.cards(); return (cs.find((c) => c.id === id) || cs.find((c) => c.type === D.payment.get()) || cs[0] || {}).id || null; };
+    const walletBal = () => 500 + D.orders.list().reduce((s, o) => s + (o.returnReq && o.returnReq.method === 'wallet' ? (o.returnReq.amount || 0) : 0), 0);
+    const WALLETS = [['paytm', 'Paytm Wallet', 'Link to pay in one tap'], ['amazonpay', 'Amazon Pay', 'Link to pay in one tap']];
+
+    function renderPref() {
+      const m = D.payment.get(); const meta = D.paymentMethods.find((x) => x.id === m) || D.paymentMethods[4];
+      const c = (m === 'credit' || m === 'debit') && D.payment.cards().find((k) => k.id === defaultCard() && k.type === m);
+      $('#prefV').textContent = c ? `${c.brand} ${m === 'credit' ? 'credit' : 'debit'} ending ${c.last4}` : meta.label;
+      $('#prefIcon').innerHTML = D.icon(meta.icon, 22);
+      $('#prefOpts').innerHTML = D.paymentMethods.map((p) => `<button class="option tap" type="button" data-value="${p.id}" aria-checked="${p.id === m}"><span class="option__radio"></span><span class="option__body"><span class="option__title">${p.label}</span><span class="option__sub">${p.sub}</span></span>${D.icon(p.icon, 20)}</button>`).join('');
+      delete $('#prefOpts').dataset.inited; D.hydrate($('#prefSheet'));
+    }
+    let prefPick = null;
+    $('#prefOpts').addEventListener('select', (e) => { prefPick = e.detail; });
+    $('#prefSave').addEventListener('click', async (e) => {
+      if (prefPick) { await D.loading(e.currentTarget, 500); D.payment.set(prefPick); }
+      D.sheet.close(); renderPref(); D.toast(`${D.payment.label()} is now preferred`, { icon: 'check' });
+    });
+
+    function renderCards() {
+      const cs = D.payment.cards(); const def = defaultCard();
+      $('#cardCount').textContent = cs.length ? `${cs.length} saved` : '';
+      $('#cards').innerHTML = cs.length ? cs.map((c, i) => `<div class="cc-wrap" style="animation-delay:${i * 60}ms">
+          <div class="cc ${c.type === 'debit' ? 'cc--debit' : ''}" role="img" aria-label="${c.brand} ${c.type} card ending ${c.last4}, expires ${c.exp}${c.id === def ? ', default' : ''}">
+            <div class="cc__top"><span class="cc__type">${c.type === 'debit' ? 'Debit card' : 'Credit card'}</span><span class="cc__brand">${c.brand.toUpperCase()}</span></div>
+            <div class="cc__chip"></div>
+            <p class="cc__num">•••• •••• •••• ${c.last4}</p>
+            <div class="cc__foot"><span><small>Card holder</small><b>${D.esc(c.name)}</b></span><span><small>Expires</small><b>${c.exp}</b></span></div>
+            ${c.id === def ? `<span class="cc__default">${D.icon('check-circle', 13, { sw: 2.2 })}Default</span>` : ''}
+          </div>
+          <div class="cc-actions">${c.id === def ? '<span class="text-btn" style="color:var(--muted-2)">Default card</span>' : `<button class="text-btn text-btn--brand tap" type="button" data-default="${c.id}">Set as default</button>`}
+            <button class="text-btn text-btn--danger tap" type="button" data-remove="${c.id}">${D.icon('trash', 16)}Remove</button></div>
+        </div>`).join('')
+        : `<div class="empty-state panel" style="padding:28px 16px"><div class="empty-state__icon" style="width:72px;height:72px">${D.icon('card', 32)}</div><h3>No saved cards</h3><p>Save a card for faster checkout. We never store your CVV.</p><button class="btn btn--primary btn--md tap" type="button" data-sheet="cardSheet">Add a card</button></div>`;
+    }
+    $('#cards').addEventListener('click', async (e) => {
+      const d = e.target.closest('[data-default]'); const r = e.target.closest('[data-remove]');
+      if (d) { const c = D.payment.cards().find((x) => x.id === d.dataset.default); D.store.set('defaultCard', c.id); D.payment.set(c.type); renderCards(); renderPref(); D.toast(`${c.brand} ending ${c.last4} is now your default`, { icon: 'check' }); }
+      if (r) {
+        const c = D.payment.cards().find((x) => x.id === r.dataset.remove);
+        const ok = await D.dialog({ title: 'Remove this card?', message: `${c.brand} ending ${c.last4} will be deleted from your account. You can add it again anytime.`, confirm: 'Remove', cancel: 'Keep', tone: 'danger', icon: 'trash' });
+        if (!ok) return;
+        const wrap = r.closest('.cc-wrap'); wrap.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateX(-30px)' }], { duration: 220, easing: 'ease-in' });
+        await D.wait(200);
+        const snapshot = Object.assign({}, c); D.payment.removeCard(c.id);
+        if (D.store.get('defaultCard') === c.id) D.store.del('defaultCard');
+        if ((D.payment.get() === c.type) && !D.payment.cards().some((x) => x.type === c.type)) D.payment.set('cod');
+        renderCards(); renderPref();
+        D.toast(`Card ending ${c.last4} removed`, { action: 'Undo', onAction: () => { const { id, ...rest } = snapshot; D.payment.addCard(rest); renderCards(); } });
+      }
+    });
+
+    function renderUpi() {
+      const ids = D.payment.upi();
+      $('#upi').innerHTML = (ids.length ? ids.map((v) => `<div class="row"><span class="icon-tile">${D.icon('upi', 22)}</span><div class="grow"><p class="row__t">${D.esc(v)}</p><p class="row__s">Verified · ${D.esc(D.user.get().name)}</p></div><button class="icon-btn tap" type="button" data-upi-rm="${D.esc(v)}" aria-label="Remove ${D.esc(v)}">${D.icon('trash', 18)}</button></div>`).join('')
+        : '<p class="mini-empty">No UPI IDs yet. Add one to pay without leaving the app.</p>')
+        + `<button class="add-row tap" type="button" data-sheet="upiSheet">${D.icon('plus', 18, { sw: 2.2 })}Add UPI ID</button>`;
+    }
+    $('#upi').addEventListener('click', async (e) => {
+      const b = e.target.closest('[data-upi-rm]'); if (!b) return;
+      const v = b.dataset.upiRm;
+      if (!(await D.dialog({ title: 'Remove UPI ID?', message: `${v} will no longer appear at checkout.`, confirm: 'Remove', cancel: 'Keep', tone: 'danger', icon: 'trash' }))) return;
+      D.payment.removeUpi(v); renderUpi(); D.toast('UPI ID removed', { action: 'Undo', onAction: () => { D.payment.addUpi(v); renderUpi(); } });
+    });
+    let upiVerified = false;
+    $('#upiIn').addEventListener('input', () => { upiVerified = false; $('#upiOk').classList.remove('show'); });
+    const verifyUpi = async (btn) => {
+      if (!D.validate($('#upiIn').closest('.fg'))) return false;
+      if (D.payment.upi().includes($('#upiIn').value.trim())) { D.toast('This UPI ID is already saved'); return false; }
+      btn.textContent = 'Checking…'; await D.wait(900); btn.textContent = 'Verify';
+      upiVerified = true; $('#upiOk').classList.add('show'); return true;
+    };
+    $('#upiVerify').addEventListener('click', (e) => verifyUpi(e.currentTarget));
+    $('#upiSave').addEventListener('click', async (e) => {
+      if (!upiVerified && !(await verifyUpi($('#upiVerify')))) return;
+      await D.loading(e.currentTarget, 600);
+      D.payment.addUpi($('#upiIn').value.trim()); D.sheet.close(); renderUpi(); D.toast('UPI ID saved', { icon: 'check' });
+      $('#upiIn').value = ''; upiVerified = false; $('#upiOk').classList.remove('show');
+    });
+
+    function renderWallets() {
+      const linked = D.store.get('linkedWallets', []);
+      $('#wallets').innerHTML = `<div class="row"><span class="icon-tile" style="background:var(--navy);color:#fff">${D.icon('wallet', 22)}</span><div class="grow"><p class="row__t">Decathlon wallet</p><p class="row__s">Refunds and gift cards land here</p></div><span class="wallet-bal num">${D.fmt(walletBal())}</span></div>
+        <a class="row tap" href="club.html"><span class="icon-tile" style="background:#E6F8DF;color:var(--club)">${D.icon('trophy', 22)}</span><div class="grow"><p class="row__t">Club points</p><p class="row__s">${D.fmtNum(D.user.get().points)} points · worth ${D.fmt(Math.floor(D.user.get().points / 10))}</p></div>${D.icon('chevron', 18, { sw: 2, cls: 'chev' })}</a>
+        ${WALLETS.map(([id, n, s]) => `<div class="row"><span class="icon-tile">${D.icon('wallet', 22)}</span><div class="grow"><p class="row__t">${n}</p><p class="row__s">${linked.includes(id) ? 'Linked · +91 98311 20456' : s}</p></div>${linked.includes(id) ? `<button class="text-btn text-btn--danger tap" type="button" data-unlink="${id}">Unlink</button>` : `<button class="btn btn--soft btn--sm tap" type="button" data-link="${id}"><span>Link</span></button>`}</div>`).join('')}`;
+    }
+    $('#wallets').addEventListener('click', async (e) => {
+      const l = e.target.closest('[data-link]'); const u = e.target.closest('[data-unlink]');
+      const name = (id) => WALLETS.find((w) => w[0] === id)[1];
+      if (l) { await D.loading(l, 1000); D.store.set('linkedWallets', D.store.get('linkedWallets', []).concat(l.dataset.link)); renderWallets(); D.toast(`${name(l.dataset.link)} linked`, { icon: 'check' }); }
+      if (u) { if (!(await D.dialog({ title: `Unlink ${name(u.dataset.unlink)}?`, message: 'You can link it again anytime.', confirm: 'Unlink', tone: 'danger' }))) return; D.store.set('linkedWallets', D.store.get('linkedWallets', []).filter((x) => x !== u.dataset.unlink)); renderWallets(); D.toast('Wallet unlinked'); }
+    });
+
+    // ---- Add card sheet: live preview + validation ----
+    let cType = 'credit';
+    $('#cardType').addEventListener('change', (e) => { cType = e.detail; $('#pvType').textContent = cType === 'debit' ? 'Debit card' : 'Credit card'; $('#preview').classList.toggle('cc--debit', cType === 'debit'); });
+    const pv = () => {
+      const d = $('#cNum').value.replace(/\D/g, '');
+      $('#pvNum').textContent = (d + '••••••••••••••••'.slice(d.length)).slice(0, 16).replace(/(.{4})(?=.)/g, '$1 ');
+      $('#pvBrand').textContent = (brandOf(d) || 'Card').toUpperCase();
+      $('#pvName').textContent = ($('#cName').value.trim() || 'Your name').toUpperCase().slice(0, 22);
+      $('#pvExp').textContent = $('#cExp').value || 'MM/YY';
+    };
+    ['cNum', 'cName', 'cExp'].forEach((id) => $('#' + id).addEventListener('input', pv));
+    $('#cardForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!D.validate($('#cardForm'))) return;
+      const d = $('#cNum').value.replace(/\D/g, '');
+      if (D.payment.cards().some((c) => c.last4 === d.slice(-4) && c.type === cType)) { D.toast('This card is already saved'); return; }
+      await D.loading($('#cardSave'), 1100);
+      const id = D.payment.addCard({ type: cType, brand: brandOf(d) || 'Card', last4: d.slice(-4), exp: $('#cExp').value, name: $('#cName').value.trim() });
+      if ($('#cDefault').checked) { D.store.set('defaultCard', id); D.payment.set(cType); }
+      D.sheet.close(); $('#cardForm').reset(); $$('#cardForm .fg').forEach((f) => f.classList.remove('has-error', 'is-valid')); pv();
+      renderCards(); renderPref(); D.toast(`Card ending ${d.slice(-4)} saved`, { icon: 'check' });
+    });
+
+    renderPref(); renderCards(); renderUpi(); renderWallets(); D.hydrate(document);
+  })();
+</script>
+</body>
+</html>

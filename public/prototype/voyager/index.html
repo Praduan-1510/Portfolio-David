@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Voyager — Travel Booking Prototype</title>
+<meta name="description" content="Voyager: plan, book and manage trips in one app. Interactive high-fidelity iPhone prototype with 45 screens, 24 originals rebuilt from Figma and 37 bottom sheets.">
+<meta name="theme-color" content="#0F1A31">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 172 172'%3E%3Ccircle cx='86' cy='86' r='86' fill='%23FCA311'/%3E%3Cg fill='none' stroke='%2314213D' stroke-width='7' stroke-linecap='round' stroke-linejoin='round' transform='translate(17 17) scale(.8)'%3E%3Ccircle cx='86' cy='67.5' r='33.5'/%3E%3Cpath d='M32 40 86 139 138 40M33 138 86 35 139 138M59 89h53M86 34v105M67 41l19 46 19-46M86 67.5h32'/%3E%3C/g%3E%3C/svg%3E">
+<style>
+  :root {
+    --night: #0F1A31;          /* page canvas: a shade under the app navy */
+    --navy: #14213D;
+    --navy-2: #1B2A4A;
+    --navy-3: #243557;
+    --orange: #FCA311;
+    --orange-soft: #FFD18A;
+    --tint: #FFE7C1;
+    --paper: #F7F1E7;          /* boarding-pass paper */
+    --text: #F4F1EA;
+    --muted: #A9B1C3;
+    --dim: #76819A;
+    --line: rgba(255,255,255,.09);
+    --line-2: rgba(255,255,255,.16);
+    --ease: cubic-bezier(.22,1,.36,1);
+    --spring: cubic-bezier(.34,1.56,.64,1);
+    --display: 'Poppins', system-ui, sans-serif;
+    --ui: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body { overflow-x: clip; }
+  body { margin: 0; background: var(--night); color: var(--text); font-family: var(--ui); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+  :focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; border-radius: 8px; }
+  .wrap { width: min(1240px, 100% - 48px); margin: 0 auto; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Atmosphere: contour lines + warm horizon glow */
+  .aura { position: fixed; inset: 0; z-index: -2; pointer-events: none;
+    background:
+      radial-gradient(900px 620px at 88% -8%, rgba(252,163,17,.16), transparent 62%),
+      radial-gradient(760px 560px at -6% 108%, rgba(105,169,245,.12), transparent 62%),
+      linear-gradient(180deg, #0F1A31 0%, #111D37 60%, #0D1629 100%); }
+  .topo { position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .07;
+    background: url('assets/css/topo.svg') 0 0 / 804px 1748px repeat;
+    -webkit-mask-image: radial-gradient(120% 80% at 70% 20%, #000 20%, transparent 75%); mask-image: radial-gradient(120% 80% at 70% 20%, #000 20%, transparent 75%); }
+
+  /* Nav */
+  .nav { position: sticky; top: 0; z-index: 40; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); background: rgba(15,26,49,.72); border-bottom: 1px solid var(--line); }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 68px; }
+  .brand { display: flex; align-items: center; gap: 11px; font-family: var(--display); font-weight: 700; font-size: 19px; letter-spacing: .22em; }
+  .brand-mark { width: 36px; height: 36px; border-radius: 50%; background: var(--orange); color: var(--navy); display: grid; place-items: center; flex-shrink: 0; box-shadow: 0 0 0 4px rgba(252,163,17,.14); }
+  .nav-right { display: flex; align-items: center; gap: 6px; }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-links a { font-size: 14px; color: var(--muted); padding: 8px 14px; border-radius: 999px; transition: color .2s, background .2s; }
+  .nav-links a:hover { color: var(--text); background: rgba(255,255,255,.06); }
+  .reset { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 999px; font-size: 13.5px; font-weight: 500; color: var(--orange-soft); box-shadow: inset 0 0 0 1px rgba(252,163,17,.4); transition: background .2s, color .2s; white-space: nowrap; }
+  .reset:hover { background: rgba(252,163,17,.12); color: #fff; }
+  .reset svg { transition: transform .5s var(--ease); }
+  .reset.spin svg { transform: rotate(-360deg); }
+
+  /* Hero */
+  .hero { padding: 60px 0 48px; }
+  .hero .wrap { display: grid; grid-template-columns: 1.08fr .92fr; gap: 56px; align-items: center; }
+  .hero .wrap > * { min-width: 0; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--orange); }
+  .eyebrow::before { content: ''; width: 28px; height: 2px; background: var(--orange); border-radius: 1px; }
+  h1 { font-family: var(--display); font-weight: 700; font-size: clamp(42px, 5vw, 72px); line-height: 1.02; letter-spacing: -.025em; margin: 20px 0 22px; }
+  h1 em { font-style: italic; font-weight: 500; color: var(--orange); }
+  .lede { font-size: 17px; line-height: 1.65; color: #C9CFDB; max-width: 540px; margin: 0; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+  .btn { height: 52px; padding: 0 22px; border-radius: 10px; display: inline-flex; align-items: center; gap: 10px; font-family: var(--ui); font-size: 16px; font-weight: 600; transition: transform .25s var(--ease), background .25s, box-shadow .25s; }
+  .btn:active { transform: scale(.97); }
+  .btn-primary { background: var(--orange); color: #000; box-shadow: 0 12px 30px -8px rgba(252,163,17,.55); }
+  .btn-primary:hover { box-shadow: 0 16px 40px -8px rgba(252,163,17,.75); transform: translateY(-1px); }
+  .btn-ghost { background: rgba(255,255,255,.05); box-shadow: inset 0 0 0 1px var(--line-2); }
+  .btn-ghost:hover { background: rgba(255,255,255,.1); }
+
+  /* Flow chips */
+  .flows { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+  .flow { font-size: 13px; font-weight: 500; padding: 8px 13px; border-radius: 999px; color: #CFD5E1; box-shadow: inset 0 0 0 1px var(--line-2); transition: background .2s, color .2s, box-shadow .2s; }
+  .flow:hover { background: rgba(255,255,255,.07); }
+  .flow[aria-pressed="true"] { background: var(--orange); color: #000; box-shadow: none; }
+
+  /* Boarding pass (facts) */
+  .pass { margin-top: 36px; max-width: 560px; display: grid; grid-template-columns: 1fr 112px; color: var(--navy); filter: drop-shadow(0 20px 30px rgba(0,0,0,.35)); }
+  .pass__main, .pass__stub { background: var(--paper); position: relative; }
+  .pass__main { border-radius: 14px 0 0 14px; padding: 16px 20px 16px; }
+  .pass__stub { border-radius: 0 14px 14px 0; padding: 16px 14px; border-left: 2px dashed rgba(20,33,61,.22); display: flex; flex-direction: column; justify-content: space-between; }
+  .pass__main::before, .pass__main::after { content: ''; position: absolute; z-index: 1; right: -10px; width: 18px; height: 18px; border-radius: 50%; background: var(--night); }
+  .pass__main::before { top: -9px; } .pass__main::after { bottom: -9px; }
+  .pass__route { display: flex; align-items: center; gap: 12px; font-family: var(--display); font-weight: 700; font-size: 26px; letter-spacing: .02em; line-height: 1; }
+  .pass__route small { display: block; font-family: var(--ui); font-weight: 500; font-size: 10px; letter-spacing: .16em; color: #6B7386; margin-top: 5px; text-transform: uppercase; }
+  .pass__route .plane { flex: 1; height: 1px; background: repeating-linear-gradient(90deg, rgba(20,33,61,.35) 0 5px, transparent 5px 10px); position: relative; }
+  .pass__route .plane svg { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--paper); padding: 0 6px; box-sizing: content-box; color: var(--orange); }
+  .pass dl { display: grid; grid-template-columns: repeat(4, auto); gap: 8px 18px; margin: 16px 0 0; padding-top: 14px; border-top: 1px solid rgba(20,33,61,.12); }
+  .pass dt { font-size: 9.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #6B7386; }
+  .pass dd { margin: 4px 0 0; font-family: var(--display); font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .pass dd.o { color: #D68600; }
+  .pass__stub b { font-size: 9.5px; letter-spacing: .16em; color: #6B7386; font-weight: 600; }
+  .pass__stub span { font-family: var(--display); font-weight: 700; font-size: 20px; }
+  .barcode { height: 38px; background: repeating-linear-gradient(90deg, var(--navy) 0 2px, transparent 2px 4px, var(--navy) 4px 5px, transparent 5px 8px, var(--navy) 8px 11px, transparent 11px 12px); border-radius: 2px; opacity: .88; }
+
+  /* Device */
+  .stage { position: relative; display: grid; justify-items: center; }
+  .stage::before { content: ''; position: absolute; width: min(560px, 100%); aspect-ratio: 1; top: 8%; border-radius: 50%; background: radial-gradient(circle, rgba(252,163,17,.2), transparent 64%); filter: blur(12px); pointer-events: none; }
+  .device-scale { transform-origin: top left; position: relative; }
+  .device { position: relative; width: 426px; height: 898px; padding: 12px; border-radius: 62px;
+    background: linear-gradient(145deg, #3a4150, #161b26 38%, #262d3b);
+    box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.16), inset 0 0 0 5px #0a0d14, 0 60px 110px -24px rgba(0,0,0,.75), 0 30px 60px -30px rgba(0,0,0,.9); }
+  .device::before, .device::after { content: ''; position: absolute; left: -3px; width: 4px; border-radius: 2px 0 0 2px; background: #2a303d; }
+  .device::before { top: 180px; height: 62px; }
+  .device::after { top: 260px; height: 62px; }
+  .device .side { position: absolute; right: -3px; top: 230px; width: 4px; height: 96px; border-radius: 0 2px 2px 0; background: #2a303d; }
+  .device iframe { display: block; width: 402px; height: 874px; border: 0; border-radius: 50px; background: var(--navy); }
+  .screen-label { margin-top: 20px; display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); position: relative; }
+  .screen-label b { color: var(--text); font-weight: 600; }
+  .screen-label .tag { margin-left: 6px; }
+  .nav-arrows { display: flex; gap: 6px; }
+  .nav-arrows button { width: 40px; height: 40px; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--line-2); display: grid; place-items: center; transition: background .2s, color .2s; }
+  .nav-arrows button:hover { background: var(--orange); color: #000; box-shadow: none; }
+
+  /* Sections */
+  section.block { padding: 96px 0; border-top: 1px solid var(--line); }
+  .sec-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 48px; }
+  .sec-head h2 { font-family: var(--display); font-size: clamp(32px, 4vw, 50px); font-weight: 700; margin: 12px 0 0; letter-spacing: -.02em; line-height: 1.05; }
+  .sec-head h2 em { font-style: italic; font-weight: 500; color: var(--orange); }
+  .kicker { font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--orange); }
+  .sec-head p { color: var(--muted); max-width: 440px; line-height: 1.65; margin: 0; font-size: 15px; }
+  .sec-head p b { font-weight: 600; }
+
+  /* Gallery */
+  .group { margin-bottom: 72px; }
+  .group-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 24px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+  .group-head .no { font-family: var(--display); font-size: 14px; font-weight: 600; color: var(--orange); letter-spacing: .08em; font-variant-numeric: tabular-nums; }
+  .group-head h3 { font-family: var(--display); font-size: 24px; font-weight: 600; margin: 0; letter-spacing: -.01em; }
+  .group-head .note { font-size: 13px; color: var(--dim); margin-left: auto; text-align: right; }
+  .rail { display: grid; grid-template-columns: repeat(auto-fill, minmax(214px, 1fr)); gap: 32px 22px; }
+  .thumb { display: block; text-align: left; }
+  .thumb .frame { position: relative; width: 214px; height: 451px; border-radius: 30px; padding: 6px; background: linear-gradient(145deg, #333a48, #151a24); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12), 0 22px 44px -22px rgba(0,0,0,.9); transition: transform .45s var(--ease), box-shadow .45s var(--ease); overflow: hidden; }
+  .thumb .viewport { width: 202px; height: 439px; border-radius: 25px; overflow: hidden; position: relative; background: var(--navy); }
+  .thumb iframe { display: block; width: 402px; height: 874px; border: 0; transform: scale(.5025); transform-origin: 0 0; pointer-events: none; opacity: 0; transition: opacity .5s var(--ease); }
+  .thumb iframe.ready { opacity: 1; }
+  .thumb .viewport::before { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, #14213D 30%, #1E2D4E 50%, #14213D 70%); background-size: 220% 100%; animation: shimmer 1.6s linear infinite; }
+  .thumb .viewport.loaded::before { display: none; }
+  @keyframes shimmer { to { background-position: -220% 0; } }
+  .thumb:focus-visible { outline: none; }
+  .thumb:focus-visible .frame { box-shadow: 0 0 0 2px var(--orange), 0 0 0 6px rgba(252,163,17,.25), 0 22px 44px -22px rgba(0,0,0,.9); }
+  .thumb:hover .frame { transform: translateY(-6px); box-shadow: inset 0 0 0 1px rgba(255,255,255,.2), 0 32px 60px -22px rgba(0,0,0,.9), 0 0 0 1px rgba(252,163,17,.35); }
+  .thumb .cap { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 14px; padding: 0 4px; }
+  .thumb .cap b { font-weight: 600; font-size: 14px; }
+  .thumb .cap small { font-size: 12px; color: var(--dim); font-variant-numeric: tabular-nums; display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .tag { font-style: normal; font-size: 10.5px; font-weight: 500; letter-spacing: .04em; padding: 2px 8px; border-radius: 999px; color: #9CC3F7; box-shadow: inset 0 0 0 1px rgba(105,169,245,.4); }
+  .tag--o { color: var(--orange); box-shadow: inset 0 0 0 1px rgba(252,163,17,.5); }
+  .tag--s { color: #CFD5E1; box-shadow: inset 0 0 0 1px var(--line-2); }
+  .thumb .open { position: absolute; inset: 6px; border-radius: 25px; display: grid; place-items: center; background: rgba(15,26,49,.5); opacity: 0; transition: opacity .3s; }
+  .thumb .open span { font-weight: 600; font-size: 14px; background: var(--orange); color: #000; padding: 11px 16px; border-radius: 8px; transform: translateY(8px); transition: transform .35s var(--spring); }
+  .thumb:hover .open, .thumb:focus-visible .open { opacity: 1; }
+  .thumb:hover .open span { transform: none; }
+
+  /* Design system */
+  .ds { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; }
+  .tile { background: rgba(255,255,255,.035); border-radius: 22px; padding: 26px; box-shadow: inset 0 0 0 1px var(--line); min-width: 0; }
+  .tile h4 { margin: 0 0 18px; font-size: 12px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); }
+  .span-7 { grid-column: span 7; } .span-5 { grid-column: span 5; } .span-12 { grid-column: span 12; }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(116px, 1fr)); gap: 12px; }
+  .sw { border-radius: 14px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--line); background: #0c1528; }
+  .sw i { display: block; height: 70px; }
+  .sw div { padding: 10px 12px; font-size: 12px; }
+  .sw div b { display: block; font-weight: 600; font-size: 13px; }
+  .sw div span { color: var(--dim); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; }
+  .type-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 14px 0; border-top: 1px solid var(--line); }
+  .type-row:first-of-type { border-top: 0; padding-top: 0; }
+  .type-row > span { min-width: 0; }
+  .type-row small { color: var(--dim); font-size: 12px; white-space: nowrap; }
+  .comp { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .phone-card { background: #fff; color: #000; border-radius: 18px; padding: 22px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; min-width: 0; }
+  .phone-card.navy { background: var(--navy); color: #fff; box-shadow: inset 0 0 0 1px var(--line); }
+  .c-btn { height: 42px; padding: 0 20px; border-radius: 8px; font-weight: 600; font-size: 15px; display: inline-flex; align-items: center; gap: 8px; }
+  .c-chip { height: 34px; padding: 0 16px; border-radius: 999px; font-size: 13px; font-weight: 500; display: inline-grid; place-items: center; background: #E5E5E5; }
+  .c-badge { height: 24px; padding: 0 10px; border-radius: 999px; font-size: 11px; font-weight: 600; letter-spacing: .14em; display: inline-grid; place-items: center; background: #fff; color: var(--orange); box-shadow: 0 2px 6px rgba(0,0,0,.12); }
+  .c-status { height: 22px; padding: 0 9px; border-radius: 6px; font-size: 11.5px; font-weight: 600; display: inline-grid; place-items: center; }
+  .c-switch { width: 46px; height: 26px; border-radius: 999px; background: var(--navy); position: relative; cursor: pointer; transition: background .25s; flex-shrink: 0; }
+  .c-switch::after { content: ''; position: absolute; top: 3px; left: 23px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: left .3s var(--spring); }
+  .c-switch[aria-checked="false"] { background: #BEBEBE; }
+  .c-switch[aria-checked="false"]::after { left: 3px; }
+  .c-steps { display: flex; align-items: center; }
+  .c-steps i { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: 12px; font-weight: 700; background: #E5E5E5; color: #777; }
+  .c-steps i.d { background: var(--orange); color: #fff; } .c-steps i.a { background: var(--navy); color: #fff; }
+  .c-steps s { width: 22px; height: 2px; background: #E0E0E0; } .c-steps s.d { background: var(--orange); }
+  .c-card { width: 150px; border-radius: 8px; overflow: hidden; background: var(--navy); color: #fff; font-family: var(--display); box-shadow: 0 4px 8px rgba(0,0,0,.15); }
+  .c-card .img { height: 92px; background: #1B2A4A center / cover; }
+  .c-card div:last-child { padding: 8px 10px 10px; font-size: 14px; line-height: 1.35; }
+  .c-card small { display: block; font-size: 10px; color: #C4C7CF; }
+  .c-card em { font-style: normal; font-size: 12px; color: var(--orange); }
+  .c-price { font-family: var(--ui); } .c-price b { font-size: 22px; } .c-price small { font-size: 12px; color: #8A8A8A; }
+  .principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 18px; }
+  .principle { padding: 26px; border-radius: 22px; background: rgba(255,255,255,.035); box-shadow: inset 0 0 0 1px var(--line); }
+  .principle .ic { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; margin-bottom: 18px; background: rgba(252,163,17,.14); color: var(--orange); }
+  .principle h5 { font-family: var(--display); font-size: 20px; font-weight: 600; margin: 0 0 8px; }
+  .principle p { margin: 0; color: var(--muted); line-height: 1.65; font-size: 14.5px; }
+
+  footer { padding: 40px 0 60px; border-top: 1px solid var(--line); color: var(--dim); font-size: 13px; line-height: 1.6; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; }
+  footer a { color: var(--muted); text-decoration: underline; text-decoration-color: rgba(252,163,17,.5); text-underline-offset: 3px; }
+  footer a:hover { color: var(--orange); }
+
+  .toast { position: fixed; left: 50%; bottom: 28px; z-index: 60; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; background: var(--paper); color: var(--navy); font-weight: 600; font-size: 14px; padding: 12px 18px; border-radius: 10px; box-shadow: 0 16px 40px rgba(0,0,0,.4); transition: opacity .25s, transform .35s var(--ease); max-width: calc(100% - 32px); }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 1020px) {
+    .hero .wrap { grid-template-columns: 1fr; }
+    .stage { order: -1; }
+    .span-7, .span-5 { grid-column: span 12; }
+    .principles, .comp { grid-template-columns: 1fr; }
+    .sec-head { flex-direction: column; align-items: start; }
+  }
+  @media (max-width: 640px) {
+    .wrap { width: calc(100% - 32px); }
+    .nav-links { display: none; }
+    .reset { padding: 0 12px; }
+    .brand { font-size: 16px; letter-spacing: .18em; }
+    .hero { padding-top: 32px; }
+    .screen-label { flex-wrap: wrap; justify-content: center; text-align: center; }
+    .pass { grid-template-columns: 1fr; }
+    .pass__main { border-radius: 14px 14px 0 0; }
+    .pass__main::before, .pass__main::after { display: none; }
+    .pass__stub { border-radius: 0 0 14px 14px; border-left: 0; border-top: 2px dashed rgba(20,33,61,.22); flex-direction: row; align-items: center; gap: 14px; }
+    .pass__stub .barcode { flex: 1; }
+    .pass dl { grid-template-columns: repeat(2, auto); }
+    .pass__route { font-size: 22px; }
+    .rail { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 14px; }
+    .thumb .frame { width: 100%; height: auto; border-radius: 22px; padding: 5px; }
+    .thumb .viewport { width: 100%; height: auto; aspect-ratio: 402 / 874; border-radius: 18px; }
+    .thumb .open { inset: 5px; border-radius: 18px; }
+    .thumb .open span { font-size: 12.5px; padding: 9px 12px; }
+    .thumb .cap { flex-direction: column; align-items: flex-start; gap: 6px; margin-top: 12px; }
+    .thumb .cap b { font-size: 13.5px; line-height: 1.3; }
+    .thumb iframe { transform: scale(var(--s, .4)); }
+    .group-head { flex-wrap: wrap; gap: 4px 12px; }
+    .group-head .note { margin-left: 0; width: 100%; text-align: left; }
+    .group { margin-bottom: 52px; }
+    section.block { padding: 64px 0; }
+    .tile { padding: 20px; }
+    .type-row { flex-direction: column; gap: 6px; }
+    .phone-card { padding: 18px; }
+  }
+  @media (max-width: 380px) {
+    .reset span { display: none; }
+    .reset { width: 40px; padding: 0; justify-content: center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .thumb .viewport::before { animation: none; }
+    * { transition-duration: 1ms !important; animation-duration: 1ms !important; }
+  }
+</style>
+<script defer src="/prototype/_shared/case-link.js" data-href="/work/voyager" data-label="Back to the Voyager case study" data-position="top-center; (max-width: 640px) bottom-left 16 16 compact"></script>
+</head>
+<body>
+<div class="aura" aria-hidden="true"></div>
+<div class="topo" aria-hidden="true"></div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Voyager home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 172 172" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><circle cx="86" cy="67.5" r="33.5"/><path d="M32 40 86 139 138 40M33 138 86 35 139 138M59 89h53M86 34v105M67 41l19 46 19-46M86 67.5h32"/></svg>
+      </span>
+      VOYAGER
+    </a>
+    <div class="nav-right">
+      <nav class="nav-links" aria-label="Sections">
+        <a href="#prototype">Prototype</a>
+        <a href="#screens">Screens</a>
+        <a href="#system">Design system</a>
+      </nav>
+      <button class="reset" type="button" id="reset" aria-label="Reset demo data">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 9.5h4.5V5M21 9.5l-3.2-3.2a8.5 8.5 0 1 0 0 12"/></svg>
+        <span>Reset demo</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" id="prototype">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Travel · iOS app · Interactive prototype</span>
+        <h1>Plan less.<br><em>Wander more.</em></h1>
+        <p class="lede">Voyager puts the whole trip in one place: discover destinations, book flights and hotels in four steps, keep tickets and documents offline, and earn points on every journey.</p>
+        <div class="cta">
+          <button class="btn btn-primary" type="button" data-load="splash">
+            Start the journey
+            <svg width="18" height="16" viewBox="0 0 18 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 8h14.5M9.5 1.5 16 8l-6.5 6.5"/></svg>
+          </button>
+          <a class="btn btn-ghost" href="#screens">Browse all screens</a>
+        </div>
+
+        <div class="flows" role="group" aria-label="Jump to a flow">
+          <button class="flow" type="button" data-load="splash" aria-pressed="true">Launch &amp; Auth</button>
+          <button class="flow" type="button" data-load="dashboard" aria-pressed="false">Discover</button>
+          <button class="flow" type="button" data-load="book-dates" aria-pressed="false">Booking</button>
+          <button class="flow" type="button" data-load="trips" aria-pressed="false">Trips</button>
+          <button class="flow" type="button" data-load="profile" aria-pressed="false">Profile &amp; Rewards</button>
+          <button class="flow" type="button" data-load="support" aria-pressed="false">Support</button>
+        </div>
+
+        <div class="pass" aria-label="Prototype facts">
+          <div class="pass__main">
+            <div class="pass__route">
+              <div>LHR<small>Idea</small></div>
+              <div class="plane" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12c0-.9-.7-1.6-1.6-1.6h-4.6L9.9 3H7.8l2.6 7.4H6.1L4.4 8.5H3l1 3.5-1 3.5h1.4l1.7-1.9h4.3L7.8 21h2.1l4.9-7.4h4.6c.9 0 1.6-.7 1.6-1.6Z"/></svg></div>
+              <div style="text-align:right">CDG<small>Itinerary</small></div>
+            </div>
+            <dl>
+              <div><dt>Screens</dt><dd>45</dd></div>
+              <div><dt>Originals</dt><dd class="o">24</dd></div>
+              <div><dt>Sheets</dt><dd>37</dd></div>
+              <div><dt>Flows</dt><dd>6</dd></div>
+            </dl>
+          </div>
+          <div class="pass__stub" aria-hidden="true">
+            <div><b>GATE</b><br><span>V24</span></div>
+            <div class="barcode"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="device-scale" id="deviceScale">
+          <div class="device">
+            <span class="side" aria-hidden="true"></span>
+            <iframe id="phone" name="phone" src="screens/splash.html" title="Voyager interactive prototype" loading="eager"></iframe>
+          </div>
+        </div>
+        <div class="screen-label">
+          <div class="nav-arrows">
+            <button type="button" id="prev" aria-label="Previous screen"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2 4 7l5 5"/></svg></button>
+            <button type="button" id="next" aria-label="Next screen"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 2 5 5-5 5"/></svg></button>
+          </div>
+          <span aria-live="polite">Now viewing <b id="current">Splash</b><span id="curTag"></span> · tap anything inside the phone</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="screens">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <span class="kicker">All screens</span>
+          <h2>45 screens, <em>six journeys</em></h2>
+        </div>
+        <p>24 <b style="color:#FCA311">original</b> frames were rebuilt from the Figma designs and corrected so every date, price and total reconciles; 21 <b style="color:#9CC3F7">extended</b> screens complete every journey with the same components. Select any screen to open it in the live phone.</p>
+      </div>
+      <div id="gallery"></div>
+    </div>
+  </section>
+
+  <section class="block" id="system">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <span class="kicker">Design system</span>
+          <h2>Midnight navy, <em>golden hour</em> orange</h2>
+        </div>
+        <p>A deep navy frame holds every screen like a passport cover. Orange marks the next step: prices, the primary action and progress. White sheets carry the content.</p>
+      </div>
+
+      <div class="ds">
+        <div class="tile span-7 reveal">
+          <h4>Color</h4>
+          <div class="swatches">
+            <div class="sw"><i style="background:#14213D;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)"></i><div><b>Navy</b><span>#14213D</span></div></div>
+            <div class="sw"><i style="background:#2A364E;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)"></i><div><b>Navy 2</b><span>#2A364E</span></div></div>
+            <div class="sw"><i style="background:#FCA311"></i><div><b>Orange</b><span>#FCA311</span></div></div>
+            <div class="sw"><i style="background:#FFE7C1"></i><div><b>Orange tint</b><span>#FFE7C1</span></div></div>
+            <div class="sw"><i style="background:#F4F4F4"></i><div><b>Sheet grey</b><span>#F4F4F4</span></div></div>
+            <div class="sw"><i style="background:#69A9F5"></i><div><b>Tab active</b><span>#69A9F5</span></div></div>
+            <div class="sw"><i style="background:#2E9B2E"></i><div><b>Valid</b><span>#2E9B2E</span></div></div>
+            <div class="sw"><i style="background:#E0592A"></i><div><b>Expiring</b><span>#E0592A</span></div></div>
+          </div>
+        </div>
+        <div class="tile span-5 reveal">
+          <h4>Typography</h4>
+          <div class="type-row"><span style="font-family:var(--ui);font-size:28px;font-weight:700;line-height:1.1">Good Morning, <span style="color:#FCA311">Alex</span></span><small>Inter 28 / Bold</small></div>
+          <div class="type-row"><span style="font-family:var(--ui);font-size:24px;font-weight:700">Paris City Break</span><small>Inter 24 / Bold</small></div>
+          <div class="type-row"><span style="font-family:var(--display);font-size:14px;font-weight:500;letter-spacing:.2em;color:#FCA311">EXPLORE · TOP RATED</span><small>Poppins 14 / Label</small></div>
+          <div class="type-row"><span style="font-family:var(--display);font-size:14px">Paris <span style="color:#A9B1C3;font-size:11px">France 7 Days</span></span><small>Poppins 14 / Card</small></div>
+          <div class="type-row"><span style="font-family:var(--ui);font-size:13px;color:#C9CFDB">Experience the magic of the City of Light</span><small>Inter 13 / Body</small></div>
+        </div>
+        <div class="tile span-12 reveal">
+          <h4>Components</h4>
+          <div class="comp">
+            <div class="phone-card">
+              <span class="c-btn" style="background:#FCA311">Book Now</span>
+              <span class="c-btn" style="background:#14213D;color:#fff">Continue <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3.5 12h17M14 5.5l6.5 6.5-6.5 6.5"/></svg></span>
+              <span class="c-btn" style="box-shadow:inset 0 0 0 1.5px #FCA311;color:#FCA311">+ Add New Card</span>
+              <span class="c-chip" style="background:#FCA311;color:#fff">All</span>
+              <span class="c-chip">Hotels</span>
+              <span class="c-chip">4–7 Days</span>
+              <span class="c-status" style="background:#CAF9BE;color:#2E9B2E">Valid</span>
+              <span class="c-status" style="background:#FFE0CC;color:#E0592A">Expiring</span>
+              <span class="c-switch" role="switch" aria-checked="true" tabindex="0" aria-label="Demo toggle"></span>
+              <span class="c-steps" aria-label="Stepper, step 3 of 4" role="img"><i class="d">&#10003;</i><s class="d"></s><i class="d">&#10003;</i><s class="d"></s><i class="a">3</i><s></s><i>4</i></span>
+              <span class="c-price"><small>Starting from</small><br><b>$1,240</b> <small>/person</small></span>
+            </div>
+            <div class="phone-card navy">
+              <div class="c-card"><div class="img" style="background-image:url('assets/img/dest-paris.jpg')"></div><div>Paris<small>France 7 Days</small><em>From $ 1240</em></div></div>
+              <div class="c-card"><div class="img" style="background-image:url('assets/img/dest-prague.jpg')"></div><div>Prague<small>Czech Rep 5 Days</small><em>From $ 800</em></div></div>
+              <span class="c-badge">UPCOMING</span>
+              <span class="c-btn" style="box-shadow:inset 0 0 0 1.5px #FCA311;color:#FCA311;height:34px;font-size:13px">Manage</span>
+              <span class="c-btn" style="background:#fff;color:#14213D;height:34px;font-size:13px">View Details →</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="principles">
+        <div class="principle reveal">
+          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z"/></svg></div>
+          <h5>Inspiration first</h5>
+          <p>Photography leads every screen. Search, a map with tappable pins and a wishlist sit one tap from any destination.</p>
+        </div>
+        <div class="principle reveal">
+          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5V6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v2.5a3.5 3.5 0 0 0 0 7V18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2.5a3.5 3.5 0 0 0 0-7Z"/><path d="M15 5v14" stroke-dasharray="2 2"/></svg></div>
+          <h5>Four steps, one price</h5>
+          <p>Dates, extras, payment, confirmed. The live total ($2,709 for the Paris break) matches on every screen, down to the tax line.</p>
+        </div>
+        <div class="principle reveal">
+          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 5.5v5.3c0 5.9 5.3 8.6 7.2 9.3.2.1.4.1.6 0 1.9-.7 7.2-3.4 7.2-9.3V5.5a.5.5 0 0 0-.5-.5h-14a.5.5 0 0 0-.5.5Z"/><path d="m8.5 12 2.5 2.5 4.5-4.5"/></svg></div>
+          <h5>Calm on the road</h5>
+          <p>Itinerary, e-tickets, documents and 24/7 support live together, with honest refund maths when plans change.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Voyager, a travel booking case study · Inter &amp; Poppins · Designed for iPhone 16 Pro (402 × 874)</span>
+    <span>Photos from <a href="https://unsplash.com" rel="noopener" target="_blank">Unsplash</a> · Map data © <a href="https://www.openstreetmap.org/copyright" rel="noopener" target="_blank">OpenStreetMap contributors</a> · <a href="assets/img/CREDITS.md">Full image credits</a></span>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  const O = true; // original, pixel-matched Figma frame
+  const SCREENS = [
+    { id: 'splash', name: 'Splash', flow: 'Launch & Auth', o: O },
+    { id: 'onboarding-1', name: 'Explore the World', flow: 'Launch & Auth', o: O },
+    { id: 'onboarding-2', name: 'Plan Your Itinerary', flow: 'Launch & Auth', o: O },
+    { id: 'onboarding-3', name: 'Get Started', flow: 'Launch & Auth', o: O },
+    { id: 'signup', name: 'Create Account', flow: 'Launch & Auth', o: O },
+    { id: 'otp', name: 'Verify Email', flow: 'Launch & Auth' },
+    { id: 'permissions', name: 'Permissions', flow: 'Launch & Auth' },
+    { id: 'login', name: 'Log In', flow: 'Launch & Auth' },
+    { id: 'forgot-password', name: 'Forgot Password', flow: 'Launch & Auth' },
+    { id: 'reset-password', name: 'New Password', flow: 'Launch & Auth' },
+    { id: 'dashboard', name: 'Home', flow: 'Discover', o: O },
+    { id: 'search', name: 'Search', flow: 'Discover' },
+    { id: 'search-results', name: 'Search Results', flow: 'Discover', o: O },
+    { id: 'filters', name: 'Filters', flow: 'Discover', o: O },
+    { id: 'map', name: 'Map', flow: 'Discover', o: O },
+    { id: 'saved', name: 'Saved', flow: 'Discover', o: O },
+    { id: 'destination', name: 'Destination', flow: 'Discover', o: O },
+    { id: 'gallery', name: 'Photo Gallery', flow: 'Discover' },
+    { id: 'hotel', name: 'Hotel', flow: 'Discover' },
+    { id: 'reviews', name: 'Reviews', flow: 'Discover', o: O },
+    { id: 'write-review', name: 'Write a Review', flow: 'Discover' },
+    { id: 'book-dates', name: 'Dates & Guests', flow: 'Booking', o: O },
+    { id: 'book-extras', name: 'Add Extras', flow: 'Booking', o: O },
+    { id: 'book-payment', name: 'Payment', flow: 'Booking', o: O },
+    { id: 'add-card', name: 'Add Card', flow: 'Booking' },
+    { id: 'payment-failed', name: 'Payment Failed', flow: 'Booking' },
+    { id: 'book-confirmed', name: 'Booking Confirmed', flow: 'Booking', o: O },
+    { id: 'trips', name: 'My Trips', flow: 'Trips', o: O },
+    { id: 'itinerary', name: 'Itinerary', flow: 'Trips', o: O },
+    { id: 'e-ticket', name: 'E-Ticket', flow: 'Trips' },
+    { id: 'modify-booking', name: 'Modify Booking', flow: 'Trips' },
+    { id: 'cancel-trip', name: 'Cancel Trip', flow: 'Trips' },
+    { id: 'profile', name: 'Profile', flow: 'Profile & Rewards', o: O },
+    { id: 'rewards', name: 'Rewards', flow: 'Profile & Rewards', o: O },
+    { id: 'documents', name: 'Travel Documents', flow: 'Profile & Rewards', o: O },
+    { id: 'add-document', name: 'Add Document', flow: 'Profile & Rewards' },
+    { id: 'payment-methods', name: 'Payment Methods', flow: 'Profile & Rewards' },
+    { id: 'promo-codes', name: 'Promo Codes', flow: 'Profile & Rewards' },
+    { id: 'settings', name: 'Settings', flow: 'Profile & Rewards', o: O },
+    { id: 'edit-profile', name: 'Edit Profile', flow: 'Profile & Rewards' },
+    { id: 'change-password', name: 'Change Password', flow: 'Profile & Rewards' },
+    { id: 'language', name: 'Language & Region', flow: 'Profile & Rewards' },
+    { id: 'notifications', name: 'Notifications', flow: 'Support', o: O },
+    { id: 'support', name: 'Live Chat', flow: 'Support', o: O },
+    { id: 'help', name: 'Help Centre', flow: 'Support' },
+  ];
+  const SHEETS = [
+    { id: 'map', sheet: 'pinSheet', name: 'Map Pin Preview' },
+    { id: 'search', sheet: 'whenSheet', name: 'When Are You Going?' },
+    { id: 'search', sheet: 'whoSheet', name: 'Who’s Travelling?' },
+    { id: 'search-results', sheet: 'sortSheet', name: 'Sort Results' },
+    { id: 'saved', sheet: 'filterSheet', name: 'Filter Saved' },
+    { id: 'reviews', sheet: 'sortSheet', name: 'Sort Reviews' },
+    { id: 'book-extras', sheet: 'breakdown', name: 'Price Breakdown' },
+    { id: 'book-payment', sheet: 'secure', name: '3-D Secure Check' },
+    { id: 'trips', sheet: 'manage', name: 'Manage Trip' },
+    { id: 'itinerary', sheet: 'event', name: 'Itinerary Event' },
+    { id: 'documents', sheet: 'docSheet', name: 'Document Details' },
+    { id: 'documents', sheet: 'renewSheet', name: 'Renew Insurance' },
+    { id: 'rewards', sheet: 'redeemSheet', name: 'Redeem Reward' },
+    { id: 'payment-methods', sheet: 'cardSheet', name: 'Card Actions' },
+    { id: 'settings', sheet: 'deleteSheet', name: 'Delete Account' },
+    { id: 'login', sheet: 'googleSheet', name: 'Google Sign-In' },
+  ];
+  const FLOW_NOTES = {
+    'Launch & Auth': 'First launch, onboarding, sign-up and sign-in',
+    'Discover': 'Search, map, wishlist and destination detail',
+    'Booking': 'Four-step checkout with a live total',
+    'Trips': 'Itinerary, tickets, changes and cancellations',
+    'Profile & Rewards': 'Points, documents, payments and settings',
+    'Support': 'Notifications, live chat and help centre',
+    'Sheets & Dialogs': 'Bottom sheets used across the app',
+  };
+  const FLOW_START = { 'Launch & Auth': 'splash', 'Discover': 'dashboard', 'Booking': 'book-dates', 'Trips': 'trips', 'Profile & Rewards': 'profile', 'Support': 'support' };
+
+  const phone = document.getElementById('phone');
+  const current = document.getElementById('current');
+  const curTag = document.getElementById('curTag');
+  const byId = (id) => SCREENS.find((x) => x.id === id);
+  const idOf = (url) => (String(url).match(/screens\/([\w-]+)\.html/) || [])[1];
+  let lastId = 'splash';
+
+  // Splash auto-advances to onboarding. Remember that, so "previous" skips Splash
+  // instead of bouncing straight back to the same screen.
+  let splashAt = Date.now(), autoFromSplash = false;
+  const setCurrent = (id) => {
+    const s = byId(id); if (!s) return;
+    if (id !== 'splash' && lastId === 'splash' && Date.now() - splashAt < 6000) autoFromSplash = true;
+    else if (id !== lastId) autoFromSplash = false;
+    lastId = id;
+    current.textContent = s.name;
+    curTag.innerHTML = s.o ? ' <i class="tag tag--o">Original</i>' : ' <i class="tag">Extended</i>';
+    const start = FLOW_START[s.flow];
+    document.querySelectorAll('.flow').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.load === start)));
+  };
+  function load(id, scroll, query) {
+    autoFromSplash = false;
+    if (id === 'splash') splashAt = Date.now();
+    setCurrent(id);
+    phone.src = 'screens/' + id + '.html' + (query || '');
+    if (scroll) {
+      const far = Math.abs(document.getElementById('prototype').getBoundingClientRect().top) > 2400;
+      const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      document.getElementById('prototype').scrollIntoView({ behavior: far || calm ? 'instant' : 'smooth' });
+    }
+  }
+  // Sync on navigation inside the phone: postMessage from app.js (works on file://), plus same-origin load fallback
+  phone.addEventListener('load', () => { try { const id = idOf(phone.contentWindow.location.pathname); if (id) setCurrent(id); } catch (e) {} });
+  addEventListener('message', (e) => {
+    if (!e.data || !e.data.voyagerScreen || e.source !== phone.contentWindow) return;
+    setCurrent(e.data.voyagerScreen);
+  });
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-load]');
+    if (b) load(b.dataset.load, b.classList.contains('thumb'), b.dataset.query);
+  });
+  const step = (d) => {
+    let i = SCREENS.findIndex((x) => x.id === lastId);
+    if (d < 0 && autoFromSplash) i = SCREENS.findIndex((x) => x.id === 'splash');
+    load(SCREENS[(i + d + SCREENS.length) % SCREENS.length].id);
+  };
+  document.getElementById('prev').addEventListener('click', () => step(-1));
+  document.getElementById('next').addEventListener('click', () => step(1));
+  addEventListener('keydown', (e) => {
+    if (e.defaultPrevented || e.altKey || e.metaKey || e.ctrlKey || /input|textarea|select/i.test(document.activeElement.tagName)) return;
+    if (e.key === 'ArrowLeft') step(-1); if (e.key === 'ArrowRight') step(1);
+  });
+
+  // Reset demo data: call Voyager.reset() in the phone when same-origin, otherwise reload with ?reset=1
+  const toastEl = document.getElementById('toast');
+  const toast = (msg) => { toastEl.textContent = msg; toastEl.classList.add('show'); clearTimeout(toastEl._h); toastEl._h = setTimeout(() => toastEl.classList.remove('show'), 2400); };
+  document.getElementById('reset').addEventListener('click', (e) => {
+    const btn = e.currentTarget; btn.classList.remove('spin'); void btn.offsetWidth; btn.classList.add('spin');
+    let done = false;
+    try { const w = phone.contentWindow; if (w.Voyager && typeof w.Voyager.reset === 'function') { w.Voyager.reset(); done = true; } } catch (err) {}
+    load(lastId, false, done ? '' : '?reset=1');
+    toast('Demo data reset: trips, points and saved places are back to the start');
+  });
+
+  // Gallery
+  const gallery = document.getElementById('gallery');
+  const flows = [...new Set(SCREENS.map((s) => s.flow))];
+  let n = 0;
+  const thumb = (id, name, query, tag) => {
+    n++;
+    const a = document.createElement('button');
+    a.type = 'button'; a.className = 'thumb'; a.dataset.load = id; if (query) a.dataset.query = query;
+    a.setAttribute('aria-label', 'Open ' + name + ' in the prototype');
+    const src = `screens/${id}.html?capture=1${query ? '&' + query.slice(1) : ''}`;
+    const tcls = tag === 'Original' ? 'tag--o' : tag === 'Sheet' ? 'tag--s' : '';
+    a.innerHTML = `<div class="frame"><div class="viewport"><iframe data-src="${src}" loading="lazy" tabindex="-1" aria-hidden="true" title="${name}"></iframe></div><div class="open"><span>Open in prototype</span></div></div><div class="cap"><b>${name}</b><small><i class="tag ${tcls}">${tag}</i>${String(n).padStart(2, '0')}</small></div>`;
+    return a;
+  };
+  const group = (no, title, note, count, unit) => {
+    const g = document.createElement('div'); g.className = 'group reveal';
+    g.innerHTML = `<div class="group-head"><span class="no">${String(no).padStart(2, '0')}</span><h3>${title}</h3><span class="note">${note} · ${count} ${unit}</span></div><div class="rail"></div>`;
+    gallery.appendChild(g); return g.querySelector('.rail');
+  };
+  flows.forEach((flow, k) => {
+    const list = SCREENS.filter((s) => s.flow === flow);
+    const rail = group(k + 1, flow.replace('&', '&amp;'), FLOW_NOTES[flow], list.length, 'screens');
+    list.forEach((s) => rail.appendChild(thumb(s.id, s.name, '', s.o ? 'Original' : 'Extended')));
+  });
+  {
+    const rail = group(flows.length + 1, 'Sheets &amp; Dialogs', FLOW_NOTES['Sheets & Dialogs'], SHEETS.length, 'highlights');
+    SHEETS.forEach((x) => rail.appendChild(thumb(x.id, x.name, '?sheet=' + x.sheet, 'Sheet')));
+  }
+
+  // Mount thumbnail iframes only as each group nears the viewport (61 live documents otherwise)
+  const mount = (rail) => rail.querySelectorAll('iframe[data-src]').forEach((f) => {
+    const done = () => { try { if (f.contentWindow.location.href === 'about:blank') return; } catch (e) {} f.classList.add('ready'); f.parentElement.classList.add('loaded'); f.removeEventListener('load', done); };
+    f.addEventListener('load', done);
+    f.src = f.dataset.src; f.removeAttribute('data-src');
+  });
+  if ('IntersectionObserver' in window) {
+    const mio = new IntersectionObserver((entries) => entries.forEach((en) => { if (en.isIntersecting) { mount(en.target); mio.unobserve(en.target); } }), { rootMargin: '900px 0px' });
+    gallery.querySelectorAll('.rail').forEach((r) => mio.observe(r));
+  } else gallery.querySelectorAll('.rail').forEach(mount);
+
+  // Fit the device to the viewport
+  const scaleBox = document.getElementById('deviceScale');
+  function fit() {
+    const avail = Math.min(window.innerHeight - (innerWidth > 1020 ? 196 : 150), 898);
+    const wAvail = Math.min(document.documentElement.clientWidth - 32, 426);
+    const s = Math.max(.5, Math.min(1, avail / 898, wAvail / 426));
+    const dev = scaleBox.firstElementChild;
+    dev.style.transform = `scale(${s})`; dev.style.transformOrigin = 'top left';
+    scaleBox.style.height = 898 * s + 'px';
+    scaleBox.style.width = 426 * s + 'px';
+    document.querySelectorAll('.thumb .viewport').forEach((v) => { const w = v.clientWidth; if (w) v.style.setProperty('--s', w / 402); });
+  }
+  addEventListener('resize', fit); fit();
+
+  // Reveal on scroll
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), { rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  } else document.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'));
+
+  // Demo switch
+  document.querySelectorAll('.c-switch').forEach((sw) => {
+    const t = () => sw.setAttribute('aria-checked', String(sw.getAttribute('aria-checked') !== 'true'));
+    sw.addEventListener('click', t); sw.addEventListener('keydown', (e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); t(); } });
+  });
+</script>
+</body>
+</html>

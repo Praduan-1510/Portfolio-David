@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
-import type { Project, ProjectMeta } from "@/types/project";
+import type { Project, ProjectMeta, ProjectStatus } from "@/types/project";
 
 /*
  * Thin content layer (ARCHITECTURE.md §8). Case studies are MDX files in
@@ -124,6 +124,56 @@ function assertProjectMeta(
     throw new Error(
       `[content] ${slug}.mdx: "accent" must be a hex string starting with "#"`,
     );
+
+  // Status is usually derived (see deriveStatus below); when it is written by
+  // hand it overrides the derivation, so a typo must not quietly fall through
+  // to a pill the card cannot draw.
+  if (data.status !== undefined && !(STATUSES as readonly unknown[]).includes(data.status))
+    throw new Error(
+      `[content] ${slug}.mdx: "status" must be "live", "prototype" or "concept"`,
+    );
+
+  // The outcome is the line a project card leads with, printed under the title
+  // on the home page and /work, so every screen study must have one and it is
+  // held to the card's shape: a single result, short enough to sit in two or
+  // three lines under a title, in the site's own punctuation. The em dash is
+  // banned in all new copy here, and a card is where one would slip in.
+  if (data.outcome !== undefined && typeof data.outcome !== "string")
+    throw new Error(`[content] ${slug}.mdx: "outcome" must be a string`);
+  if (kind === "app" || kind === "web") {
+    const outcome = typeof data.outcome === "string" ? data.outcome.trim() : "";
+    if (!outcome)
+      throw new Error(
+        `[content] ${slug}.mdx: ${kind} projects need an "outcome", the one line their card leads with`,
+      );
+    if (outcome.length > OUTCOME_MAX)
+      throw new Error(
+        `[content] ${slug}.mdx: "outcome" is ${outcome.length} characters; a card holds ${OUTCOME_MAX}`,
+      );
+    if (outcome.includes("\u2014"))
+      throw new Error(
+        `[content] ${slug}.mdx: "outcome" contains an em dash (U+2014); use a colon or a comma`,
+      );
+  }
+}
+
+/** The pills a project card can draw. */
+const STATUSES = ["live", "prototype", "concept"] as const satisfies readonly ProjectStatus[];
+
+/** Longest outcome line a card will carry. */
+const OUTCOME_MAX = 90;
+
+/**
+ * Where a study stands when its frontmatter does not say. A shipped site with a
+ * reachable URL is live; a playable build (an HTML prototype or a Figma file)
+ * is a prototype; anything else is a concept on paper. Written `status` wins,
+ * for the case where this reading would be wrong.
+ */
+function deriveStatus(data: Omit<ProjectMeta, "slug">): ProjectStatus {
+  if (data.status) return data.status;
+  if (data.liveUrl) return "live";
+  if (data.prototype || data.figma) return "prototype";
+  return "concept";
 }
 
 /** The playable-prototype block, shared by web and app studies. */
@@ -178,10 +228,11 @@ export function getProjectBySlug(slug: string): Project | null {
   const { data, content } = matter(raw);
 
   // Validate the §8 schema, then attach the slug (filename is the source of
-  // truth) and derive the flat gallery list from the grouped flows.
+  // truth), derive the flat gallery list from the grouped flows, and settle the
+  // status the cards print.
   assertProjectMeta(slug, data);
   const gallery = (data.flows ?? []).flatMap((flow) => flow.screens.map((s) => s.src));
-  const meta: ProjectMeta = { ...data, slug, gallery };
+  const meta: ProjectMeta = { ...data, slug, gallery, status: deriveStatus(data) };
   return { meta, content };
 }
 

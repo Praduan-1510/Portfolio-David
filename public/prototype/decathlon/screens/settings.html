@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  .set-h { display: block; margin: 26px 0 10px 2px; }
+  .set-h:first-of-type { margin-top: 22px; }
+  .set .menu__item { min-height: 56px; gap: 12px; padding: 0 16px; }
+  .set .menu__label { color: #111; }
+  .set .menu__icon--lg { width: 34px; height: 34px; }
+  .set .menu__icon--lg svg { width: 18px; height: 18px; }
+  .set .menu__meta { margin-left: auto; color: var(--muted-2); }
+  .set .menu__meta + .chev { margin-left: 0; }
+  .set .chev { margin-left: auto; }
+  .set .switch { margin-left: auto; }
+  .set--danger .menu__icon--lg { background: var(--danger-bg); color: var(--danger); }
+  .set--danger .menu__label { color: var(--danger); }
+  .dark-preview { display: flex; gap: 10px; margin-top: 10px; }
+  .dark-preview span { flex: 1; height: 70px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--border); position: relative; overflow: hidden; }
+  .dark-preview span::before { content: ''; position: absolute; left: 10px; right: 30px; top: 12px; height: 8px; border-radius: 4px; background: currentColor; opacity: .5; }
+  .dark-preview span::after { content: ''; position: absolute; left: 10px; right: 10px; bottom: 10px; height: 22px; border-radius: 6px; background: currentColor; opacity: .18; }
+  .version { text-align: center; margin: 28px 0 0; font-size: 12px; line-height: 1.6; color: var(--muted); }
+  .version .wordmark { width: 96px; color: #C5D3DA; display: block; margin: 0 auto 8px; }
+  .legal { font-size: 13.5px; line-height: 1.6; color: #333; }
+  .legal p + p { margin-top: 10px; }
+  .legal b { font-weight: 600; }
+  body.dark-preview-on .page { filter: none; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Settings">
+  <header class="appbar">
+    <a class="back tap" href="account.html" data-go="back" aria-label="Back"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <h1 class="appbar__title">Settings</h1>
+  </header>
+  <div class="page-divider"></div>
+
+  <span class="label-caps set-h">Notifications</span>
+  <div class="menu set">
+    <div class="menu__item"><span class="menu__icon menu__icon--lg"><i data-icon="bell"></i></span><span class="menu__body"><span class="menu__label" id="l-push">Push notifications</span><span class="menu__sub">Alerts on this phone</span></span><button class="switch" type="button" role="switch" aria-labelledby="l-push" data-key="push"></button></div>
+    <div class="menu__item"><span class="menu__icon menu__icon--lg"><i data-icon="truck"></i></span><span class="menu__body"><span class="menu__label" id="l-orders">Order updates</span><span class="menu__sub">Shipping, delivery and returns</span></span><button class="switch" type="button" role="switch" aria-labelledby="l-orders" data-key="orderUpdates"></button></div>
+    <div class="menu__item"><span class="menu__icon menu__icon--lg"><i data-icon="tag"></i></span><span class="menu__body"><span class="menu__label" id="l-offers">Offers and sales</span><span class="menu__sub">Club early access and deals</span></span><button class="switch" type="button" role="switch" aria-labelledby="l-offers" data-key="offers"></button></div>
+    <div class="menu__item"><span class="menu__icon menu__icon--lg"><i data-icon="mail"></i></span><span class="menu__body"><span class="menu__label" id="l-email">Email</span><span class="menu__sub" id="emailSub">aditya.banerjee@gmail.com</span></span><button class="switch" type="button" role="switch" aria-labelledby="l-email" data-key="email"></button></div>
+    <div class="menu__item"><span class="menu__icon menu__icon--lg"><i data-icon="chat"></i></span><span class="menu__body"><span class="menu__label" id="l-sms">SMS</span><span class="menu__sub">Delivery OTPs are always sent</span></span><button class="switch" type="button" role="switch" aria-labelledby="l-sms" data-key="sms"></button></div>
+  </div>
+
+  <span class="label-caps set-h">Preferences</span>
+  <div class="menu set">
+    <button class="menu__item tap" type="button" data-sheet="langSheet"><span class="menu__icon menu__icon--lg"><i data-icon="globe"></i></span><span class="menu__label">Language</span><span class="menu__meta" id="langMeta">English</span><i class="chev" data-icon="chevron" data-size="18" data-sw="2"></i></button>
+    <button class="menu__item tap" type="button" data-sheet="regionSheet"><span class="menu__icon menu__icon--lg"><i data-icon="pin"></i></span><span class="menu__label">Country / region</span><span class="menu__meta" id="regionMeta">India · INR</span><i class="chev" data-icon="chevron" data-size="18" data-sw="2"></i></button>
+    <a class="menu__item tap" href="location.html?from=settings&amp;state=set"><span class="menu__icon menu__icon--lg"><i data-icon="truck"></i></span><span class="menu__label">Delivery pincode</span><span class="menu__meta" data-bind="pin">700135</span><i class="chev" data-icon="chevron" data-size="18" data-sw="2"></i></a>
+    <div class="menu__item"><span class="menu__icon menu__icon--lg"><i data-icon="eye"></i></span><span class="menu__body"><span class="menu__label" id="l-dark">Dark mode</span><span class="menu__sub" id="darkSub">Preview only in this prototype</span></span><button class="switch" type="button" role="switch" aria-labelledby="l-dark" data-key="dark"></button></div>
+    <div class="menu__item"><span class="menu__icon menu__icon--lg"><i data-icon="shield"></i></span><span class="menu__body"><span class="menu__label" id="l-bio">Face ID sign in</span><span class="menu__sub">Skip the OTP on this phone</span></span><button class="switch" type="button" role="switch" aria-labelledby="l-bio" data-key="biometric"></button></div>
+  </div>
+  <div class="dark-preview" id="darkPreview" hidden aria-hidden="true"><span style="background:#fff;color:#012A4A"></span><span style="background:#0B1620;color:#9FD5F1"></span></div>
+
+  <span class="label-caps set-h">Privacy &amp; legal</span>
+  <div class="menu set">
+    <button class="menu__item tap" type="button" data-sheet="privacySheet"><span class="menu__icon menu__icon--lg"><i data-icon="lock"></i></span><span class="menu__label">Privacy policy</span><i class="chev" data-icon="chevron" data-size="18" data-sw="2"></i></button>
+    <button class="menu__item tap" type="button" data-sheet="termsSheet"><span class="menu__icon menu__icon--lg"><i data-icon="info"></i></span><span class="menu__label">Terms of use</span><i class="chev" data-icon="chevron" data-size="18" data-sw="2"></i></button>
+    <button class="menu__item tap" type="button" id="download"><span class="menu__icon menu__icon--lg"><i data-icon="box"></i></span><span class="menu__body"><span class="menu__label">Download my data</span><span class="menu__sub" id="dlSub">Orders, addresses and Club history</span></span><i class="chev" data-icon="chevron" data-size="18" data-sw="2"></i></button>
+  </div>
+
+  <span class="label-caps set-h">Data on this device</span>
+  <div class="menu set">
+    <button class="menu__item tap" type="button" id="clearSearch"><span class="menu__icon menu__icon--lg"><i data-icon="history"></i></span><span class="menu__body"><span class="menu__label">Clear search history</span><span class="menu__sub" id="searchSub">4 recent searches</span></span></button>
+    <button class="menu__item tap" type="button" id="resetDemo"><span class="menu__icon menu__icon--lg"><i data-icon="refresh"></i></span><span class="menu__body"><span class="menu__label">Reset demo data</span><span class="menu__sub">Restore the bag, orders and wishlist</span></span></button>
+  </div>
+
+  <span class="label-caps set-h" id="danger">Account</span>
+  <div class="menu set set--danger">
+    <button class="menu__item tap" type="button" id="logout"><span class="menu__icon menu__icon--lg"><i data-icon="logout"></i></span><span class="menu__label">Log out</span></button>
+    <button class="menu__item tap" type="button" id="deleteAcc"><span class="menu__icon menu__icon--lg"><i data-icon="trash"></i></span><span class="menu__body"><span class="menu__label">Delete account</span><span class="menu__sub">Permanently removes your data and points</span></span></button>
+  </div>
+
+  <p class="version"><span class="wordmark" aria-hidden="true"></span>Decathlon for iPhone · Version 4.12.0 (2026.09)<br><button class="text-btn tap" type="button" id="update" style="min-height:30px;font-size:12px">Check for updates</button></p>
+
+  <nav data-tabbar="account"></nav>
+</main>
+
+<section class="sheet" id="langSheet" aria-labelledby="langT">
+  <div class="sheet__head"><div><p class="sheet__title" id="langT">Language</p><p class="sheet__sub">Product names stay in English</p></div><button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button></div>
+  <div class="options" data-options id="langOpts">
+    <button class="option" type="button" data-value="English"><span class="option__radio"></span><span class="option__body"><span class="option__title">English</span></span></button>
+    <button class="option" type="button" data-value="हिन्दी"><span class="option__radio"></span><span class="option__body"><span class="option__title">हिन्दी</span><span class="option__sub">Hindi</span></span></button>
+    <button class="option" type="button" data-value="বাংলা"><span class="option__radio"></span><span class="option__body"><span class="option__title">বাংলা</span><span class="option__sub">Bengali</span></span></button>
+    <button class="option" type="button" data-value="தமிழ்"><span class="option__radio"></span><span class="option__body"><span class="option__title">தமிழ்</span><span class="option__sub">Tamil</span></span></button>
+    <button class="option" type="button" data-value="मराठी"><span class="option__radio"></span><span class="option__body"><span class="option__title">मराठी</span><span class="option__sub">Marathi</span></span></button>
+  </div>
+  <div class="sheet__foot"><button class="btn btn--primary btn--lg tap" type="button" id="langSave"><span>Apply</span></button></div>
+</section>
+
+<section class="sheet" id="regionSheet" aria-labelledby="regionT">
+  <div class="sheet__head"><div><p class="sheet__title" id="regionT">Country / region</p><p class="sheet__sub">Changes prices, currency and delivery options</p></div><button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button></div>
+  <div class="options" data-options id="regionOpts">
+    <button class="option" type="button" data-value="India · INR"><span class="option__radio"></span><span class="option__body"><span class="option__title">India</span><span class="option__sub">Prices in ₹ · GST included</span></span><span class="option__meta">INR</span></button>
+    <button class="option" type="button" data-value="Sri Lanka · LKR"><span class="option__radio"></span><span class="option__body"><span class="option__title">Sri Lanka</span><span class="option__sub">Opens the Decathlon Sri Lanka store</span></span><span class="option__meta">LKR</span></button>
+    <button class="option" type="button" data-value="UAE · AED"><span class="option__radio"></span><span class="option__body"><span class="option__title">United Arab Emirates</span><span class="option__sub">Opens the Decathlon UAE store</span></span><span class="option__meta">AED</span></button>
+    <button class="option" type="button" data-value="Singapore · SGD"><span class="option__radio"></span><span class="option__body"><span class="option__title">Singapore</span><span class="option__sub">Opens the Decathlon Singapore store</span></span><span class="option__meta">SGD</span></button>
+  </div>
+  <div class="sheet__foot"><button class="btn btn--primary btn--lg tap" type="button" id="regionSave"><span>Save</span></button></div>
+</section>
+
+<section class="sheet" id="privacySheet" aria-labelledby="privT">
+  <div class="sheet__head"><div><p class="sheet__title" id="privT">Privacy policy</p><p class="sheet__sub">How we use your data</p></div><button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button></div>
+  <ol class="track">
+    <li class="done"><span class="track__title">What we collect</span><span class="track__meta">Name, contact details, delivery addresses and your order history.</span></li>
+    <li class="done"><span class="track__title">Why we collect it</span><span class="track__meta">To deliver orders, run Decathlon Club and suggest gear for your sports.</span></li>
+    <li class="done"><span class="track__title">Your control</span><span class="track__meta">Download or delete your data any time from this screen.</span></li>
+  </ol>
+  <div class="sheet__foot"><button class="btn btn--primary btn--lg tap" type="button" data-close>Got it</button></div>
+</section>
+
+<section class="sheet" id="termsSheet" aria-labelledby="termsT">
+  <div class="sheet__head"><div><p class="sheet__title" id="termsT">Terms of use</p><p class="sheet__sub">Last updated 1 September 2026</p></div><button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button></div>
+  <div class="legal">
+    <p><b>1. Your account.</b> You are responsible for keeping your login details safe. One account per person.</p>
+    <p><b>2. Orders and prices.</b> Prices include GST. We confirm an order only once payment is received or Cash on delivery is accepted.</p>
+    <p><b>3. Returns.</b> Unused items can be returned within 30 days. Decathlon brands carry a 2-year warranty.</p>
+    <p><b>4. Decathlon Club.</b> Points have no cash value, expire after 12 months of inactivity and can be redeemed as vouchers.</p>
+  </div>
+  <div class="sheet__foot"><button class="btn btn--primary btn--lg tap" type="button" data-close>Got it</button></div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const s = D.settings.get(), u = D.user.get();
+    const LABEL = { push: 'Push notifications', orderUpdates: 'Order updates', offers: 'Offers and sales', email: 'Email updates', sms: 'SMS updates', dark: 'Dark mode', biometric: 'Face ID sign in' };
+
+    // Switches reflect Deca.settings and persist on change
+    $$('.switch[data-key]').forEach((sw) => {
+      sw.setAttribute('aria-checked', String(!!s[sw.dataset.key]));
+      sw.addEventListener('change', (e) => {
+        const k = sw.dataset.key; D.settings.set({ [k]: e.detail });
+        if (k === 'dark') { $('#darkPreview').hidden = !e.detail; $('#darkSub').textContent = e.detail ? 'On · full dark theme coming soon' : 'Preview only in this prototype'; }
+        if (k === 'push' && !e.detail) { D.toast('Push off. You will still get order updates by SMS'); return; }
+        D.toast(`${LABEL[k]} ${e.detail ? 'on' : 'off'}`);
+      });
+    });
+    $('#darkPreview').hidden = !s.dark;
+    $('#emailSub').textContent = u.email || 'Add an email in your profile';
+
+    // Language
+    const pick = (opts, val) => $$('.option', opts).forEach((o) => o.setAttribute('aria-checked', String(o.dataset.value === val)));
+    let lang = s.language || 'English'; $('#langMeta').textContent = lang; pick($('#langOpts'), lang);
+    $('#langOpts').addEventListener('select', (e) => { lang = e.detail; });
+    $('#langSave').addEventListener('click', async (e) => { await D.loading(e.currentTarget, 700); D.settings.set({ language: lang }); $('#langMeta').textContent = lang; D.sheet.close(); D.toast(lang === 'English' ? 'Language set to English' : `Language set to ${lang}. Full translation rolls out soon`, { icon: 'check' }); });
+
+    // Region
+    let region = s.region || 'India · INR'; $('#regionMeta').textContent = region; pick($('#regionOpts'), region);
+    $('#regionOpts').addEventListener('select', (e) => { region = e.detail; });
+    $('#regionSave').addEventListener('click', async (e) => {
+      const btn = e.currentTarget;
+      if (region !== 'India · INR') {
+        const go = await D.dialog({ title: 'Switch store?', message: `Your bag and Club points stay in the India store. ${region.split(' · ')[0]} has its own catalogue and prices.`, confirm: 'Switch', cancel: 'Stay in India', tone: 'info', icon: 'globe' });
+        if (!go) { region = 'India · INR'; pick($('#regionOpts'), region); return; }
+      }
+      await D.loading(btn, 800); D.settings.set({ region }); $('#regionMeta').textContent = region; D.sheet.close(); D.toast('Region saved: ' + region.split(' · ')[0], { icon: 'check' });
+    });
+
+    // Download data
+    $('#download').addEventListener('click', async (e) => { const sub = $('#dlSub'); sub.textContent = 'Preparing your file…'; await D.wait(1200); sub.textContent = 'Sent to ' + (u.email || 'your email'); D.toast('We emailed you a download link', { icon: 'mail' }); });
+
+    // Search history
+    const searchSub = () => { const n = D.searches.list().length; $('#searchSub').textContent = n ? `${n} recent ${n === 1 ? 'search' : 'searches'}` : 'Nothing to clear'; };
+    searchSub();
+    $('#clearSearch').addEventListener('click', async () => {
+      if (!D.searches.list().length) { D.toast('Your search history is already empty'); return; }
+      if (!(await D.dialog({ title: 'Clear search history?', message: 'Recent searches will be removed from this device.', confirm: 'Clear', tone: 'danger', icon: 'history' }))) return;
+      D.searches.clear(); searchSub(); D.toast('Search history cleared', { icon: 'check' });
+    });
+
+    // Reset demo
+    $('#resetDemo').addEventListener('click', async () => {
+      if (!(await D.dialog({ title: 'Reset demo data?', message: 'Bag, wishlist, orders, addresses, Club points and settings go back to the starting demo.', confirm: 'Reset', tone: 'danger', icon: 'refresh' }))) return;
+      D.reset(); D.store.del('clubRedeemed'); D.store.del('auth'); D.store.del('signup');
+      D.toast('Demo data restored', { icon: 'check' }); setTimeout(() => location.reload(), 700);
+    });
+
+    // Log out
+    $('#logout').addEventListener('click', async () => {
+      if (!(await D.dialog({ title: 'Log out of Decathlon?', message: 'Your bag and wishlist stay saved on this device.', confirm: 'Log out', cancel: 'Stay', tone: 'danger', icon: 'logout' }))) return;
+      D.user.logout(); D.toast('You have been logged out'); await D.wait(700); location.href = 'welcome.html';
+    });
+
+    // Delete account: danger confirm -> loading -> Welcome
+    $('#deleteAcc').addEventListener('click', async (e) => {
+      const row = e.currentTarget; const pts = D.fmtNum(u.points || 0);
+      if (!(await D.dialog({ title: 'Delete your account?', message: `This permanently deletes your profile, order history and ${pts} Club points. It cannot be undone.`, confirm: 'Delete', cancel: 'Keep account', tone: 'danger', icon: 'trash' }))) return;
+      row.querySelector('.menu__sub').textContent = 'Deleting your account…'; row.style.pointerEvents = 'none';
+      await D.wait(1400);
+      D.reset(); D.user.set({ loggedIn: false }); D.store.del('clubRedeemed');
+      D.toast('Your account has been deleted'); await D.wait(800); location.href = 'welcome.html';
+    });
+
+    $('#update').addEventListener('click', async (e) => { const b = e.currentTarget; b.textContent = 'Checking…'; await D.wait(900); b.textContent = 'You are on the latest version'; });
+    if (location.hash === '#danger') setTimeout(() => $('#danger').scrollIntoView({ block: 'center' }), 100);
+  })();
+</script>
+</body>
+</html>

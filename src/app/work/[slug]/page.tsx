@@ -5,7 +5,6 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import {
   Container,
   Text,
-  Link,
   Button,
   PhoneFrame,
   GraphicDeck,
@@ -244,7 +243,7 @@ export default async function CaseStudy({
               <div className="flex flex-col gap-space-5 md:flex-row md:items-end md:justify-between md:gap-space-9">
                 <TextReveal
                   as="h1"
-                  by="lines"
+                  by="words"
                   trigger="load"
                   delay={0.1}
                   className="max-w-[16ch] font-display text-display-l"
@@ -258,8 +257,13 @@ export default async function CaseStudy({
                     className="flex shrink-0 flex-wrap items-center gap-x-space-5 gap-y-space-3 md:pb-space-2"
                   >
                     <Magnetic>
-                      <Button href={meta.liveUrl} target="_blank" variant="primary">
-                        Visit site ↗
+                      <Button
+                        href={meta.liveUrl}
+                        target="_blank"
+                        variant="primary"
+                        arrow="up-right"
+                      >
+                        Visit site
                       </Button>
                     </Magnetic>
                     <span className="inline-flex items-center gap-space-2 font-mono text-caption uppercase tracking-[0.14em] text-muted">
@@ -381,7 +385,7 @@ export default async function CaseStudy({
             <div>
               <TextReveal
                 as="h1"
-                by="lines"
+                by="words"
                 trigger="load"
                 delay={0.1}
                 className="max-w-[14ch] font-display text-display-xl short-land:text-display-l"
@@ -558,9 +562,10 @@ export default async function CaseStudy({
                 />
               </Reveal>
             ) : showLiveShowcase ? (
-              /* The playable HTML build, framed in the house browser chrome with
-                 its device switcher, in the same slot for the same reason. Not
-                 the LCP (the hero cover above is), so no priority. */
+              /* The playable HTML build, framed in the house browser chrome, in
+                 the same slot for the same reason; its device switcher lives in
+                 the demo window it launches. Not the LCP (the hero cover above
+                 is), so no priority. */
               <Reveal>
                 <LivePrototype
                   tabs={meta.prototype!.surfaces}
@@ -826,7 +831,9 @@ export default async function CaseStudy({
       )}
 
       <Container className="pt-0 pb-space-8">
-        <Link href="/work" className="inline-flex min-h-[44px] items-center">← Back to all work</Link>
+        <Button href="/work" variant="ghost" arrow="left" className="-ml-3.5">
+          Back to all work
+        </Button>
       </Container>
     </article>
   );

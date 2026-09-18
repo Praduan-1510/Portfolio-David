@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Return requested</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* Confirmation language: 158 circle + scalloped badge, 22/700 title, steel sub */
+  .result { padding-top: 56px; }
+  .rs-id { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; height: 36px; padding: 0 14px; border-radius: var(--r-pill); background: var(--surface); box-shadow: inset 0 0 0 1px var(--border); font-size: 13px; color: var(--navy); }
+  .rs-id b { font-weight: 700; letter-spacing: .3px; }
+  .rs-id svg { color: var(--brand); }
+  .rs-card { margin-top: 26px; }
+  .rs-card .kvs > div { font-size: 14px; }
+  .rs-card .kvs .v { color: #111; font-weight: 500; }
+  .rs-amount { display: flex; align-items: center; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .rs-amount__v { font-size: 24px; font-weight: 700; color: var(--navy); line-height: 1.1; }
+  .rs-amount__k { font-size: 12px; color: var(--muted-2); }
+  .rs-steps { margin-top: 22px; }
+  .rs-actions { margin-top: 26px; display: flex; flex-direction: column; align-items: center; gap: 13px; }
+  .rs-actions .btn { width: 280px; height: 34px; }
+</style>
+</head>
+<body>
+<main class="page page--bare" aria-label="Return requested">
+  <div id="root"></div>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$;
+    let o = D.orders.get(D.q('id')) || D.orders.list().find((x) => x.returnReq);
+    const root = $('#root');
+    let preview = false;
+    if ((!o || !o.returnReq) && !D.q('id')) {
+      // Opened directly (demo jump, screen gallery): preview a return of the latest delivered
+      // order's first item, exactly as the return flow would file it, without filing it.
+      const d = D.orders.list().find((x) => x.status === 'delivered');
+      if (d) { const it = d.items[0]; preview = true; o = Object.assign({}, d, { returnReq: { rid: 'RET' + d.id.slice(3), type: 'return', items: [it.id], reason: 'Size too small', method: 'original', on: D.iso(), pickup: D.iso(D.addDays(2)), slot: '9 AM – 12 PM', amount: it.price * it.qty } }); }
+    }
+    if (!o || !o.returnReq) {
+      root.innerHTML = `<div class="empty-state" style="padding-top:120px"><div class="empty-state__icon">${D.icon('return', 40)}</div><h3>No return found</h3><p>Start a return from any delivered order within its return window.</p><a class="btn btn--primary btn--md tap" href="orders.html?filter=delivered">See delivered orders</a></div>`;
+      return;
+    }
+    const r = o.returnReq; const ex = r.type === 'exchange';
+    const items = D.orders.items(o).filter((it) => !r.items || r.items.includes(it.id));
+    const pickup = new Date((r.pickup || D.iso(D.addDays(2))) + 'T12:00:00');
+    const toWallet = r.method === 'wallet';
+    const refundTo = toWallet ? 'Decathlon wallet' : o.payment === 'cod' ? 'Bank account via UPI' : D.payment.label(o.payment);
+    const eta = toWallet ? 'Instantly after pickup' : `By ${D.fmtDay(D.addDays(5, pickup))}`;
+    const rid = r.rid || 'RET' + o.id.slice(3);
+    document.title = `Decathlon · ${ex ? 'Exchange' : 'Return'} requested`;
+
+    root.innerHTML = `<section class="result">
+        <div class="result__circle">${D.icon('verified', 96)}</div>
+        <h1 class="result__title">${ex ? 'Exchange requested' : 'Return requested'}</h1>
+        <p class="result__sub">Pickup on ${D.fmtDay(pickup)}</p>
+        <button class="rs-id tap" type="button" data-action="copy" data-copy="${rid}" data-copied="Return ID copied" aria-label="Copy return ID ${rid}">Return ID <b class="num">${rid}</b>${D.icon('copy', 15)}</button>
+      </section>
+
+      <div class="panel rs-card enter" style="--i:1">
+        <div class="rs-amount"><span class="icon-tile">${D.icon(ex ? 'refresh' : toWallet ? 'wallet' : 'cash', 22)}</span>
+          <div class="grow"><p class="rs-amount__k">${ex ? 'Replacement' : 'Refund amount'}</p><p class="rs-amount__v num">${ex ? 'Free exchange' : D.fmt(r.amount || o.total)}</p></div></div>
+        <div class="kvs" style="margin-top:4px">
+          <div><span class="k">Items</span><span class="v">${items.map((it) => D.esc(it.product.name) + (ex && r.sizes && r.sizes[it.id] ? ' → ' + r.sizes[it.id] : '')).join(', ')}</span></div>
+          <div><span class="k">Pickup slot</span><span class="v">${D.fmtDay(pickup)}, ${D.esc(r.slot || '9 AM – 12 PM')}</span></div>
+          ${ex ? `<div><span class="k">New item arrives</span><span class="v">With the pickup</span></div>` : `<div><span class="k">Refund to</span><span class="v">${refundTo}</span></div><div><span class="k">Refund ETA</span><span class="v v--ok">${eta}</span></div>`}
+          <div><span class="k">Order</span><span class="v"><a class="c-brand tap" href="order-detail.html?id=${o.id}">#${o.id}</a></span></div>
+        </div>
+      </div>
+
+      <ol class="track rs-steps enter" style="--i:2" aria-label="What happens next">
+        <li class="done"><span class="track__title">Request received</span><span class="track__meta">${D.fmtDay(r.on || D.iso())} · reason: ${D.esc(r.reason || 'Not specified')}</span></li>
+        <li class="now"><span class="track__title">Courier pickup</span><span class="track__meta">Keep items packed with tags. Show Return ID ${rid}.</span></li>
+        <li><span class="track__title">Quality check</span><span class="track__meta">Within 24 hours of pickup</span></li>
+        <li><span class="track__title">${ex ? 'Replacement delivered' : 'Refund issued'}</span><span class="track__meta">${ex ? 'Handed over at pickup' : eta + ' · ' + refundTo}</span></li>
+      </ol>
+
+      <div class="rs-actions">
+        <a class="btn btn--primary tap" href="home.html">Continue shopping</a>
+        <a class="btn btn--outline tap" href="order-detail.html?id=${o.id}">${preview ? 'View order' : 'Track return'}</a>
+      </div>`;
+    D.hydrate(root);
+  })();
+</script>
+</body>
+</html>

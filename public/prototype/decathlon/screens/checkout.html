@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Checkout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* Step 3 of 3, Confirm. The revision of Checkout.png: the first pass merged address,
+     payment choice and Pay Now into one view while its stepper said Confirm. Address and
+     payment are now chosen on their own steps and only read back here, with the full
+     cost, and there is one action. Card CVV is asked here, never stored. */
+  .co-steps { margin: 29px 4px 0; }
+  .co-steps li { gap: 9px; }
+  .co-steps li::before { width: 13px; height: 13px; }
+  .co-steps li::after { top: 6px; }
+  .co-h { font-size: 20px; font-weight: 600; line-height: 28px; color: #000; margin: 18px 0 0 3px; }
+  .co-card { display: flex; align-items: center; gap: 16px; margin-top: 10px; padding: 14px 14px 14px 16px; border-radius: var(--r); box-shadow: inset 0 0 0 1px var(--border); background: #fff; }
+  .co-card .icon-tile { flex-shrink: 0; }
+  .co-card .icon-tile svg { width: 24px; height: 24px; }
+  .co-card__t { display: block; font-size: 15px; font-weight: 600; color: #111; }
+  .co-card__s { display: block; font-size: 13px; line-height: 1.45; color: var(--muted-2); margin-top: 2px; overflow-wrap: break-word; }
+  .co-head { display: flex; align-items: flex-end; justify-content: space-between; }
+  .co-card__edit { flex-shrink: 0; min-height: 36px; padding: 0 4px; font-size: 14px; font-weight: 600; color: var(--brand); display: inline-flex; align-items: center; }
+  .co-eta { display: flex; align-items: center; gap: 6px; margin: 8px 0 0 4px; font-size: 12px; font-weight: 500; color: var(--ok); }
+  .co-eta svg { width: 15px; height: 15px; }
+  .co-cvv { display: flex; align-items: flex-end; gap: 12px; margin-top: 10px; }
+  .co-cvv .fg { width: 120px; }
+  .co-cvv .form-note { padding-bottom: 12px; }
+  .co-sum { margin-top: 10px; padding: 6px 16px 12px; }
+  .co-lines { display: flex; align-items: center; gap: 10px; padding: 8px 0 10px; border-bottom: 1px solid var(--divider-soft); }
+  .co-lines .thumbs { display: flex; }
+  .co-lines .thumb { width: 36px; height: 36px; box-shadow: 0 0 0 2px #fff; }
+  .co-lines .thumb + .thumb { margin-left: -10px; }
+  .co-lines__t { font-size: 13px; color: #111; }
+  .co-lines__t a { color: var(--brand); font-weight: 500; }
+  .co-sum .kvs > div { min-height: 34px; }
+  .co-gst { font-size: 11.5px; line-height: 1.5; color: var(--muted-2); margin-top: 2px; }
+  .co-cta { margin-top: 18px; }
+  .co-cta .btn { height: 48px; font-size: 18px; }
+  .co-note { display: flex; gap: 6px; align-items: center; justify-content: center; margin-top: 10px; font-size: 12px; color: var(--muted-2); }
+  .pay-overlay { position: fixed; inset: 0; z-index: var(--z-dialog); background: rgba(255,255,255,.97); display: grid; place-items: center; text-align: center; opacity: 0; transition: opacity 220ms var(--ease-out); }
+  .pay-overlay.show { opacity: 1; }
+  .pay-spin { width: 64px; height: 64px; margin: 0 auto; border-radius: 50%; border: 4px solid var(--surface); border-top-color: var(--brand); animation: spin 800ms linear infinite; }
+  .pay-overlay h2 { font-size: 18px; font-weight: 600; margin-top: 22px; }
+  .pay-overlay p { font-size: 13px; color: var(--muted-2); margin-top: 4px; padding: 0 32px; }
+  .pay-overlay .result__circle { width: 110px; height: 110px; margin: 0 auto; }
+  .pay-overlay .result__circle svg { width: 70px; height: 70px; }
+  .pay-overlay .result__circle::before { display: none; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Checkout: confirm your order" id="co">
+  <header class="appbar">
+    <a class="back tap" href="payment.html" data-go="back" aria-label="Back to payment"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <h1 class="appbar__title">Checkout</h1>
+  </header>
+  <div class="page-divider"></div>
+
+  <ol class="steps co-steps" aria-label="Checkout progress">
+    <li class="done">Address</li>
+    <li class="done">Payment</li>
+    <li class="current" aria-current="step">Confirm</li>
+  </ol>
+
+  <div class="co-head"><h2 class="co-h">Delivery address</h2><a class="co-card__edit tap" id="addrEdit" href="addresses.html?select=1&amp;next=checkout" aria-label="Change delivery address">Change</a></div>
+  <div class="co-card" id="addr">
+    <span class="icon-tile" aria-hidden="true"><i data-icon="pin-fill" data-size="24"></i></span>
+    <span class="grow"><span class="co-card__t" id="addrName">Aditya Banerjee</span><span class="co-card__s" id="addrText"></span></span>
+  </div>
+  <p class="co-eta"><i data-icon="truck" data-size="15"></i><span>Delivery by <b id="etaDay"></b></span></p>
+
+  <div class="co-head"><h2 class="co-h">Payment</h2><a class="co-card__edit tap" href="payment.html" aria-label="Change payment method">Change</a></div>
+  <div class="co-card" id="pay">
+    <span class="icon-tile" aria-hidden="true" id="payIcon"></span>
+    <span class="grow"><span class="co-card__t" id="payT"></span><span class="co-card__s" id="payS"></span></span>
+  </div>
+  <div class="co-cvv" id="cvvRow" hidden>
+    <div class="fg"><label class="label" for="cvv">CVV<span class="req">*</span></label><input class="field" id="cvv" type="password" inputmode="numeric" maxlength="4" data-mask="digits" data-validate="required|cvv" autocomplete="cc-csc" placeholder="123"></div>
+    <p class="form-note">3 digits on the back of your card. Never stored.</p>
+  </div>
+
+  <h2 class="co-h">Order summary</h2>
+  <section class="panel co-sum" aria-label="Order summary">
+    <div class="co-lines"><span class="thumbs" id="thumbs"></span><span class="grow co-lines__t" id="linesT"></span></div>
+    <div class="kvs kvs--sm" id="kvs"></div>
+    <p class="co-gst" id="gst"></p>
+  </section>
+
+  <div class="co-cta"><button class="btn btn--primary tap" id="payBtn" type="button"><i data-icon="lock" data-size="16"></i><span id="payTxt">Pay</span></button></div>
+  <p class="co-note"><i data-icon="shield" data-size="14"></i>Payments are encrypted and processed securely.</p>
+
+  <nav data-tabbar="bag"></nav>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$;
+    const t = D.bag.totals();
+    if (!t.count) {
+      const nav = $('.tabbar');
+      $('#co').innerHTML = `<header class="appbar"><a class="back tap" href="bag.html" aria-label="Back"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a><h1 class="appbar__title">Checkout</h1></header><div class="page-divider"></div><div class="empty-state"><div class="empty-state__icon">${D.icon('bag', 40, { sw: 1.6 })}</div><h3>Your bag is empty</h3><p>Add something to your bag to check out.</p><a class="btn btn--primary tap" href="home.html" style="height:44px">Continue shopping</a></div>`;
+      if (nav) $('#co').appendChild(nav);
+      return;
+    }
+
+    // ---- Address (chosen on step 1)
+    const a = D.addresses.selected();
+    if (a) {
+      $('#addrName').textContent = `${a.name} · ${a.label}`;
+      $('#addrText').textContent = a.text;
+      $('#etaDay').textContent = D.location.eta(a.pin);
+    } else {
+      $('#addrName').textContent = 'No delivery address yet';
+      $('#addrText').textContent = 'Add one to continue';
+      $('#addrEdit').textContent = 'Add';
+      $('#etaDay').closest('.co-eta').hidden = true;
+    }
+
+    // ---- Payment (chosen on step 2). A direct visit falls back to the saved preference.
+    const pref = D.payment.get();
+    let d = D.store.get('payDraft', null);
+    if (!d || d.method !== pref) {
+      const card = D.payment.cards().find((c) => c.type === pref);
+      d = pref === 'upi' ? { method: 'upi', vpa: D.payment.upi()[0] } : card ? { method: pref, cardId: card.id } : pref === 'netbanking' ? { method: 'netbanking', bank: 'HDFC Bank' } : { method: 'cod' };
+    }
+    const saved = d.cardId && D.payment.cards().find((c) => c.id === d.cardId);
+    const card = saved || d.newCard;
+    const isCard = d.method === 'credit' || d.method === 'debit';
+    const P = isCard && card ? { icon: 'card', t: `${card.brand} •••• ${card.last4}`, s: `${card.type === 'debit' ? 'Debit' : 'Credit'} card · expires ${card.exp}` }
+      : d.method === 'upi' ? { icon: 'upi', t: d.upiApp ? `UPI · ${d.upiApp}` : 'UPI', s: d.upiApp ? 'You approve the request in the app' : (d.vpa || 'UPI ID') }
+      : d.method === 'netbanking' ? { icon: 'bank', t: 'Net banking', s: d.bank || 'Your bank' }
+      : { icon: 'cash', t: 'Cash on delivery', s: 'Pay in cash or by UPI at your door' };
+    $('#payIcon').innerHTML = D.icon(P.icon, 24);
+    $('#payT').textContent = P.t; $('#payS').textContent = P.s;
+    $('#cvvRow').hidden = !isCard;
+
+    // ---- Summary: every cost before the one action
+    const items = D.bag.items();
+    $('#thumbs').innerHTML = items.slice(0, 3).map((it) => `<span class="thumb"><img src="${D.img(it.product.img)}" alt=""></span>`).join('');
+    $('#linesT').innerHTML = `${t.count} ${t.count === 1 ? 'item' : 'items'}${t.promoCode ? ` · ${t.promoCode} applied` : ''} · <a class="tap" href="bag.html">Edit bag</a>`;
+    $('#kvs').innerHTML = `<div><span class="k">Subtotal (MRP)</span><span class="v">${D.fmt(t.mrp)}</span></div><div><span class="k">Discount</span><span class="v">${D.fmt(-t.discount)}</span></div>${t.promo ? `<div><span class="k">Promo ${t.promoCode}</span><span class="v v--ok">${D.fmt(-t.promo)}</span></div>` : ''}<div><span class="k">Delivery</span><span class="v ${t.delivery ? '' : 'v--ok'}">${t.delivery ? D.fmt(t.delivery) : 'Free'}</span></div><div class="total"><span class="k">Total</span><span class="v">${D.fmt(t.total)}</span></div>`;
+    $('#gst').textContent = `Inclusive of GST: ${D.gstNote(t)}`;
+    const cod = d.method === 'cod';
+    $('#payTxt').textContent = cod ? `Place order · ${D.fmt(t.total)}` : `Pay ${D.fmt(t.total)}`;
+    if (cod) $('#payBtn [data-icon]').remove();
+    D.hydrate($('#co'));
+
+    // ---- The one action
+    const overlay = (html) => { let o = $('.pay-overlay'); if (!o) { o = document.createElement('div'); o.className = 'pay-overlay'; o.setAttribute('role', 'alertdialog'); o.setAttribute('aria-live', 'assertive'); document.body.appendChild(o); requestAnimationFrame(() => o.classList.add('show')); } o.innerHTML = `<div>${html}</div>`; return o; };
+    $('#payBtn').addEventListener('click', async (e) => {
+      if (!a) { D.toast('Add a delivery address first', { action: 'Add', href: 'add-address.html?from=checkout&next=checkout' }); return; }
+      if (isCard && !D.validate($('#cvvRow'))) return;
+      const btn = e.currentTarget;
+      if (cod) {
+        await D.loading(btn, 1100);
+        const o = D.orders.place({ payment: 'cod' }); D.store.del('payDraft'); D.haptic(20);
+        location.href = 'confirmation.html?id=' + o.id; return;
+      }
+      const via = d.method === 'upi' ? (d.upiApp || d.vpa) : d.method === 'netbanking' ? d.bank : '';
+      let fail = D.store.get('payFail', false) || !!d.decline;
+      const reason = d.decline ? 'declined' : d.method === 'upi' ? 'timeout' : 'declined';
+      await D.loading(btn, 300);
+      overlay(`<div class="pay-spin" aria-hidden="true"></div><h2>Processing payment…</h2><p>${d.method === 'upi' ? `Approve the request${d.upiApp ? ' in ' + D.esc(d.upiApp) : ' sent to ' + D.esc(d.vpa || 'your UPI app')}` : d.method === 'netbanking' ? `Securely connecting to ${D.esc(d.bank)}` : 'Talking to your bank'}. Don’t close this screen.</p>`);
+      await D.wait(2000);
+      if (fail) {
+        D.store.set('payFail', false);
+        location.href = 'payment-failed.html?' + new URLSearchParams({ method: d.method, reason, via: via || '' }).toString(); return;
+      }
+      if (d.newCard && d.newCard.save) { const n = d.newCard; D.payment.addCard({ type: n.type, brand: n.brand, last4: n.last4, exp: n.exp, name: n.name }); }
+      if (d.method === 'upi' && d.vpa) D.payment.addUpi(d.vpa);
+      overlay(`<div class="result__circle">${D.icon('verified', 70)}</div><h2>Payment successful</h2><p>${D.fmt(t.total)} paid. Placing your order…</p>`);
+      await D.wait(900);
+      const o = D.orders.place({ payment: d.method, paidVia: via || undefined }); D.store.del('payDraft');
+      location.href = 'confirmation.html?id=' + o.id;
+    });
+  })();
+</script>
+</body>
+</html>

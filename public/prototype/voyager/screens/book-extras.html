@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Customise Trip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .bx-head { position: relative; margin: 33px 0 0 3px; }
+  .bx-total { position: absolute; right: -4px; top: -11px; display: inline-flex; align-items: center; gap: 6px; height: 44px; padding: 0 4px 0 10px; border-radius: 10px; color: var(--text-4); font-size: 11px; }
+  .bx-total b { font-size: 15px; font-weight: 700; color: var(--orange); font-variant-numeric: tabular-nums; transition: transform 260ms var(--ease-spring); display: inline-block; }
+  .bx-total b.bump { transform: scale(1.14); }
+  .bx-total svg { align-self: center; color: var(--text-4); }
+  .bx-label { display: block; margin: 10px 0 0 2px; }
+  .opts { margin-top: 11px; }
+  .addons { margin: 10px 2px 0; }
+  #req { display: block; width: 336px; margin: 15px 0 0 2px; border-radius: 8px; box-shadow: inset 0 0 0 1px #BEBEBE; padding: 15px 12px; font-size: 14px; }
+  #req:focus { box-shadow: inset 0 0 0 2px var(--orange); }
+  #req::placeholder { color: #BDBDBD; }
+  .req-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-5); margin: 6px 2px 0; min-height: 14px; }
+  .btn .arrow { margin-left: 2px; }
+  .psheet { padding-bottom: 0 !important; }
+</style>
+</head>
+<body>
+<main class="page page--cta" aria-label="Customise trip — step 2 of 4">
+  <header class="phead">
+    <a class="phead__back tap" href="book-dates.html" aria-label="Back to dates and guests">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3.5M10.5 4.5 3 12l7.5 7.5"/></svg>
+    </a>
+    <div class="phead__titles"><h1 class="phead__title">Customise Trip</h1></div>
+  </header>
+
+  <section class="psheet">
+    <div class="steps enter" data-step="2" data-total="4"></div>
+
+    <div class="bx-head enter" style="--i:1">
+      <h2 class="h-sec">Add Extras</h2>
+      <button class="bx-total tap" type="button" data-sheet="breakdown" aria-label="View price breakdown">Total <b id="total" class="num">$2,709</b><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 4.5 7.5 7.5L9 19.5"/></svg></button>
+    </div>
+
+    <p class="caps bx-label enter" id="clsLabel" style="--i:2">Flight Class</p>
+    <div class="opts enter" id="cls" data-options aria-labelledby="clsLabel" style="--i:2">
+      <button class="opt" type="button" data-value="economy" aria-checked="true"><span class="opt__title">Economy</span><span class="opt__sub">Included</span></button>
+      <button class="opt" type="button" data-value="business" aria-checked="false"><span class="opt__title">Business</span><span class="opt__sub" id="bizSub">+$850 per person</span></button>
+    </div>
+
+    <p class="caps bx-label enter" id="addonsLabel" style="margin:20px 0 0 0;--i:3">Add-Ons</p>
+    <div class="addons enter" role="group" aria-labelledby="addonsLabel" style="--i:3">
+      <div class="addon" data-switch-row>
+        <span class="addon__icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 5.5v5.3c0 5.9 5.3 8.6 7.2 9.3.2.1.4.1.6 0 1.9-.7 7.2-3.4 7.2-9.3V5.5a.5.5 0 0 0-.5-.5h-14a.5.5 0 0 0-.5.5Z"/><path d="m8.5 12 2.5 2.5 4.5-4.5"/></svg></span>
+        <span class="addon__body"><span class="addon__title" id="l-ins">Travel Insurance</span><span class="addon__sub">Full Coverage</span></span>
+        <span class="addon__right"><span class="addon__price">+$45</span><button class="toggle" type="button" role="switch" data-addon="insurance" aria-checked="true" aria-labelledby="l-ins"></button></span>
+      </div>
+      <div class="addon" data-switch-row>
+        <span class="addon__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7.5c0-1.7 1.3-3 3-3h6v14h-6c-1.7 0-3 1.3-3 3M3 18.5h6c1.7 0 3 1.3 3 3V7.5c0-1.7-1.3-3-3-3H3v14Z"/></svg></span>
+        <span class="addon__body"><span class="addon__title" id="l-tour">Guided City Tour</span><span class="addon__sub">Half Day</span></span>
+        <span class="addon__right"><span class="addon__price">+$80</span><button class="toggle" type="button" role="switch" data-addon="tour" aria-checked="false" aria-labelledby="l-tour"></button></span>
+      </div>
+      <div class="addon" data-switch-row>
+        <span class="addon__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12.5h19M5.5 12.5l2-4.6a1.6 1.6 0 0 1 1.5-.9h6a1.6 1.6 0 0 1 1.5.9l2 4.6M3.5 12.5h17a1 1 0 0 1 1 1V17a1 1 0 0 1-1 1h-17a1 1 0 0 1-1-1v-3.5a1 1 0 0 1 1-1ZM4.5 18v1.5M19.5 18v1.5"/><circle cx="7" cy="15.2" r="1.1" fill="currentColor" stroke="none"/><circle cx="17" cy="15.2" r="1.1" fill="currentColor" stroke="none"/></svg></span>
+        <span class="addon__body"><span class="addon__title" id="l-transfer">Airport Transfer</span><span class="addon__sub">Both Ways</span></span>
+        <span class="addon__right"><span class="addon__price">+$60</span><button class="toggle" type="button" role="switch" data-addon="transfer" aria-checked="true" aria-labelledby="l-transfer"></button></span>
+      </div>
+    </div>
+
+    <label class="caps bx-label enter" for="req" style="margin-top:22px;--i:4">Special Requests</label>
+    <textarea class="field enter" id="req" maxlength="300" data-charcount="reqCount" placeholder="Any dietary requirements or preferences…" aria-describedby="reqCount" style="--i:4"></textarea>
+    <p class="req-meta" aria-live="polite"><span id="reqSaved"></span><span id="reqCount"></span></p>
+  </section>
+
+  <div class="cta-bar">
+    <div class="cta-bar__in">
+      <a class="btn btn--primary" id="continue" href="book-payment.html"><span>Continue</span><svg class="arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12h17M14 5.5l6.5 6.5-6.5 6.5"/></svg></a>
+    </div>
+  </div>
+</main>
+
+<!-- Price breakdown -->
+<section class="sheet" id="breakdown" aria-labelledby="bdTitle">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="bdTitle">Price breakdown</p><p class="sheet__sub" id="bdSub">Paris City Break · Aug 12–19 · 2 Adults · Economy</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="summary" id="bdRows"></div>
+  <p class="small" style="margin-top:12px">Taxes &amp; fees are 5% of the package and class upgrade. Add-ons are charged once per booking.</p>
+  <div class="sheet__foot"><button class="btn btn--primary" type="button" id="bdGo"><span>Continue to Payment</span></button></div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const B = Voyager.booking;
+    const $ = (s) => document.querySelector(s);
+    let b = B.get();
+    const d = B.dest();
+    const trav = () => B.travellers();
+
+    // ---- restore persisted choices
+    $('#cls').select(b.cls);
+    document.querySelectorAll('[data-addon]').forEach((t) => t.setAttribute('aria-checked', String(!!b.addons[t.dataset.addon])));
+    $('#req').value = b.requests || '';
+    const count = () => { const n = $('#req').value.length; $('#reqCount').textContent = n ? `${n}/300` : ''; };
+    count();
+
+    // ---- live total
+    const totalEl = $('#total');
+    const render = (bump) => {
+      const t = B.totals();
+      totalEl.textContent = Voyager.fmt(t.total);
+      if (bump) { totalEl.classList.remove('bump'); void totalEl.offsetWidth; totalEl.classList.add('bump'); setTimeout(() => totalEl.classList.remove('bump'), 260); }
+      $('#bdSub').textContent = `${d.package.name} · ${B.summary()}`;
+      $('#bdRows').innerHTML = t.lines.map((l) => `<div class="summary__row${l.discount ? ' is-discount' : ''}"><span>${Voyager.esc(l.label)}</span><span class="num">${Voyager.fmt(l.amount)}</span></div>`).join('') +
+        `<div class="summary__div"></div><div class="summary__total"><span>Total</span><span class="num">${Voyager.fmt(t.total)}</span></div>`;
+      $('#bizSub').textContent = '+$850 per person';
+      $('#bizSub').parentElement.setAttribute('aria-label', `Business, plus $850 per traveller, ${Voyager.fmt(850 * trav())} for ${trav()}`);
+    };
+    render(false);
+
+    // ---- flight class
+    $('#cls').addEventListener('select', (e) => {
+      const was = B.get().cls; B.set({ cls: e.detail }); render(true);
+      if (was !== e.detail) Voyager.toast(e.detail === 'business' ? `Business Class added · +${Voyager.fmt(850 * trav())}` : 'Economy selected · included in your package');
+    });
+
+    // ---- add-ons
+    document.querySelectorAll('[data-addon]').forEach((t) => t.addEventListener('change', (e) => {
+      B.set({ addons: { [t.dataset.addon]: e.detail } }); render(true);
+    }));
+
+    // ---- special requests (persisted, debounced)
+    let h;
+    $('#req').addEventListener('input', () => {
+      count(); clearTimeout(h);
+      h = setTimeout(() => { B.set({ requests: $('#req').value.trim() }); $('#reqSaved').textContent = $('#req').value.trim() ? 'Saved to your booking' : ''; }, 400);
+    });
+
+    // ---- continue
+    const go = async (btn) => {
+      B.set({ requests: $('#req').value.trim() });
+      await Voyager.loading(btn, 900);
+      location.href = 'book-payment.html';
+    };
+    $('#continue').addEventListener('click', (e) => { e.preventDefault(); go(e.currentTarget); });
+    $('#bdGo').addEventListener('click', (e) => go(e.currentTarget));
+  })();
+</script>
+</body>
+</html>

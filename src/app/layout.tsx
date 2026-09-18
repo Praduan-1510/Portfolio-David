@@ -7,7 +7,10 @@ import {
 } from "next/font/google";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
+import { Dock } from "@/components/layout/Dock";
+import { EdgeFade } from "@/components/layout/EdgeFade";
 import { ScrollProgress, HandoffLayer } from "@/components/motion";
+import { GlassFilters } from "@/components/primitives/GlassFilters";
 import { LenisProvider } from "@/lib/lenis/lenis-provider";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -60,7 +63,10 @@ const signature = Mrs_Saint_Delafield({
 });
 
 // Tint mobile browser chrome to the near-black base (address bar, overscroll).
-export const viewport: Viewport = { themeColor: "#0d0d10" };
+// viewportFit "cover" lets the page run under a phone's home indicator and
+// makes env(safe-area-inset-*) real, which the dock and the contact drawer use
+// to stand clear of it.
+export const viewport: Viewport = { themeColor: "#0d0d10", viewportFit: "cover" };
 
 export const metadata: Metadata = {
   // Base for resolving relative OG/twitter image paths to absolute URLs.
@@ -154,10 +160,25 @@ export default function RootLayout({
         />
         <LenisProvider>
           <ScrollProgress />
+          {/* The liquid-glass refraction filter, rendered once: every glass
+              surface clones it (components/primitives/GlassFilters.tsx). */}
+          <GlassFilters />
+          {/* The viewport's edges dissolve the page instead of cutting it:
+              under the header's capsule, and under the dock (which the
+              bottom edge leaves with). CSS only, aria-hidden. */}
+          <EdgeFade edge="top" />
+          <EdgeFade edge="bottom" />
           {/* Cover-to-hero handoff: lives here, outside template.tsx, so the
               clone survives the route change it is flying across. */}
           <HandoffLayer />
           <Nav />
+          {/* The bottom dock and its contact drawer. Here, not in
+              template.tsx: PageTransition's opacity wrapper would blank the
+              glass's backdrop. Straight after the nav in the DOM, so keyboard
+              users meet it with the other site chrome (the skip link passes
+              both). Placed after the footer it could never be reached by Tab:
+              it steps aside, inert, whenever the footer is in view. */}
+          <Dock />
           <main id="main-content">{children}</main>
           <Footer />
         </LenisProvider>

@@ -443,12 +443,8 @@ export default function Resume() {
                 <Bullets items={project.bullets} />
                 {project.href && (
                   <Reveal className="mt-space-5" data-noprint>
-                    <Button href={project.href} variant="secondary" className="group/cs">
+                    <Button href={project.href} variant="secondary" arrow="up-right">
                       Read the case study
-                      <ArrowUpRight
-                        aria-hidden="true"
-                        className="h-[15px] w-[15px] shrink-0 transition-transform duration-fast ease-out-quad group-hover/cs:-translate-y-0.5 group-hover/cs:translate-x-0.5"
-                      />
                     </Button>
                   </Reveal>
                 )}
@@ -564,7 +560,7 @@ export default function Resume() {
           </Text>
           <div className="mt-space-6 flex flex-wrap gap-space-4">
             <Magnetic className="inline-block">
-              <Button href={RESUME_PDF} download variant="primary">
+              <Button href={RESUME_PDF} download variant="primary" arrow="down">
                 Download PDF
               </Button>
             </Magnetic>

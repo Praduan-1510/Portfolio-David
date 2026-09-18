@@ -103,6 +103,15 @@ export type Testimonial = {
  */
 export const TESTIMONIALS: Testimonial[] = [
   {
+    name: "Kanad Saha",
+    portrait: "/testimonials/kanad-saha.jpg",
+    role: "Product Designer & SaaS UX Specialist",
+    company: "InsightsTap",
+    quote:
+      "Praduan is an exceptional designer with a strong eye for detail and a remarkable sense of creativity. I truly admire his design skills and his ability to transform ideas into intuitive and visually engaging experiences. What makes him stand out is his ability to leverage AI tools effectively. He has created and integrated multiple AI-powered tools into his workflow, using them intelligently to enhance productivity, explore ideas, and deliver better design outcomes. His creativity, technical curiosity, and passion for design make him a highly valuable asset to any team. I would gladly recommend Praduan to anyone looking for a talented and forward-thinking designer.",
+    provenance: { kind: "on-file", medium: "Message, quoted with permission" },
+  },
+  {
     name: "Claire Bennett",
     portrait: "/testimonials/claire-bennett.jpg",
     role: "Founder",

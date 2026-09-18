@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Payment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  .amt { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .amt__v { font-size: 22px; font-weight: 700; color: var(--navy); }
+  .amt__k { font-size: 12px; color: var(--muted-2); }
+  .amt__link { font-size: 13px; font-weight: 500; color: var(--brand); padding: 10px 0; }
+  .pay-seg { margin-top: 22px; }
+  .pay-sec { margin-top: 18px; }
+  .card-opt .option__title { font-variant-numeric: tabular-nums; }
+  .brand-mark { display: inline-grid; place-items: center; min-width: 42px; height: 26px; padding: 0 6px; border-radius: 5px; background: var(--navy); color: #fff; font-size: 10px; font-weight: 700; letter-spacing: .6px; flex-shrink: 0; }
+  .brand-mark--RuPay { background: #1C6B3A; } .brand-mark--Mastercard { background: #C0392B; } .brand-mark--Amex { background: #2A6FB5; }
+  .brand-mark--none { background: var(--surface); color: var(--steel); }
+  .cvv-row { display: flex; align-items: flex-end; gap: 12px; margin: 10px 0 4px; }
+  .cvv-row .fg { width: 130px; }
+  .newcard { margin-top: 14px; }
+  .save-row { display: flex; align-items: center; gap: 12px; margin-top: 14px; font-size: 14px; cursor: pointer; min-height: 40px; }
+  .save-row input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .apps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .app { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 2px 8px; border-radius: var(--r); box-shadow: inset 0 0 0 1px var(--border); font-size: 11.5px; color: #111; background: #fff; }
+  .app[aria-checked="true"] { box-shadow: inset 0 0 0 2px var(--navy); background: var(--surface); }
+  .app__logo { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 13px; font-weight: 700; }
+  .or { display: flex; align-items: center; gap: 10px; margin: 18px 0 14px; font-size: 12px; color: var(--muted-2); }
+  .or::before, .or::after { content: ''; flex: 1; height: 1px; background: var(--divider-soft); }
+  .verified { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 500; color: var(--ok); margin-top: 6px; }
+  .banks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .bank { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 4px 10px; border-radius: var(--r); box-shadow: inset 0 0 0 1px var(--border); font-size: 12px; background: #fff; text-align: center; }
+  .bank[aria-checked="true"] { box-shadow: inset 0 0 0 2px var(--navy); background: var(--surface); }
+  .bank__logo { width: 34px; height: 34px; border-radius: 8px; background: var(--tile); color: var(--brand); display: grid; place-items: center; font-size: 11px; font-weight: 700; }
+  .bank-list { margin-top: 12px; max-height: 280px; overflow-y: auto; }
+  .bank-list .option { min-height: 46px; }
+  .test-link { display: block; margin: 28px auto 0; font-size: 12px; color: var(--muted-2); text-decoration: underline; text-underline-offset: 3px; min-height: 36px; }
+  .pay-overlay { position: fixed; inset: 0; z-index: var(--z-dialog); background: rgba(255,255,255,.97); display: grid; place-items: center; text-align: center; opacity: 0; transition: opacity 220ms var(--ease-out); }
+  .pay-overlay.show { opacity: 1; }
+  .pay-spin { width: 64px; height: 64px; margin: 0 auto; border-radius: 50%; border: 4px solid var(--surface); border-top-color: var(--brand); animation: spin 800ms linear infinite; }
+  .pay-overlay h2 { font-size: 18px; font-weight: 600; margin-top: 22px; }
+  .pay-overlay p { font-size: 13px; color: var(--muted-2); margin-top: 4px; }
+  .pay-overlay .result__circle { width: 110px; height: 110px; }
+  .pay-overlay .result__circle svg { width: 70px; height: 70px; }
+  .pay-overlay .result__circle::before { display: none; }
+  .segmented button { text-align: center; }
+  .cod { display: flex; gap: 14px; align-items: center; padding: 14px; }
+  .cod__t { font-size: 15px; font-weight: 600; color: #111; }
+  .cod__s { font-size: 12.5px; line-height: 1.5; color: var(--muted-2); margin-top: 2px; }
+  #ctype { height: 44px; }
+  .pay-seg button { font-size: 13px; letter-spacing: -.1px; padding: 0 2px; min-width: 0; }
+</style>
+</head>
+<body>
+<main class="page page--no-nav" aria-label="Payment">
+  <header class="appbar">
+    <a class="back tap" href="addresses.html?select=1" aria-label="Back to delivery address"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <h1 class="appbar__title">Payment</h1>
+  </header>
+  <div class="page-divider"></div>
+
+  <ol class="steps" aria-label="Checkout progress" style="margin-top:22px">
+    <li class="done">Address</li>
+    <li class="current" aria-current="step">Payment</li>
+    <li>Confirm</li>
+  </ol>
+
+  <div class="panel panel--surface amt" style="margin-top:10px">
+    <div><p class="amt__k">Amount payable</p><p class="amt__v num" id="amt">₹28,000</p><p class="amt__k" id="amtSub">6 items · deliver to Home</p></div>
+    <button class="amt__link tap" type="button" data-sheet="sumSheet">View details</button>
+  </div>
+
+  <div class="segmented pay-seg" id="seg" aria-label="Payment method">
+    <button type="button" data-value="card" aria-selected="true">Card</button>
+    <button type="button" data-value="upi">UPI</button>
+    <button type="button" data-value="netbanking">Netbanking</button>
+    <button type="button" data-value="cod">Cash</button>
+  </div>
+
+  <!-- Card -->
+  <section class="pay-sec" id="sec-card" aria-label="Pay by card">
+    <p class="label-caps" style="margin-bottom:10px" id="cardHead">Saved cards</p>
+    <div class="options" id="cards" data-options></div>
+    <p class="form-note" id="cvvNote" style="margin-top:10px">You’ll enter the CVV on the next step, just before you pay.</p>
+    <form class="newcard" id="newCard" novalidate hidden>
+      <div class="fg"><label class="label" for="cnum">Card number<span class="req">*</span></label>
+        <div class="field field-affix"><input id="cnum" inputmode="numeric" autocomplete="cc-number" data-mask="card" data-validate="required|card" placeholder="1234 5678 9012 3456"><span class="brand-mark brand-mark--none" id="brand">CARD</span></div></div>
+      <div class="fg"><label class="label" for="cname">Name on card<span class="req">*</span></label><input class="field" id="cname" autocomplete="cc-name" data-validate="required|name" placeholder="As printed on the card"></div>
+      <div class="field-row" style="margin-top:16px">
+        <div class="fg"><label class="label" for="cexp">Expiry<span class="req">*</span></label><input class="field" id="cexp" inputmode="numeric" autocomplete="cc-exp" data-mask="expiry" data-validate="required|expiry" placeholder="MM/YY"></div>
+        <div class="fg"><label class="label">Type</label><div class="segmented" id="ctype" aria-label="Card type"><button type="button" data-value="credit" aria-selected="true">Credit</button><button type="button" data-value="debit">Debit</button></div></div>
+      </div>
+      <label class="save-row"><input type="checkbox" id="saveCard" checked><span class="check-box"></span>Save this card for faster checkout</label>
+    </form>
+  </section>
+
+  <!-- UPI -->
+  <section class="pay-sec" id="sec-upi" aria-label="Pay by UPI" hidden>
+    <p class="label-caps" style="margin-bottom:10px">Pay with an app</p>
+    <div class="apps" id="apps" data-radio aria-label="UPI apps">
+      <button type="button" class="app tap" role="radio" aria-checked="false" data-value="Google Pay"><span class="app__logo" style="background:#4285F4">G</span>Google Pay</button>
+      <button type="button" class="app tap" role="radio" aria-checked="false" data-value="PhonePe"><span class="app__logo" style="background:#5F259F">Pe</span>PhonePe</button>
+      <button type="button" class="app tap" role="radio" aria-checked="false" data-value="Paytm"><span class="app__logo" style="background:#00BAF2">P</span>Paytm</button>
+      <button type="button" class="app tap" role="radio" aria-checked="false" data-value="BHIM"><span class="app__logo" style="background:#F47B20">B</span>BHIM</button>
+    </div>
+    <p class="or">or pay with a UPI ID</p>
+    <div class="options" id="vpas" data-options></div>
+    <div class="fg" style="margin-top:12px" id="vpaFg"><label class="label" for="vpa">UPI ID</label>
+      <div class="field field-affix"><input id="vpa" autocomplete="off" autocapitalize="none" data-validate="upi" placeholder="name@okbank"><button class="affix-btn tap" type="button" id="verify">Verify</button></div>
+      <span class="helper" id="vpaHelp">A payment request will be sent to this UPI ID</span></div>
+  </section>
+
+  <!-- Net banking -->
+  <section class="pay-sec" id="sec-netbanking" aria-label="Pay by net banking" hidden>
+    <p class="label-caps" style="margin-bottom:10px">Popular banks</p>
+    <div class="banks" id="banks" data-radio aria-label="Popular banks"></div>
+    <div class="fg" style="margin-top:18px"><label class="label" for="bankQ">All banks</label>
+      <div class="field field-affix"><i data-icon="search" data-size="16"></i><input id="bankQ" type="search" placeholder="Search your bank" autocomplete="off"></div></div>
+    <div class="options bank-list" id="bankList" data-options></div>
+    <p class="form-note" id="noBank" hidden style="margin-top:10px">No bank matches that name. Try “State Bank” or “HDFC”.</p>
+  </section>
+
+  <!-- Cash on delivery -->
+  <section class="pay-sec" id="sec-cod" aria-label="Cash on delivery" hidden>
+    <div class="panel cod">
+      <span class="icon-tile"><i data-icon="cash" data-size="22"></i></span>
+      <div><p class="cod__t">Pay when it arrives</p><p class="cod__s" id="codSub">Cash, or scan the courier’s UPI QR at your door. Nothing is charged now.</p></div>
+    </div>
+  </section>
+
+  <p class="form-note" style="margin-top:22px;display:flex;gap:6px;align-items:center"><i data-icon="shield" data-size="14"></i>100% secure payments · PCI DSS compliant</p>
+  <button class="test-link tap" type="button" data-sheet="testSheet">Test payment options</button>
+
+  <div class="cta-bar">
+    <div class="cta-bar__sum"><span id="payLbl">Paying by card</span><b class="num" id="ctaAmt">₹28,000</b></div>
+    <button class="btn btn--primary btn--lg tap" type="button" id="payBtn"><span id="payTxt">Continue to review</span></button>
+  </div>
+</main>
+
+<section class="sheet" id="sumSheet" aria-labelledby="sumT">
+  <div class="sheet__head"><div><p class="sheet__title" id="sumT">Price details</p><p class="sheet__sub" id="sumSub">Inclusive of all taxes</p></div><button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button></div>
+  <div class="kvs kvs--sm" id="sumKvs"></div>
+  <div class="sheet__foot"><button class="btn btn--primary btn--lg tap" type="button" data-close>Done</button></div>
+</section>
+
+<section class="sheet" id="testSheet" aria-labelledby="testT">
+  <div class="sheet__head"><div><p class="sheet__title" id="testT">Test payment options</p><p class="sheet__sub">For demos only. Nothing is charged.</p></div><button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button></div>
+  <div class="between" style="min-height:52px"><div><p style="font-size:15px">Simulate a failed payment</p><p class="form-note">The bank will decline the next payment</p></div><button class="switch" role="switch" id="failSw" aria-checked="false" aria-label="Simulate a failed payment"></button></div>
+  <div class="banner banner--info" style="margin-top:12px"><i data-icon="card" data-size="18"></i><span>Test cards: <b>4111 1111 1111 1111</b> succeeds, any card ending <b>0000</b> (e.g. <b>4000 0000 0002 0000</b>) is declined when you pay.</span></div>
+  <div class="sheet__foot"><button class="btn btn--outline btn--lg tap" type="button" id="fillTest">Fill a test card</button></div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const t = D.bag.totals();
+    if (!t.count) { // nothing to pay (e.g. order already placed)
+      $('main').innerHTML = `<header class="appbar"><a class="back tap" href="bag.html" aria-label="Back"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a><h1 class="appbar__title">Payment</h1></header><div class="page-divider"></div><div class="empty-state"><div class="empty-state__icon">${D.icon('bag', 40, { sw: 1.6 })}</div><h3>Nothing to pay for</h3><p>Your bag is empty, so there is no payment due.</p><a class="btn btn--primary tap" href="home.html" style="height:44px">Continue shopping</a></div>`;
+      return;
+    }
+    // Step 2 of 3: choose how to pay. Nothing is charged here; the Confirm step pays.
+    const draft = D.store.get('payDraft', null) || {};
+    const param = D.q('method') || draft.method || D.payment.get();
+    let tab = param === 'upi' ? 'upi' : param === 'netbanking' ? 'netbanking' : param === 'cod' ? 'cod' : 'card';
+    let cardType = param === 'debit' ? 'debit' : 'credit';
+    const a = D.addresses.selected();
+    $('#amt').textContent = D.fmt(t.total); $('#ctaAmt').textContent = D.fmt(t.total);
+    $('#amtSub').textContent = `${t.count} ${t.count === 1 ? 'item' : 'items'}${a ? ' · deliver to ' + a.label : ''}`;
+    $('#sumKvs').innerHTML = `<div><span class="k">MRP (${t.count} items)</span><span class="v">${D.fmt(t.mrp)}</span></div><div><span class="k">Discount</span><span class="v">${D.fmt(-t.discount)}</span></div>${t.promo ? `<div><span class="k">Promo ${t.promoCode}</span><span class="v v--ok">${D.fmt(-t.promo)}</span></div>` : ''}<div><span class="k">Delivery</span><span class="v ${t.delivery ? '' : 'v--ok'}">${t.delivery ? D.fmt(t.delivery) : 'Free'}</span></div><div><span class="k">GST (included)</span><span class="v">${D.fmt(t.gst)}</span></div><div class="total"><span class="k">Total</span><span class="v">${D.fmt(t.total)}</span></div>`;
+
+    // ---- Tabs
+    const setTab = (v) => {
+      tab = v; ['card', 'upi', 'netbanking', 'cod'].forEach((k) => ($('#sec-' + k).hidden = k !== v));
+      $$('#seg button').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.value === v)));
+      updateCta();
+    };
+    $('#seg').addEventListener('change', (e) => setTab(e.detail));
+
+    // ---- Cards
+    let cardSel = null, upiApp = null, vpa = null, vpaOk = false, bank = null;
+    const brandOf = (n) => { n = n.replace(/\D/g, ''); return /^4/.test(n) ? 'Visa' : /^(5[1-5]|2[2-7])/.test(n) ? 'Mastercard' : /^3[47]/.test(n) ? 'Amex' : /^(60|65|81|82|508)/.test(n) ? 'RuPay' : ''; };
+    function renderCards() {
+      const cards = D.payment.cards();
+      const pref = cards.find((c) => c.id === draft.cardId) || cards.find((c) => c.type === cardType) || cards[0];
+      cardSel = pref ? pref.id : 'new';
+      $('#cardHead').textContent = cards.length ? 'Saved cards' : 'Card details';
+      $('#cards').innerHTML = cards.map((c) => `<button class="option card-opt tap" type="button" data-value="${c.id}" aria-checked="${c.id === cardSel}"><span class="option__radio"></span><span class="brand-mark brand-mark--${c.brand}">${c.brand.toUpperCase()}</span><span class="option__body"><span class="option__title">•••• ${c.last4}</span><span class="option__sub">${c.type === 'debit' ? 'Debit' : 'Credit'} card · expires ${c.exp}</span></span></button>`).join('')
+        + `<button class="option tap" type="button" data-value="new" aria-checked="${cardSel === 'new'}"><span class="option__radio"></span><span class="icon-tile" style="width:34px;height:26px;border-radius:5px">${D.icon('plus', 16, { sw: 2.2 })}</span><span class="option__body"><span class="option__title">Add a new card</span><span class="option__sub">Visa, Mastercard, RuPay, Amex</span></span></button>`;
+      delete $('#cards').dataset.inited; D.hydrate($('#sec-card'));
+      syncCard();
+    }
+    const syncCard = () => { const isNew = cardSel === 'new'; $('#newCard').hidden = !isNew; updateCta(); };
+    $('#cards').addEventListener('select', (e) => { cardSel = e.detail; syncCard(); if (cardSel === 'new') $('#cnum').focus(); });
+    $('#ctype').addEventListener('change', (e) => { cardType = e.detail; });
+    $('#cnum').addEventListener('input', () => { const b = brandOf($('#cnum').value); const m = $('#brand'); m.textContent = b ? b.toUpperCase() : 'CARD'; m.className = 'brand-mark brand-mark--' + (b || 'none'); });
+    renderCards();
+
+    // ---- UPI
+    $('#vpas').innerHTML = D.payment.upi().map((v) => `<button class="option tap" type="button" data-value="${D.esc(v)}" aria-checked="false"><span class="option__radio"></span><span class="option__body"><span class="option__title">${D.esc(v)}</span><span class="option__sub">Saved UPI ID · verified</span></span></button>`).join('');
+    delete $('#vpas').dataset.inited; D.hydrate($('#sec-upi'));
+    const clearUpi = (except) => { if (except !== 'app') { upiApp = null; $$('#apps [role=radio]').forEach((x) => x.setAttribute('aria-checked', 'false')); } if (except !== 'saved') $$('#vpas .option').forEach((x) => x.setAttribute('aria-checked', 'false')); if (except !== 'typed') { $('#vpa').value = ''; vpaOk = false; $('#vpaHelp').textContent = 'A payment request will be sent to this UPI ID'; } };
+    $('#apps').addEventListener('change', (e) => { clearUpi('app'); upiApp = e.detail; vpa = null; updateCta(); });
+    $('#vpas').addEventListener('select', (e) => { clearUpi('saved'); vpa = e.detail; vpaOk = true; updateCta(); });
+    $('#vpa').addEventListener('input', () => { clearUpi('typed'); vpa = null; vpaOk = false; $('#vpaHelp').textContent = 'Tap Verify to check this UPI ID'; updateCta(); });
+    $('#verify').addEventListener('click', async (e) => {
+      const fg = $('#vpaFg'); const v = $('#vpa').value.trim();
+      if (!v) { $('#vpa').dataset.validate = 'required|upi'; D.validate(fg); $('#vpa').dataset.validate = 'upi'; return; }
+      if (!D.validate(fg)) return;
+      const b = e.currentTarget; b.textContent = 'Checking…'; await D.wait(900); b.textContent = 'Verify';
+      vpa = v; vpaOk = true; $('#vpaHelp').innerHTML = `<span class="verified">${D.icon('check-circle', 15)}Verified: ${D.esc(D.user.get().name)}</span>`; updateCta();
+    });
+
+    // ---- Net banking
+    const POP = [['SBI', 'State Bank of India'], ['HDFC', 'HDFC Bank'], ['ICICI', 'ICICI Bank'], ['AXIS', 'Axis Bank'], ['KOTAK', 'Kotak Mahindra Bank'], ['YES', 'Yes Bank']];
+    const ALL = POP.map((b) => b[1]).concat(['Bank of Baroda', 'Punjab National Bank', 'Canara Bank', 'Union Bank of India', 'IndusInd Bank', 'IDFC FIRST Bank', 'Federal Bank', 'Bank of India', 'Indian Bank', 'UCO Bank', 'Central Bank of India', 'RBL Bank', 'South Indian Bank', 'Karnataka Bank', 'Bandhan Bank', 'AU Small Finance Bank']);
+    $('#banks').innerHTML = POP.map(([s, n]) => `<button type="button" class="bank tap" role="radio" aria-checked="false" data-value="${n}"><span class="bank__logo">${s}</span>${n.replace(' Bank', '').replace('State Bank of India', 'SBI').replace(' Mahindra', '')}</button>`).join('');
+    D.hydrate($('#banks'));
+    const renderBanks = () => {
+      const q = $('#bankQ').value.trim().toLowerCase(); const list = ALL.filter((n) => n.toLowerCase().includes(q));
+      $('#bankList').innerHTML = list.map((n) => `<button class="option tap" type="button" data-value="${n}" aria-checked="${n === bank}"><span class="option__radio"></span><span class="option__body"><span class="option__title">${n}</span></span></button>`).join('');
+      $('#noBank').hidden = list.length > 0; delete $('#bankList').dataset.inited; D.hydrate($('#sec-netbanking'));
+    };
+    $('#bankQ').addEventListener('input', renderBanks);
+    $('#banks').addEventListener('change', (e) => { bank = e.detail; renderBanks(); updateCta(); });
+    $('#bankList').addEventListener('select', (e) => { bank = e.detail; $$('#banks [role=radio]').forEach((x) => x.setAttribute('aria-checked', String(x.dataset.value === bank))); updateCta(); });
+    renderBanks();
+
+    // ---- CTA label
+    function cardLabel() { const c = D.payment.cards().find((x) => x.id === cardSel); return c ? `${c.brand} •••• ${c.last4}` : 'card'; }
+    function updateCta() {
+      const lbl = tab === 'card' ? (cardSel === 'new' ? 'Paying by a new card' : `Paying by ${cardLabel()}`)
+        : tab === 'upi' ? (upiApp ? `Paying via ${upiApp}` : vpa ? `Paying via ${vpa}` : 'Choose a UPI app or ID') : tab === 'cod' ? 'Paying on delivery' : (bank ? `Paying via ${bank}` : 'Choose your bank');
+      $('#payLbl').textContent = lbl;
+    }
+
+    // ---- Test sheet
+    let forceFail = D.store.get('payFail', false);
+    $('#failSw').setAttribute('aria-checked', String(forceFail));
+    $('#failSw').addEventListener('change', (e) => { forceFail = e.detail; D.store.set('payFail', forceFail); D.toast(forceFail ? 'Next payment will fail' : 'Payments will succeed'); });
+    $('#fillTest').addEventListener('click', () => { setTab('card'); $$('#seg button').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.value === 'card'))); cardSel = 'new'; $$('#cards .option').forEach((o) => o.setAttribute('aria-checked', String(o.dataset.value === 'new'))); syncCard(); $('#cnum').value = '4111 1111 1111 1111'; $('#cnum').dispatchEvent(new Event('input', { bubbles: true })); $('#cname').value = D.user.get().name; $('#cexp').value = '09/29'; D.sheet.close(); });
+
+    setTab(tab);
+
+    // ---- Continue: remember the choice (never the card number or CVV) and go to Confirm
+    if (draft.upiApp && tab === 'upi') { const b = $(`#apps [data-value="${draft.upiApp}"]`); if (b) b.click(); }
+    if (draft.bank && tab === 'netbanking') { bank = draft.bank; renderBanks(); $$('#banks [role=radio]').forEach((x) => x.setAttribute('aria-checked', String(x.dataset.value === bank))); updateCta(); }
+    // UPI opens on the chosen ID, else the saved one (the account's preferred method)
+    const vpa0 = draft.upiApp ? null : draft.vpa || D.payment.upi()[0];
+    if (vpa0 && tab === 'upi') { const o = $(`#vpas [data-value="${CSS.escape(vpa0)}"]`); if (o) o.click(); }
+    $('#codSub').textContent = `Pay ${D.fmt(t.total)} in cash, or scan the courier’s UPI QR at your door. Nothing is charged now.`;
+    $('#payBtn').addEventListener('click', async (e) => {
+      let d;
+      if (tab === 'card') {
+        if (cardSel === 'new') {
+          if (!D.validate($('#newCard'))) return;
+          const n = $('#cnum').value.replace(/\D/g, '');
+          d = { method: cardType, newCard: { type: cardType, brand: brandOf(n) || 'Visa', last4: n.slice(-4), exp: $('#cexp').value, name: $('#cname').value.trim(), save: $('#saveCard').checked }, decline: /0000$/.test(n) };
+        } else { const c = D.payment.cards().find((x) => x.id === cardSel); d = { method: c.type, cardId: c.id }; }
+      } else if (tab === 'upi') {
+        if (!upiApp && !vpa) { if ($('#vpa').value.trim() && !vpaOk) { D.toast('Verify your UPI ID first'); $('#verify').focus(); } else D.toast('Pick a UPI app or enter your UPI ID'); return; }
+        d = { method: 'upi', upiApp: upiApp || null, vpa: upiApp ? null : vpa };
+      } else if (tab === 'netbanking') {
+        if (!bank) { D.toast('Choose your bank to continue'); $('#bankQ').focus(); return; }
+        d = { method: 'netbanking', bank };
+      } else d = { method: 'cod' };
+      await D.loading(e.currentTarget, 450);
+      D.store.set('payDraft', d); D.payment.set(d.method);
+      location.href = 'checkout.html';
+    });
+  })();
+</script>
+</body>
+</html>

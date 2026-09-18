@@ -1,0 +1,561 @@
+/* ── Floating chrome: the dock, the contact drawer, the edge fades ───────────
+ * Imported by components/layout/Dock.tsx (which renders the drawer) and
+ * EdgeFade.tsx. The glass itself is the shared material in
+ * components/primitives/liquid-glass.css: nothing here restyles it, these
+ * rules only place, size and move the things cut from it.
+ *
+ * THE RULE THAT HOLDS EVERYTHING UP: no opacity < 1, filter, mask, clip-path
+ * or mix-blend-mode on a .lg root, on the <dialog>, or on the .edge-fade
+ * wrappers. Each makes a Backdrop Root and blanks every backdrop-filter
+ * inside it. Things move by TRANSFORM; things fade on their own leaf layers
+ * (a blur layer, the veil, a tip), never on an ancestor of glass.
+ * ──────────────────────────────────────────────────────────────────────────── */
+
+/* ── The dock ────────────────────────────────────────────────────────────── */
+
+.dock {
+  bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+  /* Far enough below the fold to clear the lift shadow too. */
+  --dock-away: calc(100% + 3rem + env(safe-area-inset-bottom, 0px));
+  transition:
+    transform var(--dur-slow) var(--ease-out-expo),
+    visibility 0s linear 0s;
+}
+
+/* Before JS has decided whether this page wants the dock (the home reel owns
+   the bottom edge from the first frame), it waits below the fold, so it never
+   rises and then retreats. Without scripting it simply rises on a keyframe. */
+@media (scripting: enabled) {
+  .dock:not([data-armed]) {
+    transform: translate3d(0, var(--dock-away), 0);
+    visibility: hidden;
+    transition: none;
+  }
+}
+@media (scripting: none) and (prefers-reduced-motion: no-preference) {
+  .dock {
+    animation: dock-rise var(--dur-slower) var(--ease-out-expo) 0.3s backwards;
+  }
+}
+@keyframes dock-rise {
+  from {
+    transform: translate3d(0, 100px, 0);
+  }
+}
+
+/* The first entrance: slower, and a beat after the page's own load moves. */
+.dock[data-armed="enter"] {
+  transition:
+    transform var(--dur-slower) var(--ease-out-expo) 0.25s,
+    visibility 0s linear 0s;
+}
+
+/* Yield: glide below the fold on a quicker, symmetric curve (exit faster
+   than enter), then go invisible so nothing (not even the shadow's tail) is
+   left painting, focusable or hit-testable. */
+.dock[data-yield] {
+  transform: translate3d(0, var(--dock-away), 0);
+  visibility: hidden;
+  transition:
+    transform var(--dur-base) var(--ease-in-out-quart),
+    visibility 0s linear var(--dur-base);
+}
+
+.dock-row {
+  display: flex;
+  align-items: center;
+  height: 3.5rem;
+  padding: 0.375rem;
+}
+
+.dock-rule {
+  flex-shrink: 0;
+  width: 1px;
+  height: 1.25rem;
+  margin-inline: 0.375rem;
+  background: var(--line-strong);
+}
+
+.dock-keys {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* A key: a 44px round glass bead. At rest each shows a dim bead of its own;
+   the droplet lens (useDropletLens) glides over them and swallows the bead of
+   the key it settles on, so exactly one key is ever lit. */
+.dock-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  -webkit-tap-highlight-color: transparent;
+}
+.dock-key::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--fg) 5%, transparent);
+  box-shadow:
+    inset 0 1px 0 0 color-mix(in srgb, var(--fg) 14%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--fg) 7%, transparent);
+  transition:
+    opacity var(--dur-fast) var(--ease-out-quad),
+    transform var(--dur-base) var(--ease-out-back);
+  pointer-events: none;
+}
+.dock-key[data-lensed]::before {
+  opacity: 0;
+  transform: scale(0.6);
+}
+.dock-key:active [data-lens-label] {
+  transform: scale(0.92);
+  transition-duration: var(--dur-instant);
+}
+
+/* Icons stack in one cell so the copy glyph can hand over to the check. */
+.dock-icon {
+  display: grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.dock-icon > svg {
+  grid-area: 1 / 1;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+/* The label rises out of the key it names: a small readout tag above the
+   dock. Solid rather than glass (a second backdrop-filter for eleven letters
+   is waste), with the glass's own rim so it reads as the same family. It
+   shows for a real hover and for keyboard focus. Not for [data-lensed]: that also follows a mouse click's focus, and
+   the tag would linger over a key nobody is pointing at. */
+.dock-tip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 1rem);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  height: 1.625rem;
+  padding-inline: 0.625rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  pointer-events: none;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--lg-ink, var(--fg));
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  box-shadow:
+    inset 0 1px 0 0 color-mix(in srgb, var(--fg) 16%, transparent),
+    inset 0 0 0 1px var(--line-strong),
+    0 10px 24px -12px rgba(var(--shadow-rgb), 0.9);
+  opacity: 0;
+  translate: -50% 6px;
+  scale: 0.94;
+  transition:
+    opacity var(--dur-fast) var(--ease-out-quad),
+    translate var(--dur-base) var(--ease-out-back),
+    scale var(--dur-base) var(--ease-out-back);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dock-key:hover .dock-tip {
+    opacity: 1;
+    translate: -50% 0;
+    scale: 1;
+  }
+}
+.dock-key:focus-visible .dock-tip {
+  opacity: 1;
+  translate: -50% 0;
+  scale: 1;
+}
+
+/* The flame end cap (.lg-cap, shared with the nav's Contact). Its glyph is a
+   speech mark rather than the nav's arrow: this one opens a conversation in
+   place, it does not go anywhere. */
+.dock-cap {
+  margin-left: 0.125rem;
+  /* .lg-cap's metrics sit in :where() (zero specificity) and the nav's cap is
+     an <a>; on a <button> Tailwind's preflight (padding 0, font-size 100%,
+     font-weight inherit) outranks them, so they are restated here. */
+  padding-inline: 1.125rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 1;
+}
+.dock-cap-glyph {
+  flex-shrink: 0;
+  transition: transform var(--dur-base) var(--ease-out-back);
+}
+@media (hover: hover) {
+  .dock-cap:hover .dock-cap-glyph {
+    transform: translateY(-1px) rotate(-8deg);
+  }
+}
+
+/* Landscape phones: every pixel of height is contested, so the dock tightens
+   by 8px (the same trade the nav makes there). */
+@media (max-height: 520px) and (orientation: landscape) {
+  .dock-row {
+    height: 3rem;
+    padding: 0.25rem;
+  }
+  .dock-key {
+    height: 2.5rem;
+  }
+  .dock-key {
+    width: 2.5rem;
+  }
+  .dock-cap {
+    height: 2.5rem;
+  }
+}
+
+@media (forced-colors: active) {
+  .dock-key::before {
+    display: none;
+  }
+  .dock-tip {
+    background: Canvas;
+    color: CanvasText;
+    border: 1px solid CanvasText;
+    box-shadow: none;
+  }
+  .dock-rule {
+    background: CanvasText;
+  }
+}
+
+/* ── The contact drawer ─────────────────────────────────────────────────────
+   A modal <dialog>: the top layer ignores every containing block the page
+   builds (Reveal transforms, perspective stages), makes the page inert, and
+   turns Esc into a cancelable `cancel` event. The UA box is undone so the
+   element is simply the window, as .lp-dialog does in globals.css. */
+.cd-dialog {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  width: 100vw;
+  height: 100%;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background: transparent;
+  color: var(--fg);
+}
+/* The dimming is a real element so GSAP can fade it with the panel's slide;
+   ::backdrop stays empty. */
+.cd-dialog::backdrop {
+  background: transparent;
+}
+.cd-veil {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+/* The panel floats, inset like the mobile menu sheet, so all four edges carry
+   the glass's lit rim: a slab of the same glass, not a sheet glued to the
+   window edge. It slides in on TRANSFORM (GSAP xPercent), nothing else. */
+.cd-panel {
+  position: absolute;
+  top: max(0.5rem, env(safe-area-inset-top, 0px));
+  right: max(0.5rem, env(safe-area-inset-right, 0px));
+  bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
+  width: min(540px, calc(100vw - 1rem));
+}
+.cd-scroll {
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: inherit;
+  padding: 1rem 1.25rem 1.75rem;
+}
+@media (min-width: 640px) {
+  .cd-scroll {
+    padding: 1.25rem 2rem 2.25rem;
+  }
+}
+/* A closing drawer must not take a click aimed at the page it is revealing. */
+.cd-panel[data-state="closing"] {
+  pointer-events: none;
+}
+
+/* The close key: the dock's glass bead, with an x that turns a quarter on
+   hover (a small out-back settle). */
+.cd-close {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  color: var(--lg-ink-soft);
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+  box-shadow:
+    inset 0 1px 0 0 color-mix(in srgb, var(--fg) 18%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--fg) 9%, transparent);
+  transition:
+    color var(--dur-fast) var(--ease-out-quad),
+    background-color var(--dur-fast) var(--ease-out-quad);
+}
+.cd-close svg {
+  transition: transform var(--dur-base) var(--ease-out-back);
+}
+@media (hover: hover) {
+  .cd-close:hover {
+    color: var(--lg-ink);
+    background: color-mix(in srgb, var(--fg) 11%, transparent);
+  }
+  .cd-close:hover svg {
+    transform: rotate(90deg);
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .cd-veil {
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .cd-veil {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+  }
+}
+html[data-glass="flat"] .cd-veil {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+}
+@media (forced-colors: active) {
+  .cd-veil {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: transparent;
+  }
+  .cd-close {
+    border: 1px solid ButtonText;
+    box-shadow: none;
+  }
+}
+
+/* ── Edge fades ─────────────────────────────────────────────────────────────
+   Content dissolves into the viewport's edges instead of being cut by them.
+   A progressive blur: stacked backdrop-filter layers whose blur grows toward
+   the edge, each masked to its own band (the mask sits on the LAYER, never on
+   the wrapper), under a tint that settles the edge into the ground. Purely
+   decorative: aria-hidden, no pointer events, never printed. */
+.edge-fade {
+  position: fixed;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+.edge-fade > span {
+  position: absolute;
+  inset: 0;
+}
+.ef-blur {
+  -webkit-backdrop-filter: blur(var(--ef-blur));
+  backdrop-filter: blur(var(--ef-blur));
+  -webkit-mask-image: var(--ef-mask);
+  mask-image: var(--ef-mask);
+}
+
+/* Bottom: under the dock (z 44 < 45). Four layers, 1 / 2 / 4 / 8px, in 25%
+   bands; each is clear until its band, solid across the next, clear after, and
+   the last runs solid to the edge. A backdrop-filter pays for its whole box,
+   mask or no mask, so each layer's box is cut to its own band (the masks below
+   are relative to that box): 2.25 band-heights of blur instead of 4, and the
+   heavy 4px and 8px passes run over the smallest strips. */
+.edge-fade--bottom .ef-1 {
+  --ef-blur: 1px;
+  top: 0;
+  bottom: 25%;
+  --ef-mask: linear-gradient(to bottom, transparent 0%, #000 33.333%, #000 66.667%, transparent 100%);
+}
+.edge-fade--bottom .ef-2 {
+  --ef-blur: 2px;
+  top: 25%;
+  --ef-mask: linear-gradient(to bottom, transparent 0%, #000 33.333%, #000 66.667%, transparent 100%);
+}
+.edge-fade--bottom .ef-3 {
+  --ef-blur: 4px;
+  top: 50%;
+  --ef-mask: linear-gradient(to bottom, transparent 0%, #000 50%, #000 100%);
+}
+.edge-fade--bottom .ef-4 {
+  --ef-blur: 8px;
+  top: 75%;
+  --ef-mask: linear-gradient(to bottom, transparent 0%, #000 100%);
+}
+/* The tint eases in (no visible start line) and stops at 55% of the ground,
+   so the last row of pixels is dimmed, never blacked out. */
+.edge-fade--bottom .ef-tint {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    color-mix(in srgb, var(--bg) 6%, transparent) 30%,
+    color-mix(in srgb, var(--bg) 22%, transparent) 60%,
+    color-mix(in srgb, var(--bg) 42%, transparent) 84%,
+    color-mix(in srgb, var(--bg) 55%, transparent) 100%
+  );
+}
+/* It leaves with the dock (useChromeYield), so the footer ends clean. */
+.edge-fade--bottom[data-yield] {
+  transform: translate3d(0, 100%, 0);
+  visibility: hidden;
+  transition:
+    transform var(--dur-base) var(--ease-in-out-quart),
+    visibility 0s linear var(--dur-base);
+}
+
+/* Touch and narrow screens: two layers (3px, 8px) in 50% bands. Half the
+   passes; at phone sizes the difference is invisible. */
+@media (max-width: 767px), (pointer: coarse) {
+  .edge-fade--bottom .ef-1,
+  .edge-fade--bottom .ef-3 {
+    display: none;
+  }
+  .edge-fade--bottom .ef-2 {
+    --ef-blur: 3px;
+    top: 0;
+    --ef-mask: linear-gradient(to bottom, transparent 0%, #000 50%, transparent 100%);
+  }
+  .edge-fade--bottom .ef-4 {
+    top: 50%;
+    --ef-mask: linear-gradient(to bottom, transparent 0%, #000 100%);
+  }
+}
+
+/* Top: under the header's capsule. It sits BELOW z-30 on purpose: the
+   case-study Contents bar (sticky top-16, z-30, opaque) must stay crisp over
+   it, while every other thing on a page (z <= 10) dissolves beneath it.
+   The dissolve is centred on the header's own bottom edge (64px; 48px on
+   short screens), because that is where the hard line was: the page's first
+   edge at scroll 0 (the home film, a case-study cover) and anything pinned at
+   top-16. The tint is still more than half the ground there and runs out
+   32px lower, so that line melts; above it, content passing up under the
+   capsule fades toward the ground at the window's edge. */
+.edge-fade--top {
+  top: 0;
+  z-index: 29;
+  height: calc(4rem + 32px);
+}
+@media (max-height: 480px) {
+  .edge-fade--top {
+    height: calc(3rem + 28px);
+  }
+}
+/* Two small blurs, each cut to the band where the page still shows through
+   the tint (above ~20% the tint is 95%+ ground, and a blur there would be
+   paid for and never seen): 3px across the capsule's lower half, easing out
+   by 72%; 1.5px across the header's bottom edge, clear again by the fade's
+   end so no blur line is left at 96px. */
+.edge-fade--top .ef-1 {
+  --ef-blur: 1.5px;
+  top: 45%;
+  --ef-mask: linear-gradient(to bottom, transparent 0%, #000 30%, #000 60%, transparent 100%);
+}
+.edge-fade--top .ef-2 {
+  --ef-blur: 3px;
+  top: 20%;
+  bottom: 28%;
+  --ef-mask: linear-gradient(to bottom, #000 0%, #000 50%, transparent 100%);
+}
+.edge-fade--top .ef-tint {
+  background: linear-gradient(
+    to bottom,
+    var(--bg) 0%,
+    color-mix(in srgb, var(--bg) 90%, transparent) 38%,
+    color-mix(in srgb, var(--bg) 56%, transparent) 66.7%,
+    color-mix(in srgb, var(--bg) 22%, transparent) 84%,
+    transparent 100%
+  );
+}
+/* At the very top of a page nothing is passing under the capsule yet: the
+   band above 64px is the ground already, so the tint only melts the page's
+   first edge, and the blur waits. Once the page is scrolled (TopEdge sets
+   data-scrolled) the blur comes up on the layers' own opacity. */
+.edge-fade--top > span {
+  transition: opacity var(--dur-slow) var(--ease-out-quad);
+}
+.edge-fade--top:not([data-scrolled]) .ef-blur {
+  opacity: 0;
+}
+
+/* Fallbacks: no backdrop-filter, a reader who asked for less transparency, or
+   a GPU the ambient field's watchdog found struggling: the tint alone,
+   deepened a step so the edge still reads. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .edge-fade .ef-blur {
+    display: none;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .edge-fade .ef-blur {
+    display: none;
+  }
+  .edge-fade--bottom .ef-tint {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      color-mix(in srgb, var(--bg) 40%, transparent) 55%,
+      color-mix(in srgb, var(--bg) 78%, transparent) 100%
+    );
+  }
+}
+html[data-glass="flat"] .edge-fade .ef-blur {
+  display: none;
+}
+html[data-glass="flat"] .edge-fade--bottom .ef-tint {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    color-mix(in srgb, var(--bg) 40%, transparent) 55%,
+    color-mix(in srgb, var(--bg) 78%, transparent) 100%
+  );
+}
+
+/* Gone where they cannot help: forced colours (a system palette has no
+   "dissolve"), landscape phones (the height is the content's), and paper. */
+@media (forced-colors: active) {
+  .edge-fade {
+    display: none;
+  }
+}
+@media (max-height: 520px) and (orientation: landscape) {
+  .edge-fade {
+    display: none;
+  }
+}
+@media print {
+  .edge-fade,
+  .dock,
+  .cd-dialog {
+    display: none !important;
+  }
+}

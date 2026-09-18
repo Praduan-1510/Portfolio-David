@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · My Bag</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* Pixel-matched to Bag.png (393 x 964): cards x26..365 from y100 (86 tall, pitch 98),
+     promo row y404, summary x24..359 y460..834, CTA y847. Flow layout so lines/rows reflow. */
+  .bag-list { margin: 18px 4px 0 2px; }
+  .bag-list .line-card { height: 86px; min-height: 0; padding: 0 11px 0 13px; gap: 23px; align-items: stretch; transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out); }
+  .bag-list .line-card + .line-card { margin-top: 12px; }
+  .line-card.is-leaving { opacity: 0; transform: translateX(-16px); }
+  .line-card .thumb--lg { align-self: center; display: block; }
+  .line-card__body { display: block; padding-top: 15px; }
+  .line-card__name { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .line-card__meta { display: block; font-size: 10.5px; line-height: 13px; color: var(--muted-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .line-card__price { margin-top: 0; line-height: 20px; }
+  .line-card__price .price { font-size: 15px; }
+  .line-card__side { display: flex; align-items: center; flex-shrink: 0; }
+  .line-card .qty { margin-top: 1px; }
+  .line-edit { display: none; gap: 8px; }
+  .is-editing .line-card .qty { display: none; }
+  .is-editing .line-edit { display: flex; }
+  .line-edit button { width: 34px; height: 34px; border-radius: var(--r); display: grid; place-items: center; background: var(--surface); color: var(--navy); }
+  .line-edit button.del { background: var(--danger-bg); color: var(--danger); }
+  .line-edit svg { width: 17px; height: 17px; }
+
+  .promo { position: relative; display: flex; gap: 10px; margin: 22px 4px 0 4px; }
+  .promo .field--promo { flex: 0 0 238px; width: 238px; padding-right: 64px; }
+  .promo__offers { position: absolute; left: 180px; top: 0; height: 34px; width: 58px; display: inline-flex; align-items: center; justify-content: center; gap: 3px; font-size: 12px; font-weight: 600; color: var(--brand); border-radius: 6px; }
+  .promo__offers svg { width: 14px; height: 14px; }
+  .promo .btn { flex: 0 0 89px; width: 89px; height: 34px; font-size: 17px; padding: 0; }
+  .promo.has-error .field--promo { box-shadow: inset 0 0 0 1.5px var(--danger); }
+  .promo-err { margin: 6px 6px 0; font-size: 12px; line-height: 16px; color: var(--danger); }
+  .promo-applied { display: flex; align-items: center; gap: 10px; height: 34px; margin: 22px 4px 0 4px; padding: 0 6px 0 12px; border-radius: var(--r); background: var(--ok-bg); color: #24701F; font-size: 13px; }
+  .promo-applied svg { width: 17px; height: 17px; flex-shrink: 0; }
+  .promo-applied b { font-weight: 600; }
+  .promo-applied.is-warn { background: var(--warn-bg); color: #7A5600; }
+  .promo-applied .text-btn { min-height: 34px; padding: 0 8px; font-size: 13px; font-weight: 600; color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+
+  .sum { margin: 22px 9px 0 0; border-radius: var(--r); box-shadow: inset 0 0 0 1px var(--border); padding: 5px 0 8px; background: #fff; }
+  .sum__row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 0 31px; color: var(--steel); font-variant-numeric: tabular-nums; }
+  .sum__row > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sum__row > span:last-child { flex-shrink: 0; }
+  .sum__row--item { height: 41px; padding-top: 4px; font-size: 13px; }
+  .sum__row--tot { height: 44px; font-size: 15px; font-weight: 500; }
+  .sum__row .ok { color: var(--ok); }
+  .sum__row--total { height: 44px; margin-top: 10px; padding-left: 30px; font-size: 17px; font-weight: 700; color: var(--navy); }
+  .sum__sep { height: 2px; margin: 0 22px; background: #B0D2E0; }
+  .sum__sep + .sum__row--tot { margin-top: 0; }
+  .sum__sep--2 { margin-top: 4px; }
+  .sum__gstnote { margin: 0 31px 0 30px; padding-bottom: 4px; font-size: 11.5px; line-height: 1.5; color: var(--muted-2); }
+  .sum__gst { font-size: 11px; font-weight: 400; color: var(--muted-2); margin-left: 4px; }
+  .bag-cta { display: flex; width: 280px; height: 34px; margin: 13px auto 0; }
+
+  .bag-more { margin-top: 28px; }
+  .perk-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+  .perk-row a { display: block; text-align: center; padding: 12px 6px; border-radius: var(--r); background: var(--surface); font-size: 11px; line-height: 1.35; color: var(--navy); }
+  .perk-row .icon-circle { width: 30px; height: 30px; margin: 0 auto 6px; }
+  .perk-row .icon-circle svg { width: 16px; height: 16px; }
+  .perk-row b { display: block; font-size: 12px; font-weight: 600; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="My bag" id="bagPage">
+  <header class="appbar">
+    <h1 class="appbar__title">My Bag</h1>
+    <button class="appbar__action tap" id="editBtn" type="button" aria-pressed="false">Edit</button>
+  </header>
+  <div class="page-divider"></div>
+
+  <div id="full">
+    <ul class="bag-list" id="lines" data-delegate aria-label="Items in your bag"></ul>
+
+    <div id="promoSlot"></div>
+
+    <section class="sum" id="summary" aria-label="Price summary"></section>
+    <a class="btn btn--primary tap bag-cta" id="checkoutBtn" href="addresses.html?select=1"><span>Proceed to checkout</span></a>
+
+    <div class="bag-more">
+      <div class="banner banner--ok" id="etaBanner"><i data-icon="truck" data-size="18"></i><span id="etaText">Free delivery to <b data-bind="pin">700135</b> · arriving by <b data-bind="eta">Tue, 22 Sep</b></span></div>
+      <div class="perk-row">
+        <a class="tap" href="help.html?topic=returns"><span class="icon-circle"><i data-icon="return" data-size="16"></i></span><b>30-day</b>free returns</a>
+        <a class="tap" href="help.html?topic=warranty"><span class="icon-circle"><i data-icon="shield" data-size="16"></i></span><b>Secure</b>payments</a>
+        <a class="tap" href="club.html"><span class="icon-circle"><i data-icon="trophy" data-size="16"></i></span><b id="ptsEarn">+280</b>Club points</a>
+      </div>
+      <div id="wishWrap">
+        <div class="section-head"><h2 class="section-title">From your wishlist</h2><a class="see-all see-all--brand tap" href="wishlist.html">See all</a></div>
+        <div class="rail" id="wishRail" aria-label="Wishlist items"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state" id="empty" hidden>
+    <div class="empty-state__icon"><i data-icon="bag" data-size="40" data-sw="1.6"></i></div>
+    <h3>Your bag is empty</h3>
+    <p>Rackets, running shoes, tents: everything you add shows up here.</p>
+    <a class="btn btn--primary tap" href="home.html" style="height:44px">Start shopping</a>
+    <a class="btn btn--ghost tap" href="wishlist.html" style="height:44px;margin-top:8px;max-width:240px">View wishlist</a>
+  </div>
+
+  <nav data-tabbar="bag"></nav>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const lines = $('#lines'), editBtn = $('#editBtn');
+    let editing = false, promoError = '';
+
+    const meta = (it) => [it.size && (/^(UK|Size)/.test(it.size) ? it.size : (it.product.sizeLabel ? 'Grip ' : 'Size ') + it.size), it.colour].filter(Boolean).join(' · ');
+
+    function renderLines() {
+      const items = D.bag.items();
+      lines.innerHTML = items.map((it) => {
+        const p = it.product, href = `product.html?id=${p.id}`;
+        return `<li class="line-card" data-key="${D.esc(it.key)}">
+          <a class="thumb thumb--lg tap" href="${href}" aria-label="${D.esc(p.name)}"><img src="${D.img(p.img)}" alt=""></a>
+          <div class="line-card__body grow">
+            <a class="line-card__name" href="${href}">${D.esc(p.name)}</a>
+            <span class="line-card__meta">${D.esc(meta(it))}</span>
+            <span class="line-card__price">${D.priceHtml(p)}</span>
+          </div>
+          <div class="line-card__side">
+            <div class="qty" data-qty data-min="1" data-max="10" data-key="${D.esc(it.key)}" data-removable aria-label="Quantity for ${D.esc(p.name)}"><button type="button" data-action="dec" aria-label="Decrease quantity">${D.icon('minus', 10, { sw: 2.6 })}</button><output aria-live="polite">${it.qty}</output><button type="button" data-action="inc" aria-label="Increase quantity">${D.icon('plus', 10, { sw: 2.6 })}</button></div>
+            <div class="line-edit"><button class="tap" type="button" data-move aria-label="Move ${D.esc(p.name)} to wishlist">${D.icon('heart', 17)}</button><button class="tap del" type="button" data-del aria-label="Remove ${D.esc(p.name)}">${D.icon('trash', 17)}</button></div>
+          </div>
+        </li>`;
+      }).join('');
+      D.hydrate(lines);
+    }
+
+    function renderPromo() {
+      const slot = $('#promoSlot'); const code = D.bag.promo(); const t = D.bag.totals();
+      if (code) {
+        const ok = !!t.promoCode;
+        const pr = D.promos.find((x) => x.code === code);
+        const msg = ok ? `<span class="grow"><b>${code}</b> applied · you save <b class="num">${D.fmt(t.promo)}</b></span>` : `<span class="grow"><b>${code}</b> needs ${D.fmt((pr ? pr.min : 0) - t.subtotal)} more</span>`;
+        slot.innerHTML = `<div class="promo-applied${ok ? '' : ' is-warn'}" role="status">${D.icon(ok ? 'check-circle' : 'alert', 17)}${msg}<button class="text-btn tap" type="button" id="promoRemove">Remove</button></div>`;
+        $('#promoRemove').onclick = () => { D.bag.removePromo(); D.toast(`${code} removed`, { action: 'Undo', onAction: () => { D.bag.applyPromo(code); renderAll(); } }); renderAll(); };
+        return;
+      }
+      slot.innerHTML = `<form class="promo${promoError ? ' has-error' : ''}" id="promoForm" novalidate>
+          <label class="sr-only" for="promoIn">Promo code</label>
+          <input class="field field--promo" id="promoIn" data-mask="upper" autocomplete="off" autocapitalize="characters" placeholder="Enter promo code" aria-describedby="promoErr" ${promoError ? 'aria-invalid="true"' : ''}>
+          <a class="promo__offers tap" href="coupons.html" aria-label="View coupons">${D.icon('ticket', 14, { sw: 2 })}Offers</a>
+          <button class="btn btn--primary tap" type="submit" id="applyBtn"><span>Apply</span></button>
+        </form>${promoError ? `<p class="promo-err" id="promoErr" role="alert">${D.esc(promoError)}</p>` : ''}`;
+      const inp = $('#promoIn');
+      if (promoError) inp.value = D.store.get('promoTry', '') || '';
+      inp.addEventListener('input', () => { if (promoError) { promoError = ''; $('#promoForm').classList.remove('has-error'); const e = $('#promoErr'); e && e.remove(); inp.removeAttribute('aria-invalid'); } });
+      $('#promoForm').addEventListener('submit', async (e) => {
+        e.preventDefault(); const v = inp.value.trim().toUpperCase();
+        if (!v) { promoError = 'Enter a promo code, e.g. DECA10, or tap Offers'; renderPromo(); $('#promoIn').focus(); return; }
+        await D.loading($('#applyBtn'), 650);
+        const r = D.bag.applyPromo(v);
+        if (r.ok) { promoError = ''; D.haptic(15); D.toast(r.msg, { icon: 'check' }); renderAll(); }
+        else { promoError = r.msg; D.store.set('promoTry', v); renderPromo(); $('#promoIn').focus(); }
+      });
+    }
+
+    function renderSummary() {
+      const items = D.bag.items(); const t = D.bag.totals();
+      const rows = items.map((it) => `<div class="sum__row sum__row--item"><span>${D.esc(it.product.name)}${it.qty > 1 ? ` × ${it.qty}` : ''}</span><span>${D.fmt(it.product.price * it.qty)}</span></div>`).join('');
+      $('#summary').innerHTML = rows + `<div class="sum__sep" role="separator"></div>
+        <div class="sum__row sum__row--tot"><span>Subtotal (MRP)</span><span>${D.fmt(t.mrp)}</span></div>
+        <div class="sum__row sum__row--tot"><span>Discount</span><span>${D.fmt(-t.discount)}</span></div>
+        ${t.promo ? `<div class="sum__row sum__row--tot"><span>Promo (${t.promoCode})</span><span class="ok">${D.fmt(-t.promo)}</span></div>` : ''}
+        <div class="sum__row sum__row--tot"><span>GST (included)</span><span>${D.fmt(t.gst)}</span></div>
+        <div class="sum__row sum__row--tot"><span>Delivery</span><span class="${t.delivery ? '' : 'ok'}">${t.delivery ? D.fmt(t.delivery) : 'Free'}</span></div>
+        <div class="sum__sep sum__sep--2" role="separator"></div>
+        <div class="sum__row sum__row--total"><span>Total</span><span>${D.fmt(t.total)}</span></div>
+        <p class="sum__gstnote">Inclusive of GST: ${D.gstNote(t)}</p>`;
+      $('#ptsEarn').textContent = '+' + D.fmtNum(Math.round(t.total / 100));
+      $('#etaText').innerHTML = t.delivery ? `Add <b>${D.fmt(999 - t.subtotal)}</b> more for free delivery · arriving by <b data-bind="eta"></b>` : `Free delivery to <b data-bind="pin"></b> · arriving by <b data-bind="eta"></b>`;
+      D.bindLocation();
+    }
+
+    function renderWish() {
+      const ws = D.wish.products().slice(0, 6);
+      $('#wishWrap').hidden = !ws.length;
+      $('#wishRail').innerHTML = ws.map((p) => D.card(p, { rail: true, add: true })).join('');
+      D.hydrate($('#wishRail'));
+    }
+
+    function renderAll() {
+      const empty = D.bag.lines() === 0;
+      $('#full').hidden = empty; $('#empty').hidden = !empty; editBtn.hidden = empty;
+      if (empty) { setEditing(false); return; }
+      renderLines(); renderPromo(); renderSummary();
+    }
+
+    function setEditing(on) {
+      editing = on; lines.classList.toggle('is-editing', on);
+      editBtn.textContent = on ? 'Done' : 'Edit'; editBtn.setAttribute('aria-pressed', String(on));
+      editBtn.classList.toggle('appbar__action--brand', on);
+    }
+    editBtn.addEventListener('click', () => setEditing(!editing));
+
+    // Remove with confirm + undo
+    async function removeLine(key, askFirst = true) {
+      const it = D.bag.items().find((x) => x.key === key); if (!it) return;
+      if (askFirst && !(await D.dialog({ title: `Remove ${it.product.name}?`, message: 'It will be taken out of your bag. You can undo right after.', confirm: 'Remove', tone: 'danger', icon: 'trash' }))) return;
+      const card = lines.querySelector(`[data-key="${CSS.escape(key)}"]`);
+      if (card) { card.classList.add('is-leaving'); await D.wait(200); }
+      const token = D.bag.remove(key); renderAll(); D.haptic(12);
+      D.toast(`${it.product.name} removed`, { action: 'Undo', onAction: () => { D.bag.restore(token); renderAll(); } });
+    }
+    lines.addEventListener('remove', (e) => { const q = e.target.closest('[data-qty]'); if (q) removeLine(q.dataset.key); });
+    lines.addEventListener('click', async (e) => {
+      const del = e.target.closest('[data-del]'), mv = e.target.closest('[data-move]'); if (!del && !mv) return;
+      const key = e.target.closest('.line-card').dataset.key;
+      if (del) return removeLine(key);
+      const it = D.bag.items().find((x) => x.key === key); if (!it) return;
+      D.wish.add(it.id); await D.wait(80);
+      const token = D.bag.remove(key); renderAll(); renderWish();
+      D.toast(`Moved to wishlist`, { icon: 'heart', action: 'Undo', onAction: () => { D.bag.restore(token); renderAll(); } });
+    });
+    // Qty -> live totals (Deca.bag already updated by the stepper)
+    lines.addEventListener('change', () => { renderSummary(); if (D.bag.promo()) renderPromo(); });
+    D.on('bag', () => { if (!lines.contains(document.activeElement)) { /* external change (e.g. wishlist rail add) */ renderAll(); } else { renderSummary(); } });
+
+    $('#checkoutBtn').addEventListener('click', async (e) => {
+      e.preventDefault(); const btn = e.currentTarget;
+      const t = D.bag.totals(); if (!t.count) return;
+      await D.loading(btn, 500); location.href = 'addresses.html?select=1';
+    });
+
+    renderAll(); renderWish();
+  })();
+</script>
+</body>
+</html>

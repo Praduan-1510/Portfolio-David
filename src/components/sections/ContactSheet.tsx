@@ -5,6 +5,7 @@ import Image from "next/image";
 import NextLink from "next/link";
 import { useGSAP } from "@gsap/react";
 import { Container, Text } from "@/components/primitives";
+import "@/components/primitives/button.css";
 import { Reveal, TextReveal } from "@/components/motion";
 import { gsap, registerGsap } from "@/lib/motion/gsap";
 import { useReducedMotion, prefersReducedMotion } from "@/hooks/useReducedMotion";
@@ -303,8 +304,20 @@ export function ContactSheet({ project }: { project: ProjectMeta }) {
                       hold("user", next);
                     }}
                     aria-pressed={userPaused}
-                    className="relative shrink-0 font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-muted transition-colors duration-fast ease-out-quad before:absolute before:-inset-x-3 before:-inset-y-4 before:content-[''] hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg"
+                    // A glass chip, the site's button family at transport
+                    // scale (.btn-chip, primitives/button.css), with the same
+                    // LED as the marquee's stop. ::before overhangs the pill
+                    // to a 44px hit area.
+                    className="btn-chip relative inline-flex shrink-0 items-center gap-[5px] rounded-full px-space-2 py-[3px] font-mono text-[0.6875rem] uppercase tracking-[0.16em] before:absolute before:-inset-x-2 before:-inset-y-3 before:content-['']"
                   >
+                    <span
+                      aria-hidden="true"
+                      className={`h-[5px] w-[5px] rounded-full ${
+                        userPaused
+                          ? "bg-[color:color-mix(in_srgb,var(--fg)_60%,transparent)]"
+                          : "bg-accent"
+                      }`}
+                    />
                     {userPaused ? "Play" : "Pause"}
                     <span className="sr-only"> the contact sheet</span>
                   </button>

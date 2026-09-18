@@ -1,200 +1,280 @@
 import NextLink from "next/link";
-import { Text, ProjectCover } from "@/components/primitives";
+import Image from "next/image";
+import { PhoneFrame } from "@/components/primitives";
 import { cn } from "@/lib/utils/cn";
 import { displayTitle } from "@/lib/utils/typography";
-import type { ProjectMeta } from "@/types/project";
+import blurMap from "@/lib/content/blur-map.json";
+import type { ProjectMeta, ProjectStatus } from "@/types/project";
+import "./project-card.css";
 
 /*
- * Project teaser for the home page. The whole card is a single link to the case
- * study. The media is an accent-washed dark "stage" holding the project's cover
- * screen in a phone frame: themed to each project's own accent (the same remap
- * the case-study route uses), with the phone bleeding off the bottom edge so it
- * reads as rising out of the card. Hover lifts the phone and shifts the title to
- * the site accent. The per-project accent is scoped to the stage only, so the
- * wash stays vivid on dark while the title/focus keep their AA-safe values on
- * the light page below.
+ * Project card: the one listing for the work, on the home page and on /work.
  *
- * Two layouts share the same stage + meta: the default vertical card (stage over
- * meta, used in the 2-up grid) and a `wide` editorial row (stage beside meta,
- * used to make the trailing odd project a full-width feature instead of leaving
- * a hole in the grid).
+ * A 4:3 media box over four lines of type, the whole card one link. The media
+ * is a still that behaves as if it were in use (project-card.css): a website
+ * sits in a browser window inset from the top-left and bleeding off the right
+ * and bottom edges, drifting slowly as if someone were reading it; a phone app
+ * rises out of the bottom edge with its screenshot scrolling from top to bottom
+ * inside the screen. Under the media: where the work stands (a status pill),
+ * what it is and when, its name, and the one line it came to (`outcome`, which
+ * the content layer holds to 90 characters and to claims its own study makes).
+ *
+ * The project's accent is scoped to the card (the same inline remap the
+ * case-study route uses), so the wash, the prototype dot and the focus ring
+ * speak in the project's colour while the page around it stays monochrome.
+ * Voyager has no accent by design and speaks in the site's own signal.
+ *
+ * Hover exists only on a real hover device (`can-hover:`): the screenshot
+ * zooms in its frame (a web page from its resting 1.06 to 1.10; a phone
+ * screen, which has no drift to hide, from 1.00 to 1.04), the frame lifts 4px,
+ * and a solid chip slides in over the media naming the client. Keyboard focus
+ * shows the same chip. On touch there is no overlay to discover; an arrow
+ * beside the title says the card goes somewhere. Motion is transform and
+ * opacity only.
+ *
+ * No hooks, no client state: the card renders wherever its parent does. The
+ * loops are pure CSS; ProjectGrid decides which cards are playing.
  */
+
+/** `sizes` pinned to what is actually painted, by the grid's breakpoints (see
+ *  ProjectGrid: 1 column below 640px, 2 to 1279px, 3 above, 90rem container
+ *  with a 5vw gutter). A web screenshot is drawn at object-fit: cover in a 4:3
+ *  window, about 1.37 card widths wide, times its 1.06 resting zoom (a 416px
+ *  card paints about 600px, which the 1200w variant covers at 2x); a phone's
+ *  screen is about 0.37 of a card width. Measured: every card fetches at
+ *  least its painted width in device pixels at 1440@2x, 1024@2x and 390@3x. */
+const WEB_SIZES = "(min-width: 1280px) 37.5rem, (min-width: 640px) 68vw, 136vw";
+const APP_SIZES = "(min-width: 1280px) 10rem, (min-width: 640px) 17vw, 34vw";
+
+/*
+ * Intrinsic sizes of the phone covers, so next/image can draw a tall
+ * screenshot at its natural height inside the screen (`fill` would crop it to
+ * the screen's shape and there would be nothing to scroll). A cover missing
+ * here is not an error: its phone simply fills the screen and floats.
+ */
+const PHONE_COVERS: Record<string, { width: number; height: number }> = {
+  "/images/work/nukkad/home.png": { width: 804, height: 1748 },
+  "/images/work/spendee/dashboard.png": { width: 804, height: 2640 },
+  "/images/work/voyager/dashboard.png": { width: 804, height: 2376 },
+  "/images/work/decathlon/home.png": { width: 393, height: 852 },
+};
+
+/** Height over width past which a screenshot is worth scrolling. The card's
+ *  screen is about 2.25, so a single-screen capture (Nukkad 2.17, Decathlon
+ *  2.17) has nothing to show by moving and floats instead, while a dashboard
+ *  three screens tall (Spendee 3.28, Voyager 2.96) scrolls. */
+const SCROLL_ASPECT = 2.5;
+
+const STATUS_LABEL: Record<ProjectStatus, string> = {
+  live: "Live",
+  prototype: "Prototype",
+  concept: "Concept",
+};
+
+const KIND_LABEL: Record<NonNullable<ProjectMeta["kind"]>, string> = {
+  app: "App",
+  web: "Web",
+  graphic: "Graphic",
+};
+
+const blurFor = (src: string): string | undefined =>
+  (blurMap as Record<string, string>)[src];
+
+/*
+ * Whether the study's hero has a screen for the cover to fly into (the
+ * HandoffLayer docking). It mirrors `hasReel` in app/work/[slug]/page.tsx: an
+ * app study with a hero video opens on a floating reel, which registers no
+ * HandoffTarget. Offering a source there would park a clone over the new page
+ * for 1.2s before it gave up, so those cards get the ordinary transition.
+ */
+const docks = (project: ProjectMeta): boolean =>
+  project.kind === "web" || !project.video?.src;
+
 export function ProjectCard({
   project,
-  layout = "default",
+  titleAs: Title = "h3",
 }: {
   project: ProjectMeta;
-  /** "wide" lays the stage beside the meta as a full-width feature row. */
-  layout?: "default" | "wide";
+  /** Heading level for the title: h3 under a section h2 (home), h2 directly
+   *  under the page h1 (/work). */
+  titleAs?: "h2" | "h3";
 }) {
-  const accentStyle = project.accent
-    ? ({ "--accent": project.accent } as React.CSSProperties)
-    : undefined;
-  const wide = layout === "wide";
-  // Web projects use a landscape browser frame, wide + vertically centered in
-  // the stage, rather than the portrait phone "rising from the base".
+  const { slug } = project;
   const isWeb = project.kind === "web";
+  const ids = {
+    title: `pc-${slug}-title`,
+    status: `pc-${slug}-status`,
+    outcome: `pc-${slug}-outcome`,
+  };
 
   return (
-    <article className="group">
-      <NextLink
-        href={`/work/${project.slug}`}
-        aria-label={`View case study: ${project.title}`}
-        className={cn(
-          "block rounded-[3px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg",
-          wide && "grid items-stretch gap-space-6 md:grid-cols-[1.15fr_1fr] md:gap-space-8",
-        )}
+    <NextLink
+      href={`/work/${slug}`}
+      aria-labelledby={ids.title}
+      aria-describedby={`${ids.status} ${ids.outcome}`}
+      className="group block rounded-[16px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg"
+      style={{ "--accent": project.accent ?? "var(--signal)" } as React.CSSProperties}
+    >
+      {/* The media box. It holds the screenshot, so it is the handoff source. */}
+      <div
+        data-handoff-source={docks(project) ? slug : undefined}
+        className="relative isolate aspect-[4/3] overflow-hidden rounded-[16px] border border-line bg-surface"
       >
-        {/* Media stage: dark, accent-washed, cover screen rising from the base.
-            A radial accent wash from the top, a soft floor gradient so the phone
-            doesn't float, and an inset hairline + shadow ring so the stage reads
-            as a recessed well with the phone raised inside it, keeping presence
-            even on a dark app screen (e.g. Spendee/Decathlon). */}
-        <div
-          data-theme="dark"
-          style={accentStyle}
-          className={cn(
-            "relative isolate overflow-hidden rounded-[3px] border border-line bg-bg transition-[border-color,box-shadow] duration-base ease-out-quad group-hover:border-neon group-hover:shadow-neon",
-            wide ? "aspect-[16/10] md:aspect-auto md:min-h-[24rem]" : "aspect-[4/3]",
-          )}
-        >
-          {/* Accent wash from the crown of the stage. */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 -z-10"
-            style={{
-              background:
-                "radial-gradient(82% 72% at 50% 6%, color-mix(in srgb, var(--accent) 34%, transparent), transparent 72%)",
-            }}
-          />
-          {/* Floor gradient + faint accent grounding so the phone has a base to
-              rise from instead of a flat field. */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-x-0 bottom-0 -z-10 h-1/2"
-            style={{
-              background:
-                "linear-gradient(to top, color-mix(in srgb, var(--bg) 92%, #000) 0%, transparent 100%)",
-            }}
-          />
-          {/* Inset ring: a recessed-well edge that lifts the phone off the stage.
-              Inline style (not an arbitrary shadow class) so the color-mix commas
-              don't fight Tailwind's multi-shadow splitting. */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 rounded-[3px]"
-            style={{
-              boxShadow:
-                "inset 0 1px 0 color-mix(in srgb, var(--accent) 22%, transparent), inset 0 0 0 1px rgba(255,255,255,0.04), inset 0 -40px 60px -30px rgba(0,0,0,0.6)",
-            }}
-          />
-          {/* Cover frame: a portrait phone anchored low (app), or a landscape
-              browser window centered in the stage (web). */}
-          <div
-            // Source for the cover-to-hero handoff (components/motion/HandoffLayer).
-            data-handoff-source={project.slug}
-            className={cn(
-              "absolute left-1/2 -translate-x-1/2 transition-transform duration-base ease-out-quad will-change-transform",
-              isWeb
-                ? cn(
-                    "top-1/2 -translate-y-1/2 group-hover:-translate-y-[calc(50%+0.5rem)]",
-                    wide ? "w-[82%]" : "w-[80%]",
-                  )
-                : cn(
-                    "group-hover:-translate-y-2",
-                    wide ? "top-[14%] w-[32%] md:top-[16%] md:w-[34%]" : "top-[12%] w-[40%]",
-                  ),
-            )}
-          >
-            <ProjectCover
-              project={project}
-              playVideo={isWeb}
-              sizes={
-                isWeb
-                  ? "(min-width: 768px) 30rem, 82vw"
-                  : wide
-                    ? "(min-width: 768px) 14rem, 34vw"
-                    : "(min-width: 768px) 12rem, 40vw"
-              }
-              imgClassName={
-                isWeb
-                  ? "transition-transform duration-slow ease-out-quad group-hover:scale-[1.02]"
-                  : "object-top transition-transform duration-slow ease-out-quad will-change-transform group-hover:scale-[1.05]"
-              }
-            />
-          </div>
-          {/* Bottom dissolve OVER the phone: the cover bleeds off the stage edge
-              by design, but a hard slice mid-module read as accidental cropping;
-              the fade makes the bleed look intentional. Phone cards only (web
-              covers are fully contained). */}
-          {!isWeb && (
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-16"
-              style={{
-                background:
-                  "linear-gradient(to top, color-mix(in srgb, var(--bg) 96%, #000) 12%, transparent 100%)",
-              }}
-            />
-          )}
-          {/* Corner affordance. */}
-          <span className="absolute right-space-4 top-space-4 z-[2] font-mono text-caption uppercase tracking-[0.16em] text-fg transition-colors duration-fast ease-out-quad group-hover:text-neon">
-            View →
+        <Wash web={isWeb} />
+        {isWeb ? <BrowserWindow project={project} /> : <RisingPhone project={project} />}
+        <Chip client={project.client} />
+      </div>
+
+      <div className="mt-space-4">
+        <div className="flex flex-wrap items-center gap-x-space-3 gap-y-space-2">
+          <StatusPill id={ids.status} status={project.status} />
+          <span className="font-mono text-caption uppercase tracking-[0.14em] text-muted">
+            {KIND_LABEL[project.kind ?? "app"]} · {project.year}
           </span>
         </div>
+        <Title
+          id={ids.title}
+          className="mt-space-3 font-display text-heading-s text-fg transition-colors duration-fast ease-out-quad can-hover:group-hover:text-neon"
+        >
+          {displayTitle(project.title)}
+          {/* Touch has no hover chip, so the affordance lives here instead. */}
+          <span aria-hidden="true" className="ml-space-2 inline-block text-muted can-hover:hidden">
+            →
+          </span>
+        </Title>
+        <p id={ids.outcome} className="mt-space-2 font-sans text-body text-muted">
+          {project.outcome ?? project.indexNote ?? project.summary}
+        </p>
+      </div>
+    </NextLink>
+  );
+}
 
-        {/* Meta: beside the stage in the wide layout, beneath it otherwise. */}
-        <div className={cn(wide && "flex flex-col justify-center")}>
-          {wide && (
-            <span className="mb-space-4 font-mono text-caption uppercase tracking-[0.18em] text-muted">
-              Featured project
-            </span>
-          )}
-          <div
-            className={cn(
-              "flex items-baseline justify-between gap-space-4",
-              !wide && "mt-space-4",
-            )}
-          >
-            <Text
-              as="h3"
-              variant={wide ? "display-l" : "heading"}
-              className="relative inline-block transition-colors duration-fast ease-out-quad group-hover:text-neon"
-            >
-              {displayTitle(project.title)}
-              {/* Neon underline draws in from the left on hover (transform only). */}
-              <span
-                aria-hidden="true"
-                className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-neon transition-transform duration-base ease-out-quad group-hover:scale-x-100"
-              />
-            </Text>
-            <span className="shrink-0 font-mono text-caption text-muted">
-              {project.year}
-            </span>
-          </div>
-          <Text
-            variant={wide ? "body-l" : "body"}
-            className={cn("mt-space-2 text-muted", wide && "max-w-[44ch] md:mt-space-4")}
-          >
-            {project.summary}
-          </Text>
-          <ul
-            className={cn(
-              "flex flex-wrap gap-x-space-4 gap-y-space-1",
-              wide ? "mt-space-5" : "mt-space-3",
-            )}
-          >
-            {project.services.map((service) => (
-              <li
-                key={service}
-                className="font-mono text-caption uppercase tracking-[0.12em] text-muted"
-              >
-                {service}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </NextLink>
-    </article>
+/* The accent pool behind the device: from the top-left corner for a window
+   (the only ground a bleeding window leaves visible), from the base for a
+   phone rising out of it. The recipe is the work index's stage wash. */
+function Wash({ web }: { web: boolean }) {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 -z-10 opacity-[0.85] transition-opacity duration-slow ease-out-quad can-hover:group-hover:opacity-100"
+      style={{
+        background: web
+          ? "radial-gradient(90% 90% at 0% 0%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 72%)"
+          : "radial-gradient(78% 70% at 50% 100%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 72%)",
+      }}
+    />
+  );
+}
+
+/* A website: the screenshot in a hairline window inset 7% / 9% from the
+   top-left (equal margins in a 4:3 box) and running off the other two edges,
+   anchored at the page's top-left so the logo and navigation lead. */
+function BrowserWindow({ project }: { project: ProjectMeta }) {
+  const blur = blurFor(project.cover);
+  return (
+    <div className="absolute left-[7%] top-[9%] h-full w-full transition-transform duration-base ease-out-quad can-hover:group-hover:-translate-y-1">
+      <div
+        data-handoff-frame
+        className="relative isolate h-full w-full overflow-hidden rounded-[10px] border border-[color:color-mix(in_srgb,var(--fg)_14%,transparent)] bg-bezel shadow-[0_24px_60px_-26px_rgba(0,0,0,0.85)]"
+      >
+        <Image
+          src={project.cover}
+          alt=""
+          fill
+          sizes={WEB_SIZES}
+          placeholder={blur ? "blur" : "empty"}
+          blurDataURL={blur}
+          className="pc-drift origin-top-left scale-[1.06] object-cover object-left-top transition-transform duration-slow ease-out-quad can-hover:group-hover:scale-[1.10]"
+        />
+        {/* Glass sheen, PhoneFrame's and BrowserMockup's vocabulary. */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(135deg,rgba(255,255,255,0.07),transparent_38%)]"
+        />
+      </div>
+    </div>
+  );
+}
+
+/* A phone app: the device rising out of the bottom edge, a third of the card
+   wide, its screenshot scrolling (or, for a single-screen capture, the whole
+   device floating). */
+function RisingPhone({ project }: { project: ProjectMeta }) {
+  const size = PHONE_COVERS[project.cover];
+  const scrolls = !!size && size.height / size.width > SCROLL_ASPECT;
+  return (
+    <div className="absolute left-1/2 top-[12%] w-[34%] -translate-x-1/2">
+      <div
+        className={cn(
+          "transition-transform duration-base ease-out-quad can-hover:group-hover:-translate-y-1",
+          !scrolls && "pc-float",
+        )}
+      >
+        <PhoneFrame
+          scroll
+          src={project.cover}
+          alt=""
+          width={size?.width}
+          height={size?.height}
+          sizes={APP_SIZES}
+          scrollerClassName={scrolls ? "pc-scroll" : undefined}
+          // No resting zoom here, unlike the window's 1.06: that zoom exists
+          // to hide the drift's travel, a phone screen does not drift
+          // sideways, and a 6% zoom crops the text that app screens set
+          // close to their edges. The hover adds the same 0.04 step.
+          imgClassName="origin-top transition-transform duration-slow ease-out-quad can-hover:group-hover:scale-[1.04]"
+        />
+      </div>
+    </div>
+  );
+}
+
+/* The hover and focus chip. Decorative for assistive tech: the link already
+   announces the title, the status and the outcome. */
+function Chip({ client }: { client: string }) {
+  return (
+    <span
+      aria-hidden="true"
+      data-card-chip
+      className="pointer-events-none absolute bottom-space-4 left-space-4 z-[2] flex max-w-[calc(100%-2rem)] -translate-x-2 items-center gap-space-2 rounded-full border border-line-strong bg-bg py-space-2 pl-space-4 pr-space-3 font-mono text-[0.6875rem] uppercase leading-none tracking-[0.12em] text-fg opacity-0 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.9)] transition-[opacity,transform] duration-base ease-out-quad group-focus-visible:translate-x-0 group-focus-visible:opacity-100 can-hover:group-hover:translate-x-0 can-hover:group-hover:opacity-100"
+    >
+      <span className="min-w-0 truncate text-muted">{client}</span>
+      <span className="shrink-0 text-muted">·</span>
+      <span className="shrink-0">
+        View case study <span className="text-neon">→</span>
+      </span>
+    </span>
+  );
+}
+
+/* Where the work stands. Live is the one moving mark (the site's signal, a
+   16px halo at 25% around an 8px dot, pulsing); a prototype is a steady dot in
+   the project's colour; a concept is a hollow ring. Every mark sits in the same
+   16px box so the labels line up across a row. */
+function StatusPill({ id, status }: { id: string; status: ProjectStatus }) {
+  const live = status === "live";
+  return (
+    <span
+      id={id}
+      className={cn(
+        "inline-flex items-center gap-space-2 rounded-full border py-[3px] pl-space-2 pr-space-3 font-mono text-[0.6875rem] uppercase leading-none tracking-[0.14em]",
+        live
+          ? "border-[color:color-mix(in_srgb,var(--signal)_45%,transparent)] text-fg"
+          : "border-line text-muted",
+      )}
+    >
+      <span aria-hidden="true" className="relative inline-flex h-4 w-4 shrink-0 items-center justify-center">
+        {live && (
+          <>
+            <span className="absolute inset-0 rounded-full bg-signal opacity-25" />
+            <span className="relative h-2 w-2 rounded-full bg-signal motion-safe:animate-status-pulse" />
+          </>
+        )}
+        {status === "prototype" && <span className="h-2 w-2 rounded-full bg-accent" />}
+        {status === "concept" && <span className="h-2 w-2 rounded-full border border-muted" />}
+      </span>
+      {STATUS_LABEL[status]}
+    </span>
   );
 }

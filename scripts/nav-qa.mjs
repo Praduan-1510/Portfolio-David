@@ -46,8 +46,8 @@ async function run(tag, startUrl, selector, shots) {
   console.log(tag, "| source:", src, "|", states.join(" | "), "|", JSON.stringify(after));
   await ctx.close();
 }
-await run("board-to-nukkad", "http://localhost:3000/work", 'ol a[href="/work/nukkad"]', true);
-await run("board-to-baseweight", "http://localhost:3000/work", 'ol a[href="/work/baseweight"]', false);
+await run("card-to-nukkad", "http://localhost:3000/work", '[data-card] a[href="/work/nukkad"]', true);
+await run("card-to-baseweight", "http://localhost:3000/work", '[data-card] a[href="/work/baseweight"]', false);
 await run("home-to-nukkad", "http://localhost:3000/", 'a[href="/work/nukkad"]', true);
 await run("home-to-baseweight", "http://localhost:3000/", 'a[href="/work/baseweight"]', false);
 await run("study-to-next", "http://localhost:3000/work/nukkad", 'section a.group[href^="/work/"]', false);

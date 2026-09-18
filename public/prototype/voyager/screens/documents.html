@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Travel Documents</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .psheet { padding: 20px 17px 24px 18px; }
+  body.capture .page { min-height: 932px; }
+  /* Passport card (PNG x32–369 y123–312, navy) */
+  .pp { position: relative; display: block; width: 337px; height: 190px; border-radius: 8px; background: var(--navy); color: #fff; text-align: left; overflow: hidden; isolation: isolate; }
+  .pp::after { content: ''; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255,255,255,.04); pointer-events: none; }
+  .pp .t { position: absolute; line-height: 1; white-space: nowrap; }
+  .pp__k { left: 21px; top: 24px; font-size: 10px; letter-spacing: .1em; color: var(--orange); }
+  .pp__name { left: 21px; top: 48px; font-size: 16px; font-weight: 600; letter-spacing: -.1px; }
+  .pp__num { left: 21px; top: 75px; font-size: 12px; letter-spacing: .42em; color: #C9CCD3; font-variant-numeric: tabular-nums; }
+  .pp__lk { top: 122px; font-size: 12px; color: #A6A9B0; }
+  .pp__lv { top: 141px; font-size: 12px; font-weight: 600; }
+  .pp__hit { position: absolute; inset: 0; border-radius: inherit; z-index: 0; }
+  .pp__hit:active { background: rgba(255,255,255,.03); }
+  .pp .t { pointer-events: none; }
+  .pp__qr { z-index: 1; position: absolute; left: 233px; top: 28px; width: 78px; height: 78px; color: #D0D3D8; border-radius: 4px; }
+  .pp__qr:focus-visible { outline-offset: 4px; }
+  .pp__glow { position: absolute; right: -70px; bottom: -90px; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(252,163,17,.12), rgba(252,163,17,0) 70%); z-index: -1; pointer-events: none; }
+  .pp--empty { display: grid; place-items: center; text-align: center; border: 1.5px dashed #9AA3B5; background: #1B2946; }
+  .pp--empty p { font-size: 13px; color: #C4C7CF; margin-top: 6px; }
+
+  .dc-label { font-size: 13px; line-height: 1; color: #555; margin: 36px 0 0 1px; text-transform: uppercase; }
+  .dl { background: #fff; border-radius: 16px; padding: 1px 17px 0; margin: 14px -3px 0 -3px; }
+  .dl__row { position: relative; display: flex; align-items: center; width: 100%; min-height: 53px; padding: 0 23px 6px 24px; text-align: left; color: #000; }
+  .dl__row + .dl__row::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: #D0D0D0; }
+  .dl__ic { width: 24px; height: 24px; display: grid; place-items: center; flex-shrink: 0; }
+  .dl__t { flex: 1; min-width: 0; font-size: 15px; font-weight: 600; margin-left: 9px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dl__row .badge { height: 21px; font-size: 10.5px; min-width: 43px; padding: 0 8px; }
+  .dl__row:active { background: rgba(0,0,0,.02); }
+  .dl__row.is-new { animation: newrow 1.6s var(--ease-out); }
+  @keyframes newrow { 0%, 30% { background: var(--orange-tint-2); } 100% { background: transparent; } }
+  .dc-warn { margin: 14px -3px 0 -3px; }
+  .dc-warn a { font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
+
+  /* Detail sheet */
+  .scan { position: relative; height: 176px; border-radius: 14px; background: linear-gradient(135deg, #EEF0F4, #DCE1EA); overflow: hidden; padding: 14px 16px; }
+  .scan__photo { position: absolute; left: 16px; top: 38px; width: 64px; height: 80px; border-radius: 6px; overflow: hidden; filter: grayscale(.4) contrast(.95); }
+  .scan__head { font-size: 10px; letter-spacing: .25em; color: #6B7385; text-transform: uppercase; }
+  .scan__lines { position: absolute; left: 94px; top: 40px; right: 16px; display: grid; gap: 7px; }
+  .scan__lines i { display: block; height: 7px; border-radius: 4px; background: rgba(20,33,61,.14); }
+  .scan__mrz { position: absolute; left: 16px; right: 16px; bottom: 12px; font: 600 10px/1.35 ui-monospace, 'SF Mono', Menlo, monospace; color: #3A4458; letter-spacing: .06em; white-space: nowrap; overflow: hidden; }
+  .scan__blur { filter: blur(3.5px); transition: filter 300ms; }
+  .scan.is-shown .scan__blur { filter: none; }
+  .scan__stamp { position: absolute; right: 14px; top: 12px; }
+  .num-row { display: flex; align-items: center; gap: 8px; }
+  .reveal { display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 10px; border-radius: 15px; background: var(--grey-1); color: var(--navy); font-size: 12px; font-weight: 600; }
+  .qr-big { width: 220px; height: 220px; margin: 6px auto 0; padding: 14px; border-radius: 18px; background: #fff; box-shadow: inset 0 0 0 1px #E6E6E6; color: var(--navy); }
+</style>
+</head>
+<body>
+<main class="page page--cta" aria-label="Travel documents">
+  <header class="phead">
+    <a class="phead__back tap" href="profile.html" data-go="back" aria-label="Back">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3.5M10.5 4.5 3 12l7.5 7.5"/></svg>
+    </a>
+    <div class="phead__titles"><h1 class="phead__title">Travel Document</h1></div>
+  </header>
+
+  <section class="psheet psheet--grey">
+    <div id="ppWrap" class="enter" data-delegate></div>
+
+    <h2 class="dc-label enter" style="--i:1">All Documents</h2>
+    <div class="dl enter" id="dl" style="--i:2" role="list" data-delegate></div>
+    <div id="warnWrap" data-delegate></div>
+  </section>
+
+  <div class="cta-bar cta-bar--grey"><div class="cta-bar__in" style="padding:20px 22px 16px 25px">
+    <a class="btn btn--primary" href="add-document.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 4.5v15M4.5 12h15"/></svg><span>Add New Document</span></a>
+  </div></div>
+</main>
+
+<!-- Document detail -->
+<section class="sheet" id="docSheet" aria-labelledby="dsT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="dsT">UK Passport</p><p class="sheet__sub" id="dsSub">Passport · United Kingdom</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="scan" id="scan" aria-label="Scanned copy preview">
+    <p class="scan__head" id="scanHead">United Kingdom · Passport</p>
+    <span class="scan__stamp" id="scanStamp"></span>
+    <div class="scan__photo ph ph--warm"><img src="../assets/img/avatar-alex.jpg" alt=""></div>
+    <div class="scan__lines" aria-hidden="true"><i style="width:70%"></i><i style="width:90%"></i><i style="width:55%"></i><i style="width:80%"></i><i style="width:40%"></i></div>
+    <p class="scan__mrz scan__blur" id="mrz">P&lt;GBRJOHNSON&lt;&lt;ALEX&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>1234567897GBR9006142M3003149&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;00</p>
+  </div>
+  <div class="kvs mt-8">
+    <div><span class="k">Document number</span><span class="v num-row"><span class="num" id="dsNum">•••••6789</span><button class="reveal tap" type="button" id="reveal" aria-pressed="false"><span id="revIc"></span><span id="revT">Show</span></button></span></div>
+    <div><span class="k">Issuing country</span><span class="v" id="dsCountry">United Kingdom</span></div>
+    <div><span class="k">Issued</span><span class="v" id="dsIssue">Mar 2020</span></div>
+    <div><span class="k">Expires</span><span class="v" id="dsExp">Mar 2030</span></div>
+    <div><span class="k">Status</span><span class="v" id="dsStatus"></span></div>
+  </div>
+  <div class="banner banner--warn mt-12" id="dsWarn" hidden><span data-icon="warning" data-size="18"></span><span id="dsWarnT">Expires in October. Renew now to stay covered on your Paris trip.</span></div>
+  <div class="sheet__foot">
+    <button class="btn btn--primary" type="button" id="dsRenew" hidden><span>Renew Cover</span></button>
+    <div class="btn-pair" style="margin-top:10px">
+      <button class="btn btn--neutral" type="button" id="dsShare"></button>
+      <button class="btn btn--danger-soft" type="button" id="dsDel"></button>
+    </div>
+  </div>
+</section>
+
+<!-- QR enlarge -->
+<section class="sheet" id="qrSheet" aria-labelledby="qrT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="qrT">Passport QR</p><p class="sheet__sub">Show this at check-in or border kiosks that support digital ID.</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="qr-big" id="qrBig" role="img" aria-label="QR code for passport GBR 123456789"></div>
+  <p class="small center mt-12" id="qrMeta">GBR · 123456789 · refreshes every 60 seconds</p>
+  <div class="sheet__foot"><button class="btn btn--navy" type="button" id="qrBright"><span>Max Brightness</span></button></div>
+</section>
+
+<!-- Renew insurance -->
+<section class="sheet" id="renewSheet" aria-labelledby="rnT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="rnT">Renew travel insurance</p><p class="sheet__sub">Your cover ends Oct 2026 — before your Prague and Sydney trips.</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="options" data-options id="plans">
+    <button class="option" type="button" data-value="annual" aria-checked="true"><span class="option__radio"></span><span class="option__body"><span class="option__title">Annual multi-trip</span><span class="option__sub">Unlimited trips · Europe &amp; worldwide · 12 months</span></span><b class="num">$129</b></button>
+    <button class="option" type="button" data-value="single" aria-checked="false"><span class="option__radio"></span><span class="option__body"><span class="option__title">Single trip</span><span class="option__sub">One trip up to 31 days</span></span><b class="num">$45</b></button>
+  </div>
+  <p class="small mt-12">Charged to your default card <span id="rnCard">Visa •••• 4887</span>. Cancel within 14 days for a full refund.</p>
+  <div class="sheet__foot"><button class="btn btn--primary" type="button" id="rnGo"><span>Renew For $129</span></button></div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const $ = (s) => document.querySelector(s);
+  const FI = {
+    passport: '<path fill="currentColor" d="M1.8 5c0-.4.3-.8.8-.8H9a3.2 3.2 0 0 1 2.3 1V20a3.4 3.4 0 0 0-2.3-.9H2.6a.8.8 0 0 1-.8-.8V5Zm20.4 0c0-.4-.3-.8-.8-.8H15a3.2 3.2 0 0 0-2.3 1V20a3.4 3.4 0 0 1 2.3-.9h6.4c.5 0 .8-.4.8-.8V5Z"/>',
+    licence: '<rect x="1.6" y="4.8" width="20.8" height="14.4" rx="2" fill="currentColor"/><path d="M1.6 9.5h20.8" stroke="#fff" stroke-width="1.7"/><path d="M5.2 15.3h2.6M9.8 15.3h2.6" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/>',
+    insurance: '<path fill="currentColor" d="M4 4.3h16a1 1 0 0 1 1 1v5.5c0 6.6-5.9 9.7-8.2 10.5a2.3 2.3 0 0 1-1.6 0C8.9 20.5 3 17.4 3 10.8V5.3a1 1 0 0 1 1-1Z"/><path d="m8.3 12.1 2.6 2.6 4.8-4.8" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+    visa: '<path fill="currentColor" d="M5.5 2.5H14l5.5 5.5v12.5a1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1Z"/><circle cx="11.5" cy="14" r="3.6" stroke="#fff" stroke-width="1.5"/><path d="M14 2.8V8h5.2" stroke="#fff" stroke-width="1.5"/>',
+    id: '<rect x="1.6" y="4.3" width="20.8" height="15.4" rx="2" fill="currentColor"/><circle cx="8.3" cy="10.7" r="2.3" fill="#fff"/><path d="M4.9 16.3c.6-1.5 2-2.3 3.4-2.3s2.8.8 3.4 2.3M14.5 9.5h4.5M14.5 13h4.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>',
+    vaccination: '<circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M12 7v10M7 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>',
+  };
+  const TYPE = { passport: 'Passport', licence: "Driver's licence", insurance: 'Travel insurance', visa: 'Visa', id: 'ID card', vaccination: 'Vaccination record' };
+  const COUNTRY = { GBR: 'United Kingdom', FRA: 'France', USA: 'United States', IND: 'India', AUS: 'Australia', DEU: 'Germany', ESP: 'Spain', ITA: 'Italy', JPN: 'Japan', CAN: 'Canada', IRL: 'Ireland', SCH: 'Schengen Area' };
+  const ISSUE = { passport: 'Mar 2020', licence: 'Jul 2021', insurance: 'Oct 2025' };
+  // ICAO 9303 TD3 machine-readable zone, with real check digits (DOB 14 Jun 1990, expiry 14 Mar 2030)
+  const mrzCd = (str) => String([...str].reduce((a, c, i) => a + (c === '<' ? 0 : /\d/.test(c) ? +c : c.charCodeAt(0) - 55) * [7, 3, 1][i % 3], 0) % 10);
+  const mrz = (doc) => {
+    const num = (String(doc.number).replace(/[^A-Z0-9]/gi, '').toUpperCase() + '<<<<<<<<<').slice(0, 9), cc = (doc.country || 'GBR').slice(0, 3);
+    const pn = '<'.repeat(14);
+    let l2 = num + mrzCd(num) + cc + '900614' + mrzCd('900614') + 'M' + '300314' + mrzCd('300314') + pn + mrzCd(pn);
+    l2 += mrzCd(l2.slice(0, 10) + l2.slice(13, 20) + l2.slice(21, 43));
+    const l1 = ('P<' + cc + 'JOHNSON<<ALEX' + '<'.repeat(44)).slice(0, 44);
+    return V.esc(l1) + '<br>' + V.esc(l2);
+  };
+  const fi = (type, size = 26) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" aria-hidden="true">${FI[type] || FI.visa}</svg>`;
+
+  // ---- deterministic QR-style SVG (21×21 modules, 3 finder patterns)
+  const qrSVG = (seed) => {
+    let h = 2166136261; for (const c of seed) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); }
+    const rnd = () => { h ^= h << 13; h ^= h >>> 17; h ^= h << 5; return (h >>> 0) / 4294967296; };
+    const N = 21, cells = [];
+    const finder = (x, y) => x < 8 && y < 8 || x > N - 9 && y < 8 || x < 8 && y > N - 9;
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) { if (finder(x, y)) continue; if (rnd() > .52) cells.push(`M${x} ${y}h1v1h-1z`); }
+    const f = (x, y) => `<path d="M${x} ${y}h7v7h-7zM${x + 1} ${y + 1}v5h5v-5z" fill-rule="evenodd"/><path d="M${x + 2} ${y + 2}h3v3h-3z"/>`;
+    return `<svg viewBox="0 0 ${N} ${N}" width="100%" height="100%" fill="currentColor" shape-rendering="crispEdges" aria-hidden="true">${f(0, 0)}${f(N - 7, 0)}${f(0, N - 7)}<path d="${cells.join('')}"/></svg>`;
+  };
+
+  // ---- passport card
+  const renderPassport = () => {
+    const u = V.user.get(); const p = V.documents.list().find((d) => d.type === 'passport');
+    if (!p) {
+      $('#ppWrap').innerHTML = `<a class="pp pp--empty tap" href="add-document.html?type=passport"><div><span style="color:var(--orange)">${V.icon('plus', 28, 'stroke-width="2"')}</span><p><b style="color:#fff">Add your passport</b><br>Store it once, check in faster everywhere.</p></div></a>`;
+      return;
+    }
+    $('#ppWrap').innerHTML = `<div class="pp" role="group" aria-label="Passport, ${V.esc(u.name)}">
+      <span class="pp__glow"></span>
+      <button class="pp__hit" type="button" data-doc="${p.id}" aria-label="Open passport details"></button>
+      <p class="t pp__k">PASSPORT</p>
+      <p class="t pp__name">${V.esc(u.name)}</p>
+      <p class="t pp__num">${V.esc(p.country)} · ${V.esc(p.number)}</p>
+      <p class="t pp__lk" style="left:21px">Nationality</p><p class="t pp__lv" style="left:21px">${V.esc(u.nationality)}</p>
+      <p class="t pp__lk" style="left:109px">Expires</p><p class="t pp__lv" style="left:109px">${V.esc(p.expires)}</p>
+      <p class="t pp__lk" style="left:195px">DOB</p><p class="t pp__lv" style="left:195px">${V.date.fmt(u.dob, 'dmy')}</p>
+      <button class="pp__qr tap" type="button" data-sheet="qrSheet" aria-label="Enlarge passport QR code">${qrSVG(p.country + p.number)}</button>
+    </div>`;
+    $('#qrBig').innerHTML = qrSVG(p.country + p.number);
+    $('#qrMeta').textContent = `${p.country} · ${p.number} · refreshes every 60 seconds`;
+  };
+
+  // ---- list
+  const renderList = (newId) => {
+    const l = V.documents.list();
+    $('#dl').innerHTML = l.length ? l.map((d) => `<button class="dl__row tap${d.id === newId ? ' is-new' : ''}" type="button" role="listitem" data-doc="${d.id}">
+        <span class="dl__ic">${fi(d.type)}</span><span class="dl__t">${V.esc(d.name)}</span>
+        <span class="badge ${d.status === 'expiring' ? 'badge--expiring' : d.status === 'expired' ? 'badge--danger' : 'badge--valid'}">${d.status === 'expiring' ? 'Expiring' : d.status === 'expired' ? 'Expired' : 'Valid'}</span></button>`).join('')
+      : `<div class="empty"><div class="empty__icon">${V.icon('file', 30)}</div><p class="empty__title">No documents yet</p><p class="empty__msg">Add your passport, visas and insurance so they’re ready at every check-in.</p><a class="btn btn--primary btn--inline" href="add-document.html">Add Document</a></div>`;
+    const exp = l.find((d) => d.status === 'expiring');
+    $('#warnWrap').innerHTML = exp && !document.body.classList.contains('capture') ? `<div class="banner banner--warn dc-warn" role="status">${V.icon('warning', 18)}<span>${V.esc(exp.name)} expires ${V.esc(exp.expires)}. <a href="#" data-renew="${exp.id}">Renew now</a> to stay covered on upcoming trips.</span></div>` : '';
+  };
+
+  // ---- detail sheet
+  let cur = null, shown = false;
+  const mask = (n) => '•'.repeat(Math.max(0, n.length - 4)) + n.slice(-4);
+  const setReveal = (on) => {
+    shown = on; $('#dsNum').textContent = on ? cur.number : mask(cur.number);
+    $('#revIc').innerHTML = V.icon(on ? 'eye-slash' : 'eye', 16); $('#revT').textContent = on ? 'Hide' : 'Show';
+    $('#reveal').setAttribute('aria-pressed', String(on)); $('#reveal').setAttribute('aria-label', on ? 'Hide document number' : 'Show document number');
+    $('#scan').classList.toggle('is-shown', on);
+  };
+  const openDoc = (id) => {
+    cur = V.documents.get(id); if (!cur) return;
+    $('#dsT').textContent = cur.name;
+    $('#dsSub').textContent = `${TYPE[cur.type] || 'Document'} · ${COUNTRY[cur.country] || cur.country}`;
+    $('#scanHead').textContent = `${COUNTRY[cur.country] || cur.country} · ${TYPE[cur.type] || 'Document'}`;
+    $('#scanStamp').innerHTML = `<span style="color:var(--navy)">${fi(cur.type, 22)}</span>`;
+    $('#mrz').innerHTML = cur.type === 'passport' ? mrz(cur) : `${V.esc((TYPE[cur.type] || 'DOC').toUpperCase())} · ${V.esc(cur.number)}<br>HOLDER JOHNSON ALEX · ${V.esc(cur.expires || '')}`;
+    $('#dsCountry').textContent = COUNTRY[cur.country] || cur.country;
+    $('#dsIssue').textContent = cur.issued || ISSUE[cur.type] || '—';
+    $('#dsExp').textContent = cur.expires || 'No expiry';
+    $('#dsStatus').innerHTML = `<span class="badge ${cur.status === 'expiring' ? 'badge--expiring' : 'badge--valid'}">${cur.status === 'expiring' ? 'Expiring' : 'Valid'}</span>`;
+    const expiring = cur.status === 'expiring';
+    $('#dsWarn').hidden = !expiring; $('#dsRenew').hidden = !(expiring && cur.type === 'insurance');
+    if (expiring) $('#dsWarnT').textContent = cur.type === 'insurance' ? `Cover ends ${cur.expires}. Renew now to stay covered on your Prague and Sydney trips.` : `Expires ${cur.expires}. Many countries need 6 months’ validity — renew soon.`;
+    setReveal(false);
+    V.sheet.open('docSheet');
+  };
+  $('#dsShare').innerHTML = V.icon('share', 18) + '<span>Share</span>';
+  $('#dsDel').innerHTML = V.icon('trash', 18) + '<span>Delete</span>';
+  $('#reveal').addEventListener('click', () => setReveal(!shown));
+  $('#dsShare').addEventListener('click', async () => {
+    if (!cur) return;
+    const text = `${cur.name} · ${mask(cur.number)} · expires ${cur.expires}`;
+    if (navigator.share) { try { await navigator.share({ title: cur.name, text }); } catch (e) {} return; }
+    try { await navigator.clipboard.writeText(text); } catch (e) {}
+    V.toast('Secure share link copied · expires in 24 hours');
+  });
+  $('#dsDel').addEventListener('click', async () => {
+    if (!cur) return;
+    const d = cur;
+    if (!(await V.dialog({ title: `Delete ${d.name}?`, message: 'The scanned copy and details are removed from this device and your Voyager account.', confirm: 'Delete', cancel: 'Keep', tone: 'danger', icon: 'trash' }))) return;
+    const before = V.documents.list();
+    V.documents.remove(d.id); V.sheet.close(); renderAll();
+    V.toast(`${d.name} deleted`, { action: 'Undo', onAction: () => { V.store.set('docs', before); renderAll(d.id); V.toast(`${d.name} restored`); } });
+  });
+
+  // ---- renew
+  let plan = 'annual';
+  $('#plans').addEventListener('select', (e) => { plan = e.detail; $('#rnGo').querySelector('span').textContent = `Renew For ${plan === 'annual' ? '$129' : '$45'}`; });
+  const card = V.cards.default(); if (card) $('#rnCard').textContent = `${card.brand} •••• ${card.last4}`;
+  const openRenew = () => V.sheet.open('renewSheet');
+  $('#dsRenew').addEventListener('click', openRenew);
+  $('#rnGo').addEventListener('click', async (e) => {
+    await V.loading(e.currentTarget, 1100);
+    const cur = V.documents.list().find((d) => d.type === 'insurance');
+    const issued = V.date.fmt(V.today, 'my').replace(/^(\w{3})\w*/, '$1');   // "Jul 2026"
+    const ins = cur && V.documents.update(cur.id, { status: 'valid', expires: plan === 'annual' ? 'Jul 2027' : 'Dec 2026', issued, number: 'VYG-INS-' + (80000 + Math.floor(Math.random() * 9999)) });
+    V.sheet.close(); renderAll(ins && ins.id);
+    V.toast(`Travel insurance renewed · covered until ${ins ? ins.expires : ''}`);
+  });
+
+  document.addEventListener('click', (e) => {
+    const r = e.target.closest('[data-renew]'); if (r) { e.preventDefault(); openRenew(); return; }
+    const d = e.target.closest('[data-doc]'); if (d) openDoc(d.dataset.doc);
+  });
+  $('#qrBright').addEventListener('click', (e) => { document.querySelector('#qrBig').style.boxShadow = '0 0 0 6px #fff, 0 0 40px rgba(252,163,17,.5)'; e.currentTarget.querySelector('span').textContent = 'Brightness Boosted'; V.toast('Screen brightness raised for scanning'); });
+
+  const renderAll = (newId) => { renderPassport(); renderList(newId); };
+  renderAll(V.q('added'));
+  if (V.q('added')) { const d = V.documents.get(V.q('added')); if (d) V.toast(`${d.name} added to your documents`); }
+  if (V.q('doc')) setTimeout(() => openDoc(V.q('doc')), 300);
+  // Deep-linked with ?sheet=docSheet alone (the index thumbnail): the sheet's static content is the passport, so act on it.
+  else if (V.q('sheet') === 'docSheet') cur = V.documents.list().find((d) => d.type === 'passport') || null;
+})();
+</script>
+</body>
+</html>

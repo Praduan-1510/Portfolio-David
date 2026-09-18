@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Log In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .lg-hero { display: flex; align-items: center; gap: 16px; margin: 4px 0 0 2px; }
+  .lg-hero .logo { width: 64px; height: 64px; flex-shrink: 0; box-shadow: 0 6px 16px rgba(20,33,61,.18); }
+  .lg-hero h2 { font-size: 26px; line-height: 31px; font-weight: 700; color: #000; }
+  .lg-hero p { font-size: 13.5px; line-height: 1.45; color: var(--text-3); margin-top: 3px; }
+  .lg-form { margin-top: 26px; }
+  .lg-form .field-wrap--lead .field { padding-left: 46px; }
+  .lg-form .field-wrap__lead { left: 15px; color: #8A8A8A; }
+  .lg-form .fg:focus-within .field-wrap__lead { color: var(--orange); }
+  .lg-row { display: flex; align-items: center; justify-content: space-between; margin: 16px 0 0 1px; min-height: 44px; }
+  .lg-row .check { align-items: center; font-size: 13.5px; color: var(--text-2); }
+  .lg-row .check input { margin: 0; }
+  .lg-submit { margin-top: 14px; }
+  .lg-or { display: flex; align-items: center; gap: 12px; margin: 26px 0 16px; font-size: 13px; color: var(--text-4); }
+  .lg-or::before, .lg-or::after { content: ''; flex: 1; height: 1px; background: var(--line-2); }
+  .lg-social .btn { height: 46px; gap: 10px; font-size: 15px; }
+  .lg-new { margin: 26px 0 6px; text-align: center; font-size: 14px; color: var(--text-3); }
+  .lg-new a { color: var(--orange); font-weight: 700; padding: 12px 4px; margin: -12px -4px; }
+  .lg-attempts { margin-top: 14px; }
+  .lg-form .fg.has-error .error-text a { color: var(--danger); text-decoration: underline; font-weight: 600; }
+  .shake { animation: shake 360ms; }
+
+  /* Account-picker sheets (Google / Apple) */
+  .brand-badge { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; background: #fff; box-shadow: inset 0 0 0 1px var(--line-2); }
+  .brand-badge--apple { background: #000; color: #fff; box-shadow: none; }
+  .acct { display: flex; align-items: center; gap: 14px; width: 100%; min-height: 64px; padding: 10px 14px; border-radius: 14px; background: var(--grey-1); text-align: left; position: relative; }
+  .acct + .acct { margin-top: 10px; }
+  .acct__av { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
+  .acct__av--icon { display: grid; place-items: center; background: var(--orange-tint); color: var(--orange); }
+  .acct__name { display: block; font-size: 15px; font-weight: 600; color: #000; }
+  .acct__mail { display: block; font-size: 12.5px; color: var(--text-3); margin-top: 1px; }
+  .acct__end { margin-left: auto; color: var(--text-4); display: grid; place-items: center; width: 24px; height: 24px; }
+  .acct.is-busy .acct__end svg { display: none; }
+  .acct.is-busy .acct__end::after { content: ''; width: 18px; height: 18px; border-radius: 50%; border: 2.2px solid rgba(20,33,61,.15); border-top-color: var(--navy); animation: spin 700ms linear infinite; }
+  .sheet-note { font-size: 12px; line-height: 1.5; color: var(--text-4); margin-top: 16px; }
+  .apple-card { background: var(--grey-1); border-radius: 14px; padding: 4px 16px; }
+  .btn--apple { background: #000; color: #fff; }
+  .btn--apple.is-loading::after { border-color: rgba(255,255,255,.25); border-top-color: #fff; }
+  .faceid { display: grid; place-items: center; gap: 10px; padding: 18px 0 6px; text-align: center; }
+  .faceid__ring { width: 76px; height: 76px; border-radius: 22px; display: grid; place-items: center; background: var(--valid-bg); color: var(--valid); animation: rise 360ms var(--ease-spring) both; }
+  .faceid p { font-size: 15px; font-weight: 600; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Log in">
+  <header class="phead">
+    <a class="phead__back tap" href="onboarding-3.html" data-go="back" aria-label="Back">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3.5M10.5 4.5 3 12l7.5 7.5"/></svg>
+    </a>
+    <div class="phead__titles"><h1 class="phead__title">Log In</h1></div>
+  </header>
+
+  <section class="psheet">
+    <div class="lg-hero enter">
+      <div class="logo logo--navy" data-logo aria-hidden="true"></div>
+      <div><h2>Welcome back</h2><p>Sign in to see your trips, saved places and rewards.</p></div>
+    </div>
+
+    <form class="lg-form" id="form" novalidate aria-label="Log in form">
+      <div class="fg enter" style="--i:1">
+        <label class="label" for="email">Email Address</label>
+        <div class="field-wrap field-wrap--lead">
+          <span class="field-wrap__lead" data-icon="envelope" data-size="20"></span>
+          <input class="field" id="email" type="email" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false" value="alex.johnson@email.com" data-validate="required|email">
+        </div>
+      </div>
+      <div class="fg enter" id="pwGroup" style="--i:2">
+        <label class="label" for="pw">Password</label>
+        <div class="field-wrap field-wrap--lead">
+          <span class="field-wrap__lead" data-icon="lock" data-size="20"></span>
+          <input class="field" id="pw" type="password" autocomplete="current-password" placeholder="Enter your password" data-validate="required">
+          <button type="button" class="field-wrap__btn" data-pw-toggle aria-label="Show password"></button>
+        </div>
+      </div>
+      <div class="lg-row enter" style="--i:3">
+        <label class="check"><input type="checkbox" id="remember" checked> Remember me</label>
+        <a class="link" id="forgot" href="forgot-password.html">Forgot password?</a>
+      </div>
+      <div class="banner banner--danger lg-attempts" id="attempts" role="alert" hidden></div>
+      <button class="btn btn--primary lg-submit enter" type="submit" id="submit" style="--i:4"><span>Log In</span><svg class="arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 12h17M14 5.5l6.5 6.5-6.5 6.5"/></svg></button>
+    </form>
+
+    <p class="lg-or enter" style="--i:5">or continue with</p>
+    <div class="btn-pair lg-social enter" style="--i:5">
+      <button class="btn btn--outline tap" type="button" data-sheet="googleSheet" aria-label="Log in with Google">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8Z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24Z"/><path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6H1.3a12 12 0 0 0 0 10.8l4-3.1Z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9Z"/></svg>
+        <span>Google</span>
+      </button>
+      <button class="btn btn--outline tap" type="button" data-sheet="appleSheet" aria-label="Log in with Apple">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="#000" d="M16.4 12.7c0-2.6 2.1-3.8 2.2-3.9a4.8 4.8 0 0 0-3.8-2c-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9a5 5 0 0 0-4.2 2.6c-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.6-1-2.6-4.1ZM13.9 5.1c.7-.9 1.2-2 1.1-3.1-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.1.1 2.3-.6 3-1.6Z"/></svg>
+        <span>Apple</span>
+      </button>
+    </div>
+    <p class="lg-new">New to Voyager? <a href="signup.html">Sign Up</a></p>
+  </section>
+</main>
+
+<!-- Google account picker -->
+<section class="sheet" id="googleSheet" aria-labelledby="gTitle">
+  <div class="sheet__head">
+    <div class="row" style="gap:12px;align-items:center">
+      <span class="brand-badge"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8Z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24Z"/><path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6H1.3a12 12 0 0 0 0 10.8l4-3.1Z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9Z"/></svg></span>
+      <div><p class="sheet__title" id="gTitle">Choose an account</p><p class="sheet__sub">to continue to Voyager</p></div>
+    </div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div id="gPick">
+    <button class="acct tap" type="button" data-account="google" data-action="pick-account" data-name="Alex Johnson" data-email="alex.johnson@email.com">
+      <span class="acct__av ph ph--warm"><img src="../assets/img/avatar-alex.jpg" alt="" width="40" height="40"></span>
+      <span><span class="acct__name">Alex Johnson</span><span class="acct__mail">alex.johnson@email.com</span></span>
+      <span class="acct__end"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 4.5 7.5 7.5L9 19.5"/></svg></span>
+    </button>
+    <button class="acct tap" type="button" id="gOtherBtn">
+      <span class="acct__av acct__av--icon"><span data-icon="user" data-size="20" data-sw="1.8"></span></span>
+      <span><span class="acct__name">Use another account</span><span class="acct__mail">Sign in with a different Google account</span></span>
+      <span class="acct__end"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 4.5 7.5 7.5L9 19.5"/></svg></span>
+    </button>
+  </div>
+  <form id="gOther" novalidate hidden>
+    <div class="fg">
+      <label class="label" for="gEmail">Google email</label>
+      <input class="field" id="gEmail" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="you@gmail.com" data-validate="required|email">
+    </div>
+    <div class="btn-pair mt-16">
+      <button class="btn btn--neutral" type="button" id="gOtherBack">Back</button>
+      <button class="btn btn--primary" type="submit" id="gOtherGo"><span>Next</span></button>
+    </div>
+  </form>
+  <p class="sheet-note">To continue, Google will share your name, email address and profile picture with Voyager.</p>
+</section>
+
+<!-- Sign in with Apple -->
+<section class="sheet" id="appleSheet" aria-labelledby="aTitle">
+  <div class="sheet__head">
+    <div class="row" style="gap:12px;align-items:center">
+      <span class="brand-badge brand-badge--apple"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.4 12.7c0-2.6 2.1-3.8 2.2-3.9a4.8 4.8 0 0 0-3.8-2c-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9a5 5 0 0 0-4.2 2.6c-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.6-1-2.6-4.1ZM13.9 5.1c.7-.9 1.2-2 1.1-3.1-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.1.1 2.3-.6 3-1.6Z"/></svg></span>
+      <div><p class="sheet__title" id="aTitle">Sign in with Apple</p><p class="sheet__sub">Use your Apple ID to log in to Voyager</p></div>
+    </div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div id="aForm">
+    <div class="apple-card kvs">
+      <div><span class="k">Apple ID</span><span class="v">alex.johnson@email.com</span></div>
+      <div><span class="k">Name</span><span class="v">Alex Johnson</span></div>
+    </div>
+    <div class="sheet__foot"><button class="btn btn--apple" type="button" id="aGo"><span>Continue with Face ID</span></button></div>
+  </div>
+  <div class="faceid" id="aDone" hidden>
+    <span class="faceid__ring"><span data-icon="check" data-size="36" data-sw="2.4"></span></span>
+    <p>Signed in with Apple</p>
+    <span class="small">Taking you to your trips…</span>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const V = window.Voyager;
+    const $ = (s) => document.querySelector(s);
+    const form = $('#form'), email = $('#email'), pw = $('#pw');
+
+    // Prefill from ?email= (after reset) or a remembered login
+    const q = V.q('email'); const remembered = V.store.get('rememberEmail', null);
+    if (q) email.value = q; else if (remembered) email.value = remembered;
+    if (V.q('reset') === '1') V.toast('Password updated. Log in with your new password');
+    $('#forgot').addEventListener('click', (e) => { e.preventDefault(); location.href = 'forgot-password.html?email=' + encodeURIComponent(email.value.trim()); });
+
+    let fails = 0;
+    const showPwError = (msg) => {
+      const fg = $('#pwGroup'); fg.classList.add('has-error'); pw.setAttribute('aria-invalid', 'true');
+      let et = fg.querySelector('.error-text');
+      if (!et) { et = document.createElement('span'); et.className = 'error-text'; et.id = 'pw-err'; et.setAttribute('role', 'alert'); fg.appendChild(et); pw.setAttribute('aria-describedby', 'pw-err'); }
+      et.innerHTML = V.icon('warning', 14, 'stroke-width="2"') + `<span>${msg}</span>`;
+      const wrap = fg.querySelector('.field-wrap'); wrap.classList.remove('shake'); void wrap.offsetWidth; wrap.classList.add('shake');
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!V.validate(form)) { V.haptic(); return; }
+      const btn = $('#submit');
+      await V.loading(btn, 1000);
+      if (pw.value === 'wrong') {
+        fails++; V.haptic();
+        showPwError('Incorrect password. Try again or <a href="forgot-password.html?email=' + encodeURIComponent(email.value.trim()) + '">reset it</a>.');
+        pw.select(); pw.focus();
+        const banner = $('#attempts');
+        if (fails >= 2) { banner.hidden = false; banner.innerHTML = V.icon('warning', 18, 'stroke-width="2"') + `<span>${fails >= 3 ? 'Too many attempts. For your security, reset your password to continue.' : '1 attempt left before we ask you to reset your password.'}</span>`; }
+        if (fails >= 3) { btn.disabled = true; btn.querySelector('span').textContent = 'Locked'; setTimeout(() => { location.href = 'forgot-password.html?email=' + encodeURIComponent(email.value.trim()); }, 1600); }
+        return;
+      }
+      if ($('#remember').checked) V.store.set('rememberEmail', email.value.trim()); else V.store.remove('rememberEmail');
+      V.auth.signIn();
+      location.href = 'dashboard.html';
+    });
+
+    // ---- Social sign-in (existing account → Home)
+    const finish = async () => { V.auth.signIn(); await V.wait(700); location.href = 'dashboard.html'; };
+    document.querySelector('[data-account="google"]').addEventListener('click', async (e) => {
+      const b = e.currentTarget; if (b.classList.contains('is-busy')) return;
+      b.classList.add('is-busy'); b.setAttribute('aria-busy', 'true');
+      await V.wait(900); V.toast('Signed in as ' + b.dataset.email); finish();
+    });
+    $('#gOtherBtn').addEventListener('click', () => { $('#gPick').hidden = true; $('#gOther').hidden = false; setTimeout(() => $('#gEmail').focus(), 50); });
+    $('#gOtherBack').addEventListener('click', () => { $('#gOther').hidden = true; $('#gPick').hidden = false; });
+    $('#gOther').addEventListener('submit', async (e) => {
+      e.preventDefault(); if (!V.validate($('#gOther'))) return;
+      await V.loading($('#gOtherGo'), 1000); V.toast('Signed in as ' + $('#gEmail').value.trim()); finish();
+    });
+    $('#googleSheet').addEventListener('sheet:close', () => { $('#gOther').hidden = true; $('#gPick').hidden = false; });
+    $('#aGo').addEventListener('click', async (e) => {
+      await V.loading(e.currentTarget, 1000);
+      $('#aForm').hidden = true; $('#aDone').hidden = false; V.haptic(); finish();
+    });
+  })();
+</script>
+</body>
+</html>

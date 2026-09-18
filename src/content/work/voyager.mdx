@@ -7,6 +7,7 @@ year: 2025
 services: [UX Design, UI Design, Design System, Prototyping]
 summary: "A travel app that carries you from inspiration to a booked, day-by-day itinerary: browse, plan, pay, and go, all in one place."
 indexNote: 'The pacing study. Dream-mood navy to task-mode light and back, without ever losing where you are in the booking.'
+outcome: "From destination card to day-by-day itinerary in one flow, four steps always in view."
 cover: /images/work/voyager/dashboard.png
 # Hero reel: looping isometric montage of the app screens, floated over the
 # hero bg. H.264 MP4; opaque near-black surround is cropped + edge-feathered by
@@ -32,6 +33,34 @@ video:
 # site's voice IS a single warm orange. Inheriting it states the same thing
 # the case study states, rather than faking a distinction that is not there.
 # Removing a colour is also the direction this repaint has gone throughout.
+#
+# The working prototype, 45 screens and their bottom sheets built in HTML/CSS.
+# It lives in frontmatter so it takes the signature-showcase slot directly
+# under the hero. The Figma frames it was built from carried 2025 dates and a
+# payment step titled Customise Trip; the prototype carries the corrected data.
+prototype:
+  poster: /images/work/voyager/stage.png
+  alt: "The Voyager demo: the app booting in a handset beside the demo trip, a panel of things to try and jump-to shortcuts for every flow"
+  aspect: 1.6
+  # A phone app that only draws its stage above 880px and is full-bleed below,
+  # the same shape as Spendee and Nukkad, so no tablet (it would show a stretched phone).
+  devices: [desktop, phone]
+  launchNote: >-
+    It opens on the splash and walks you into onboarding, fresh every time:
+    the panel beside the phone jumps to any flow, and nothing you enter
+    leaves the page.
+  hint: "Try the four things in the panel, or jump straight to a flow. Restart takes the phone back to the splash."
+  surfaces:
+    - id: app
+      label: App
+      shortLabel: App
+      src: /prototype/voyager/app.html
+      domain: voyager.app
+    - id: screens
+      label: All screens
+      shortLabel: Screens
+      src: /prototype/voyager/index.html#screens
+      domain: voyager.app/screens
 motif: route
 # featured=false demotes this to the compact "Selected concept work" tier on
 # /work (and keeps it off the home teaser). Not a quality judgement on the
@@ -50,8 +79,23 @@ flows:
         caption: "Explore 150+ countries"
       - src: /images/work/voyager/onboarding-2.png
         caption: "AI-built itineraries"
-      - src: /images/work/voyager/onboarding-3.jpg
+      - src: /images/work/voyager/onboarding-3.png
         caption: "Your world awaits"
+  - title: Sign-up & sign-in
+    note: "A warm, branded sign-up, an emailed code, two permissions asked with their reasons, and the way back in when a password is lost."
+    screens:
+      - src: /images/work/voyager/signup.png
+        caption: "Create account"
+      - src: /images/work/voyager/otp.png
+        caption: "Verify email"
+      - src: /images/work/voyager/permissions.png
+        caption: "Permissions & travel style"
+      - src: /images/work/voyager/login.png
+        caption: "Log in"
+      - src: /images/work/voyager/forgot-password.png
+        caption: "Forgot password"
+      - src: /images/work/voyager/reset-password.png
+        caption: "New password"
   - title: Discover
     note: "Browse curated destinations on deep navy: search, filter, map, and save."
     screens:
@@ -59,51 +103,81 @@ flows:
         caption: "Home"
       - src: /images/work/voyager/search.png
         caption: "Search"
+      - src: /images/work/voyager/search-results.png
+        caption: "Results for Europe"
       - src: /images/work/voyager/filters.png
         caption: "Filters"
       - src: /images/work/voyager/map.png
         caption: "Map view"
       - src: /images/work/voyager/saved.png
         caption: "Saved"
-      - src: /images/work/voyager/destination-details.png
+      - src: /images/work/voyager/destination.png
         caption: "Destination detail"
+      - src: /images/work/voyager/gallery.png
+        caption: "Photo gallery"
+      - src: /images/work/voyager/hotel.png
+        caption: "Hotel & rooms"
   - title: Book
-    note: "A four-step stepper you can always orient in: dates, customise, pay, confirm."
+    note: "A four-step stepper you can always orient in: dates, customise, pay, confirm. One total, $2,709, from the first step to the receipt."
     screens:
-      - src: /images/work/voyager/dates-guests.png
+      - src: /images/work/voyager/book-dates.png
         caption: "Dates & guests"
-      - src: /images/work/voyager/customise.png
+      - src: /images/work/voyager/book-extras.png
         caption: "Customise trip"
-      - src: /images/work/voyager/payment.png
+      - src: /images/work/voyager/book-payment.png
         caption: "Payment"
-      - src: /images/work/voyager/confirmation.png
+      - src: /images/work/voyager/add-card.png
+        caption: "Add a card"
+      - src: /images/work/voyager/payment-failed.png
+        caption: "Payment failed"
+      - src: /images/work/voyager/book-confirmed.png
         caption: "Booking confirmed"
   - title: Travel
-    note: "Everything for the trip itself: a day-by-day itinerary, trips, documents, and reviews."
+    note: "Everything for the trip itself: a day-by-day itinerary, trips, tickets, changes, documents, and reviews."
     screens:
       - src: /images/work/voyager/itinerary.png
         caption: "Day-by-day itinerary"
-      - src: /images/work/voyager/my-trips.png
+      - src: /images/work/voyager/trips.png
         caption: "My Trips"
+      - src: /images/work/voyager/e-ticket.png
+        caption: "E-ticket & vouchers"
+      - src: /images/work/voyager/modify-booking.png
+        caption: "Modify booking"
+      - src: /images/work/voyager/cancel-trip.png
+        caption: "Cancel with the refund shown"
       - src: /images/work/voyager/documents.png
         caption: "Travel documents"
+      - src: /images/work/voyager/add-document.png
+        caption: "Add a document"
       - src: /images/work/voyager/reviews.png
         caption: "Reviews"
+      - src: /images/work/voyager/write-review.png
+        caption: "Write a review"
   - title: Account & profile
-    note: "From a warm, branded sign-up to traveller stats, a rewards programme, notifications, support, and settings."
+    note: "Traveller stats, a rewards programme, saved cards and codes, notifications, support, and settings."
     screens:
-      - src: /images/work/voyager/create-account.png
-        caption: "Create account"
       - src: /images/work/voyager/profile.png
         caption: "Profile"
       - src: /images/work/voyager/rewards.png
         caption: "Rewards"
+      - src: /images/work/voyager/payment-methods.png
+        caption: "Payment methods"
+      - src: /images/work/voyager/promo-codes.png
+        caption: "Promo codes"
       - src: /images/work/voyager/notifications.png
         caption: "Notifications"
       - src: /images/work/voyager/support.png
         caption: "Support chat"
+      - src: /images/work/voyager/help.png
+        caption: "Help centre"
       - src: /images/work/voyager/settings.png
         caption: "Settings"
+      - src: /images/work/voyager/edit-profile.png
+        caption: "Edit profile"
+      - src: /images/work/voyager/change-password.png
+        caption: "Change password"
+      - src: /images/work/voyager/language.png
+        caption: "Language & region"
 ---
 
 <Lede>
@@ -245,7 +319,7 @@ Home opens with a personalised greeting, a prominent search, and curated rows (E
 The four-step stepper you can always orient in: pick dates and guests on a clean calendar with adult and child counts, customise the trip (flight class, travel insurance, guided tours, airport transfer) then pay, with an itemised breakdown (package, transfer, insurance, taxes) and saved cards, ending in a clear confirmation with a booking reference and ticket download.
 
 <ScreenBeat
-  src="/images/work/voyager/dates-guests.png"
+  src="/images/work/voyager/book-dates.png"
   side="right"
   label="Dates & guests"
   caption="Step one flips to a light surface and shows the stepper up top: the moment logistics begin, the app trades mood for legibility and tells you exactly how far you have to go."
@@ -257,7 +331,7 @@ The four-step stepper you can always orient in: pick dates and guests on a clean
   TripIt's most-loved feature is the offline master itinerary. The documents wallet exists because airports are where connectivity dies.
 </Margin>
 
-This is where the plan lives once it's booked. A day-by-day itinerary lays the trip on a vertical timeline (flights, transfers, check-in, dinners) each with time, type, and detail, switchable by day. My Trips holds upcoming, active, and past trips as photo cards with quick actions, and Reviews shows an aggregate rating with a distribution breakdown and individual traveller reviews. The travel documents wallet keeps passport, licence, and insurance together, each with a validity status and a scannable QR, so the paperwork travels with the trip.
+This is where the plan lives once it's booked. A day-by-day itinerary lays the trip on a vertical timeline (flights, transfers, check-in, dinners) each with time, type, and detail, switchable by day. My Trips holds upcoming, active, and past trips as photo cards with quick actions, and Reviews shows an aggregate rating with a distribution breakdown and individual traveller reviews. The travel documents wallet keeps passport, licence, and insurance together, each with a validity status, and the passport carries a scannable QR, so the paperwork travels with the trip.
 
 <ScreenBeat
   src="/images/work/voyager/itinerary.png"
@@ -276,7 +350,7 @@ The stepper thesis nearly shipped with a hole in it: the payment screen, step th
 
 <BeforeAfter
   before="/images/work/process/voyager-payment-v1.png"
-  after="/images/work/voyager/payment.png"
+  after="/images/work/voyager/book-payment.png"
   altBefore="First-pass Voyager payment screen mislabelled Customise Trip"
   altAfter="Shipped Voyager payment screen with the correct step title"
   note="The claim was orientation; the artifact disoriented. Revision is where that gap closed."
@@ -284,7 +358,7 @@ The stepper thesis nearly shipped with a hole in it: the payment screen, step th
 
 ## Craft
 
-A dual-theme system (deep navy with a topographic-map motif for the immersive screens, clean light surfaces for the task-heavy ones) unified by a single warm orange accent for actions and highlights. Photo-led destination cards, a four-step booking stepper, a five-slot bottom nav (Home, Search, Explore, Trip, Profile), and a geometric sans for headings paired with a clean UI sans.
+A dual-theme system (deep navy with a topographic-map motif for the immersive screens, clean light surfaces for the task-heavy ones) unified by a single warm orange accent for actions and highlights. Photo-led destination cards, a four-step booking stepper, a five-slot bottom nav (Home, Search, Explore, Trip, Profile), and a geometric sans (Poppins) for cards, labels and navigation paired with a clean UI sans (Inter) for headings and body.
 
 <Aside label="Colophon">
   Designed in Figma on one design system: a dual theme (navy topographic for the immersive screens, light for the task-heavy ones), a four-step booking stepper, and a five-slot nav, with the photography placed into the layouts. The stepper is the throughline the design has to keep: every screen names its step (dates, customise, pay, confirm), so "you always know where you are" holds screen to screen.

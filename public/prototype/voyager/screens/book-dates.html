@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Book Your Trip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .psheet { padding-bottom: 3px !important; }
+  .bd-head { position: relative; margin: 33px 0 0 3px; }
+  .bd-nights { position: absolute; right: -4px; top: -11px; display: inline-flex; align-items: center; height: 44px; padding: 0 4px 0 10px; font-size: 11px; color: var(--text-4); }
+  .bd-nights b { font-size: 13px; font-weight: 700; color: var(--orange); margin-left: 5px; font-variant-numeric: tabular-nums; }
+  .bd-label { display: block; margin: 10px 0 0 2px; }
+  .bd-dates { display: grid; grid-template-columns: 158px 158px; column-gap: 24px; margin-top: 12px; }
+  .bd-dates .label { font-size: 13px; line-height: 16px; color: #A9A9A9; margin: 0 0 5px 1px; }
+  .datebox { cursor: pointer; transition: box-shadow var(--dur), background var(--dur), transform var(--dur) var(--ease-out); }
+  .datebox:active { transform: scale(.98); }
+  .datebox.is-focus { box-shadow: inset 0 0 0 2px var(--orange), 0 0 0 3px rgba(252,163,17,.18); }
+  .datebox.is-empty.is-focus { box-shadow: inset 0 0 0 2px var(--orange); color: var(--orange); }
+
+  /* Calendar tuned to the PNG (card x31–371, y338–708) */
+  #cal { margin-top: 22px; height: 371px; padding: 22px 9px 0; }
+  #cal .cal__head { padding: 0 0 0 0; height: 24px; }
+  #cal .cal__month { font-size: 16px; line-height: 20px; }
+  #cal .cal__nav { margin-right: 9px; gap: 6px; }
+  #cal .cal__nav button { width: 10px; height: 30px; position: relative; }
+  #cal .cal__nav svg { width: 13px; height: 13px; stroke-width: 3.4; }
+  #cal .cal__nav button::after { content: ''; position: absolute; inset: -8px -12px; }
+  #cal .cal__nav button[data-m="-1"]::after { right: -3px; }
+  #cal .cal__nav button[data-m="1"]::after { left: -3px; }
+  #cal .cal__dow { margin-top: 30px; }
+  #cal .cal__dow span { height: 30px; align-items: start; padding-top: 0; font-size: 15px; line-height: 15px; color: #6B6B6B; font-weight: 500; }
+  #cal .cal__grid > * { height: 51px; border-top: 1px solid rgba(255,255,255,.9); font-size: 14px; }
+  #cal.cal--6 .cal__grid > * { height: 42.5px; }
+  #cal .cal__day.is-start, #cal .cal__day.is-end { border-radius: 8px; }
+  #cal .cal__day.is-start.has-range { box-shadow: none; background: linear-gradient(90deg, transparent 50%, var(--orange-tint) 50%); }
+  #cal .cal__day.is-start.has-range::after, #cal .cal__day.is-end.has-range::after { content: ''; position: absolute; inset: 0; background: var(--orange); border-radius: 8px; z-index: -1; }
+  #cal .cal__day { z-index: 0; isolation: isolate; }
+  #cal .cal__day.is-start.has-range, #cal .cal__day.is-end.has-range { background: transparent; }
+  #cal .cal__day.is-end.has-range { background: linear-gradient(90deg, var(--orange-tint) 50%, transparent 50%); }
+  #cal .cal__day.row-first.has-range.is-end, #cal .cal__day.row-last.has-range.is-start { background: transparent; }
+  #cal .cal__day[disabled] { color: #BDBDBD; }
+  #cal .cal__day.is-min-block { color: #BDBDBD; }
+
+  .guests { margin: 38px 12px 0; height: 76px; padding: 13px 16px 0 16px; }
+  .guests__row { height: 27px; font-size: 14px; font-weight: 600; }
+  .guests__row + .guests__row { margin-top: 0; }
+  .guests .counter { gap: 13px; margin-right: -1px; }
+  .guests .counter button { width: 17px; height: 17px; background: #fff; color: var(--guest); }
+  .guests .counter output { font-size: 14px; font-weight: 500; min-width: 13px; }
+  .guests-note { font-size: 11px; line-height: 14px; color: var(--text-4); margin: 8px 13px 0; }
+  .guests-note:empty { display: none; }
+  .btn .arrow { margin-left: 2px; }
+  .cta-bar__in::before { display: none; }
+</style>
+</head>
+<body>
+<main class="page page--cta" aria-label="Book your trip — step 1 of 4">
+  <header class="phead">
+    <a class="phead__back tap" id="back" href="destination.html?id=paris" aria-label="Back to destination">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3.5M10.5 4.5 3 12l7.5 7.5"/></svg>
+    </a>
+    <div class="phead__titles"><h1 class="phead__title">Book Your Trip</h1></div>
+  </header>
+
+  <section class="psheet">
+    <div class="steps enter" data-step="1" data-total="4"></div>
+
+    <div class="bd-head enter" style="--i:1">
+      <h2 class="h-sec">Select Dates &amp; Guests</h2>
+      <p class="bd-nights" id="nights" aria-live="polite"></p>
+    </div>
+    <p class="caps bd-label enter" style="--i:2">Travel Dates</p>
+
+    <div class="bd-dates enter" style="--i:2">
+      <div>
+        <p class="label" id="depL">Departure</p>
+        <button class="datebox" type="button" id="dep" aria-labelledby="depL dep" aria-describedby="nights">Aug 12, 2026</button>
+      </div>
+      <div>
+        <p class="label" id="retL">Return</p>
+        <button class="datebox" type="button" id="ret" aria-labelledby="retL ret">Aug 19, 2026</button>
+      </div>
+    </div>
+
+    <div id="cal" data-delegate class="enter" style="--i:3" aria-label="Choose travel dates"></div>
+
+    <div class="guests enter" data-delegate style="--i:4" role="group" aria-label="Guests">
+      <div class="guests__row"><span id="adL">Adults</span><div class="counter" id="adults" data-counter data-min="1" data-max="9" data-value="2" aria-label="Adults"></div></div>
+      <div class="guests__row"><span id="chL">Children</span><div class="counter" id="children" data-counter data-min="0" data-max="8" data-value="0" aria-label="Children"></div></div>
+    </div>
+    <p class="guests-note" id="gnote" aria-live="polite"></p>
+  </section>
+
+  <div class="cta-bar">
+    <div class="cta-bar__in">
+      <a class="btn btn--primary" id="continue" href="book-extras.html"><span>Continue</span><svg class="arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12h17M14 5.5l6.5 6.5-6.5 6.5"/></svg></a>
+    </div>
+  </div>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const V = window.Voyager, B = V.booking, D = V.date;
+    const $ = (s) => document.querySelector(s);
+    const TODAY = V.today;   // shared prototype "today" (2026-07-28 by default)
+    const MIN_NIGHTS = 2, MAX_NIGHTS = 30, MAX_GUESTS = 9;
+
+    let b = B.get();
+    const d = B.dest();
+    $('#back').href = `destination.html?id=${encodeURIComponent(d.id)}`;
+    $('#back').setAttribute('aria-label', `Back to ${d.name}`);
+
+    let from = b.depart && b.depart >= TODAY ? b.depart : '2026-08-12';
+    let to = b.ret && b.ret > from ? b.ret : D.add(from, d.days);
+    let mode = 'depart';            // which box the next tap fills
+
+    const dep = $('#dep'), ret = $('#ret'), calEl = $('#cal');
+
+    // ---- calendar
+    const cal = V.calendar(calEl, {
+      from, to, min: TODAY,
+      onChange(f, t) {
+        const prev = { from, to };
+        // "Return" box focused: a later tap sets the return date and keeps the departure
+        if (mode === 'return' && prev.from && f && f !== prev.from && f > prev.from && !t) { f = prev.from; t = calEl._last; }
+        if (t && D.nights(f, t) < MIN_NIGHTS) {
+          V.toast(`Minimum stay is ${MIN_NIGHTS} nights`); t = null;
+        } else if (t && D.nights(f, t) > MAX_NIGHTS) {
+          V.toast(`Trips can be up to ${MAX_NIGHTS} nights`); t = null;
+        }
+        from = f; to = t;
+        const shownMonth = (calEl._last || f || '').slice(0, 7);
+        cal.set(from, to); if (shownMonth) cal.show(shownMonth);
+        mode = to ? 'depart' : 'return';
+        sync();
+      },
+    });
+    // remember the tapped date (used for the return-box mode above)
+    calEl.addEventListener('click', (e) => { const x = e.target.closest('[data-date]'); if (x) calEl._last = x.dataset.date; }, true);
+
+    // Post-process every calendar render: 6-row months, range caps, prev-month limit, blocked 1-night return
+    const decorate = () => {
+      const days = [...calEl.querySelectorAll('.cal__grid > *')];
+      calEl.classList.toggle('cal--6', days.length / 7 > 5);
+      const hasRange = !!(from && to);
+      days.forEach((el, i) => {
+        el.classList.toggle('row-first', i % 7 === 0); el.classList.toggle('row-last', i % 7 === 6);
+        if (el.classList.contains('is-start') || el.classList.contains('is-end')) el.classList.toggle('has-range', hasRange);
+        if (el.dataset && el.dataset.date && from && !to && mode === 'return') {
+          const n = D.nights(from, el.dataset.date);
+          el.classList.toggle('is-min-block', n > 0 && n < MIN_NIGHTS);
+        }
+      });
+      const month = calEl.querySelector('.cal__month');
+      const prev = calEl.querySelector('[data-m="-1"]');
+      if (prev && month) {
+        const shown = days.find((x) => x.dataset && x.dataset.date);
+        prev.disabled = !!shown && shown.dataset.date.slice(0, 7) <= TODAY.slice(0, 7);
+      }
+    };
+    new MutationObserver(decorate).observe(calEl, { childList: true });
+    decorate();
+
+    // ---- date boxes
+    const sync = () => {
+      dep.textContent = from ? D.fmt(from, 'long') : 'Select date';
+      ret.textContent = to ? D.fmt(to, 'long') : 'Select date';
+      dep.classList.toggle('is-empty', !from); ret.classList.toggle('is-empty', !to);
+      // Default (both set) looks like the design: no focus ring. Picking a return date highlights the Return box.
+      dep.classList.toggle('is-focus', mode === 'depart' && !to && !from);
+      ret.classList.toggle('is-focus', mode === 'return');
+      dep.setAttribute('aria-pressed', String(mode === 'depart')); ret.setAttribute('aria-pressed', String(mode === 'return'));
+      const n = from && to ? D.nights(from, to) : 0;
+      $('#nights').innerHTML = n ? `<span>${n} nights</span><b>${D.range(from, to)}</b>` : '<span>Now pick your return date</span>';
+      if (from && to) B.set({ depart: from, ret: to });
+      decorate();
+    };
+    dep.addEventListener('click', () => {
+      mode = 'depart'; sync(); dep.classList.add('is-focus');
+      if (from) cal.show(from.slice(0, 7));
+      V.toast('Tap a date to change your departure');
+    });
+    ret.addEventListener('click', () => {
+      if (!from) { V.toast('Pick a departure date first'); return; }
+      mode = 'return'; sync();
+      cal.show((to || from).slice(0, 7));
+    });
+    // Departure mode: first tap starts a new range (calendar default); keep the calendar's rule.
+    sync();
+
+    // ---- guests (adults ≥ 1, children ≥ 0, max 9 together)
+    const ad = $('#adults'), ch = $('#children');
+    ad.value = Math.max(1, b.adults || 2); ch.value = Math.max(0, b.children || 0);
+    const guests = () => {
+      const total = ad.value + ch.value;
+      const [, adPlus] = ad.querySelectorAll('button'); const [, chPlus] = ch.querySelectorAll('button');
+      if (total >= MAX_GUESTS) { adPlus.disabled = true; chPlus.disabled = true; }
+      else { adPlus.disabled = ad.value >= 9; chPlus.disabled = ch.value >= 8; }
+      $('#gnote').textContent = total >= MAX_GUESTS ? `Up to ${MAX_GUESTS} travellers per booking. Contact support for group trips.` : (ch.value ? 'Children under 12 travel at 50% of the package price.' : '');
+      B.set({ adults: ad.value, children: ch.value });
+    };
+    ad.addEventListener('change', guests); ch.addEventListener('change', guests);
+    guests();
+
+    // ---- continue
+    $('#continue').addEventListener('click', async (e) => {
+      e.preventDefault();
+      if (!from) { V.toast('Choose your departure date'); dep.focus(); return; }
+      if (!to) { V.toast('Choose your return date'); mode = 'return'; sync(); ret.focus(); return; }
+      B.set({ depart: from, ret: to, adults: ad.value, children: ch.value });
+      await V.loading(e.currentTarget, 800);
+      location.href = 'book-extras.html';
+    });
+  })();
+</script>
+</body>
+</html>

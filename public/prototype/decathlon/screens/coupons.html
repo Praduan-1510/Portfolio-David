@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Coupons</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  .cp-enter { display: flex; gap: 10px; margin-top: 20px; }
+  .cp-enter .fg { flex: 1; }
+  .cp-enter .btn { width: 96px; height: 44px; font-size: 16px; margin-top: 26px; }
+  .cp-total { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+  .coupon { position: relative; display: flex; border-radius: var(--r); box-shadow: inset 0 0 0 1px var(--border); background: #fff; overflow: hidden; }
+  .coupon + .coupon { margin-top: 12px; }
+  .coupon__stub { flex: 0 0 44px; display: grid; place-items: center; background: var(--navy); color: #fff; position: relative; }
+  .coupon__stub span { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 12px; font-weight: 700; letter-spacing: 1.5px; }
+  .coupon__stub::after { content: ''; position: absolute; right: -1px; top: 6px; bottom: 6px; border-right: 2px dotted #fff; }
+  .coupon.is-locked .coupon__stub { background: #9DB5C1; }
+  .coupon__body { flex: 1; min-width: 0; padding: 12px 14px 10px; }
+  .coupon__top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .coupon__code { font-size: 15px; font-weight: 700; color: var(--navy); letter-spacing: .6px; padding: 2px 8px; border-radius: 6px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--steel); border-style: dashed; }
+  .coupon__title { font-size: 14px; font-weight: 600; color: #111; margin-top: 8px; }
+  .coupon__desc { font-size: 12px; color: var(--muted-2); margin-top: 1px; }
+  .coupon__save { font-size: 12.5px; font-weight: 600; margin-top: 8px; }
+  .coupon__save.ok { color: var(--ok); } .coupon__save.lock { color: var(--warn); }
+  .coupon__apply { min-height: 36px; padding: 0 4px; font-size: 14px; font-weight: 600; color: var(--brand); }
+  .coupon__apply[disabled] { color: #9DB5C1; pointer-events: none; }
+  .coupon__apply.is-applied { color: var(--ok); }
+  .terms-btn { display: inline-flex; align-items: center; gap: 4px; min-height: 32px; margin-top: 4px; font-size: 12px; font-weight: 500; color: var(--steel); }
+  .terms-btn svg { transition: transform 220ms var(--ease-out); }
+  .terms-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
+  .terms { margin: 2px 0 4px; padding-left: 16px; list-style: disc; font-size: 12px; line-height: 1.55; color: var(--muted-2); }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Coupons and offers">
+  <header class="appbar">
+    <a class="back tap" href="bag.html" data-go="back" aria-label="Back to bag"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <h1 class="appbar__title">Coupons &amp; offers</h1>
+  </header>
+  <div class="page-divider"></div>
+
+  <form class="cp-enter" id="codeForm" novalidate>
+    <div class="fg">
+      <label class="label" for="code">Have a code?</label>
+      <input class="field field--surface" id="code" data-mask="upper" data-validate="required|promo" autocomplete="off" placeholder="e.g. DECA10">
+    </div>
+    <button class="btn btn--primary tap" type="submit" id="codeBtn"><span>Apply</span></button>
+  </form>
+
+  <div class="cp-total banner banner--info" id="bagInfo"><i data-icon="bag" data-size="18"></i><span id="bagInfoText">Your bag: ₹28,000</span></div>
+
+  <div class="section-head"><h2 class="section-title">Available offers</h2><span class="muted" style="font-size:12px" id="nOffers">4 offers</span></div>
+  <div id="list" data-delegate></div>
+
+  <nav data-tabbar="bag"></nav>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const TERMS = {
+      DECA10: ['10% off, up to ₹1,000 per order', 'Minimum bag value ₹2,000 after product discounts', 'Not valid on gift cards', 'One use per account per week'],
+      CLUB500: ['Flat ₹500 off for Decathlon Club members', 'Minimum bag value ₹5,000', 'Club points are still earned on the paid amount', 'One code per order'],
+      RUN15: ['15% off your running gear, up to ₹750', 'Needs ₹3,000 of running gear in the bag', 'Counts running shoes, clothing and accessories only', 'Cannot be combined with other codes'],
+      FIRST100: ['₹100 off your first app order', 'No minimum order value', 'Only for accounts with no orders yet'],
+    };
+    // Eligibility and savings come from the same check the bag runs (Deca.promoCheck)
+
+    function render() {
+      const t = D.bag.totals(); const applied = D.bag.promo(); const empty = !t.count;
+      $('#bagInfoText').innerHTML = empty ? 'Your bag is empty. Add items to use an offer.' : `Your bag: <b class="num">${D.fmt(t.subtotal)}</b> across ${t.count} ${t.count === 1 ? 'item' : 'items'}`;
+      const chk = {}; D.promos.forEach((p) => { chk[p.code] = D.promoCheck(p.code); });
+      const list = D.promos.slice().sort((a, b) => chk[b.code].ok - chk[a.code].ok || (chk[b.code].amount || 0) - (chk[a.code].amount || 0));
+      $('#nOffers').textContent = `${list.length} offers`;
+      $('#list').innerHTML = list.map((p) => {
+        const c = chk[p.code]; const ok = !empty && c.ok, isApplied = applied === p.code;
+        const status = empty ? '<p class="coupon__save lock">Add items to your bag to use this</p>' : ok ? `<p class="coupon__save ok">You save ${D.fmt(c.amount)} on this order</p>` : `<p class="coupon__save lock">${D.esc(c.msg)}</p>`;
+        return `<article class="coupon${ok ? '' : ' is-locked'}" data-code="${p.code}">
+          <div class="coupon__stub" aria-hidden="true"><span>${p.flat ? 'FLAT' : p.pct + '% OFF'}</span></div>
+          <div class="coupon__body">
+            <div class="coupon__top"><span class="coupon__code">${p.code}</span>
+              <button class="coupon__apply tap${isApplied ? ' is-applied' : ''}" type="button" data-apply="${p.code}"${ok ? '' : ' disabled aria-disabled="true"'}>${isApplied ? 'Remove' : 'Apply'}</button></div>
+            <p class="coupon__title">${p.title}</p><p class="coupon__desc">${p.desc}</p>${status}
+            <button class="terms-btn tap" type="button" aria-expanded="false" aria-controls="t-${p.code}">Terms &amp; conditions ${D.icon('chevron-down', 14, { sw: 2 })}</button>
+            <ul class="terms" id="t-${p.code}" hidden>${(TERMS[p.code] || []).map((x) => `<li>${x}</li>`).join('')}</ul>
+          </div></article>`;
+      }).join('');
+    }
+
+    $('#list').addEventListener('click', async (e) => {
+      const tb = e.target.closest('.terms-btn');
+      if (tb) { const open = tb.getAttribute('aria-expanded') !== 'true'; tb.setAttribute('aria-expanded', String(open)); $('#' + tb.getAttribute('aria-controls')).hidden = !open; return; }
+      const b = e.target.closest('[data-apply]'); if (!b) return;
+      const code = b.dataset.apply;
+      if (D.bag.promo() === code) { D.bag.removePromo(); D.toast(`${code} removed`); render(); return; }
+      await D.loading(b, 600);
+      const r = D.bag.applyPromo(code);
+      if (r.ok) { D.haptic(15); D.toast(r.msg, { icon: 'check' }); await D.wait(700); location.href = 'bag.html'; }
+      else D.toast(r.msg);
+    });
+
+    $('#codeForm').addEventListener('submit', async (e) => {
+      e.preventDefault(); if (!D.validate($('#codeForm'))) return;
+      const fg = $('#code').closest('.fg');
+      await D.loading($('#codeBtn'), 650);
+      const r = D.bag.applyPromo($('#code').value);
+      if (r.ok) { D.toast(r.msg, { icon: 'check' }); await D.wait(700); location.href = 'bag.html'; return; }
+      fg.classList.add('has-error'); let et = fg.querySelector('.error-text'); if (!et) { et = document.createElement('span'); et.className = 'error-text'; et.setAttribute('role', 'alert'); fg.appendChild(et); }
+      et.textContent = r.msg; $('#code').setAttribute('aria-invalid', 'true'); $('#code').focus();
+    });
+
+    render();
+  })();
+</script>
+</body>
+</html>

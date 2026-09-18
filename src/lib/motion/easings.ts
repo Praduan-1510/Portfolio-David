@@ -19,6 +19,9 @@ export const easings = {
   outQuad: [0.25, 1, 0.5, 1],
   /** Slight overshoot, for playful accents only, sparingly. */
   outBack: [0.34, 1.56, 0.64, 1],
+  /** Symmetric standard curve: the heading blur-in, where a word has to
+   *  resolve evenly rather than snap and coast the way outExpo does. */
+  standard: [0.4, 0, 0.2, 1],
 } as const satisfies Record<string, readonly [number, number, number, number]>;
 
 /** `cubic-bezier(...)` strings, identical values, for GSAP / inline styles. */
@@ -27,6 +30,7 @@ export const cssEasings = {
   inOutQuart: "cubic-bezier(0.76, 0, 0.24, 1)",
   outQuad: "cubic-bezier(0.25, 1, 0.5, 1)",
   outBack: "cubic-bezier(0.34, 1.56, 0.64, 1)",
+  standard: "cubic-bezier(0.4, 0, 0.2, 1)",
   /** Scroll-linked / scrubbed motion only. */
   linear: "linear",
 } as const satisfies Record<string, string>;

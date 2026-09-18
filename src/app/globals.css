@@ -308,6 +308,7 @@
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1); /* transforms, page/section transitions */
   --ease-out-quad: cubic-bezier(0.25, 1, 0.5, 1); /* default UI / hover settles */
   --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1); /* slight overshoot: sparingly */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1); /* heading blur-in: resolves evenly */
   --ease-linear: linear; /* scroll-linked / scrubbed motion only */
 
   /* Duration scale */
@@ -763,11 +764,6 @@
     transform-origin: left center;
     transition-duration: var(--dur-base);
   }
-  /* Nav: the current route rests with its rule drawn, quieter than a hover. */
-  .row-arm[aria-current="page"]::before {
-    transform: scaleX(1);
-    opacity: 0.55;
-  }
   .row-arm:active::before {
     transform: scale(1, 2);
     transform-origin: left top;
@@ -778,15 +774,6 @@
     transform: translateX(0.5rem);
     transition-duration: var(--dur-instant);
   }
-  /* Under variant (nav links): the rule sits on the bottom edge instead. */
-  .row-arm--under::before {
-    top: auto;
-    bottom: 0;
-  }
-  .row-arm--under:active::before {
-    transform-origin: left bottom;
-  }
-
   /*
    * Reel board, portrait layout (below lg): the broadcast lower-third.
    *
@@ -1004,18 +991,6 @@
       color: CanvasText;
     }
   }
-  
-  /*
-   * Tagline alignment fix: aligns the GSAP SplitText generated inline-block
-   * word divs with the `.text-spectrum` inline-block span. Since the split divs
-   * have `overflow: clip` / `hidden`, they align to their bottom margin edge
-   * rather than the text baseline, causing a vertical misalignment with normal
-   * inline-blocks. Aligns both to the bottom to restore matching baselines.
-   */
-  .font-display.text-heading div,
-  .font-display.text-heading .text-spectrum {
-    vertical-align: bottom;
-  }
 
   /*
    * THE MARQUEE'S STOP CONTROL.
@@ -1133,6 +1108,11 @@
     scrollbar-width: thin;
     scrollbar-color: color-mix(in srgb, var(--fg) 26%, transparent) transparent;
     -webkit-text-size-adjust: 100%;
+    /* The bottom dock floats over the last ~80px of the viewport (56px
+       standing 12px, or the safe-area inset, off the edge; see
+       components/layout/chrome.css). A focused control or a scrolled-to
+       target is kept clear of it, never parked underneath. */
+    scroll-padding-bottom: calc(max(0.75rem, env(safe-area-inset-bottom, 0px)) + 4.25rem);
   }
 
   /* Color + font on <body> come from the Tailwind utilities (bg-bg text-fg
@@ -1232,24 +1212,6 @@ html.lenis body {
 
 /* Mobile-menu link reveal. `both` fill + the global reduced-motion rule means
    it jumps straight to the visible end state under prefers-reduced-motion. */
-/* The work drum's nameplate: the name rises as the drum lands on its station.
-   `both` fill plus the global reduced-motion rule means it jumps straight to
-   the settled name for anyone who asked for less movement. */
-@keyframes nameplate-in {
-  from {
-    opacity: 0;
-    transform: translateY(0.4rem);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-.nameplate-in {
-  animation: nameplate-in var(--dur-base) var(--ease-out-expo) both;
-}
-
 @keyframes nav-link-in {
   from {
     opacity: 0;
@@ -1516,16 +1478,17 @@ html.lenis body {
 }
 
 /* ── Live prototype (LivePrototype.tsx) ──────────────────────────────────────
-   The playable case study. Deliberately speaks BrowserMockup's language (same
+   The playable case study. In the page it is only ever a PICTURE of the demo:
+   a dormant slab that deliberately speaks BrowserMockup's language (same
    window radius, same layered shadow, same resting tilt) but owns its own
-   recipe because it has one behaviour the mockup doesn't: it goes FLAT when the
-   visitor launches the demo. A tilted slab is right for a picture of a product
-   and wrong for a product, so the tilt is the dormant state and square-on is the
-   working state, with one eased transition between them.
+   recipe, because clicking it opens the demo window further down this block.
+   It used to go live in place, square-on, and then take the display with the
+   Fullscreen API; that flattened state and its fullscreen scaffolding are gone
+   with the behaviour they served.
 
    Geometry is pure CSS so the frame reserves its exact space server-side (no
-   CLS, no measurement race): --lp-ratio is the chosen device's aspect, and the
-   width takes whichever of the column, 78vh, or --lp-maxh binds first. The 76px
+   CLS, no measurement race): --lp-ratio is the poster's aspect, and the width
+   takes whichever of the column, 78vh, or --lp-maxh binds first. The 76px
    subtracted from the viewport cap is the two chrome rows + the slab's padding,
    so the *whole* frame, not just its screen, clears the fold with page left
    above and below to scroll on. */
@@ -1545,7 +1508,6 @@ html.lenis body {
   transform: rotateX(7deg) rotateY(-9deg) rotateZ(0.4deg);
   transform-origin: 50% 60%;
   transition:
-    width var(--dur-base) var(--ease-out-quad),
     transform var(--dur-slow) var(--ease-out-expo),
     box-shadow var(--dur-slow) var(--ease-out-quad);
   box-shadow:
@@ -1555,11 +1517,12 @@ html.lenis body {
     0 0 0 1px rgba(255, 255, 255, 0.07),
     0 0 70px -16px color-mix(in srgb, var(--accent) 38%, transparent);
 }
-/* Dormant only: the slab invites a click, so it lifts toward the pointer like
-   the rest of the site's cards. Once live, hover belongs to the app inside. */
+/* The slab invites a click, so it lifts toward the pointer like the rest of the
+   site's cards. Hover no longer has to be handed over to a running app: the app
+   never runs in here. */
 @media (hover: hover) {
-  .lp-slab:not([data-live]):hover,
-  .lp-slab:not([data-live]):focus-within {
+  .lp-slab:hover,
+  .lp-slab:focus-within {
     transform: rotateX(3deg) rotateY(-4deg) translateZ(24px) scale(1.015);
     box-shadow:
       0 2px 6px rgba(0, 0, 0, 0.5),
@@ -1568,18 +1531,6 @@ html.lenis body {
       0 0 0 1px var(--neon),
       0 0 80px -14px var(--neon-glow);
   }
-}
-/* Live: square-on to the reader. Pointer coordinates through a rotated ancestor
-   are technically fine but feel wrong, and every pixel of a working UI should be
-   undistorted. The accent glow stays so the frame still reads as the page's
-   centre of gravity. */
-.lp-slab[data-live] {
-  transform: none;
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.5),
-    0 30px 70px -22px rgba(0, 0, 0, 0.8),
-    0 0 0 1px rgba(255, 255, 255, 0.1),
-    0 0 90px -20px color-mix(in srgb, var(--accent) 30%, transparent);
 }
 /* Phones: same reasoning as .browser-slab: a 3D tilt inside a narrow gutter
    reads as a clipped glitch, not a flourish. */
@@ -1595,167 +1546,6 @@ html.lenis body {
   aspect-ratio: var(--lp-ratio, 1.6);
   border-radius: 0 0 7px 7px;
   background: var(--bezel);
-  transition: aspect-ratio var(--dur-base) var(--ease-out-quad);
-}
-
-/* ── Fullscreen ───────────────────────────────────────────────────────────
-   Launching a demo takes over the display, and until now that did nothing
-   visible: :fullscreen put .lp-wrap at the size of the screen while .lp-slab
-   kept the width it is given in the page, so the app sat at 1126x773 in the
-   middle of a 1600x1000 black field. Measured, not assumed. The three caps that
-   pin it are all deliberate IN THE PAGE and all wrong on a full screen:
-
-     width: min(100%, (78vh - 76px) * ratio, --lp-maxh * ratio)
-
-   78vh exists so there is page left above and below to scroll on, and --lp-maxh
-   stops the frame dominating a tall monitor. On a full screen there is no page
-   to scroll and dominating the display is the entire point, so both are
-   released and the slab fills its box.
-
-   The well then stops being aspect-locked and simply takes the height left over
-   after the two chrome rows; the component fits the device viewport into it on
-   whichever axis binds first and centres the remainder. That is why the leftover
-   is painted in --bezel: it is the screen well of a device that does not share
-   the display's aspect, not a gap.
-
-   The prefixed selectors are SEPARATE blocks, never a comma list with the
-   unprefixed ones. That is not style: a list mixing the two made autoprefixer
-   rewrite the pair into :-webkit-any()/:is() and DROP two of the three rules
-   from the built stylesheet outright. Verified by reading the served CSS, which
-   is the only place that question can be settled.
-
-   Autoprefixer does not add these for us. This project has no browserslist, so
-   it resolves to defaults that start at Safari 26, and unprefixed :fullscreen
-   has been supported since 16.4: correctly, nothing is emitted. They are written
-   out anyway because the JS half calls webkitRequestFullscreen, so on a WebKit
-   older than 16.4 the demo would ENTER fullscreen with none of this applied,
-   which is precisely the bug these rules exist to fix. JS and CSS have to agree
-   about which browsers they serve. */
-.lp-wrap:fullscreen {
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  background: var(--bg);
-}
-/* The height chain has to be unbroken or nothing below it can resolve 100%.
-   `place-items: center` on a grid here was the first attempt and is a trap: it
-   stops the item stretching, so the single auto column sizes to the slab's
-   content and `width: 100%` then resolves against 480px rather than the
-   display. The unnamed div is the .browser-stage wrapper, which carries no
-   class once the demo is live, so it is reachable only as a child. */
-.lp-wrap:fullscreen > div {
-  height: 100%;
-}
-.lp-wrap:fullscreen .lp-slab {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  /* The tilt is already dropped by [data-live]; this covers the reduced-motion
-     and not-yet-transitioned cases so nothing is rotated on a full screen. */
-  transform: none;
-  box-shadow: none;
-}
-.lp-wrap:fullscreen .lp-well {
-  flex: 1 1 auto;
-  aspect-ratio: auto;
-  min-height: 0;
-  border-radius: 0;
-}
-
-/* The chrome is sized for a slab about 1100px wide sitting in a page. Stretched
-   across a whole display it is the same 11px mono uppercase at --muted, which
-   measures 6.13:1 and still reads as unreadable, because contrast is not the
-   only variable: 11px of 0.14em-tracked uppercase grey is small type at arm's
-   length on a 1600px screen. So fullscreen scales the chrome instead of just
-   recolouring it.
-
-   --muted is REMAPPED rather than the labels being reclassed, which is how the
-   rest of this file handles a context shift (see .reel-board): one declaration
-   lifts the inactive tabs, the address pill, the status text and the icon
-   controls together, and the active/inactive hierarchy survives intact because
-   both ends move. bone-300 is 11.10:1 on the ground against bone-500's 6.67.
-
-   Sizes here are deliberately not `em`: the chrome rows are fixed-height utility
-   classes, so type and control boxes are stepped explicitly and the rows given
-   room to hold them. */
-.lp-wrap:fullscreen .lp-chrome {
-  --muted: var(--bone-300);
-  height: 46px;
-  gap: 1rem;
-  padding-inline: 1rem;
-}
-.lp-wrap:fullscreen .lp-chrome [role="tab"] {
-  font-size: 0.875rem;
-  padding-block: 6px;
-  padding-inline: 0.75rem;
-  border-radius: 8px;
-}
-/* The address pill, the honesty badge and the status text: everything in the
-   chrome that is set at the caption or micro step. */
-.lp-wrap:fullscreen .lp-chrome span,
-.lp-wrap:fullscreen .lp-chrome a {
-  font-size: 0.8125rem;
-}
-.lp-wrap:fullscreen .lp-ctl {
-  width: 30px;
-  height: 30px;
-  border-radius: 7px;
-}
-.lp-wrap:fullscreen .lp-ctl svg {
-  width: 15px;
-  height: 15px;
-}
-/* The traffic dots are decoration and would look like buttons if they grew with
-   everything else. */
-.lp-wrap:fullscreen .lp-chrome [aria-hidden="true"] > span {
-  font-size: inherit;
-}
-/* Device switcher: same argument, and it sits below the well rather than in a
-   chrome row, so it is stepped separately. */
-.lp-wrap:fullscreen .lp-devices {
-  margin-top: 0.75rem;
-  margin-bottom: 0.5rem;
-  --muted: var(--bone-300);
-}
-.lp-wrap:fullscreen .lp-devices button {
-  font-size: 0.8125rem;
-  padding-block: 7px;
-  padding-inline: 1rem;
-}
-
-/* Same four rules for WebKit older than 16.4. Separate blocks, per the note
-   above: an engine that cannot parse one selector drops only that block. */
-.lp-wrap:-webkit-full-screen {
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  background: var(--bg);
-}
-.lp-wrap:-webkit-full-screen > div {
-  height: 100%;
-}
-.lp-wrap:-webkit-full-screen .lp-slab {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  transform: none;
-  box-shadow: none;
-}
-.lp-wrap:-webkit-full-screen .lp-well {
-  flex: 1 1 auto;
-  aspect-ratio: auto;
-  min-height: 0;
-  border-radius: 0;
 }
 
 /* The launch control gets a slow breath at rest so the dormant frame reads as
@@ -1775,13 +1565,243 @@ html.lenis body {
   }
 }
 
-/* The ignition scanline (LivePrototype): the 2px accent line that rides the
-   poster's cut edge when the iframe has loaded. Same recipe as the boot
+/* ── The demo window ─────────────────────────────────────────────────────────
+   Launching opens the prototype in a modal <dialog> that covers the browser
+   WINDOW, not the display. The browser's own tabs, address bar and Back button
+   stay in view, which is most of the cure for the old complaint: the demo used
+   to take the screen with the Fullscreen API, and the only ways back were an
+   unlabelled 30px icon and a key the reader had to already know.
+
+   A <dialog> opened with showModal() lives in the TOP LAYER, and that is load-
+   bearing rather than stylistic. A position:fixed box inside this component is
+   not viewport-relative: Reveal's GSAP transforms, HandoffTarget and the
+   .browser-stage perspective all create containing blocks above it. The top
+   layer ignores every one of them, makes the page behind inert, and turns Esc
+   into a `cancel` event, all for free.
+
+   The UA's dialog box (auto margins, a max-size inset, padding, a border, a
+   Canvas background) is undone here so the element is simply the window. dvh,
+   not vh or 100%, so a mobile toolbar sliding in or out never leaves a strip
+   of page showing, or pushes the bar under it. 100vw rather than 100% for the
+   same reason on the other axis: 100% of the fixed containing block stops
+   short of a classic scrollbar's gutter. A fixed box adds nothing to the
+   page's scrollable overflow, so this cannot cause a horizontal scroll. */
+.lp-dialog {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  width: 100vw;
+  height: 100%;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background: transparent;
+  color: var(--fg);
+}
+/* The dimming is a real element (.lp-veil) rather than ::backdrop so the same
+   tween that grows the window can fade it; a pseudo-element is out of GSAP's
+   reach. */
+.lp-dialog::backdrop {
+  background: transparent;
+}
+.lp-veil {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+}
+/* The window itself. It grows out of the in-page frame's rect on open and
+   shrinks back into it on close (transform + clip-path, set inline by the
+   component and cleared the moment it lands, so nothing is ever hit-tested
+   through a transform). Safe-area padding on three sides; the bar takes the
+   top. */
+.lp-panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bezel);
+  padding: 0 env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px)
+    env(safe-area-inset-left, 0px);
+}
+/* A closing window must not take a click aimed at the page it is revealing. */
+.lp-panel[data-state="closing"] {
+  pointer-events: none;
+}
+/* Full screen is an opt-in toggle on .lp-panel (a <dialog> itself is refused by
+   the Fullscreen API), and it needs no rules of its own: the UA sheet already
+   pins a fullscreen element to the display with !important, and author rules
+   beat the UA's white :-webkit-full-screen background without trying. If rules
+   ever ARE added, keep :fullscreen and :-webkit-full-screen in SEPARATE blocks.
+   A comma list mixing the two made autoprefixer rewrite the pair into
+   :-webkit-any()/:is() and drop rules from the built stylesheet outright:
+   verified by reading the served CSS, the only place that can be settled. */
+
+/* The bar: the dormant chrome, grown up. Same bezel and hairline; the project
+   accent survives as the lit top edge the slab's glow implies. Its controls are
+   44px targets (touch-target-size), which is why it is taller than the chrome
+   it replaces. */
+.lp-bar {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: max(0.375rem, env(safe-area-inset-top, 0px)) 0.75rem 0.375rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--bezel);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--accent) 30%, transparent);
+}
+/* The selected surface: a raised tab with the accent drawn under it, the same
+   "lit edge" the slab's glow uses. Colour is never the only cue: the tab is
+   also filled and brighter, and aria-selected carries it to assistive tech. */
+.lp-tab {
+  position: relative;
+}
+.lp-tab[aria-selected="true"] {
+  color: var(--fg);
+  background: color-mix(in srgb, var(--fg) 8%, transparent);
+}
+.lp-tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0.625rem;
+  bottom: 5px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+/* The screen well. Desktop (and every phone-width window) fills it at native
+   CSS px, so the only time any of it shows is around a simulated Tablet or
+   Phone, where it is the bench the device sits on: bezel, with the case-study
+   hero's accent bloom behind the device. */
+.lp-stage {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      60% 55% at 50% 42%,
+      color-mix(in srgb, var(--accent) 9%, transparent),
+      transparent 75%
+    ),
+    var(--bezel);
+}
+.lp-device {
+  position: absolute;
+  overflow: hidden;
+}
+/* A simulated device reads as an object with edges, like PhoneFrame: rounded,
+   rimmed, and lifted off the bench. The radius clips the scaled iframe the way
+   a real screen's corners clip an app. */
+.lp-device[data-scaled] {
+  border-radius: 18px;
+  box-shadow:
+    0 0 0 1px var(--line-strong),
+    0 30px 80px -24px rgba(0, 0, 0, 0.85),
+    0 0 90px -30px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.lp-device[data-scaled="phone"] {
+  border-radius: 26px;
+}
+
+/* The ignition scanline: the 2px accent line that rides the poster's cut edge
+   inside the demo window once the iframe has loaded. Same recipe as the boot
    shutter's line in BrowserMockup (inline there); a class here so the JS wipe
    only ever moves it and fades it. */
 .lp-scan {
   background: var(--accent);
   box-shadow: 0 0 16px 1px color-mix(in srgb, var(--accent) 75%, transparent);
+}
+
+/* The boot layer (LivePrototype's demo window): OPAQUE, and it takes the
+   pointer until it lifts, so no part of a half-booted app shows or is tapped.
+   It used to be a transparent box holding a letterboxed screenshot, and on a
+   phone two thirds of it showed the live app booting underneath. Its ground
+   is the stage's own (bezel plus the accent bloom), and `progress` says why
+   a click does nothing yet. */
+.lp-boot {
+  cursor: progress;
+  background:
+    radial-gradient(
+      60% 55% at 50% 42%,
+      color-mix(in srgb, var(--accent) 9%, transparent),
+      transparent 75%
+    ),
+    var(--bezel);
+}
+/* Over the poster: a small status capsule, bottom centre, clear of the app's
+   own chrome in the screenshot. */
+.lp-boot-pill {
+  position: absolute;
+  left: 50%;
+  bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0.875rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bezel) 88%, transparent);
+}
+/* Instead of the poster, where the stage is not the poster's shape: the
+   project's name and the loader, centred. */
+.lp-boot-card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.875rem;
+  padding: 1.5rem;
+  text-align: center;
+}
+/* The loading signal: an accent segment sweeping a hairline, looping until the
+   layer lifts. Rendered only when motion is welcome; reduced motion gets the
+   word "Loading" on its own. */
+.lp-loader {
+  position: relative;
+  display: block;
+  width: 3.5rem;
+  height: 2px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--line-strong);
+}
+.lp-loader::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  border-radius: inherit;
+  background: var(--accent);
+  animation: lp-loader 1.1s var(--ease-in-out-quart) infinite;
+}
+@keyframes lp-loader {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+
+/* Scroll lock while the demo window is open. Lenis is stopped too (its own
+   .lenis-stopped also sets overflow:hidden), but this class is the lock that
+   holds under reduced motion, where there is no Lenis to stop. No
+   scrollbar-gutter: reserving a classic scrollbar's gutter left an 11px dark
+   stripe down the right edge that no dialog can cover (a gutter is outside
+   every box). The page may reflow when the bar goes, but it does so behind an
+   opaque window, and the release re-applies the recorded scroll position. */
+html.lp-scroll-lock {
+  overflow: hidden;
 }
 
 /* ── Figma prototype frame (FigmaPrototype.tsx) ──────────────────────────────
@@ -2079,8 +2099,9 @@ html.lenis body {
     font-size: 9.5pt;
     line-height: 1.42;
   }
-  /* GSAP reveals can leave inline opacity/transform mid-flight; force-settle so
-     nothing prints half-faded or offset. Scoped to the résumé ON PURPOSE: as a
+  /* GSAP reveals can leave inline opacity/transform/filter mid-flight (the
+     heading blur-in tweens all three); force-settle so nothing prints
+     half-faded, offset or blurred. Scoped to the résumé ON PURPOSE: as a
      global rule it flattens transform-composed type elsewhere (the home hero's
      split-flap positions each glyph's two halves with translate inside an
      overflow-hidden tile, so `transform: none` prints the wordmark scrambled). */
@@ -2089,6 +2110,7 @@ html.lenis body {
   .resume-doc *::after {
     opacity: 1 !important;
     transform: none !important;
+    filter: none !important;
   }
   /* The résumé's own decorative overlays (corner crosshair ticks, spectrum
      threads). Safe to sweep by this pair HERE because nothing inside

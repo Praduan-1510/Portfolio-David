@@ -1,6 +1,5 @@
 "use client";
 
-import { durations } from "@/lib/motion/durations";
 import { Container, Button } from "@/components/primitives";
 import { Reveal, TextReveal, AnimatedNoise, Signature } from "@/components/motion";
 import { HeroWordmark } from "@/components/sections/HeroWordmark";
@@ -23,16 +22,21 @@ import { HeroFlow } from "@/components/sections/HeroFlow";
  *     ONE quiet ember, film grain. Quiet, composed, unmistakably this site.
  *
  * Load choreography cascades top-to-bottom (eyebrow → boards → tagline →
- * subhead → CTAs), transform/opacity only, tokens only, and fully
- * reduced-motion safe (every primitive renders settled/static).
+ * subhead → CTAs), transform/opacity only (plus the tagline's heading blur,
+ * cleared as it lands), tokens only, and fully reduced-motion safe (every
+ * primitive renders settled/static).
  */
 
 const SEQ = {
-  badge: 0.1,
   tagline: 0.75,
   sub: 1.0,
   cta: 1.2,
 } as const;
+
+/** The tagline's split words and their stagger step. The gradient phrase that
+ *  closes the line enters whole, as the step after the last of these. */
+const TAGLINE = "Design that's clear, usable, and";
+const TAGLINE_STEP = 0.05;
 
 export function Hero() {
   // z-10 + transparent bg (no bg-bg): the cinematic reel's sticky stage sits
@@ -72,50 +76,17 @@ export function Hero() {
           runs continuously beneath this section and past its bottom edge: a
           fade-to-bg band here would cut a visible seam across the frames.) */}
 
-      {/* Title-card composition: the top row pins to the top corners (framing
-          the film's subject), a flexible spacer protects the face in the upper
-          half, and the wordmark + supporting rows anchor to the lower third:
-          over the subject's dark jacket and the reel's bottom scrim, where
-          white type actually reads. */}
+      {/* Title-card composition: the wordmark + supporting rows anchor to the
+          lower third, over the subject's dark jacket and the reel's bottom
+          scrim, where white type actually reads; the space above is the
+          film's. */}
       <Container className="relative z-10 flex flex-1 py-space-7 [@media(max-height:600px)]:py-space-5">
         {/* Left column (lg+): everything the hero says lives left of the 50vw
             seam: the film owns the right half. Container is centered, so a
             w-1/2 child ends exactly at the seam; pr-space-7 is the shared
             inset off it (the reel's board uses the same). Below lg this is
             simply the old full-width column. */}
-        <div className="flex w-full flex-col justify-between short-land:justify-start motion-safe:lg:w-1/2 motion-safe:lg:pr-space-7">
-        {/* Top row: mono-caps eyebrow left (the one label that used to break
-            the site's label voice), HUD status readout right (at lg+ its right
-            edge sits just off the seam). */}
-        <Reveal
-          as="div"
-          trigger="load"
-          delay={SEQ.badge}
-          duration={durations.base}
-          className="flex items-start justify-between gap-space-6"
-        >
-          <span className="inline-flex items-center gap-space-3 font-mono text-caption uppercase tracking-[0.18em] text-muted">
-            <span
-              aria-hidden="true"
-              className="h-[6px] w-[6px] rounded-full bg-neon motion-safe:animate-status-pulse"
-            />
-            {/* One wrapping label (not sibling flex items) so at 320 it breaks
-                cleanly to "Product Designer ·" / "Front-End" instead of orphaning
-                "End" or floating the second word to the right. */}
-            <span>
-              Product Designer ·{" "}
-              <span className="whitespace-nowrap">Front-End</span>
-            </span>
-          </span>
-          <span className="hidden flex-col items-end gap-[2px] md:flex">
-            <span className="font-mono text-[0.625rem] uppercase tracking-[0.2em] text-muted">
-              Status
-            </span>
-            <span className="font-mono text-caption uppercase tracking-[0.1em] text-fg">
-              Available
-            </span>
-          </span>
-        </Reveal>
+        <div className="flex w-full flex-col justify-end short-land:justify-start motion-safe:lg:w-1/2 motion-safe:lg:pr-space-7">
 
         {/* Lower-third block: wordmark + supporting row travel together so the
             justify-between spacer above them keeps the film's subject clear. */}
@@ -130,23 +101,25 @@ export function Hero() {
             beside two lg buttons (short-land keeps its own two-col shape). */}
         <div className="mt-space-5 grid items-end gap-x-space-9 gap-y-space-5 short-land:mt-space-5 short-land:grid-cols-[minmax(0,1fr)_auto] short-land:items-start short-land:gap-x-space-5 lg:mt-space-6">
           <div className="min-w-0">
-            {/* Tagline: word-by-word rise; the closing phrase carries the one
-                sanctioned colour moment (.text-spectrum) and lands last. */}
+            {/* Tagline: one word-by-word blur-in. The closing phrase carries the
+                one sanctioned colour moment (.text-spectrum), clipped to a
+                gradient, so it blurs in whole as the stagger's last step and
+                lands last. */}
             <p className="max-w-[26ch] font-display text-heading text-fg">
               <TextReveal
                 as="span"
                 by="words"
                 trigger="load"
                 delay={SEQ.tagline}
-                stagger={0.05}
+                stagger={TAGLINE_STEP}
               >
-                {"Design that's clear, usable, and"}
+                {TAGLINE}
               </TextReveal>{" "}
               <Reveal
                 as="span"
+                blur
                 trigger="load"
-                delay={SEQ.tagline + 0.18}
-                y={16}
+                delay={SEQ.tagline + TAGLINE.split(" ").length * TAGLINE_STEP}
                 className="text-spectrum inline-block"
               >
                 {"unmistakably yours."}
@@ -161,6 +134,7 @@ export function Hero() {
             <TextReveal
               as="p"
               by="lines"
+              effect="mask"
               trigger="load"
               delay={SEQ.sub}
               className="mt-space-3 max-w-[48ch] font-sans text-body text-muted lg:mt-space-4 lg:max-w-[58ch] lg:text-body-l"
@@ -176,13 +150,20 @@ export function Hero() {
             />
           </div>
 
-          <div className="flex w-full flex-col items-stretch gap-space-3 sm:w-auto sm:flex-row sm:items-center sm:gap-space-4">
+          {/* data-chrome-yield: while these CTAs hold the bottom edge (a phone's
+              first screen), the dock and the bottom fade stay out of the way
+              (hooks/useChromeYield). */}
+          <div
+            data-chrome-yield
+            className="flex w-full flex-col items-stretch gap-space-3 sm:w-auto sm:flex-row sm:items-center sm:gap-space-4"
+          >
             <Reveal as="div" trigger="load" delay={SEQ.cta} className="w-full sm:w-auto">
               <Button
                 href="/work"
                 variant="invert"
                 size="lg"
-                className="w-full shadow-[0_14px_40px_-16px_rgba(0,0,0,0.7)] sm:w-auto"
+                arrow="right"
+                className="w-full sm:w-auto"
               >
                 View work
               </Button>
@@ -197,7 +178,7 @@ export function Hero() {
                 href="/contact"
                 variant="secondary"
                 size="lg"
-                className="w-full bg-[color:color-mix(in_srgb,var(--fg)_4%,transparent)] hover:bg-[color:color-mix(in_srgb,var(--fg)_7%,transparent)] sm:w-auto"
+                className="w-full sm:w-auto"
               >
                 Get in touch
               </Button>

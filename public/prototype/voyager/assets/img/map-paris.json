@@ -1,0 +1,98 @@
+{
+  "file": "map-paris.jpg",
+  "width": 1100,
+  "height": 900,
+  "zoom": 13,
+  "projection": "Web Mercator (EPSG:3857), OSM standard tiles",
+  "center": {
+    "lat": 48.8566,
+    "lon": 2.3522
+  },
+  "bounds": {
+    "north": 48.907382,
+    "south": 48.805733,
+    "west": 2.257862,
+    "east": 2.44669
+  },
+  "corners": {
+    "topLeft": {
+      "lat": 48.907382,
+      "lon": 2.257862
+    },
+    "topRight": {
+      "lat": 48.907382,
+      "lon": 2.44669
+    },
+    "bottomLeft": {
+      "lat": 48.805733,
+      "lon": 2.257862
+    },
+    "bottomRight": {
+      "lat": 48.805733,
+      "lon": 2.44669
+    }
+  },
+  "pins": {
+    "eiffel-tower": {
+      "name": "Eiffel Tower",
+      "lat": 48.85837,
+      "lon": 2.294481,
+      "x": 213.3,
+      "y": 434.2,
+      "xPct": 19.39,
+      "yPct": 48.24
+    },
+    "louvre": {
+      "name": "Louvre Museum",
+      "lat": 48.860611,
+      "lon": 2.337644,
+      "x": 464.8,
+      "y": 414.3,
+      "xPct": 42.25,
+      "yPct": 46.04
+    },
+    "notre-dame": {
+      "name": "Notre-Dame de Paris",
+      "lat": 48.852968,
+      "lon": 2.349902,
+      "x": 536.2,
+      "y": 482.0,
+      "xPct": 48.74,
+      "yPct": 53.56
+    },
+    "montmartre": {
+      "name": "Montmartre (Sacré-Cœur)",
+      "lat": 48.886705,
+      "lon": 2.343104,
+      "x": 496.6,
+      "y": 183.2,
+      "xPct": 45.14,
+      "yPct": 20.36
+    },
+    "hotel-le-marais": {
+      "name": "Hôtel Le Marais (Rue de Bretagne, fictional hotel)",
+      "lat": 48.86275,
+      "lon": 2.3616,
+      "x": 604.3,
+      "y": 395.4,
+      "xPct": 54.94,
+      "yPct": 43.93
+    },
+    "arc-de-triomphe": {
+      "name": "Arc de Triomphe",
+      "lat": 48.873792,
+      "lon": 2.295028,
+      "x": 216.5,
+      "y": 297.6,
+      "xPct": 19.68,
+      "yPct": 33.07
+    }
+  },
+  "howToPlace": "x,y are pixel offsets from the image's top-left at native 1100x900; use xPct/yPct for responsive placement (left: xPct%, top: yPct%). For other points: x = (lon+180)/360*256*2^13 - originX, y = mercatorY(lat) - originY.",
+  "origin": {
+    "globalPixelX": 1061729,
+    "globalPixelY": 721030
+  },
+  "attribution": "© OpenStreetMap contributors",
+  "license": "ODbL — https://www.openstreetmap.org/copyright"
+}

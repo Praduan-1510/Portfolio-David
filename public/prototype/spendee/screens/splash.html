@@ -60,7 +60,9 @@
 <script>
   (function () {
     const el = document.getElementById('splash');
-    const dest = Spendee.store.get('signedIn') ? 'login.html' : 'welcome.html';
+    // Always the first-run path: Welcome is the demo's entry, so a returning visitor
+    // (spendee:signedIn left in localStorage) must not be shortcut to Sign In.
+    const dest = 'welcome.html';
     let gone = false;
     const go = () => {
       if (gone) return; gone = true;

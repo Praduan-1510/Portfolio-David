@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Write a review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  .prod { display: flex; align-items: center; gap: 12px; margin-top: 16px; }
+  .prod .thumb { width: 56px; height: 56px; }
+  .prod__name { display: block; font-size: 15px; font-weight: 500; color: #111; }
+  .prod__sub { display: block; font-size: 12px; color: var(--muted-2); }
+  .q { font-size: 16px; font-weight: 600; color: #000; margin: 26px 0 10px; }
+  .q .req { color: var(--danger); margin-left: 2px; }
+  .rate-wrap { display: flex; align-items: center; gap: 12px; }
+  .rating-input { gap: 4px; margin-left: -4px; }
+  .rating-input button { width: 44px; height: 44px; }
+  .rating-input button svg { width: 34px; height: 34px; }
+  .rating-input button:not(.is-on) svg path { fill: none; stroke: #9DB5C1; stroke-width: 1.4; }
+  .rate-lbl { font-size: 14px; font-weight: 500; color: var(--navy); min-width: 70px; }
+  .rate-err { display: none; font-size: 12px; color: var(--danger); margin-top: 4px; }
+  .rate-wrap.is-error + .rate-err { display: block; }
+  .rate-wrap.is-error .rating-input { animation: shake 360ms; }
+  .counter { position: absolute; right: 2px; top: 0; font-size: 12px; color: var(--muted-2); }
+  .counter.is-low { color: var(--warn); }
+  .photos { display: flex; gap: 10px; flex-wrap: wrap; }
+  .ptile { position: relative; width: 72px; height: 72px; border-radius: 10px; overflow: hidden; background: var(--surface); }
+  .ptile img { width: 100%; height: 100%; object-fit: cover; }
+  .ptile__x { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border-radius: 50%; background: rgba(1,31,48,.72); color: #fff; display: grid; place-items: center; }
+  .ptile__x::after { content: ''; position: absolute; inset: -8px; }
+  .ptile__x svg { width: 11px; height: 11px; }
+  .padd { width: 72px; height: 72px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; box-shadow: inset 0 0 0 1.5px var(--steel); background: var(--surface); color: var(--navy); font-size: 11px; font-weight: 500; border: 0; }
+  .padd svg { width: 20px; height: 20px; }
+  .rec { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 26px; padding: 14px 16px; border-radius: var(--r); box-shadow: inset 0 0 0 1px var(--border); }
+  .rec b { display: block; font-size: 15px; font-weight: 600; }
+  .rec span { font-size: 12px; color: var(--muted-2); }
+  .done { text-align: center; padding-top: 36px; }
+  .done .result__circle svg { width: 96px; height: 96px; }
+  .done .rv { text-align: left; margin-top: 26px; }
+  .segmented button { text-align: center; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Write a review" style="padding-bottom:calc(var(--tabbar-h) + 110px)">
+  <header class="appbar">
+    <a class="back tap" id="back" href="reviews.html" aria-label="Back"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <h1 class="appbar__title">Write a review</h1>
+  </header>
+  <div class="page-divider"></div>
+
+  <div id="formView">
+    <div class="prod"><span class="thumb"><img id="prodImg" src="../assets/img/racket.jpg" alt=""></span><span class="grow"><span class="prod__name" id="prodName">Tennis Racket</span><span class="prod__sub" id="prodSub">Share what you liked and what could be better</span></span></div>
+
+    <form id="form" novalidate>
+      <p class="q" id="rateQ">How would you rate it?<span class="req">*</span></p>
+      <div class="rate-wrap" id="rateWrap">
+        <div class="rating-input" id="stars" role="radiogroup" aria-labelledby="rateQ"></div>
+        <span class="rate-lbl" id="rateLbl" aria-live="polite"></span>
+      </div>
+      <p class="rate-err" role="alert">Tap a star to rate this product</p>
+
+      <p class="q">Your review</p>
+      <div class="fg"><label class="label" for="title">Title<span class="req">*</span></label><input class="field" id="title" maxlength="60" data-validate="required" placeholder="Sum it up in a few words"></div>
+      <div class="fg"><label class="label" for="text">Review<span class="req">*</span></label><span class="counter num" id="counter">0 / 500</span>
+        <textarea class="field" id="text" maxlength="500" rows="5" data-validate="required" placeholder="How did it perform? How was the quality, comfort and fit?"></textarea>
+        <span class="helper">At least 20 characters</span></div>
+
+      <div id="fitSec">
+        <p class="q">How was the fit?</p>
+        <div class="segmented" id="fit" aria-label="Fit">
+          <button type="button" data-value="Runs small">Runs small</button>
+          <button type="button" data-value="True to size" aria-selected="true">True to size</button>
+          <button type="button" data-value="Runs large">Runs large</button>
+        </div>
+        <div class="fg" style="margin-top:14px"><label class="label" for="size">Size you bought</label><select class="field" id="size"></select></div>
+      </div>
+
+      <p class="q">Add photos <span class="muted" style="font-weight:400;font-size:13px">(optional, up to 4)</span></p>
+      <div class="photos" id="photos"></div>
+
+      <div class="rec"><div><b>Would you recommend it?</b><span>Helps other shoppers decide</span></div><button class="switch" type="button" role="switch" id="rec" aria-checked="true" aria-label="I recommend this product"></button></div>
+      <p class="form-note" style="margin-top:14px">Reviews are checked for spam and offensive language. Your name <b id="me">Aditya Banerjee</b> is shown with your review.</p>
+    </form>
+  </div>
+
+  <div class="done" id="doneView" hidden>
+    <div class="result__circle" aria-hidden="true"></div>
+    <h2 class="result__title">Thanks for your review!</h2>
+    <p class="result__msg">It’s now live and helps thousands of players pick the right gear. You earned <b>25 Club points</b>.</p>
+    <div id="preview"></div>
+  </div>
+
+  <div class="cta-bar cta-bar--above-tabs" id="cta">
+    <button class="btn btn--primary btn--lg tap" type="button" id="submit"><span>Submit review</span></button>
+  </div>
+  <nav data-tabbar="categories"></nav>
+</main>
+
+<section class="sheet" id="photoSheet" aria-labelledby="photoT">
+  <div class="sheet__head"><div><p class="sheet__title" id="photoT">Add a photo</p><p class="sheet__sub">Show the product in use, the fit or any detail</p></div><button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button></div>
+  <div class="options">
+    <button class="option tap" type="button" data-src="camera"><span class="icon-tile" style="width:36px;height:36px"><i data-icon="camera" data-size="18"></i></span><span class="option__body"><span class="option__title">Take a photo</span><span class="option__sub">Use your camera</span></span></button>
+    <button class="option tap" type="button" data-src="library"><span class="icon-tile" style="width:36px;height:36px"><i data-icon="image" data-size="18"></i></span><span class="option__body"><span class="option__title">Choose from library</span><span class="option__sub">JPG or PNG, up to 10 MB</span></span></button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const p = D.product(D.q('id')) || D.product('racket');
+    const order = D.q('order') && D.orders.get(D.q('order'));
+    const backTo = `reviews.html?id=${p.id}`;
+    $('#back').href = order ? `order-detail.html?id=${order.id}` : backTo;
+    $('#prodImg').src = D.img(p.img); $('#prodName').textContent = p.name;
+    if (order) $('#prodSub').textContent = `Order #${order.id} · delivered ${D.fmtDate(order.deliveredOn || order.date)}`;
+    $('#me').textContent = D.user.get().name;
+    $('.done .result__circle').innerHTML = D.icon('verified', 96);
+
+    // Stars
+    const LBL = ['', 'Poor', 'Fair', 'Good', 'Very good', 'Excellent'];
+    let rating = 0, dirty = false;
+    $('#stars').innerHTML = [1, 2, 3, 4, 5].map((n) => `<button type="button" class="tap" role="radio" aria-checked="false" aria-label="${n} star${n > 1 ? 's' : ''}, ${LBL[n]}" data-n="${n}">${D.icon('star', 34)}</button>`).join('');
+    const paint = (v) => $$('#stars button').forEach((b) => b.classList.toggle('is-on', +b.dataset.n <= v));
+    $('#stars').addEventListener('click', (e) => { const b = e.target.closest('[data-n]'); if (!b) return; rating = +b.dataset.n; dirty = true; paint(rating); $$('#stars button').forEach((x) => x.setAttribute('aria-checked', String(x === b))); $('#rateLbl').textContent = LBL[rating]; $('#rateWrap').classList.remove('is-error'); D.haptic(8); });
+    $('#stars').addEventListener('mouseover', (e) => { const b = e.target.closest('[data-n]'); if (b) paint(+b.dataset.n); });
+    $('#stars').addEventListener('mouseleave', () => paint(rating));
+
+    // Counter
+    const txt = $('#text');
+    const count = () => { const n = txt.value.length; $('#counter').textContent = `${n} / 500`; $('#counter').classList.toggle('is-low', n > 0 && n < 20); };
+    txt.addEventListener('input', () => { count(); dirty = true; }); $('#title').addEventListener('input', () => (dirty = true));
+
+    // Fit / size
+    let fit = 'True to size';
+    $('#fitSec').hidden = !p.sizes.length;
+    $('#size').innerHTML = p.sizes.map((s) => `<option${order && order.items.some((it) => it.id === p.id && it.size === s) || (!order && s === p.defaultSize) ? ' selected' : ''}>${s}</option>`).join('');
+    $('#fit').addEventListener('change', (e) => { fit = e.detail; dirty = true; });
+
+    // Photos
+    const pool = (p.imgs || [p.img]).concat([p.img]);
+    let photos = [];
+    const renderPhotos = () => {
+      $('#photos').innerHTML = photos.map((s, k) => `<div class="ptile"><img src="${D.img(s)}" alt="Your photo ${k + 1}"><button class="ptile__x tap" type="button" data-rm="${k}" aria-label="Remove photo ${k + 1}">${D.icon('close', 11, { sw: 2.6 })}</button></div>`).join('')
+        + (photos.length < 4 ? `<button class="padd tap" type="button" data-sheet="photoSheet">${D.icon('camera', 20)}Add photo</button>` : '');
+    };
+    renderPhotos();
+    $('#photos').addEventListener('click', (e) => { const x = e.target.closest('[data-rm]'); if (x) { photos.splice(+x.dataset.rm, 1); renderPhotos(); D.toast('Photo removed'); } });
+    $$('#photoSheet [data-src]').forEach((b) => b.addEventListener('click', async () => {
+      const sub = b.querySelector('.option__sub'); const t = sub.textContent; sub.textContent = b.dataset.src === 'camera' ? 'Opening camera…' : 'Opening your photos…';
+      await D.wait(700); sub.textContent = t; photos.push(pool[photos.length % pool.length]); dirty = true; renderPhotos(); D.sheet.close(); D.toast('Photo added', { icon: 'image' });
+    }));
+
+    // Leave with unsaved changes
+    $('#back').addEventListener('click', async (e) => {
+      if (!dirty || !$('#doneView').hidden) return; e.preventDefault();
+      if (await D.dialog({ title: 'Discard your review?', message: 'What you’ve written so far will be lost.', confirm: 'Discard', cancel: 'Keep writing', tone: 'danger' })) location.href = $('#back').href;
+    });
+
+    // Submit
+    $('#submit').addEventListener('click', async (e) => {
+      const btn = e.currentTarget;
+      if (!$('#doneView').hidden) { location.href = backTo + '&new=1'; return; }
+      let ok = D.validate($('#form'));
+      const fgT = txt.closest('.fg');
+      if (ok && txt.value.trim().length < 20) { fgT.classList.add('has-error'); let et = fgT.querySelector('.error-text'); if (!et) { et = document.createElement('span'); et.className = 'error-text'; et.setAttribute('role', 'alert'); fgT.appendChild(et); } et.textContent = `Add ${20 - txt.value.trim().length} more characters so others get the full picture`; txt.focus(); ok = false; }
+      if (!rating) { $('#rateWrap').classList.add('is-error'); $('#rateWrap').scrollIntoView({ behavior: 'smooth', block: 'center' }); $('#stars button').focus({ preventScroll: true }); return; }
+      if (!ok) return;
+      await D.loading(btn, 1100);
+      const r = { rating, title: $('#title').value.trim(), text: txt.value.trim(), size: p.sizes.length ? $('#size').value : '', fit: p.sizes.length ? fit : '', recommend: $('#rec').getAttribute('aria-checked') === 'true', photos: photos.slice() };
+      D.reviews.add(p.id, r);
+      D.user.set({ points: D.user.get().points + 25 });
+      dirty = false;
+      $('#formView').hidden = true; $('#doneView').hidden = false; window.scrollTo(0, 0);
+      $('#preview').innerHTML = `<div class="panel"><div style="display:flex;align-items:center;gap:8px">${D.stars(rating, 'stars--md')}<b style="font-size:14px;font-weight:600">${D.esc(r.title)}</b></div><p style="font-size:13px;line-height:1.55;color:#333;margin-top:6px">${D.esc(r.text)}</p></div>`;
+      btn.querySelector('span').textContent = 'See all reviews';
+      D.haptic(20);
+    });
+  })();
+</script>
+</body>
+</html>

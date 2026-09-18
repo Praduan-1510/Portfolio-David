@@ -7,6 +7,7 @@ year: 2025
 services: [UX Design, UI Design, Design System, Prototyping]
 summary: "A clean redesign concept for a sports-retail app: browse a huge multi-sport catalogue, filter fast, and check out in a few taps."
 indexNote: 'The constraint study. A 60-sport catalogue survives a phone screen only if narrowing leads: filters with counts, three checkout steps, no dead ends.'
+outcome: "Filter counts that add up, zero dead ends, and a three-step checkout."
 cover: /images/work/decathlon/home.png
 # Hero reel: looping 3D carousel of the app screens, floated over the hero bg.
 # H.264 MP4; opaque near-black surround is cropped + edge-feathered by
@@ -14,6 +15,36 @@ cover: /images/work/decathlon/home.png
 video:
   src: /videos/Decathlon.mp4
   aspect: "4/3" # carousel ring spans ~58% of the frame: 4/3 shows the whole cylinder
+#
+# The working prototype, 45 screens and their sheets built in HTML/CSS. It lives
+# in frontmatter so it takes the signature-showcase slot directly under the
+# hero. The Figma frames carried a US placeholder address and name, "Rs", an 8%
+# GST that India doesn't have, and filter counts (42 + 28 + 19 + 14) that could
+# not come from 48 results; the prototype corrects all of it, and the stills
+# below are shot from it (scripts/decathlon-shots.mjs).
+prototype:
+  poster: /images/work/decathlon/stage.png
+  alt: "The Decathlon demo: the app's splash in a handset on a running-track stage, beside a panel of things to try and jump-to shortcuts for every flow"
+  aspect: 1.6
+  # A phone app that only draws its stage above 880px and is full-bleed below,
+  # the same shape as Spendee and Nukkad, so no tablet (it would show a stretched phone).
+  devices: [desktop, phone]
+  launchNote: >-
+    It opens on the splash and walks you into the welcome screen, fresh every
+    time: the panel beside the phone jumps to any flow, and nothing you enter
+    leaves the page.
+  hint: "Try the four things in the panel, or jump straight to a flow. Restart takes the phone back to the splash."
+  surfaces:
+    - id: app
+      label: App
+      shortLabel: App
+      src: /prototype/decathlon/app.html
+      domain: decathlon-concept.app
+    - id: screens
+      label: All screens
+      shortLabel: Screens
+      src: /prototype/decathlon/index.html#screens
+      domain: decathlon-concept.app/screens
 accent: "#0C8DE9" # Decathlon blue, near its real brand #0082C3 rather than the framework-default sky it used to be. 5.55:1 on --bg, 5.10:1 on --surface, dE 51.1 from the site's flame. Held unchanged through the logo repaint: a cold blue was already the furthest guest from a warm voice, and the darker ground only improved it.
 disclaimer: Unofficial concept redesign, not affiliated with Decathlon.
 motif: grid
@@ -26,43 +57,115 @@ featured: false
 order: 4
 flows:
   - title: Get started
-    note: "A branded blue splash into a photo-led home."
+    note: "A branded blue splash into three onboarding cards, then sign-in with a mobile number and a one-time code, and a delivery pincode before the first product."
     screens:
+      - src: /images/work/decathlon/splash.png
+        caption: "Splash"
       - src: /images/work/decathlon/welcome.png
         caption: "Welcome"
+      - src: /images/work/decathlon/onboarding-1.png
+        caption: "Every sport"
+      - src: /images/work/decathlon/onboarding-2.png
+        caption: "Tested gear"
+      - src: /images/work/decathlon/onboarding-3.png
+        caption: "Decathlon Club"
+      - src: /images/work/decathlon/login.png
+        caption: "Sign in"
+      - src: /images/work/decathlon/otp.png
+        caption: "One-time code"
+      - src: /images/work/decathlon/signup.png
+        caption: "Create account"
+      - src: /images/work/decathlon/forgot-password.png
+        caption: "Forgot password"
+      - src: /images/work/decathlon/location.png
+        caption: "Delivery pincode"
+  - title: Browse & find
+    note: "Image-first browsing with fast narrowing: sports, search, results with filter chips, a full filter sheet whose counts add up to the results, and product detail."
+    screens:
       - src: /images/work/decathlon/home.png
         caption: "Home"
-  - title: Browse & find
-    note: "Image-first browsing with fast narrowing: categories, search, a full filter sheet, and product detail."
-    screens:
-      - src: /images/work/decathlon/categories.jpg
+      - src: /images/work/decathlon/category.png
         caption: "Categories"
+      - src: /images/work/decathlon/sport.png
+        caption: "Sport"
       - src: /images/work/decathlon/search.png
+        caption: "Search"
+      - src: /images/work/decathlon/search-results.png
         caption: "Search results"
       - src: /images/work/decathlon/filters.png
         caption: "Filters"
-      - src: /images/work/decathlon/product-details.png
+      - src: /images/work/decathlon/scanner.png
+        caption: "Scan in store"
+      - src: /images/work/decathlon/product.png
         caption: "Product detail"
+      - src: /images/work/decathlon/gallery.png
+        caption: "Photos"
+      - src: /images/work/decathlon/reviews.png
+        caption: "Reviews"
+      - src: /images/work/decathlon/wishlist.png
+        caption: "Wishlist"
+      - src: /images/work/decathlon/notifications.png
+        caption: "Notifications"
   - title: Bag & checkout
-    note: "A short, confident three-step checkout: address, payment, confirm."
+    note: "A bag that shows every cost, GST included, then three steps with one action each: address, payment, confirm."
     screens:
       - src: /images/work/decathlon/bag.png
         caption: "Bag"
+      - src: /images/work/decathlon/coupons.png
+        caption: "Offers"
+      - src: /images/work/decathlon/checkout-address.png
+        caption: "Step 1: Address"
+      - src: /images/work/decathlon/payment.png
+        caption: "Step 2: Payment"
       - src: /images/work/decathlon/checkout.png
-        caption: "Checkout"
+        caption: "Step 3: Confirm"
+      - src: /images/work/decathlon/payment-failed.png
+        caption: "Payment failed"
       - src: /images/work/decathlon/confirmation.png
         caption: "Order confirmed"
+  - title: Orders & returns
+    note: "Status tabs, live tracking with the delivery OTP, and a four-step return that shows the refund before you confirm it."
+    screens:
+      - src: /images/work/decathlon/orders.png
+        caption: "Orders"
+      - src: /images/work/decathlon/order-detail.png
+        caption: "Order details"
+      - src: /images/work/decathlon/order-tracking.png
+        caption: "Tracking"
+      - src: /images/work/decathlon/return-request.png
+        caption: "Return"
+      - src: /images/work/decathlon/return-success.png
+        caption: "Return requested"
+      - src: /images/work/decathlon/write-review.png
+        caption: "Write a review"
   - title: Account
-    note: "Profile, orders, wishlist, and a store locator."
+    note: "Profile, Club points whose history adds up to the balance, saved addresses and payment methods, settings and help."
     screens:
       - src: /images/work/decathlon/account.png
         caption: "Account"
-      - src: /images/work/decathlon/order-history.png
-        caption: "Orders"
-      - src: /images/work/decathlon/wishlist.png
-        caption: "Wishlist"
+      - src: /images/work/decathlon/club.png
+        caption: "Decathlon Club"
+      - src: /images/work/decathlon/edit-profile.png
+        caption: "Edit profile"
+      - src: /images/work/decathlon/addresses.png
+        caption: "Addresses"
+      - src: /images/work/decathlon/add-address.png
+        caption: "Add address"
+      - src: /images/work/decathlon/payment-methods.png
+        caption: "Payment methods"
+      - src: /images/work/decathlon/settings.png
+        caption: "Settings"
+      - src: /images/work/decathlon/help.png
+        caption: "Help"
+  - title: Stores
+    note: "A store locator: stores worldwide, Kolkata stores by distance, then hours, services and reserve-and-collect."
+    screens:
       - src: /images/work/decathlon/travel-store.png
         caption: "Store locator"
+      - src: /images/work/decathlon/stores.png
+        caption: "Stores near you"
+      - src: /images/work/decathlon/store-detail.png
+        caption: "Store"
 ---
 
 <Lede>
@@ -105,7 +208,7 @@ Each goal names the published research signal I'd test it against.
   <Goal
     goal="No one hits a zero-result dead end."
     signal="Match counts shown on every filter option: the pattern Baymard finds only ~16% of sites get right."
-    status="Verified in the design"
+    status="Verified in the prototype"
   />
   <Goal
     goal="Checkout stays short and unambiguous at the moment most carts are abandoned."
@@ -200,7 +303,7 @@ The bag shows line items with quantity steppers and savings, a promo-code field,
 
 ### Account
 
-A profile with club membership, orders, wishlist, saved addresses, and support. The orders screen carries status tabs (all, active, delivered, returns) plus reorder and review. Wishlist saves products as cards with quick add-to-cart, and a store locator maps store coverage with nearby stores and photos.
+A profile with club membership, orders, wishlist, saved addresses, and support. The orders screen carries status tabs (all, active, delivered, returns) plus reorder and review. Wishlist saves products as cards with quick add-to-bag, and a store locator maps store coverage with nearby stores and photos.
 
 <ScreenBeat
   src="/images/work/decathlon/travel-store.png"
@@ -227,7 +330,7 @@ The checkout was the study's own research claim turned against it: the copy argu
 A clean, light interface anchored by Decathlon's blue; photo-led category and product cards; a consistent header and a five-tab bottom nav with a clear active state; a rating-plus-strikethrough-price pattern for products; and a bold sans for headings paired with a clean UI sans.
 
 <Aside label="Colophon">
-  Designed in Figma on one component set: a five-tab shell, one product card, one rating-and-strikethrough price treatment, held across thirteen screens. The filter counts are arithmetic, not placeholder text: "running shoes" returns 48, and the facets underneath add up to it. Decathlon's blue sits one step lighter than the live brand, tuned to clear AA on dark surfaces.
+  Designed in Figma on one component set: a five-tab shell, one product card, one rating-and-strikethrough price treatment, held across thirteen screens, then built out to forty-five working screens in HTML. In the prototype the filter counts are arithmetic, not placeholder text: "running shoes" returns 48, each facet underneath adds up to it, and an option that would empty the list is switched off. Decathlon's blue sits one step lighter than the live brand, tuned to clear AA on dark surfaces.
 </Aside>
 
 ## Outcome

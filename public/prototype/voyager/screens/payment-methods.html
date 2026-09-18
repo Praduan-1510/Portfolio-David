@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Payment Methods</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .pm-cards { display: grid; gap: 14px; }
+  .pm-card { position: relative; display: block; width: 100%; text-align: left; border-radius: 8px; transition: transform var(--dur) var(--ease-out); }
+  .pm-card:active { transform: scale(.985); }
+  .pm-card .paycard { height: 176px; }
+  .pm-card .paycard--mc { background: linear-gradient(135deg, #2A364E, #14213D 70%); }
+  .pm-card .paycard--mc::before { background: radial-gradient(circle, rgba(105,169,245,.7) 0%, rgba(105,169,245,.3) 25%, rgba(105,169,245,0) 65%); }
+  .pm-def { position: absolute; top: 18px; right: 18px; z-index: 2; height: 24px; padding: 0 10px; border-radius: 12px; background: var(--orange); color: #000; font-size: 11px; font-weight: 700; letter-spacing: .06em; display: inline-flex; align-items: center; gap: 4px; }
+  .pm-more { position: absolute; top: 14px; right: 12px; z-index: 2; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: rgba(255,255,255,.12); }
+  .pm-card .pm-def + .pm-more { display: none; }
+  .mc-logo { position: absolute; right: 19px; bottom: 20px; width: 44px; height: 28px; }
+  .mc-logo i { position: absolute; top: 0; width: 28px; height: 28px; border-radius: 50%; }
+  .mc-logo i:first-child { left: 0; background: #EB001B; } .mc-logo i:last-child { right: 0; background: #F79E1B; mix-blend-mode: screen; opacity: .95; }
+  .pm-sec { margin: 28px 0 12px; }
+  .wallet { background: var(--grey-1); }
+  .wallet .list__icon { width: 40px; height: 40px; border-radius: 10px; background: #fff; box-shadow: inset 0 0 0 1px #E6E6E6; }
+  .pm-add { margin-top: 16px; }
+  .pm-note { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: var(--text-4); margin-top: 18px; line-height: 1.45; }
+</style>
+</head>
+<body>
+<main class="page page--tabs" aria-label="Payment methods">
+  <header class="phead">
+    <a class="phead__back tap" href="profile.html" data-go="back" aria-label="Back">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3.5M10.5 4.5 3 12l7.5 7.5"/></svg>
+    </a>
+    <div class="phead__titles"><h1 class="phead__title">Payment Methods</h1></div>
+  </header>
+
+  <section class="psheet">
+    <p class="caps enter">Saved Cards</p>
+    <div class="pm-cards mt-12" id="cards" data-delegate></div>
+    <a class="btn btn--outline-orange pm-add enter" href="add-card.html?from=payment-methods" style="--i:2"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 4.5v15M4.5 12h15"/></svg><span>Add New Card</span></a>
+
+    <p class="caps pm-sec enter" style="--i:3">Other Methods</p>
+    <div class="list wallet enter" style="--i:3">
+      <div class="list__item" data-switch-row>
+        <span class="list__icon"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="#000" d="M16.4 12.7c0-2.6 2.1-3.8 2.2-3.9a4.8 4.8 0 0 0-3.8-2c-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9a5 5 0 0 0-4.2 2.6c-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.6-1-2.6-4.1ZM13.9 5.1c.7-.9 1.2-2 1.1-3.1-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.1.1 2.3-.6 3-1.6Z"/></svg></span>
+        <span class="list__body"><span class="list__title" id="lApple">Apple Pay</span><span class="list__sub" id="subApple">Visa •••• 4887 in Wallet</span></span>
+        <button class="toggle" type="button" role="switch" data-wallet="apple" aria-labelledby="lApple"></button>
+      </div>
+      <div class="list__item" data-switch-row>
+        <span class="list__icon"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="#003087" d="M8.3 21.2H4.6a.5.5 0 0 1-.5-.6L6.8 3.4c.1-.5.5-.8 1-.8h6.5c3.2 0 5.3 1.7 4.8 4.9-.6 3.8-3.1 5.4-6.4 5.4H10.4a.9.9 0 0 0-.9.8l-1.2 7.5Z"/><path fill="#0070E0" d="M19.3 8c-.6 3.6-3 5.6-6.3 5.6h-1.6l-1.3 8a.4.4 0 0 1-.4.4H7.1l.2-1.3 1.1-6.8a.9.9 0 0 1 .9-.8h2.3c3.3 0 5.8-1.6 6.4-5.4l.1-.4c.7.5 1.2 1.2 1.2.7Z"/></svg></span>
+        <span class="list__body"><span class="list__title" id="lPaypal">PayPal</span><span class="list__sub" id="subPaypal">Not linked</span></span>
+        <button class="toggle" type="button" role="switch" data-wallet="paypal" aria-labelledby="lPaypal"></button>
+      </div>
+    </div>
+    <p class="pm-note"><span data-icon="lock" data-size="16"></span><span>Cards are tokenised by our PCI-certified processor. Voyager never stores your full card number or CVV.</span></p>
+  </section>
+  <nav data-tabbar="profile"></nav>
+</main>
+
+<!-- Card actions -->
+<section class="sheet" id="cardSheet" aria-labelledby="csT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="csT">Visa •••• 4887</p><p class="sheet__sub" id="csSub">Alex Johnson · Expires 09/28</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="kvs">
+    <div><span class="k">Used for</span><span class="v" id="csUsed">6 bookings</span></div>
+    <div><span class="k">Billing address</span><span class="v">London, United Kingdom</span></div>
+  </div>
+  <div class="sheet__foot">
+    <button class="btn btn--primary" type="button" id="csDefault" disabled><span>Default Card</span></button>
+    <button class="btn btn--danger-soft mt-8" type="button" id="csRemove"><span>Remove Card</span></button>
+  </div>
+</section>
+
+<!-- PayPal link -->
+<section class="sheet" id="ppSheet" aria-labelledby="plT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="plT">Link PayPal</p><p class="sheet__sub">You’ll approve each payment in PayPal. No card details are shared.</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <form id="ppForm" novalidate>
+    <div class="fg"><label class="label" for="ppEmail">PayPal email</label><input class="field" type="email" id="ppEmail" data-validate="required|email" autocomplete="email"></div>
+    <div class="sheet__foot"><button class="btn btn--primary" type="submit" id="ppGo"><span>Continue To PayPal</span></button></div>
+  </form>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const $ = (s) => document.querySelector(s);
+  const u = V.user.get();
+  const wallets = () => V.store.get('wallets', { apple: true, paypal: false, paypalEmail: '' });
+  const setW = (p) => V.store.set('wallets', Object.assign(wallets(), p));
+
+  const render = () => {
+    const l = V.cards.list();
+    $('#cards').innerHTML = l.length ? l.map((c) => `<button class="pm-card enter" type="button" data-card="${c.id}" aria-label="${c.brand} ending ${c.last4}${c.isDefault ? ', default card' : ''}. Manage card">
+      <div class="paycard${c.brand === 'Mastercard' ? ' paycard--mc' : ''}">
+        <span class="paycard__chip"></span>
+        <p class="paycard__num">**** **** **** ${V.esc(c.last4)}</p>
+        <div class="paycard__row"><div><span class="paycard__k">Card Holder</span><span class="paycard__v">${V.esc(c.holder)}</span></div><div><span class="paycard__k">Expires</span><span class="paycard__v num">${V.esc(c.exp)}</span></div></div>
+        ${c.brand === 'Mastercard' ? '<span class="mc-logo" aria-hidden="true"><i></i><i></i></span>' : `<span class="paycard__brand">${V.esc(c.brand.toUpperCase())}</span>`}
+      </div>
+      ${c.isDefault ? `<span class="pm-def">${V.icon('check', 12, 'stroke-width="3"')}DEFAULT</span>` : ''}
+      <span class="pm-more" aria-hidden="true">${V.icon('sliders', 16)}</span>
+    </button>`).join('')
+      : `<div class="empty" style="padding:26px 10px 10px"><div class="empty__icon">${V.icon('card', 30)}</div><p class="empty__title">No saved cards</p><p class="empty__msg">Add a card to check out faster. You can also pay with Apple Pay or PayPal.</p></div>`;
+    const d = V.cards.default();
+    $('#subApple').textContent = wallets().apple ? (d ? `${d.brand} •••• ${d.last4} in Wallet` : 'Ready to use') : 'Not set up';
+    const w = wallets(); $('#subPaypal').textContent = w.paypal ? `Linked · ${w.paypalEmail || u.email}` : 'Not linked';
+    document.querySelectorAll('[data-wallet]').forEach((t) => t.setAttribute('aria-checked', String(!!w[t.dataset.wallet])));
+  };
+
+  // ---- card actions
+  let cur = null;
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-card]'); if (!b) return;
+    cur = V.cards.get(b.dataset.card); if (!cur) return;
+    $('#csT').textContent = `${cur.brand} •••• ${cur.last4}`; $('#csSub').textContent = `${cur.holder} · Expires ${cur.exp}`;
+    const n = V.trips.list().filter((t) => t.card === cur.id).length; $('#csUsed').textContent = n ? `${n} booking${n === 1 ? '' : 's'}` : 'No bookings yet';
+    $('#csDefault').disabled = cur.isDefault; $('#csDefault').querySelector('span').textContent = cur.isDefault ? 'Default Card' : 'Set As Default';
+    V.sheet.open('cardSheet');
+  });
+  $('#csDefault').addEventListener('click', async (e) => {
+    if (!cur) return; await V.loading(e.currentTarget, 600);
+    V.cards.setDefault(cur.id); V.booking.set({ card: cur.id }); V.sheet.close(); render();
+    V.toast(`${cur.brand} •••• ${cur.last4} is now your default card`);
+  });
+  $('#csRemove').addEventListener('click', async () => {
+    if (!cur) return; const c = cur; V.sheet.close();
+    const up = V.trips.list('upcoming').filter((t) => t.card === c.id).length;
+    if (!(await V.dialog({ title: `Remove ${c.brand} •••• ${c.last4}?`, message: up ? `It’s linked to ${up} upcoming trip${up === 1 ? '' : 's'}. Any balance will be charged to your new default card.` : 'You can add it again any time.', confirm: 'Remove', cancel: 'Keep Card', tone: 'danger', icon: 'trash' }))) return;
+    const before = V.cards.list(); V.cards.remove(c.id); render();
+    V.toast(`${c.brand} •••• ${c.last4} removed`, { action: 'Undo', onAction: () => { V.store.set('cards', before); render(); } });
+  });
+
+  // ---- wallets
+  document.querySelectorAll('[data-wallet]').forEach((t) => t.addEventListener('change', async (e) => {
+    const k = t.dataset.wallet, on = e.detail;
+    if (k === 'paypal' && on) { t.setAttribute('aria-checked', 'false'); $('#ppEmail').value = wallets().paypalEmail || u.email; V.sheet.open('ppSheet'); return; }
+    if (!on && !(await V.dialog({ title: `Unlink ${k === 'apple' ? 'Apple Pay' : 'PayPal'}?`, message: 'You won’t see it at checkout until you link it again.', confirm: 'Unlink', cancel: 'Keep', tone: 'warn' }))) { t.setAttribute('aria-checked', 'true'); return; }
+    setW({ [k]: on }); render(); V.toast(on ? 'Apple Pay ready at checkout' : `${k === 'apple' ? 'Apple Pay' : 'PayPal'} unlinked`);
+  }));
+  $('#ppForm').addEventListener('submit', async (e) => {
+    e.preventDefault(); if (!V.validate($('#ppForm'))) return;
+    await V.loading($('#ppGo'), 1300);
+    setW({ paypal: true, paypalEmail: $('#ppEmail').value.trim() }); V.sheet.close(); render();
+    V.toast('PayPal linked');
+  });
+
+  render();
+  if (V.q('added')) V.toast('Card added and set as default');
+})();
+</script>
+</body>
+</html>

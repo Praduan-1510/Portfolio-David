@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Notifications</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  .nt-tools { display: flex; align-items: center; justify-content: space-between; margin: 14px 0 2px; }
+  .nt-count { font-size: 13px; color: var(--muted-2); }
+  .nt-count b { color: var(--navy); font-weight: 600; }
+  .nt-tools .text-btn { font-size: 13px; }
+  .nt-tools .text-btn[disabled] { opacity: .4; pointer-events: none; }
+  .chip-row { margin-top: 18px; gap: 8px; }
+  .nt-group { font-size: 11px; font-weight: 600; letter-spacing: .8px; text-transform: uppercase; color: var(--steel); margin: 22px 0 10px; }
+
+  /* Swipe-to-delete row: red action sits behind, the card slides left */
+  .nrow { position: relative; border-radius: var(--r); overflow: hidden; }
+  .nrow.dragging, .nrow.is-open, .nrow:has(.nrow__del:focus-visible) { background: var(--danger); }
+  .nrow:not(.dragging):not(.is-open) .nrow__del:not(:focus-visible) { opacity: 0; }
+  .nrow + .nrow { margin-top: 10px; }
+  .nrow__del { position: absolute; right: 0; top: 0; bottom: 0; width: 84px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: #fff; font-size: 12px; font-weight: 600; }
+  .nrow__del svg { width: 20px; height: 20px; }
+  .nrow__fg { position: relative; display: flex; gap: 12px; padding: 13px 14px 13px 12px; background: #fff; border-radius: var(--r); box-shadow: inset 0 0 0 1px var(--border); touch-action: pan-y; transition: transform 260ms var(--ease-out), background-color var(--dur); user-select: none; -webkit-user-select: none; }
+  .nrow.is-unread .nrow__fg { background: var(--profile); }
+  .nrow.dragging .nrow__fg { transition: none; }
+  .nrow.is-open .nrow__fg, .nrow:has(.nrow__del:focus-visible) .nrow__fg { transform: translateX(-84px); }
+  .nrow__fg:active { filter: brightness(.98); }
+  .nrow__icon { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; flex-shrink: 0; }
+  .nrow__icon svg { width: 20px; height: 20px; }
+  .nrow__t { font-size: 14px; font-weight: 600; color: #000; line-height: 1.35; padding-right: 14px; }
+  .nrow__b { font-size: 12.5px; color: #3D4B53; line-height: 1.45; margin-top: 2px; }
+  .nrow__time { font-size: 11px; color: var(--muted-2); margin-top: 6px; display: flex; align-items: center; gap: 6px; }
+  .nrow__cta { color: var(--brand); font-weight: 600; }
+  .nrow__dot { position: absolute; right: 12px; top: 16px; width: 8px; height: 8px; border-radius: 50%; background: var(--brand); box-shadow: 0 0 0 3px rgba(15,150,219,.15); }
+  .nrow.leaving { animation: leave 240ms var(--ease-out) forwards; }
+  @keyframes leave { to { opacity: 0; transform: translateX(-40px); } }
+  .hint { margin-top: 16px; }
+  .hint button { margin-left: auto; color: inherit; font-weight: 600; padding: 4px 0 4px 8px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Notifications">
+  <header class="appbar">
+    <a class="back tap" href="home.html" data-go="back" aria-label="Back"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <h1 class="appbar__title">Notifications</h1>
+    <div class="appbar__icons"><a class="appbar__icon tap" href="settings.html" aria-label="Notification settings" style="width:44px"><i data-icon="settings" data-size="20" data-sw="1.7"></i></a></div>
+  </header>
+  <div class="page-divider"></div>
+
+  <div class="chip-row" id="chips" data-group aria-label="Filter notifications">
+    <button class="chip is-active tap" role="tab" type="button" data-value="all">All</button>
+    <button class="chip tap" role="tab" type="button" data-value="order">Orders</button>
+    <button class="chip tap" role="tab" type="button" data-value="offer">Offers</button>
+    <button class="chip tap" role="tab" type="button" data-value="wish">Wishlist</button>
+  </div>
+
+  <div class="nt-tools" id="tools">
+    <p class="nt-count" id="count" aria-live="polite"></p>
+    <div class="row-flex" style="gap:16px">
+      <button class="text-btn text-btn--brand tap" type="button" id="readAll">Mark all read</button>
+      <button class="text-btn text-btn--danger tap" type="button" id="clearAll">Clear all</button>
+    </div>
+  </div>
+
+  <div class="banner banner--info hint" id="hint"><i data-icon="info" data-size="18"></i><span>Swipe left on a notification to delete it.</span><button class="tap" type="button" id="hintOk">Got it</button></div>
+
+  <div id="list" data-delegate></div>
+
+  <nav data-tabbar="home"></nav>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const TYPE = {
+      order: ['truck', 'var(--tile)', 'var(--brand)', 'Track'],
+      offer: ['tag', '#FDE8E8', 'var(--sale)', 'Shop the sale'],
+      club: ['trophy', '#E6F8DF', 'var(--club)', 'View points'],
+      store: ['store', 'var(--tile)', 'var(--navy)', 'Store details'],
+      stock: ['box', '#FFF5CA', '#B07A00', 'View product'],
+      price: ['percent', '#E6F8DF', 'var(--ok)', 'View product'],
+    };
+    const GROUP_OF = { order: 'order', offer: 'offer', stock: 'wish', price: 'wish' };
+
+    let filter = 'all';
+    const isToday = (t) => /(\d+\s?(m|min|h)\s?ago|just now|now)/i.test(t);
+    const hrefOf = (n) => (n.type === 'offer' && !/sale=1/.test(n.href) ? n.href + (n.href.includes('?') ? '&' : '?') + 'sale=1' : n.href);
+
+    function row(n) {
+      const [ic, bg, fg, cta0] = TYPE[n.type] || TYPE.order; const cta = /write-review/.test(n.href) ? 'Write a review' : /order-detail/.test(n.href) ? 'View order' : cta0;
+      return `<div class="nrow${n.read ? '' : ' is-unread'}" data-id="${n.id}">
+        <button class="nrow__del" type="button" data-del="${n.id}" aria-label="Delete notification: ${D.esc(n.title)}">${D.icon('trash', 20)}Delete</button>
+        <a class="nrow__fg" href="${hrefOf(n)}" data-open="${n.id}" draggable="false">
+          <span class="nrow__icon" style="background:${bg};color:${fg}">${D.icon(ic, 20)}</span>
+          <span class="grow"><span class="nrow__t" style="display:block">${D.esc(n.title)}</span><span class="nrow__b" style="display:block">${D.esc(n.body)}</span>
+          <span class="nrow__time">${D.esc(n.time)} · <span class="nrow__cta">${cta}</span></span></span>
+          ${n.read ? '' : '<span class="nrow__dot" aria-label="Unread"></span>'}
+        </a></div>`;
+    }
+
+    function render() {
+      const all = D.notifications.list();
+      const list = all.filter((n) => filter === 'all' || GROUP_OF[n.type] === filter);
+      const unread = all.filter((n) => !n.read).length;
+      $('#count').innerHTML = unread ? `<b>${unread}</b> unread` : 'All caught up';
+      $('#readAll').disabled = !unread; $('#clearAll').disabled = !all.length;
+      $('#tools').hidden = !all.length; $('#chips').hidden = !all.length;
+      $('#hint').hidden = !list.length || !!D.store.get('notifHint');
+      if (!list.length) {
+        const none = !all.length;
+        $('#list').innerHTML = `<div class="empty-state"><div class="empty-state__icon">${D.icon('bell', 40)}</div><h3>${none ? 'You’re all caught up' : 'Nothing here yet'}</h3><p>${none ? 'Order updates, offers and price drops on your wishlist will show up here.' : 'No notifications in this category. Try another filter.'}</p>${none ? '<a class="btn btn--primary btn--md tap" href="home.html">Continue shopping</a><a class="text-btn text-btn--brand tap" href="settings.html" style="margin-top:8px">Notification settings</a>' : '<button class="btn btn--soft btn--md tap" type="button" id="showAll">Show all notifications</button>'}</div>`;
+        const sa = $('#showAll'); if (sa) sa.onclick = () => $('#chips [data-value="all"]').click();
+        D.hydrate($('#list')); return;
+      }
+      const today = list.filter((n) => isToday(n.time)), earlier = list.filter((n) => !isToday(n.time));
+      $('#list').innerHTML = (today.length ? `<p class="nt-group">Today</p>${today.map(row).join('')}` : '') + (earlier.length ? `<p class="nt-group">Earlier</p>${earlier.map(row).join('')}` : '');
+      bindSwipe();
+    }
+
+    // ---- Swipe gesture ----
+    let openRow = null;
+    const closeOpen = () => { if (openRow) { openRow.classList.remove('is-open'); openRow = null; } };
+    function bindSwipe() {
+      $$('.nrow').forEach((r) => {
+        const fg = $('.nrow__fg', r); let x0 = null, y0 = 0, dx = 0, moved = false, base = 0;
+        fg.addEventListener('pointerdown', (e) => { if (e.button) return; x0 = e.clientX; y0 = e.clientY; dx = 0; moved = false; base = r.classList.contains('is-open') ? -84 : 0; });
+        fg.addEventListener('pointermove', (e) => {
+          if (x0 == null) return; const ddx = e.clientX - x0;
+          if (!moved && Math.abs(ddx) > 8 && Math.abs(ddx) > Math.abs(e.clientY - y0)) { moved = true; r.classList.add('dragging'); fg.setPointerCapture(e.pointerId); if (openRow && openRow !== r) closeOpen(); }
+          if (moved) { dx = Math.min(0, Math.max(-110, base + ddx)); fg.style.transform = `translateX(${dx}px)`; }
+        });
+        const end = () => { if (x0 == null) return; x0 = null; r.classList.remove('dragging'); fg.style.transform = ''; if (moved) { const open = dx < -42; r.classList.toggle('is-open', open); openRow = open ? r : (openRow === r ? null : openRow); if (open) { D.haptic(8); D.store.set('notifHint', true); $('#hint').hidden = true; } } };
+        fg.addEventListener('pointerup', end); fg.addEventListener('pointercancel', end);
+        fg.addEventListener('click', (e) => {
+          if (moved) { e.preventDefault(); moved = false; return; }
+          if (r.classList.contains('is-open')) { e.preventDefault(); closeOpen(); return; }
+          e.preventDefault(); D.notifications.markRead(r.dataset.id); location.href = fg.getAttribute('href');
+        });
+      });
+    }
+    document.addEventListener('pointerdown', (e) => { if (openRow && !openRow.contains(e.target)) closeOpen(); });
+
+    // ---- Delete one (with undo) ----
+    $('#list').addEventListener('click', async (e) => {
+      const b = e.target.closest('[data-del]'); if (!b) return;
+      const before = D.notifications.list(); const r = b.closest('.nrow'); r.classList.add('leaving'); openRow = null;
+      await D.wait(220); D.notifications.remove(b.dataset.del); render();
+      D.toast('Notification deleted', { action: 'Undo', onAction: () => { D.store.set('notifications', before); D.badges(); render(); } });
+    });
+
+    $('#readAll').addEventListener('click', () => { const n = D.notifications.unread(); D.notifications.markAllRead(); render(); D.toast(`${n} marked as read`, { icon: 'check' }); });
+    $('#clearAll').addEventListener('click', async () => {
+      const n = D.notifications.list().length;
+      if (!(await D.dialog({ title: 'Clear all notifications?', message: `All ${n} notifications will be removed. This can’t be undone.`, confirm: 'Clear all', cancel: 'Cancel', tone: 'danger', icon: 'trash' }))) return;
+      D.notifications.list().forEach((x) => D.notifications.remove(x.id)); render(); D.toast('Notifications cleared');
+    });
+    $('#hintOk').addEventListener('click', () => { D.store.set('notifHint', true); $('#hint').hidden = true; });
+    $('#chips').addEventListener('change', (e) => { filter = e.detail; closeOpen(); render(); });
+
+    render();
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Track order</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* ETA card: navy with a brand glow — the one dark moment on the screen */
+  .eta { position: relative; overflow: hidden; margin-top: 20px; padding: 18px 18px 16px; border-radius: var(--r-hero); background: radial-gradient(120% 140% at 100% 0%, #0F96DB 0%, #075881 38%, #012A4A 78%); color: #fff; }
+  .eta::after { content: ''; position: absolute; right: -40px; bottom: -60px; width: 180px; height: 180px; border-radius: 50%; border: 22px solid rgba(255,255,255,.06); }
+  .eta__label { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #9FD5F1; }
+  .eta__date { font-size: 26px; font-weight: 700; line-height: 1.15; margin-top: 4px; }
+  .eta__sub { font-size: 13px; color: #CFE7F4; margin-top: 4px; }
+  .eta__bar { position: relative; height: 6px; border-radius: 3px; background: rgba(255,255,255,.18); margin-top: 16px; }
+  .eta__bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; background: linear-gradient(90deg, #9FD5F1, #fff); }
+  .eta__ends { display: flex; justify-content: space-between; font-size: 11px; color: #9FD5F1; margin-top: 6px; }
+  .eta .pill { position: absolute; right: 16px; top: 16px; z-index: 1; }
+
+  /* Stylised route map */
+  .map { position: relative; margin-top: 14px; border-radius: var(--r-hero); overflow: hidden; box-shadow: inset 0 0 0 1px var(--border); background: #EAF4F8; }
+  .map svg { display: block; width: 100%; height: auto; }
+  .map__chip { position: absolute; left: 12px; top: 12px; display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: var(--r-pill); background: #fff; font-size: 12px; font-weight: 600; color: var(--navy); box-shadow: var(--shadow-1); }
+  .map__chip svg { width: 14px; height: 14px; color: var(--brand); }
+  .map__recenter { position: absolute; right: 10px; bottom: 10px; width: 36px; height: 36px; border-radius: 50%; background: #fff; color: var(--navy); display: grid; place-items: center; box-shadow: var(--shadow-1); }
+  .map__recenter svg { width: 18px; height: 18px; }
+  .courier-pulse { transform-box: fill-box; transform-origin: center; animation: cpulse 1.8s var(--ease-out) infinite; }
+  @keyframes cpulse { 0% { transform: scale(.6); opacity: .55; } 100% { transform: scale(1.9); opacity: 0; } }
+
+  .who { display: flex; align-items: center; gap: 12px; }
+  .who .avatar { width: 46px; height: 46px; }
+  .who__name { font-size: 15px; font-weight: 600; color: #000; }
+  .who__sub { font-size: 12px; color: var(--muted-2); margin-top: 1px; }
+  .who__call { width: 44px; height: 44px; border-radius: 50%; background: var(--brand); color: #fff; display: grid; place-items: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(15,150,219,.3); }
+  .who__call svg { width: 20px; height: 20px; }
+  .awb { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; padding: 10px 12px; border-radius: var(--r); background: var(--surface); }
+  .awb__k { font-size: 11px; color: var(--muted-2); }
+  .awb__v { font-size: 14px; font-weight: 600; color: var(--navy); letter-spacing: .3px; }
+  .awb .text-btn { color: var(--brand); font-weight: 600; font-size: 13px; }
+
+  .otp-card { display: flex; align-items: center; gap: 14px; }
+  .otp-digits { display: flex; gap: 6px; }
+  .otp-digits span { width: 34px; height: 40px; border-radius: 8px; background: #fff; box-shadow: inset 0 0 0 1.5px var(--steel); display: grid; place-items: center; font-size: 19px; font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
+  .otp-card__t { font-size: 14px; font-weight: 600; color: #000; }
+  .otp-card__s { font-size: 12px; color: var(--muted-2); line-height: 1.4; margin-top: 2px; }
+
+  .instr { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; }
+  .instr__t { font-size: 14px; font-weight: 600; color: #000; }
+  .instr__s { font-size: 12.5px; color: var(--muted-2); margin-top: 1px; line-height: 1.4; }
+  .instr .text-btn { color: var(--brand); font-weight: 600; flex-shrink: 0; }
+  .track { margin-top: 4px; }
+  .track__loc { display: block; font-size: 12px; color: var(--steel); line-height: 16px; }
+  .count { font-size: 12px; color: var(--muted-2); text-align: right; margin-top: 4px; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Track order">
+  <header class="appbar">
+    <a class="back tap" href="order-detail.html" id="backLink" data-go="back" aria-label="Back"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <h1 class="appbar__title">Track order<span class="appbar__sub" id="sub">#DEC20260222</span></h1>
+    <button class="appbar__action appbar__action--brand tap" type="button" data-action="share" data-title="Track my Decathlon order">Share</button>
+  </header>
+  <div class="page-divider"></div>
+
+  <section class="eta enter" style="--i:0" aria-live="polite" id="eta"></section>
+
+  <div class="map enter" style="--i:1" id="map" role="img" aria-label="Map showing the courier on the way from the Kolkata hub to your address"></div>
+
+  <div class="section-head"><h2 class="section-title">Delivery partner</h2></div>
+  <div class="panel enter" style="--i:2" id="courierCard"></div>
+
+  <div id="otpWrap">
+    <div class="section-head"><h2 class="section-title">Delivery OTP</h2></div>
+    <div class="panel panel--surface otp-card" id="otp"></div>
+  </div>
+
+  <div class="section-head"><h2 class="section-title">Delivery instructions</h2></div>
+  <button class="panel instr tap" type="button" id="instrBtn"><span class="icon-tile"><i data-icon="home" data-size="22"></i></span><span class="grow"><span class="instr__t" style="display:block" id="instrT">No instructions yet</span><span class="instr__s" style="display:block" id="instrS">Tell the courier where to leave your parcel</span></span><span class="text-btn" id="instrCta">Add</span></button>
+
+  <div class="section-head"><h2 class="section-title">Shipment updates</h2></div>
+  <ol class="track" id="track"></ol>
+
+  <div class="btn-pair" style="margin-top:8px">
+    <a class="btn btn--outline btn--md tap" id="detailBtn" href="order-detail.html">Order details</a>
+    <a class="btn btn--outline btn--md tap" id="helpBtn" href="help.html">Get help</a>
+  </div>
+
+  <nav data-tabbar="account"></nav>
+</main>
+
+<section class="sheet" id="instrSheet" aria-labelledby="instrST">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="instrST">Delivery instructions</p><p class="sheet__sub">Shared with your delivery partner for this order</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button>
+  </div>
+  <div class="options" data-options id="instrOpts">
+    <button class="option tap" type="button" data-value="Hand it to me"><span class="option__radio"></span><span class="option__body"><span class="option__title">Hand it to me</span><span class="option__sub">OTP needed at the door</span></span></button>
+    <button class="option tap" type="button" data-value="Leave with security"><span class="option__radio"></span><span class="option__body"><span class="option__title">Leave with security</span><span class="option__sub">Guard shares the OTP on your behalf</span></span></button>
+    <button class="option tap" type="button" data-value="Call before arriving"><span class="option__radio"></span><span class="option__body"><span class="option__title">Call before arriving</span><span class="option__sub">Rakesh calls 10 minutes ahead</span></span></button>
+    <button class="option tap" type="button" data-value="Leave with a neighbour"><span class="option__radio"></span><span class="option__body"><span class="option__title">Leave with a neighbour</span><span class="option__sub">Mention the flat number below</span></span></button>
+  </div>
+  <div class="fg" style="margin-top:16px">
+    <label class="label" for="instrNote">Note for the courier</label>
+    <textarea class="field" id="instrNote" maxlength="120" placeholder="e.g. Ring twice, the bell is on the left gate"></textarea>
+    <span class="helper"><span id="instrCount">0</span>/120 characters</span>
+  </div>
+  <div class="sheet__foot"><button class="btn btn--primary btn--lg tap" type="button" id="instrSave"><span>Save instructions</span></button></div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const capture = document.body.classList.contains('capture');
+    let o = D.orders.get(D.q('id') || 'DEC20260222') || D.orders.get('DEC20260222') || D.orders.list()[0];
+    if (!o) { $('#eta').outerHTML = `<div class="empty-state"><div class="empty-state__icon">${D.icon('truck', 40)}</div><h3>Nothing to track</h3><p>Place an order to follow it here, step by step.</p><a class="btn btn--primary btn--md tap" href="home.html">Start shopping</a></div>`; return; }
+    const id = o.id; const s = o.status;
+    const COURIER = { name: 'Rakesh Kumar', rating: 4.8, phone: '+91 80 4718 2290' };
+    const LOC = ['Decathlon online store', 'Bengaluru fulfilment centre', 'Reached Kolkata hub, Dankuni', `Out with ${COURIER.name}`, 'Handed over at your door'];
+    const FRAC = { processing: 0.04, transit: 0.58, delivered: 1, 'return-requested': 1, returned: 1, cancelled: 0.3 }[s];
+
+    document.title = `Decathlon · Track #${id}`;
+    $('#sub').textContent = `#${id} · ${D.orders.count(o)} ${D.orders.count(o) === 1 ? 'item' : 'items'}`;
+    $('#backLink').href = `order-detail.html?id=${id}`;
+    $('#detailBtn').href = `order-detail.html?id=${id}`;
+    $('#helpBtn').href = `help.html?order=${id}&topic=delivery`;
+
+    // ---- ETA card ----
+    const eta = o.eta || D.iso(D.addDays(4, new Date(o.date + 'T12:00:00')));
+    const delivered = s === 'delivered' || s === 'return-requested' || s === 'returned';
+    const etaTxt = delivered ? ['Delivered on', D.fmtDay(o.deliveredOn || eta), 'Signed for with OTP at your address']
+      : s === 'cancelled' ? ['Order cancelled', D.fmtDay(o.cancelledOn || D.iso()), 'The shipment is on its way back to us']
+      : s === 'processing' ? ['Estimated arrival', D.fmtDay(eta), 'We are packing your order at the warehouse']
+      : eta <= D.iso() ? ['Arriving today', D.fmtDay(eta), 'Out for delivery · usually before 2 PM'] : ['Arriving by', D.fmtDay(eta), 'Between 10 AM and 7 PM · usually before 2 PM'];
+    $('#eta').innerHTML = `<span class="pill ${D.orders.pill(s)} pill--sm">${D.orders.status(s)}</span>
+      <p class="eta__label">${etaTxt[0]}</p><p class="eta__date">${etaTxt[1]}</p><p class="eta__sub">${etaTxt[2]}</p>
+      <div class="eta__bar" aria-hidden="true"><i id="etaFill" style="width:${Math.round(FRAC * 100)}%"></i></div>
+      <div class="eta__ends"><span>Kolkata hub</span><span id="kmLeft">${delivered ? 'Delivered' : s === 'cancelled' ? 'Returning' : '6.2 km to go'}</span><span>Home</span></div>`;
+
+    // ---- Route map (inline SVG, courier dot follows the route path) ----
+    const blocks = [];
+    for (let r = 0; r < 5; r++) for (let c = 0; c < 7; c++) { const x = 8 + c * 50 + (r % 2 ? 12 : 0), y = 6 + r * 44; if ((r + c) % 4 !== 1) blocks.push(`<rect x="${x}" y="${y}" width="${36 + ((r * c) % 3) * 4}" height="30" rx="6" fill="#fff" opacity="${0.55 + ((r + c) % 3) * 0.15}"/>`); }
+    const ROUTE = 'M36 188 C 62 176 70 150 96 144 S 150 150 168 122 S 196 70 232 74 S 282 96 300 70 S 318 40 322 30';
+    $('#map').innerHTML = `<svg viewBox="0 0 345 220" aria-hidden="true">
+        <rect width="345" height="220" fill="#E4F1F7"/>
+        ${blocks.join('')}
+        <path d="M-10 60 C 40 70 60 40 110 36 S 170 10 200 -10" fill="none" stroke="#B8DDEE" stroke-width="18" stroke-linecap="round"/>
+        <path d="M0 110 H345 M0 160 H345 M130 0 V220 M250 0 V220" stroke="#fff" stroke-width="7"/>
+        <circle cx="70" cy="70" r="18" fill="#CFE8C8"/><circle cx="286" cy="176" r="24" fill="#CFE8C8"/>
+        <path id="route" d="${ROUTE}" fill="none" stroke="#9DB5C1" stroke-width="4" stroke-linecap="round" stroke-dasharray="1 8"/>
+        <path id="routeDone" d="${ROUTE}" fill="none" stroke="#0F96DB" stroke-width="5" stroke-linecap="round"/>
+        <g transform="translate(36 188)"><circle r="12" fill="#012A4A"/><g transform="translate(-7 -7)" color="#fff">${D.icon('store', 14, { sw: 2 })}</g></g>
+        <g transform="translate(322 30)"><circle r="16" fill="#0F96DB" opacity=".18"/><g transform="translate(-11 -19)" color="#0F96DB">${D.icon('pin-fill', 22)}</g></g>
+        <g id="courier">${delivered || s === 'processing' ? '' : '<circle class="courier-pulse" r="12" fill="#0F96DB"/>'}<circle r="11" fill="#fff" stroke="#0F96DB" stroke-width="2.5"/><g transform="translate(-7 -7)" color="#012A4A">${D.icon('truck', 14, { sw: 2 })}</g></g>
+      </svg>
+      <span class="map__chip">${D.icon('clock', 14)}<span id="mapChip">${delivered ? 'Delivered' : s === 'processing' ? 'Not shipped yet' : s === 'cancelled' ? 'Returning to hub' : 'About 35 min away'}</span></span>
+      <button class="map__recenter tap" type="button" id="recenter" aria-label="Recenter map on the courier">${D.icon('locate', 18)}</button>`;
+    const route = $('#route'), done = $('#routeDone'), dot = $('#courier'); const L = route.getTotalLength();
+    const place = (f) => { const p = route.getPointAtLength(L * f); dot.setAttribute('transform', `translate(${p.x.toFixed(1)} ${p.y.toFixed(1)})`); done.setAttribute('stroke-dasharray', `${L * f} ${L}`); };
+    place(FRAC);
+    if (s === 'transit' && !capture && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const t0 = performance.now(); const SPAN = 0.16, DUR = 14000;
+      const tick = (t) => { const k = ((t - t0) % DUR) / DUR; const f = FRAC - 0.06 + SPAN * k; place(f);
+        $('#etaFill').style.width = Math.round(f * 100) + '%'; const km = Math.max(0.4, (1 - f) * 14.6); $('#kmLeft').textContent = `${km.toFixed(1)} km to go`; $('#mapChip').textContent = `About ${Math.max(5, Math.round(km * 5.6))} min away`;
+        requestAnimationFrame(tick); };
+      requestAnimationFrame(tick);
+    }
+    $('#recenter').addEventListener('click', () => { const m = $('#map'); m.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.02)' }, { transform: 'scale(1)' }], { duration: 320 }); D.toast(delivered ? 'Your parcel was delivered to Home' : `Courier is near ${s === 'transit' ? 'Chinar Park, New Town' : 'the Kolkata hub'}`, { icon: 'locate' }); });
+
+    // ---- Courier + AWB ----
+    const awb = o.awb || `DLV ${id.slice(-4)} 2290 ${id.slice(3, 7)}`;
+    $('#courierCard').innerHTML = `<div class="who"><span class="avatar">${D.icon('user-fill', 26)}</span><div class="grow"><p class="who__name">${s === 'processing' ? 'Assigned when shipped' : COURIER.name}</p><p class="who__sub">${o.courier || 'Delhivery'} · ${D.icon('star', 11).replace('<svg', '<svg style="display:inline;vertical-align:-1px;color:#FFC727"')} ${COURIER.rating} rating</p></div>
+        <button class="who__call tap" type="button" id="callBtn" aria-label="Call delivery partner">${D.icon('phone', 20)}</button></div>
+      <div class="awb"><div><p class="awb__k">Tracking number (AWB)</p><p class="awb__v num">${awb}</p></div><button class="text-btn tap" type="button" data-action="copy" data-copy="${awb.replace(/\s/g, '')}" data-copied="Tracking number copied">${D.icon('copy', 16)}Copy</button></div>`;
+    $('#callBtn').addEventListener('click', async () => {
+      if (s !== 'transit') { D.toast(s === 'processing' ? 'A delivery partner is assigned once your order ships' : 'This delivery is complete. Contact support for help.'); return; }
+      const ok = await D.dialog({ title: `Call ${COURIER.name}?`, message: `Your number stays private. We connect you through a masked line (${COURIER.phone}).`, confirm: 'Call now', cancel: 'Not now', tone: 'info', icon: 'phone' });
+      if (ok) { D.toast(`Connecting you to ${COURIER.name.split(' ')[0]}…`, { icon: 'phone' }); location.href = 'tel:' + COURIER.phone.replace(/\s/g, ''); }
+    });
+
+    // ---- Delivery OTP (hidden until revealed) ----
+    const code = String([...id].reduce((a, c) => (a * 31 + c.charCodeAt(0)) % 9000, 7) + 1000);
+    let shown = false;
+    const renderOtp = () => {
+      $('#otp').innerHTML = `<div class="grow"><p class="otp-card__t">${shown ? 'Share at the door' : 'Tap to reveal'}</p><p class="otp-card__s">Give this code only when you have your parcel in hand.</p></div>
+        <button class="otp-digits tap" type="button" id="otpBtn" aria-label="${shown ? 'Hide delivery OTP ' + code.split('').join(' ') : 'Show delivery OTP'}">${code.split('').map((d) => `<span>${shown ? d : '•'}</span>`).join('')}</button>`;
+      $('#otpBtn').onclick = () => { shown = !shown; renderOtp(); D.haptic(8); };
+    };
+    if (s === 'transit' || s === 'processing') renderOtp(); else $('#otpWrap').hidden = true;
+
+    // ---- Delivery instructions sheet ----
+    const renderInstr = () => {
+      const x = (D.orders.get(id) || o).instructions;
+      $('#instrT').textContent = x ? x.type : 'No instructions yet';
+      $('#instrS').textContent = x ? (x.note || 'No extra note') : 'Tell the courier where to leave your parcel';
+      $('#instrCta').textContent = x ? 'Change' : 'Add';
+    };
+    renderInstr();
+    const lockInstr = !(s === 'transit' || s === 'processing');
+    let pick = null;
+    $('#instrOpts').addEventListener('select', (e) => { pick = e.detail; });
+    $('#instrNote').addEventListener('input', (e) => { $('#instrCount').textContent = e.target.value.length; });
+    $('#instrBtn').addEventListener('click', () => {
+      if (lockInstr) { D.toast('Instructions can only be changed before delivery'); return; }
+      const x = (D.orders.get(id) || o).instructions || {}; pick = x.type || null;
+      $$('#instrOpts .option').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.value === pick)));
+      $('#instrNote').value = x.note || ''; $('#instrCount').textContent = (x.note || '').length;
+      D.sheet.open('instrSheet');
+    });
+    $('#instrSave').addEventListener('click', async (e) => {
+      if (!pick) { const g = $('#instrOpts'); g.classList.remove('shake'); void g.offsetWidth; g.classList.add('shake'); D.toast('Pick where the courier should leave it'); return; }
+      await D.loading(e.currentTarget, 800);
+      D.orders.update(id, { instructions: { type: pick, note: $('#instrNote').value.trim() } });
+      D.sheet.close(); renderInstr(); D.toast('Instructions shared with your delivery partner', { icon: 'check' });
+    });
+
+    // ---- Timeline ----
+    $('#track').innerHTML = D.orders.timeline(o).map((t, i) => `<li class="${t.state}"><span class="track__title">${t.title}</span><span class="track__meta">${t.meta}</span>${t.state && s !== 'cancelled' ? `<span class="track__loc">${LOC[i]}</span>` : ''}</li>`).join('');
+    D.hydrate(document);
+  })();
+</script>
+</body>
+</html>

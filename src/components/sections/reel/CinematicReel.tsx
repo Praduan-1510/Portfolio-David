@@ -388,8 +388,15 @@ export function CinematicReel() {
         {/* The board: dl/dt/dd semantics preserved (BoardRow unchanged). At
             lg+ (motion-safe) it rides the LEFT half over the solid panel: the
             centered Container makes the w-1/2 wrapper end exactly at the seam,
-            and pr-space-7 matches the hero column's inset off it. */}
-        <Container className="relative py-space-7 motion-safe:absolute motion-safe:inset-x-0 motion-safe:bottom-0 motion-safe:py-0 motion-safe:pb-space-7 short-land:pb-space-4">
+            and pr-space-7 matches the hero column's inset off it.
+            data-chrome-yield: while this pinned board holds the bottom edge,
+            the dock and the bottom edge fade step aside (useChromeYield).
+            Only when it IS pinned: under reduced motion it is plain flow and
+            passes the dock like any other content. */}
+        <Container
+          data-chrome-yield={reduced ? undefined : ""}
+          className="relative py-space-7 motion-safe:absolute motion-safe:inset-x-0 motion-safe:bottom-0 motion-safe:py-0 motion-safe:pb-space-7 short-land:pb-space-4"
+        >
           {/* `.reel-board` carries the portrait layout's lower-third well and its
               brighter --muted (globals.css @layer components). Both are scoped
               there to the motion-safe sub-lg case, so this class is inert at lg+

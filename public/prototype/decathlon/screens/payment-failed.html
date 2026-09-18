@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Payment failed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  .pf .result { padding-top: 56px; }
+  .pf .result__circle svg { width: 72px; height: 72px; }
+  .pf .result__circle::before { border-color: var(--danger-bg); }
+  .pf-amt { font-size: 26px; font-weight: 700; color: var(--navy); margin-top: 14px; }
+  .pf-card { margin-top: 26px; }
+  .pf-card .kvs--plain > div { padding: 8px 0; }
+  .pf-help { display: flex; align-items: center; gap: 12px; width: 100%; margin-top: 12px; min-height: 60px; }
+  .pf-help .grow b { display: block; font-size: 14px; font-weight: 600; color: #111; }
+  .pf-help .grow span { font-size: 12px; color: var(--muted-2); }
+  .page--no-nav { padding-bottom: 240px; }   /* two stacked CTAs */
+</style>
+</head>
+<body>
+<main class="page page--no-nav pf" aria-label="Payment failed">
+  <header class="appbar">
+    <a class="back tap" href="checkout.html" aria-label="Back to checkout"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <h1 class="appbar__title">Payment</h1>
+  </header>
+  <div class="page-divider"></div>
+
+  <div class="result" role="alert">
+    <div class="result__circle result__circle--fail"><i data-icon="x-circle" data-size="72" data-sw="1.6"></i></div>
+    <h2 class="result__title">Payment failed</h2>
+    <p class="result__msg" id="reason">Your bank declined this transaction.</p>
+    <p class="pf-amt num" id="amt">₹28,000</p>
+  </div>
+
+  <div class="banner banner--ok pf-card"><i data-icon="bag" data-size="18"></i><span><b>Your bag is safe.</b> All <span id="nItems">6 items</span> are still in your bag and no order was placed.</span></div>
+
+  <div class="panel" style="margin-top:12px;padding-top:8px;padding-bottom:8px">
+    <div class="kvs kvs--plain">
+      <div><span class="k">Method</span><span class="v" id="method">Credit Card</span></div>
+      <div><span class="k">Transaction ID</span><span class="v num" id="txn">TXN0000</span></div>
+      <div><span class="k">Time</span><span class="v" id="time">Today</span></div>
+    </div>
+  </div>
+  <p class="form-note" style="margin-top:12px">If any money was debited, it will be refunded automatically to the same account within 3–5 working days.</p>
+
+  <a class="panel pf-help tap" href="help.html"><span class="icon-tile"><i data-icon="headset" data-size="22"></i></span><span class="grow"><b>Need help?</b><span>Chat with us or call 1800 266 1177</span></span><i class="chev" data-icon="chevron" data-size="18" data-sw="2"></i></a>
+
+  <div class="cta-bar">
+    <a class="btn btn--primary btn--lg tap" id="retry" href="checkout.html"><i data-icon="refresh" data-size="18"></i><span>Retry payment</span></a>
+    <a class="btn btn--outline btn--lg tap" id="change" href="payment.html"><span>Change payment method</span></a>
+  </div>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$;
+    const REASONS = { declined: 'Your bank declined this transaction. Try another card or payment method.', timeout: 'The payment request expired before it was approved. Please try again.', insufficient: 'There were not enough funds in the account.', network: 'We lost the connection to your bank. Nothing was charged.' };
+    // Cash on delivery can't fail, so a direct visit shows the saved UPI ID, the default online method
+    let m = D.q('method') || D.payment.get(); if (m === 'cod') m = 'upi';
+    const via = D.q('via') || (m === 'upi' ? D.payment.upi()[0] : '');
+    $('#reason').textContent = REASONS[D.q('reason')] || (m === 'upi' ? REASONS.timeout : REASONS.declined);
+    const t = D.bag.totals();
+    $('#amt').textContent = D.fmt(t.total);
+    $('#nItems').textContent = `${t.count} ${t.count === 1 ? 'item' : 'items'}`;
+    $('#method').textContent = D.payment.label(m) + (via ? ` · ${via}` : '');
+    $('#txn').textContent = 'TXN' + String(Date.now()).slice(-9);
+    const d = new Date(); $('#time').textContent = `${D.fmtDay(d)}, ${d.toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' })}`;
+    $('#change').href = 'payment.html?method=' + encodeURIComponent(m);
+    if (!t.count) { $('#retry').href = 'bag.html'; $('#retry span').textContent = 'Go to bag'; }
+  })();
+</script>
+</body>
+</html>

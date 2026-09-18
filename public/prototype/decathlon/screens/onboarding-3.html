@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Join Decathlon Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* Onboarding: full-bleed Welcome gradient, visual on top fading into the canvas */
+  .onb { height: 852px; min-height: 852px; touch-action: pan-y; }
+  body:not(.capture) .onb { height: 100vh; min-height: 852px; }
+  .onb__visual { left: 0; top: 0; width: 393px; height: 520px; overflow: hidden; }
+  .onb__visual::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(1,38,57,.55) 0%, rgba(1,38,57,0) 20%, rgba(14,127,188,0) 62%, rgba(14,127,188,.75) 88%, #0E7FBC 100%); pointer-events: none; }
+  .onb__top { left: 0; right: 0; top: 14px; height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; z-index: 3; }
+  .onb__skip, .onb__back { height: 44px; min-width: 44px; padding: 0 12px; border-radius: 22px; display: inline-flex; align-items: center; gap: 6px; color: #fff; font-size: 14px; font-weight: 500; }
+  .onb__skip { background: rgba(1,31,48,.35); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); height: 34px; }
+  .onb__back { width: 44px; padding: 0; justify-content: center; background: rgba(1,31,48,.35); height: 34px; width: 34px; border-radius: 50%; }
+  .onb__mark { color: #fff; }
+  .onb__step { left: 32px; top: 548px; font-size: 12px; font-weight: 600; letter-spacing: 1.6px; color: #9FD5F1; text-transform: uppercase; }
+  .onb__title { left: 32px; right: 32px; top: 572px; font-size: 27px; font-weight: 700; line-height: 1.18; color: #fff; letter-spacing: -.2px; }
+  .onb__title em { font-style: italic; color: #9FE0FF; }
+  .onb__body { left: 32px; right: 40px; top: 646px; font-size: 14.5px; line-height: 1.55; color: #CFE7F4; }
+  .onb__dots { left: 32px; top: 752px; display: flex; gap: 6px; }
+  .onb__dots a { position: relative; width: 8px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.35); transition: width 260ms var(--ease-out), background-color 260ms; }
+  .onb__dots a::after { content: ''; position: absolute; inset: -14px -3px; }
+  .onb__dots a[aria-current="step"] { width: 24px; background: #fff; }
+  .onb__next { left: 225px; top: 734px; width: 136px; height: 44px; font-size: 17px; gap: 8px; }
+  .onb__next svg { width: 18px; height: 18px; }
+  .onb__signin { left: 0; right: 0; top: 800px; text-align: center; font-size: 13px; color: #CFE7F4; }
+  .onb__signin a { color: #fff; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; padding: 10px 2px; }
+  .photo3 { position: absolute; inset: 0; background: linear-gradient(135deg, #2F5C7A, #0F96DB); }
+  .photo3 img { width: 100%; height: 100%; object-fit: cover; }
+  .ptscard { position: absolute; left: 36px; right: 36px; top: 250px; z-index: 2; border-radius: 18px; padding: 16px 18px; color: #fff; background: linear-gradient(125deg, rgba(1,42,74,.92), rgba(15,150,219,.85)); box-shadow: 0 18px 40px rgba(1,31,48,.4), inset 0 0 0 1px rgba(255,255,255,.18); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .ptscard__row { display: flex; align-items: center; justify-content: space-between; }
+  .ptscard__tier { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #9FE08A; }
+  .ptscard__pts { font-size: 34px; font-weight: 700; line-height: 1; margin-top: 12px; letter-spacing: -.5px; }
+  .ptscard__pts small { font-size: 13px; font-weight: 500; color: #CFE7F4; margin-left: 6px; letter-spacing: 0; }
+  .ptscard__bar { height: 6px; border-radius: 3px; background: rgba(255,255,255,.2); margin-top: 14px; overflow: hidden; }
+  .ptscard__bar i { display: block; width: 49%; height: 100%; border-radius: 3px; background: #9FE08A; }
+  .ptscard__meta { font-size: 11px; color: #CFE7F4; margin-top: 6px; }
+  .perk-row { position: absolute; left: 36px; right: 36px; top: 424px; z-index: 2; display: flex; gap: 8px; }
+  .perk-row span { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 9px 4px; border-radius: 12px; background: rgba(255,255,255,.94); color: var(--navy); font-size: 10.5px; font-weight: 600; text-align: center; line-height: 1.2; box-shadow: 0 8px 20px rgba(1,31,48,.2); }
+  .perk-row .icon-circle { width: 24px; height: 24px; }
+  .perk-row .icon-circle svg { width: 13px; height: 13px; }
+</style>
+</head>
+<body>
+<main class="screen bg-welcome onb" id="onb" aria-label="Onboarding step 3 of 3" aria-roledescription="onboarding step">
+  <div class="abs onb__visual" aria-hidden="true">
+    <div class="photo3"><img src="../assets/img/club-banner.jpg" alt=""></div>
+    <div class="ptscard"><div class="ptscard__row"><span class="ptscard__tier"><i data-icon="trophy" data-size="14" data-sw="2"></i>Decathlon Club</span><span class="wordmark wordmark--white" style="width:74px;opacity:.85"></span></div>
+      <p class="ptscard__pts num">+500<small>welcome points</small></p><div class="ptscard__bar"><i></i></div><p class="ptscard__meta">Earn 1 point for every ₹100 you spend</p></div>
+    <div class="perk-row"><span><span class="icon-circle"><i data-icon="truck" data-size="13" data-sw="2"></i></span>Free delivery</span><span><span class="icon-circle"><i data-icon="flash" data-size="13" data-sw="2"></i></span>Early sale access</span><span><span class="icon-circle"><i data-icon="gift" data-size="13" data-sw="2"></i></span>Birthday bonus</span></div>
+  </div>
+  <div class="abs onb__top">
+    <a class="onb__back tap" href="onboarding-2.html" aria-label="Previous step"><svg width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <a class="onb__skip tap" href="signup.html">Skip</a>
+  </div>
+  <p class="t onb__step enter" style="--i:1">03 / 03 · Rewards</p>
+  <h1 class="abs onb__title enter" style="--i:2">Join<br><em>Decathlon Club.</em></h1>
+  <p class="abs onb__body enter" style="--i:3">Collect points on every order, get free delivery and early access to sales. Joining is free.</p>
+  <nav class="abs onb__dots" aria-label="Onboarding steps">
+    <a class="tap" href="onboarding-1.html" aria-label="Step 1 of 3"></a><a class="tap" href="onboarding-2.html" aria-label="Step 2 of 3"></a><a class="tap" href="onboarding-3.html" aria-label="Step 3 of 3" aria-current="step"></a>
+  </nav>
+  <a class="abs btn btn--brand onb__next tap enter" style="--i:4" href="signup.html" id="next">Join free<i data-icon="arrow" data-size="18" data-sw="2.2"></i></a>
+  <p class="t onb__signin">Already a member? <a class="tap" href="login.html">Sign in</a></p>
+</main>
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    // Swipe left = next, swipe right = previous (keyboard: arrow keys)
+    const next = 'signup.html', prev = 'onboarding-2.html';
+    let x0 = null, y0 = 0;
+    const el = document.getElementById('onb');
+    el.addEventListener('pointerdown', (e) => { x0 = e.clientX; y0 = e.clientY; });
+    el.addEventListener('pointerup', (e) => { if (x0 == null) return; const dx = e.clientX - x0, dy = e.clientY - y0; x0 = null; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) { if (dx < 0) location.href = next; else if (prev) location.href = prev; } });
+    document.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') location.href = next; if (e.key === 'ArrowLeft' && prev) location.href = prev; });
+
+  })();
+</script>
+</body>
+</html>

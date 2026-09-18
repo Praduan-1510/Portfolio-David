@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Order details</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* Status hero — profile-card language (EBFAFF, r14, 1px border) */
+  .od-hero { margin-top: 20px; padding: 16px 16px 16px; border-radius: var(--r-profile); background: var(--profile); box-shadow: inset 0 0 0 1px var(--border); }
+  .od-hero__top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .od-id { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--order-id); min-height: 32px; padding: 0 2px; border-radius: 6px; }
+  .od-id svg { color: var(--steel); }
+  .od-hero__title { font-size: 20px; font-weight: 700; color: #000; line-height: 1.25; margin-top: 10px; }
+  .od-hero__sub { font-size: 13px; color: var(--muted-2); margin-top: 3px; }
+  .od-prog { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-top: 14px; }
+  .od-prog i { height: 5px; border-radius: 3px; background: #D3E6EE; }
+  .od-prog i.done { background: var(--brand); }
+  .od-prog i.now { background: linear-gradient(90deg, var(--brand) 55%, #D3E6EE 55%); }
+  .od-prog--cancel i { background: var(--danger-bg); }
+  .od-prog--cancel i.done { background: var(--danger); }
+  .od-prog__cap { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted-2); margin-top: 6px; }
+  .od-prog__cap b { color: var(--navy); font-weight: 600; }
+  .od-hero .btn-pair, .od-hero > .btn { margin-top: 14px; }
+  .od-hero .btn { height: 40px; font-size: 15px; }
+
+  .od-item { display: flex; gap: 14px; align-items: center; padding: 12px; border-radius: var(--r); box-shadow: inset 0 0 0 1px var(--border); background: #fff; }
+  .od-item + .od-item { margin-top: 10px; }
+  .od-item .thumb { width: 64px; height: 64px; border-radius: 8px; }
+  .od-item__name { font-size: 14px; color: #111; line-height: 20px; }
+  .od-item__meta { font-size: 12px; color: var(--muted-2); margin-top: 1px; }
+  .od-item__price { display: flex; align-items: baseline; gap: 4px; margin-top: 4px; }
+  .od-item__price .price { font-size: 15px; }
+  .od-item .chev { color: #000; }
+  .od-item__review { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 500; color: var(--brand); margin-top: 6px; padding: 4px 0; }
+
+  .od-row { display: flex; gap: 12px; align-items: flex-start; }
+  .od-row__t { font-size: 14px; font-weight: 600; color: #000; }
+  .od-row__s { font-size: 13px; color: #111; line-height: 1.5; margin-top: 2px; }
+  .od-row__m { font-size: 12px; color: var(--muted-2); margin-top: 2px; }
+  .od-price { padding: 6px 16px 10px; }
+  .od-price .kvs > div { font-size: 14px; }
+  .od-gst { font-size: 12px; color: var(--muted-2); margin-top: 2px; text-align: right; }
+  .od-menu .menu__item { min-height: 54px; }
+  .od-menu .menu__label { color: #111; }
+  .od-menu .menu__meta.is-busy { color: var(--brand); }
+  .od-banner { margin-top: 14px; }
+
+  .reason-note { margin-top: 12px; }
+  .inv { font-size: 13px; }
+  .inv__head { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 12px; border-bottom: 1px dashed var(--border); }
+  .inv__head .wordmark { width: 108px; color: var(--navy); }
+  .inv__meta { text-align: right; font-size: 11.5px; color: var(--muted-2); line-height: 1.5; }
+  .inv table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  .inv th, .inv td { text-align: left; padding: 7px 0; border-bottom: 1px solid var(--divider-soft); font-size: 12.5px; }
+  .inv th { font-size: 11px; color: var(--steel); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+  .inv td:last-child, .inv th:last-child { text-align: right; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Order details">
+  <header class="appbar">
+    <a class="back tap" href="orders.html" data-go="back" aria-label="Back"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <h1 class="appbar__title">Order details</h1>
+    <a class="appbar__action appbar__action--brand tap" id="helpTop" href="help.html">Help</a>
+  </header>
+  <div class="page-divider"></div>
+
+  <div id="root"></div>
+
+  <nav data-tabbar="account"></nav>
+</main>
+
+<!-- Cancel: reason -->
+<section class="sheet" id="cancelSheet" aria-labelledby="cancelT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="cancelT">Why are you cancelling?</p><p class="sheet__sub" id="cancelSub">This helps us improve. Pick one reason.</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button>
+  </div>
+  <div class="options" data-options id="reasons">
+    <button class="option tap" type="button" data-value="Ordered by mistake"><span class="option__radio"></span><span class="option__body"><span class="option__title">Ordered by mistake</span></span></button>
+    <button class="option tap" type="button" data-value="Found a better price"><span class="option__radio"></span><span class="option__body"><span class="option__title">Found a better price elsewhere</span></span></button>
+    <button class="option tap" type="button" data-value="Delivery is taking too long"><span class="option__radio"></span><span class="option__body"><span class="option__title">Delivery is taking too long</span></span></button>
+    <button class="option tap" type="button" data-value="Want a different size or colour"><span class="option__radio"></span><span class="option__body"><span class="option__title">Want a different size or colour</span></span></button>
+    <button class="option tap" type="button" data-value="Other"><span class="option__radio"></span><span class="option__body"><span class="option__title">Something else</span></span></button>
+  </div>
+  <div class="fg reason-note" id="otherFg" hidden>
+    <label class="label" for="otherTxt">Tell us more <span class="req">*</span></label>
+    <textarea class="field" id="otherTxt" maxlength="200" data-validate="required" placeholder="e.g. I need it before Saturday"></textarea>
+    <span class="helper">Up to 200 characters</span>
+  </div>
+  <p class="helper" id="reasonErr" role="alert" style="color:var(--danger);display:none;margin-top:10px">Pick a reason to continue</p>
+  <div class="sheet__foot">
+    <button class="btn btn--danger btn--lg tap" type="button" id="cancelGo"><span>Cancel order</span></button>
+    <button class="btn btn--outline btn--lg tap" type="button" data-close><span>Keep my order</span></button>
+  </div>
+</section>
+
+<!-- Invoice preview -->
+<section class="sheet" id="invoiceSheet" aria-labelledby="invT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="invT">Tax invoice</p><p class="sheet__sub" id="invSub">Saved to your Files</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button>
+  </div>
+  <div class="inv panel" id="inv"></div>
+  <div class="sheet__foot">
+    <button class="btn btn--primary btn--lg tap" type="button" id="invAgain"><i data-icon="share" data-size="18"></i><span>Share invoice</span></button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const RETURN_DAYS = 30;
+    const today = new Date();
+    let o = D.orders.get(D.q('id')) || D.orders.last();
+    const root = $('#root');
+
+    const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+    const deliveredOn = (x) => x.deliveredOn || D.iso(D.addDays(4, new Date(x.date + 'T12:00:00')));
+    const returnUntil = (x) => D.addDays(RETURN_DAYS, new Date(deliveredOn(x) + 'T12:00:00'));
+    const canReturn = (x) => x.status === 'delivered' && returnUntil(x) >= today;
+    const active = (x) => x.status === 'processing' || x.status === 'transit';
+
+    function payInfo(x) {
+      const m = x.payment; const label = D.payment.label(m);
+      if (m === 'credit' || m === 'debit') { const c = D.payment.cards().find((k) => k.type === m); return { icon: 'card', title: label, sub: c ? `${c.brand} ending ${c.last4}` : 'Card payment' }; }
+      if (m === 'upi') return { icon: 'upi', title: 'UPI', sub: D.payment.upi()[0] || 'UPI app' };
+      if (m === 'netbanking') return { icon: 'bank', title: 'Net Banking', sub: 'HDFC Bank' };
+      return { icon: 'cash', title: 'Cash on delivery', sub: x.status === 'delivered' || x.status === 'return-requested' ? 'Paid in cash at delivery' : x.status === 'cancelled' ? 'Nothing was charged' : `Pay ${D.fmt(x.total)} at your door` };
+    }
+
+    function totals(x) {
+      const items = D.orders.items(x);
+      const mrp = items.reduce((a, it) => a + it.product.mrp * it.qty, 0);
+      const sub = items.reduce((a, it) => a + it.price * it.qty, 0);
+      const promo = x.promo || 0;
+      const delivery = Math.max(0, x.total - (sub - promo));
+      const g = D.gstOf(items, promo, delivery);
+      return { mrp, sub, discount: mrp - sub, promo, delivery, total: x.total, gst: g.gst, gstRates: g.gstRates, count: D.orders.count(x) };
+    }
+
+    function hero(x) {
+      const tl = D.orders.timeline(x); const s = x.status; let title, sub, prog = '', cap = '', btns = '';
+      const n = plural(D.orders.count(x), 'item');
+      if (s === 'transit') { title = `Arriving by ${D.fmtDay(x.eta)}`; sub = `Shipped with ${x.courier || 'Delhivery'} · ${n}`; }
+      else if (s === 'processing') { title = `Arriving by ${D.fmtDay(x.eta || D.addDays(4))}`; sub = `We are packing your order · ${n}`; }
+      else if (s === 'delivered') { title = `Delivered on ${D.fmtDay(deliveredOn(x))}`; sub = canReturn(x) ? `Returnable till ${D.fmtDate(returnUntil(x))}` : 'Return window closed'; }
+      else if (s === 'cancelled') { title = 'Order cancelled'; sub = `Cancelled on ${D.fmtDay(x.cancelledOn || D.iso())}${x.reason ? ' · ' + x.reason : ''}`; }
+      else if (s === 'return-requested') { const r = x.returnReq || {}; title = r.type === 'exchange' ? 'Exchange requested' : 'Return requested'; sub = `Pickup on ${D.fmtDay(r.pickup || D.addDays(2))}${r.slot ? ', ' + r.slot : ''}`; }
+      else { title = 'Returned'; sub = 'Refund completed'; }
+
+      if (s !== 'cancelled') {
+        prog = `<div class="od-prog" aria-hidden="true">${tl.map((t) => `<i class="${t.state}"></i>`).join('')}</div>`;
+        const cur = tl.filter((t) => t.state).pop() || tl[0];
+        cap = `<p class="od-prog__cap"><span>Ordered ${D.fmtShort(x.date)}</span><b>${cur.title}</b></p>`;
+      } else prog = `<div class="od-prog od-prog--cancel" aria-hidden="true"><i class="done"></i><i class="done"></i><i></i><i></i><i></i></div>`;
+
+      if (active(x)) btns = `<a class="btn btn--primary tap" href="order-tracking.html?id=${x.id}">${D.icon('truck', 18)}<span>Track order</span></a>`;
+      else if (s === 'delivered') btns = `<div class="btn-pair">${canReturn(x) ? `<a class="btn btn--primary tap" href="return-request.html?id=${x.id}">${D.icon('return', 18)}<span>Return</span></a>` : ''}<button class="btn btn--outline tap" type="button" data-action="buy-again" data-id="${x.id}"><span>Buy again</span></button></div>`;
+      else if (s === 'return-requested') btns = `<a class="btn btn--primary tap" href="return-success.html?id=${x.id}"><span>View return</span></a>`;
+      else btns = `<button class="btn btn--primary tap" type="button" data-action="buy-again" data-id="${x.id}"><span>Buy again</span></button>`;
+      if (s === 'delivered' && !canReturn(x)) btns = btns.replace('<div class="btn-pair">', '<div>');
+
+      return `<section class="od-hero enter" style="--i:0" aria-label="Order status">
+        <div class="od-hero__top"><span class="pill ${D.orders.pill(s)}">${D.orders.status(s)}</span>
+          <button class="od-id tap" type="button" data-action="copy" data-copy="${x.id}" data-copied="Order number copied" aria-label="Copy order number ${x.id}">#${x.id}${D.icon('copy', 14)}</button></div>
+        <p class="od-hero__title">${title}</p><p class="od-hero__sub">${D.esc(sub)}</p>
+        ${prog}${cap}${btns}
+      </section>`;
+    }
+
+    function banner(x) {
+      const pay = D.payment.label(x.payment);
+      if (x.status === 'cancelled') return x.payment === 'cod'
+        ? `<div class="banner banner--info od-banner">${D.icon('info')}<span>No payment was taken for this cash on delivery order.</span></div>`
+        : `<div class="banner banner--ok od-banner">${D.icon('check-circle')}<span>Refund of <b>${D.fmt(x.total)}</b> to your ${pay} in 3–5 working days.</span></div>`;
+      if (x.status === 'return-requested') { const r = x.returnReq || {}; return `<div class="banner banner--info od-banner">${D.icon('return')}<span>Keep the items unused with tags. ${r.type === 'exchange' ? 'Your replacement ships after pickup.' : `Refund of <b>${D.fmt(r.amount || x.total)}</b> to ${r.method === 'wallet' ? 'Decathlon wallet' : 'your ' + pay} after pickup.`}</span></div>`; }
+      if (x.status === 'transit') return `<div class="banner banner--warn od-banner">${D.icon('shield')}<span>Share delivery OTP <b>only</b> with the courier at your door. Find it on the tracking screen.</span></div>`;
+      return '';
+    }
+
+    function render() {
+      o = D.orders.get(o.id) || o;
+      const items = D.orders.items(o); const t = totals(o); const a = D.addresses.get(o.addressId) || D.addresses.selected(); const p = payInfo(o);
+      document.title = `Decathlon · Order #${o.id}`;
+      $('#helpTop').href = `help.html?order=${o.id}`;
+      root.innerHTML = `${hero(o)}${banner(o)}
+      <div class="section-head"><h2 class="section-title">Items <span class="muted fw-5" style="font-size:14px">(${t.count})</span></h2></div>
+      <div class="enter" style="--i:1">${items.map((it) => `<a class="od-item tap" href="product.html?id=${it.id}" aria-label="${D.esc(it.product.name)}, view product">
+          <span class="thumb"><img src="${D.img(it.product.img)}" alt="" loading="lazy"></span>
+          <span class="grow"><span class="od-item__name" style="display:block">${D.esc(it.product.name)}</span>
+            <span class="od-item__meta" style="display:block">${[it.size && 'Size ' + it.size, it.colour, 'Qty ' + it.qty].filter(Boolean).join(' · ')}</span>
+            <span class="od-item__price"><span class="price num">${D.fmt(it.price * it.qty)}</span>${it.product.mrp > it.price ? `<span class="mrp num">${D.fmt(it.product.mrp * it.qty)}</span>` : ''}</span></span>
+          ${D.icon('chevron', 18, { sw: 2, cls: 'chev' })}</a>
+          ${o.status === 'delivered' ? `<a class="od-item__review tap" href="write-review.html?id=${it.id}&order=${o.id}" style="margin:0 0 4px 12px">${D.icon('edit', 14)}Rate &amp; review ${D.esc(it.product.name)}</a>` : ''}`).join('')}</div>
+
+      <div class="section-head"><h2 class="section-title">${o.status === 'delivered' ? 'Delivered to' : 'Delivery address'}</h2></div>
+      <div class="panel od-row enter" style="--i:2"><span class="icon-tile">${D.icon('pin-fill', 22)}</span><div class="grow"><p class="od-row__t">${D.esc(a.name)} <span class="pill pill--processing pill--sm" style="margin-left:4px">${D.esc(a.label)}</span></p><p class="od-row__s">${D.esc(a.text)}</p><p class="od-row__m">${D.esc(a.phone)}</p></div></div>
+
+      <div class="section-head"><h2 class="section-title">Payment</h2></div>
+      <div class="panel od-row enter" style="--i:3"><span class="icon-tile">${D.icon(p.icon, 22)}</span><div class="grow"><p class="od-row__t">${p.title}</p><p class="od-row__m" style="font-size:13px">${D.esc(p.sub)}</p></div></div>
+
+      <div class="section-head"><h2 class="section-title">Price details</h2></div>
+      <div class="panel od-price enter" style="--i:4"><div class="kvs">
+        <div><span class="k">MRP (${plural(t.count, 'item')})</span><span class="v">${D.fmt(t.mrp)}</span></div>
+        <div><span class="k">Discount</span><span class="v v--ok">${D.fmt(-t.discount)}</span></div>
+        ${t.promo ? `<div><span class="k">Promo${o.promoCode ? ' (' + o.promoCode + ')' : ''}</span><span class="v v--ok">${D.fmt(-t.promo)}</span></div>` : ''}
+        <div><span class="k">Delivery</span><span class="v ${t.delivery ? '' : 'v--ok'}">${t.delivery ? D.fmt(t.delivery) : 'Free'}</span></div>
+        <div class="sep"></div>
+        <div class="total"><span class="k">Order total</span><span class="v">${D.fmt(t.total)}</span></div>
+      </div><p class="od-gst">Includes GST of ${D.fmt(t.gst)}${t.gstRates.filter((g) => g.tax).length > 1 ? ` (${D.gstNote(t)})` : ` at ${(t.gstRates.find((g) => g.tax) || { rate: 5 }).rate}%`}</p></div>
+
+      <div class="section-head"><h2 class="section-title">More</h2></div>
+      <div class="menu od-menu">
+        <button class="menu__item tap" type="button" id="invoiceBtn"><span class="icon-tile" style="width:36px;height:36px">${D.icon('box', 19)}</span><span class="menu__body"><span class="menu__label">Download invoice</span><span class="menu__sub">PDF · Tax invoice with GST details</span></span><span class="menu__meta" id="invMeta">${D.icon('arrow', 18)}</span></button>
+        ${active(o) ? `<button class="menu__item menu__item--danger tap" type="button" id="cancelBtn"><span class="icon-tile" style="width:36px;height:36px;background:var(--danger-bg);color:var(--danger)">${D.icon('x-circle', 19)}</span><span class="menu__body"><span class="menu__label" style="color:var(--danger)">Cancel order</span><span class="menu__sub">${o.status === 'transit' ? 'The courier will bring it back to us' : 'Free, before it ships'}</span></span>${D.icon('chevron', 18, { sw: 2, cls: 'chev' })}</button>` : ''}
+        ${o.status === 'delivered' ? `<a class="menu__item tap" href="${canReturn(o) ? 'return-request.html?id=' + o.id : 'help.html?order=' + o.id + '&topic=returns'}"><span class="icon-tile" style="width:36px;height:36px">${D.icon('return', 19)}</span><span class="menu__body"><span class="menu__label">Return or exchange</span><span class="menu__sub">${canReturn(o) ? 'Free pickup from your address' : 'Window closed · contact support'}</span></span>${D.icon('chevron', 18, { sw: 2, cls: 'chev' })}</a>` : ''}
+        <a class="menu__item tap" href="help.html?order=${o.id}"><span class="icon-tile" style="width:36px;height:36px">${D.icon('headset', 19)}</span><span class="menu__body"><span class="menu__label">Need help with this order?</span><span class="menu__sub">Chat, call or raise a ticket</span></span>${D.icon('chevron', 18, { sw: 2, cls: 'chev' })}</a>
+      </div>`;
+      D.hydrate(root);
+      $('#invoiceBtn').addEventListener('click', invoice);
+      const cb = $('#cancelBtn'); if (cb) cb.addEventListener('click', openCancel);
+    }
+
+    // ---- Invoice: builds a real downloadable file, then offers a preview ----
+    function invoiceHtml() {
+      const items = D.orders.items(o); const t = totals(o);
+      // Seller GSTIN is West Bengal (19): Bengal addresses pay CGST + SGST, other states IGST
+      const ad = D.addresses.get(o.addressId) || D.addresses.selected(); const intra = !ad || /^7[0-4]/.test(ad.pin || '');
+      return `<div class="inv__head"><span class="wordmark" role="img" aria-label="Decathlon"></span><div class="inv__meta">Invoice INV-${o.id.slice(3)}<br>${D.fmtShort(o.date)}<br>GSTIN 19AAACD1234F1Z5</div></div>
+        <table><thead><tr><th scope="col">Item</th><th scope="col">Qty</th><th scope="col">Amount</th></tr></thead><tbody>${items.map((it) => `<tr><td>${D.esc(it.product.name)}</td><td>${it.qty}</td><td class="num">${D.fmt(it.price * it.qty)}</td></tr>`).join('')}</tbody></table>
+        <div class="kvs kvs--sm kvs--plain" style="margin-top:6px"><div><span class="k">Taxable value</span><span class="v num">${D.fmt(t.total - t.gst)}</span></div>${t.gstRates.filter((g) => g.tax).map((g) => { const c = Math.floor(g.tax / 2); if (!intra) return `<div><span class="k">IGST ${g.rate}%</span><span class="v num">${D.fmt(g.tax)}</span></div>`; return `<div><span class="k">CGST ${g.rate / 2}%</span><span class="v num">${D.fmt(c)}</span></div><div><span class="k">SGST ${g.rate / 2}%</span><span class="v num">${D.fmt(g.tax - c)}</span></div>`; }).join('')}<div><span class="k" style="color:#000;font-weight:600">Total paid</span><span class="v num fw-7">${D.fmt(t.total)}</span></div></div>`;
+    }
+    async function invoice(e) {
+      const btn = e.currentTarget; if (btn.dataset.busy) return; btn.dataset.busy = '1';
+      const meta = $('#invMeta'); meta.classList.add('is-busy'); meta.textContent = 'Preparing…'; btn.setAttribute('aria-busy', 'true');
+      await D.wait(1100);
+      try {
+        const doc = `<!doctype html><meta charset="utf-8"><title>Invoice ${o.id}</title><body style="font-family:Poppins,Arial,sans-serif;max-width:560px;margin:32px auto;color:#111"><h2>Decathlon Sports India</h2>${invoiceHtml().replace(/<span class="wordmark"[^>]*><\/span>/, '')}</body>`;
+        const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([doc], { type: 'text/html' })); a.download = `Decathlon-invoice-${o.id}.html`;
+        if (!document.body.classList.contains('capture')) { document.body.appendChild(a); a.click(); a.remove(); }
+      } catch (x) {}
+      meta.classList.remove('is-busy'); meta.innerHTML = D.icon('check', 18); btn.removeAttribute('aria-busy'); delete btn.dataset.busy;
+      D.toast('Invoice downloaded', { icon: 'check', action: 'View', onAction: openInvoice });
+    }
+    function openInvoice() { $('#inv').innerHTML = invoiceHtml(); $('#invSub').textContent = `Decathlon-invoice-${o.id} · saved to Files`; D.sheet.open('invoiceSheet'); }
+    $('#invAgain').addEventListener('click', async (e) => {
+      await D.loading(e.currentTarget, 600);
+      try { if (navigator.share && !document.body.classList.contains('capture')) await navigator.share({ title: `Invoice ${o.id}`, text: `Decathlon invoice for order #${o.id}` }); else throw 0; }
+      catch (x) { D.toast('Invoice link copied to clipboard'); }
+    });
+
+    // ---- Cancel: reason sheet -> confirm dialog -> Deca.orders.cancel ----
+    let reason = null;
+    const reasons = $('#reasons');
+    reasons.addEventListener('select', (e) => { reason = e.detail; $('#otherFg').hidden = reason !== 'Other'; $('#reasonErr').style.display = 'none'; if (reason === 'Other') setTimeout(() => $('#otherTxt').focus(), 50); });
+    function openCancel() {
+      reason = null; $$('.option', reasons).forEach((x) => x.setAttribute('aria-checked', 'false')); $('#otherFg').hidden = true; $('#otherTxt').value = '';
+      $('#cancelSub').textContent = `Order #${o.id} · ${D.fmt(o.total)}. Pick one reason.`;
+      D.sheet.open('cancelSheet');
+    }
+    $('#cancelGo').addEventListener('click', async (e) => {
+      const btn = e.currentTarget;
+      if (!reason) { $('#reasonErr').style.display = 'block'; reasons.classList.remove('shake'); void reasons.offsetWidth; reasons.classList.add('shake'); D.haptic(30); return; }
+      if (reason === 'Other' && !D.validate($('#otherFg'))) return;
+      const refund = o.payment === 'cod' ? 'You have not been charged for this order.' : `${D.fmt(o.total)} will be refunded to your ${D.payment.label(o.payment)} in 3–5 working days.`;
+      const ok = await D.dialog({ title: 'Cancel this order?', message: `#${o.id} · ${refund}`, confirm: 'Cancel order', cancel: 'Keep order', tone: 'danger' });
+      if (!ok) return;
+      await D.loading(btn, 1000);
+      D.orders.cancel(o.id, reason === 'Other' ? $('#otherTxt').value.trim() : reason);
+      D.sheet.close();
+      render(); window.scrollTo({ top: 0, behavior: 'smooth' });
+      D.toast('Order cancelled', { icon: 'check', action: 'Buy again', onAction: () => { const b = document.querySelector('[data-action="buy-again"]'); b && b.click(); } });
+    });
+
+    if (!o) { root.innerHTML = `<div class="empty-state"><div class="empty-state__icon">${D.icon('box', 40)}</div><h3>Order not found</h3><p>We couldn't find that order. It may belong to another account.</p><a class="btn btn--primary btn--md tap" href="orders.html">See my orders</a></div>`; return; }
+    render();
+    if (D.q('sheet') === 'invoiceSheet') openInvoice();
+  })();
+</script>
+</body>
+</html>

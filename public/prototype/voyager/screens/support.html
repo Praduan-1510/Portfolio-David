@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Support</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  body.capture .page { min-height: 932px; }
+  .phead--sub { padding-top: 33px; padding-left: 8px; }   /* taller status subline: header sits 10px higher than Rewards */
+  .phead--sub .phead__sub { font-size: 14px; line-height: 17px; color: #B9BDC6; margin-top: 5px; padding-bottom: 0; }
+  .phead--sub .phead__sub::after { display: none; }
+  .phead__sub .online-dot { width: 8px; height: 8px; margin: 0 5px 1px 1px; vertical-align: middle; }
+  .phead__sub .sep { color: #7D8494; margin: 0 4px; }
+  .phead__icon { color: #fff; margin-left: auto; }
+  .psheet { padding: 27px 17px 12px; }
+  .chat { gap: 0; }
+  .chat .bubble { font-size: 12px; line-height: 13.5px; padding: 14px 27px 13px 26px; border-radius: 16px; }
+  .chat .bubble--me { padding: 21px 22px 18px 26px; }
+  .chat .bubble-time { font-size: 10px; line-height: 1; color: #333; margin: 13px 0 15px 11px; }
+  .chat .bubble-time--me { margin: 13px 8px 15px 0; }
+  .bubble.fade-in { animation: pop 320ms var(--ease-out) both; }
+  @keyframes pop { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+  .qr-wrap { margin: 2px 0 8px; }
+  .quick-replies { gap: 10px 11px; }
+  .quick-replies .chip { height: 34px; padding: 0 19px; font-size: 12px; font-weight: 400; }
+  .quick-replies[aria-disabled="true"] { opacity: .5; pointer-events: none; }
+  .sys { align-self: center; font-size: 11px; color: var(--text-4); margin: 4px 0 16px; display: flex; align-items: center; gap: 8px; }
+  .sys img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; }
+  /* Rich agent cards */
+  .rich { max-width: 262px; background: #fff; border-radius: 16px; box-shadow: inset 0 0 0 1px #E6E6E6; padding: 14px 16px; margin-top: 6px; font-size: 12px; line-height: 1.45; color: #222; }
+  .rich__t { font-size: 13px; font-weight: 700; color: #000; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .rich__t svg { color: var(--orange); }
+  .ck { display: flex; gap: 8px; align-items: flex-start; padding: 5px 0; }
+  .ck + .ck { border-top: 1px solid #F0F0F0; }
+  .ck__ic { width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; margin-top: 1px; }
+  .ck__ic.ok { background: var(--valid-bg); color: var(--valid); } .ck__ic.todo { background: var(--orange-tint); color: #B26F00; } .ck__ic.warn { background: var(--warn-bg); color: var(--warn); }
+  .ck small { display: block; color: var(--text-4); font-size: 11px; }
+  .rich .btn { height: 36px; font-size: 13px; margin-top: 10px; }
+  .rich--img { padding: 6px; } .rich--img img { border-radius: 12px; width: 100%; height: 150px; object-fit: cover; }
+  .me-card { align-self: flex-end; background: var(--navy); color: #fff; border-radius: 16px; padding: 12px 14px; max-width: 246px; display: flex; gap: 10px; align-items: center; font-size: 12px; }
+  .me-card__ic { width: 36px; height: 36px; border-radius: 10px; background: rgba(255,255,255,.1); color: var(--orange); display: grid; place-items: center; flex-shrink: 0; }
+  .me-card b { display: block; font-size: 13px; }
+  .me-card span { color: #C4C7CF; }
+  /* Composer bar */
+  .cta-bar__in.composer-in { padding: 0 !important; border-radius: 0 0 32px 32px; }
+  .composer-in::before { display: none; }
+  .composer { border-top: 1px solid #D6D6D6; padding: 20px 25px 20px 22px; gap: 4px; border-radius: 0 0 32px 32px; }
+  .composer__attach { width: 32px; height: 40px; color: #555; }
+  .composer__input { height: 34px; border-radius: 17px; box-shadow: inset 0 0 0 1.5px #C7C7C7; font-size: 13px; padding: 0 18px 0 20px; margin-right: 13px; }
+  .composer__input::placeholder { color: #111; opacity: .85; }
+  .composer__send { width: 40px; height: 40px; }
+  .composer__send:active { transform: scale(.92); }
+  .att-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .att { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 6px; border-radius: 14px; background: var(--grey-1); font-size: 12.5px; font-weight: 600; }
+  .att span:first-child { width: 44px; height: 44px; border-radius: 50%; background: var(--navy); color: var(--orange); display: grid; place-items: center; }
+  .att-step[hidden] { display: none; }
+</style>
+</head>
+<body>
+<main class="page page--cta" aria-label="Voyager support chat">
+  <header class="phead phead--sub">
+    <a class="phead__back tap" href="help.html" data-go="back" aria-label="Back">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3.5M10.5 4.5 3 12l7.5 7.5"/></svg>
+    </a>
+    <div class="phead__titles"><h1 class="phead__title">Voyager Support</h1><p class="phead__sub" id="status"><span class="online-dot" aria-hidden="true"></span>Online<span class="sep">|</span>Responds Instantly</p></div>
+    <button class="phead__action tap" type="button" id="newChat" aria-label="Start a new chat" style="color:#C4C7CF;margin-top:4px"><span data-icon="refresh" data-size="20"></span></button>
+  </header>
+
+  <section class="psheet">
+    <div data-delegate class="chat" id="chat" role="log" aria-live="polite" aria-label="Conversation"></div>
+    <div class="qr-wrap"><div data-delegate class="quick-replies" id="qr" role="group" aria-label="Suggested replies"></div></div>
+  </section>
+
+  <div class="cta-bar"><div class="cta-bar__in composer-in">
+    <form class="composer" id="composer" autocomplete="off">
+      <button class="composer__attach tap" type="button" data-sheet="attSheet" aria-label="Attach photo, document or booking"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15.5 7.5-7.8 7.9a1.9 1.9 0 0 0 2.7 2.7l9-9.1a3.8 3.8 0 0 0-5.3-5.3l-9 9.1a5.7 5.7 0 0 0 8 8l7.4-7.4"/></svg></button>
+      <input class="composer__input" id="msg" placeholder="Type a message..." aria-label="Message" maxlength="500">
+      <button class="composer__send tap" type="submit" aria-label="Send message"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 5.5l6.5 6.5-6.5 6.5"/></svg></button>
+    </form>
+  </div></div>
+</main>
+
+<!-- Attachments -->
+<section class="sheet" id="attSheet" aria-labelledby="atT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="atT">Share with support</p><p class="sheet__sub" id="atSub">Only this conversation can see what you share.</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="att-step" id="atMain">
+    <div class="att-grid">
+      <button class="att tap" type="button" id="atPhoto"><span data-icon="image" data-size="22"></span><span>Photo</span></button>
+      <button class="att tap" type="button" id="atDoc"><span data-icon="file" data-size="22"></span><span>Document</span></button>
+      <button class="att tap" type="button" id="atRef"><span data-icon="ticket" data-size="22"></span><span>Booking ref</span></button>
+    </div>
+  </div>
+  <div class="att-step" id="atPick" hidden>
+    <div class="options" id="atList"></div>
+    <button class="btn btn--ghost mt-8" type="button" id="atBack">Back</button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const $ = (s) => document.querySelector(s);
+  const chat = $('#chat'), qr = $('#qr');
+  const u = V.user.get();
+  const capture = document.body.classList.contains('capture');
+  const now = () => { const d = new Date(); let h = d.getHours(); const m = String(d.getMinutes()).padStart(2, '0'); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return `${h}:${m} ${ap}`; };
+  const SEED = [
+    { who: 'agent', text: `Hello ${u.first}! Welcome To Voyager Support. How Can I Help You Today?`, time: '9:30 AM' },
+    { who: 'me', text: 'Hi! I’d Like To Know About Visa Requirements For Paris.', time: '9:32 AM' },
+    { who: 'agent', text: 'Great Question! As A UK Passport Holder, You Can Visit France Visa-Free For Up To 90 Days In Any 180. ETIAS Isn’t Needed For This Trip: It Launches In Late 2026. Want Me To Send A Full Checklist?', time: '9:32 AM' },
+  ];
+  const SEED_QR = ['Yes, send checklist', 'ETIAS info', 'Travel insurance'];
+  const store = { get: () => V.store.get('supportChat', null), set: (v) => V.store.set('supportChat', v) };
+  let state = (!capture && store.get()) || { msgs: SEED.slice(), qr: SEED_QR.slice() };
+
+  // ---- rich cards
+  const passport = V.documents.list().find((d) => d.type === 'passport');
+  const insurance = V.documents.list().find((d) => d.type === 'insurance');
+  const ck = (cls, ic, t, s) => `<div class="ck"><span class="ck__ic ${cls}">${V.icon(ic, 12, 'stroke-width="3"')}</span><span>${t}${s ? `<small>${s}</small>` : ''}</span></div>`;
+  const RICH = {
+    checklist: () => `<div class="rich"><p class="rich__t">${V.icon('check', 16, 'stroke-width="2.4"')}France entry checklist</p>
+      ${ck('ok', 'check', 'Passport valid 3+ months after return', passport ? `${passport.name} · expires ${passport.expires}` : 'Add your passport in Documents')}
+      ${ck('ok', 'check', 'ETIAS travel authorisation', 'Not needed on Aug 12 · launches late 2026')}
+      ${ck('ok', 'check', 'Return flights booked', 'BA303 out Aug 12 · BA318 home Aug 19')}
+      ${ck('ok', 'check', 'Proof of accommodation', 'Hôtel Le Marais · 7 nights')}
+      ${ck(insurance && insurance.status === 'expiring' ? 'warn' : 'ok', insurance && insurance.status === 'expiring' ? 'warning' : 'check', 'Travel insurance', insurance ? `${insurance.status === 'expiring' ? 'Expiring' : 'Valid'} · ${insurance.expires}` : 'Recommended')}
+      <a class="btn btn--primary" href="documents.html">Open My Documents</a></div>`,
+    etias: () => `<div class="rich"><p class="rich__t">${V.icon('globe', 16, 'stroke-width="2"')}ETIAS in 60 seconds</p>
+      ${ck('ok', 'check', 'Who needs it', 'UK, US, Canadian and Australian passports, among others')}
+      ${ck('ok', 'check', 'Cost & validity', '€20 · valid 3 years or until your passport expires')}
+      ${ck('ok', 'check', 'How long it takes', 'Most approvals arrive within minutes; allow 4 days')}
+      <a class="btn btn--navy" href="https://travel-europe.europa.eu/etias_en" target="_blank" rel="noopener">Official ETIAS Site</a></div>`,
+    insurance: () => `<div class="rich"><p class="rich__t">${V.icon('shield-check', 16, 'stroke-width="2"')}Stay covered</p>
+      ${ck(insurance && insurance.status === 'expiring' ? 'warn' : 'ok', insurance && insurance.status === 'expiring' ? 'warning' : 'check', 'Your current policy', insurance ? `${insurance.name} · ${insurance.status === 'expiring' ? 'ends' : 'valid until'} ${insurance.expires}` : 'No policy on file')}
+      ${ck('ok', 'check', 'Annual multi-trip · $129', 'Covers Paris, Prague and Sydney · medical up to $10m')}
+      ${ck('ok', 'check', 'Cancellation cover', 'Up to $5,000 per trip if you can’t travel')}
+      <a class="btn btn--primary" href="documents.html?doc=insurance">Renew My Cover</a></div>`,
+    refund: () => `<div class="rich"><p class="rich__t">${V.icon('dollar', 16, 'stroke-width="2"')}Cancelling Paris City Break</p>
+      ${ck('ok', 'check', 'Refund if you cancel today', `${V.fmt(V.trips.refund(V.trips.get('paris-aug') || { total: 2709, addons: { insurance: true } }))} back in 5–7 days`)}
+      ${ck('todo', 'info', 'Insurance is non-refundable', '$45 · policy stays active for other trips')}
+      <a class="btn btn--neutral" href="cancel-trip.html?trip=paris-aug">Review Cancellation</a></div>`,
+    booking: () => `<div class="rich"><p class="rich__t">${V.icon('ticket', 16, 'stroke-width="2"')}VYG-4892-PAR</p>
+      ${ck('ok', 'check', 'Paris City Break · Aug 12–19', '2 Adults · Economy · $2,709 paid')}
+      ${ck('ok', 'check', 'BA303 · 09:00 LHR → CDG', 'Check-in opens Aug 11, 09:00')}
+      <a class="btn btn--primary" href="itinerary.html?trip=paris-aug">View Itinerary</a></div>`,
+    help: () => `<div class="rich"><p class="rich__t">${V.icon('question', 16, 'stroke-width="2"')}Popular answers</p>
+      ${ck('ok', 'arrow-right', 'Change dates or travellers', 'Free up to 14 days before departure')}
+      ${ck('ok', 'arrow-right', 'Where is my e-ticket?', 'Trips → View Details → E-Ticket')}
+      <a class="btn btn--neutral" href="help.html">Open Help Centre</a></div>`,
+  };
+  const REPLIES = {
+    'Yes, send checklist': { text: 'Here’s Everything You Need For France. You’re Almost Set: Just Your Insurance Renewal To Sort.', rich: 'checklist', qr: ['ETIAS info', 'Travel insurance', 'Talk to a person'] },
+    'ETIAS info': { text: 'ETIAS Is A Quick Online Travel Authorisation For Visa-Free Visitors To Europe, Due To Launch In Late 2026. It’s Linked To Your Passport.', rich: 'etias', qr: ['Yes, send checklist', 'Travel insurance', 'Talk to a person'] },
+    'Travel insurance': { text: 'Good Thinking. Your Current Policy Ends In October, Before Your Prague And Sydney Trips. An Annual Plan Would Cover All Three.', rich: 'insurance', qr: ['Yes, send checklist', 'ETIAS info', 'Talk to a person'] },
+    'Talk to a person': { handoff: true, text: 'Hi Alex, I’m Emma From The Paris Travel Desk. I’ve Read The Chat — What Else Can I Help With?', qr: ['Change my dates', 'Cancel my trip', 'That’s all, thanks'] },
+    'Change my dates': { text: 'You Can Change Dates For Free Until Jul 29. Pick New Dates And I’ll Hold The Same Hotel For You.', link: ['Modify Booking', 'modify-booking.html?trip=paris-aug'], qr: ['Cancel my trip', 'That’s all, thanks'] },
+    'Cancel my trip': { text: 'Sorry To Hear That. Here’s What You’d Get Back If You Cancel Today.', rich: 'refund', qr: ['Change my dates', 'That’s all, thanks'] },
+    'That’s all, thanks': { text: 'Anytime! Have A Wonderful Time In Paris. This Chat Stays Here If You Need Us Again.', qr: ['Rate this chat'] },
+    'Rate this chat': { text: 'Thanks For The Rating — It Helps Us Improve.', rate: true, qr: [] },
+  };
+  const smart = (t) => {
+    const s = t.toLowerCase();
+    if (/refund|cancel/.test(s)) return REPLIES['Cancel my trip'];
+    if (/vyg|booking|reference|itinerar|ticket/.test(s)) return { text: 'I’ve Found Your Upcoming Booking. Here Are The Key Details.', rich: 'booking', qr: ['Change my dates', 'Talk to a person'] };
+    if (/etias|visa/.test(s)) return REPLIES['ETIAS info'];
+    if (/insur/.test(s)) return REPLIES['Travel insurance'];
+    if (/date|change|modify/.test(s)) return REPLIES['Change my dates'];
+    if (/thank|bye/.test(s)) return REPLIES['That’s all, thanks'];
+    return { text: 'Thanks For The Details. I’m Checking That Now — Meanwhile, These Answers Might Help.', rich: 'help', qr: ['Talk to a person', 'Yes, send checklist'] };
+  };
+
+  // ---- render
+  const msgHTML = (m, anim) => {
+    const a = anim ? ' fade-in' : '';
+    if (m.who === 'sys') return `<p class="sys${a}">${m.avatar ? `<img src="${V.img(m.avatar)}" alt="">` : ''}${V.esc(m.text)}</p>`;
+    if (m.who === 'me-card') return `<div class="me-card${a}"><span class="me-card__ic">${V.icon(m.icon, 20)}</span><span><b>${V.esc(m.title)}</b><span>${V.esc(m.sub)}</span></span></div><p class="bubble-time bubble-time--me">${m.time}</p>`;
+    if (m.who === 'me-img') return `<div class="rich rich--img${a}" style="align-self:flex-end"><img src="${V.img(m.img)}" alt="Shared photo"></div><p class="bubble-time bubble-time--me">${m.time}</p>`;
+    const me = m.who === 'me';
+    return `<div class="bubble${me ? ' bubble--me' : ''}${a}">${V.esc(m.text)}</div>${m.rich && RICH[m.rich] ? RICH[m.rich]() : ''}${m.link ? `<a class="btn btn--primary btn--sm btn--inline${a}" style="margin-top:8px;align-self:flex-start" href="${m.link[1]}">${V.esc(m.link[0])}</a>` : ''}${m.rate ? `<div class="rich" style="padding:10px 14px">${V.starsHTML(5, 22)}</div>` : ''}<p class="bubble-time${me ? ' bubble-time--me' : ''}">${m.time}</p>`;
+  };
+  const renderQR = () => { qr.innerHTML = state.qr.map((q) => `<button class="chip chip--outline tap" type="button" data-q="${V.esc(q)}">${V.esc(q)}</button>`).join(''); };
+  const render = () => { chat.innerHTML = state.msgs.map((m) => msgHTML(m)).join(''); renderQR(); };
+  const save = () => { if (!capture) store.set(state); };
+  const scrollEnd = () => requestAnimationFrame(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' }));
+  const push = (m) => { state.msgs.push(m); chat.insertAdjacentHTML('beforeend', msgHTML(m, true)); save(); scrollEnd(); };
+
+  let busy = false;
+  const typing = async (ms) => {
+    const t = document.createElement('div'); t.className = 'bubble bubble--typing fade-in'; t.setAttribute('aria-label', 'Support is typing'); t.innerHTML = '<i></i><i></i><i></i>';
+    chat.appendChild(t); scrollEnd(); await V.wait(ms); t.remove();
+  };
+  const respond = async (r) => {
+    busy = true; qr.setAttribute('aria-disabled', 'true'); state.qr = []; renderQR();
+    await V.wait(350);
+    if (r.handoff) {
+      $('#status').innerHTML = '<span class="online-dot" aria-hidden="true"></span>Emma<span class="sep">|</span>Paris Travel Desk';
+      push({ who: 'sys', text: 'Connecting you to a travel expert…' }); await V.wait(900);
+      push({ who: 'sys', text: 'Emma joined the chat', avatar: 'agent-emma' }); state.agent = 'emma';
+    }
+    await typing(1100 + Math.min(900, r.text.length * 6));
+    push({ who: 'agent', text: r.text, rich: r.rich, link: r.link, rate: r.rate, time: now() });
+    state.qr = r.qr || []; renderQR(); qr.removeAttribute('aria-disabled'); save(); busy = false;
+  };
+  const send = (text) => { if (busy || !text.trim()) return; push({ who: 'me', text: text.trim(), time: now() }); respond(REPLIES[text] || smart(text)); };
+
+  qr.addEventListener('click', (e) => { const b = e.target.closest('[data-q]'); if (b) send(b.dataset.q); });
+  $('#composer').addEventListener('submit', (e) => { e.preventDefault(); const i = $('#msg'); if (!i.value.trim()) { i.focus(); V.toast('Type a message or tap a suggestion'); return; } send(i.value); i.value = ''; });
+
+  // ---- attachments
+  const showPick = (title, items) => { $('#atMain').hidden = true; $('#atPick').hidden = false; $('#atT').textContent = title; $('#atList').innerHTML = items.join(''); };
+  const resetAtt = () => { $('#atMain').hidden = false; $('#atPick').hidden = true; $('#atT').textContent = 'Share with support'; };
+  $('#attSheet').addEventListener('sheet:open', resetAtt);
+  $('#atBack').addEventListener('click', resetAtt);
+  $('#atPhoto').addEventListener('click', () => showPick('Choose a photo', ['itin-paris-sunset', 'hotel-marais', 'gal-louvre'].map((s) => `<button class="option" type="button" data-img="${s}"><span class="ph" style="width:56px;height:42px;border-radius:8px;overflow:hidden;flex-shrink:0"><img src="${V.img(s)}" alt=""></span><span class="option__body"><span class="option__title">${s === 'hotel-marais' ? 'Hotel entrance' : s === 'gal-louvre' ? 'Louvre ticket desk' : 'Seine at sunset'}</span><span class="option__sub">From your camera roll</span></span></button>`)));
+  $('#atDoc').addEventListener('click', () => { const l = V.documents.list(); showPick('Share a document', l.length ? l.map((d) => `<button class="option" type="button" data-sdoc="${d.id}"><span class="option__body"><span class="option__title">${V.esc(d.name)}</span><span class="option__sub">•••• ${V.esc(String(d.number).slice(-4))} · ${d.expires ? 'expires ' + V.esc(d.expires) : 'no expiry'}</span></span>${V.icon('chevron-right', 18)}</button>`) : ['<p class="small">No documents saved yet. <a class="link" href="add-document.html">Add one</a></p>']); });
+  $('#atRef').addEventListener('click', () => showPick('Share a booking', V.trips.list().filter((t) => t.status !== 'past').map((t) => `<button class="option" type="button" data-sref="${t.ref}"><span class="option__body"><span class="option__title">${V.esc(t.ref)}</span><span class="option__sub">${V.esc(t.title)} · ${V.date.range(t.start, t.end)}</span></span>${V.icon('chevron-right', 18)}</button>`)));
+  $('#atList').addEventListener('click', (e) => {
+    const img = e.target.closest('[data-img]'), doc = e.target.closest('[data-sdoc]'), ref = e.target.closest('[data-sref]');
+    if (!img && !doc && !ref) return;
+    V.sheet.close();
+    if (img) { push({ who: 'me-img', img: img.dataset.img, time: now() }); respond({ text: 'Thanks, Got The Photo. I’ve Added It To Your Case File.', qr: ['Talk to a person', 'That’s all, thanks'] }); }
+    if (doc) { const d = V.documents.get(doc.dataset.sdoc); push({ who: 'me-card', icon: 'file', title: d.name, sub: `Shared securely · •••• ${String(d.number).slice(-4)}`, time: now() }); respond({ text: `Received Your ${d.name}. It’s Valid For Your Trip — Nothing Else Needed.`, qr: ['Yes, send checklist', 'That’s all, thanks'] }); }
+    if (ref) { const t = V.trips.get(ref.dataset.sref); push({ who: 'me-card', icon: 'ticket', title: t.ref, sub: `${t.title} · ${V.date.range(t.start, t.end)}`, time: now() }); respond({ text: `Got It — ${t.title}. What Would You Like To Do With This Booking?`, rich: t.ref === 'VYG-4892-PAR' ? 'booking' : null, qr: ['Change my dates', 'Cancel my trip', 'Talk to a person'] }); }
+  });
+
+  $('#newChat').addEventListener('click', async () => {
+    if (busy) return;
+    if (!(await V.dialog({ title: 'Start a new chat?', message: 'This conversation will be cleared from this device. We keep a copy for 30 days if you need it.', confirm: 'New Chat', cancel: 'Keep Chatting', tone: 'info', icon: 'chat' }))) return;
+    state = { msgs: SEED.slice(), qr: SEED_QR.slice() }; V.store.remove('supportChat');
+    $('#status').innerHTML = '<span class="online-dot" aria-hidden="true"></span>Online<span class="sep">|</span>Responds Instantly';
+    render(); window.scrollTo({ top: 0 }); V.toast('New chat started');
+  });
+
+  render();
+  if (state.agent === 'emma') $('#status').innerHTML = '<span class="online-dot" aria-hidden="true"></span>Emma<span class="sep">|</span>Paris Travel Desk';
+  if (!capture && state.msgs.length > 3) setTimeout(scrollEnd, 50);
+})();
+</script>
+</body>
+</html>

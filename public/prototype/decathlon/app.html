@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon — Live prototype</title>
+<meta name="description" content="Decathlon: a sports-retail app for India. Live, tappable iPhone prototype: browse, filter, check out in three steps, track and return.">
+<meta name="theme-color" content="#F4F9FB">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,700;1,800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230F96DB'/%3E%3Cpath d='M17 18h12c9 0 15 5.5 15 14s-6 14-15 14H17Zm9 8v12h3c3.6 0 6-2.4 6-6s-2.4-6-6-6Z' fill='%23fff' fill-rule='evenodd'/%3E%3C/svg%3E">
+<script>
+  /* Fresh start on every launch: forget the previous visitor's demo state (bag,
+     orders placed, filters, vouchers, sign-out) BEFORE the phone's first screen
+     loads, so every visit starts from the same reconciled data. ?resume=1 keeps it. */
+  (function () {
+    if (new URLSearchParams(location.search).get('resume') === '1') return;
+    [window.localStorage, window.sessionStorage].forEach(function (st) {
+      try { for (var i = st.length - 1; i >= 0; i--) { var k = st.key(i); if (k && k.indexOf('deca:') === 0) st.removeItem(k); } } catch (e) {}
+    });
+  })();
+</script>
+<style>
+  :root {
+    --bg: #F4F9FB;
+    --paper: #FFFFFF;
+    --ink: #012A4A;       /* Decathlon navy: CTAs, active chips */
+    --ink-2: #26455E;
+    --muted: #5C7486;
+    --dim: #8AA0AF;
+    --blue: #0F96DB;      /* brand blue: what you can tap */
+    --blue-d: #0A78B2;
+    --steel: #61A5C2;
+    --sky: #A9D6E5;
+    --surface: #E5F2F7;
+    --peach: #FBD7B1;     /* where you are */
+    --peach-d: #F5B77A;
+    --peach-ink: #7A4A12;
+    --ok: #3AAA35;
+    --line: rgba(1,42,74,.10);
+    --line-2: rgba(1,42,74,.18);
+    --ease: cubic-bezier(.22,1,.36,1);
+    --font: 'Poppins', system-ui, -apple-system, sans-serif;
+    --s: 1; /* handset scale, set by fit() */
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #fff; color: var(--ink); overflow-x: clip; }
+  body { font-family: var(--font); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 8px; }
+
+  /* ── Phone first: the app IS the viewport ─────────────────────────────── */
+  .stage { min-height: 100dvh; }
+  .side, .wash, .lanes, .hs-btn { display: none; }
+  .hs-box, .handset { position: static; }
+  #phone { position: fixed; top: 0; left: 0; display: block; border: 0; background: #fff; width: 100vw; height: 100dvh; }
+
+  /* ── Desktop stage ─────────────────────────────────────────────────────── */
+  @media (min-width: 880px) {
+    html, body { background: var(--bg); }
+    .wash { display: block; position: fixed; inset: 0; pointer-events: none; }
+    .wash {
+      background:
+        radial-gradient(900px 620px at 84% -10%, rgba(15,150,219,.20), transparent 62%),
+        radial-gradient(720px 520px at -6% 110%, rgba(251,215,177,.62), transparent 60%),
+        linear-gradient(180deg, #F8FBFD, var(--bg));
+    }
+    /* A running track behind the handset (the showcase's own stage motif), scaled with it
+       and never wider than the gap to the panel */
+    .lanes { display: block; position: absolute; z-index: -1; left: 50%; top: 50%; width: calc(560px * var(--s)); height: calc(980px * var(--s)); transform: translate(-50%, -50%); pointer-events: none; }
+    .lanes svg { display: block; width: 100%; height: 100%; overflow: visible; }
+
+    .stage {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: minmax(300px, 420px) auto;
+      gap: clamp(40px, 5.5vw, 88px); justify-content: center; align-items: center;
+      padding: 24px 32px;
+    }
+
+    /* Side panel */
+    .side { display: flex; flex-direction: column; gap: clamp(14px, 2.4vh, 24px); min-width: 0; }
+    .brand { display: flex; flex-direction: column; gap: clamp(8px, 1.4vh, 12px); }
+    .kick { display: inline-flex; align-self: flex-start; align-items: center; gap: 8px; height: 28px; padding: 0 12px 0 4px; border-radius: 999px; background: var(--paper);
+      box-shadow: 0 0 0 1px var(--line), 0 6px 18px -10px rgba(1,42,74,.3); font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); }
+    .kick i { font-style: normal; display: inline-grid; place-items: center; height: 20px; padding: 0 8px; border-radius: 999px; background: var(--blue); color: #fff; font-size: 10px; letter-spacing: .1em; }
+    .wordmark { display: block; width: 216px; height: auto; color: var(--blue); }
+    .tagline { margin: 0; font-size: 22px; font-weight: 800; font-style: italic; text-transform: uppercase; letter-spacing: -.02em; line-height: 1.05; color: var(--ink); }
+    .tagline span { position: relative; z-index: 0; white-space: nowrap; }
+    .tagline span::after { content: ''; position: absolute; left: -.06em; right: -.08em; bottom: .04em; height: .36em; background: var(--peach); z-index: -1; transform: skewX(-12deg); border-radius: 3px; }
+    .desc { margin: 0; font-size: 14px; line-height: 1.65; color: var(--muted); max-width: 40ch; }
+    .desc b { color: var(--ink); font-weight: 600; }
+
+    .eyebrow { display: flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--dim); margin: 0 0 8px; }
+    .eyebrow::before { content: ''; width: 22px; height: 3px; border-radius: 2px; background: var(--blue); box-shadow: 7px 0 0 var(--peach-d); margin-right: 7px; }
+
+    /* "Things worth trying": numbered like lanes on a track */
+    .tries { list-style: none; margin: 0; padding: 0; counter-reset: lane; display: grid; gap: 2px; }
+    .tries li { counter-increment: lane; display: grid; grid-template-columns: 30px 1fr; gap: 0 12px; align-items: start;
+      padding: clamp(7px, 1.1vh, 10px) 12px clamp(7px, 1.1vh, 10px) 0; border-top: 1.5px dashed var(--sky); font-size: 13px; line-height: 1.55; color: var(--ink-2); }
+    .tries li:first-child { border-top: 0; }
+    .tries li::before { content: counter(lane); display: grid; place-items: center; width: 30px; height: 30px; border-radius: 8px; background: var(--peach);
+      font-size: 17px; font-weight: 800; font-style: italic; color: var(--peach-ink); font-variant-numeric: tabular-nums; transform: skewX(-8deg); margin-top: 1px; }
+    .tries b { color: var(--ink); font-weight: 600; }
+    .tries .v { font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .tries .ok { font-weight: 700; color: #257A22; white-space: nowrap; }
+    .tries code { font-family: var(--font); font-size: 11.5px; font-weight: 600; padding: 1px 6px; border-radius: 5px; background: var(--surface); color: var(--ink); box-shadow: inset 0 0 0 1px var(--sky); white-space: nowrap; }
+
+    /* Jump to: the app's own chip, navy when you are there */
+    .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+    .chip { height: 32px; padding: 0 12px; border-radius: 8px; font-size: 12.5px; font-weight: 500; color: var(--ink); background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--steel);
+      transition: background .2s var(--ease), color .2s var(--ease), box-shadow .2s var(--ease), transform .2s var(--ease); }
+    .chip:hover { transform: translateY(-1px); background: #D9EDF4; }
+    .chip[aria-pressed="true"] { background: var(--ink); color: #fff; box-shadow: 0 8px 18px -10px rgba(1,42,74,.7); }
+    .chip--restart { display: inline-flex; align-items: center; gap: 6px; color: var(--blue-d); background: var(--paper); box-shadow: inset 0 0 0 1.5px var(--sky); }
+    .chip--restart:hover { background: var(--peach); color: var(--peach-ink); }
+    .chip--restart svg { transition: transform .5s var(--ease); }
+    .chip--restart:hover svg { transform: rotate(-200deg); }
+    .now { margin: 10px 0 0; font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 8px; min-height: 18px; }
+    .now i { width: 7px; height: 7px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 3px var(--peach); flex: none; }
+    .now b { color: var(--ink); font-weight: 600; }
+
+    .foot { font-size: 12px; line-height: 1.8; color: var(--muted); padding-top: 14px; border-top: 2px solid var(--sky); }
+    .foot a { color: var(--blue-d); font-weight: 500; text-decoration: none; white-space: nowrap; }
+    .foot a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* Handset: 393×852 screen in a light titanium frame (the prototype's own device). Scaled as one piece by fit(). */
+    .hs-box { position: relative; width: calc(417px * var(--s)); height: calc(876px * var(--s)); }
+    .handset { position: absolute; top: 0; left: 0; width: 417px; height: 876px; padding: 12px; border-radius: 64px;
+      transform: scale(var(--s)); transform-origin: 0 0;
+      background: linear-gradient(145deg, #F2F6F8, #C9D3DA 38%, #EEF3F6 62%, #B9C5CE);
+      box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.9), inset 0 0 0 6px #0B1720, 0 60px 90px -40px rgba(1,42,74,.55), 0 24px 40px -24px rgba(1,42,74,.35); }
+    .hs-btn { display: block; position: absolute; width: 4px; background: #B6C1C9; }
+    .hs-btn--l { left: -3px; border-radius: 2px 0 0 2px; }
+    .hs-btn--a { top: 170px; height: 60px; }
+    .hs-btn--b { top: 246px; height: 60px; }
+    .hs-btn--r { right: -3px; top: 220px; height: 92px; border-radius: 0 2px 2px 0; }
+    #phone { position: static; width: 393px; height: 852px; border-radius: 52px; }
+
+    /* Entrance: one orchestrated load. Transform/opacity only, so nothing shifts. */
+    .js .side > * { animation: rise .9s var(--ease) both; animation-delay: calc(120ms + var(--i, 0) * 70ms); }
+    .js .hs-box { animation: lift 1.1s var(--ease) 60ms both; }
+    .js .lanes svg { animation: fade 1.6s var(--ease) both; }
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+  @keyframes lift { from { opacity: 0; transform: translateY(48px) scale(.975); } }
+  @keyframes fade { from { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .js .side > *, .js .hs-box, .js .lanes svg { animation: none !important; }
+    .chip, .chip--restart svg { transition: none; }
+  }
+</style>
+<script defer src="/prototype/_shared/case-link.js" data-href="/work/decathlon" data-label="Back to the Decathlon case study" data-position="top-left short; (max-width: 879px) top-center 0 compact"></script>
+</head>
+<body>
+<script>document.documentElement.classList.add('js');</script>
+<div class="wash" aria-hidden="true"></div>
+
+<main class="stage">
+  <!-- Desktop-only context panel. On a phone the app fills the screen and this is hidden. -->
+  <aside class="side" aria-label="About this prototype">
+    <div class="brand" style="--i:0">
+      <span class="kick"><i>iOS</i>Live prototype</span>
+      <h1 style="margin:0">
+        <svg class="wordmark" viewBox="0 0 135 21" fill="currentColor" role="img" aria-label="Decathlon"><path fill-rule="evenodd" d="M0 .5h8.2C13.2.5 16.4 4.4 16.4 10.5S13.2 20.5 8.2 20.5H0Zm5.2 5v10h2.4c2.2 0 3.6-1.9 3.6-5s-1.4-5-3.6-5Z"/><path d="M16 .5h12.4v4.6h-7.2v3h6.9v4.4h-6.9v3.4h7.3v4.6H16Z"/><path d="M45.6 3.4C43.9 1.4 41.5.3 38.7.3 33.4.3 29.6 4.5 29.6 10.5s3.8 10.2 9.1 10.2c2.8 0 5.2-1.1 6.9-3.1l-3.5-3.5c-.8 1-1.9 1.6-3.2 1.6-2.3 0-3.9-2-3.9-5.2s1.6-5.2 3.9-5.2c1.3 0 2.4.6 3.2 1.6Z"/><path fill-rule="evenodd" d="M50 .5h6v20h-5.2v-4.9h-8.6v-3.2Zm.8 7.2-2.9 4.6h2.9Z"/><path d="M57 .5h12.6v4.6h-3.7v15.4h-5.2V5.1H57Z"/><path d="M71 .5h5v7.6h6V.5h5v20h-5v-7.9h-6v7.9h-5Z"/><path d="M88.2.5h5.4v15h6.4v5H88.2Z"/><path fill-rule="evenodd" d="M107.4.3c5.8 0 10.2 4.4 10.2 10.2s-4.4 10.2-10.2 10.2S97.2 16.3 97.2 10.5 101.6.3 107.4.3Zm0 5c-2.4 0-4.2 2.2-4.2 5.2s1.8 5.2 4.2 5.2 4.2-2.2 4.2-5.2-1.8-5.2-4.2-5.2Z"/><path d="M117.6.5h5.4l6.4 10V.5h5.4v20h-5.2l-6.6-10.3v10.3h-5.4Z"/></svg>
+      </h1>
+      <p class="tagline">Your sports. <span>Your world.</span></p>
+    </div>
+
+    <p class="desc" style="--i:1">A sports-retail app for India. One set of numbers runs through all <b>45 screens</b>: rupees, real GST rates, and filter counts that add up.</p>
+
+    <section style="--i:2" aria-labelledby="triesH">
+      <h2 class="eyebrow" id="triesH">Things worth trying</h2>
+      <ol class="tries">
+        <li><span>Search <b>Running shoes</b> and open Filters: by type (<span class="v">22 + 12 + 8 + 6</span>) and by brand, it all adds up to <span class="v">48</span>.</span></li>
+        <li><span>In the <span class="v">₹28,000</span> bag, <code>RUN15</code> is refused (no running gear) and <code>DECA10</code> takes <span class="ok">₹1,000</span> off.</span></li>
+        <li><span>Check out in three steps. Pay with a new card ending <code>0000</code>: it’s declined, and your bag survives.</span></li>
+        <li><span>Turn <span class="v">1,000</span> of your <span class="v">2,450</span> Club points into a <span class="v">₹100</span> voucher, then use its code in the bag.</span></li>
+      </ol>
+    </section>
+
+    <section style="--i:3" aria-labelledby="demoH">
+      <h2 class="eyebrow" id="demoH">Jump to</h2>
+      <div class="chips" role="group" aria-label="Jump the phone to a flow">
+        <button class="chip" data-load="welcome" aria-pressed="false">Onboarding</button>
+        <button class="chip" data-load="login" aria-pressed="false">Sign in</button>
+        <button class="chip" data-load="home" aria-pressed="false">Home</button>
+        <button class="chip" data-load="search-results" aria-pressed="false">Search &amp; filters</button>
+        <button class="chip" data-load="product" aria-pressed="false">Product</button>
+        <button class="chip" data-load="bag" aria-pressed="false">Bag &amp; checkout</button>
+        <button class="chip" data-load="orders" aria-pressed="false">Orders</button>
+        <button class="chip" data-load="travel-store" aria-pressed="false">Stores</button>
+        <button class="chip" data-load="account" aria-pressed="false">Account</button>
+        <button class="chip chip--restart" id="restart" type="button" aria-label="Restart the demo from the splash screen"><svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7a5 5 0 1 0 1.6-3.7"/><path d="M2 1.8v2.8h2.8"/></svg>Restart</button>
+      </div>
+      <p class="now" aria-live="polite"><i aria-hidden="true"></i><span>On screen: <b id="now">Splash</b></span></p>
+    </section>
+
+    <p class="foot" style="--i:4">Every screen and sheet is plain HTML/CSS.<br><a href="index.html#screens" target="_self">Browse all 45 screens →</a> &nbsp;·&nbsp; <a href="index.html#system" target="_self">Design system →</a></p>
+  </aside>
+
+  <!-- The app itself -->
+  <div class="hs-box" id="hsBox">
+    <div class="lanes" aria-hidden="true">
+      <svg viewBox="0 0 560 980" fill="none">
+        <rect x="8" y="8" width="544" height="964" rx="272" stroke="#A9D6E5" stroke-width="2"/>
+        <rect x="34" y="34" width="492" height="912" rx="246" stroke="#FBD7B1" stroke-width="26" opacity=".8"/>
+        <rect x="60" y="60" width="440" height="860" rx="220" stroke="#A9D6E5" stroke-width="2" stroke-dasharray="2 12" stroke-linecap="round"/>
+        <path d="M8 520h40" stroke="#0F96DB" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="552" cy="330" r="7" fill="#0F96DB"/>
+      </svg>
+    </div>
+    <div class="handset" id="handset">
+      <span class="hs-btn hs-btn--l hs-btn--a" aria-hidden="true"></span>
+      <span class="hs-btn hs-btn--l hs-btn--b" aria-hidden="true"></span>
+      <span class="hs-btn hs-btn--r" aria-hidden="true"></span>
+      <iframe id="phone" name="phone" src="screens/splash.html" title="Decathlon app prototype: tap to use it like a phone" loading="eager"></iframe>
+    </div>
+  </div>
+</main>
+
+<script>
+(function () {
+  const phone = document.getElementById('phone');
+  const root = document.documentElement;
+  const now = document.getElementById('now');
+  const chips = [...document.querySelectorAll('.chip[data-load]')];
+  const DESK = matchMedia('(min-width: 880px)');
+  const W = 393, H = 852, FW = 417, FH = 876;
+
+  /* Fit. Desktop: scale the whole handset (417×876) to the viewport height, never above 1.
+     Phone: the iframe is the viewport; below 393px wide, scale the 393pt screens down to fit. */
+  function fit() {
+    const w = innerWidth, h = innerHeight;
+    if (DESK.matches) {
+      phone.style.cssText = '';
+      const s = Math.min(1, (h - 48) / FH, Math.max(.4, (w - 64 - 300 - 64) / FW));
+      root.style.setProperty('--s', Math.max(.4, s).toFixed(4));
+    } else {
+      root.style.setProperty('--s', 1);
+      if (w < W) {
+        const s = w / W;
+        phone.style.cssText = `width:${W}px;height:${h / s}px;transform:scale(${s});transform-origin:0 0`;
+      } else phone.style.cssText = '';
+    }
+  }
+  fit();
+  addEventListener('resize', fit);
+
+  /* Which chip owns which screen (all 45 ids in index.html's SCREENS). */
+  const FLOW_CHIP = {
+    splash: 'welcome', welcome: 'welcome', 'onboarding-1': 'welcome', 'onboarding-2': 'welcome', 'onboarding-3': 'welcome',
+    login: 'login', otp: 'login', signup: 'login', 'forgot-password': 'login', location: 'login',
+    home: 'home', category: 'home', sport: 'home', notifications: 'home', scanner: 'home',
+    search: 'search-results', 'search-results': 'search-results', filters: 'search-results',
+    product: 'product', gallery: 'product', reviews: 'product', 'write-review': 'product', wishlist: 'product',
+    bag: 'bag', coupons: 'bag', checkout: 'bag', payment: 'bag', 'payment-failed': 'bag', confirmation: 'bag',
+    orders: 'orders', 'order-detail': 'orders', 'order-tracking': 'orders', 'return-request': 'orders', 'return-success': 'orders',
+    'travel-store': 'travel-store', stores: 'travel-store', 'store-detail': 'travel-store',
+    account: 'account', 'edit-profile': 'account', addresses: 'account', 'add-address': 'account', 'payment-methods': 'account', club: 'account', settings: 'account', help: 'account',
+  };
+  const NAMES = {
+    splash: 'Splash', welcome: 'Welcome', 'onboarding-1': 'Every Sport', 'onboarding-2': 'Tested Gear', 'onboarding-3': 'Decathlon Club',
+    login: 'Sign In', otp: 'Verify Code', signup: 'Create Account', 'forgot-password': 'Forgot Password',
+    home: 'Home', category: 'Categories', sport: 'Sport', 'travel-store': 'Travel Store', stores: 'Stores', 'store-detail': 'Store',
+    search: 'Search', 'search-results': 'Search Results', filters: 'Filters', scanner: 'Scan', notifications: 'Notifications', location: 'Delivery Location',
+    product: 'Product', gallery: 'Photos', reviews: 'Reviews', 'write-review': 'Write a Review', wishlist: 'Wishlist',
+    bag: 'My Bag', coupons: 'Coupons', checkout: 'Checkout: Confirm', payment: 'Checkout: Payment', 'payment-failed': 'Payment Failed', confirmation: 'Order Confirmed',
+    orders: 'My Orders', 'order-detail': 'Order Details', 'order-tracking': 'Track Order', 'return-request': 'Return or Exchange', 'return-success': 'Return Requested',
+    account: 'My Account', 'edit-profile': 'Edit Profile', addresses: 'Addresses', 'add-address': 'Add Address', 'payment-methods': 'Payment Methods',
+    club: 'Decathlon Club', settings: 'Settings', help: 'Help & Support',
+  };
+
+  // Saved addresses doubles as checkout step 1 (?select=1): it belongs to Bag & checkout then
+  const inCheckout = () => { try { return /[?&]select=1/.test(phone.contentWindow.location.search); } catch (e) { return false; } };
+  let current = '', currentKey = '';
+  function setCurrent(id) {
+    if (!id || !(id in FLOW_CHIP)) return;
+    const step1 = id === 'addresses' && inCheckout();
+    const key = id + (step1 ? ':select' : '');
+    if (key === currentKey) return;
+    current = id; currentKey = key;
+    now.textContent = step1 ? 'Checkout: Address' : NAMES[id] || id;
+    const chip = step1 ? 'bag' : FLOW_CHIP[id];
+    chips.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.load === chip)));
+  }
+  setCurrent('splash');
+
+  addEventListener('message', (e) => {
+    if (e.source !== phone.contentWindow || !e.data || !e.data.decaScreen) return;
+    setCurrent(e.data.decaScreen);
+  });
+  // Belt and braces: same-origin, so read the path on every load too.
+  phone.addEventListener('load', () => {
+    try { setCurrent((phone.contentWindow.location.pathname.match(/([\w-]+)\.html$/) || [])[1]); } catch (e) {}
+  });
+
+  const go = (id) => { phone.src = 'screens/' + id + '.html'; };
+  chips.forEach((b) => b.addEventListener('click', () => { setCurrent(b.dataset.load); go(b.dataset.load); }));
+
+  document.getElementById('restart').addEventListener('click', () => {
+    [window.localStorage, window.sessionStorage].forEach((st) => {
+      try { for (let i = st.length - 1; i >= 0; i--) { const k = st.key(i); if (k && k.indexOf('deca:') === 0) st.removeItem(k); } } catch (e) {}
+    });
+    currentKey = ''; setCurrent('splash');
+    go('splash');
+  });
+})();
+</script>
+</body>
+</html>

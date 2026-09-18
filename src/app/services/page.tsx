@@ -470,7 +470,7 @@ export default function ServicesPage() {
           </Text>
           <div className="mt-space-6 flex flex-wrap items-center gap-space-4">
             <Magnetic className="inline-block">
-              <Button href="/contact" variant="invert">
+              <Button href="/contact" variant="invert" arrow="right">
                 Start a conversation
               </Button>
             </Magnetic>

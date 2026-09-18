@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Search</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .sh { padding: 49px 16px 0; color: #fff; flex-shrink: 0; }
+  .sh__title { font-size: 24px; line-height: 29px; font-weight: 700; margin-left: 10px; }
+  .sh form { margin-top: 22px; position: relative; }
+  .sh .search { height: 54px; gap: 14px; padding: 0 6px 0 18px; }
+  .sh .search input { font-size: 14px; font-weight: 500; }
+  .sh .search input::placeholder { color: #555; opacity: 1; }
+  .sh__clear { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: #555; }
+  .sh__clear span { width: 22px; height: 22px; border-radius: 50%; background: #D6D6D6; display: grid; place-items: center; }
+  .qf { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 8px; margin: 12px 0 22px; }
+  .qf button { text-align: left; padding: 9px 12px 10px; border-radius: 14px; background: rgba(255,255,255,.08); box-shadow: inset 0 0 0 1px rgba(255,255,255,.14); color: #fff; min-height: 54px; }
+  .qf button:hover { background: rgba(255,255,255,.12); }
+  .qf small { display: flex; align-items: center; gap: 5px; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--orange); font-weight: 600; }
+  .qf b { display: block; font-size: 13.5px; font-weight: 600; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .psheet.srch { padding: 24px 0 28px; }
+  .srch .sec { padding: 0 17px 0 17px; margin: 30px 0 12px; }
+  .srch .sec:first-child { margin-top: 0; }
+  .recent { padding: 0 17px; }
+  .recent a { display: flex; align-items: center; gap: 12px; min-height: 46px; color: #111; font-size: 14px; border-bottom: 1px solid #EEE; }
+  .recent a:last-child { border-bottom: 0; }
+  .recent a .grow { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .recent small { color: var(--text-4); font-size: 12px; }
+  .recent .ic { width: 32px; height: 32px; border-radius: 10px; background: var(--grey-1); display: grid; place-items: center; color: #666; flex-shrink: 0; }
+  .rail { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; padding: 0 17px; scroll-snap-type: x mandatory; scroll-padding: 17px; }
+  .rail::-webkit-scrollbar { display: none; }
+  .pop { position: relative; flex-shrink: 0; width: 132px; height: 170px; border-radius: 12px; overflow: hidden; scroll-snap-align: start; color: #fff; font-family: var(--font-2); }
+  .pop img { width: 100%; height: 100%; object-fit: cover; transition: transform 500ms var(--ease-out); }
+  .pop:hover img { transform: scale(1.05); }
+  .pop::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,33,61,0) 40%, rgba(20,33,61,.88)); }
+  .pop__t { position: absolute; left: 11px; right: 10px; bottom: 10px; z-index: 1; }
+  .pop__t b { display: block; font-size: 15px; font-weight: 500; line-height: 19px; }
+  .pop__t span { display: block; font-size: 10.5px; color: #E5E7EC; }
+  .pop__t i { display: block; font-style: normal; font-size: 12px; color: var(--orange); margin-top: 1px; }
+  .pop__rate { position: absolute; top: 8px; left: 8px; z-index: 1; display: inline-flex; align-items: center; gap: 3px; height: 20px; padding: 0 7px; border-radius: 10px; background: rgba(255,255,255,.92); color: #000; font: 600 10.5px var(--font); }
+  .pop__rate svg { color: var(--star); }
+  .styles { padding: 0 17px; }
+  .styles .chip { gap: 7px; }
+  .styles .chip svg { color: var(--navy); }
+  /* autocomplete */
+  .ac { position: absolute; left: 0; right: 0; top: 60px; z-index: 30; background: #fff; border-radius: 18px; box-shadow: 0 18px 40px rgba(8,14,28,.28); padding: 6px; color: #000; max-height: 390px; overflow-y: auto; }
+  .ac a { display: flex; align-items: center; gap: 12px; padding: 8px 10px; border-radius: 12px; }
+  .ac a:hover, .ac a.is-hl { background: var(--grey-1); }
+  .ac__img { width: 44px; height: 44px; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
+  .ac__t { font-size: 14px; font-weight: 600; }
+  .ac__t mark { background: var(--orange-tint); color: inherit; border-radius: 3px; padding: 0 1px; }
+  .ac__s { font-size: 12px; color: var(--text-4); margin-top: 2px; }
+  .ac__p { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--orange); white-space: nowrap; }
+  .ac__all { justify-content: flex-start; font-size: 13px; font-weight: 600; color: var(--navy); border-top: 1px solid #EEE; border-radius: 0 0 12px 12px !important; margin-top: 4px; }
+  .ac__none { padding: 14px 12px 6px; font-size: 13px; color: var(--text-3); }
+  .guests--light { background: var(--grey-1); color: #000; border-radius: 16px; padding: 6px 16px; }
+  .guests--light .guests__row { height: 56px; font-size: 15px; }
+  .guests--light .guests__row + .guests__row { border-top: 1px solid #E4E4E4; }
+  .guests--light small { display: block; font-size: 12px; color: var(--text-4); font-weight: 400; }
+  .when-sum { display: flex; gap: 10px; margin-bottom: 12px; }
+  .when-sum .datebox { font-size: 14px; }
+  .flex-dates { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<main class="page page--tabs" aria-label="Search">
+  <header class="sh">
+    <h1 class="sh__title">Search</h1>
+    <form id="form" role="search" action="search-results.html" autocomplete="off">
+      <label class="search" for="q">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7.5"/><path d="m16 16 5.5 5.5"/></svg>
+        <input type="search" id="q" name="q" placeholder="Where do you want to go?" aria-label="Search destinations, countries or styles" aria-autocomplete="list" aria-controls="ac" enterkeyhint="search">
+        <button class="sh__clear" type="button" id="clear" aria-label="Clear search" hidden><span><span data-icon="close" data-size="12" data-sw="3"></span></span></button>
+      </label>
+      <div class="ac" id="ac" role="listbox" aria-label="Suggestions" hidden></div>
+    </form>
+    <div class="qf">
+      <button type="button" id="qWhere" aria-label="Where: choose a destination"><small><span data-icon="map-pin" data-size="12" data-sw="2.4"></span>Where</small><b id="vWhere">Anywhere</b></button>
+      <button type="button" data-sheet="whenSheet" aria-label="When: choose dates"><small><span data-icon="calendar" data-size="12" data-sw="2.4"></span>When</small><b id="vWhen">Aug 12–19</b></button>
+      <button type="button" data-sheet="whoSheet" aria-label="Who: choose travellers"><small><span data-icon="user" data-size="12" data-sw="2.4"></span>Who</small><b id="vWho">2 Guests</b></button>
+    </div>
+  </header>
+
+  <section class="psheet psheet--round srch">
+    <div id="recentWrap">
+      <div class="sec"><h2 class="sec__label">Recent</h2><button class="sec__more" type="button" id="clearRecent">Clear</button></div>
+      <div class="recent" id="recent"></div>
+    </div>
+
+    <div class="sec"><h2 class="sec__label">Popular</h2><a class="sec__more" href="search-results.html?sort=rating">See All</a></div>
+    <div class="rail" id="rail"></div>
+
+    <div class="sec"><h2 class="sec__label">Trending Styles</h2></div>
+    <div class="chips styles" id="styles"></div>
+  </section>
+
+  <nav data-tabbar="search"></nav>
+</main>
+
+<!-- When -->
+<section class="sheet" id="whenSheet" aria-labelledby="whT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="whT">When are you going?</p><p class="sheet__sub">Pick a departure and a return date</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><span data-icon="close" data-size="14" data-sw="2.4"></span></button>
+  </div>
+  <div class="when-sum"><span class="datebox" id="dFrom">Aug 12, 2026</span><span class="datebox" id="dTo">Aug 19, 2026</span></div>
+  <div id="cal" data-delegate></div>
+  <div class="flex-dates chips" id="flex" data-delegate>
+    <button class="chip chip--outline" type="button" data-flex="weekend">This weekend</button>
+    <button class="chip chip--outline" type="button" data-flex="week">A week in Aug</button>
+    <button class="chip chip--outline" type="button" data-flex="any">I'm flexible</button>
+  </div>
+  <div class="sheet__foot"><button class="btn btn--primary" type="button" id="whenDone"><span>Save dates</span></button></div>
+</section>
+
+<!-- Who -->
+<section class="sheet" id="whoSheet" aria-labelledby="woT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="woT">Who’s travelling?</p><p class="sheet__sub">Children under 12 travel at 50% of the package price</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><span data-icon="close" data-size="14" data-sw="2.4"></span></button>
+  </div>
+  <div class="guests guests--light" data-delegate>
+    <div class="guests__row"><span>Adults<small>Age 12+</small></span><div class="counter counter--lg" id="cA" data-counter data-min="1" data-max="9" data-value="2" aria-label="Adults"></div></div>
+    <div class="guests__row"><span>Children<small>Age 2–11</small></span><div class="counter counter--lg" id="cC" data-counter data-min="0" data-max="6" data-value="0" aria-label="Children"></div></div>
+  </div>
+  <div class="sheet__foot"><button class="btn btn--primary" type="button" id="whoDone"><span>Save travellers</span></button></div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const V = window.Voyager; const $ = (s) => document.querySelector(s);
+  const capture = document.body.classList.contains('capture');
+  const q = $('#q'), ac = $('#ac'), clear = $('#clear');
+  const S = Object.assign({ from: '2026-08-12', to: '2026-08-19', adults: 2, children: 0, when: 'Aug', guests: 2 }, V.store.get('vb:search', {}));
+  const save = () => { S.guests = S.adults + S.children; S.when = S.from ? V.date.MON[V.date.parse(S.from).getMonth()] : 'Any time'; V.store.set('vb:search', S); paint(); };
+  const paint = () => {
+    $('#vWhen').textContent = S.from && S.to ? V.date.range(S.from, S.to) : 'Any time';
+    $('#vWho').textContent = `${S.adults + S.children} Guest${S.adults + S.children === 1 ? '' : 's'}`;
+    $('#vWhere').textContent = q.value.trim() || 'Anywhere';
+  };
+
+  // ---- prefill from ?q=
+  if (V.q('q')) q.value = V.q('q');
+  clear.hidden = !q.value;
+  if (!capture) setTimeout(() => q.focus(), 60);
+  paint();
+
+  // ---- autocomplete
+  const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const hl = (text, term) => { const i = norm(text).indexOf(norm(term)); if (i < 0 || !term) return V.esc(text); return V.esc(text.slice(0, i)) + '<mark>' + V.esc(text.slice(i, i + term.length)) + '</mark>' + V.esc(text.slice(i + term.length)); };
+  let hi = -1;
+  const suggest = () => {
+    const t = q.value.trim(); clear.hidden = !t; paint();
+    if (!t) { ac.hidden = true; q.setAttribute('aria-expanded', 'false'); return; }
+    const n = norm(t);
+    const regions = [...new Set(V.destinations.map((d) => d.region))].filter((r) => norm(r).startsWith(n));
+    const styles = [...new Set(V.destinations.flatMap((d) => d.styles))].filter((s) => norm(s).startsWith(n));
+    const dests = V.destinations.filter((d) => [d.name, d.country, d.package.name].some((x) => norm(x).includes(n)) || d.styles.some((s) => norm(s).startsWith(n)) || norm(d.region).startsWith(n)).slice(0, 6);
+    let h = '';
+    regions.concat(styles).slice(0, 2).forEach((r) => {
+      const c = V.destinations.filter((d) => d.region === r || d.styles.includes(r)).length;
+      h += `<a role="option" href="search-results.html?q=${encodeURIComponent(r)}" data-term="${V.esc(r)}"><span class="ac__img ph" style="display:grid;place-items:center;color:#fff">${V.icon(regions.includes(r) ? 'globe' : 'sparkle', 22, 'stroke-width="1.8"')}</span><span><span class="ac__t" style="display:block">${hl(r, t)}</span><span class="ac__s" style="display:block">${regions.includes(r) ? 'Region' : 'Travel style'} · ${c} destination${c === 1 ? '' : 's'}</span></span></a>`;
+    });
+    h += dests.map((d) => `<a role="option" href="destination.html?id=${d.id}" data-term="${V.esc(d.name)}"><span class="ac__img ph"><img src="${V.img(d.img)}" alt=""></span><span><span class="ac__t" style="display:block">${hl(d.name, t)}</span><span class="ac__s" style="display:block">${hl(d.country, t)} · ${d.days} Days</span></span><span class="ac__p">${V.fmt(d.from)}</span></a>`).join('');
+    if (!dests.length && !regions.length && !styles.length) h += `<p class="ac__none">No destinations match “${V.esc(t)}”. Check the spelling, or search anyway.</p>`;
+    h += `<a class="ac__all" role="option" href="search-results.html?q=${encodeURIComponent(t)}" data-term="${V.esc(t)}">${V.icon('search', 18, 'stroke-width="2"')}<span>See all results for “${V.esc(t)}”</span></a>`;
+    ac.innerHTML = h; ac.hidden = false; q.setAttribute('aria-expanded', 'true'); hi = -1;
+  };
+  q.addEventListener('input', suggest);
+  q.addEventListener('focus', () => { if (q.value.trim()) suggest(); });
+  q.addEventListener('keydown', (e) => {
+    const items = [...ac.querySelectorAll('a')]; if (ac.hidden || !items.length) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); hi = (hi + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length; items.forEach((a, i) => a.classList.toggle('is-hl', i === hi)); }
+    if (e.key === 'Enter' && hi >= 0) { e.preventDefault(); items[hi].click(); }
+    if (e.key === 'Escape') { ac.hidden = true; }
+  });
+  document.addEventListener('click', (e) => { if (!e.target.closest('#form')) ac.hidden = true; });
+  ac.addEventListener('click', (e) => { const a = e.target.closest('a[data-term]'); if (a) remember(a.dataset.term); });
+  clear.addEventListener('click', () => { q.value = ''; suggest(); q.focus(); });
+
+  // ---- recent searches
+  const recentWrap = $('#recentWrap');
+  const recents = () => V.store.get('vb:recent', ['Europe', 'Bali beaches', 'Kyoto']);
+  const remember = (t) => { if (!t) return; const l = recents().filter((x) => x.toLowerCase() !== t.toLowerCase()); l.unshift(t); V.store.set('vb:recent', l.slice(0, 5)); };
+  const renderRecent = () => {
+    const l = recents(); recentWrap.hidden = !l.length;
+    $('#recent').innerHTML = l.map((t, i) => `<a href="search-results.html?q=${encodeURIComponent(t)}"><span class="ic">${V.icon('clock', 17, 'stroke-width="1.9"')}</span><span class="grow">${V.esc(t)}</span><small>${i === 0 ? V.esc(`${V.date.range(S.from, S.to)} · ${S.guests} Guests`) : ''}</small>${V.icon('arrow-up-right', 16, 'stroke-width="2"')}</a>`).join('');
+  };
+  $('#clearRecent').addEventListener('click', () => { const prev = recents(); V.store.set('vb:recent', []); renderRecent(); V.toast('Recent searches cleared', { action: 'Undo', onAction: () => { V.store.set('vb:recent', prev); renderRecent(); } }); });
+  renderRecent();
+
+  // ---- submit
+  $('#form').addEventListener('submit', (e) => {
+    e.preventDefault(); const t = q.value.trim();
+    if (!t) { q.focus(); V.toast('Type a destination, country or style'); return; }
+    remember(t); location.href = 'search-results.html?q=' + encodeURIComponent(t);
+  });
+  $('#qWhere').addEventListener('click', () => { q.focus(); q.select(); });
+
+  // ---- popular rail
+  const POP = ['santorini', 'kyoto', 'paris', 'swiss-alps', 'bali', 'dubai'];
+  $('#rail').innerHTML = POP.map(V.dest).map((d) => `<a class="pop ph tap" href="destination.html?id=${d.id}" aria-label="${V.esc(d.name)}, ${V.esc(d.country)}, rated ${d.rating}"><img src="${V.img(d.img)}" alt="" loading="lazy"><span class="pop__rate">${V.icon('star-fill', 11)}${d.rating}</span><span class="pop__t"><b>${V.esc(d.name)}</b><span>${V.esc(d.country)} · ${d.days} Days</span><i>${V.fmtFrom(d.from)}</i></span></a>`).join('');
+
+  // ---- trending styles
+  const STY = [['Beach', 'sun'], ['Cultural', 'book'], ['Adventure', 'compass'], ['Luxury', 'sparkle'], ['Food & Wine', 'cutlery'], ['Family', 'user']];
+  $('#styles').innerHTML = STY.map(([s, ic]) => `<a class="chip chip--lg" href="search-results.html?q=${encodeURIComponent(s)}">${V.icon(ic, 16, 'stroke-width="2"')}${V.esc(s)}</a>`).join('');
+  $('#styles').addEventListener('click', (e) => { const a = e.target.closest('a'); if (a) remember(a.textContent.trim()); });
+
+  // ---- when sheet
+  let tmp = { from: S.from, to: S.to };
+  const paintDates = () => {
+    $('#dFrom').textContent = tmp.from ? V.date.fmt(tmp.from) : 'Departure'; $('#dFrom').classList.toggle('is-empty', !tmp.from);
+    $('#dTo').textContent = tmp.to ? V.date.fmt(tmp.to) : 'Return'; $('#dTo').classList.toggle('is-empty', !tmp.to);
+    $('#whenDone').disabled = !!tmp.from && !tmp.to;
+  };
+  const cal = V.calendar($('#cal'), { from: S.from, to: S.to, month: (S.from || '2026-08-12').slice(0, 7), onChange: (f, t) => { tmp = { from: f, to: t }; paintDates(); } });
+  cal.show((S.from || '2026-08-12').slice(0, 7));
+  $('#flex').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-flex]'); if (!b) return;
+    const f = b.dataset.flex;
+    if (f === 'weekend') tmp = { from: '2026-09-25', to: '2026-09-27' };
+    if (f === 'week') tmp = { from: '2026-08-12', to: '2026-08-19' };
+    if (f === 'any') tmp = { from: null, to: null };
+    cal.set(tmp.from, tmp.to); paintDates();
+  });
+  $('#whenSheet').addEventListener('sheet:open', () => { tmp = { from: S.from, to: S.to }; cal.set(S.from, S.to); paintDates(); });
+  $('#whenDone').addEventListener('click', () => { S.from = tmp.from; S.to = tmp.to; save(); renderRecent(); V.sheet.close(); V.toast(S.from ? `Dates set · ${V.date.range(S.from, S.to)}` : 'Showing any dates'); });
+  paintDates();
+
+  // ---- who sheet
+  $('#cA').value = S.adults; $('#cC').value = S.children;
+  $('#whoDone').addEventListener('click', () => { S.adults = $('#cA').value; S.children = $('#cC').value; save(); renderRecent(); V.sheet.close(); V.toast(`${S.adults + S.children} travellers saved`); });
+})();
+</script>
+</body>
+</html>

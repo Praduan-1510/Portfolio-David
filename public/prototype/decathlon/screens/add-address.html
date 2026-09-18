@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Add address</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  .form { margin-top: 20px; }
+  .form .label-caps { margin: 26px 0 12px; }
+  .form .label-caps:first-child { margin-top: 0; }
+  .locate { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 52px; padding: 0 14px; border-radius: var(--r); background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--steel); color: var(--navy); font-size: 14px; font-weight: 500; text-align: left; margin-top: 20px; }
+  .locate .icon-tile { width: 32px; height: 32px; background: #fff; }
+  .locate__sub { display: block; font-size: 12px; font-weight: 400; color: var(--muted-2); }
+  .pin-ok { color: var(--ok); font-weight: 500; }
+  .type-seg { margin-top: 2px; }
+  .field-row + .fg { margin-top: 16px; }
+  .def-row { display: flex; align-items: center; gap: 12px; margin-top: 20px; font-size: 14px; color: #111; cursor: pointer; min-height: 44px; }
+  .def-row input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .segmented button { text-align: center; }
+</style>
+</head>
+<body>
+<main class="page page--no-nav" aria-label="Add address">
+  <header class="appbar">
+    <a class="back tap" href="addresses.html" id="backBtn" aria-label="Back"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <h1 class="appbar__title" id="title">Add new address</h1>
+  </header>
+  <div class="page-divider"></div>
+
+  <button class="locate tap" type="button" id="gps"><span class="icon-tile"><i data-icon="locate" data-size="18"></i></span><span class="grow">Use my current location<span class="locate__sub" id="gpsSub">Fills pincode, city and state for you</span></span></button>
+
+  <form class="form" id="form" novalidate>
+    <p class="label-caps">Contact</p>
+    <div class="fg"><label class="label" for="name">Full name<span class="req">*</span></label><input class="field" id="name" autocomplete="name" data-validate="required|name" placeholder="e.g. Aditya Banerjee"></div>
+    <div class="fg"><label class="label" for="phone">Mobile number<span class="req">*</span></label>
+      <div class="field field-affix"><span>+91</span><input id="phone" type="tel" inputmode="numeric" autocomplete="tel-national" data-mask="phone" data-validate="required|phone" placeholder="98311 20456"></div>
+      <span class="helper">Our courier calls this number if they can’t find you</span></div>
+
+    <p class="label-caps">Address</p>
+    <div class="fg" id="pinFg"><label class="label" for="pin">Pincode<span class="req">*</span></label><input class="field" id="pin" inputmode="numeric" maxlength="6" autocomplete="postal-code" data-mask="pin" data-validate="required" placeholder="e.g. 700135"><span class="helper" id="pinHelp">We’ll fill in the city and state</span></div>
+    <div class="field-row" style="margin-top:16px">
+      <div class="fg"><label class="label" for="city">City<span class="req">*</span></label><input class="field" id="city" autocomplete="address-level2" data-validate="required" placeholder="City"></div>
+      <div class="fg"><label class="label" for="state">State<span class="req">*</span></label><input class="field" id="state" autocomplete="address-level1" data-validate="required" placeholder="State"></div>
+    </div>
+    <div class="fg"><label class="label" for="line1">House no., building<span class="req">*</span></label><input class="field" id="line1" autocomplete="address-line1" data-validate="required" placeholder="e.g. Flat 4B, Sunrise Towers"></div>
+    <div class="fg"><label class="label" for="line2">Street, area<span class="req">*</span></label><input class="field" id="line2" autocomplete="address-line2" data-validate="required" placeholder="e.g. Action Area 1, New Town"></div>
+    <div class="fg"><label class="label" for="landmark">Landmark <span class="muted" style="font-weight:400">(optional)</span></label><input class="field" id="landmark" placeholder="e.g. Opposite City Centre 2"></div>
+
+    <p class="label-caps">Save as</p>
+    <div class="segmented type-seg" id="type" aria-label="Address type">
+      <button type="button" data-value="Home" aria-selected="true">Home</button>
+      <button type="button" data-value="Work">Work</button>
+      <button type="button" data-value="Other">Other</button>
+    </div>
+    <div class="fg" id="otherFg" style="margin-top:14px" hidden><label class="label" for="other">Name this address<span class="req">*</span></label><input class="field" id="other" data-validate="required" placeholder="e.g. Parents’ home"></div>
+    <label class="def-row"><input type="checkbox" id="def"><span class="check-box"></span>Make this my default address</label>
+  </form>
+
+  <div class="cta-bar"><button class="btn btn--primary btn--lg tap" type="button" id="save"><span>Save address</span></button></div>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$;
+    const editId = D.q('edit'), from = D.q('from');
+    // From checkout, both Back and Save return to step 1 (choose the delivery address)
+    const back = from === 'checkout' ? 'addresses.html?select=1' + (D.q('next') ? '&next=' + encodeURIComponent(D.q('next')) : '') : 'addresses.html';
+    const STATES = [[/^70|^71|^72|^73|^74/, 'West Bengal'], [/^11/, 'Delhi'], [/^40|^41|^42|^43|^44/, 'Maharashtra'], [/^56|^57|^58|^59/, 'Karnataka'], [/^60|^61|^62|^63|^64/, 'Tamil Nadu'], [/^50/, 'Telangana']];
+    let type = 'Home', dirty = false;
+    $('#backBtn').href = editId && from !== 'checkout' ? 'addresses.html' : back;
+
+    // Prefill when editing
+    const a = editId && D.addresses.get(editId);
+    if (a) {
+      $('#title').textContent = 'Edit address'; $('#save span').textContent = 'Save changes';
+      $('#name').value = a.name || ''; $('#phone').value = (a.phone || '').replace(/^\+91\s*/, '');
+      $('#pin').value = a.pin || ''; $('#city').value = a.city || ''; $('#state').value = a.state || '';
+      $('#line1').value = a.line1 || ''; $('#line2').value = a.line2 || ''; $('#landmark').value = a.landmark || '';
+      type = ['Home', 'Work'].includes(a.label) ? a.label : 'Other';
+      if (type === 'Other') { $('#other').value = a.label || ''; $('#otherFg').hidden = false; }
+      D.$$('#type button').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.value === type)));
+      $('#def').checked = !!a.isDefault;
+    } else {
+      const u = D.user.get(); $('#name').value = u.name; $('#phone').value = u.phone.replace(/^\+91\s*/, '');
+      $('#def').checked = !D.addresses.list().length;
+    }
+
+    $('#type').addEventListener('change', (e) => { type = e.detail; $('#otherFg').hidden = type !== 'Other'; dirty = true; });
+    $('#form').addEventListener('input', () => { dirty = true; });
+
+    // Pincode -> city / state
+    const pinErr = (msg) => { const fg = $('#pinFg'); fg.classList.toggle('has-error', !!msg); let et = fg.querySelector('.error-text'); if (!et) { et = document.createElement('span'); et.className = 'error-text'; et.setAttribute('role', 'alert'); fg.appendChild(et); } et.textContent = msg || ''; $('#pin').setAttribute('aria-invalid', String(!!msg)); };
+    function lookup(fill) {
+      const pin = $('#pin').value.trim();
+      if (!/^\d{6}$/.test(pin)) return false;
+      const area = D.location.lookup(pin);
+      if (area && !/^Pincode/.test(area)) {
+        const parts = area.split(', '); const st = (STATES.find(([re]) => re.test(pin)) || [])[1];
+        if (fill) { $('#city').value = parts[1] || parts[0]; $('#state').value = st || parts[1] || $('#state').value; if (!$('#line2').value && parts[1]) $('#line2').value = parts[0]; }
+        $('#pinHelp').innerHTML = `<span class="pin-ok">${D.esc(area)}</span> · delivery by ${D.location.eta(pin)}`;
+      } else {
+        const st = (STATES.find(([re]) => re.test(pin)) || [])[1]; if (fill && st) $('#state').value = st;
+        $('#pinHelp').textContent = `Delivery by ${D.location.eta(pin)}. Enter the city below.`;
+      }
+      return true;
+    }
+    $('#pin').addEventListener('input', () => { pinErr(''); if ($('#pin').value.length === 6) lookup(true); });
+    if (a) lookup(false);
+
+    $('#gps').addEventListener('click', async (e) => {
+      const b = e.currentTarget; $('#gpsSub').textContent = 'Finding your location…'; b.setAttribute('aria-busy', 'true');
+      await D.wait(1000); b.removeAttribute('aria-busy');
+      $('#pin').value = '700135'; lookup(true); $('#city').value = 'Kolkata'; $('#state').value = 'West Bengal';
+      if (!$('#line2').value) $('#line2').value = 'Action Area 1, New Town';
+      $('#gpsSub').textContent = 'Found: New Town, Kolkata 700135'; dirty = true; D.toast('Location found. Add your house number.', { icon: 'pin' }); $('#line1').focus();
+    });
+
+    // Back with unsaved changes -> confirm
+    $('#backBtn').addEventListener('click', async (e) => {
+      if (!dirty) return; e.preventDefault();
+      if (await D.dialog({ title: 'Discard changes?', message: 'The address you entered will not be saved.', confirm: 'Discard', cancel: 'Keep editing', tone: 'danger' })) location.href = $('#backBtn').href;
+    });
+
+    // Save
+    $('#save').addEventListener('click', async (e) => {
+      const okFields = D.validate($('#form'));
+      const pinOk = /^\d{5,6}$/.test($('#pin').value.trim()) && !/^0/.test($('#pin').value.trim());
+      if (!pinOk && $('#pin').value.trim()) pinErr('Pincode should be 6 digits, e.g. 700135');
+      if (!okFields || !pinOk) { if (okFields) $('#pin').focus(); return; }
+      const label = type === 'Other' ? $('#other').value.trim() : type;
+      const data = { label, name: $('#name').value.trim(), phone: '+91 ' + $('#phone').value.trim(), line1: $('#line1').value.trim(), line2: $('#line2').value.trim(), landmark: $('#landmark').value.trim(), city: $('#city').value.trim(), state: $('#state').value.trim(), pin: $('#pin').value.trim() };
+      data.text = [data.line1, data.line2, `${data.city}, ${data.state}`].filter(Boolean).join(', ') + ' ' + data.pin;
+      await D.loading(e.currentTarget, 800);
+      let id = editId;
+      if (a) D.addresses.update(editId, data); else id = D.addresses.add(data);
+      if ($('#def').checked) D.addresses.list().forEach((x) => D.addresses.update(x.id, { isDefault: x.id === id }));
+      D.addresses.select(id); dirty = false;
+      D.toast(a ? 'Address updated' : 'Address saved', { icon: 'check' });
+      await D.wait(600);
+      location.href = back;
+    });
+  })();
+</script>
+</body>
+</html>

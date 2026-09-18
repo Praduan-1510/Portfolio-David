@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Filters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* Pixel-matched to Filters.png (393 x 864). Section boxes x30..341; price box x33..345 y132..185;
+     category box y242..415; size chips y474; brands box from y562. Sticky "Show N results" CTA added. */
+  .page { padding-bottom: calc(var(--tabbar-h) + 96px); }
+  .fbody { margin: 0 28px 0 6px; }
+  .f-h { font-size: 18px; font-weight: 600; line-height: 1; color: #000; display: flex; align-items: baseline; justify-content: space-between; }
+  .f-h small { font-size: 12px; font-weight: 500; color: var(--muted-2); }
+  .f-range { margin: 15.7px -4px 0 3px; height: 54px; padding: 2px 35px 0; }
+  .f-range .dual-range__track { left: -23px; right: -23px; height: 9px; }
+  .f-range .dual-range__fill { height: 9px; }
+  .f-range .dual-range input::-webkit-slider-thumb { width: 14px; height: 14px; }
+  .f-range .dual-range input { top: 5px; }
+  .f-range .dual-range__lbl { top: 27px; font-size: 13px; line-height: 1.45; }
+  .checklist { padding: 3px 10px 3px; }
+  .checklist .check-row { min-height: 41.5px; gap: 10px; }
+  .checklist .check-row .count { margin-left: 6px; font-weight: 400; }
+  .checklist .check-row.is-zero { opacity: .45; cursor: default; }
+  .f-sizes .chip[disabled] { opacity: .4; pointer-events: none; }
+  .f-sizes .chip { gap: 6px; padding: 0 11px; }
+  .f-sizes .chip small { font-size: 11px; font-weight: 500; color: var(--steel); }
+  .f-sizes .chip.is-active small { color: #A9D6E5; }
+  #brandList { padding-top: 3px; }
+  #brandList .check-row { min-height: 42.6px; }
+
+  .f-sizes { display: flex; flex-wrap: wrap; gap: 10px 10px; margin: 17.7px -24px 0 8px; }
+  .f-sizes .chip { height: 29px; padding: 0 15px; border-radius: 6px; font-size: 14px; }
+  .more-brands { margin: 6px 0 0 2px; }
+  .f-cta { padding-top: 22px; }
+  .f-cta .btn { height: 44px; font-size: 17px; }
+  .f-note { text-align: center; font-size: 12px; color: var(--muted-2); margin-top: 6px; min-height: 16px; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Filters" id="fp">
+  <header class="appbar">
+    <h1 class="appbar__title">Filters</h1>
+    <button class="appbar__action tap" type="button" id="reset">Reset all</button>
+  </header>
+  <div class="page-divider"></div>
+
+  <div class="fbody">
+    <section aria-labelledby="priceH">
+      <h2 class="f-h" id="priceH" style="margin:16.3px 0 0 5px">Price range</h2>
+      <div class="range-box f-range"><div class="dual-range" id="price" data-min="0" data-max="15000" data-step="500" data-from="0" data-to="15000" data-fmt="rs" data-label="price"></div></div>
+    </section>
+
+    <section aria-labelledby="catH">
+      <h2 class="f-h" id="catH" style="margin:24.3px 0 0 1px">Category</h2>
+      <div class="checklist" id="catList" role="group" aria-labelledby="catH" style="margin-top:13.7px"></div>
+    </section>
+
+    <section aria-labelledby="sizeH">
+      <h2 class="f-h" id="sizeH" style="margin:23.3px 0 0 1px">Size</h2>
+      <div class="f-sizes" id="sizeList" data-multi role="group" aria-labelledby="sizeH"></div>
+    </section>
+
+    <section aria-labelledby="brandH">
+      <h2 class="f-h" id="brandH" style="margin:26.3px 0 0 1px">Brands</h2>
+      <div class="checklist" id="brandList" role="group" aria-labelledby="brandH" style="margin-top:14.7px"></div>
+      <button class="text-btn text-btn--brand more-brands tap" type="button" id="moreBrands" aria-expanded="false"><i data-icon="chevron-down" data-size="16" data-sw="2"></i><span>Show all brands</span></button>
+    </section>
+  </div>
+
+  <div class="cta-bar cta-bar--above-tabs f-cta">
+    <button class="btn btn--primary tap" type="button" id="show"><span id="showTxt">Show results</span></button>
+    <p class="f-note" id="note" role="status" aria-live="polite"></p>
+  </div>
+
+  <nav data-tabbar="categories"></nav>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$, S = D.shop;
+    /* Counts come from Deca.shop, the same model the results page uses. Each row's
+       number is "results if you also tick this"; rows in one facet add up to the
+       result count; a row that would lead to zero results is disabled. */
+    const q = (D.q('q') || D.store.get('lastQuery', 'Running shoes')).trim();
+    const sale = D.q('sale') === '1';
+    let f = S.load(q, sale);
+    const MAXP = S.run(q, sale, S.EMPTY).maxPrice;
+    const range = $('#price');
+    range.dataset.max = MAXP; range.dataset.step = MAXP > 20000 ? 1000 : 500; range.dataset.from = f.min || 0; range.dataset.to = f.max == null ? MAXP : f.max; D.dualRange(range);
+
+    const row = (kind, o, bold) => `<label class="check-row${bold ? ' check-row--bold' : ''}" data-${kind}="${D.esc(o.v)}"><input type="checkbox" value="${D.esc(o.v)}"><span class="checkc"></span>${D.esc(o.label)} <span class="count num"></span></label>`;
+    let r0 = S.run(q, sale, f);
+    $('#catList').innerHTML = r0.cats.map((o) => row('cat', o)).join('');
+    $('#sizeList').innerHTML = r0.sizes.map((o) => `<button class="chip tap" type="button" data-value="${D.esc(o.v)}" aria-pressed="false">${D.esc(o.v)}<small class="num"></small></button>`).join('');
+    $('#brandList').innerHTML = r0.brands.map((o, i) => row('brand', o, true).replace('<label', i > 5 ? '<label data-extra hidden' : '<label')).join('');
+    $('#moreBrands').hidden = r0.brands.length <= 6;
+    const toggleMore = (open) => { $$('[data-extra]').forEach((r) => (r.hidden = !open)); const b = $('#moreBrands'); b.setAttribute('aria-expanded', String(open)); b.querySelector('span').textContent = open ? 'Show fewer brands' : 'Show all brands'; b.querySelector('svg').style.transform = open ? 'rotate(180deg)' : ''; };
+    $('#moreBrands').addEventListener('click', () => toggleMore($('#moreBrands').getAttribute('aria-expanded') !== 'true'));
+    D.hydrateIcons($('#fp'));
+    if ($$('[data-extra] input').some((i) => f.brands.includes(i.value))) toggleMore(true);
+
+    function paintControls() {
+      $$('#catList input').forEach((i) => (i.checked = f.cats.includes(i.value)));
+      $$('#brandList input').forEach((i) => (i.checked = f.brands.includes(i.value)));
+      $$('#sizeList .chip').forEach((c) => { const on = f.sizes.includes(c.dataset.value); c.setAttribute('aria-pressed', String(on)); c.classList.toggle('is-active', on); });
+      range.set(f.min || 0, f.max == null ? MAXP : f.max);
+    }
+    function maxLabel() { const l = $$('.dual-range__lbl', range)[1]; if (l && +$$('input', range)[1].value >= MAXP) l.textContent = D.fmt(MAXP) + '+'; }
+    function refresh() {
+      const r = S.run(q, sale, f); const n = r.results.length;
+      const paint = (sel, list, fmt) => list.forEach((o) => { const el = $(`${sel} [data-${sel === '#catList' ? 'cat' : 'brand'}="${CSS.escape(o.v)}"]`); if (!el) return; const inp = el.querySelector('input'); el.querySelector('.count').textContent = fmt(o.n); const dead = !o.n && !inp.checked; el.classList.toggle('is-zero', dead); inp.disabled = dead; });
+      paint('#catList', r.cats, (k) => `(${k})`);
+      paint('#brandList', r.brands, (k) => `(${k})`);
+      $$('#sizeList .chip').forEach((c) => { const o = r.sizes.find((x) => x.v === c.dataset.value) || { n: 0 }; const dead = !o.n && c.getAttribute('aria-pressed') !== 'true'; c.disabled = dead; c.querySelector('small').textContent = o.n; c.setAttribute('aria-label', `Size ${c.dataset.value}, ${o.n} ${o.n === 1 ? 'result' : 'results'}`); });
+      const btn = $('#show');
+      $('#showTxt').textContent = n ? `Show ${n} ${n === 1 ? 'result' : 'results'}` : 'No matching products';
+      btn.disabled = !n;
+      $('#note').textContent = n ? (S.isEmpty(f) ? `All ${r.all.length} results for “${q}”${sale ? ' on sale' : ''}` : `Filtering “${q}”${sale ? ' on sale' : ''}`) : 'Widen the price range to see results';
+      maxLabel();
+    }
+    range.addEventListener('change', (e) => { f.min = e.detail.from; f.max = e.detail.to >= MAXP ? null : e.detail.to; refresh(); });
+    $$('input', range).forEach((i) => i.addEventListener('input', () => { const v = range.value(); f.min = v.from; f.max = v.to >= MAXP ? null : v.to; refresh(); }));
+    $('#catList').addEventListener('change', () => { f.cats = $$('#catList input:checked').map((i) => i.value); refresh(); });
+    $('#brandList').addEventListener('change', () => { f.brands = $$('#brandList input:checked').map((i) => i.value); refresh(); });
+    $('#sizeList').addEventListener('change', (e) => { f.sizes = e.detail; refresh(); });
+    $('#reset').addEventListener('click', () => {
+      if (S.isEmpty(f)) { D.toast('No filters to reset'); return; }
+      const prev = S.norm(f); f = S.norm(S.EMPTY); paintControls(); refresh(); D.haptic(10);
+      D.toast('All filters cleared', { action: 'Undo', onAction: () => { f = S.norm(prev); paintControls(); refresh(); } });
+    });
+    $('#show').addEventListener('click', async (e) => {
+      const btn = e.currentTarget; await D.loading(btn, 650);
+      S.save(q, sale, f);
+      location.href = `search-results.html?q=${encodeURIComponent(q)}${sale ? '&sale=1' : ''}`;
+    });
+    paintControls(); refresh();
+  })();
+</script>
+</body>
+</html>

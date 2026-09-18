@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Search results</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* Pixel-matched to Search results.png (393 x 997): field 41..378 x 25..67, chips y84 / y124,
+     steel divider y166, "48 results" + Sort by y179..207, grid from y219 (cards 167 wide, pitch 149). */
+  .sr-head { display: flex; align-items: center; height: 67px; padding-top: 25px; }
+  .sr-head .back { width: 30px; height: 42px; margin-left: -12px; display: grid; place-items: center; color: #000; border-radius: 8px; flex-shrink: 0; }
+  .sr-head .back svg { width: 10px; height: 17px; }
+  .sr-head .search-field { margin: 0 -9px 0 -1px; height: 42px; padding: 0 12px 0 11px; gap: 9px; }
+  .sr-head .search-field > svg { width: 17px; height: 17px; }
+  .sr-head .search-field input { font-size: 15px; letter-spacing: -.1px; }
+  .sr-head .search-field button { color: #111; }
+  .sr-head .search-field .clear { width: 26px; margin-right: -4px; color: var(--muted-2); }
+  .sr-head .search-field .clear[hidden] { display: none; }
+  .sr-head .search-field:not(:focus-within) .clear { display: none; }
+  .sr-chips { display: flex; flex-wrap: wrap; gap: 12px 16px; margin: 17px 0 0 8px; min-height: 68px; }
+  .sr-chips .chip { height: 28px; padding: 0 14px; font-size: 14.6px; }
+  .sr-chips .chip--filters { background: var(--navy); color: #fff; box-shadow: none; }
+  .sr-chips .chip--filters b { display: inline-grid; place-items: center; min-width: 18px; height: 18px; padding: 0 5px; margin-right: -6px; border-radius: 9px; background: #fff; color: var(--navy); font-size: 11px; font-weight: 700; }
+  .sr-chips .chip .chip__x { width: 12px; height: 12px; }
+  .sr-div { margin: 14px -24px 0; }
+  .sr-bar { display: flex; align-items: center; justify-content: space-between; height: 28px; margin-top: 11px; }
+  .sr-count { font-size: 18px; font-weight: 600; color: var(--steel); margin-left: 11px; line-height: 1; }
+  .sr-count small { font-size: 13px; font-weight: 400; color: var(--muted-2); margin-left: 4px; }
+  .sr-sort { position: relative; height: 28px; width: 78px; padding: 0; margin-right: 9px; font-size: 14.5px; }
+  .sr-sort .dot-badge { top: -5px; right: -5px; min-width: 10px; width: 10px; height: 10px; padding: 0; }
+  .sr-grid { margin-top: 12px; row-gap: 14px; }
+  .sr-grid .pcard { min-height: 134px; padding-bottom: 7px; }
+  .sr-grid .pcard__row { margin-top: 4px; }
+  .sr-grid .pcard__price { margin-top: 1px; }
+  .sr-grid.is-loading { pointer-events: none; }
+  .sr-more { margin-top: 22px; text-align: center; }
+  .sr-more__bar { height: 4px; border-radius: 2px; background: var(--surface); overflow: hidden; margin: 8px auto 14px; width: 180px; }
+  .sr-more__bar i { display: block; height: 100%; background: var(--navy); border-radius: 2px; }
+  .sr-more p { font-size: 13px; color: var(--muted-2); }
+  .suggest { margin-top: 6px; }
+  .suggest .label-caps { margin: 22px 0 10px; }
+  .suggest .chip-row { gap: 8px; }
+  .sport-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .sport-row a { text-align: center; font-size: 11px; color: #111; }
+  .sport-row .tile { width: 100%; height: auto; aspect-ratio: 1; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Search results" id="sr">
+  <form class="sr-head" id="form" role="search" action="search-results.html">
+    <a class="back tap" href="search.html" data-go="back" aria-label="Back"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <div class="search-field">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m20 20-4.4-4.4"/></svg>
+      <label class="sr-only" for="q">Search products</label>
+      <input id="q" name="q" type="search" enterkeyhint="search" autocomplete="off" value="Running shoes">
+      <button class="clear tap" type="button" id="clearQ" aria-label="Clear search" hidden><i data-icon="x-circle" data-size="18"></i></button>
+      <button class="tap" type="button" data-action="voice" aria-label="Search by voice"><i data-icon="mic" data-size="17" data-sw="1.6"></i></button>
+    </div>
+  </form>
+
+  <div class="sr-chips" id="chips" data-delegate aria-label="Quick filters"></div>
+  <div class="page-divider page-divider--steel sr-div" role="separator"></div>
+
+  <div class="sr-bar">
+    <h1 class="sr-count num" id="count" aria-live="polite">48 results</h1>
+    <button class="chip sr-sort tap" type="button" data-sheet="sortSheet" id="sortBtn" aria-haspopup="dialog">Sort by</button>
+  </div>
+
+  <div class="pgrid sr-grid" id="grid" aria-label="Products"></div>
+  <div id="after"></div>
+
+  <nav data-tabbar="categories"></nav>
+</main>
+
+<section class="sheet" id="sortSheet" aria-labelledby="sortT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="sortT">Sort by</p><p class="sheet__sub" id="sortSub">Applies to these results</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button>
+  </div>
+  <div class="options" data-options id="sortOpts">
+    <button class="option" type="button" data-value="relevance"><span class="option__radio"></span><span class="option__body"><span class="option__title">Relevance</span><span class="option__sub">Best match for your search</span></span></button>
+    <button class="option" type="button" data-value="price-asc"><span class="option__radio"></span><span class="option__body"><span class="option__title">Price: low to high</span></span></button>
+    <button class="option" type="button" data-value="price-desc"><span class="option__radio"></span><span class="option__body"><span class="option__title">Price: high to low</span></span></button>
+    <button class="option" type="button" data-value="newest"><span class="option__radio"></span><span class="option__body"><span class="option__title">Newest first</span><span class="option__sub">Latest arrivals this season</span></span></button>
+    <button class="option" type="button" data-value="rating"><span class="option__radio"></span><span class="option__body"><span class="option__title">Top rated</span><span class="option__sub">Highest rating, most reviews</span></span></button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const capture = document.body.classList.contains('capture');
+
+    const S = D.shop;   // shared search + filter model (same one Filters counts with)
+    const SORTS = { relevance: 'Relevance', 'price-asc': 'Price: low to high', 'price-desc': 'Price: high to low', newest: 'Newest first', rating: 'Top rated' };
+    function sortList(list, by) {
+      const idx = (p) => D.products.indexOf(p); const l = list.slice();
+      if (by === 'price-asc') l.sort((a, b) => a.price - b.price || idx(a) - idx(b));
+      else if (by === 'price-desc') l.sort((a, b) => b.price - a.price || idx(a) - idx(b));
+      else if (by === 'newest') l.sort((a, b) => idx(b) - idx(a));
+      else if (by === 'rating') l.sort((a, b) => b.rating - a.rating || b.reviews - a.reviews);
+      return l;
+    }
+
+    /* ---- State ---- */
+    let q = (D.q('q') || 'Running shoes').trim();
+    let sale = D.q('sale') === '1';
+    let filters = S.load(q, sale);
+    let sort = D.store.get('sort', 'relevance');
+    const setFilters = (f) => { filters = S.norm(f); S.save(q, sale, filters); };
+
+    const input = $('#q');
+    input.value = q;
+    const syncClear = () => { $('#clearQ').hidden = !input.value; };
+    syncClear();
+
+    /* ---- Quick chips, built from the results themselves: the top category, a price cap,
+       your usual size, the top two brands. A chip is only offered if tapping it leaves
+       at least one result. ---- */
+    const toggleIn = (arr, v, on) => (on ? arr.concat(v) : arr.filter((x) => x !== v));
+    function quickChips(r) {
+      const out = []; const user = D.user.get();
+      const top = r.cats.slice().sort((x, y) => y.n - x.n)[0];
+      if (r.cats.length > 1 && top) out.push({ id: 'cat', label: top.label, on: (f) => f.cats.includes(top.v), toggle: (f, on) => { f.cats = toggleIn(f.cats, top.v, on); } });
+      if (r.all.some((p) => p.price <= 3000) && r.all.some((p) => p.price > 3000)) out.push({ id: 'u3k', label: `Under ${D.fmt(3000)}`, on: (f) => f.max != null && f.max <= 3000 && !f.min, toggle: (f, on) => { if (on) { f.min = 0; f.max = 3000; } else f.max = null; } });
+      const mine = r.sizes.find((z) => z.v === (user.shoeSize || 'UK 9')) || r.sizes.find((z) => z.v === 'M');
+      if (mine) out.push({ id: 'size', label: /^UK/.test(mine.v) ? mine.v : 'Size ' + mine.v, on: (f) => f.sizes.includes(mine.v), toggle: (f, on) => { f.sizes = toggleIn(f.sizes, mine.v, on); } });
+      r.brands.slice().sort((x, y) => y.n - x.n).slice(0, 2).forEach((bd) => { if (r.brands.length > 1) out.push({ id: 'b-' + bd.v, label: bd.v, on: (f) => f.brands.includes(bd.v), toggle: (f, on) => { f.brands = toggleIn(f.brands, bd.v, on); } }); });
+      return out.filter((c) => { if (c.on(filters)) return true; const g = S.norm(filters); c.toggle(g, true); return r.countWith(g) > 0; });
+    }
+    let QUICK = [];
+    const countApplied = (f) => (f.min || f.max != null ? 1 : 0) + f.cats.length + f.sizes.length + f.brands.length;
+    function extras(f) {
+      const out = []; const quick = (test) => QUICK.some((c) => test(c));
+      if ((f.min || f.max != null) && !quick((c) => c.id === 'u3k' && c.on(f))) out.push({ k: 'price', label: `${D.fmt(f.min || 0)} – ${f.max == null ? 'any' : D.fmt(f.max)}` });
+      f.cats.forEach((c) => { if (!quick((x) => x.id === 'cat' && x.label === S.catLabel(c))) out.push({ k: 'cat', v: c, label: S.catLabel(c) }); });
+      f.sizes.forEach((z) => { if (!quick((x) => x.id === 'size' && x.on({ sizes: [z], cats: [], brands: [] }))) out.push({ k: 'size', v: z, label: /^UK/.test(z) ? z : 'Size ' + z }); });
+      f.brands.forEach((b) => { if (!quick((x) => x.id === 'b-' + b)) out.push({ k: 'brand', v: b, label: b }); });
+      return out;
+    }
+    function filtersHref() { return `filters.html?q=${encodeURIComponent(q)}${sale ? '&sale=1' : ''}`; }
+    function renderChips() {
+      const n = countApplied(filters);
+      let h = `<a class="chip chip--filters tap" href="${filtersHref()}" aria-label="Filters${n ? `, ${n} applied` : ''}">Filters${n ? `<b class="num">${n}</b>` : ''}</a>`;
+      if (sale) h += `<button class="chip is-active tap" type="button" data-x="sale" aria-label="Remove Sale filter">Sale <i class="chip__x" data-icon="close" data-size="12" data-sw="2.4"></i></button>`;
+      h += QUICK.map((c) => `<button class="chip tap" type="button" data-quick="${D.esc(c.id)}" aria-pressed="${c.on(filters)}">${D.esc(c.label)}</button>`).join('');
+      h += extras(filters).map((x) => `<button class="chip is-active tap" type="button" data-x="${x.k}" data-v="${D.esc(x.v || '')}" aria-label="Remove ${D.esc(x.label)}">${D.esc(x.label)} <i class="chip__x" data-icon="close" data-size="12" data-sw="2.4"></i></button>`).join('');
+      $('#chips').innerHTML = h;
+      D.hydrateIcons($('#chips'));
+    }
+    $('#chips').addEventListener('click', (e) => {
+      const qb = e.target.closest('[data-quick]'); const xb = e.target.closest('[data-x]');
+      if (qb) {
+        const c = QUICK.find((x) => x.id === qb.dataset.quick); const f = JSON.parse(JSON.stringify(filters));
+        c.toggle(f, !c.on(filters)); setFilters(f); shown = PAGE; D.haptic(8); update(true);
+      } else if (xb) {
+        const k = xb.dataset.x, v = xb.dataset.v; const f = JSON.parse(JSON.stringify(filters));
+        if (k === 'sale') { sale = false; } else if (k === 'price') { f.min = 0; f.max = null; } else if (k === 'cat') f.cats = f.cats.filter((x) => x !== v); else if (k === 'size') f.sizes = f.sizes.filter((x) => x !== v); else if (k === 'brand') f.brands = f.brands.filter((x) => x !== v);
+        setFilters(f); shown = PAGE; update(true);
+      }
+    });
+
+    /* ---- Results ---- */
+    const PAGE = 12;
+    let shown = PAGE;
+    function update(animate) {
+      const url = new URL(location.href); url.searchParams.set('q', q); if (sale) url.searchParams.set('sale', '1'); else url.searchParams.delete('sale');
+      history.replaceState(null, '', url.pathname.split('/').pop() + url.search);
+      document.title = `Decathlon · ${q}`;
+      D.store.set('lastQuery', q);
+      const r = S.run(q, sale, filters); QUICK = quickChips(r);
+      renderChips();
+      const list = sortList(r.results, sort);
+      const total = list.length;
+      $('#count').innerHTML = `${D.fmtNum(total)} ${total === 1 ? 'result' : 'results'}`;
+      $('#sortBtn').innerHTML = 'Sort by' + (sort !== 'relevance' ? '<span class="dot-badge" aria-hidden="true"></span><span class="sr-only">, ' + SORTS[sort] + '</span>' : '');
+      const grid = $('#grid');
+      const paint = () => {
+        grid.classList.remove('is-loading');
+        grid.innerHTML = list.slice(0, shown).map((p) => D.card(p)).join('');
+        grid.hidden = !list.length;
+        renderAfter(list, total);
+        D.hydrate($('#sr'));
+      };
+      if (animate && !capture) { grid.classList.add('is-loading'); grid.innerHTML = Array.from({ length: Math.min(4, Math.max(2, list.length)) }, () => '<div class="skeleton skeleton--card" aria-hidden="true"></div>').join(''); setTimeout(paint, 280); }
+      else paint();
+    }
+    function renderAfter(list, total) {
+      const after = $('#after');
+      if (!list.length) {
+        const hadFilters = !S.isEmpty(filters) || sale; const baseN = S.base(q, false).length;
+        after.innerHTML = `<div class="empty-state" role="status"><div class="empty-state__icon">${D.icon(hadFilters && baseN ? 'filter' : 'search', 40)}</div>
+          <h3>${hadFilters && baseN ? 'No products match these filters' : `No results for “${D.esc(q)}”`}</h3>
+          <p>${hadFilters && baseN ? `${baseN} ${baseN === 1 ? 'product matches' : 'products match'} your search. Remove a filter or widen the price range to see them.` : 'Check the spelling, use a more general word, or try one of these popular searches.'}</p>
+          ${hadFilters && baseN ? `<div class="btn-pair" style="max-width:300px;margin:0 auto"><button class="btn btn--primary btn--md tap" type="button" id="resetF">Clear filters</button><a class="btn btn--outline btn--md tap" href="${filtersHref()}">Edit filters</a></div>` : ''}</div>
+          <div class="suggest"><p class="label-caps">Trending searches</p><div class="chip-row">${D.trending.map((t) => `<a class="chip tap" href="search-results.html?q=${encodeURIComponent(t)}">${t}</a>`).join('')}</div>
+          <p class="label-caps">Shop by sport</p><div class="sport-row">${['running', 'tennis', 'cycling', 'camping'].map((s) => { const sp = D.sport(s); return `<a class="tap" href="sport.html?sport=${s}"><span class="tile"><img src="${D.img(sp.img)}" alt="" loading="lazy"></span><span class="tile-cap">${sp.name}</span></a>`; }).join('')}</div></div>`;
+        const rb = $('#resetF'); if (rb) rb.onclick = () => { sale = false; setFilters(S.EMPTY); update(true); D.toast('Filters cleared'); };
+      } else if (total > shown) {
+        const n = Math.min(shown, total); const pct = Math.round(n / total * 100);
+        after.innerHTML = `<div class="sr-more"><p class="num">Showing ${n} of ${total} results</p><div class="sr-more__bar"><i style="width:${pct}%"></i></div><button class="btn btn--outline btn--md tap" type="button" id="more" style="max-width:220px">Load ${Math.min(PAGE, total - n)} more</button></div>`;
+        $('#more').onclick = async (e) => {
+          await D.loading(e.currentTarget, 600); shown += PAGE;
+          $('#grid').insertAdjacentHTML('beforeend', list.slice(shown - PAGE, shown).map((p) => D.card(p)).join(''));
+          renderAfter(list, total); D.hydrate($('#sr'));
+        };
+      } else {
+        after.innerHTML = `<div class="sr-more"><p>That’s all ${list.length} ${list.length === 1 ? 'result' : 'results'}${!S.isEmpty(filters) ? ' for these filters' : ''}.</p><a class="text-btn text-btn--brand tap" href="category.html" style="margin-top:4px">Browse all categories</a></div>`;
+      }
+    }
+
+    /* ---- Search field ---- */
+    input.addEventListener('input', syncClear);
+    $('#clearQ').addEventListener('click', () => { input.value = ''; syncClear(); input.focus(); });
+    $('#form').addEventListener('submit', (e) => {
+      e.preventDefault(); const v = input.value.trim(); if (!v) { input.focus(); D.toast('Type something to search'); return; }
+      q = v; sale = false; shown = PAGE; filters = S.load(q, sale); D.searches.add(q); input.blur(); window.scrollTo({ top: 0 }); update(true);
+    });
+
+    /* ---- Sort sheet ---- */
+    const opts = $('#sortOpts');
+    const markSort = () => $$('.option', opts).forEach((o) => o.setAttribute('aria-checked', String(o.dataset.value === sort)));
+    markSort();
+    opts.addEventListener('select', (e) => { sort = e.detail; D.store.set('sort', sort); markSort(); setTimeout(() => { D.sheet.close(); update(true); D.toast(`Sorted by ${SORTS[sort].toLowerCase()}`, { icon: 'sort' }); }, 160); });
+
+    // Saved hearts may change on this page; nothing else to do (Deca.syncHearts handles it)
+    update(false);
+  })();
+</script>
+</body>
+</html>

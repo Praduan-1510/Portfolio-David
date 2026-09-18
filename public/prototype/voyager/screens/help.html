@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Help Centre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .hp-hi { font-size: 20px; line-height: 26px; font-weight: 700; color: #000; }
+  .hp-hi span { color: var(--orange); }
+  .search { margin-top: 14px; height: 50px; }
+  .search input { font-size: 14px; }
+  .search input::placeholder { color: #6B6B6B; }
+  .search__clear { width: 36px; height: 36px; margin-right: -10px; border-radius: 50%; display: grid; place-items: center; color: var(--text-4); }
+  .bk { position: relative; display: grid; grid-template-columns: 64px 1fr; gap: 12px; align-items: center; margin-top: 18px; padding: 12px; border-radius: 16px; background: var(--navy); color: #fff; overflow: hidden; isolation: isolate; }
+  .bk::before { content: ''; position: absolute; right: -40px; top: -60px; width: 170px; height: 170px; border-radius: 50%; background: radial-gradient(circle, rgba(252,163,17,.4), rgba(252,163,17,0) 70%); z-index: -1; }
+  .bk__img { width: 64px; height: 64px; border-radius: 10px; overflow: hidden; }
+  .bk__k { font-size: 10px; letter-spacing: .25em; color: var(--orange); text-transform: uppercase; }
+  .bk__t { font-size: 15px; font-weight: 600; margin-top: 3px; }
+  .bk__s { font-size: 11.5px; color: var(--card-sub); margin-top: 1px; }
+  .bk__acts { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .bk__acts .btn { height: 34px; font-size: 12.5px; padding: 0 6px; }
+  .topics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .topic { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; min-height: 92px; padding: 12px; border-radius: 14px; background: var(--grey-1); text-align: left; font-size: 12.5px; font-weight: 600; line-height: 1.3; color: #111; box-shadow: inset 0 0 0 1.5px transparent; transition: background var(--dur), box-shadow var(--dur); }
+  .topic__ic { width: 34px; height: 34px; border-radius: 10px; background: #fff; color: var(--navy); display: grid; place-items: center; }
+  .topic[aria-pressed="true"] { background: var(--orange-tint); box-shadow: inset 0 0 0 1.5px var(--orange); }
+  .topic[aria-pressed="true"] .topic__ic { background: var(--orange); color: #000; }
+  .hp-sec { margin: 28px 0 12px; display: flex; justify-content: space-between; align-items: baseline; }
+  .faq { border-radius: 16px; background: var(--grey-1); padding: 2px 16px; }
+  .faq__item + .faq__item { border-top: 1px solid #E3E3E3; }
+  .faq__q { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 54px; padding: 12px 0; text-align: left; font-size: 14px; font-weight: 600; color: #111; }
+  .faq__q svg { flex-shrink: 0; transition: transform 240ms var(--ease-out); color: var(--text-4); }
+  .faq__q[aria-expanded="true"] svg { transform: rotate(180deg); color: var(--orange); }
+  .faq__a { font-size: 13px; line-height: 1.55; color: var(--text-2); padding: 0 0 14px; }
+  .faq__a a { color: var(--orange); font-weight: 600; }
+  .faq__help { display: flex; align-items: center; gap: 10px; margin-top: 10px; font-size: 12px; color: var(--text-4); }
+  .faq__help button { height: 28px; padding: 0 10px; border-radius: 14px; background: #fff; box-shadow: inset 0 0 0 1px #DDD; font-size: 12px; color: #333; }
+  .faq__help button[aria-pressed="true"] { background: var(--valid-bg); box-shadow: none; color: var(--valid); }
+  mark { background: var(--orange-tint); color: inherit; border-radius: 3px; padding: 0 1px; }
+  .contact .list__icon { width: 40px; height: 40px; border-radius: 12px; background: var(--grey-2); }
+  .contact { padding: 4px 16px; box-shadow: inset 0 0 0 1px #EDEDED; }
+  .contact .badge { margin-right: 4px; }
+</style>
+</head>
+<body>
+<main class="page page--tabs" aria-label="Help centre">
+  <header class="phead">
+    <a class="phead__back tap" href="profile.html" data-go="back" aria-label="Back">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3.5M10.5 4.5 3 12l7.5 7.5"/></svg>
+    </a>
+    <div class="phead__titles"><h1 class="phead__title">Help &amp; Support</h1></div>
+  </header>
+
+  <section class="psheet">
+    <p class="hp-hi enter">How can we help, <span id="first">Alex</span>?</p>
+    <label class="search enter" style="--i:1"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="7"/><path d="m16 16 5 5"/></svg><input type="search" id="q" placeholder="Search refunds, visas, baggage…" aria-label="Search help articles" autocomplete="off"><button class="search__clear" type="button" id="clear" hidden aria-label="Clear search"><span data-icon="close" data-size="16"></span></button></label>
+
+    <div class="bk enter" style="--i:2" id="bk">
+      <span class="bk__img ph"><img src="../assets/img/trip-paris.jpg" alt=""></span>
+      <div><p class="bk__k">Help with your trip</p><p class="bk__t" id="bkT">Paris City Break</p><p class="bk__s" id="bkS">VYG-4892-PAR · Aug 12–19</p></div>
+      <div class="bk__acts">
+        <a class="btn btn--white" id="bkView" href="itinerary.html?trip=paris-aug">Itinerary</a>
+        <a class="btn btn--manage" id="bkMod" href="modify-booking.html?trip=paris-aug">Change</a>
+        <a class="btn btn--manage" id="bkCan" href="cancel-trip.html?trip=paris-aug">Cancel</a>
+      </div>
+    </div>
+
+    <div class="hp-sec"><p class="caps">Browse Topics</p><button class="link" type="button" id="allTopics" hidden>Show all</button></div>
+    <div data-delegate class="topics" id="topics" role="group" aria-label="Help topics"></div>
+
+    <div class="hp-sec"><p class="caps" id="faqLabel">Top Questions</p><span class="small" id="faqCount"></span></div>
+    <div data-delegate class="faq" id="faq" aria-labelledby="faqLabel"></div>
+    <div class="empty" id="noRes" hidden style="padding:26px 10px 8px">
+      <div class="empty__icon"></div>
+      <p class="empty__title">No answers for “<span id="qEcho"></span>”</p>
+      <p class="empty__msg">Our travel experts reply in under 2 minutes.</p>
+      <a class="btn btn--primary btn--inline" href="support.html"><span>Chat With Us</span></a>
+    </div>
+
+    <div class="hp-sec"><p class="caps">Still Need Help?</p></div>
+    <nav class="list contact" aria-label="Contact support">
+      <a class="list__item tap" href="support.html"><span class="list__icon" data-icon="chat" data-size="22"></span><span class="list__body"><span class="list__title">Chat with us</span><span class="list__sub">24/7 · replies in under 2 minutes</span></span><span class="badge badge--valid"><span class="online-dot" style="margin:0"></span>Online</span></a>
+      <button class="list__item tap" type="button" id="call"><span class="list__icon" data-icon="phone" data-size="22"></span><span class="list__body"><span class="list__title">Call us</span><span class="list__sub">+44 20 7946 0123 · Gold line, 24/7</span></span><span class="list__chev" data-icon="chevron-right" data-size="18"></span></button>
+      <button class="list__item tap" type="button" id="email"><span class="list__icon" data-icon="envelope" data-size="22"></span><span class="list__body"><span class="list__title">Email us</span><span class="list__sub">help@voyager.app · within 24 hours</span></span><span class="list__chev" data-icon="chevron-right" data-size="18"></span></button>
+    </nav>
+    <p class="small center mt-16">Gold members get priority support on every channel.</p>
+  </section>
+  <nav data-tabbar="profile"></nav>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const $ = (s) => document.querySelector(s);
+  const TOPICS = [['bookings', 'Bookings', 'briefcase'], ['payments', 'Payments & refunds', 'card'], ['changes', 'Changes & cancellations', 'calendar'], ['docs', 'Documents & visas', 'passport'], ['rewards', 'Rewards', 'gift'], ['account', 'Account', 'user']];
+  const FAQ = [
+    ['bookings', 'Where can I find my e-ticket?', 'Open <a href="trips.html">My Trips</a>, tap View Details on your trip, then E-Ticket. You can also <a href="e-ticket.html?ref=VYG-4892-PAR">open your Paris e-ticket</a> directly.'],
+    ['bookings', 'Can I add a guided tour after booking?', 'Yes. Use Change on your trip to add the Guided City Tour ($80) or an airport transfer ($60) up to 48 hours before departure.'],
+    ['payments', 'When will I get my refund?', 'Refunds go back to the original card within 5–7 working days. Cancelling 14 or more days before departure returns 90% of your total, excluding insurance; later cancellations return 50%.'],
+    ['payments', 'Which payment methods can I use?', 'Visa, Mastercard and Amex, plus Apple Pay and PayPal. Manage them in <a href="payment-methods.html">Payment Methods</a>.'],
+    ['changes', 'How do I change my travel dates?', 'Tap Change on your booking. Date changes are free up to 14 days before departure; after that a fare difference may apply.'],
+    ['changes', 'What happens if my flight is cancelled?', 'We rebook you on the next available flight at no cost and text you the new details. You can also choose a full refund instead.'],
+    ['docs', 'Do I need a visa for France?', 'UK passport holders can visit France visa-free for up to 90 days in any 180. From late 2026 you’ll need an ETIAS authorisation (€20, valid 3 years). <a href="support.html">Ask support</a> for a full checklist.'],
+    ['docs', 'How much passport validity do I need?', 'For the Schengen area, your passport must be valid for at least 3 months after you leave. Check yours in <a href="documents.html">Travel Documents</a>.'],
+    ['rewards', 'How do I earn and redeem points?', 'You earn 1 point for every $2 of package price (add-ons and taxes don’t earn). Redeem them for discounts, upgrades and lounge passes in <a href="rewards.html">Rewards</a>.'],
+    ['rewards', 'Do my points expire?', 'Points never expire as long as you travel at least once every 24 months.'],
+    ['account', 'How do I change my password?', 'Go to Settings → <a href="change-password.html">Change Password</a>. If you’ve forgotten it, use <a href="forgot-password.html">Forgot password</a> on the login screen.'],
+    ['account', 'How do I delete my account?', 'Settings → Delete Account. Upcoming bookings stay valid with our partners, but your points and stored documents are removed.'],
+  ];
+  let topic = null;
+  $('#first').textContent = V.user.get().first;
+  $('#noRes').querySelector('.empty__icon').innerHTML = V.icon('search', 30);
+
+  // next upcoming trip for the booking help card
+  const t = V.trips.list('upcoming')[0];
+  if (t) { $('#bkT').textContent = t.title; $('#bkS').textContent = `${t.ref} · ${V.date.range(t.start, t.end)}`; $('#bk').querySelector('img').src = V.img(t.img); $('#bkView').href = `itinerary.html?trip=${t.id}`; $('#bkMod').href = `modify-booking.html?trip=${t.id}`; $('#bkCan').href = `cancel-trip.html?trip=${t.id}`; }
+  else $('#bk').hidden = true;
+
+  $('#topics').innerHTML = TOPICS.map(([id, label, ic]) => `<button class="topic tap" type="button" data-topic="${id}" aria-pressed="false"><span class="topic__ic">${V.icon(ic, 20)}</span>${V.esc(label)}</button>`).join('');
+
+  const hl = (html, q) => { if (!q) return html; const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'ig'); return html.split(/(<[^>]+>)/).map((part) => part.startsWith('<') ? part : part.replace(re, '<mark>$1</mark>')).join(''); };
+  const render = () => {
+    const q = $('#q').value.trim(); const ql = q.toLowerCase();
+    const list = FAQ.filter(([tp, qq, a]) => (!topic || tp === topic) && (!ql || (qq + ' ' + a.replace(/<[^>]+>/g, '')).toLowerCase().includes(ql)));
+    const shown = !topic && !ql ? list.slice(0, 5) : list;
+    $('#faq').hidden = !shown.length; $('#noRes').hidden = !!shown.length; $('#qEcho').textContent = q;
+    $('#faqLabel').textContent = ql ? 'Results' : topic ? TOPICS.find((x) => x[0] === topic)[1] : 'Top Questions';
+    $('#faqCount').textContent = ql || topic ? `${list.length} article${list.length === 1 ? '' : 's'}` : '';
+    $('#faq').innerHTML = shown.map(([tp, qq, a], i) => `<div class="faq__item"><button class="faq__q" type="button" aria-expanded="${ql && i === 0 ? 'true' : 'false'}" aria-controls="fa${i}">${hl(V.esc(qq), q)}${V.icon('chevron-down', 18, 'stroke-width="2.2"')}</button><div class="faq__a" id="fa${i}" ${ql && i === 0 ? '' : 'hidden'}>${hl(a, q)}<div class="faq__help">Was this helpful?<button type="button" data-help="yes" aria-pressed="false">Yes</button><button type="button" data-help="no" aria-pressed="false">No</button></div></div></div>`).join('');
+    $('#clear').hidden = !q; $('#allTopics').hidden = !topic;
+  };
+  $('#q').addEventListener('input', render);
+  $('#clear').addEventListener('click', () => { $('#q').value = ''; render(); $('#q').focus(); });
+  $('#topics').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-topic]'); if (!b) return;
+    topic = topic === b.dataset.topic ? null : b.dataset.topic;
+    document.querySelectorAll('[data-topic]').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.topic === topic)));
+    render(); if (topic) $('#faqLabel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  $('#allTopics').addEventListener('click', () => { topic = null; document.querySelectorAll('[data-topic]').forEach((x) => x.setAttribute('aria-pressed', 'false')); render(); });
+  $('#faq').addEventListener('click', (e) => {
+    const q = e.target.closest('.faq__q');
+    if (q) { const a = document.getElementById(q.getAttribute('aria-controls')); const open = q.getAttribute('aria-expanded') !== 'true'; q.setAttribute('aria-expanded', String(open)); a.hidden = !open; return; }
+    const h = e.target.closest('[data-help]');
+    if (h) { h.parentElement.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === h))); V.toast(h.dataset.help === 'yes' ? 'Thanks for the feedback' : 'Sorry about that — chat with us for a quicker answer', h.dataset.help === 'no' ? { action: 'Chat', onAction: () => { location.href = 'support.html'; } } : {}); }
+  });
+
+  $('#call').addEventListener('click', async () => {
+    if (await V.dialog({ title: 'Call Voyager Gold line?', message: '+44 20 7946 0123 · open 24/7. Have your booking reference VYG-4892-PAR ready.', confirm: 'Call', cancel: 'Cancel', tone: 'info', icon: 'phone' })) { location.href = 'tel:+442079460123'; V.toast('Calling +44 20 7946 0123…'); }
+  });
+  $('#email').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText('help@voyager.app'); } catch (e) {}
+    V.toast('help@voyager.app copied · we reply within 24 hours');
+  });
+
+  if (V.q('q')) $('#q').value = V.q('q');
+  if (V.q('topic')) topic = V.q('topic');
+  render();
+})();
+</script>
+</body>
+</html>

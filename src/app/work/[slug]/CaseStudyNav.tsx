@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils/cn";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useLenis } from "@/lib/lenis/useLenis";
 import { spectrumAt } from "@/lib/spectrum";
+import "@/components/primitives/button.css";
 
 /*
  * Case-study "Contents" rail: a sticky, scroll-spying index of the narrative
@@ -24,7 +25,7 @@ interface Section {
 }
 
 // Sticky overlay a section must clear when navigated to. On mobile BOTH the 64px
-// header and the ~65px "Contents" chip rail pin at the top, so the target has to
+// header and the ~69px "Contents" chip rail pin at the top, so the target has to
 // clear ~140px or it lands behind the rail. On md+ only the 64px header sits over
 // the reading column (the desktop contents rail is a side sidebar, not a top
 // overlay), so 96px is enough. Read at call time so it tracks viewport changes.
@@ -100,32 +101,31 @@ export function CaseStudyNav({
   // Mobile: a full-bleed, sticky, horizontally-scrollable chip rail under the top
   // nav. Full-bleed via -mx that cancels the Container gutter, re-inset with px so
   // the chips align with the body column; bg-bg so content scrolls cleanly under.
+  // The chips are the dock's keys (.btn-bead, primitives/button.css): a dim
+  // glass bead each, and the current section's swallowed by the droplet lens.
   if (variant === "mobile") {
     return (
       <nav
         aria-label="On this page"
         className={cn(
-          "sticky top-16 z-30 -mx-[clamp(1.25rem,5vw,6rem)] border-b border-line bg-bg px-[clamp(1.25rem,5vw,6rem)] py-space-3 [@media(max-height:480px)]:top-12 md:hidden",
+          "sticky top-16 z-30 -mx-[clamp(1.25rem,5vw,6rem)] border-b border-line bg-bg px-[clamp(1.25rem,5vw,6rem)] py-space-2 [@media(max-height:480px)]:top-12 md:hidden",
           className,
         )}
       >
-        <ul className="flex gap-space-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {sections.map((s, i) => {
+        {/* The 4px of padding is the room a 44px bead's focus ring needs
+            inside a scroller (which clips on both axes); -mx keeps the first
+            chip on the column edge. 8 + 4 + 44 + 4 + 8 + 1px rule = 69px, well
+            inside the 140px navOffset() clears. */}
+        <ul className="-mx-1 flex gap-space-2 overflow-x-auto px-1 py-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {sections.map((s) => {
             const on = active === s.id;
             return (
-              <li
-                key={s.id}
-                className="shrink-0"
-                style={{ "--dot": spectrumAt(i) } as React.CSSProperties}
-              >
+              <li key={s.id} className="shrink-0">
                 <a
                   href={`#${s.id}`}
                   onClick={(e) => go(e, s.id)}
                   aria-current={on ? "true" : undefined}
-                  className={cn(
-                    "flex min-h-[40px] items-center whitespace-nowrap rounded-full border px-space-4 font-mono text-caption uppercase tracking-[0.12em] transition-colors duration-base ease-out-quad",
-                    on ? "border-[var(--dot)] text-fg" : "border-line text-muted",
-                  )}
+                  className="btn-bead flex min-h-11 items-center whitespace-nowrap rounded-full px-space-4 font-mono text-caption uppercase tracking-[0.12em]"
                 >
                   {s.label}
                 </a>

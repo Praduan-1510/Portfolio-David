@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Wishlist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* Pixel-matched to Wishlist.png (393 x 726): title cap y22, count y50, 2px steel rule y84,
+     2 x 3 cards 168 x 170 at x24 / x205, rows y104 / 286 / 468 */
+  .wl-head { position: relative; height: 84px; }
+  .wl-head h1 { left: 0; top: 21px; font-size: 20px; font-weight: 600; color: #000; }
+  .wl-head p { left: 1px; top: 49px; font-size: 13px; color: var(--muted); }
+  .wl-grid { display: grid; grid-template-columns: 168px 168px; gap: 12px 13px; margin-top: 18px; }
+  .wl-grid .pcard { height: 170px; padding: 8px 8px 0 7px; transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out); }
+  .wl-grid .pcard__media { height: 83px; }
+  .wl-grid .pcard__row { margin-top: 5px; }
+  .wl-grid .pcard__name { font-size: 10.5px; }
+  .wl-grid .pcard__price { margin-top: 1px; }
+  .wl-grid .pcard__body { padding: 0 1px 0 3px; }
+  .wl-grid .add-btn { width: 146px; margin: 0 0 0 3px; font-size: 15px; font-weight: 500; }
+  .wl-grid .pcard > .heart { top: 12px; right: 12px; }
+  .wl-grid .pcard.is-leaving { opacity: 0; transform: scale(.94); }
+  .wl-foot { margin-top: 26px; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Wishlist">
+  <header class="wl-head">
+    <h1 class="t">Wishlist</h1>
+    <p class="t" id="count" aria-live="polite">6 items saved</p>
+  </header>
+  <div class="page-divider page-divider--steel"></div>
+
+  <div class="wl-grid" id="grid"></div>
+
+  <div class="wl-foot" id="foot">
+    <div class="banner banner--info"><i data-icon="bell" data-size="18"></i><span>We’ll let you know when anything you saved drops in price or runs low in stock.</span></div>
+  </div>
+
+  <div class="empty-state" id="empty" hidden>
+    <div class="empty-state__icon"><i data-icon="heart" data-size="40" data-sw="1.6"></i></div>
+    <h3>Nothing saved yet</h3>
+    <p>Tap the heart on any product to keep it here for later.</p>
+    <a class="btn btn--primary tap" href="home.html" style="height:44px">Explore products</a>
+  </div>
+
+  <nav data-tabbar="account"></nav>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$;
+    const grid = $('#grid');
+
+    function render() {
+      const ps = D.wish.products(); const n = ps.length;
+      $('#count').textContent = `${n} ${n === 1 ? 'item' : 'items'} saved`;
+      grid.innerHTML = ps.map((p) => D.card(p, { add: true })).join('');
+      grid.querySelectorAll('[data-heart]').forEach((h) => { h.setAttribute('data-silent', ''); h.setAttribute('aria-label', 'Remove ' + h.getAttribute('aria-label').replace(/^Save | to wishlist$/g, '') + ' from wishlist'); });
+      D.hydrate(grid);
+      $('#empty').hidden = n > 0; $('#foot').hidden = n === 0; grid.hidden = n === 0;
+    }
+
+    // Heart = remove (with undo that restores the original position)
+    grid.addEventListener('heart', async (e) => {
+      const { id, on, product } = e.detail; if (on) return;
+      const card = e.target.closest('.pcard'); const pos = card ? +card.dataset.idx : 0;
+      if (card) { card.classList.add('is-leaving'); await D.wait(200); }
+      render();
+      D.toast(`${product.name} removed from wishlist`, { action: 'Undo', onAction: () => {
+        const cur = D.wish.list().filter((x) => x !== id); cur.splice(Math.min(pos, cur.length), 0, id);
+        D.store.set('wish', cur); D.badges(); render(); D.toast('Back in your wishlist', { icon: 'heart' });
+      } });
+    });
+    // remember card positions for undo
+    const index = () => grid.querySelectorAll('.pcard').forEach((c, i) => (c.dataset.idx = i));
+    new MutationObserver(index).observe(grid, { childList: true });
+
+    D.on('reset', render);
+    render(); index();
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Modify Booking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .psheet { padding-top: 24px; }
+  .mini { display: grid; grid-template-columns: 64px 1fr; gap: 14px; align-items: center; padding: 10px; border-radius: 16px; background: var(--grey-1); }
+  .mini__img { width: 64px; height: 64px; border-radius: 10px; overflow: hidden; }
+  .mini__t { font-size: 16px; font-weight: 700; }
+  .mini__s { font-size: 12px; color: var(--text-3); margin-top: 3px; }
+  .dates { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .dates .label { font-size: 13px; color: #A9A9A9; margin-bottom: 5px; }
+  .datebox { cursor: pointer; font-size: 15px; }
+  .datebox.is-focus { box-shadow: inset 0 0 0 2px var(--orange); }
+  #cal { margin-top: 14px; }
+  #cal .cal__grid > * { height: 44px; }
+  .changed { position: relative; }
+  .changed::after { content: 'Changed'; position: absolute; right: 0; top: -2px; font-size: 10.5px; font-weight: 600; color: #2F74C7; background: var(--info-bg); padding: 2px 7px; border-radius: 8px; }
+  .trav { background: var(--grey-1); border-radius: 16px; padding: 4px 16px; }
+  .trav__row { display: flex; align-items: center; justify-content: space-between; min-height: 62px; }
+  .trav__row + .trav__row { border-top: 1px solid var(--line-2); }
+  .trav__row b { display: block; font-size: 15px; }
+  .trav__row small { font-size: 12px; color: var(--text-4); }
+  .fare { margin-top: 24px; border-radius: 16px; background: var(--navy); color: #fff; padding: 16px 18px; }
+  .fare__row { display: flex; justify-content: space-between; font-size: 13px; color: var(--card-sub); padding: 4px 0; }
+  .fare__row span:last-child { color: #fff; font-variant-numeric: tabular-nums; }
+  .fare__diff { display: flex; justify-content: space-between; align-items: baseline; margin-top: 8px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.18); }
+  .fare__diff span { font-size: 14px; font-weight: 600; }
+  .fare__diff b { font-size: 22px; color: var(--orange); font-variant-numeric: tabular-nums; transition: transform 260ms var(--ease-spring); display: inline-block; }
+  .fare__diff b.bump { transform: scale(1.12); }
+  .fare__diff b.is-refund { color: #7BE07B; }
+  .fare__note { font-size: 11.5px; color: var(--card-sub); margin-top: 6px; }
+  .actions { margin-top: 18px; }
+  .actions .btn + .btn { margin-top: 10px; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Modify booking">
+  <header class="phead">
+    <a class="phead__back tap" id="back" href="trips.html" data-go="back" aria-label="Back">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3.5M10.5 4.5 3 12l7.5 7.5"/></svg>
+    </a>
+    <div class="phead__titles"><h1 class="phead__title">Modify Booking</h1></div>
+  </header>
+
+  <section class="psheet">
+    <div class="mini enter">
+      <span class="mini__img ph"><img id="img" src="../assets/img/trip-paris.jpg" alt=""></span>
+      <div><p class="mini__t" id="tName">Paris City Break</p><p class="mini__s" id="tSub">VYG-4892-PAR · Paid $2,709</p></div>
+    </div>
+
+    <div class="sec" id="secDates"><h2 class="sec__label">Travel Dates</h2></div>
+    <div class="dates">
+      <div><p class="label" id="depL">Departure</p><button class="datebox" type="button" id="dep" aria-labelledby="depL dep">Aug 12, 2026</button></div>
+      <div><p class="label" id="retL">Return</p><button class="datebox" type="button" id="ret" aria-labelledby="retL ret">Aug 19, 2026</button></div>
+    </div>
+    <div id="cal" data-delegate aria-label="Choose new dates"></div>
+
+    <div class="sec" id="secTrav"><h2 class="sec__label">Travellers</h2></div>
+    <div class="trav" data-delegate>
+      <div class="trav__row"><div><b>Adults</b><small>Age 12+</small></div><div class="counter counter--lg" id="adults" data-counter data-min="1" data-max="9" data-value="2" aria-label="Adults"></div></div>
+      <div class="trav__row"><div><b>Children</b><small>Age 2–11 · 50% of package</small></div><div class="counter counter--lg" id="children" data-counter data-min="0" data-max="8" data-value="0" aria-label="Children"></div></div>
+    </div>
+
+    <div class="sec" id="secCls"><h2 class="sec__label" id="clsL">Flight Class</h2></div>
+    <div class="opts" id="cls" data-options aria-labelledby="clsL" style="gap:16px">
+      <button class="opt" type="button" data-value="economy" aria-checked="true"><span class="opt__title">Economy</span><span class="opt__sub">Included</span></button>
+      <button class="opt" type="button" data-value="business" aria-checked="false"><span class="opt__title">Business</span><span class="opt__sub">+$850 / person</span></button>
+    </div>
+
+    <div class="fare" aria-live="polite">
+      <div class="fare__row"><span>Originally paid</span><span id="fPaid">$2,709</span></div>
+      <div class="fare__row"><span>New trip total</span><span id="fNew">$2,709</span></div>
+      <div class="fare__row"><span>Change fee (Gold perk)</span><span>$0</span></div>
+      <div class="fare__diff"><span id="fLabel">Fare difference</span><b id="fDiff">$0</b></div>
+      <p class="fare__note" id="fNote">Make a change to see the new price.</p>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn--primary" type="button" id="confirm" disabled><span id="confirmTxt">Confirm Changes</span></button>
+      <button class="btn btn--neutral" type="button" id="reset" hidden><span>Undo All Changes</span></button>
+    </div>
+  </section>
+
+  <nav data-tabbar="trip"></nav>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const V = window.Voyager, D = V.date;
+    const $ = (s) => document.querySelector(s);
+    const key = V.q('trip') || 'paris-aug';
+    const trip = V.trips.get(key) || V.trips.get('paris-aug') || V.trips.list('upcoming')[0];
+    const d = V.dest(trip.dest) || V.dest('paris');
+    const card = V.cards.get(trip.card) || V.cards.default();
+    const TODAY = V.today;                 // shared prototype "today"
+    const orig = { depart: trip.start, ret: trip.end, adults: trip.adults, children: trip.children, cls: trip.cls };
+    const st = Object.assign({}, orig);
+    let mode = 'depart';
+
+    $('#img').src = V.img(trip.img || d.img);
+    $('#tName').textContent = trip.title;
+    $('#tSub').textContent = `${trip.ref} · Paid ${V.fmt(trip.total)}`;
+    if (trip.status !== 'upcoming') {
+      $('#confirm').disabled = true; $('#fNote').textContent = trip.status === 'cancelled' ? 'This trip was cancelled and can’t be modified.' : 'Only upcoming trips can be modified. Contact support for help.';
+    }
+
+    // ---- dates
+    const cal = V.calendar($('#cal'), {
+      from: st.depart, to: st.ret, min: TODAY,
+      onChange(f, t) {
+        const shown = (f || '').slice(0, 7);
+        if (mode === 'return' && st.depart && f > st.depart && !t) { t = f; f = st.depart; }
+        if (t && D.nights(f, t) < 2) { V.toast('Minimum stay is 2 nights'); t = null; }
+        st.depart = f; st.ret = t; cal.set(f, t); if (shown) cal.show(shown);
+        mode = t ? 'depart' : 'return';
+        render(true);
+      },
+    });
+    $('#dep').addEventListener('click', () => { mode = 'depart'; cal.show(st.depart.slice(0, 7)); render(); V.toast('Tap a new departure date'); });
+    $('#ret').addEventListener('click', () => { mode = 'return'; cal.show((st.ret || st.depart).slice(0, 7)); render(); });
+
+    // ---- travellers + class
+    const ad = $('#adults'), ch = $('#children');
+    ad.value = st.adults; ch.value = st.children;
+    const cap = () => { const tot = ad.value + ch.value; ad.querySelectorAll('button')[1].disabled = tot >= 9 || ad.value >= 9; ch.querySelectorAll('button')[1].disabled = tot >= 9 || ch.value >= 8; };
+    ad.addEventListener('change', (e) => { st.adults = e.detail; cap(); render(true); });
+    ch.addEventListener('change', (e) => { st.children = e.detail; cap(); render(true); });
+    cap();
+    $('#cls').select(st.cls);
+    $('#cls').addEventListener('select', (e) => { st.cls = e.detail; render(true); });
+
+    // ---- fare
+    const newTotal = () => V.booking.totals({ dest: trip.dest, depart: st.depart, ret: st.ret || st.depart, adults: st.adults, children: st.children, cls: st.cls, room: trip.room || 'classic', addons: Object.assign({ insurance: false, tour: false, transfer: false }, trip.addons), promo: '' }).total;
+    const changed = () => ['depart', 'ret', 'adults', 'children', 'cls'].some((k) => st[k] !== orig[k]);
+    const render = (bump) => {
+      $('#dep').textContent = st.depart ? D.fmt(st.depart, 'long') : 'Select date';
+      $('#ret').textContent = st.ret ? D.fmt(st.ret, 'long') : 'Select date';
+      $('#ret').classList.toggle('is-empty', !st.ret);
+      $('#dep').classList.toggle('is-focus', mode === 'depart' && !st.ret);
+      $('#ret').classList.toggle('is-focus', mode === 'return');
+      $('#secDates').classList.toggle('changed', st.depart !== orig.depart || st.ret !== orig.ret);
+      $('#secTrav').classList.toggle('changed', st.adults !== orig.adults || st.children !== orig.children);
+      $('#secCls').classList.toggle('changed', st.cls !== orig.cls);
+      const nt = newTotal(); const diff = nt - trip.total; const dEl = $('#fDiff');
+      $('#fPaid').textContent = V.fmt(trip.total);
+      $('#fNew').textContent = st.ret ? V.fmt(nt) : '—';
+      dEl.textContent = !st.ret ? '—' : diff > 0 ? '+' + V.fmt(diff) : diff < 0 ? V.fmt(diff) : '$0';
+      dEl.classList.toggle('is-refund', diff < 0);
+      $('#fLabel').textContent = diff > 0 ? 'You pay' : diff < 0 ? 'You get back' : 'Fare difference';
+      const c = changed();
+      if (trip.status === 'upcoming') $('#fNote').textContent = !st.ret ? 'Pick a return date to see the new price.' : !c ? 'Make a change to see the new price.' : diff > 0 ? `Charged to ${card ? card.brand + ' •••• ' + card.last4 : 'your card'} when you confirm.` : diff < 0 ? `Refunded to ${card ? card.brand + ' •••• ' + card.last4 : 'your card'} within 5–7 business days.` : 'No extra cost for this change.';
+      $('#confirm').disabled = !c || !st.ret || trip.status !== 'upcoming';
+      $('#confirmTxt').textContent = c && st.ret && diff > 0 ? `Confirm & Pay ${V.fmt(diff)}` : 'Confirm Changes';
+      $('#reset').hidden = !c;
+      if (bump) { dEl.classList.remove('bump'); void dEl.offsetWidth; dEl.classList.add('bump'); setTimeout(() => dEl.classList.remove('bump'), 260); }
+    };
+    render();
+
+    $('#reset').addEventListener('click', () => {
+      Object.assign(st, orig); ad.value = st.adults; ch.value = st.children; cap(); $('#cls').select(st.cls); cal.set(st.depart, st.ret); mode = 'depart'; render(true);
+      V.toast('Changes undone');
+    });
+
+    $('#confirm').addEventListener('click', async (e) => {
+      const btn = e.currentTarget;   // currentTarget is null once the dialog below has been awaited
+      const nt = newTotal(); const diff = nt - trip.total;
+      const summary = `${D.range(st.depart, st.ret)} · ${st.adults + st.children} traveller${st.adults + st.children === 1 ? '' : 's'} · ${st.cls === 'business' ? 'Business' : 'Economy'}`;
+      const ok = await V.dialog({
+        title: 'Confirm these changes?',
+        message: `${summary}. ${diff > 0 ? `We’ll charge ${V.fmt(diff)} to ${card ? card.brand + ' •••• ' + card.last4 : 'your card'}.` : diff < 0 ? `You’ll get ${V.fmt(-diff)} back.` : 'There’s no extra cost.'}`,
+        confirm: diff > 0 ? `Pay ${V.fmt(diff)}` : 'Confirm', cancel: 'Go Back', tone: 'info',
+      });
+      if (!ok) return;
+      await V.loading(btn, 1200);
+      V.trips.update(trip.id, { start: st.depart, end: st.ret, adults: st.adults, children: st.children, cls: st.cls, total: nt });
+      V.toast('Booking updated · new e-ticket issued');
+      await V.wait(900);
+      location.href = `itinerary.html?trip=${encodeURIComponent(trip.id)}`;
+    });
+  })();
+</script>
+</body>
+</html>

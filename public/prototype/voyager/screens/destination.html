@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Destination</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .psheet.ds { margin-top: 22px; padding: 0 0 34px; border-radius: var(--r-sheet) var(--r-sheet) 0 0; overflow: hidden; background: #F5F5F5; }
+  .ds__hero { position: relative; height: 380px; }
+  .ds__hero img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; filter: saturate(.82) brightness(1.03); }
+  .ds__hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(245,245,245,0) 0%, rgba(245,245,245,0) 52%, rgba(245,245,245,.55) 70%, rgba(245,245,245,.9) 86%, #F5F5F5 100%); pointer-events: none; }
+  .ds__btn { position: absolute; top: 39px; z-index: 2; }
+  .ds__btn.icon-btn { width: 34px; height: 30px; }
+  .ds__back { left: 15px; color: #000; }
+  .ds__share { right: 58px; color: var(--navy); }
+  .ds__heart { right: 10px; top: 38px; height: 31px; color: #000; }
+  .ds__heart svg { width: 19px; height: 19px; }
+  .ds__heart .h-fill { display: none; }
+  .ds__heart[aria-pressed="true"] { color: var(--orange); }
+  .ds__heart[aria-pressed="true"] .h-fill { display: block; }
+  .ds__heart[aria-pressed="true"] .h-line { display: none; }
+  .ds__heart.pop { animation: heartpop 360ms var(--ease-spring); }
+  .ds__body { padding: 0 23px 0 21px; margin-top: 21px; position: relative; }
+  .ds__title { font-size: 24px; line-height: 29px; font-weight: 700; color: var(--navy); letter-spacing: -.1px; }
+  .ds__loc { font-size: 12px; line-height: 15px; color: #000; margin-top: 7px; }
+  .stats.ds__stats { width: 308px; margin: 23px 0 0 12px; padding: 21.5px 0 21px; }
+  .ds__stats span { margin-top: 0; }
+  .ds__stats > div + div::before { top: 7px; bottom: 7px; }
+  .ds__tabs { display: flex; gap: 26px; margin-top: 27px; }
+  .ds__tabs button { position: relative; font-size: 18px; line-height: 22px; font-weight: 600; color: #A7A7A7; padding: 0 0 10px; }
+  .ds__tabs button[aria-selected="true"] { color: #555; }
+  .ds__tabs button[aria-selected="true"]::after { content: ''; position: absolute; left: -1px; right: -11px; bottom: 0; height: 2px; background: var(--orange); }
+  .ds__tabs button:first-child[aria-selected="true"]::after { right: -9px; }
+  .ds__panel { padding-top: 13px; }
+  .ds__blurb { font-size: 13.9px; line-height: 17.3px; color: #000; max-width: 306px; }
+  .ds__pills { margin-top: 21px; gap: 20px; }
+  .ds__pills .ipill { width: 148px; height: 43px; padding: 0 0 0 9px; gap: 3px; font-size: 14px; color: #555; background: #E7E7E7; }
+  .ds__pills .ipill svg { color: #333; }
+  .ds__sec { display: flex; align-items: center; justify-content: space-between; margin: 40px 0 12px; }
+  .ds__sec h2 { font-size: 16px; font-weight: 700; color: #333; }
+  .ds__sec a { font-family: var(--font-2); font-size: 12px; font-weight: 600; color: var(--navy); padding: 12px 0 12px 12px; margin: -12px 0; }
+  .gstrip { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; margin: 0 -23px; padding: 0 23px; scroll-snap-type: x mandatory; }
+  .gstrip::-webkit-scrollbar { display: none; }
+  .gstrip a { flex-shrink: 0; width: 118px; height: 88px; border-radius: 10px; overflow: hidden; scroll-snap-align: start; position: relative; }
+  .gstrip a:last-child::after { content: attr(data-more); position: absolute; inset: 0; display: grid; place-items: center; background: rgba(20,33,61,.55); color: #fff; font-weight: 600; font-size: 14px; }
+  .hcard { display: flex; gap: 12px; padding: 10px; background: #fff; border-radius: var(--r-card); box-shadow: 0 1px 2px rgba(0,0,0,.04); align-items: center; }
+  .hcard__img { width: 84px; height: 72px; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
+  .hcard__name { font-size: 15px; font-weight: 600; color: #000; }
+  .hcard__meta { font-size: 12px; color: var(--text-3); margin-top: 3px; }
+  .hcard__rate { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #333; margin-top: 6px; }
+  .incl { background: #fff; border-radius: var(--r-card); padding: 4px 16px; }
+  .incl__row { display: flex; gap: 12px; align-items: center; padding: 12px 0; }
+  .incl__row + .incl__row { border-top: 1px solid #E6E6E6; }
+  .incl__ic { width: 36px; height: 36px; border-radius: 10px; background: var(--orange-tint); color: #8A5A00; display: grid; place-items: center; flex-shrink: 0; }
+  .incl__ic.off { background: #EDEDED; color: #9A9A9A; }
+  .incl__t { font-size: 14px; font-weight: 600; color: #222; }
+  .incl__s { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+  .days-l { display: flex; flex-direction: column; gap: 10px; }
+  .dayrow { display: grid; grid-template-columns: 52px 1fr; gap: 12px; align-items: start; padding: 12px; background: #fff; border-radius: var(--r-card); }
+  .dayrow__n { height: 48px; border-radius: 10px; background: var(--navy); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .dayrow__n b { font-size: 16px; line-height: 18px; } .dayrow__n small { font-size: 10px; color: #C4C7CF; }
+  .dayrow:first-child .dayrow__n { background: var(--orange); color: #000; } .dayrow:first-child .dayrow__n small { color: #5A3A00; }
+  .dayrow__t { font-size: 14px; font-weight: 600; color: #111; }
+  .dayrow__s { font-size: 12px; line-height: 1.45; color: var(--text-3); margin-top: 3px; }
+  .rv-sum { display: grid; grid-template-columns: 110px 1fr; align-items: center; gap: 16px; background: #fff; border-radius: var(--r-card); padding: 16px; }
+  .rv-sum .rating__num { font-size: 36px; line-height: 40px; }
+  .rv-mini { background: #fff; border-radius: var(--r-card); padding: 14px 16px; margin-top: 10px; }
+  .rv-mini__h { display: flex; gap: 10px; align-items: center; }
+  .rv-mini__av { width: 36px; height: 36px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
+  .rv-mini__n { font-size: 14px; font-weight: 600; }
+  .rv-mini__time { margin-left: auto; font-size: 11px; color: var(--text-3); align-self: flex-start; }
+  .rv-mini p { font-size: 12px; line-height: 1.45; color: #333; margin-top: 8px; }
+  .ds-bar .cta-bar__in { background: #F5F5F5; }
+  .ds-bar .cta-bar__in::before { top: -25px; background: linear-gradient(to bottom, rgba(245,245,245,0), #F5F5F5); }
+  .ds-bar .buybar { align-items: flex-end; padding: 22px 25px 21px 30px !important; border-top: 1px solid #DCDCDC; }
+  .ds-bar .buybar > div { margin-bottom: -2px; }
+  .ds-bar .buybar > * + * { margin-top: 0; }
+  .ds-bar .buybar__k { font-size: 11px; line-height: 13px; color: #555; }
+  .ds-bar .buybar__v { font-size: 20px; line-height: 24px; margin-top: 6px; }
+  .ds-bar .buybar__v small { font-size: 11px; margin-left: 10px; color: #555; }
+  .ds-bar .btn { width: 136px; height: 42px; font-size: 16px; }
+  body.capture.pin:not(.embedded) .page > .cta-bar.ds-bar { position: sticky; }
+  .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .share-grid button { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 12px; color: #333; padding: 6px 0; border-radius: 12px; }
+  .share-grid span.ic { width: 52px; height: 52px; border-radius: 16px; background: var(--grey-1); display: grid; place-items: center; color: var(--navy); }
+  .share-link { display: flex; align-items: center; gap: 10px; margin-top: 18px; padding: 0 6px 0 14px; height: 48px; border-radius: 12px; background: var(--grey-1); font-size: 13px; color: #555; }
+  .share-link span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+</style>
+</head>
+<body>
+<main class="page page--cta" aria-label="Destination details">
+  <section class="psheet ds">
+    <div class="ds__hero ph" id="hero"><img id="heroImg" src="../assets/img/hero-paris.jpg" alt="Eiffel Tower above the Seine in Paris"></div>
+    <a class="icon-btn ds__btn ds__back tap" href="search-results.html" data-go="back" aria-label="Back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12H4M11 5 4 12l7 7"/></svg>
+    </a>
+    <button class="icon-btn ds__btn ds__share tap" type="button" data-sheet="shareSheet" aria-label="Share this trip"><span data-icon="share" data-size="18" data-sw="2"></span></button>
+    <button class="icon-btn ds__btn ds__heart" type="button" id="heart" data-heart="paris" aria-label="Save Paris"></button>
+
+    <div class="ds__body">
+      <h1 class="ds__title enter" id="title">Paris City Break</h1>
+      <p class="ds__loc enter" id="loc" style="--i:1">Paris, France</p>
+
+      <div class="stats ds__stats enter" style="--i:2">
+        <div><b id="sDays">7</b><span>Days</span></div>
+        <div><b id="sRating">4.9</b><span>Rating</span></div>
+        <div><b id="sBooked">2.4k</b><span>Booked</span></div>
+      </div>
+
+      <div class="ds__tabs segmented enter" id="tabs" role="tablist" aria-label="Trip details" style="--i:3">
+        <button type="button" role="tab" aria-selected="true" aria-controls="pOverview" data-value="overview" id="tOverview">Overview</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="pItin" data-value="itinerary" id="tItin">Itinerary</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="pReviews" data-value="reviews" id="tReviews">Reviews</button>
+      </div>
+
+      <div class="ds__panel" id="pOverview" role="tabpanel" aria-labelledby="tOverview">
+        <p class="ds__blurb" id="blurb">Experience The Magic Of The City Of Light — From The Iconic Eiffel Tower To Hidden Montmartre Streets, World-Class Cuisine, And Legendary Art Museums.</p>
+        <div class="ipills ds__pills" id="pills"></div>
+
+        <div class="ds__sec" style="margin-top:44px"><h2>Gallery</h2><a href="gallery.html?id=paris" id="galAll">See All</a></div>
+        <div class="gstrip" id="gstrip"></div>
+
+        <div class="ds__sec"><h2>Where You’ll Stay</h2><a href="hotel.html?id=paris" id="hotelMore">Details</a></div>
+        <a class="hcard tap" href="hotel.html?id=paris" id="hcard"></a>
+
+        <div class="ds__sec"><h2>What’s Included</h2></div>
+        <div class="incl" id="incl"></div>
+      </div>
+
+      <div class="ds__panel" id="pItin" role="tabpanel" aria-labelledby="tItin" hidden>
+        <div class="days-l" id="days"></div>
+        <p class="small" style="margin-top:12px">Times are a guide. Your full, bookable itinerary unlocks after checkout.</p>
+      </div>
+
+      <div class="ds__panel" id="pReviews" role="tabpanel" aria-labelledby="tReviews" hidden>
+        <div class="rv-sum">
+          <div class="rating__big"><p class="rating__num" id="rNum">4.9</p><span id="rStars"></span><p class="rating__count" id="rCount">2,418 Reviews</p></div>
+          <div class="bars" id="rBars"></div>
+        </div>
+        <div id="rList"></div>
+        <a class="btn btn--navy mt-16" href="reviews.html?id=paris" id="rAll"><span>See All Reviews</span></a>
+        <a class="btn btn--outline mt-12" href="write-review.html?id=paris" id="rWrite"><span data-icon="edit" data-size="18" data-sw="2"></span><span>Write a Review</span></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-bar ds-bar"><div class="cta-bar__in buybar">
+    <div><p class="buybar__k">Starting from</p><p class="buybar__v num"><span id="price">$1,240</span><small>/person</small></p></div>
+    <button class="btn btn--primary" type="button" id="book"><span>Book Now</span></button>
+  </div></div>
+</main>
+
+<!-- Share -->
+<section class="sheet" id="shareSheet" aria-labelledby="shT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="shT">Share this trip</p><p class="sheet__sub" id="shSub">Paris City Break · 7 Days from $1,240</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><span data-icon="close" data-size="14" data-sw="2.4"></span></button>
+  </div>
+  <div class="share-grid">
+    <button type="button" data-share="Messages"><span class="ic"><span data-icon="chat" data-size="24"></span></span>Messages</button>
+    <button type="button" data-share="Mail"><span class="ic"><span data-icon="envelope" data-size="24"></span></span>Mail</button>
+    <button type="button" data-share="WhatsApp"><span class="ic"><span data-icon="phone" data-size="24"></span></span>WhatsApp</button>
+    <button type="button" data-share="More"><span class="ic"><span data-icon="share" data-size="24"></span></span>More</button>
+  </div>
+  <div class="share-link"><span id="shLink">voyager.app/trip/paris</span><button class="btn btn--primary btn--xs btn--inline" type="button" id="copyLink" data-copy><span data-icon="copy" data-size="16" data-sw="2"></span><span>Copy</span></button></div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const V = window.Voyager; const $ = (s) => document.querySelector(s);
+  const d = V.dest(V.q('id')) || V.dest('paris');
+  const id = d.id;
+  const isParis = id === 'paris';
+  if (V.q('pin')) document.body.classList.add('pin');   // capture helper: pin the buy bar to the viewport foot (design-frame comparison)
+  document.title = 'Voyager · ' + d.package.name;
+
+  // ---- hero + header
+  $('#heroImg').src = V.img(d.hero);
+  $('#heroImg').alt = isParis ? 'Eiffel Tower above the Seine in Paris' : `${d.name}, ${d.country}`;
+  const heart = $('#heart'); heart.dataset.heart = id; heart.setAttribute('aria-label', 'Save ' + d.name);
+  V.hydrateHearts(heart.parentElement);
+  $('#title').textContent = d.package.name;
+  $('#loc').textContent = `${d.name}, ${d.country}`;
+  $('#sDays').textContent = d.days; $('#sRating').textContent = d.rating.toFixed(1); $('#sBooked').textContent = d.booked;
+  $('#blurb').textContent = d.blurb;
+  $('#price').textContent = V.fmt(d.package.pp);
+  $('#shSub').textContent = `${d.package.name} · ${d.days} Days from ${V.fmt(d.package.pp)}`;
+  $('#shLink').textContent = `voyager.app/trip/${id}`;
+
+  // ---- pills (design: Flights / Hotel)
+  const pill = (ic, label) => `<span class="ipill">${V.icon(ic, 24, 'stroke-width="1.5"')}${label}</span>`;
+  $('#pills').innerHTML = (d.inclusions.flights ? pill('plane', 'Flights Included') : '') + (d.inclusions.hotel ? pill('building', 'Hotel Included') : '');
+
+  // ---- gallery strip
+  const GAL = isParis ? ['gal-louvre', 'gal-montmartre', 'gal-seine-cruise', 'gal-paris-cafe', 'gal-versailles'] : [d.hero, d.img].filter((v, i, a) => a.indexOf(v) === i);
+  const galTotal = isParis ? 7 : GAL.length;
+  $('#gstrip').innerHTML = GAL.map((g, i) => `<a class="ph tap" href="gallery.html?id=${id}&i=${i}" ${i === GAL.length - 1 && galTotal > GAL.length ? `data-more="+${galTotal - GAL.length + 1}"` : ''} aria-label="Open photo ${i + 1} of ${galTotal}"><img src="${V.img(g)}" alt="" loading="lazy"></a>`).join('');
+  $('#galAll').href = `gallery.html?id=${id}`;
+
+  // ---- hotel
+  const trip = V.trips.list().find((t) => t.dest === id);
+  const hotelName = isParis ? 'Hôtel Le Marais' : (trip && trip.hotel) || V.travel(id).hotel;
+  const hotelMeta = isParis ? '4★ Boutique · Rue De Bretagne' : `${d.hotelStars}★ Hotel · ${d.name}`;
+  $('#hcard').href = $('#hotelMore').href = `hotel.html?id=${id}`;
+  $('#hcard').innerHTML = `<span class="hcard__img ph ph--warm"><img src="${V.img(isParis ? 'hotel-marais' : d.img)}" alt=""></span>
+    <span class="grow"><span class="hcard__name" style="display:block">${V.esc(hotelName)}</span><span class="hcard__meta" style="display:block">${V.esc(hotelMeta)}</span>
+    <span class="hcard__rate">${V.starsHTML(d.hotelStars, 12)}<span>${isParis ? '4.8 · 612 reviews' : (d.rating - 0.1).toFixed(1) + ' · guest rating'}</span></span></span>
+    <span class="list__chev">${V.icon('chevron-right', 18, 'stroke-width="2"')}</span>`;
+
+  // ---- inclusions
+  const inc = [
+    ['plane', 'Return Flights', (() => { const tr = V.travel(id); const no = (trip && trip.flight) || tr.out; return `${tr.airline(no)} ${no} · LHR → ${tr.airport[0]}`; })(), d.inclusions.flights],
+    ['building', `${d.days} Nights Hotel`, isParis ? 'Hôtel Le Marais · breakfast included' : `${hotelName} · breakfast included`, d.inclusions.hotel],
+    ['car', 'Airport Transfers', 'Private car both ways', d.inclusions.transfers],
+    ['book', 'Guided City Tour', 'Optional add-on · +$80', false],
+  ];
+  $('#incl').innerHTML = inc.map(([ic, t, s, on]) => `<div class="incl__row"><span class="incl__ic ${on ? '' : 'off'}">${V.icon(ic, 20, 'stroke-width="1.7"')}</span><span><span class="incl__t" style="display:block">${t}</span><span class="incl__s" style="display:block">${on ? s : (ic === 'book' ? s : 'Not included · add at checkout')}</span></span></div>`).join('');
+
+  // ---- itinerary preview
+  // Mirrors itinerary.html day for day: eight days, Aug 12 to Aug 19.
+  const DAYS = isParis ? [
+    ['Arrival & Orientation', 'BA303 LHR → CDG 09:00 · private transfer · check-in at Hôtel Le Marais · welcome dinner'],
+    ['Louvre & Tuileries', 'Skip-the-line Louvre, lunch at Café Marly by the pyramid, then a stroll through the Tuileries'],
+    ['Montmartre & Sacré-Cœur', 'A guided walk, the climb to the Sacré-Cœur dome, Place du Tertre and the Moulin Rouge'],
+    ['Versailles Day Trip', 'RER C to the palace, the Hall of Mirrors and the Musical Fountains in the gardens'],
+    ['Eiffel Tower & Seine Cruise', 'Timed entry to the summit, Marais boutiques, then a Seine dinner cruise past Notre-Dame'],
+    ['Sainte-Chapelle & Saint-Germain', 'Stained glass on Île de la Cité, lunch at Café de Flore and the Luxembourg Gardens'],
+    ['Free Day & Farewell', 'Your own pace, a croissant class on Rue des Rosiers and dinner at Le Train Bleu'],
+    ['Departure', 'Check-out, transfer to CDG and BA318 home to London at 6:25 PM'],
+  ] : Array.from({ length: d.days + 1 }, (_, i) => i === 0 ? ['Arrival & Check-In', `Flight to ${d.name}, transfer and a relaxed welcome dinner`] : i === d.days ? ['Departure', 'Breakfast, checkout and transfer to the airport'] : [['City Highlights Tour', 'Guided walk through the landmarks with a local expert'], ['Local Food Trail', 'Markets, street food and a cooking class'], ['Day Trip', 'A full-day excursion beyond the city'], ['Free Day', 'Explore at your own pace — ask us for tips'], ['Culture & Museums', 'Museum passes and an evening performance']][(i - 1) % 5]);
+  const b = V.booking.get();
+  const start = b.dest === id ? b.depart : (isParis ? '2026-08-12' : null);
+  $('#days').innerHTML = DAYS.map(([t, s], i) => `<div class="dayrow"><span class="dayrow__n"><b>${i + 1}</b><small>${start ? V.date.fmt(V.date.add(start, i), 'md') : 'Day'}</small></span><span><span class="dayrow__t" style="display:block">Day ${i + 1} — ${t}</span><span class="dayrow__s" style="display:block">${s}</span></span></div>`).join('');
+
+  // ---- reviews preview
+  $('#rNum').textContent = d.rating.toFixed(1);
+  $('#rStars').innerHTML = V.starsHTML(5, 16);
+  $('#rCount').textContent = V.fmtNum(d.reviews) + ' Reviews';
+  $('#rBars').innerHTML = [78, 58, 38, 28, 10].map((w, i) => `<div class="bars__row"><span>${5 - i}</span><div class="bars__track"><div class="bars__fill" style="width:${w}%"></div></div></div>`).join('');
+  const RV = [['rev-sarah', 'Sarah L.', '2 Days Ago', 'Absolutely Magical Experience. Every Detail Was Perfectly Organised — The Hotel Was Stunning And The Guided Tours Were Informative And Fun.'], ['rev-marcus', 'Marcus K.', '1 Week Ago', `Voyager Made Our Anniversary Trip Completely Stress-Free. Highly Recommend The ${d.name} Package!`]];
+  $('#rList').innerHTML = RV.map(([img, n, t, x]) => `<div class="rv-mini"><div class="rv-mini__h"><span class="rv-mini__av ph ph--warm"><img src="${V.img(img)}" alt=""></span><span><span class="rv-mini__n" style="display:block">${n}</span>${V.starsHTML(5, 12)}</span><span class="rv-mini__time">${t}</span></div><p>“${x}”</p></div>`).join('');
+  $('#rAll').href = `reviews.html?id=${id}`; $('#rWrite').href = `write-review.html?id=${id}`;
+
+  // ---- tabs (open from ?tab=)
+  const tabs = V.refresh($('#tabs'));
+  if (V.q('tab')) tabs.select(V.q('tab'));
+
+  // ---- share
+  document.querySelectorAll('[data-share]').forEach((btn) => btn.addEventListener('click', async () => {
+    const via = btn.dataset.share;
+    if (via === 'More' && navigator.share && !document.body.classList.contains('capture')) { try { await navigator.share({ title: d.package.name, url: location.href }); } catch (e) {} }
+    V.sheet.close(); V.toast(`Shared via ${via}`);
+  }));
+  $('#copyLink').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(`https://voyager.app/trip/${id}`); } catch (e) {}
+    V.sheet.close(); V.toast('Link copied');
+  });
+
+  // ---- book
+  $('#book').addEventListener('click', async (e) => {
+    V.booking.start(id);
+    await V.loading(e.currentTarget, 700);
+    location.href = 'book-dates.html';
+  });
+})();
+</script>
+</body>
+</html>

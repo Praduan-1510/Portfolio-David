@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Verify Code</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .au-icon { width: 72px; height: 72px; border-radius: 50%; background: var(--orange-tint); color: var(--orange); display: grid; place-items: center; margin: 14px 0 0 2px; position: relative; transition: background 300ms, color 300ms; }
+  .au-icon::after { content: ''; position: absolute; inset: -8px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px rgba(252,163,17,.25); }
+  .au-icon.is-ok { background: var(--valid-bg); color: var(--valid); }
+  .au-icon.is-ok::after { box-shadow: inset 0 0 0 1.5px rgba(46,155,46,.25); }
+  .au-title { font-size: 24px; line-height: 30px; font-weight: 700; color: #000; margin: 24px 0 0 2px; }
+  .au-text { font-size: 14px; line-height: 1.55; color: var(--text-3); margin: 8px 0 0 2px; max-width: 330px; }
+  .au-text b { color: #000; font-weight: 600; }
+  .au-text .link { font-size: 14px; }
+  .otp { margin: 30px 1px 0; }
+  .otp input { width: 50px; height: 58px; }
+  .otp-err { display: flex; gap: 6px; align-items: flex-start; font-size: 13px; line-height: 17px; color: var(--danger); margin: 12px 0 0 2px; }
+  .otp-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 18px 0 0 2px; min-height: 44px; }
+  .otp-meta p { font-size: 13.5px; color: var(--text-3); }
+  .otp-meta .link[disabled] { color: var(--text-4); font-weight: 500; font-variant-numeric: tabular-nums; cursor: default; }
+  .demo-hint { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px 0 10px; border-radius: 999px; background: var(--grey-1); box-shadow: inset 0 0 0 1px var(--line-2); font-size: 12px; color: var(--text-3); margin: 22px 0 0 2px; }
+  .demo-hint b { color: var(--navy); letter-spacing: .12em; font-variant-numeric: tabular-nums; }
+  .demo-hint span[data-icon] { color: var(--orange); }
+  .otp-tips { margin: 28px 0 0 2px; }
+  .otp-tips summary { font-size: 13.5px; font-weight: 600; color: var(--navy); cursor: pointer; list-style: none; display: flex; align-items: center; gap: 6px; min-height: 44px; }
+  .otp-tips summary::-webkit-details-marker { display: none; }
+  .otp-tips summary svg { transition: transform var(--dur) var(--ease-out); }
+  .otp-tips[open] summary svg { transform: rotate(180deg); }
+  .otp-tips ul { display: grid; gap: 8px; padding: 2px 0 0 2px; }
+  .otp-tips li { font-size: 13px; line-height: 1.45; color: var(--text-3); display: flex; gap: 8px; }
+  .otp-tips li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--orange); margin-top: 7px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<main class="page page--cta" aria-label="Verify your code">
+  <header class="phead">
+    <a class="phead__back tap" id="back" href="signup.html" data-go="back" aria-label="Back">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3.5M10.5 4.5 3 12l7.5 7.5"/></svg>
+    </a>
+    <div class="phead__titles"><h1 class="phead__title" id="headTitle">Verify Email</h1></div>
+  </header>
+
+  <section class="psheet">
+    <div class="au-icon enter" id="icon"><span data-icon="envelope" data-size="32" data-sw="1.7"></span></div>
+    <h2 class="au-title enter" style="--i:1" id="title">Check your inbox</h2>
+    <p class="au-text enter" style="--i:1">Enter the 6-digit code we sent to <b id="masked">al••••••@email.com</b>. <a class="link" id="change" href="signup.html">Change</a></p>
+
+    <div class="otp enter" id="otp" data-length="6" role="group" aria-label="6-digit verification code" style="--i:2"></div>
+    <p class="otp-err" id="err" role="alert" hidden></p>
+
+    <div class="otp-meta enter" style="--i:3">
+      <p>Didn’t get it?</p>
+      <button class="link" type="button" id="resend" data-countdown="30">Resend code</button>
+    </div>
+
+    <button class="demo-hint tap enter" type="button" id="demo" style="--i:3" aria-label="Fill the demo code 123456"><span data-icon="info" data-size="16" data-sw="2"></span>Demo code <b>123456</b></button>
+
+    <details class="otp-tips enter" style="--i:4">
+      <summary>Can’t find the email? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4.5 9 7.5 7.5L19.5 9"/></svg></summary>
+      <ul>
+        <li>Check your spam, promotions or updates folders.</li>
+        <li>Codes come from no-reply@voyager.travel and expire after 10 minutes.</li>
+        <li>Still nothing? Tap Resend code, or go back and check your email address.</li>
+      </ul>
+    </details>
+  </section>
+
+  <div class="cta-bar"><div class="cta-bar__in">
+    <button class="btn btn--primary" type="button" id="verify" disabled><span>Verify</span><svg class="arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 12h17M14 5.5l6.5 6.5-6.5 6.5"/></svg></button>
+  </div></div>
+</main>
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const V = window.Voyager;
+    const $ = (s) => document.getElementById(s);
+    const DEMO = '123456';
+    const flow = ['signup', 'reset', 'login'].includes(V.q('flow')) ? V.q('flow') : 'signup';
+    const pending = V.store.get('pendingSignup', null);
+    const email = (V.q('email') || (flow === 'reset' ? V.store.get('resetEmail', null) : pending && pending.email) || V.user.get().email).trim();
+
+    // Copy per flow
+    const COPY = {
+      signup: { head: 'Verify Email', back: 'signup.html', change: 'signup.html', next: 'permissions.html', ok: 'Email verified' },
+      reset: { head: 'Verify Code', back: 'forgot-password.html?email=' + encodeURIComponent(email), change: 'forgot-password.html?email=' + encodeURIComponent(email), next: 'reset-password.html?email=' + encodeURIComponent(email), ok: 'Code confirmed' },
+      login: { head: 'Verify It’s You', back: 'login.html', change: 'login.html', next: 'dashboard.html', ok: 'Signed in' },
+    }[flow];
+    $('headTitle').textContent = COPY.head;
+    document.title = 'Voyager · ' + COPY.head;
+    $('back').setAttribute('href', COPY.back);
+    $('change').setAttribute('href', COPY.change);
+    if (flow === 'reset') $('title').textContent = 'Enter your reset code';
+
+    // Masked address: al••••••@email.com
+    const [local, domain = ''] = email.split('@');
+    $('masked').textContent = local.slice(0, 2) + '•'.repeat(Math.min(Math.max(local.length - 2, 3), 8)) + (domain ? '@' + domain : '');
+
+    const otp = $('otp'), verify = $('verify'), err = $('err');
+    let attempts = 0, busy = false;
+    const showErr = (msg) => { err.hidden = false; err.innerHTML = V.icon('warning', 16, 'stroke-width="2"') + `<span>${msg}</span>`; };
+
+    otp.addEventListener('input', () => { verify.disabled = otp.value().length < 6; if (otp.value().length < 6) err.hidden = true; });
+    const check = async () => {
+      if (busy) return; const code = otp.value(); if (code.length < 6) return;
+      busy = true; verify.disabled = true;
+      await V.loading(verify, 900);
+      if (code !== DEMO) {
+        attempts++; busy = false; V.haptic();
+        otp.classList.remove('is-error'); void otp.offsetWidth; otp.classList.add('is-error');
+        showErr(attempts >= 3 ? 'Still not right. We can send you a fresh code — tap Resend code when it’s available.' : `That code isn’t right. Check the latest email and try again${attempts === 2 ? ' (1 attempt left before we suggest a new code)' : ''}.`);
+        setTimeout(() => { otp.reset(); otp.classList.add('is-error'); }, 900);
+        return;
+      }
+      otp.classList.add('is-ok'); err.hidden = true;
+      $('icon').classList.add('is-ok'); $('icon').innerHTML = V.icon('check', 34, 'stroke-width="2.2"');
+      verify.querySelector('span').textContent = 'Verified'; verify.classList.remove('is-loading');
+      V.toast(COPY.ok); V.haptic();
+      if (flow === 'signup') V.store.set('emailVerified', email);
+      if (flow === 'login') V.auth.signIn();
+      await V.wait(800);
+      location.href = COPY.next;
+    };
+    otp.addEventListener('complete', check);
+    verify.addEventListener('click', check);
+
+    $('demo').addEventListener('click', () => { err.hidden = true; otp.fill(DEMO); });
+    $('resend').addEventListener('click', () => { attempts = 0; err.hidden = true; otp.classList.remove('is-error'); otp.reset(); });
+
+    // Focus the first box once the entrance settles
+    setTimeout(() => { const f = otp.querySelector('input'); f && f.focus({ preventScroll: true }); }, 350);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  /* Navy top half (PNG 0–392) */
+  .pf-head { position: relative; height: 393px; flex-shrink: 0; color: #fff; }
+  .pf-avatar { position: absolute; left: 145px; top: 102px; width: 111px; height: 111px; }
+  .pf-avatar__edit { position: absolute; right: 2px; bottom: 4px; width: 28px; height: 28px; border-radius: 50%; background: var(--orange); color: #000; display: grid; place-items: center; box-shadow: 0 0 0 3px var(--navy); opacity: 0; transform: scale(.6); transition: opacity var(--dur), transform var(--dur) var(--ease-spring); }
+  .pf-avatar:hover .pf-avatar__edit, .pf-avatar:focus-visible .pf-avatar__edit { opacity: 1; transform: none; }
+  .pf-name { position: absolute; left: 0; right: 0; top: 232px; text-align: center; font-size: 22px; line-height: 1; font-weight: 700; letter-spacing: -.1px; }
+  .pf-email { position: absolute; left: 0; right: 0; top: 259px; text-align: center; font-size: 13px; line-height: 1; color: #D3D6DD; }
+  .pf-stats { position: absolute; left: 88px; top: 290px; display: grid; grid-template-columns: 74px 64px 82px; }
+  .pf-stat { display: flex; flex-direction: column; align-items: center; padding: 4px 0 6px; border-radius: 10px; }
+  .pf-stat b { font-size: 22px; line-height: 1; font-weight: 600; color: var(--orange); font-variant-numeric: tabular-nums; }
+  .pf-stat span { font-size: 14px; line-height: 1; color: #DADDE3; margin-top: 7px; }
+  .pf-stat:hover { background: rgba(255,255,255,.05); }
+
+  /* Grey sheet (PNG y393+) */
+  .pf-sheet { padding: 24px 17px 16px; }
+  .pf-card { background: #fff; border-radius: var(--r-card); }
+  .pf-card--a { padding: 16px 11px 6px 24px; }
+  .pf-card--b { padding: 10px 17px 2px; margin-top: 20px; }
+  .pf-tier { display: flex; align-items: center; height: 49px; padding: 0 0 0 21px; border-radius: 8px; background: var(--navy); color: #fff; }
+  .pf-tier__crown { color: #FFC727; width: 24px; margin-right: 10px; }
+  .pf-tier__t { display: block; font-size: 14px; line-height: 17px; font-weight: 600; color: var(--orange); letter-spacing: 0; }
+  .pf-tier__s { display: block; font-size: 10.5px; line-height: 13px; font-weight: 500; margin-top: 0; }
+  .pf-tier .pf-chev { color: var(--orange); margin-left: auto; margin-right: 13px; }
+  .pf-row { position: relative; display: flex; align-items: center; height: 50px; padding: 0 0 10px; width: 100%; text-align: left; color: #000; -webkit-tap-highlight-color: transparent; }
+  .pf-row::before { content: ''; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: #D9D9D9; }
+  .pf-card--a .pf-tier + .pf-row { margin-top: 11px; height: 56px; }
+  .pf-card--a .pf-row { padding-left: 21px; }
+  .pf-card--b .pf-row { padding-left: 21px; height: 52px; }
+  .pf-card--b .pf-row:first-child { height: 56px; padding-bottom: 8px; }
+  .pf-card--b .pf-row:first-child::before { display: none; }
+  .pf-row__ic { width: 24px; height: 24px; flex-shrink: 0; display: grid; place-items: center; }
+  .pf-row__t { flex: 1; min-width: 0; font-size: 15px; line-height: 19px; font-weight: 600; margin-left: 11px; }
+  .pf-row__meta { font-size: 12px; font-weight: 500; color: var(--text-4); margin-right: 6px; }
+  .pf-row__meta.is-count { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--orange); color: #000; font-size: 11px; font-weight: 700; display: inline-grid; place-items: center; }
+  .pf-chev { flex-shrink: 0; margin-right: 13px; }
+  .pf-row:active { background: rgba(0,0,0,.025); }
+  .pf-row:hover .pf-chev { transform: translateX(2px); }
+  .pf-chev { transition: transform var(--dur) var(--ease-out); }
+  .pf-row--out .pf-row__t { color: #000; }
+  .pf-ver { text-align: center; font-size: 11px; color: var(--text-5); margin: 18px 0 4px; }
+  svg .cut { stroke: #fff; } svg .cutf { fill: #fff; }
+</style>
+</head>
+<body>
+<main class="page page--tabs" aria-label="Profile">
+  <header class="pf-head">
+    <a class="pf-avatar avatar-glow avatar-glow--lg tap enter" href="edit-profile.html" aria-label="Edit profile photo and details" style="overflow:visible">
+      <span class="ph ph--warm" style="display:block;width:100%;height:100%;border-radius:50%;overflow:hidden"><img id="pfImg" src="../assets/img/avatar-alex.jpg" alt="" width="111" height="111"></span>
+      <span class="pf-avatar__edit" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 20.5H4.5a.5.5 0 0 1-.5-.5v-4.3l11.3-11.3a.8.8 0 0 1 1.1 0l3.7 3.7a.8.8 0 0 1 0 1.1L9 20.5ZM12.5 6.5l5 5"/></svg></span>
+    </a>
+    <h1 class="pf-name enter" id="pfName" style="--i:1">Alex Johnson</h1>
+    <p class="pf-email enter" id="pfEmail" style="--i:1">alex.johnson@email.com</p>
+    <div class="pf-stats enter" style="--i:2" role="group" aria-label="Your travel stats">
+      <a class="pf-stat tap" href="trips.html"><b id="stTrips">12</b><span>Trips</span></a>
+      <a class="pf-stat tap" href="saved.html"><b id="stSaved">8</b><span>Saved</span></a>
+      <button class="pf-stat tap" type="button" data-sheet="ratingSheet"><b id="stRating">4.9</b><span>Rating</span></button>
+    </div>
+  </header>
+
+  <section class="psheet psheet--grey pf-sheet" aria-label="Account menu">
+    <nav class="pf-card pf-card--a enter" style="--i:3" aria-label="Travel">
+      <a class="pf-tier tap" href="rewards.html" aria-label="Gold Member rewards">
+        <span class="pf-tier__crown"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22.4 6.6a1 1 0 0 0-1.1.3l-3.9 4.2-4.5-7.2a1 1 0 0 0-1.8 0l-4.5 7.2-3.9-4.2a1 1 0 0 0-1.7.8l1.9 10.6c.1.5.5.8 1 .8h15.8c.5 0 .9-.3 1-.8l1.9-10.6a1 1 0 0 0-.2-1.1Z"/></svg></span>
+        <span><span class="pf-tier__t" id="tierT">GOLD MEMBER</span><span class="pf-tier__s" id="tierS">4,820 Points · Upgrade To Platinum</span></span>
+        <svg class="pf-chev" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 4.5 7.5 7.5L9 19.5"/></svg>
+      </a>
+      <a class="pf-row tap" href="trips.html">
+        <span class="pf-row__ic" data-fi="calendar-fill"></span><span class="pf-row__t">My Bookings</span>
+        <span class="pf-row__meta" id="upMeta"></span><span class="pf-chev" data-chev></span>
+      </a>
+      <a class="pf-row tap" href="saved.html">
+        <span class="pf-row__ic" data-fi="heart-red"></span><span class="pf-row__t" style="margin-left:9px">Saved Places</span>
+        <span class="pf-chev" data-chev></span>
+      </a>
+      <a class="pf-row tap" href="payment-methods.html">
+        <span class="pf-row__ic" data-fi="card-fill"></span><span class="pf-row__t">Payment Methods</span>
+        <span class="pf-chev" data-chev></span>
+      </a>
+      <a class="pf-row tap" href="promo-codes.html">
+        <span class="pf-row__ic" data-fi="tag-fill"></span><span class="pf-row__t" style="margin-left:8px">Promo Codes</span>
+        <span class="pf-chev" data-chev></span>
+      </a>
+      <a class="pf-row tap" href="documents.html">
+        <span class="pf-row__ic" data-fi="file-fill"></span><span class="pf-row__t">Travel Documents</span>
+        <span class="pf-row__meta" id="docMeta"></span><span class="pf-chev" data-chev></span>
+      </a>
+      <a class="pf-row tap" href="help.html">
+        <span class="pf-row__ic" data-fi="headset-fill"></span><span class="pf-row__t">Help &amp; Support</span>
+        <span class="pf-chev" data-chev></span>
+      </a>
+    </nav>
+
+    <nav class="pf-card pf-card--b enter" style="--i:4" aria-label="App">
+      <a class="pf-row tap" href="settings.html">
+        <span class="pf-row__ic" data-fi="gear-fill"></span><span class="pf-row__t" style="margin-left:10px">Settings</span>
+        <span class="pf-chev" data-chev></span>
+      </a>
+      <a class="pf-row tap" href="notifications.html">
+        <span class="pf-row__ic" data-fi="bell-yellow"></span><span class="pf-row__t" style="margin-left:7px">Notifications</span>
+        <span class="pf-row__meta is-count" id="nCount" hidden></span><span class="pf-chev" data-chev></span>
+      </a>
+      <button class="pf-row pf-row--out tap" type="button" id="signOut">
+        <span class="pf-row__ic" data-fi="signout-red"></span><span class="pf-row__t" style="margin-left:13px">Sign Out</span>
+        <span class="pf-chev" data-chev></span>
+      </button>
+    </nav>
+    <p class="pf-ver">Voyager 2.6.0 · Signed in as <span id="verEmail">alex.johnson@email.com</span></p>
+  </section>
+
+  <nav data-tabbar="profile" data-tabbar-grey></nav>
+</main>
+
+<!-- Rating explainer -->
+<section class="sheet" id="ratingSheet" aria-labelledby="rtT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="rtT">Your traveller rating</p><p class="sheet__sub">Hosts, guides and drivers rate you after every trip.</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="row" style="gap:16px;align-items:center">
+    <p style="font-size:44px;font-weight:700;line-height:1" class="num" id="rtNum">4.9</p>
+    <div><div id="rtStars"></div><p class="small" style="margin-top:4px">Based on 31 ratings across 12 trips</p></div>
+  </div>
+  <div class="kvs mt-16">
+    <div><span class="k">Hotels</span><span class="v">5.0</span></div>
+    <div><span class="k">Guided tours</span><span class="v">4.9</span></div>
+    <div><span class="k">Transfers &amp; drivers</span><span class="v">4.8</span></div>
+  </div>
+  <div class="banner banner--ok mt-16"><span data-icon="shield-check" data-size="18"></span><span>Top-rated travellers get priority on free upgrades and early check-in.</span></div>
+  <div class="sheet__foot"><a class="btn btn--primary" href="trips.html?tab=past"><span>See Past Trips</span></a></div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const $ = (s) => document.querySelector(s);
+  // Filled glyphs as in the PNG (Phosphor "fill" look)
+  const FI = {
+    'calendar-fill': '<path fill="currentColor" d="M5 4.3h14a2 2 0 0 1 2 2v12.9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6.3a2 2 0 0 1 2-2Z"/><path d="M7.5 2.6v3.4M16.5 2.6v3.4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path class="cut" d="M4.6 8.9h14.8" stroke-width="1.6"/>',
+    'heart-red': '<path fill="#E8262B" d="M12 21.2c-.2 0-.3 0-.5-.1C11.1 20.9 2.5 16.1 2.5 9.9a5.3 5.3 0 0 1 9.5-3.3 5.3 5.3 0 0 1 9.5 3.3c0 6.2-8.6 11-9 11.2-.2.1-.3.1-.5.1Z"/>',
+    'card-fill': '<rect x="1.6" y="4.8" width="20.8" height="14.4" rx="2" fill="currentColor"/><path class="cut" d="M1.6 9.5h20.8" stroke-width="1.7"/><path class="cut" d="M5.2 15.3h2.6M9.8 15.3h2.6" stroke-width="1.9" stroke-linecap="round"/>',
+    'tag-fill': '<path d="M3.9 13.1a1 1 0 0 1-.3-.7V4.2a.6.6 0 0 1 .6-.6h8.2c.3 0 .5.1.7.3l8 8a1 1 0 0 1 0 1.4l-7.3 7.3a1 1 0 0 1-1.4 0L3.9 13.1Z" fill="#9B9B9B" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="8" cy="8" r="1.3" fill="#fff" stroke="currentColor" stroke-width="1"/>',
+    'file-fill': '<path fill="currentColor" d="M5.5 2.5H14l5.5 5.5v12.5a1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1Z"/><path class="cut" d="M14 2.8V8h5.2M8.5 13h7M8.5 16.5h7" stroke-width="1.6" stroke-linecap="round"/>',
+    'headset-fill': '<path d="M3.5 13v-1a8.5 8.5 0 0 1 17 0v1" stroke="currentColor" stroke-width="1.9" fill="none"/><rect x="2.6" y="12.2" width="5.6" height="7.6" rx="1.6" fill="currentColor"/><rect x="15.8" y="12.2" width="5.6" height="7.6" rx="1.6" fill="currentColor"/><path d="M20.5 18.5v.6a2.5 2.5 0 0 1-2.5 2.5h-4.5" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linecap="round"/>',
+    'gear-fill': '<path fill="currentColor" stroke="currentColor" stroke-width="1" d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/><circle class="cutf" cx="12" cy="12" r="3.4"/>',
+    'bell-yellow': '<path fill="#FFC21A" d="M20.8 17.1c-.6-1-1.4-3.3-1.4-6.9a7.4 7.4 0 0 0-14.8 0c0 3.6-.8 5.9-1.4 6.9a1.4 1.4 0 0 0 1.2 2.1h3.8a3.8 3.8 0 0 0 7.6 0h3.8a1.4 1.4 0 0 0 1.2-2.1Z"/>',
+    'signout-red': '<g stroke="#E1262B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M14.5 3.5H5a1 1 0 0 0-1 1v15a1 1 0 0 0 1 1h9.5"/><path d="M11.5 8 7.5 12l4 4M7.8 12h14"/></g>',
+  };
+  document.querySelectorAll('[data-fi]').forEach((el) => { el.innerHTML = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="margin:-2px">${FI[el.dataset.fi] || ''}</svg>`; });
+  document.querySelectorAll('[data-chev]').forEach((el) => { el.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 4.5 7.5 7.5L9 19.5"/></svg>'; });
+
+  // ---- data
+  const u = V.user.get();
+  $('#pfName').textContent = u.name; $('#pfEmail').textContent = u.email; $('#verEmail').textContent = u.email;
+  $('#stTrips').textContent = u.trips; $('#stSaved').textContent = V.saved.count(); $('#stRating').textContent = u.rating.toFixed(1);
+  $('#tierT').textContent = `${u.tier.toUpperCase()} MEMBER`;
+  $('#tierS').textContent = `${V.fmtNum(u.points)} Points · Upgrade To ${u.nextTier}`;
+  if (u.avatarData) $('#pfImg').src = u.avatarData;
+  else if (u.avatarRemoved) { const w = $('#pfImg').parentElement; w.className = ''; w.style.cssText = 'display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:var(--orange);color:var(--navy);font-size:38px;font-weight:700'; w.textContent = u.name.split(/\s+/).map((x) => x[0]).slice(0, 2).join('').toUpperCase(); }
+  $('#rtNum').textContent = u.rating.toFixed(1); $('#rtStars').innerHTML = V.starsHTML(5, 18);
+  const n = V.notifications.unread();
+  const capture = document.body.classList.contains('capture');
+  if (n && !capture) { $('#nCount').hidden = false; $('#nCount').textContent = n; $('#nCount').setAttribute('aria-label', `${n} unread`); }
+  const expiring = V.documents.list().filter((d) => d.status === 'expiring').length;
+  if (expiring && !capture) { $('#docMeta').textContent = `${expiring} expiring`; $('#docMeta').style.color = 'var(--warn)'; }
+  document.addEventListener('voyager:saved', () => { $('#stSaved').textContent = V.saved.count(); });
+
+  // ---- sign out
+  $('#signOut').addEventListener('click', async () => {
+    const ok = await V.dialog({ title: 'Sign out of Voyager?', message: 'Your trips and saved places stay safe in your account. You’ll need your password to sign back in.', confirm: 'Sign Out', cancel: 'Stay', tone: 'danger', icon: 'sign-out' });
+    if (!ok) return;
+    V.auth.signOut();
+    V.toast('Signed out. See you soon, ' + u.first);
+    await V.wait(700);
+    location.href = 'login.html';
+  });
+})();
+</script>
+</body>
+</html>

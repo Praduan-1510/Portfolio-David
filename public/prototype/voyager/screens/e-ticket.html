@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · E-Ticket</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .phead { padding-right: 10px; }
+  .hd-act { width: 44px; height: 44px; margin-top: -4px; display: grid; place-items: center; color: #fff; border-radius: 10px; }
+  .psheet { padding-top: 22px; }
+  .seg { margin-bottom: 18px; }
+
+  /* Boarding pass */
+  .pass { position: relative; border-radius: 16px; overflow: hidden; background: #fff; box-shadow: 0 10px 28px rgba(20,33,61,.14), 0 1px 3px rgba(20,33,61,.08); }
+  .pass__top { position: relative; background: var(--navy); color: #fff; padding: 18px 20px 20px; overflow: hidden; isolation: isolate; }
+  .pass__top::before { content: ''; position: absolute; right: -60px; top: -70px; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(252,163,17,.5), rgba(252,163,17,0) 65%); z-index: -1; }
+  .pass__airline { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--card-sub); }
+  .pass__airline b { color: #fff; font-size: 13px; font-weight: 600; }
+  .pass__route { display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; margin-top: 16px; }
+  .pass__code { font-size: 34px; line-height: 38px; font-weight: 700; letter-spacing: .02em; }
+  .pass__city { font-size: 12px; line-height: 15px; color: var(--card-sub); margin-top: 2px; min-height: 30px; }
+  .pass__route > div:first-child .pass__city, .pass__right .pass__city { max-width: 118px; }
+  .pass__right .pass__city { margin-left: auto; }
+  .pass__time { font-size: 15px; font-weight: 600; color: var(--orange); margin-top: 6px; }
+  .pass__mid { text-align: center; padding: 0 8px 22px; color: var(--orange); }
+  .pass__mid small { display: block; font-size: 11px; color: var(--card-sub); margin-top: 4px; }
+  .pass__mid .line { display: flex; align-items: center; gap: 6px; }
+  .pass__mid .line i { width: 22px; height: 0; border-top: 1.5px dashed rgba(255,255,255,.45); }
+  .pass__right { text-align: right; }
+  .pass__cut { position: relative; height: 22px; background: #fff; }
+  .pass__cut::before, .pass__cut::after { content: ''; position: absolute; top: -11px; width: 22px; height: 22px; border-radius: 50%; background: var(--sheetbg, #fff); box-shadow: inset 0 0 0 0 transparent; }
+  .pass__cut::before { left: -11px; } .pass__cut::after { right: -11px; }
+  .pass__cut i { position: absolute; left: 18px; right: 18px; top: 10px; border-top: 2px dashed #DADADA; }
+  .pass__grid { display: grid; grid-template-columns: 1.35fr 1fr 1fr; gap: 14px 10px; padding: 4px 20px 16px; }
+  .pass__k { display: block; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-4); }
+  .pass__v { display: block; font-size: 15px; font-weight: 700; color: #000; margin-top: 3px; }
+  .pass__v.c-orange { color: var(--orange); }
+  .pass__codes { display: grid; grid-template-columns: 110px 1fr; gap: 16px; align-items: center; padding: 14px 20px 20px; border-top: 1px solid #EFEFEF; }
+  .qr { width: 110px; height: 110px; padding: 6px; border-radius: 10px; background: #fff; box-shadow: inset 0 0 0 1px #E6E6E6; }
+  .qr svg { width: 100%; height: 100%; }
+  .barcode { height: 54px; }
+  .barcode svg { width: 100%; height: 100%; }
+  .pass__hint { font-size: 11.5px; color: var(--text-4); margin-top: 8px; line-height: 1.4; }
+  .pax { display: flex; gap: 8px; margin: 0 0 14px; }
+  .pax .chip { height: 32px; font-size: 12.5px; padding: 0 14px; }
+
+  .vouch { display: grid; grid-template-columns: 44px 1fr; gap: 14px; padding: 16px; border-radius: 16px; background: var(--grey-1); }
+  .vouch + .vouch { margin-top: 12px; }
+  .vouch__ic { width: 44px; height: 44px; border-radius: 12px; background: var(--orange-tint); color: var(--orange); display: grid; place-items: center; }
+  .vouch__t { font-size: 15px; font-weight: 700; color: #000; }
+  .vouch__s { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+  .vouch__kv { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  .vouch__kv .pass__v { font-size: 13.5px; }
+  .vouch__conf { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding-top: 10px; border-top: 1px dashed #D6D6D6; font-size: 12px; color: var(--text-3); }
+  .vouch__conf b { color: #000; letter-spacing: .06em; }
+  .vouch__conf button { color: var(--orange); font-weight: 600; padding: 8px 4px; margin: -8px -4px; }
+  .acts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 22px; }
+  .acts .btn { height: 48px; font-size: 14px; }
+  .wallet { background: #000; color: #fff; }
+  .wallet:hover { background: #1a1a1a; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="E-ticket and vouchers">
+  <header class="phead">
+    <a class="phead__back tap" href="trips.html" data-go="back" aria-label="Back">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3.5M10.5 4.5 3 12l7.5 7.5"/></svg>
+    </a>
+    <div class="phead__titles"><h1 class="phead__title">E-Ticket</h1></div>
+    <button class="hd-act tap" type="button" data-sheet="share" aria-label="Share ticket"><span data-icon="share" data-size="22" data-sw="2"></span></button>
+  </header>
+
+  <section class="psheet">
+    <div class="seg" id="leg" aria-label="Flight">
+      <button type="button" data-value="out" aria-selected="true">Outbound</button>
+      <button type="button" data-value="ret">Return</button>
+    </div>
+
+    <div class="pax chips" data-group id="pax" aria-label="Passenger"></div>
+
+    <article class="pass enter" id="pass" aria-label="Boarding pass">
+      <div class="pass__top">
+        <div class="pass__airline"><b id="airline">British Airways</b><span id="fdate">Wed, 12 Aug 2026</span></div>
+        <div class="pass__route">
+          <div><p class="pass__code" id="fromCode">LHR</p><p class="pass__city" id="fromCity">London Heathrow</p><p class="pass__time num" id="dep">09:00</p></div>
+          <div class="pass__mid"><div class="line"><i></i><span data-icon="plane" data-size="22"></span><i></i></div><small id="dur">1h 20m</small></div>
+          <div class="pass__right"><p class="pass__code" id="toCode">CDG</p><p class="pass__city" id="toCity">Paris Charles de Gaulle</p><p class="pass__time num" id="arr">11:20</p></div>
+        </div>
+      </div>
+      <div class="pass__cut" aria-hidden="true"><i></i></div>
+      <div class="pass__grid">
+        <div><span class="pass__k">Passenger</span><span class="pass__v" id="pName">Alex Johnson</span></div>
+        <div><span class="pass__k">Flight</span><span class="pass__v" id="fNo">BA303</span></div>
+        <div><span class="pass__k">Class</span><span class="pass__v" id="fCls">Economy</span></div>
+        <div><span class="pass__k">Gate</span><span class="pass__v" id="gate">B32</span></div>
+        <div><span class="pass__k">Boarding</span><span class="pass__v c-orange num" id="board">08:15</span></div>
+        <div><span class="pass__k">Seat</span><span class="pass__v" id="seat">14A</span></div>
+      </div>
+      <div class="pass__codes">
+        <div class="qr" id="qr" role="img" aria-label="Boarding pass QR code"></div>
+        <div>
+          <div class="barcode" id="bar" aria-hidden="true"></div>
+          <p class="pass__hint">Booking <b class="c-navy" id="refTxt">VYG-4892-PAR</b><br>Show this code at security and the gate. Saved on this phone, so it opens offline.</p>
+        </div>
+      </div>
+    </article>
+
+    <div class="acts">
+      <button class="btn wallet" type="button" id="wallet"><span data-icon="card" data-size="18"></span><span>Add to Wallet</span></button>
+      <button class="btn btn--outline-soft" type="button" id="pdf"><span data-icon="download" data-size="18"></span><span>Download PDF</span></button>
+    </div>
+
+    <div class="sec mt-32"><h2 class="sec__label">Vouchers</h2></div>
+    <div id="vouchers"></div>
+  </section>
+
+  <nav data-tabbar="trip"></nav>
+</main>
+
+<section class="sheet" id="share" aria-labelledby="shT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="shT">Share ticket</p><p class="sheet__sub">Only share boarding passes with people you trust.</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="list list--grey" data-delegate>
+    <button class="list__item" type="button" data-sharex="Link copied"><span class="list__icon ic-navy" data-icon="copy"></span><span class="list__body"><span class="list__title">Copy ticket link</span></span></button>
+    <button class="list__item" type="button" data-sharex="Opening Messages…"><span class="list__icon ic-navy" data-icon="chat"></span><span class="list__body"><span class="list__title">Send in Messages</span></span></button>
+    <button class="list__item" type="button" data-sharex="Ticket emailed to alex.johnson@email.com"><span class="list__icon ic-navy" data-icon="envelope"></span><span class="list__body"><span class="list__title">Email to me</span><span class="list__sub">alex.johnson@email.com</span></span></button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const V = window.Voyager, D = V.date;
+    const $ = (s) => document.querySelector(s);
+    const ref = V.q('ref') || V.q('trip') || 'VYG-4892-PAR';
+    const trip = V.trips.get(ref) || V.trips.get('VYG-4892-PAR') || V.trips.list()[0];
+    const d = V.dest(trip.dest) || V.dest('paris');
+    const TR = V.travel(d.id);
+    const AP = [TR.airport[0], TR.airport[1], TR.mins];
+    const outNo = trip.flight || TR.out;
+    const retNo = TR.back;
+    const hm = (mins) => `${Math.floor(mins / 60)}h ${String(mins % 60).padStart(2, '0')}m`.replace(' 00m', '');
+    const dayOff = (t, mins) => { const [h, m] = t.split(':').map(Number); return Math.floor((h * 60 + m + mins) / 1440); };
+    const addT = (t, mins) => { const [h, m] = t.split(':').map(Number); const x = h * 60 + m + mins; return `${String(Math.floor(x / 60) % 24).padStart(2, '0')}:${String(x % 60).padStart(2, '0')}`; };
+    // Paris BA303 lands 11:20 local (1h 20m flight + 1h time difference)
+    const LEGS = {
+      out: { no: outNo, date: trip.start, from: ['LHR', 'London Heathrow'], to: [AP[0], AP[1]], dep: '09:00', dur: AP[2], tz: TR.tz(trip.start), gate: 'B32', seats: ['14A', '14B', '14C', '15A', '15B', '15C', '16A', '16B', '16C'] },
+      ret: { no: retNo, date: trip.end, from: [AP[0], AP[1]], to: ['LHR', 'London Heathrow'], dep: d.id === 'paris' ? '18:25' : '14:00', dur: d.id === 'paris' ? 75 : AP[2], tz: -TR.tz(trip.end), gate: 'K41', seats: ['21C', '21D', '21E', '22C', '22D', '22E', '23C', '23D', '23E'] },
+    };
+    const u = V.user.get();
+    const pax = [u.name].concat(Array.from({ length: trip.adults + trip.children - 1 }, (_, i) => `Guest ${i + 2}`));
+    let leg = 'out', who = 0;
+
+    $('#pax').innerHTML = pax.map((p, i) => `<button class="chip ${i === 0 ? 'is-active' : ''}" type="button" role="tab" data-value="${i}">${V.esc(p)}</button>`).join('');
+    const paxG = V.refresh($('#pax'));
+    paxG.addEventListener('change', (e) => { who = +e.detail; render(); });
+    if (pax.length < 2) paxG.hidden = true;
+
+    // deterministic pseudo-random from a string
+    const rng = (seed) => { let h = 2166136261; for (const c of seed) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return () => { h ^= h << 13; h ^= h >>> 17; h ^= h << 5; return ((h >>> 0) % 1000) / 1000; }; };
+    const qr = (seed) => {
+      const n = 25, r = rng(seed); let cells = '';
+      const finder = (x, y) => `<rect x="${x}" y="${y}" width="7" height="7" fill="#14213D"/><rect x="${x + 1}" y="${y + 1}" width="5" height="5" fill="#fff"/><rect x="${x + 2}" y="${y + 2}" width="3" height="3" fill="#14213D"/>`;
+      const inF = (x, y) => (x < 8 && y < 8) || (x > n - 9 && y < 8) || (x < 8 && y > n - 9);
+      for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (!inF(x, y) && r() > 0.52) cells += `M${x} ${y}h1v1h-1z`;
+      return `<svg viewBox="0 0 ${n} ${n}" shape-rendering="crispEdges"><path d="${cells}" fill="#14213D"/>${finder(0, 0)}${finder(n - 7, 0)}${finder(0, n - 7)}</svg>`;
+    };
+    const bar = (seed) => {
+      const r = rng(seed); let x = 0, h = '';
+      while (x < 200) { const w = 1 + Math.floor(r() * 3); if (r() > 0.4) h += `<rect x="${x}" width="${w}" height="54" fill="#14213D"/>`; x += w + 1; }
+      return `<svg viewBox="0 0 200 54" preserveAspectRatio="none">${h}</svg>`;
+    };
+
+    const render = () => {
+      const L = LEGS[leg];
+      const code = L.no.slice(0, 2);
+      $('#airline').textContent = TR.airline(L.no);
+      $('#fdate').textContent = `${D.fmt(L.date, 'dow')}, ${D.fmt(L.date, 'dmy')}`;
+      $('#fromCode').textContent = L.from[0]; $('#fromCity').textContent = L.from[1];
+      $('#toCode').textContent = L.to[0]; $('#toCity').textContent = L.to[1];
+      $('#dep').textContent = L.dep; $('#arr').textContent = addT(L.dep, L.dur + L.tz) + (dayOff(L.dep, L.dur + L.tz) ? ` +${dayOff(L.dep, L.dur + L.tz)}` : '');
+      $('#dur').textContent = hm(L.dur);
+      $('#fNo').textContent = L.no;
+      $('#fCls').textContent = trip.cls === 'business' ? 'Business' : 'Economy';
+      $('#gate').textContent = L.gate;
+      $('#board').textContent = addT(L.dep, -45);
+      $('#seat').textContent = trip.cls === 'business' ? ['2A', '2C', '3A', '3C', '4A', '4C', '5A', '5C', '6A'][who] : L.seats[who];
+      $('#pName').textContent = pax[who];
+      $('#refTxt').textContent = trip.ref;
+      const seed = `${trip.ref}-${leg}-${who}`;
+      $('#qr').innerHTML = qr(seed); $('#bar').innerHTML = bar(seed);
+      $('#pass').setAttribute('aria-label', `Boarding pass ${L.no}, ${L.from[0]} to ${L.to[0]}, ${pax[who]}, seat ${$('#seat').textContent}`);
+    };
+    $('#leg').addEventListener('change', (e) => { leg = e.detail; const p = $('#pass'); p.classList.remove('enter'); void p.offsetWidth; p.classList.add('enter'); render(); });
+    render();
+
+    // vouchers
+    const checkIn = D.add(trip.start, dayOff('09:00', AP[2] + TR.tz(trip.start)));   // long-haul checks in the day it lands
+    const hotelConf = 'HTL-' + trip.ref.slice(4, 8) + (d.id === 'paris' ? '-8231' : '-5504');
+    let vh = `<article class="vouch"><span class="vouch__ic">${V.icon('building', 22)}</span><div>
+        <p class="vouch__t">${V.esc(trip.hotel || TR.hotel)}</p><p class="vouch__s">${d.id === 'paris' ? '4★ Boutique · Rue De Bretagne, Paris' : `${d.hotelStars}★ · ${V.esc(d.name)}`}</p>
+        <div class="vouch__kv"><div><span class="pass__k">Check-in</span><span class="pass__v">${D.fmt(checkIn, 'md')} · 2:00 PM</span></div><div><span class="pass__k">Check-out</span><span class="pass__v">${D.fmt(trip.end, 'md')} · 11:00 AM</span></div>
+        <div><span class="pass__k">Room</span><span class="pass__v">${V.esc(V.room(trip.room || 'classic', d.id).name)}</span></div><div><span class="pass__k">Guests</span><span class="pass__v">${trip.adults + trip.children} · ${D.nights(checkIn, trip.end)} nights</span></div></div>
+        <div class="vouch__conf"><span>Confirmation <b>${hotelConf}</b></span><button type="button" data-copy="${hotelConf}">Copy</button></div></div></article>`;
+    if (trip.addons && trip.addons.transfer) {
+      const tc = 'TRF-' + trip.ref.slice(4, 8);
+      vh += `<article class="vouch"><span class="vouch__ic">${V.icon('car', 22)}</span><div>
+        <p class="vouch__t">Private Airport Transfer</p><p class="vouch__s">${AP[0]} → ${V.esc(trip.hotel || TR.hotel)} · Both ways</p>
+        <div class="vouch__kv"><div><span class="pass__k">Pickup</span><span class="pass__v">${D.fmt(D.add(trip.start, dayOff('09:00', AP[2] + TR.tz(trip.start))), 'md')} · ${addT('09:00', AP[2] + TR.tz(trip.start) + 70).replace(/^0/, '')}</span></div><div><span class="pass__k">Meet at</span><span class="pass__v">Arrivals Gate 2</span></div></div>
+        <div class="vouch__conf"><span>Voucher <b>${tc}</b></span><button type="button" data-copy="${tc}">Copy</button></div></div></article>`;
+    }
+    $('#vouchers').innerHTML = vh;
+    $('#vouchers').addEventListener('click', async (e) => { const b = e.target.closest('[data-copy]'); if (!b) return; try { await navigator.clipboard.writeText(b.dataset.copy); } catch (x) {} V.toast(`${b.dataset.copy} copied`); });
+
+    $('#wallet').addEventListener('click', async (e) => { const b = e.currentTarget; await V.loading(b, 900); b.querySelector('span:last-child').textContent = 'Added to Wallet'; V.toast(`${LEGS[leg].no} boarding pass added to Wallet`); });
+    $('#pdf').addEventListener('click', async (e) => { await V.loading(e.currentTarget, 1200); V.toast(`E-ticket ${trip.ref}.pdf saved to Files`); });
+    document.querySelectorAll('[data-sharex]').forEach((b) => b.addEventListener('click', () => { V.sheet.close(); V.toast(b.dataset.sharex); }));
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  body { background: #0B1426; }
+  .gv { position: relative; width: 402px; min-height: 100vh; margin: 0 auto; background: #0B1426; color: #fff; display: flex; flex-direction: column; overflow: hidden; }
+  body.capture .gv { min-height: 874px; border-radius: var(--r-frame); }
+  .gv__top { display: flex; align-items: center; justify-content: space-between; padding: 50px 14px 10px; }
+  .gv__btn { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: rgba(255,255,255,.1); }
+  .gv__btn:hover { background: rgba(255,255,255,.18); }
+  .gv__count { font-size: 14px; font-weight: 600; letter-spacing: .04em; font-variant-numeric: tabular-nums; }
+  .gv__count small { display: block; text-align: center; font-size: 11px; font-weight: 500; color: #9AA3B5; letter-spacing: 0; margin-top: 2px; }
+  .track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; min-height: 540px; overscroll-behavior-x: contain; }
+  .track::-webkit-scrollbar { display: none; }
+  .track.is-zoomed { overflow-x: hidden; }
+  .slide { flex: 0 0 402px; scroll-snap-align: center; display: grid; place-items: center; padding: 0 0; position: relative; overflow: hidden; }
+  .slide__img { width: 402px; height: 540px; overflow: hidden; touch-action: manipulation; cursor: zoom-in; }
+  .slide__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 300ms var(--ease-out); transform-origin: var(--ox, 50%) var(--oy, 50%); }
+  .slide.is-zoomed .slide__img { cursor: zoom-out; }
+  .slide.is-zoomed img { transform: scale(2.2); }
+  .cap { padding: 18px 24px 0; min-height: 76px; }
+  .cap__t { font-size: 17px; font-weight: 700; }
+  .cap__s { font-size: 13px; color: #B7BECC; margin-top: 4px; line-height: 1.45; }
+  .thumbs { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 16px 24px 38px; }
+  .thumbs::-webkit-scrollbar { display: none; }
+  .thumbs button { flex-shrink: 0; width: 58px; height: 58px; border-radius: 10px; overflow: hidden; opacity: .5; box-shadow: inset 0 0 0 2px transparent; transition: opacity var(--dur), transform var(--dur); position: relative; }
+  .thumbs button img { width: 100%; height: 100%; object-fit: cover; }
+  .thumbs button[aria-current="true"] { opacity: 1; transform: translateY(-2px); }
+  .thumbs button[aria-current="true"]::after { content: ''; position: absolute; inset: 0; border-radius: 10px; box-shadow: inset 0 0 0 2px var(--orange); }
+  .hint { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); font-size: 11px; color: #fff; background: rgba(11,20,38,.65); padding: 5px 10px; border-radius: 12px; pointer-events: none; transition: opacity 400ms; }
+  .nav-arrow { position: absolute; top: 50%; width: 36px; height: 36px; margin-top: -18px; border-radius: 50%; background: rgba(11,20,38,.5); color: #fff; display: grid; place-items: center; z-index: 2; }
+  .nav-arrow--l { left: 10px; } .nav-arrow--r { right: 10px; }
+  .nav-arrow[disabled] { opacity: 0; pointer-events: none; }
+  .stage { position: relative; }
+</style>
+</head>
+<body>
+<main class="gv" aria-label="Photo gallery">
+  <div class="gv__top">
+    <a class="gv__btn tap" href="destination.html?id=paris" id="close" data-go="back" aria-label="Close gallery"><span data-icon="close" data-size="20" data-sw="2.2"></span></a>
+    <p class="gv__count" aria-live="polite"><span id="count">1 / 7</span><small id="where">Paris City Break</small></p>
+    <button class="gv__btn tap" type="button" id="share" aria-label="Share this photo"><span data-icon="share" data-size="19" data-sw="2"></span></button>
+  </div>
+  <div class="stage">
+    <div class="track" id="track" tabindex="0" aria-roledescription="carousel" aria-label="Photos — swipe or use the arrow keys"></div>
+    <button class="nav-arrow nav-arrow--l" type="button" id="prev" aria-label="Previous photo"><span data-icon="chevron-left" data-size="18" data-sw="2.4"></span></button>
+    <button class="nav-arrow nav-arrow--r" type="button" id="next" aria-label="Next photo"><span data-icon="chevron-right" data-size="18" data-sw="2.4"></span></button>
+    <span class="hint" id="hint">Double-tap to zoom</span>
+  </div>
+  <div class="cap"><p class="cap__t" id="capT"></p><p class="cap__s" id="capS"></p></div>
+  <div class="thumbs" id="thumbs" role="tablist" aria-label="Choose a photo"></div>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const V = window.Voyager; const $ = (s) => document.querySelector(s);
+  const d = V.dest(V.q('id')) || V.dest('paris'); const id = d.id;
+  const PHOTOS = id === 'paris' ? [
+    ['gal-louvre', 'The Louvre Pyramid', 'Day 2 · Skip-the-line entry through the pyramid'],
+    ['gal-montmartre', 'Montmartre Lanes', 'Day 3 · Place du Tertre painters and the climb to Sacré-Cœur'],
+    ['gal-seine-cruise', 'Evening Seine Cruise', 'Day 5 · Past Notre-Dame and the Île Saint-Louis at golden hour'],
+    ['gal-paris-cafe', 'Paris Café Culture', 'Day 6 · Lunch on the terrace at Café De Flore in Saint-Germain'],
+    ['gal-versailles', 'Palace of Versailles', 'Day 4 · The Hall of Mirrors and the royal gardens'],
+    ['hero-paris', 'Eiffel Tower From the Seine', 'Day 5 · Timed entry and the lift to the summit'],
+    ['itin-paris-sunset', 'Sunset Over the Seine', 'Day 1 · Your first evening in the City of Light'],
+  ] : [[d.hero, `${d.name}, ${d.country}`, d.blurb], [d.img, d.package.name, `${d.days} days · from ${V.fmt(d.package.pp)} per person`]].filter((p, i, a) => a.findIndex((x) => x[0] === p[0]) === i);
+  $('#where').textContent = d.package.name;
+  $('#close').href = `destination.html?id=${id}`;
+
+  const track = $('#track');
+  track.innerHTML = PHOTOS.map(([img, t], i) => `<figure class="slide" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${PHOTOS.length}: ${V.esc(t)}"><div class="slide__img ph" data-z="${i}"><img src="${V.img(img)}" alt="${V.esc(t)}" draggable="false"></div></figure>`).join('');
+  $('#thumbs').innerHTML = PHOTOS.map(([img, t], i) => `<button type="button" class="ph" role="tab" data-i="${i}" aria-label="Photo ${i + 1}: ${V.esc(t)}"><img src="${V.img(img)}" alt=""></button>`).join('');
+  const slides = [...track.children];
+  let cur = -1;
+
+  const show = (i) => {
+    if (i === cur) return; cur = i;
+    $('#count').textContent = `${i + 1} / ${PHOTOS.length}`;
+    $('#capT').textContent = PHOTOS[i][1]; $('#capS').textContent = PHOTOS[i][2];
+    document.querySelectorAll('#thumbs button').forEach((b, k) => { b.setAttribute('aria-current', String(k === i)); b.setAttribute('aria-selected', String(k === i)); });
+    const tb = $(`#thumbs [data-i="${i}"]`); tb && tb.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+    $('#prev').disabled = i === 0; $('#next').disabled = i === PHOTOS.length - 1;
+    slides.forEach((s) => s.classList.remove('is-zoomed')); track.classList.remove('is-zoomed');
+    const u = new URL(location.href); u.searchParams.set('i', i); history.replaceState(null, '', u);
+  };
+  const go = (i, smooth = true) => { i = Math.max(0, Math.min(PHOTOS.length - 1, i)); track.scrollTo({ left: i * 402, behavior: smooth ? 'smooth' : 'auto' }); show(i); };
+
+  let t; track.addEventListener('scroll', () => { clearTimeout(t); t = setTimeout(() => show(Math.round(track.scrollLeft / 402)), 60); });
+  $('#thumbs').addEventListener('click', (e) => { const b = e.target.closest('[data-i]'); if (b) go(+b.dataset.i); });
+  $('#prev').addEventListener('click', () => go(cur - 1));
+  $('#next').addEventListener('click', () => go(cur + 1));
+  document.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') go(cur + 1); if (e.key === 'ArrowLeft') go(cur - 1); if (e.key === 'Escape') $('#close').click(); });
+
+  // double-tap / double-click to zoom around the tap point
+  let last = 0;
+  const zoom = (e) => {
+    const box = e.target.closest('.slide__img'); if (!box) return;
+    const s = box.parentElement; const r = box.getBoundingClientRect();
+    box.style.setProperty('--ox', ((e.clientX - r.left) / r.width * 100) + '%'); box.style.setProperty('--oy', ((e.clientY - r.top) / r.height * 100) + '%');
+    const on = !s.classList.contains('is-zoomed'); s.classList.toggle('is-zoomed', on); track.classList.toggle('is-zoomed', on);
+    $('#hint').style.opacity = 0; V.haptic();
+  };
+  track.addEventListener('dblclick', zoom);
+  track.addEventListener('pointerup', (e) => { if (e.pointerType !== 'touch') return; const n = Date.now(); if (n - last < 300) { zoom(e); last = 0; } else last = n; });
+  setTimeout(() => ($('#hint').style.opacity = 0), 2600);
+
+  $('#share').addEventListener('click', async () => {
+    if (navigator.share && !document.body.classList.contains('capture')) { try { await navigator.share({ title: PHOTOS[cur][1], url: location.href }); return; } catch (e) {} }
+    try { await navigator.clipboard.writeText(location.href); } catch (e) {}
+    V.toast('Photo link copied');
+  });
+
+  const start = Math.max(0, Math.min(PHOTOS.length - 1, +V.q('i') || 0));
+  requestAnimationFrame(() => go(start, false));
+})();
+</script>
+</body>
+</html>

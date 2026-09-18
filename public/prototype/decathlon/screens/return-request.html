@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Return or exchange</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  .steps { --n: 4; margin: 20px 0 10px; }
+  .steps li.done { cursor: pointer; }
+  .step-caption { text-align: center; margin: 0 0 4px; }
+  .rr-step { animation: rise 320ms var(--ease-out) both; }
+  .rr-step[hidden] { display: none !important; }
+  .rr-h { font-size: 20px; font-weight: 600; color: #000; margin: 22px 0 4px; }
+  .rr-p { font-size: 13px; color: var(--muted-2); margin-bottom: 14px; line-height: 1.5; }
+  .rr-sub { font-size: 16px; font-weight: 600; color: #000; margin: 24px 0 10px; }
+  .segmented { margin-top: 16px; }
+  .segmented button { text-align: center; }
+
+  .pick { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: var(--r); box-shadow: inset 0 0 0 1px var(--border); cursor: pointer; transition: box-shadow var(--dur), background-color var(--dur); position: relative; }
+  .pick + .pick { margin-top: 10px; }
+  .pick input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .pick:has(input:checked) { box-shadow: inset 0 0 0 2px var(--navy); background: var(--surface); }
+  .pick:has(input:focus-visible) { outline: 2px solid var(--brand); outline-offset: 2px; }
+  .pick .thumb { width: 58px; height: 58px; border-radius: 8px; }
+  .pick__name { font-size: 14px; color: #111; line-height: 20px; }
+  .pick__meta { font-size: 12px; color: var(--muted-2); }
+  .pick__price { font-size: 14px; font-weight: 700; margin-top: 2px; }
+  .rr-err { display: none; font-size: 12px; color: var(--danger); margin-top: 10px; }
+  .rr-err.show { display: block; }
+
+  .radio-list .check-row { font-size: 15px; }
+  .photos { display: flex; gap: 10px; }
+  .photo-tile { position: relative; width: 96px; height: 96px; border-radius: var(--r-tile); background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--steel); display: grid; place-items: center; color: var(--steel); overflow: hidden; cursor: pointer; }
+  .photo-tile.is-empty { background-image: repeating-linear-gradient(135deg, transparent 0 8px, rgba(97,165,194,.08) 8px 16px); box-shadow: inset 0 0 0 1.5px var(--border); }
+  .photo-tile__lbl { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; }
+  .photo-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .photo-tile input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .photo-tile__x { position: absolute; top: 5px; right: 5px; width: 24px; height: 24px; border-radius: 50%; background: rgba(1,31,48,.72); color: #fff; display: grid; place-items: center; z-index: 2; }
+  .photo-tile__x::after { content: ''; position: absolute; inset: -8px; }
+  .photo-tile__x svg { width: 12px; height: 12px; }
+
+  .slot-row { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -24px; padding: 2px 24px; }
+  .slot-row::-webkit-scrollbar { display: none; }
+  .slot-row .chip { height: 54px; flex-direction: column; gap: 2px; padding: 0 14px; font-size: 13px; line-height: 1.1; min-width: 64px; }
+  .slot-row .chip b { font-size: 16px; font-weight: 600; }
+  .slot-row--time .chip { height: 36px; flex-direction: row; }
+  .ex-item { padding: 12px; border-radius: var(--r); box-shadow: inset 0 0 0 1px var(--border); }
+  .ex-item + .ex-item { margin-top: 10px; }
+  .ex-item .sizes { margin-top: 10px; gap: 9px; }
+
+  .rev-thumbs { display: flex; gap: 6px; }
+  .rev .kvs > div { font-size: 14px; }
+  .rev .kvs .v { color: #111; font-weight: 500; max-width: 60%; }
+  .agree { margin-top: 16px; font-size: 13px; color: #111; align-items: flex-start; gap: 10px; }
+  .agree .check-box { margin-top: 1px; }
+</style>
+</head>
+<body>
+<main class="page page--no-nav" aria-label="Return or exchange">
+  <header class="appbar">
+    <a class="back tap" href="order-detail.html" id="back" aria-label="Back"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <h1 class="appbar__title"><span id="ttl">Return items</span><span class="appbar__sub" id="sub">#DEC20260418</span></h1>
+  </header>
+  <div class="page-divider"></div>
+
+  <div id="flow">
+    <ol class="steps" id="steps" aria-label="Progress">
+      <li class="current" data-i="0">Items</li><li data-i="1">Reason</li><li data-i="2" id="step3Lbl">Refund</li><li data-i="3">Review</li>
+    </ol>
+    <p class="step-caption" id="caption" aria-live="polite">Step 1 of 4</p>
+
+    <!-- 1 · Items -->
+    <section class="rr-step" data-step="0" aria-labelledby="h0">
+      <div class="segmented" id="type" aria-label="Return or exchange"><button type="button" data-value="return" aria-selected="true">Return for refund</button><button type="button" data-value="exchange">Exchange size</button></div>
+      <h2 class="rr-h" id="h0">Which items?</h2>
+      <p class="rr-p" id="p0">Select everything you want to send back. We pick it up for free.</p>
+      <div id="items"></div>
+      <p class="rr-err" id="err0" role="alert">Select at least one item to continue</p>
+    </section>
+
+    <!-- 2 · Reason -->
+    <section class="rr-step" data-step="1" aria-labelledby="h1" hidden>
+      <h2 class="rr-h" id="h1">What went wrong?</h2>
+      <p class="rr-p">Your answer helps us fix sizing and quality issues faster.</p>
+      <div class="radio-list" id="reasons" role="radiogroup" aria-labelledby="h1"></div>
+      <p class="rr-err" id="err1" role="alert">Pick a reason to continue</p>
+      <div class="fg" style="margin-top:14px">
+        <label class="label" for="comment">Anything else? <span class="muted fw-5" style="font-weight:400">(optional)</span></label>
+        <textarea class="field" id="comment" maxlength="300" placeholder="e.g. The UK 9 fits like a UK 8, toes touch the front"></textarea>
+      </div>
+      <p class="rr-sub" id="photoH">Add photos <span class="muted" style="font-weight:400;font-size:13px" id="photoReq">(optional)</span></p>
+      <div class="photos" id="photos"></div>
+      <p class="helper" id="photoHelp">Up to 3 photos. Show the label and any damage clearly.</p>
+      <p class="rr-err" id="errPhoto" role="alert">Add at least one photo of the damage or the wrong item</p>
+    </section>
+
+    <!-- 3 · Refund / exchange + pickup -->
+    <section class="rr-step" data-step="2" aria-labelledby="h2" hidden>
+      <div id="refundWrap">
+        <h2 class="rr-h" id="h2">Where should we refund?</h2>
+        <p class="rr-p">Refunds start as soon as the courier picks up your items.</p>
+        <div class="options" data-options id="method"></div>
+      </div>
+      <div id="exWrap" hidden>
+        <h2 class="rr-h">Pick your new size</h2>
+        <p class="rr-p">We deliver the replacement when we collect the original. No extra charge.</p>
+        <div id="exItems"></div>
+        <p class="rr-err" id="errEx" role="alert">Choose a new size for each item</p>
+      </div>
+      <p class="rr-sub">Pickup date</p>
+      <div class="slot-row" id="dates" data-group aria-label="Pickup date"></div>
+      <p class="rr-sub">Time slot</p>
+      <div class="slot-row slot-row--time" id="slots" data-group aria-label="Pickup time">
+        <button class="chip tap is-active" role="tab" type="button" data-value="9 AM – 12 PM">9 AM – 12 PM</button>
+        <button class="chip tap" role="tab" type="button" data-value="12 – 4 PM">12 – 4 PM</button>
+        <button class="chip tap" role="tab" type="button" data-value="4 – 8 PM">4 – 8 PM</button>
+      </div>
+      <p class="rr-sub">Pickup from</p>
+      <div class="panel panel--tight row-flex" id="addr"></div>
+    </section>
+
+    <!-- 4 · Review -->
+    <section class="rr-step rev" data-step="3" aria-labelledby="h3" hidden>
+      <h2 class="rr-h" id="h3">Review your request</h2>
+      <p class="rr-p">Check the details before we schedule the pickup.</p>
+      <div class="panel" id="review"></div>
+      <label class="check-row agree"><input type="checkbox" id="agree"><span class="check-box"></span><span>Items are unused, with original tags and packaging. I understand the refund is issued after a quality check.</span></label>
+      <p class="rr-err" id="err3" role="alert">Please confirm the items are unused to submit</p>
+    </section>
+  </div>
+
+  <div class="cta-bar" id="cta">
+    <div class="cta-bar__sum"><span id="sumK">Refund amount</span><b class="num" id="sumV">₹0</b></div>
+    <button class="btn btn--primary btn--lg tap" type="button" id="next"><span id="nextLbl">Continue</span></button>
+  </div>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const until = (x) => D.addDays(30, new Date((x.deliveredOn || x.date) + 'T12:00:00'));
+    const o = D.orders.get(D.q('id')) || D.orders.list().find((x) => x.status === 'delivered' && until(x) >= new Date()) || D.orders.list().find((x) => x.status === 'delivered');
+    const flow = $('#flow');
+    const blocked = (title, msg, href, label) => { flow.innerHTML = `<div class="empty-state"><div class="empty-state__icon">${D.icon('return', 40)}</div><h3>${title}</h3><p>${msg}</p><a class="btn btn--primary btn--md tap" href="${href}">${label}</a></div>`; $('#cta').hidden = true; };
+    if (!o) { blocked('Nothing to return', 'Only delivered orders can be returned or exchanged.', 'orders.html', 'See my orders'); return; }
+    $('#sub').textContent = `#${o.id}`; $('#back').href = `order-detail.html?id=${o.id}`;
+    if (o.status === 'return-requested') { blocked('Return already requested', `Pickup for #${o.id} is scheduled. You can follow it from the order page.`, `return-success.html?id=${o.id}`, 'View return'); return; }
+    if (o.status === 'delivered' && until(o) < new Date()) { blocked('Return window closed', `#${o.id} was delivered on ${D.fmtDate(o.deliveredOn || o.date)}, and returns close 30 days after delivery. For a fault, the 2-year warranty still applies.`, `order-detail.html?id=${o.id}`, 'Back to order'); return; }
+    if (o.status !== 'delivered') { blocked('Not returnable yet', `#${o.id} is ${D.orders.status(o.status).toLowerCase()}. Returns open once it is delivered.`, `order-detail.html?id=${o.id}`, 'Back to order'); return; }
+
+    const items = D.orders.items(o);
+    const REASONS = ['Size too small', 'Size too large', 'Damaged or defective', 'Received the wrong item', 'Not as described or pictured', 'Changed my mind'];
+    const PHOTO_REQ = ['Damaged or defective', 'Received the wrong item'];
+    const st = { step: 0, type: 'return', sel: new Set(items.length === 1 ? [items[0].id] : []), reason: null, photos: [null, null, null], method: 'original', ex: {}, date: null, slot: '9 AM – 12 PM' };
+
+    // ---- Step 1: type + items ----
+    $('#items').innerHTML = items.map((it) => `<label class="pick"><input type="checkbox" value="${it.id}"${st.sel.has(it.id) ? ' checked' : ''}><span class="check-box" aria-hidden="true"></span>
+      <span class="thumb"><img src="${D.img(it.product.img)}" alt=""></span>
+      <span class="grow"><span class="pick__name" style="display:block">${D.esc(it.product.name)}</span><span class="pick__meta" style="display:block">${[it.size && 'Size ' + it.size, it.colour, 'Qty ' + it.qty].filter(Boolean).join(' · ')}</span><span class="pick__price num" style="display:block">${D.fmt(it.price * it.qty)}</span></span></label>`).join('');
+    $('#items').addEventListener('change', (e) => { const c = e.target; c.checked ? st.sel.add(c.value) : st.sel.delete(c.value); $('#err0').classList.remove('show'); sum(); });
+    $('#type').addEventListener('change', (e) => {
+      st.type = e.detail; const ex = st.type === 'exchange';
+      $('#ttl').textContent = ex ? 'Exchange items' : 'Return items';
+      $('#p0').textContent = ex ? 'Select the items you want in a different size. Pickup and redelivery are free.' : 'Select everything you want to send back. We pick it up for free.';
+      $('#step3Lbl').textContent = ex ? 'New size' : 'Refund';
+      sum();
+    });
+
+    // ---- Step 2: reason + comment + photos ----
+    $('#reasons').innerHTML = REASONS.map((r, i) => `<label class="check-row check-row--dark"><input type="radio" name="reason" value="${r}"><span class="checkc checkc--soft"></span>${r}</label>`).join('');
+    $('#reasons').addEventListener('change', (e) => { st.reason = e.target.value; $('#err1').classList.remove('show'); const req = PHOTO_REQ.includes(st.reason); $('#photoReq').textContent = req ? '(required)' : '(optional)'; $('#photoReq').style.color = req ? 'var(--danger)' : ''; $('#errPhoto').classList.remove('show'); });
+    const renderPhotos = () => {
+      $('#photos').innerHTML = st.photos.map((p, i) => p
+        ? `<div class="photo-tile"><img src="${p}" alt="Photo ${i + 1} added"><button class="photo-tile__x tap" type="button" data-rm="${i}" aria-label="Remove photo ${i + 1}">${D.icon('close', 12, { sw: 2.4 })}</button></div>`
+        : `<label class="photo-tile is-empty tap"><input type="file" accept="image/*" data-i="${i}" aria-label="Add photo ${i + 1}"><span class="photo-tile__lbl">${D.icon(i ? 'plus' : 'camera', 22)}${i ? 'Add' : 'Add photo'}</span></label>`).join('');
+    };
+    renderPhotos();
+    $('#photos').addEventListener('change', (e) => {
+      const f = e.target.files && e.target.files[0]; if (!f) return;
+      if (!/^image\//.test(f.type)) { D.toast('Please choose an image file'); return; }
+      if (f.size > 8 * 1024 * 1024) { D.toast('That photo is over 8 MB. Try a smaller one.'); return; }
+      st.photos[+e.target.dataset.i] = URL.createObjectURL(f); renderPhotos(); $('#errPhoto').classList.remove('show'); D.toast('Photo added', { icon: 'check' });
+    });
+    $('#photos').addEventListener('click', (e) => { const b = e.target.closest('[data-rm]'); if (!b) return; e.preventDefault(); st.photos[+b.dataset.rm] = null; renderPhotos(); D.toast('Photo removed'); });
+
+    // ---- Step 3: refund method / exchange sizes + pickup ----
+    const origLabel = o.payment === 'cod' ? 'Bank account via UPI' : `Original payment · ${D.payment.label(o.payment)}`;
+    const origSub = o.payment === 'cod' ? `${D.payment.upi()[0] || 'Your UPI ID'} · 3–5 working days` : '3–5 working days after pickup';
+    $('#method').innerHTML = `<button class="option tap" type="button" data-value="original" aria-checked="true"><span class="option__radio"></span><span class="option__body"><span class="option__title">${origLabel}</span><span class="option__sub">${D.esc(origSub)}</span></span>${D.icon(o.payment === 'cod' || o.payment === 'upi' ? 'upi' : 'card', 20)}</button>
+      <button class="option tap" type="button" data-value="wallet"><span class="option__radio"></span><span class="option__body"><span class="option__title">Decathlon wallet</span><span class="option__sub">Instant after pickup · use on your next order</span></span><span class="pill pill--club pill--sm">Fastest</span></button>`;
+    $('#method').addEventListener('select', (e) => { st.method = e.detail; });
+    const days = [1, 2, 3, 4, 5].map((n) => D.addDays(n)); st.date = D.iso(days[0]);
+    $('#dates').innerHTML = days.map((d, i) => `<button class="chip tap${i ? '' : ' is-active'}" role="tab" type="button" data-value="${D.iso(d)}" aria-label="${D.fmtDay(d)}"><span>${D.fmtDay(d).split(',')[0]}</span><b>${d.getDate()}</b></button>`).join('');
+    $('#dates').addEventListener('change', (e) => { st.date = e.detail; });
+    $('#slots').addEventListener('change', (e) => { st.slot = e.detail; });
+    const a = D.addresses.get(o.addressId) || D.addresses.selected();
+    $('#addr').innerHTML = `<span class="icon-tile">${D.icon('pin-fill', 22)}</span><span class="grow" style="font-size:13px;line-height:1.45"><b style="font-weight:600">${D.esc(a.label)}</b> · ${D.esc(a.text)}</span><a class="text-btn text-btn--brand tap" href="addresses.html">Change</a>`;
+    const renderEx = () => {
+      $('#exItems').innerHTML = items.filter((it) => st.sel.has(it.id)).map((it) => {
+        const sizes = it.product.sizes.filter((s) => s !== it.size);
+        return `<div class="ex-item"><div class="row-flex"><span class="thumb"><img src="${D.img(it.product.img)}" alt=""></span><div class="grow"><p class="pick__name">${D.esc(it.product.name)}</p><p class="pick__meta">${it.size ? 'You have ' + it.size : 'Same item, new piece'}</p></div></div>
+          ${sizes.length ? `<div class="sizes" data-radio data-item="${it.id}" aria-label="New size for ${D.esc(it.product.name)}">${sizes.map((s) => `<button type="button" class="size${s.length > 2 ? ' size--wide' : ''}" role="radio" aria-checked="${st.ex[it.id] === s}" data-value="${s}">${s}</button>`).join('')}</div>` : ''}</div>`;
+      }).join('');
+      D.hydrate($('#exItems'));
+    };
+    $('#exItems').addEventListener('change', (e) => { const g = e.target.closest && e.target.closest('[data-item]'); if (g && e.detail) { st.ex[g.dataset.item] = e.detail; $('#errEx').classList.remove('show'); } }); // [data-radio] change bubbles up from each size group
+
+    // ---- Step 4: review ----
+    const selItems = () => items.filter((it) => st.sel.has(it.id));
+    const amount = () => selItems().reduce((s, it) => s + it.price * it.qty, 0);
+    const renderReview = () => {
+      const ex = st.type === 'exchange'; const d = new Date(st.date + 'T12:00:00');
+      $('#review').innerHTML = `<div class="row-flex" style="gap:10px"><span class="rev-thumbs">${selItems().map((it) => `<span class="thumb"><img src="${D.img(it.product.img)}" alt=""></span>`).join('')}</span><span class="grow" style="font-size:13px;color:var(--muted-2)">${selItems().map((it) => D.esc(it.product.name) + (ex && st.ex[it.id] ? ` → ${st.ex[it.id]}` : '')).join('<br>')}</span></div>
+        <div class="kvs" style="margin-top:8px">
+          <div><span class="k">Type</span><span class="v">${ex ? 'Exchange' : 'Return for refund'}</span></div>
+          <div><span class="k">Reason</span><span class="v">${D.esc(st.reason)}</span></div>
+          ${st.photos.filter(Boolean).length ? `<div><span class="k">Photos</span><span class="v">${st.photos.filter(Boolean).length} added</span></div>` : ''}
+          <div><span class="k">Pickup</span><span class="v">${D.fmtDay(d)}, ${st.slot}</span></div>
+          ${ex ? '' : `<div><span class="k">Refund to</span><span class="v">${st.method === 'wallet' ? 'Decathlon wallet' : D.esc(origLabel.replace('Original payment · ', ''))}</span></div>`}
+          <div class="sep"></div>
+          <div class="total"><span class="k">${ex ? 'Extra to pay' : 'Refund amount'}</span><span class="v" style="color:var(--navy)">${ex ? '₹0' : D.fmt(amount())}</span></div>
+        </div>`;
+    };
+
+    // ---- Stepper + CTA ----
+    const sum = () => {
+      const ex = st.type === 'exchange'; const n = selItems().reduce((s, it) => s + it.qty, 0);
+      $('#sumK').textContent = ex ? `Exchange · ${n} ${n === 1 ? 'item' : 'items'}` : `Refund · ${n} ${n === 1 ? 'item' : 'items'}`;
+      $('#sumV').textContent = ex ? 'Free' : D.fmt(amount());
+    };
+    const show = (i) => {
+      st.step = i;
+      $$('.rr-step').forEach((s) => (s.hidden = +s.dataset.step !== i));
+      $$('#steps li').forEach((li, k) => { li.className = k < i ? 'done' : k === i ? 'current' : ''; li.setAttribute('aria-current', k === i ? 'step' : 'false'); });
+      $('#caption').textContent = `Step ${i + 1} of 4 · ${['Choose items', 'Tell us why', st.type === 'exchange' ? 'New size and pickup' : 'Refund and pickup', 'Review and submit'][i]}`;
+      if (i === 2) { const ex = st.type === 'exchange'; $('#refundWrap').hidden = ex; $('#exWrap').hidden = !ex; if (ex) renderEx(); }
+      if (i === 3) renderReview();
+      $('#nextLbl').textContent = i === 3 ? (st.type === 'exchange' ? 'Request exchange' : 'Submit return') : 'Continue';
+      window.scrollTo({ top: 0, behavior: document.body.classList.contains('capture') ? 'auto' : 'smooth' });
+    };
+    const fail = (el) => { el.classList.add('show'); D.haptic(30); el.scrollIntoView({ block: 'center', behavior: 'smooth' }); };
+    const valid = () => {
+      if (st.step === 0 && !st.sel.size) { fail($('#err0')); return false; }
+      if (st.step === 0 && st.type === 'exchange' && !selItems().some((it) => it.product.sizes.length > 1)) { D.toast('These items come in one size. Choose a return instead.'); return false; }
+      if (st.step === 1 && !st.reason) { fail($('#err1')); return false; }
+      if (st.step === 1 && PHOTO_REQ.includes(st.reason) && !st.photos.some(Boolean)) { fail($('#errPhoto')); return false; }
+      if (st.step === 2 && st.type === 'exchange' && selItems().some((it) => it.product.sizes.filter((s) => s !== it.size).length && !st.ex[it.id])) { fail($('#errEx')); return false; }
+      if (st.step === 3 && !$('#agree').checked) { fail($('#err3')); return false; }
+      return true;
+    };
+    $('#agree').addEventListener('change', () => $('#err3').classList.remove('show'));
+    $('#next').addEventListener('click', async (e) => {
+      if (!valid()) return;
+      if (st.step < 3) { show(st.step + 1); return; }
+      await D.loading(e.currentTarget, 1300);
+      const ex = st.type === 'exchange';
+      D.orders.requestReturn(o.id, { rid: 'RET' + o.id.slice(3), type: st.type, items: [...st.sel], sizes: ex ? st.ex : null, reason: st.reason, comment: $('#comment').value.trim(), photos: st.photos.filter(Boolean).length, method: ex ? null : st.method, pickup: st.date, slot: st.slot, amount: ex ? 0 : amount() });
+      location.href = `return-success.html?id=${o.id}`;
+    });
+    $('#steps').addEventListener('click', (e) => { const li = e.target.closest('li.done'); if (li) show(+li.dataset.i); });
+    // Back walks the steps first, then leaves the flow
+    $('#back').addEventListener('click', (e) => { if (st.step > 0) { e.preventDefault(); show(st.step - 1); } });
+
+    ['#method', '#dates'].forEach((sel) => delete $(sel).dataset.inited);
+    D.hydrate(document);
+    sum();
+    const s0 = +D.q('step'); if (s0 > 0 && s0 < 4) { // design review deep link: ?step=n fills sensible defaults
+      if (!st.sel.size) st.sel.add(items[0].id); $$('#items input').forEach((c) => (c.checked = st.sel.has(c.value)));
+      if (s0 > 1) { st.reason = REASONS[0]; $('#reasons input').checked = true; }
+      sum(); show(s0);
+    }
+  })();
+</script>
+</body>
+</html>

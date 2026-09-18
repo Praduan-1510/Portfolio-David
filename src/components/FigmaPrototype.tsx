@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { cn } from "@/lib/utils/cn";
-import { PhoneFrame } from "@/components/primitives";
+import { Button, PhoneFrame } from "@/components/primitives";
 import blurMap from "@/lib/content/blur-map.json";
 
 const blurFor = (src: string): string | undefined =>
@@ -200,22 +200,14 @@ export function FigmaPrototype({
         {live ? (
           /* Restart: Figma's own arrows go away with footer=0, so the one
              control a prototype genuinely needs is rebuilt in our vocabulary. */
-          <button
-            type="button"
-            onClick={restart}
-            className="inline-flex items-center gap-space-2 rounded-full border border-line px-space-4 py-space-2 font-mono text-caption uppercase tracking-[0.14em] text-muted transition-colors duration-fast ease-out-quad hover:border-neon hover:text-neon"
-          >
+          <Button type="button" onClick={restart} variant="secondary">
             <span aria-hidden="true">↺</span> Restart the prototype
-          </button>
+          </Button>
         ) : (
-          <button
-            type="button"
-            onClick={launch}
-            className="lp-launch inline-flex items-center gap-space-2 rounded-full border border-accent bg-accent/10 px-space-5 py-space-3 font-mono text-caption uppercase tracking-[0.14em] text-fg transition-colors duration-fast ease-out-quad hover:border-neon hover:text-neon"
-          >
-            <span aria-hidden="true" className="h-[6px] w-[6px] rounded-full bg-accent" />
+          <Button type="button" onClick={launch} variant="primary" arrow="right" className="lp-launch">
+            <span aria-hidden="true" className="btn-ping" />
             Launch the prototype
-          </button>
+          </Button>
         )}
       </div>
 

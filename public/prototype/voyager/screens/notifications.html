@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Notifications</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  body.capture .page { min-height: 932px; }
+  .psheet { margin-top: 19px; padding: 25px 17px 24px; }
+  .nt-head { display: flex; align-items: center; justify-content: space-between; margin: 0 0 0 11px; height: 26px; }
+  .nt-title { font-size: 17px; line-height: 1; font-weight: 700; color: #1B2236; letter-spacing: -.1px; }
+  .nt-actions { display: flex; align-items: center; gap: 2px; margin-right: -2px; }
+  .nt-gear { width: 40px; height: 40px; display: grid; place-items: center; color: #9A9A9A; border-radius: 10px; }
+  .nt-mark { font-size: 13px; font-weight: 500; color: var(--orange); height: 44px; padding: 0 2px 0 8px; }
+  .nt-mark[disabled] { color: #C9C9C9; cursor: default; }
+  .nt-group { font-size: 13.5px; line-height: 1; color: #555; text-transform: uppercase; margin: 22px 0 12px 11px; letter-spacing: .01em; }
+  .nt-group:first-child { margin-top: 28px; }
+  .nt-list .nt-group + .nw { margin-top: 0; }
+  .nw { position: relative; border-radius: 16px; overflow: hidden; }
+  .nw.dragging, .nw.open { background: var(--danger); }
+  .nw:not(.dragging):not(.open) .nw__del { visibility: hidden; }
+  .nw + .nw { margin-top: 13px; }
+  .nw__del { position: absolute; right: 0; top: 0; bottom: 0; width: 92px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #fff; font-size: 12px; font-weight: 600; }
+  .nw .notif { transition: transform 260ms var(--ease-out), background var(--dur); touch-action: pan-y; user-select: none; -webkit-user-select: none; padding: 21px 22px 20px 23px; column-gap: 10px; }
+  .nw.dragging .notif { transition: none; }
+  .notif:active { background: #EFEFEF; }
+  .notif__title { font-size: 13px; line-height: 16px; margin-top: 1px; font-weight: 600; color: #333; padding-right: 10px; }
+  .notif__body { max-width: 222px; font-size: 10px; line-height: 12.3px; color: #111; margin-top: 16px; }
+  .notif__time { font-size: 10px; line-height: 12px; color: #666; margin-top: 8px; }
+  .notif__icon { margin-top: 1px; }
+  .notif__icon svg { width: 18px; height: 18px; }
+  .notif.is-unread::after { top: 20px; right: 18px; }
+  .notif.is-unread .notif__title { color: #111; }
+  .nw.is-leaving { animation: leave 280ms var(--ease-out) forwards; }
+  @keyframes leave { to { opacity: 0; transform: translateX(-30px); } }
+  .nt-hint { font-size: 11.5px; color: var(--text-5); text-align: center; margin: 22px 0 6px; }
+</style>
+</head>
+<body>
+<main class="page page--tabs" aria-label="Notifications">
+  <section class="psheet psheet--round">
+    <div class="nt-head">
+      <h1 class="nt-title">Notifications</h1>
+      <div class="nt-actions">
+        <a class="nt-gear tap" href="settings.html#notifications" aria-label="Notification settings"><span data-icon="gear" data-size="20"></span></a>
+        <button class="nt-mark tap" type="button" id="markAll">Mark All Read</button>
+      </div>
+    </div>
+    <div class="nt-list" id="list" aria-live="polite" data-delegate></div>
+    <p class="nt-hint" id="hint">Swipe left or press and hold a notification for more options</p>
+  </section>
+  <nav data-tabbar="home"></nav>
+</main>
+
+<!-- Long-press actions -->
+<section class="sheet" id="actSheet" aria-labelledby="acT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="acT">Flight Confirmed</p><p class="sheet__sub" id="acSub">20 Minutes Ago</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="list list--grey" style="padding:4px 16px">
+    <button class="list__item" type="button" id="acOpen"><span class="list__icon" data-icon="arrow-up-right" data-size="22"></span><span class="list__body"><span class="list__title">Open</span></span></button>
+    <button class="list__item" type="button" id="acRead"><span class="list__icon" data-icon="check" data-size="22"></span><span class="list__body"><span class="list__title" id="acReadT">Mark as read</span></span></button>
+    <button class="list__item" type="button" id="acMute"><span class="list__icon" data-icon="bell" data-size="22"></span><span class="list__body"><span class="list__title" id="acMuteT">Turn off alerts like this</span><span class="list__sub">You can turn them back on in Settings</span></span></button>
+    <button class="list__item list__item--danger" type="button" id="acDel"><span class="list__icon" data-icon="trash" data-size="22"></span><span class="list__body"><span class="list__title">Delete</span></span></button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const $ = (s) => document.querySelector(s);
+  // Deep-link targets (fall back to the seed href)
+  const LINK = { 'Flight Confirmed': 'e-ticket.html?ref=VYG-4892-PAR', 'Hotel Ready': 'hotel.html?id=paris', 'Transport Update': 'itinerary.html?trip=paris-aug', 'Deal Alert!': 'destination.html?id=bali', 'Leave A Review': 'write-review.html?id=rome', 'Last-Minute Access': 'gallery.html?id=paris' };
+  const GROUPS = [['today', 'Today'], ['yesterday', 'Yesterday'], ['earlier', 'Earlier']];
+  const hrefOf = (n) => LINK[n.title] || n.href || 'dashboard.html';
+  const muted = () => V.store.get('notifMuted', []);
+
+  const render = () => {
+    const l = V.notifications.list();
+    $('#markAll').disabled = !l.some((n) => n.unread);
+    $('#hint').hidden = !l.length || document.body.classList.contains('capture');
+    if (!l.length) {
+      $('#list').innerHTML = `<div class="empty" style="padding-top:90px"><div class="empty__icon">${V.icon('bell', 32)}</div><p class="empty__title">You’re all caught up</p><p class="empty__msg">Flight changes, hotel updates and deals for trips you’ve saved will show up here.</p><a class="btn btn--primary btn--inline" href="dashboard.html"><span>Explore Destinations</span></a></div>`;
+      return;
+    }
+    $('#list').innerHTML = GROUPS.map(([g, label]) => {
+      const items = l.filter((n) => (n.group || 'earlier') === g); if (!items.length) return '';
+      return `<h2 class="nt-group">${label}</h2>` + items.map((n) => `<div class="nw" data-id="${n.id}">
+        <button class="nw__del" type="button" data-del="${n.id}" tabindex="-1" aria-hidden="true">${V.icon('trash', 20)}Delete</button>
+        <button class="notif${n.unread ? ' is-unread' : ''}" type="button" data-open="${n.id}" aria-label="${V.esc(n.title)}. ${V.esc(n.body)} ${V.esc(n.time)}${n.unread ? '. Unread' : ''}">
+          <span class="notif__icon">${V.icon('bell-fill', 20)}</span>
+          <span><span class="notif__title" style="display:block">${V.esc(n.title)}</span><span class="notif__body" style="display:block">${V.esc(n.body)}</span><span class="notif__time" style="display:block">${V.esc(n.time)}</span></span>
+        </button></div>`).join('');
+    }).join('');
+    wireSwipe();
+  };
+
+  // ---- open (mark read → deep link)
+  const open = (id) => { const n = V.notifications.list().find((x) => x.id === id); if (!n) return; V.notifications.markRead(id); location.href = hrefOf(n); };
+
+  // ---- delete with undo
+  const del = (id) => {
+    const before = V.notifications.list(); const n = before.find((x) => x.id === id); if (!n) return;
+    const w = document.querySelector(`.nw[data-id="${id}"]`);
+    const done = () => { V.notifications.remove(id); render(); V.toast(`“${n.title}” deleted`, { action: 'Undo', onAction: () => { V.store.set('notifs', before); render(); } }); };
+    if (w) { w.classList.add('is-leaving'); setTimeout(done, 240); } else done();
+  };
+
+  // ---- swipe + long-press
+  let suppress = false;
+  const wireSwipe = () => {
+    document.querySelectorAll('.nw').forEach((w) => {
+      const card = w.querySelector('.notif'); let x0 = null, y0 = 0, dx = 0, base = 0, horiz = false, lp = null;
+      const set = (x) => { card.style.transform = x ? `translateX(${x}px)` : ''; };
+      card.addEventListener('pointerdown', (e) => {
+        x0 = e.clientX; y0 = e.clientY; dx = 0; horiz = false; base = w.classList.contains('open') ? -92 : 0;
+        lp = setTimeout(() => { lp = null; if (!horiz) { suppress = true; V.haptic(); openActions(w.dataset.id); x0 = null; } }, 550);
+      });
+      card.addEventListener('pointermove', (e) => {
+        if (x0 == null) return; const mx = e.clientX - x0, my = e.clientY - y0;
+        if (!horiz && Math.abs(mx) > 8 && Math.abs(mx) > Math.abs(my)) { horiz = true; w.classList.add('dragging'); try { card.setPointerCapture(e.pointerId); } catch (err) {} }
+        if (Math.abs(mx) > 8 || Math.abs(my) > 8) { clearTimeout(lp); lp = null; }
+        if (horiz) { dx = mx; set(Math.max(-120, Math.min(0, base + dx))); }
+      });
+      const end = () => {
+        clearTimeout(lp); lp = null; if (x0 == null) return; x0 = null; w.classList.remove('dragging');
+        if (horiz) { suppress = true; const pos = base + dx; if (pos < -150) { del(w.dataset.id); return; } const openIt = pos < -46; w.classList.toggle('open', openIt); set(openIt ? -92 : 0); w.querySelector('.nw__del').tabIndex = openIt ? 0 : -1; }
+      };
+      card.addEventListener('pointerup', end); card.addEventListener('pointercancel', end);
+      card.addEventListener('contextmenu', (e) => e.preventDefault());
+    });
+  };
+  document.addEventListener('click', (e) => {
+    const d = e.target.closest('[data-del]'); if (d) { del(d.dataset.del); return; }
+    const o = e.target.closest('[data-open]'); if (!o) return;
+    if (suppress) { suppress = false; return; }
+    const w = o.closest('.nw'); if (w.classList.contains('open')) { w.classList.remove('open'); o.style.transform = ''; return; }
+    open(o.dataset.open);
+  });
+  // keyboard: Delete key removes the focused notification
+  document.addEventListener('keydown', (e) => { const o = document.activeElement && document.activeElement.closest && document.activeElement.closest('[data-open]'); if (o && (e.key === 'Delete' || e.key === 'Backspace')) del(o.dataset.open); if (o && e.key === 'ContextMenu') openActions(o.dataset.open); });
+
+  // ---- actions sheet
+  let cur = null;
+  const openActions = (id) => {
+    cur = V.notifications.list().find((x) => x.id === id); if (!cur) return;
+    $('#acT').textContent = cur.title; $('#acSub').textContent = cur.time;
+    $('#acReadT').textContent = cur.unread ? 'Mark as read' : 'Mark as unread';
+    const m = muted().includes(cur.title); $('#acMuteT').textContent = m ? 'Turn alerts like this back on' : 'Turn off alerts like this';
+    V.sheet.open('actSheet');
+  };
+  $('#acOpen').addEventListener('click', () => { V.sheet.close(); cur && open(cur.id); });
+  $('#acRead').addEventListener('click', () => {
+    if (!cur) return; const l = V.notifications.list(); const n = l.find((x) => x.id === cur.id); n.unread = !n.unread; V.store.set('notifs', l);
+    V.sheet.close(); render(); V.toast(n.unread ? 'Marked as unread' : 'Marked as read');
+  });
+  $('#acMute').addEventListener('click', () => {
+    if (!cur) return; let m = muted(); const on = m.includes(cur.title); m = on ? m.filter((t) => t !== cur.title) : m.concat(cur.title); V.store.set('notifMuted', m);
+    V.sheet.close(); V.toast(on ? `Alerts like “${cur.title}” turned back on` : `You won’t get alerts like “${cur.title}”`);
+  });
+  $('#acDel').addEventListener('click', () => { V.sheet.close(); cur && del(cur.id); });
+
+  // ---- mark all read
+  $('#markAll').addEventListener('click', () => {
+    const before = V.notifications.list(); const n = V.notifications.unread(); if (!n) return;
+    V.notifications.markAllRead(); render();
+    V.toast(`${n} marked as read`, { action: 'Undo', onAction: () => { V.store.set('notifs', before); render(); } });
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

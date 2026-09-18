@@ -27,6 +27,24 @@ interface PhoneFrameProps {
   /** Extra classes on the <Image>, e.g. "object-top" to anchor tall screens
    *  so the screen's header/title stays visible instead of a centre crop. */
   imgClassName?: string;
+  /**
+   * Opt-in scroll mode. The screen stops cropping the screenshot to its own
+   * shape and becomes a viewport onto the whole of it: the image is drawn at
+   * its natural height, top-aligned, inside a scroller the caller can move (a
+   * dashboard three screens tall is otherwise only ever seen as its first
+   * screen). The screen is a size container, so a caller's keyframe can travel
+   * exactly `calc(100cqh - 100%)`: the image's own height less the screen's.
+   * Corner radii scale with the frame, since this mode runs at card sizes where
+   * the default 2rem corner would turn the device into a pill. Off by default:
+   * every existing caller renders exactly as before.
+   */
+  scroll?: boolean;
+  /** Scroll mode: the screenshot's intrinsic size in px. With it the image is
+   *  drawn at its natural height; without it the screen is simply filled. */
+  width?: number;
+  height?: number;
+  /** Scroll mode: classes on the scroller, the element a caller animates. */
+  scrollerClassName?: string;
 }
 
 export function PhoneFrame({
@@ -36,7 +54,26 @@ export function PhoneFrame({
   priority = false,
   className,
   imgClassName,
+  scroll = false,
+  width,
+  height,
+  scrollerClassName,
 }: PhoneFrameProps) {
+  if (scroll) {
+    return (
+      <ScrollingPhone
+        src={src}
+        alt={alt}
+        sizes={sizes}
+        priority={priority}
+        className={className}
+        imgClassName={imgClassName}
+        width={width}
+        height={height}
+        scrollerClassName={scrollerClassName}
+      />
+    );
+  }
   return (
     <div
       className={cn(
@@ -74,6 +111,87 @@ export function PhoneFrame({
       <div
         aria-hidden="true"
         className="absolute left-1/2 top-[6px] z-10 h-[14px] w-[34%] -translate-x-1/2 rounded-b-[10px] bg-bezel"
+      />
+    </div>
+  );
+}
+
+/*
+ * Scroll mode (see the `scroll` prop). The same device as above, in the same
+ * vocabulary (raised body, hairline rim, screen seam, glass sheen, notch), with
+ * three differences: the radii are proportional (13% / 6% is a circular corner
+ * on a 9:19.5 body), the screen is a size container, and the screenshot sits in
+ * a top-aligned scroller at its natural height. `min-h-[100cqh]` keeps a
+ * screenshot that is SHORTER than the screen from leaving a gap at the bottom:
+ * it is covered, top-anchored, exactly as the default mode would draw it.
+ *
+ * The screen well carries `data-handoff-frame`: it is the element that clips
+ * the screenshot, so the cover-to-hero handoff measures the image against it
+ * rather than against the scroller, which is taller than the screen.
+ */
+function ScrollingPhone({
+  src,
+  alt,
+  sizes,
+  priority,
+  className,
+  imgClassName,
+  width,
+  height,
+  scrollerClassName,
+}: Required<Pick<PhoneFrameProps, "src" | "alt" | "sizes" | "priority">> &
+  Pick<PhoneFrameProps, "className" | "imgClassName" | "width" | "height" | "scrollerClassName">) {
+  const blur = blurFor(src);
+  return (
+    <div
+      className={cn(
+        "relative aspect-[9/19.5] w-full overflow-hidden rounded-[13%/6%] border border-[color:color-mix(in_srgb,var(--fg)_12%,transparent)] bg-device p-[6px] shadow-[0_28px_70px_-24px_rgba(0,0,0,0.85),0_2px_8px_-2px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.1)]",
+        className,
+      )}
+    >
+      <div
+        data-handoff-frame
+        className="relative isolate h-full w-full overflow-hidden rounded-[10%/4.6%] bg-bezel [container-type:size]"
+      >
+        <div className={cn("absolute inset-x-0 top-0", scrollerClassName)}>
+          {width && height ? (
+            <Image
+              src={src}
+              alt={alt}
+              width={width}
+              height={height}
+              sizes={sizes}
+              priority={priority}
+              placeholder={blur ? "blur" : "empty"}
+              blurDataURL={blur}
+              className={cn("block h-auto min-h-[100cqh] w-full object-cover object-top", imgClassName)}
+            />
+          ) : (
+            <div className="relative h-[100cqh] w-full">
+              <Image
+                src={src}
+                alt={alt}
+                fill
+                sizes={sizes}
+                priority={priority}
+                placeholder={blur ? "blur" : "empty"}
+                blurDataURL={blur}
+                className={cn("object-cover object-top", imgClassName)}
+              />
+            </div>
+          )}
+        </div>
+        {/* The default mode's glass: hairline ring on the screen edge plus a
+            faint diagonal sheen, above the moving image so it stays still. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-[1] rounded-[inherit] bg-[linear-gradient(135deg,rgba(255,255,255,0.07),transparent_38%)] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)]"
+        />
+      </div>
+      {/* Notch, proportional like the corners. */}
+      <div
+        aria-hidden="true"
+        className="absolute left-1/2 top-[6px] z-10 h-[3%] w-[30%] -translate-x-1/2 rounded-b-[8px] bg-bezel"
       />
     </div>
   );

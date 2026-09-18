@@ -105,14 +105,19 @@ async function shot(id) {
 
 for (const id of SCREENS) await shot(id);
 
-// Poster for the live frame: the landing page's stage, first screen settled.
+// Poster for the live frame: the demo stage (app.html) at the frame's desktop
+// viewport, on the splash, which is the first thing the launched frame shows,
+// so the poster-to-live wipe lands pixel-aligned. The splash routes itself on
+// to welcome at 1.8s, so this is shot fast, inside that window, after the
+// stage's own entrance (~0.9s) has settled.
 {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: 2 });
   const page = await ctx.newPage();
   page.on("pageerror", (e) => errs.push(`stage: ${e.message}`));
-  await page.goto(`${BASE}/index.html`, { waitUntil: "networkidle" });
+  // ?case-link=0 keeps the portfolio's "Back to the case study" link out of the poster.
+  await page.goto(`${BASE}/app.html?case-link=0`, { waitUntil: "load" });
   await page.evaluate(() => document.fonts.ready);
-  await page.waitForTimeout(2500);
+  await page.waitForTimeout(1200);
   await page.screenshot({ path: `${OUT}/stage.png` });
   console.log("✓ stage                1280x800");
   await ctx.close();

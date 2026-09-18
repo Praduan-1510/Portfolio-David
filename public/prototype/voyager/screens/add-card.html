@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Add New Card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .psheet { padding-top: 24px; }
+  .flip { perspective: 1200px; height: 190px; margin: 0 2px; }
+  .flip__in { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 600ms var(--ease-out); }
+  .flip.is-back .flip__in { transform: rotateY(180deg); }
+  .flip .paycard { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+  .paycard__num { margin-top: 42px; letter-spacing: .3em; min-height: 17px; }
+  .paycard__num .ph-d { color: rgba(255,255,255,.4); }
+  .paycard__row { margin-top: 29px; gap: 36px; }
+  .paycard__v { max-width: 190px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .paycard__brand { font-size: 14px; font-style: normal; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; transition: opacity 200ms; }
+  .card-back { transform: rotateY(180deg); padding: 22px 0 0 !important; }
+  .card-back::before { right: auto; left: -60px; top: auto; bottom: -80px; }
+  .strip { height: 40px; background: #0A1122; margin-top: 4px; }
+  .sig { display: flex; align-items: center; gap: 10px; margin: 18px 19px 0; }
+  .sig i { flex: 1; height: 34px; border-radius: 4px; background: repeating-linear-gradient(135deg, #E9E6DF 0 6px, #F6F3EC 6px 12px); }
+  .sig b { width: 56px; height: 34px; border-radius: 4px; background: #fff; color: #000; display: grid; place-items: center; font: italic 700 15px var(--font); letter-spacing: .1em; box-shadow: 0 0 0 2px var(--orange); }
+  .card-back p { margin: 14px 19px 0; font-size: 10px; color: var(--card-sub); line-height: 1.4; }
+  .form { margin-top: 26px; }
+  .field-wrap__lead { display: grid; place-items: center; }
+  .brand-tag { position: absolute; right: 12px; font-size: 11px; font-weight: 800; letter-spacing: .08em; color: var(--navy); text-transform: uppercase; pointer-events: none; }
+  .test { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .test .chip { height: 30px; font-size: 12px; padding: 0 12px; }
+  .check { margin-top: 20px; }
+  .secure { display: flex; gap: 10px; margin-top: 20px; }
+</style>
+</head>
+<body>
+<main class="page page--cta" aria-label="Add new card">
+  <header class="phead">
+    <a class="phead__back tap" id="back" href="book-payment.html" aria-label="Back to payment">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3.5M10.5 4.5 3 12l7.5 7.5"/></svg>
+    </a>
+    <div class="phead__titles"><h1 class="phead__title">Add New Card</h1></div>
+  </header>
+
+  <section class="psheet">
+    <div class="flip enter" id="flip" aria-hidden="true">
+      <div class="flip__in">
+        <div class="paycard">
+          <div class="paycard__chip"></div>
+          <p class="paycard__num num" id="pvNum"></p>
+          <div class="paycard__row"><div><span class="paycard__k">Card Holder</span><span class="paycard__v" id="pvName">Alex Johnson</span></div><div><span class="paycard__k">Expires</span><span class="paycard__v num" id="pvExp">MM/YY</span></div></div>
+          <span class="paycard__brand" id="pvBrand"></span>
+        </div>
+        <div class="paycard card-back">
+          <div class="strip"></div>
+          <div class="sig"><i></i><b id="pvCvv">•••</b></div>
+          <p>This card is issued for demo purposes. The 3 or 4 digit security code is printed on the back of your card.</p>
+        </div>
+      </div>
+    </div>
+
+    <form class="form" id="form" novalidate>
+      <div class="fg">
+        <label class="label" for="num">Card Number <span class="req" aria-hidden="true">*</span></label>
+        <div class="field-wrap field-wrap--lead">
+          <span class="field-wrap__lead" data-icon="card" data-size="20"></span>
+          <input class="field num" id="num" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" data-mask="card" data-validate="required|card" aria-describedby="numHelp" required>
+          <span class="brand-tag" id="brandTag"></span>
+        </div>
+        <span class="helper" id="numHelp">Visa, Mastercard and Amex accepted</span>
+        <div class="test" aria-label="Test cards">
+          <button class="chip" type="button" data-fill="4242 4242 4242 4242">Test Visa</button>
+          <button class="chip" type="button" data-fill="5555 5555 5555 4444">Test Mastercard</button>
+          <button class="chip" type="button" data-fill="4000 0000 0002 0000">Decline (0000)</button>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="label" for="holder">Name on Card <span class="req" aria-hidden="true">*</span></label>
+        <input class="field" id="holder" autocomplete="cc-name" value="Alex Johnson" data-validate="required|name" required>
+      </div>
+      <div class="field-row" style="margin-top:16px">
+        <div class="fg">
+          <label class="label" for="exp">Expiry <span class="req" aria-hidden="true">*</span></label>
+          <input class="field num" id="exp" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" data-mask="expiry" data-validate="required|expiry" required>
+        </div>
+        <div class="fg" style="margin-top:0">
+          <label class="label" for="cvv">CVV <span class="req" aria-hidden="true">*</span></label>
+          <div class="field-wrap">
+            <input class="field num" id="cvv" type="password" inputmode="numeric" autocomplete="cc-csc" placeholder="123" data-mask="cvv" data-validate="required|cvv" required>
+            <button type="button" class="field-wrap__btn" data-pw-toggle aria-label="Show CVV"></button>
+          </div>
+        </div>
+      </div>
+      <label class="check"><input type="checkbox" id="def" checked> <span>Set as my default payment method</span></label>
+      <div class="banner banner--info secure"><span data-icon="lock" data-size="18"></span><span>Your card is encrypted and stored securely. We’ll never show the full number again.</span></div>
+    </form>
+  </section>
+
+  <div class="cta-bar">
+    <div class="cta-bar__in">
+      <button class="btn btn--primary" type="submit" form="form" id="save"><span>Save Card</span></button>
+    </div>
+  </div>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const V = window.Voyager;
+    const $ = (s) => document.querySelector(s);
+    const from = V.q('from') === 'payment-methods' || V.q('from') === 'profile' ? 'payment-methods' : 'booking';
+    const backHref = from === 'booking' ? 'book-payment.html' : 'payment-methods.html';
+    $('#back').href = backHref;
+    $('#back').setAttribute('aria-label', from === 'booking' ? 'Back to payment' : 'Back to payment methods');
+
+    const brandOf = (digits) => /^4/.test(digits) ? 'Visa' : /^(5[1-5]|2[2-7])/.test(digits) ? 'Mastercard' : /^3[47]/.test(digits) ? 'Amex' : '';
+    const num = $('#num'), holder = $('#holder'), exp = $('#exp'), cvv = $('#cvv'), flip = $('#flip');
+
+    const render = () => {
+      const digits = num.value.replace(/\D/g, '');
+      const shown = (digits + '################').slice(0, 16).replace(/(.{4})(?=.)/g, '$1 ');
+      $('#pvNum').innerHTML = shown.split('').map((c) => c === '#' ? '<span class="ph-d">•</span>' : V.esc(c)).join('');
+      $('#pvName').textContent = holder.value.trim() || 'Your Name';
+      $('#pvExp').textContent = exp.value || 'MM/YY';
+      $('#pvCvv').textContent = cvv.value ? cvv.value.replace(/./g, '•') : '•••';
+      const b = brandOf(digits);
+      $('#pvBrand').textContent = b; $('#brandTag').textContent = b;
+    };
+    ['input', 'change'].forEach((ev) => [num, holder, exp, cvv].forEach((el) => el.addEventListener(ev, render)));
+    cvv.addEventListener('focus', () => flip.classList.add('is-back'));
+    cvv.addEventListener('blur', () => flip.classList.remove('is-back'));
+    // Auto-advance when a field is complete
+    num.addEventListener('input', () => { if (num.value.replace(/\D/g, '').length === 16 && V.luhn(num.value)) holder.focus(); });
+    exp.addEventListener('input', () => { if (exp.value.length === 5) cvv.focus(); });
+    document.querySelectorAll('[data-fill]').forEach((c) => c.addEventListener('click', () => {
+      num.value = c.dataset.fill; num.dispatchEvent(new Event('input', { bubbles: true }));
+      if (!exp.value) exp.value = '12/29'; if (!cvv.value) cvv.value = '123';
+      render(); V.validate(num);
+    }));
+    render();
+
+    $('#form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!V.validate($('#form'))) { V.haptic(); return; }
+      const digits = num.value.replace(/\D/g, '');
+      if (V.cards.list().some((c) => c.last4 === digits.slice(-4) && c.exp === exp.value)) {
+        const fg = num.closest('.fg'); fg.classList.add('has-error');
+        let et = fg.querySelector('.error-text'); if (!et) { et = document.createElement('span'); et.className = 'error-text'; et.setAttribute('role', 'alert'); fg.appendChild(et); }
+        et.innerHTML = V.icon('warning', 14, 'stroke-width="2"') + '<span>This card is already saved</span>'; num.focus(); return;
+      }
+      await V.loading($('#save'), 1100);
+      const card = V.cards.add({ number: digits, holder: holder.value.trim(), exp: exp.value, makeDefault: $('#def').checked });
+      if (from === 'booking') { V.booking.set({ card: card.id }); location.href = `book-payment.html?added=${encodeURIComponent(card.id)}`; }
+      else { V.toast(`${card.brand} •••• ${card.last4} saved`); await V.wait(500); location.href = `payment-methods.html?added=${encodeURIComponent(card.id)}`; }
+    });
+  })();
+</script>
+</body>
+</html>

@@ -55,11 +55,13 @@ const restClasses = await page.evaluate(() => document.documentElement.className
 ok("html has no lenis-smooth at rest", !restClasses.includes("lenis-smooth"), `class="${restClasses}"`);
 
 console.log("\n3. Launch");
+// The demo now opens in a window over the page, so the launch control is found
+// by its label rather than a styling hook.
 await page.evaluate(() => {
-  document.querySelector(".lp-launch")?.scrollIntoView({ block: "center" });
+  [...document.querySelectorAll("button")]
+    .find((b) => /launch the live demo/i.test(b.textContent || ""))
+    ?.click();
 });
-await sleep(1400);
-await page.click(".lp-launch");
 await page.waitForSelector("iframe[data-live-frame]", { timeout: 10000 });
 const frameEl = await page.$("iframe[data-live-frame]");
 let frame = await frameEl.contentFrame();
@@ -200,7 +202,13 @@ for (const [label, want] of [["Tablet", 834], ["Phone", 390], ["Desktop", 1280]]
     stored: !!localStorage.getItem("meridian-b"),
   }));
   ok(`${label}: clicked`, clicked);
-  ok(`${label}: iframe innerWidth is ${want}`, state.w === want, `got ${state.w}`);
+  // Desktop fills the demo window, never narrower than 1280; Tablet and Phone
+  // are real device viewports.
+  ok(
+    `${label}: iframe innerWidth is ${label === "Desktop" ? `at least ${want}` : want}`,
+    label === "Desktop" ? state.w >= want : state.w === want,
+    `got ${state.w}`,
+  );
   ok(
     `${label}: mobile shell ${want <= 860 ? "on" : "off"}`,
     state.mobileShell === want <= 860,
@@ -235,20 +243,22 @@ for (const w of [390, 768, 1024]) {
   ok(`no horizontal overflow at ${w}`, o <= 0, `${o}px`);
 }
 
-console.log("\n9. Small-screen fallback (fresh load at 390)");
+console.log("\n9. Phones launch in place (fresh load at 390)");
 const small = await browser.newPage();
 await small.setViewport({ width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
 await small.goto(URL, { waitUntil: "networkidle0", timeout: 45000 });
 await sleep(900);
 const fb = await small.evaluate(() => {
-  const btn = document.querySelector(".lp-launch");
+  const btn = [...document.querySelectorAll("button")].find((b) =>
+    /launch the live demo/i.test(b.textContent || ""),
+  );
   return {
-    launchHidden: !btn || getComputedStyle(btn).display === "none",
+    launchVisible: !!btn && getComputedStyle(btn).display !== "none",
     iframes: document.querySelectorAll("iframe").length,
   };
 });
-ok("launch button hidden below sm", fb.launchHidden);
-ok("no iframe on small screens", fb.iframes === 0);
+ok("launch button visible on phones", fb.launchVisible);
+ok("no iframe before launch on phones", fb.iframes === 0);
 await small.close();
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"}: ${pass} passed, ${fail} failed`);

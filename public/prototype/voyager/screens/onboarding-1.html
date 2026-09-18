@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Onboarding 1 of 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .ob { height: 874px; min-height: 100vh; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+  .ob .mosaic { left: 0; top: 0; width: 402px; gap: 0; grid-template-columns: repeat(6, 1fr); }
+  .ob .mosaic__tile img { animation: ob-reveal 1100ms var(--ease-out) both; animation-delay: calc(var(--i, 0) * 55ms); -webkit-user-drag: none; }
+  .ob .mosaic::after { background: rgba(20,33,61,.42); }
+  .ob .mosaic__back { top: 39px; }
+  .ob .mosaic__back::after { inset: -6px; }
+  .ob-pill { left: 20px; top: 359px; width: 86px; height: 27px; justify-content: center; padding: 0 0 0 .2em; z-index: 2; }
+  .ob .pdots { left: 0; right: 0; }
+  .ob-title { left: 42px; top: 535.5px; width: 340px; font-size: 27.5px; line-height: 35px; font-weight: 700; color: #000; letter-spacing: -.1px; }
+  .ob-body { left: 42px; top: 625.5px; width: 318px; font-size: 18px; line-height: 22px; color: #000; }
+  .ob .btn.abs { height: 50px; }
+  .ob-cta { font-size: 16px; }
+  .ob-cta--sm { height: 40px !important; }
+  .ob-swipe { left: 0; right: 0; bottom: 14px; text-align: center; font-size: 11px; color: var(--text-5); opacity: 0; animation: fade 600ms 1400ms both; pointer-events: none; }
+  body.capture .ob-swipe { display: none; }
+  @keyframes ob-reveal { from { opacity: 0; transform: scale(1.14); } to { opacity: 1; transform: none; } }
+  /* page-to-page slide (direction set by the page we came from) */
+  .ob-stage { position: absolute; inset: 0; }
+  .ob.from-next .ob-stage { animation: ob-in-l 420ms var(--ease-out) both; }
+  .ob.from-prev .ob-stage { animation: ob-in-r 420ms var(--ease-out) both; }
+  .ob.to-next .ob-stage { animation: ob-out-l 240ms ease-in forwards; }
+  .ob.to-prev .ob-stage { animation: ob-out-r 240ms ease-in forwards; }
+  @keyframes ob-in-r { from { opacity: 0; transform: translateX(42px); } to { opacity: 1; transform: none; } }
+  @keyframes ob-in-l { from { opacity: 0; transform: translateX(-42px); } to { opacity: 1; transform: none; } }
+  @keyframes ob-out-l { to { opacity: 0; transform: translateX(-42px); } }
+  @keyframes ob-out-r { to { opacity: 0; transform: translateX(42px); } }
+  .ob.dragging .ob-stage { transition: none; }
+  .ob-stage.settle { transition: transform 260ms var(--ease-out); }
+</style>
+</head>
+<body>
+
+<main class="screen screen--white ob" id="ob" style="height:874px" aria-label="Onboarding step 1 of 3: Explore the world’s best destinations">
+<div class="ob-stage" id="stage">
+  <div class="abs mosaic" style="height:403px;grid-template-rows:111px 124px 168px" role="img" aria-label="Photo collage: Eiffel Tower, Paris, Kelingking cove, Nusa Penida, Swimmers in a mountain lake, Alpine chalet village, India Gate, New Delhi, The Colosseum, Rome, Photographing the Statue of Liberty">
+    <div class="mosaic__tile ph" style="grid-column:span 3;--i:0"><img src="../assets/img/ob-eiffel.jpg" alt="" style="object-position:50% 18%" draggable="false"></div>
+    <div class="mosaic__tile ph ph--sea" style="grid-column:span 3;--i:1"><img src="../assets/img/ob-nusa-penida.jpg" alt="" style="object-position:50% 50%" draggable="false"></div>
+    <div class="mosaic__tile ph ph--warm" style="grid-column:span 2;--i:2"><img src="../assets/img/ob-lake-swim.jpg" alt="" style="object-position:50% 50%" draggable="false"></div>
+    <div class="mosaic__tile ph ph--dusk" style="grid-column:span 2;--i:3"><img src="../assets/img/ob-alpine-village.jpg" alt="" style="object-position:50% 50%" draggable="false"></div>
+    <div class="mosaic__tile ph" style="grid-column:span 2;--i:4"><img src="../assets/img/ob-india-gate.jpg" alt="" style="object-position:50% 60%" draggable="false"></div>
+    <div class="mosaic__tile ph ph--sea" style="grid-column:span 3;--i:5"><img src="../assets/img/ob-colosseum.jpg" alt="" style="object-position:50% 50%" draggable="false"></div>
+    <div class="mosaic__tile ph ph--warm" style="grid-column:span 3;--i:6"><img src="../assets/img/ob-statue-liberty.jpg" alt="" style="object-position:50% 50%" draggable="false"></div>
+  </div>
+  <a class="mosaic__back tap" href="splash.html" data-nav="prev" aria-label="Back to welcome"><svg width="12" height="20" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.5 1.5 2 10l8.5 8.5"/></svg></a>
+  <span class="abs pill-tag ob-pill">Discover</span>
+  <nav class="abs pdots" style="top:430px" aria-label="Onboarding steps">
+    <a href="onboarding-1.html" data-step-link="1" aria-label="Step 1 of 3" aria-current="step"><i class="on"></i></a>
+    <a href="onboarding-2.html" data-step-link="2" aria-label="Step 2 of 3"><i class=""></i></a>
+    <a href="onboarding-3.html" data-step-link="3" aria-label="Step 3 of 3"><i class=""></i></a>
+  </nav>
+  <p class="t step-label enter" style="left:40px;top:504px">Step 1 of 3</p>
+  <h1 class="abs ob-title enter" style="--i:1">Explore The World's<br>Best Destinations</h1>
+  <p class="abs ob-body enter" style="--i:2">Discover Curated Trips To Over 150 Countries. From Hidden Gems To Iconic Landmarks.</p>
+  <a class="abs btn btn--outline ob-cta enter" href="onboarding-3.html" data-nav="skip" style="left:48px;top:787px;width:140px;--i:3">Skip</a>
+  <a class="abs btn btn--navy ob-cta enter" href="onboarding-2.html" data-nav="next" style="left:214px;top:787px;width:140px;gap:8px;--i:3"><span>Next</span><svg class="arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 12h17M14 5.5l6.5 6.5-6.5 6.5"/></svg></a>
+  <p class="t ob-swipe">Swipe to explore</p>
+</div>
+</main>
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const V = window.Voyager;
+    const N = 1;
+    const ob = document.getElementById('ob');
+    const stage = document.getElementById('stage');
+    const capture = document.body.classList.contains('capture');
+    const ss = { get(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} } };
+
+    // Arrival slide: direction recorded by the page we came from
+    const dir = ss.get('voyager:ob-dir'); ss.set('voyager:ob-dir', '');
+    if (!capture && dir) ob.classList.add(dir === 'next' ? 'from-prev' : 'from-next');
+    V.store.set('onboardingStep', N);
+    if (N === 3) V.store.set('onboarded', true);
+
+    const prevHref = N === 1 ? 'splash.html' : `onboarding-${N - 1}.html`;
+    const nextHref = N === 3 ? null : `onboarding-${N + 1}.html`;
+    let leaving = false;
+    const go = (href, direction) => {
+      if (leaving || !href) return; leaving = true;
+      V.haptic();
+      ss.set('voyager:ob-dir', href.startsWith('onboarding-') ? direction : '');
+      ob.classList.remove('from-prev', 'from-next');
+      stage.style.transform = '';
+      ob.classList.add(direction === 'next' ? 'to-next' : 'to-prev');
+      setTimeout(() => { location.href = href; }, capture ? 0 : 220);
+    };
+
+    // Buttons + dots use the same slide
+    document.querySelectorAll('[data-nav]').forEach((a) => a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const k = a.dataset.nav;
+      go(a.getAttribute('href'), k === 'prev' ? 'prev' : 'next');
+    }));
+    document.querySelectorAll('[data-step-link]').forEach((a) => a.addEventListener('click', (e) => {
+      e.preventDefault(); const k = +a.dataset.stepLink; if (k === N) return;
+      go(a.getAttribute('href'), k > N ? 'next' : 'prev');
+    }));
+    ['login', 'signup'].forEach((id) => { const b = document.getElementById(id); b && b.addEventListener('click', (e) => { e.preventDefault(); go(b.getAttribute('href'), 'next'); }); });
+
+    // Swipe left / right (finger-tracking with a threshold)
+    let x0 = null, y0 = 0, dx = 0, locked = null;
+    ob.addEventListener('pointerdown', (e) => { if (e.button > 0) return; x0 = e.clientX; y0 = e.clientY; dx = 0; locked = null; stage.classList.remove('settle'); });
+    ob.addEventListener('pointermove', (e) => {
+      if (x0 == null || leaving) return;
+      dx = e.clientX - x0; const dy = e.clientY - y0;
+      if (locked == null && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) locked = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+      if (locked !== 'x') return;
+      const edge = (dx > 0 && N === 1) || (dx < 0 && N === 3);   // rubber-band at the ends
+      stage.style.transform = `translateX(${edge ? dx * 0.25 : dx * 0.6}px)`;
+    });
+    const end = () => {
+      if (x0 == null) return; x0 = null;
+      if (locked === 'x' && Math.abs(dx) > 60) {
+        if (dx < 0 && nextHref) return go(nextHref, 'next');
+        if (dx > 0 && N > 1) return go(prevHref, 'prev');
+      }
+      if (locked === 'x') { const cancel = (e) => { e.preventDefault(); e.stopPropagation(); }; ob.addEventListener('click', cancel, { capture: true, once: true }); setTimeout(() => ob.removeEventListener('click', cancel, true), 50); }
+      stage.classList.add('settle'); stage.style.transform = '';
+    };
+    ob.addEventListener('pointerup', end); ob.addEventListener('pointercancel', end); ob.addEventListener('pointerleave', end);
+
+    // Keyboard: arrow keys move between steps
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' && nextHref) go(nextHref, 'next');
+      if (e.key === 'ArrowLeft' && N > 1) go(prevHref, 'prev');
+    });
+    // Back/forward cache: clear exit state if the page is restored
+    window.addEventListener('pageshow', (e) => { if (e.persisted) { leaving = false; ob.classList.remove('to-next', 'to-prev'); stage.style.transform = ''; } });
+  })();
+</script>
+</body>
+</html>

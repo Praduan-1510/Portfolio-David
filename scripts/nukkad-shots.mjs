@@ -169,7 +169,8 @@ async function wide(file, query, name) {
   page.on("pageerror", (e) => errs.push(`${name}: ${e.message}`));
   await page.setViewport({ width: 1280, height: 800, deviceScaleFactor: 2 });
   await page.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: "reduce" }]);
-  await page.goto(`${BASE}/${file}${query ? "?" + query : ""}`, {
+  // case-link=0 keeps the portfolio's "Back to the case study" link out of the stills.
+  await page.goto(`${BASE}/${file}?case-link=0${query ? "&" + query : ""}`, {
     waitUntil: "networkidle0",
     timeout: 30000,
   });

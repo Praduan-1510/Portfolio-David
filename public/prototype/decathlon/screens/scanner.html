@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Scan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  .scan { min-height: 852px; height: 100vh; overflow: hidden; }
+  body.capture .scan { height: 852px; }
+  .feed { position: absolute; inset: 0; overflow: hidden; background: #0B1620; }
+  .feed img { width: 100%; height: 100%; object-fit: cover; filter: blur(2.5px) brightness(.5) saturate(.9); transform: scale(1.06); transition: filter 300ms; }
+  .scan.torch .feed img { filter: blur(2.5px) brightness(.85) saturate(1); }
+  .glass { background: rgba(8, 20, 30, .55); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); color: #fff; }
+  .top { position: absolute; left: 0; right: 0; top: 0; height: 76px; padding: 20px 14px 0; display: flex; align-items: center; justify-content: space-between; z-index: 3; }
+  .round { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; }
+  .round[aria-pressed="true"] { background: #FBD7B1; color: var(--navy); }
+  .top h1 { font-size: 18px; font-weight: 600; color: #fff; }
+  .modes { position: absolute; z-index: 3; left: 50%; top: 92px; transform: translateX(-50%); display: flex; padding: 4px; border-radius: 999px; }
+  .modes button { white-space: nowrap; height: 34px; padding: 0 16px; border-radius: 999px; font-size: 13px; font-weight: 500; color: #CFE3EE; }
+  .modes button[aria-selected="true"] { background: #fff; color: var(--navy); }
+  .finder { position: absolute; z-index: 2; left: 50%; top: 220px; width: 280px; height: 180px; transform: translateX(-50%); border-radius: 18px; box-shadow: 0 0 0 999px rgba(3, 12, 20, .5); transition: width 300ms var(--ease-out), height 300ms var(--ease-out), top 300ms var(--ease-out); }
+  .scan.qr .finder { width: 230px; height: 230px; top: 200px; }
+  .corner { position: absolute; width: 34px; height: 34px; border: 4px solid #fff; transition: border-color 200ms; }
+  .corner.tl { left: -2px; top: -2px; border-right: 0; border-bottom: 0; border-top-left-radius: 18px; }
+  .corner.tr { right: -2px; top: -2px; border-left: 0; border-bottom: 0; border-top-right-radius: 18px; }
+  .corner.bl { left: -2px; bottom: -2px; border-right: 0; border-top: 0; border-bottom-left-radius: 18px; }
+  .corner.br { right: -2px; bottom: -2px; border-left: 0; border-top: 0; border-bottom-right-radius: 18px; }
+  .line { position: absolute; left: 14px; right: 14px; top: 10px; height: 2px; border-radius: 2px; background: #3FC1FF; box-shadow: 0 0 12px 2px rgba(63, 193, 255, .8); animation: sweep 1.8s ease-in-out infinite alternate; }
+  @keyframes sweep { from { transform: translateY(0); } to { transform: translateY(calc(var(--h, 180px) - 22px)); } }
+  .scan.qr .line { --h: 230px; }
+  .scan.found .corner { border-color: #5BE36A; }
+  .scan.found .line { display: none; }
+  .code-ghost { position: absolute; inset: 42px 38px; display: flex; gap: 3px; align-items: stretch; opacity: .35; }
+  .code-ghost i { flex: 1; background: #fff; }
+  .code-ghost i:nth-child(3n) { flex: .4; } .code-ghost i:nth-child(4n) { flex: 1.8; } .code-ghost i:nth-child(5n) { background: transparent; }
+  .qr-ghost { display: none; position: absolute; inset: 50px; opacity: .3; background: repeating-conic-gradient(#fff 0 25%, transparent 0 50%) 0 0 / 22px 22px; border-radius: 6px; }
+  .scan.qr .code-ghost { display: none; } .scan.qr .qr-ghost { display: block; }
+  .hint { position: absolute; z-index: 3; left: 24px; right: 24px; top: 430px; text-align: center; color: #fff; }
+  .scan.qr .hint { top: 456px; }
+  .hint b { display: block; font-size: 16px; font-weight: 600; }
+  .hint span { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 13px; color: #CFE3EE; }
+  .hint span::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #3FC1FF; animation: blink 1s ease-in-out infinite; }
+  .scan.found .hint span::before { background: #5BE36A; animation: none; }
+  @keyframes blink { 50% { opacity: .25; } }
+  .actions { position: absolute; z-index: 3; left: 24px; right: 24px; bottom: calc(var(--tabbar-h) + 26px); display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .actions button { height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; font-weight: 500; }
+  .actions svg { width: 20px; height: 20px; }
+  .found-card { display: flex; gap: 14px; align-items: center; }
+  .found-card .thumb { width: 84px; height: 84px; border-radius: 10px; }
+  .found-card__b { font-size: 11px; font-weight: 600; letter-spacing: .6px; text-transform: uppercase; color: var(--steel); }
+  .found-card__n { font-size: 16px; font-weight: 600; color: #000; line-height: 1.3; }
+  .stock { font-size: 12px; font-weight: 600; margin-top: 4px; }
+  .stock--in { color: var(--ok); } .stock--low { color: var(--warn); } .stock--out { color: var(--danger); }
+</style>
+</head>
+<body>
+<main class="screen scan" aria-label="Scanner" id="scan">
+  <div class="feed" aria-hidden="true"><img src="../assets/img/store-interior.jpg" alt=""></div>
+
+  <div class="top">
+    <a class="round glass tap" href="home.html" data-go="back" aria-label="Close scanner"><i data-icon="close" data-size="20" data-sw="2"></i></a>
+    <h1>Scan</h1>
+    <button class="round glass tap" type="button" id="torch" aria-pressed="false" aria-label="Torch"><i data-icon="flash" data-size="20"></i></button>
+  </div>
+
+  <div class="modes glass" role="tablist" aria-label="What to scan">
+    <button type="button" role="tab" aria-selected="true" data-mode="barcode" id="mBar">Product barcode</button>
+    <button type="button" role="tab" aria-selected="false" data-mode="qr" id="mQr">Store QR</button>
+  </div>
+
+  <div class="finder" aria-hidden="true">
+    <span class="code-ghost"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+    <span class="qr-ghost"></span>
+    <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+    <span class="line"></span>
+  </div>
+
+  <div class="hint" role="status" aria-live="polite"><b id="hintT">Point at the barcode on the tag</b><span id="hintS">Looking for a barcode…</span></div>
+
+  <div class="actions">
+    <button class="glass tap" type="button" id="gallery"><i data-icon="image" data-size="20"></i><span>Upload photo</span></button>
+    <button class="glass tap" type="button" data-sheet="codeSheet"><i data-icon="keyboard" data-size="20"></i><span>Enter code</span></button>
+  </div>
+
+  <nav data-tabbar="categories"></nav>
+</main>
+
+<section class="sheet" id="foundSheet" aria-labelledby="fT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="fT">Product found</p><p class="sheet__sub" id="fSub">Barcode 3608 4192 2206 1</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button>
+  </div>
+  <div class="found-card">
+    <span class="thumb"><img id="fImg" src="../assets/img/racket.jpg" alt=""></span>
+    <div class="grow">
+      <p class="found-card__b" id="fBrand">Artengo</p>
+      <p class="found-card__n" id="fName">Tennis Racket</p>
+      <div id="fStars" style="margin-top:2px"></div>
+      <p class="pcard__price" id="fPrice"></p>
+      <p class="stock" id="fStock"></p>
+    </div>
+  </div>
+  <div class="sheet__foot">
+    <a class="btn btn--primary btn--lg tap" id="fView" href="product.html?id=racket"><span>View product</span></a>
+    <button class="btn btn--outline btn--lg tap" type="button" id="fAdd"><span>Add to bag</span></button>
+    <button class="btn btn--ghost tap" type="button" id="fAgain">Scan another</button>
+  </div>
+</section>
+
+<section class="sheet" id="storeSheet" aria-labelledby="sT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="sT">Welcome to Decathlon New Town</p><p class="sheet__sub" id="sSub">Store QR recognised</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button>
+  </div>
+  <div class="banner banner--info"><i data-icon="store" data-size="18"></i><span>Scan any price tag to see reviews, sizes and stock in this store. Your Club points apply at the till.</span></div>
+  <div class="sheet__foot">
+    <button class="btn btn--primary btn--lg tap" type="button" id="sMine"><span>Set as my store</span></button>
+    <a class="btn btn--outline btn--lg tap" id="sView" href="store-detail.html?id=newtown"><span>View store</span></a>
+    <button class="btn btn--ghost tap" type="button" id="sAgain">Scan a product</button>
+  </div>
+</section>
+
+<section class="sheet" id="codeSheet" aria-labelledby="cT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="cT">Enter code manually</p><p class="sheet__sub">The 8 to 13 digits under the barcode</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button>
+  </div>
+  <form id="codeForm" novalidate>
+    <div class="fg">
+      <label class="label" for="code">Barcode number <span class="req">*</span></label>
+      <input class="field num" id="code" inputmode="numeric" maxlength="13" data-mask="digits" data-validate="required" autocomplete="off" placeholder="e.g. 3608419222061">
+      <span class="helper">Tip: try 3608419222061 (Tennis Racket) or 3583788112543 (tent)</span>
+    </div>
+    <div class="sheet__foot"><button class="btn btn--primary btn--lg tap" type="submit" id="codeGo"><span>Look up product</span></button></div>
+  </form>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const scan = $('#scan'); const capture = document.body.classList.contains('capture');
+    let mode = D.q('mode') === 'qr' ? 'qr' : 'barcode', timer = null, found = null;
+
+    const CODES = { '3608419222061': 'racket', '3583788112543': 'tent', '8901234567890': 'nike-run-1', '3608439875213': 'bottle', '3583787501119': 'helmet' };
+    const ROTATION = ['racket', 'nike-run-1', 'tent', 'bottle', 'helmet', 'yoga-mat'];
+    const codeFor = (id) => Object.keys(CODES).find((k) => CODES[k] === id) || ('36' + String(Math.abs([...id].reduce((a, c) => a * 31 + c.charCodeAt(0), 7))).padStart(11, '0').slice(0, 11));
+    const myStore = () => D.storeById(D.store.get('myStore', 'newtown')) || D.storeById('newtown');
+
+    function setMode(m) {
+      mode = m; scan.classList.toggle('qr', m === 'qr');
+      $('#mBar').setAttribute('aria-selected', String(m === 'barcode')); $('#mQr').setAttribute('aria-selected', String(m === 'qr'));
+      $('#hintT').textContent = m === 'qr' ? 'Scan the QR code at the store entrance' : 'Point at the barcode on the tag';
+      restart();
+    }
+    function restart() {
+      clearTimeout(timer); found = null; scan.classList.remove('found');
+      $('#hintS').textContent = mode === 'qr' ? 'Looking for a store QR…' : 'Looking for a barcode…';
+      if (!capture || D.q('detect')) timer = setTimeout(detect, capture ? 0 : 2500);
+    }
+    function detect() {
+      scan.classList.add('found'); if (navigator.userActivation && navigator.userActivation.hasBeenActive) D.haptic(30);
+      if (mode === 'qr') { $('#hintS').textContent = 'Store QR recognised'; showStore(D.storeById(D.q('store')) || myStore()); return; }
+      const i = D.store.get('scanIdx', 0); const id = D.q('id') && D.product(D.q('id')) ? D.q('id') : ROTATION[i % ROTATION.length];
+      D.store.set('scanIdx', i + 1);
+      $('#hintS').textContent = 'Barcode found'; showProduct(id, codeFor(id));
+    }
+    function showProduct(id, code) {
+      const p = D.product(id); found = p; const s = myStore(); const st = D.stock(s.id, p.id);
+      $('#fImg').src = D.img(p.img); $('#fBrand').textContent = p.brand; $('#fName').textContent = p.name;
+      $('#fStars').innerHTML = D.stars(p.rating, 'stars--md'); $('#fPrice').innerHTML = D.priceHtml(p, true);
+      $('#fStock').className = 'stock stock--' + st; $('#fStock').textContent = `${D.stockLabel[st]} at ${s.name}`;
+      $('#fSub').textContent = `Barcode ${String(code).replace(/(\d{4})(?=\d)/g, '$1 ')}`;
+      $('#fView').href = `product.html?id=${p.id}`;
+      D.store.set('recent', [p.id].concat((D.store.get('recent', []) || []).filter((x) => x !== p.id)).slice(0, 10));
+      D.sheet.open('foundSheet');
+    }
+    function showStore(s) {
+      $('#sT').textContent = `Welcome to ${s.full}`; $('#sSub').textContent = `${s.address.split(',').slice(0, 2).join(',')} · open ${s.hours}`;
+      $('#sView').href = `store-detail.html?id=${s.id}`; $('#sMine').dataset.id = s.id;
+      const mine = D.store.get('myStore', null) === s.id; $('#sMine span').textContent = mine ? 'This is your store' : 'Set as my store'; $('#sMine').classList.toggle('btn--soft', mine);
+      D.sheet.open('storeSheet');
+    }
+
+    // Controls
+    $$('.modes [data-mode]').forEach((b) => b.addEventListener('click', () => { setMode(b.dataset.mode); D.haptic(6); }));
+    $('#torch').addEventListener('click', (e) => { const on = e.currentTarget.getAttribute('aria-pressed') !== 'true'; e.currentTarget.setAttribute('aria-pressed', String(on)); scan.classList.toggle('torch', on); D.toast(on ? 'Torch on' : 'Torch off', { icon: 'flash' }); });
+    $('#gallery').addEventListener('click', async (e) => {
+      const b = e.currentTarget; clearTimeout(timer); b.querySelector('span').textContent = 'Reading photo…'; b.disabled = true;
+      await D.wait(1200); b.querySelector('span').textContent = 'Upload photo'; b.disabled = false;
+      if (mode === 'qr') { scan.classList.add('found'); showStore(myStore()); } else { scan.classList.add('found'); showProduct('nike-run-4', codeFor('nike-run-4')); }
+    });
+    $('#codeSheet').addEventListener('sheet:open', () => clearTimeout(timer));
+    $('#codeForm').addEventListener('submit', async (e) => {
+      e.preventDefault(); const inp = $('#code'); const fg = inp.closest('.fg');
+      if (!D.validate(fg)) return;
+      const v = inp.value.replace(/\D/g, '');
+      if (v.length < 8) { fg.classList.add('has-error'); fg.querySelector('.error-text').textContent = 'Barcodes have 8 to 13 digits. Check the number under the bars.'; inp.focus(); return; }
+      await D.loading($('#codeGo'), 800);
+      const id = CODES[v];
+      if (!id) { fg.classList.add('has-error'); fg.querySelector('.error-text').textContent = 'We couldn’t find a product with this code. Check the digits or scan the tag instead.'; inp.focus(); return; }
+      D.sheet.close(true); scan.classList.add('found'); showProduct(id, v);
+    });
+    $('#fAdd').addEventListener('click', async (e) => { if (found) { const ok = await D.addToBag(e.currentTarget, found.id); if (ok) D.sheet.close(); } });
+    $('#fAgain').addEventListener('click', () => { D.sheet.close(); setTimeout(restart, 350); });
+    $('#sAgain').addEventListener('click', () => { D.sheet.close(); setTimeout(() => setMode('barcode'), 350); });
+    $('#sMine').addEventListener('click', async (e) => {
+      const id = e.currentTarget.dataset.id; const s = D.storeById(id);
+      await D.loading(e.currentTarget, 600); D.store.set('myStore', id); showStore(s);
+      D.toast(`${s.name} is now your store`, { icon: 'check' });
+    });
+    // Restart scanning when a result sheet is dismissed
+    ['foundSheet', 'storeSheet', 'codeSheet'].forEach((id) => $('#' + id).addEventListener('sheet:close', () => { if (!D.sheet.current()) setTimeout(() => { if (!D.sheet.current() && !document.querySelector('.dialog-wrap')) restart(); }, 400); }));
+
+    setMode(mode);
+    D.hydrate(scan);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decathlon App Prototype</title>
+<meta name="description" content="Decathlon iPhone shopping app: an interactive high-fidelity prototype with 45 screens across six flows, from sign-in to returns.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700;1,800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230F96DB'/%3E%3Cpath d='M17 18h12c9 0 15 5.5 15 14s-6 14-15 14H17Zm9 8v12h3c3.6 0 6-2.4 6-6s-2.4-6-6-6Z' fill='%23fff' fill-rule='evenodd'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #F4F9FB;
+    --bg-2: #EAF4F8;
+    --paper: #FFFFFF;
+    --ink: #012A4A;
+    --ink-2: #26455E;
+    --muted: #5C7486;
+    --dim: #8AA0AF;
+    --line: rgba(1,42,74,.10);
+    --line-2: rgba(1,42,74,.18);
+    --blue: #0F96DB;
+    --blue-d: #0A78B2;
+    --navy: #012A4A;
+    --peach: #FBD7B1;
+    --peach-d: #F5B77A;
+    --sky: #A9D6E5;
+    --surface: #E5F2F7;
+    --ok: #3AAA35;
+    --amber: #F0A500;
+    --red: #F23A3A;
+    --ease: cubic-bezier(.22,1,.36,1);
+    --spring: cubic-bezier(.34,1.56,.64,1);
+    --font: 'Poppins', system-ui, -apple-system, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body { overflow-x: clip; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 8px; }
+  .wrap { width: min(1200px, calc(100% - 48px)); margin: 0 auto; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Backdrop: sky wash + faint lane stripes */
+  .aura { position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background:
+      radial-gradient(1000px 640px at 88% -12%, rgba(15,150,219,.20), transparent 62%),
+      radial-gradient(760px 520px at -8% 108%, rgba(251,215,177,.55), transparent 60%),
+      linear-gradient(180deg, #F7FBFD, var(--bg)); }
+
+  /* Wordmark (same geometry as the app) */
+  .wordmark { display: inline-block; width: 150px; aspect-ratio: 135 / 21; }
+  .wordmark svg { display: block; width: 100%; height: 100%; fill: currentColor; }
+
+  /* Nav */
+  .nav { position: sticky; top: 0; z-index: 40; backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px); background: rgba(244,249,251,.78); border-bottom: 1px solid var(--line); }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 68px; }
+  .brand { display: flex; align-items: center; gap: 12px; color: var(--blue); }
+  .brand small { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink); padding: 4px 8px; border-radius: 6px; background: var(--peach); }
+  .nav-links { display: flex; align-items: center; gap: 4px; }
+  .nav-links a { font-size: 14px; font-weight: 500; color: var(--muted); padding: 8px 14px; border-radius: 999px; transition: color .2s, background .2s; }
+  .nav-links a:hover { color: var(--ink); background: rgba(1,42,74,.06); }
+  .nav-links a.keep { color: #fff; background: var(--navy); }
+  .nav-links a.keep:hover { background: #033B66; }
+
+  /* Hero */
+  .hero { position: relative; padding: 56px 0 48px; }
+  .hero .wrap { display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; }
+  .hero .wrap > * { min-width: 0; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); padding: 6px 14px 6px 6px; border-radius: 999px; background: var(--paper); box-shadow: 0 0 0 1px var(--line), 0 6px 18px -10px rgba(1,42,74,.25); }
+  .eyebrow i { font-style: normal; display: inline-grid; place-items: center; height: 22px; padding: 0 9px; border-radius: 999px; background: var(--blue); color: #fff; font-size: 10.5px; letter-spacing: .1em; }
+  h1 { font-weight: 800; font-style: italic; font-size: clamp(34px, 4.7vw, 68px); line-height: .98; letter-spacing: -.035em; margin: 24px 0 22px; text-transform: uppercase; }
+  h1 .l2 { display: block; color: var(--blue); }
+  h1 .l3 { display: inline-block; position: relative; z-index: 0; white-space: nowrap; }
+  h1 .l3::after { content: ''; position: absolute; left: -.08em; right: -.1em; bottom: .06em; height: .34em; background: var(--peach); z-index: -1; transform: skewX(-12deg); border-radius: 4px; }
+  .lede { font-size: 17px; line-height: 1.7; color: var(--muted); max-width: 540px; margin: 0; }
+  .lede b { color: var(--ink); font-weight: 600; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+  .btn { height: 52px; padding: 0 24px; border-radius: 12px; display: inline-flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 600; transition: transform .25s var(--ease), background .25s, box-shadow .25s; }
+  .btn:active { transform: scale(.97); }
+  .btn-primary { background: var(--navy); color: #fff; box-shadow: 0 14px 30px -14px rgba(1,42,74,.7); }
+  .btn-primary:hover { background: #033B66; transform: translateY(-1px); }
+  .btn-ghost { background: var(--paper); box-shadow: inset 0 0 0 1.5px var(--sky); color: var(--blue-d); }
+  .btn-ghost:hover { background: var(--surface); }
+
+  .flows { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 30px; }
+  .flow { font-size: 13.5px; font-weight: 500; height: 34px; padding: 0 14px; border-radius: 8px; color: var(--ink); background: var(--surface); box-shadow: inset 0 0 0 1.5px #61A5C2; transition: background .2s, color .2s, box-shadow .2s, transform .2s var(--ease); }
+  .flow:hover { transform: translateY(-1px); }
+  .flow[aria-pressed="true"] { background: var(--navy); color: #fff; box-shadow: none; }
+
+  .facts { display: grid; grid-template-columns: repeat(4, auto); gap: 26px; margin-top: 40px; padding-top: 26px; border-top: 2px solid var(--sky); max-width: 560px; }
+  .facts dt { font-size: 11.5px; font-weight: 600; color: var(--dim); letter-spacing: .12em; text-transform: uppercase; }
+  .facts dd { margin: 4px 0 0; font-size: 30px; font-weight: 700; font-style: italic; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .facts dd sup { font-size: 14px; color: var(--blue); font-style: normal; margin-left: 2px; }
+
+  /* Stage: running-track lanes behind the phone */
+  .stage { position: relative; display: grid; justify-items: center; }
+  .track { position: absolute; top: 4%; width: min(560px, 118%); aspect-ratio: 1 / 1.25; pointer-events: none; }
+  .track svg { width: 100%; height: 100%; overflow: visible; }
+  .device-scale { position: relative; transform-origin: top left; }
+  .device { position: relative; width: 417px; height: 876px; padding: 12px; border-radius: 64px;
+    background: linear-gradient(145deg, #F2F6F8, #C9D3DA 38%, #EEF3F6 62%, #B9C5CE);
+    box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.9), inset 0 0 0 6px #0B1720, 0 60px 90px -40px rgba(1,42,74,.55), 0 24px 40px -24px rgba(1,42,74,.35); }
+  .device::before, .device::after { content: ''; position: absolute; left: -3px; width: 4px; border-radius: 2px 0 0 2px; background: #B6C1C9; }
+  .device::before { top: 170px; height: 60px; }
+  .device::after { top: 246px; height: 60px; }
+  .device .side { position: absolute; right: -3px; top: 220px; width: 4px; height: 92px; border-radius: 0 2px 2px 0; background: #B6C1C9; }
+  .device iframe { display: block; width: 393px; height: 852px; border: 0; border-radius: 52px; background: #fff; }
+  .screen-label { position: relative; margin-top: 18px; display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); }
+  .screen-label b { color: var(--ink); font-weight: 600; }
+  .nav-arrows { display: flex; gap: 6px; }
+  .round { width: 38px; height: 38px; border-radius: 50%; background: var(--paper); box-shadow: 0 0 0 1px var(--line-2); display: grid; place-items: center; transition: background .2s, transform .2s var(--ease); }
+  .round:hover { background: var(--surface); }
+  .round:active { transform: scale(.94); }
+  .reset { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500; color: var(--ink-2); background: var(--paper); box-shadow: 0 0 0 1px var(--line-2); transition: background .2s; white-space: nowrap; }
+  .reset:hover { background: var(--peach); }
+  .reset.done { background: #E1F5DF; color: #257A22; }
+
+  /* Sections */
+  section.block { padding: 96px 0; }
+  section.block + section.block { border-top: 1px solid var(--line); }
+  .sec-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 44px; }
+  .sec-head h2 { font-size: clamp(32px, 4vw, 52px); font-weight: 800; font-style: italic; text-transform: uppercase; letter-spacing: -.03em; line-height: 1; margin: 12px 0 0; }
+  .sec-head h2 span { color: var(--blue); }
+  .kicker { display: inline-flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--blue-d); }
+  .kicker::before { content: ''; width: 26px; height: 3px; border-radius: 2px; background: var(--blue); box-shadow: 8px 0 0 var(--peach-d); }
+  .sec-head p { color: var(--muted); max-width: 440px; line-height: 1.65; margin: 0; font-size: 15px; }
+  .sec-head p b { font-weight: 600; }
+
+  /* Gallery */
+  .group { margin-bottom: 64px; }
+  .group-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; padding-bottom: 14px; border-bottom: 2px solid var(--sky); }
+  .group-head .no { font-size: 13px; font-weight: 700; font-style: italic; color: var(--blue); font-variant-numeric: tabular-nums; }
+  .group-head h3 { font-size: 22px; font-weight: 700; margin: 0; letter-spacing: -.01em; }
+  .group-head span { font-size: 13px; color: var(--muted); }
+  .rail { display: grid; grid-template-columns: repeat(auto-fill, minmax(208px, 1fr)); gap: 30px 22px; }
+  .thumb { display: block; text-align: left; width: 100%; }
+  .thumb .frame { position: relative; width: 208px; height: 450px; border-radius: 32px; padding: 6px; background: linear-gradient(145deg, #F4F7F9, #CDD6DC 45%, #E9EEF1); box-shadow: inset 0 0 0 1px rgba(255,255,255,.9), inset 0 0 0 3.5px #0B1720, 0 22px 36px -22px rgba(1,42,74,.45); transition: transform .45s var(--ease), box-shadow .45s var(--ease); overflow: hidden; }
+  .thumb .viewport { width: 196px; height: 438px; border-radius: 26px; overflow: hidden; position: relative; background: #fff; }
+  .thumb iframe { display: block; width: 393px; height: 852px; border: 0; transform: scale(var(--s, .4987)); transform-origin: 0 0; pointer-events: none; opacity: 0; transition: opacity .5s var(--ease); }
+  .thumb iframe.ready { opacity: 1; }
+  .thumb .viewport::before { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, #EEF5F8 30%, #FFFFFF 50%, #EEF5F8 70%); background-size: 220% 100%; animation: thumbShimmer 1.6s linear infinite; }
+  .thumb .viewport.loaded::before { display: none; }
+  @keyframes thumbShimmer { to { background-position: -220% 0; } }
+  .thumb:focus-visible { outline: none; }
+  .thumb:focus-visible .frame { box-shadow: 0 0 0 3px var(--blue), 0 0 0 7px rgba(15,150,219,.2); }
+  .thumb:hover .frame { transform: translateY(-6px) rotate(-.6deg); box-shadow: inset 0 0 0 1px rgba(255,255,255,.9), inset 0 0 0 3.5px #0B1720, 0 34px 50px -24px rgba(1,42,74,.5); }
+  .thumb .cap { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 14px; padding: 0 4px; }
+  .thumb .cap b { font-weight: 600; font-size: 14px; }
+  .thumb .cap small { font-size: 12px; color: var(--dim); font-variant-numeric: tabular-nums; display: inline-flex; align-items: center; gap: 8px; font-weight: 500; }
+  .tag { font-style: normal; font-size: 10.5px; font-weight: 600; letter-spacing: .03em; padding: 2px 8px; border-radius: 6px; color: var(--blue-d); background: var(--surface); }
+  .tag--o { color: #7A4A12; background: var(--peach); }
+  .tag--s { color: #fff; background: var(--navy); }
+  .thumb .open { position: absolute; inset: 6px; border-radius: 26px; display: grid; place-items: center; background: rgba(1,42,74,.35); opacity: 0; transition: opacity .3s; }
+  .thumb .open span { font-weight: 600; font-size: 14px; background: #fff; color: var(--navy); padding: 10px 16px; border-radius: 10px; transform: translateY(8px); transition: transform .35s var(--spring); box-shadow: 0 10px 24px -10px rgba(0,0,0,.4); }
+  .thumb:hover .open, .thumb:focus-visible .open { opacity: 1; }
+  .thumb:hover .open span { transform: none; }
+
+  /* Design system */
+  .ds { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; }
+  .tile { background: var(--paper); border-radius: 20px; padding: 26px; box-shadow: 0 0 0 1px var(--line), 0 18px 40px -30px rgba(1,42,74,.35); min-width: 0; }
+  .tile h4 { margin: 0 0 18px; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+  .span-7 { grid-column: span 7; } .span-5 { grid-column: span 5; } .span-12 { grid-column: span 12; }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 12px; }
+  .sw { border-radius: 12px; overflow: hidden; box-shadow: 0 0 0 1px var(--line); background: var(--paper); }
+  .sw i { display: block; height: 66px; }
+  .sw div { padding: 9px 11px; font-size: 12px; }
+  .sw div b { display: block; font-weight: 600; font-size: 12.5px; }
+  .sw div span { color: var(--muted); font-family: var(--mono); font-size: 11px; }
+  .type-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 13px 0; border-top: 1px solid var(--line); }
+  .type-row:first-of-type { border-top: 0; padding-top: 0; }
+  .type-row > span { min-width: 0; }
+  .type-row small { color: var(--dim); font-size: 12px; white-space: nowrap; }
+  .comp-grid { display: flex; flex-wrap: wrap; gap: 14px 16px; align-items: center; }
+  .c-btn { height: 44px; padding: 0 26px; border-radius: 8px; font-weight: 600; font-size: 17px; display: inline-flex; align-items: center; }
+  .c-chip { height: 28px; padding: 0 12px; border-radius: 8px; font-size: 14px; display: inline-grid; place-items: center; background: var(--surface); box-shadow: inset 0 0 0 1.5px #61A5C2; color: #111; }
+  .c-pill { height: 26px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; display: inline-grid; place-items: center; }
+  .c-tab { width: 56px; height: 56px; border-radius: 8px; background: var(--peach); display: grid; place-items: center; box-shadow: 0 2px 4px rgba(0,0,0,.2); font-size: 10px; gap: 0; color: #111; }
+  .c-price b { font-size: 18px; font-weight: 700; } .c-price s { color: var(--red); font-size: 13px; margin-left: 6px; }
+  .c-qty { display: inline-flex; align-items: center; gap: 12px; font-weight: 500; }
+  .c-qty i { width: 22px; height: 22px; border-radius: 50%; background: #111; color: #fff; display: grid; place-items: center; font-style: normal; font-size: 15px; line-height: 1; }
+  .c-heart { width: 40px; height: 40px; border-radius: 8px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.1); display: grid; place-items: center; color: var(--blue); cursor: pointer; transition: transform .3s var(--spring); }
+  .c-heart[aria-pressed="false"] { color: #111; }
+  .c-heart[aria-pressed="false"] path { fill: none; stroke: currentColor; }
+  .c-heart:active { transform: scale(.9); }
+  .c-size { width: 32px; height: 32px; border-radius: 4px; display: inline-grid; place-items: center; font-size: 13px; font-weight: 700; box-shadow: inset 0 0 0 1px #9AA6AD; }
+  .c-size.on { box-shadow: inset 0 0 0 2px var(--navy); }
+  .principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 18px; }
+  .principle { position: relative; padding: 28px; border-radius: 20px; background: var(--paper); box-shadow: 0 0 0 1px var(--line); overflow: hidden; }
+  .principle::after { content: attr(data-n); position: absolute; right: 18px; top: 6px; font-size: 64px; font-weight: 800; font-style: italic; color: var(--surface); letter-spacing: -.04em; }
+  .principle .ic { position: relative; z-index: 1; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; margin-bottom: 18px; }
+  .principle h5 { position: relative; z-index: 1; font-size: 19px; font-weight: 700; margin: 0 0 8px; }
+  .principle p { position: relative; z-index: 1; margin: 0; color: var(--muted); line-height: 1.65; font-size: 14.5px; }
+
+  footer { padding: 36px 0 56px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; background: var(--paper); }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  footer a { color: var(--blue-d); font-weight: 500; text-decoration: underline; text-underline-offset: 3px; }
+  footer .wordmark { width: 118px; color: var(--blue); vertical-align: middle; margin-right: 10px; }
+
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+  .reveal.in { opacity: 1; transform: none; }
+  .hero .enter { animation: enter .9s var(--ease) both; animation-delay: calc(var(--i, 0) * 80ms); }
+  @keyframes enter { from { opacity: 0; transform: translateY(16px); } }
+
+  @media (max-width: 1020px) {
+    .hero .wrap { grid-template-columns: 1fr; }
+    .stage { order: -1; }
+    .span-7, .span-5 { grid-column: span 12; }
+    .principles { grid-template-columns: 1fr; }
+    .sec-head { flex-direction: column; align-items: start; }
+  }
+  @media (max-width: 640px) {
+    .wrap { width: calc(100% - 32px); }
+    .hero { padding-top: 28px; }
+    .nav-links a:not(.keep) { display: none; }
+    .brand small { display: none; }
+    .wordmark { width: 128px; }
+    .facts { grid-template-columns: repeat(2, auto); gap: 18px; }
+    .facts dd { font-size: 24px; }
+    .screen-label { flex-wrap: wrap; justify-content: center; text-align: center; }
+    .rail { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 14px; }
+    .thumb .frame { width: 100%; height: auto; border-radius: 24px; padding: 5px; }
+    .thumb .viewport { width: 100%; height: auto; aspect-ratio: 393 / 852; border-radius: 19px; }
+    .thumb .open { inset: 5px; border-radius: 19px; }
+    .thumb .cap { flex-direction: column; align-items: flex-start; gap: 6px; margin-top: 10px; }
+    .thumb .cap b { font-size: 13.5px; line-height: 1.3; }
+    .group-head { flex-wrap: wrap; gap: 4px 10px; }
+    .group-head span:not(.no) { flex-basis: 100%; }
+    .group { margin-bottom: 48px; }
+    .eyebrow { font-size: 10.5px; letter-spacing: .08em; }
+    section.block { padding: 64px 0; }
+    .tile { padding: 20px; }
+    .type-row { flex-wrap: wrap; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .thumb .viewport::before { animation: none; }
+    * { transition-duration: 1ms !important; animation-duration: 1ms !important; }
+  }
+</style>
+<script defer src="/prototype/_shared/case-link.js" data-href="/work/decathlon" data-label="Back to the Decathlon case study" data-position="top-center; (max-width: 640px) bottom-left 16 16 compact"></script>
+</head>
+<body>
+<div class="aura" aria-hidden="true"></div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Decathlon prototype, back to top">
+      <span class="wordmark" aria-hidden="true"><svg viewBox="0 0 135 21"><path fill-rule="evenodd" d="M0 .5h8.2C13.2.5 16.4 4.4 16.4 10.5S13.2 20.5 8.2 20.5H0Zm5.2 5v10h2.4c2.2 0 3.6-1.9 3.6-5s-1.4-5-3.6-5Z"/><path d="M16 .5h12.4v4.6h-7.2v3h6.9v4.4h-6.9v3.4h7.3v4.6H16Z"/><path d="M45.6 3.4C43.9 1.4 41.5.3 38.7.3 33.4.3 29.6 4.5 29.6 10.5s3.8 10.2 9.1 10.2c2.8 0 5.2-1.1 6.9-3.1l-3.5-3.5c-.8 1-1.9 1.6-3.2 1.6-2.3 0-3.9-2-3.9-5.2s1.6-5.2 3.9-5.2c1.3 0 2.4.6 3.2 1.6Z"/><path fill-rule="evenodd" d="M50 .5h6v20h-5.2v-4.9h-8.6v-3.2Zm.8 7.2-2.9 4.6h2.9Z"/><path d="M57 .5h12.6v4.6h-3.7v15.4h-5.2V5.1H57Z"/><path d="M71 .5h5v7.6h6V.5h5v20h-5v-7.9h-6v7.9h-5Z"/><path d="M88.2.5h5.4v15h6.4v5H88.2Z"/><path fill-rule="evenodd" d="M107.4.3c5.8 0 10.2 4.4 10.2 10.2s-4.4 10.2-10.2 10.2S97.2 16.3 97.2 10.5 101.6.3 107.4.3Zm0 5c-2.4 0-4.2 2.2-4.2 5.2s1.8 5.2 4.2 5.2 4.2-2.2 4.2-5.2-1.8-5.2-4.2-5.2Z"/><path d="M117.6.5h5.4l6.4 10V.5h5.4v20h-5.2l-6.6-10.3v10.3h-5.4Z"/></svg></span>
+      <small>App prototype</small>
+    </a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#screens">Screens</a>
+      <a href="#system">Design system</a>
+      <a href="#prototype" class="keep">Try it</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" id="prototype">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow enter"><i>iOS</i>Sports retail · Interactive prototype</span>
+        <h1 class="enter" style="--i:1">Every sport.<span class="l2">One store.</span><span class="l3">In your pocket.</span></h1>
+        <p class="lede enter" style="--i:2">A shopping app for <b>Decathlon</b>: browse 25 sports, check stock at your nearest Kolkata store, pick a size and check out in a few taps. Track, return or exchange an order without calling anyone.</p>
+        <div class="cta enter" style="--i:3">
+          <button class="btn btn-primary" type="button" data-load="splash">
+            Start from launch
+            <svg width="18" height="16" viewBox="0 0 18 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 8h14.5M9.5 1.5 16 8l-6.5 6.5"/></svg>
+          </button>
+          <a class="btn btn-ghost" href="#screens">Browse all 45 screens</a>
+        </div>
+
+        <div class="flows enter" style="--i:4" role="group" aria-label="Jump to a flow">
+          <button class="flow" type="button" data-load="welcome" aria-pressed="false">Launch &amp; Auth</button>
+          <button class="flow" type="button" data-load="home" aria-pressed="true">Browse</button>
+          <button class="flow" type="button" data-load="product" aria-pressed="false">Product</button>
+          <button class="flow" type="button" data-load="bag" aria-pressed="false">Bag &amp; Checkout</button>
+          <button class="flow" type="button" data-load="orders" aria-pressed="false">Orders</button>
+          <button class="flow" type="button" data-load="account" aria-pressed="false">Account</button>
+        </div>
+
+        <dl class="facts enter" style="--i:5">
+          <div><dt>Screens</dt><dd>45</dd></div>
+          <div><dt>Originals</dt><dd>13</dd></div>
+          <div><dt>Sheets</dt><dd>45<sup>+</sup></dd></div>
+          <div><dt>Flows</dt><dd>6</dd></div>
+        </dl>
+      </div>
+
+      <div class="stage">
+        <div class="track" aria-hidden="true">
+          <svg viewBox="0 0 400 500" fill="none">
+            <rect x="20" y="20" width="360" height="460" rx="180" stroke="#A9D6E5" stroke-width="2"/>
+            <rect x="44" y="44" width="312" height="412" rx="156" stroke="#A9D6E5" stroke-width="2" stroke-dasharray="2 10" stroke-linecap="round"/>
+            <rect x="68" y="68" width="264" height="364" rx="132" stroke="#FBD7B1" stroke-width="14" opacity=".75"/>
+            <rect x="96" y="96" width="208" height="308" rx="104" stroke="#A9D6E5" stroke-width="2"/>
+            <circle cx="380" cy="250" r="7" fill="#0F96DB"/>
+          </svg>
+        </div>
+        <div class="device-scale" id="deviceScale">
+          <div class="device">
+            <span class="side" aria-hidden="true"></span>
+            <iframe id="phone" name="phone" src="screens/home.html" title="Decathlon interactive prototype" loading="eager"></iframe>
+          </div>
+        </div>
+        <div class="screen-label">
+          <div class="nav-arrows">
+            <button class="round" id="prev" type="button" aria-label="Previous screen"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2 4 7l5 5"/></svg></button>
+            <button class="round" id="next" type="button" aria-label="Next screen"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 2 5 5-5 5"/></svg></button>
+          </div>
+          <span aria-live="polite">Now viewing <b id="current">Home</b></span>
+          <button class="reset" id="reset" type="button" title="Restore the demo bag, wishlist, orders and settings">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 12a8.5 8.5 0 0 1-15.2 5.2M3.5 12A8.5 8.5 0 0 1 18.7 6.8M19 3v4h-4M5 21v-4h4"/></svg>
+            <span id="resetTxt">Reset demo data</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="screens">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <span class="kicker">All screens</span>
+          <h2>45 screens, <span>six flows</span></h2>
+        </div>
+        <p>13 <b style="color:#9A5A14">original</b> frames were rebuilt from the designs pixel for pixel, except Checkout, which became the confirm step of a three-step flow. 32 <b style="color:var(--blue-d)">extended</b> screens use the same components to finish every journey. Pick any screen to open it in the phone above.</p>
+      </div>
+      <div id="gallery"></div>
+    </div>
+  </section>
+
+  <section class="block" id="system">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <span class="kicker">Design system</span>
+          <h2>Sky blue, navy, <span>one warm accent</span></h2>
+        </div>
+        <p>Light surfaces keep product photos in front. Brand blue marks what you can tap, navy carries the main actions, and peach marks where you are.</p>
+      </div>
+
+      <div class="ds">
+        <div class="tile span-7 reveal">
+          <h4>Colour</h4>
+          <div class="swatches">
+            <div class="sw"><i style="background:#0F96DB"></i><div><b>Brand blue</b><span>#0F96DB</span></div></div>
+            <div class="sw"><i style="background:#012A4A"></i><div><b>Navy</b><span>#012A4A</span></div></div>
+            <div class="sw"><i style="background:#FBD7B1"></i><div><b>Peach</b><span>#FBD7B1</span></div></div>
+            <div class="sw"><i style="background:#61A5C2"></i><div><b>Secondary</b><span>#61A5C2</span></div></div>
+            <div class="sw"><i style="background:#A9D6E5"></i><div><b>Border</b><span>#A9D6E5</span></div></div>
+            <div class="sw"><i style="background:#E5F2F7"></i><div><b>Surface</b><span>#E5F2F7</span></div></div>
+            <div class="sw"><i style="background:#3AAA35"></i><div><b>Delivered</b><span>#3AAA35</span></div></div>
+            <div class="sw"><i style="background:#F0A500"></i><div><b>In transit</b><span>#F0A500</span></div></div>
+            <div class="sw"><i style="background:#F23A3A"></i><div><b>MRP strike</b><span>#F23A3A</span></div></div>
+            <div class="sw"><i style="background:#FFC727"></i><div><b>Stars</b><span>#FFC727</span></div></div>
+          </div>
+        </div>
+        <div class="tile span-5 reveal">
+          <h4>Typography · Poppins</h4>
+          <div class="type-row"><span style="font-size:24px;font-weight:600;line-height:1.1">Order Confirmed</span><small>22 / Bold</small></div>
+          <div class="type-row"><span style="font-size:20px;font-weight:600">My orders</span><small>20 / Semibold</small></div>
+          <div class="type-row"><span style="font-size:18px;font-weight:700">Rs 12,000 <s style="color:#F23A3A;font-size:14px;font-weight:400">Rs 22,000</s></span><small>18 / Price</small></div>
+          <div class="type-row"><span style="font-size:15px;color:#61A5C2">Running (42) · Cycling (28)</span><small>15 / Label</small></div>
+          <div class="type-row"><span style="font-size:14px;color:var(--muted)">Responsive foam, breathable mesh upper.</span><small>14 / Body</small></div>
+          <div class="type-row"><span style="font-size:11px;font-weight:500">Home · Categories · Travel store · Bag · Account</span><small>11 / Tab bar</small></div>
+        </div>
+        <div class="tile span-12 reveal">
+          <h4>Components</h4>
+          <div class="comp-grid">
+            <span class="c-btn" style="background:#012A4A;color:#fff">Add to bag</span>
+            <span class="c-btn" style="background:#0F96DB;color:#fff">Get Started</span>
+            <span class="c-btn" style="background:#fff;color:#0F96DB;box-shadow:inset 0 0 0 1px #A9D6E5">Track your order</span>
+            <span class="c-chip" style="background:#012A4A;color:#fff;box-shadow:none">All</span>
+            <span class="c-chip">Delivered</span>
+            <span class="c-chip">Under Rs3k</span>
+            <span class="c-pill" style="background:#E1F5DF;color:#3AAA35">Delivered</span>
+            <span class="c-pill" style="background:#FFF5CA;color:#F0A500">In transit</span>
+            <span class="c-price"><b>Rs 9,000</b><s>Rs 12,000</s></span>
+            <span class="c-qty"><i>&minus;</i>4<i>+</i></span>
+            <span class="c-size">S</span><span class="c-size">M</span><span class="c-size on">L</span>
+            <button class="c-heart" type="button" aria-pressed="true" aria-label="Demo wishlist heart"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" stroke-width="2.2" stroke-linejoin="round" d="M12 20.3s-8.3-4.9-8.3-11A4.6 4.6 0 0 1 12 6.6a4.6 4.6 0 0 1 8.3 2.7c0 6.1-8.3 11-8.3 11Z"/></svg></button>
+            <span class="c-tab"><svg width="24" height="24" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="8" r="4.6"/><path d="M4.4 23v-.8a6.4 6.4 0 0 1 6.4-6.4h4.4a6.4 6.4 0 0 1 6.4 6.4v.8H4.4Z"/></svg>Account</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="principles">
+        <div class="principle reveal" data-n="01">
+          <div class="ic" style="background:#E5F2F7"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0F96DB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2.5"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>
+          <h5>Gear up front</h5>
+          <p>Sport tiles and product photos fill the screen. Prices, ratings and the heart sit on the card, so you can compare without opening every product.</p>
+        </div>
+        <div class="principle reveal" data-n="02">
+          <div class="ic" style="background:#FBD7B1"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9A5A14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 13H6L5 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg></div>
+          <h5>Checkout in one hand</h5>
+          <p>Size, bag, promo, address and payment all sit within thumb reach. The bag count stays on the tab bar, and a failed payment keeps your bag.</p>
+        </div>
+        <div class="principle reveal" data-n="03">
+          <div class="ic" style="background:#012A4A"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21.2s-7-6.3-7-11.7a7 7 0 0 1 14 0c0 5.4-7 11.7-7 11.7Z"/><circle cx="12" cy="9.6" r="2.6"/></svg></div>
+          <h5>Local and upfront</h5>
+          <p>Prices are in rupees, delivery dates follow your pincode, and stock is shown per store. Returns show the date and the refund before you confirm.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span><span class="wordmark" aria-hidden="true"><svg viewBox="0 0 135 21"><path fill-rule="evenodd" d="M0 .5h8.2C13.2.5 16.4 4.4 16.4 10.5S13.2 20.5 8.2 20.5H0Zm5.2 5v10h2.4c2.2 0 3.6-1.9 3.6-5s-1.4-5-3.6-5Z"/><path d="M16 .5h12.4v4.6h-7.2v3h6.9v4.4h-6.9v3.4h7.3v4.6H16Z"/><path d="M45.6 3.4C43.9 1.4 41.5.3 38.7.3 33.4.3 29.6 4.5 29.6 10.5s3.8 10.2 9.1 10.2c2.8 0 5.2-1.1 6.9-3.1l-3.5-3.5c-.8 1-1.9 1.6-3.2 1.6-2.3 0-3.9-2-3.9-5.2s1.6-5.2 3.9-5.2c1.3 0 2.4.6 3.2 1.6Z"/><path fill-rule="evenodd" d="M50 .5h6v20h-5.2v-4.9h-8.6v-3.2Zm.8 7.2-2.9 4.6h2.9Z"/><path d="M57 .5h12.6v4.6h-3.7v15.4h-5.2V5.1H57Z"/><path d="M71 .5h5v7.6h6V.5h5v20h-5v-7.9h-6v7.9h-5Z"/><path d="M88.2.5h5.4v15h6.4v5H88.2Z"/><path fill-rule="evenodd" d="M107.4.3c5.8 0 10.2 4.4 10.2 10.2s-4.4 10.2-10.2 10.2S97.2 16.3 97.2 10.5 101.6.3 107.4.3Zm0 5c-2.4 0-4.2 2.2-4.2 5.2s1.8 5.2 4.2 5.2 4.2-2.2 4.2-5.2-1.8-5.2-4.2-5.2Z"/><path d="M117.6.5h5.4l6.4 10V.5h5.4v20h-5.2l-6.6-10.3v10.3h-5.4Z"/></svg></span>App prototype · product design case study</span>
+    <span>Poppins · iPhone 393 × 852 · Photos from <a href="assets/img/CREDITS.md">Unsplash</a></span>
+  </div>
+</footer>
+
+<script>
+  const O = true; // original designed frame
+  const SCREENS = [
+    { id: 'splash', name: 'Splash', flow: 'Launch & Auth' },
+    { id: 'welcome', name: 'Welcome', flow: 'Launch & Auth', o: O },
+    { id: 'onboarding-1', name: 'Every Sport', flow: 'Launch & Auth' },
+    { id: 'onboarding-2', name: 'Tested Gear', flow: 'Launch & Auth' },
+    { id: 'onboarding-3', name: 'Decathlon Club', flow: 'Launch & Auth' },
+    { id: 'login', name: 'Sign In', flow: 'Launch & Auth' },
+    { id: 'otp', name: 'Verify Code', flow: 'Launch & Auth' },
+    { id: 'signup', name: 'Create Account', flow: 'Launch & Auth' },
+    { id: 'forgot-password', name: 'Forgot Password', flow: 'Launch & Auth' },
+    { id: 'home', name: 'Home', flow: 'Browse & Discover', o: O },
+    { id: 'category', name: 'Categories', flow: 'Browse & Discover', o: O },
+    { id: 'sport', name: 'Sport', flow: 'Browse & Discover' },
+    { id: 'travel-store', name: 'Travel Store', flow: 'Browse & Discover', o: O },
+    { id: 'stores', name: 'Stores', flow: 'Browse & Discover' },
+    { id: 'store-detail', name: 'Store', flow: 'Browse & Discover' },
+    { id: 'search', name: 'Search', flow: 'Browse & Discover' },
+    { id: 'search-results', name: 'Search Results', flow: 'Browse & Discover', o: O },
+    { id: 'filters', name: 'Filters', flow: 'Browse & Discover', o: O },
+    { id: 'scanner', name: 'Scan', flow: 'Browse & Discover' },
+    { id: 'notifications', name: 'Notifications', flow: 'Browse & Discover' },
+    { id: 'location', name: 'Delivery Location', flow: 'Browse & Discover' },
+    { id: 'product', name: 'Product', flow: 'Product', o: O },
+    { id: 'gallery', name: 'Photos', flow: 'Product' },
+    { id: 'reviews', name: 'Reviews', flow: 'Product' },
+    { id: 'write-review', name: 'Write a Review', flow: 'Product' },
+    { id: 'wishlist', name: 'Wishlist', flow: 'Product', o: O },
+    { id: 'bag', name: 'My Bag', flow: 'Bag & Checkout', o: O },
+    { id: 'coupons', name: 'Coupons', flow: 'Bag & Checkout' },
+    { id: 'checkout', name: 'Checkout', flow: 'Bag & Checkout', o: O },
+    { id: 'payment', name: 'Payment', flow: 'Bag & Checkout' },
+    { id: 'payment-failed', name: 'Payment Failed', flow: 'Bag & Checkout' },
+    { id: 'confirmation', name: 'Order Confirmed', flow: 'Bag & Checkout', o: O },
+    { id: 'orders', name: 'My Orders', flow: 'Orders & Returns', o: O },
+    { id: 'order-detail', name: 'Order Details', flow: 'Orders & Returns' },
+    { id: 'order-tracking', name: 'Track Order', flow: 'Orders & Returns' },
+    { id: 'return-request', name: 'Return or Exchange', flow: 'Orders & Returns' },
+    { id: 'return-success', name: 'Return Requested', flow: 'Orders & Returns' },
+    { id: 'account', name: 'My Account', flow: 'Account & Support', o: O },
+    { id: 'edit-profile', name: 'Edit Profile', flow: 'Account & Support' },
+    { id: 'addresses', name: 'Addresses', flow: 'Account & Support' },
+    { id: 'add-address', name: 'Add Address', flow: 'Account & Support' },
+    { id: 'payment-methods', name: 'Payment Methods', flow: 'Account & Support' },
+    { id: 'club', name: 'Decathlon Club', flow: 'Account & Support' },
+    { id: 'settings', name: 'Settings', flow: 'Account & Support' },
+    { id: 'help', name: 'Help & Support', flow: 'Account & Support' },
+  ];
+  const SHEETS = [
+    { id: 'product', sheet: 'guideSheet', name: 'Size Guide' },
+    { id: 'product', sheet: 'storeSheet', name: 'Stock in Stores' },
+    { id: 'product', sheet: 'addedSheet', name: 'Added to Bag' },
+    { id: 'search-results', sheet: 'sortSheet', name: 'Sort Results' },
+    { id: 'sport', sheet: 'filterSheet', name: 'Sport Filters' },
+    { id: 'home', sheet: 'pincode', name: 'Delivery Pincode' },
+    { id: 'home', sheet: 'voice', name: 'Voice Search' },
+    { id: 'travel-store', sheet: 'countrySheet', name: 'Stores Abroad' },
+    { id: 'scanner', sheet: 'foundSheet', name: 'Product Found' },
+    { id: 'store-detail', sheet: 'reserveSheet', name: 'Reserve & Collect' },
+    { id: 'login', sheet: 'googleSheet', name: 'Google Sign-in' },
+    { id: 'payment-methods', sheet: 'cardSheet', name: 'Add a Card' },
+    { id: 'order-tracking', sheet: 'instrSheet', name: 'Delivery Instructions' },
+    { id: 'order-detail', sheet: 'cancelSheet', name: 'Cancel Order' },
+    { id: 'order-detail', sheet: 'invoiceSheet', name: 'Tax Invoice' },
+    { id: 'club', sheet: 'redeemSheet', name: 'Redeem Points' },
+    { id: 'help', sheet: 'chatSheet', name: 'Support Chat' },
+    { id: 'settings', sheet: 'langSheet', name: 'Language' },
+  ];
+  const FLOW_NOTES = {
+    'Launch & Auth': 'First launch, onboarding, sign-in and verification',
+    'Browse & Discover': 'Sports, stores, search, filters and alerts',
+    'Product': 'Details, photos, reviews and saved items',
+    'Bag & Checkout': 'Bag, offers, address, payment and confirmation',
+    'Orders & Returns': 'History, tracking, returns and exchanges',
+    'Account & Support': 'Profile, addresses, cards, Club, settings and help',
+    'Sheets & Dialogs': 'Bottom sheets used across the app',
+  };
+  const FLOW_CHIP = { 'Launch & Auth': 'welcome', 'Browse & Discover': 'home', 'Product': 'product', 'Bag & Checkout': 'bag', 'Orders & Returns': 'orders', 'Account & Support': 'account' };
+
+  let lastId = 'home';
+  const phone = document.getElementById('phone');
+  const current = document.getElementById('current');
+  const idOf = (url) => (url.match(/screens\/([\w-]+)\.html/) || [])[1];
+
+  // Splash auto-advances to Welcome inside the phone; remember that so prev/next never bounce on it
+  let splashAt = 0, autoWelcome = false;
+  const setCurrent = (id) => {
+    if (id === 'welcome' && lastId === 'splash' && Date.now() - splashAt < 6000) autoWelcome = true;
+    else if (id !== lastId) autoWelcome = false;
+    lastId = id;
+    const s = SCREENS.find((x) => x.id === id); if (!s) return;
+    current.textContent = s.name;
+    document.querySelectorAll('.flow').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.load === FLOW_CHIP[s.flow])));
+  };
+  function load(id, scroll, query) {
+    lastId = id; autoWelcome = false;
+    if (id === 'splash') splashAt = Date.now();
+    phone.src = 'screens/' + id + '.html' + (query || '');
+    setCurrent(id);
+    if (scroll) {
+      const far = Math.abs(document.getElementById('prototype').getBoundingClientRect().top) > 2400;
+      const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      document.getElementById('prototype').scrollIntoView({ behavior: far || calm ? 'instant' : 'smooth' });
+    }
+  }
+  function sync() {
+    let id;
+    try { id = idOf(phone.contentWindow.location.pathname); } catch (e) { return; }
+    if (id) setCurrent(id);
+  }
+  phone.addEventListener('load', sync);
+  addEventListener('message', (e) => {
+    if (!e.data || !e.data.decaScreen || e.source !== phone.contentWindow) return;
+    setCurrent(e.data.decaScreen);
+  });
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-load]');
+    if (b) load(b.dataset.load, b.classList.contains('thumb'), b.dataset.query);
+  });
+  const step = (d) => {
+    let i = SCREENS.findIndex((x) => x.id === lastId);
+    if (d < 0 && autoWelcome) i = SCREENS.findIndex((x) => x.id === 'splash');
+    load(SCREENS[(i + d + SCREENS.length) % SCREENS.length].id);
+  };
+  document.getElementById('prev').addEventListener('click', () => step(-1));
+  document.getElementById('next').addEventListener('click', () => step(1));
+
+  // Reset demo data: call Deca.reset() in the phone when same-origin, else reload it with ?reset=1
+  const resetBtn = document.getElementById('reset');
+  resetBtn.addEventListener('click', () => {
+    let done = false;
+    try { const w = phone.contentWindow; if (w.Deca && w.Deca.reset) { w.Deca.reset(); w.location.reload(); done = true; } } catch (e) {}
+    if (!done) phone.src = 'screens/' + lastId + '.html?reset=1';
+    resetBtn.classList.add('done'); document.getElementById('resetTxt').textContent = 'Demo data restored';
+    clearTimeout(resetBtn._t); resetBtn._t = setTimeout(() => { resetBtn.classList.remove('done'); document.getElementById('resetTxt').textContent = 'Reset demo data'; }, 2200);
+  });
+
+  // Gallery
+  const gallery = document.getElementById('gallery');
+  const flows = [...new Set(SCREENS.map((s) => s.flow))];
+  let n = 0;
+  const thumb = (id, name, query, tag) => {
+    n++;
+    const a = document.createElement('button');
+    a.type = 'button'; a.className = 'thumb'; a.dataset.load = id; if (query) a.dataset.query = query;
+    a.setAttribute('aria-label', 'Open ' + name + ' in the prototype');
+    const src = `screens/${id}.html?capture=1${query ? '&' + query.slice(1) : ''}`;
+    const cls = tag === 'Original' ? 'tag--o' : tag === 'Sheet' ? 'tag--s' : '';
+    a.innerHTML = `<div class="frame"><div class="viewport"><iframe data-src="${src}" loading="lazy" tabindex="-1" aria-hidden="true" title="${name}"></iframe></div><div class="open"><span>Open in prototype</span></div></div><div class="cap"><b>${name}</b><small><i class="tag ${cls}">${tag}</i>${String(n).padStart(2, '0')}</small></div>`;
+    return a;
+  };
+  const group = (i, title, note, count, unit) => {
+    const g = document.createElement('div'); g.className = 'group reveal';
+    g.innerHTML = `<div class="group-head"><span class="no">${String(i).padStart(2, '0')}</span><h3>${title.replace('&', '&amp;')}</h3><span>${note} · ${count} ${unit}</span></div><div class="rail"></div>`;
+    gallery.appendChild(g); return g.querySelector('.rail');
+  };
+  flows.forEach((flow, i) => {
+    const list = SCREENS.filter((s) => s.flow === flow);
+    const rail = group(i + 1, flow, FLOW_NOTES[flow], list.length, 'screens');
+    list.forEach((s) => rail.appendChild(thumb(s.id, s.name, '', s.o ? 'Original' : 'Extended')));
+  });
+  {
+    const rail = group(flows.length + 1, 'Sheets & Dialogs', FLOW_NOTES['Sheets & Dialogs'], SHEETS.length, 'highlights');
+    SHEETS.forEach((x) => rail.appendChild(thumb(x.id, x.name, '?sheet=' + x.sheet, 'Sheet')));
+  }
+
+  // Mount thumbnail iframes only as each group nears the viewport
+  const mount = (rail) => rail.querySelectorAll('iframe[data-src]').forEach((f) => {
+    const done = () => { try { if (f.contentWindow.location.href === 'about:blank') return; } catch (e) {} f.classList.add('ready'); f.parentElement.classList.add('loaded'); f.removeEventListener('load', done); };
+    f.addEventListener('load', done);
+    f.src = f.dataset.src; f.removeAttribute('data-src');
+  });
+  if ('IntersectionObserver' in window) {
+    const mio = new IntersectionObserver((entries) => entries.forEach((en) => { if (en.isIntersecting) { mount(en.target); mio.unobserve(en.target); } }), { rootMargin: '900px 0px' });
+    gallery.querySelectorAll('.rail').forEach((r) => mio.observe(r));
+  } else gallery.querySelectorAll('.rail').forEach(mount);
+
+  // Fit device to the viewport
+  const scaleBox = document.getElementById('deviceScale');
+  const DW = 417, DH = 876;
+  function fit() {
+    const avail = Math.min(window.innerHeight - 210, DH);
+    const wAvail = Math.min(document.documentElement.clientWidth - 32, DW);
+    const s = Math.max(.45, Math.min(1, avail / DH, wAvail / DW));
+    scaleBox.firstElementChild.style.transform = `scale(${s})`;
+    scaleBox.firstElementChild.style.transformOrigin = 'top left';
+    scaleBox.style.height = DH * s + 'px';
+    scaleBox.style.width = DW * s + 'px';
+    document.querySelectorAll('.thumb .viewport').forEach((v) => { const w = v.clientWidth; if (w) v.style.setProperty('--s', w / 393); });
+  }
+  addEventListener('resize', fit); fit();
+
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), { rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+  // Demo heart
+  document.querySelectorAll('.c-heart').forEach((h) => h.addEventListener('click', () => h.setAttribute('aria-pressed', String(h.getAttribute('aria-pressed') !== 'true'))));
+</script>
+</body>
+</html>

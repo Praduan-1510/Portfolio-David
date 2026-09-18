@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Cancel Trip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .psheet { padding-top: 24px; }
+  .mini { display: grid; grid-template-columns: 76px 1fr; gap: 14px; align-items: center; padding: 10px; border-radius: 16px; background: var(--grey-1); }
+  .mini__img { width: 76px; height: 76px; border-radius: 10px; overflow: hidden; }
+  .mini__t { font-size: 16px; font-weight: 700; color: #000; }
+  .mini__s { font-size: 12px; color: var(--text-3); margin-top: 3px; line-height: 1.4; }
+  .mini__ref { display: inline-block; margin-top: 6px; font-size: 11px; font-weight: 600; letter-spacing: .08em; color: var(--navy); background: var(--orange-tint); padding: 3px 8px; border-radius: 6px; }
+  .policy { margin-top: 16px; }
+  .policy b { font-weight: 700; }
+  .refund { margin-top: 6px; border-radius: 16px; background: var(--grey-2); padding: 6px 16px 14px; }
+  .refund .kvs > div { font-size: 13.5px; padding: 11px 0; }
+  .refund .kvs .v { font-variant-numeric: tabular-nums; }
+  .refund .minus { color: var(--danger); }
+  .refund__total { display: flex; justify-content: space-between; align-items: baseline; padding-top: 12px; border-top: 1.5px solid #8E8E8E; }
+  .refund__total span { font-size: 14px; font-weight: 700; color: var(--text-2); }
+  .refund__total b { font-size: 22px; color: var(--valid); font-variant-numeric: tabular-nums; }
+  .refund__eta { font-size: 12px; color: var(--text-4); margin-top: 6px; }
+  .options { gap: 8px; }
+  .option { min-height: 50px; }
+  .option__title { font-size: 14px; font-weight: 500; }
+  #otherWrap { margin-top: 10px; }
+  textarea.field { height: 96px; }
+  .err { color: var(--danger); font-size: 12px; margin-top: 8px; display: flex; gap: 6px; }
+  .actions { margin-top: 26px; }
+  .actions .btn + .btn { margin-top: 10px; }
+
+  /* result state */
+  .done { text-align: center; padding-top: 16px; }
+  .done .hero-check { width: 132px; height: 132px; }
+  .done .result__title { margin-top: 28px; font-size: 24px; }
+  .done .refbox { width: 100%; height: 76px; }
+  .done .refbox__v { font-size: 24px; color: var(--valid); }
+  .timeline { text-align: left; margin-top: 22px; }
+  .step { display: grid; grid-template-columns: 24px 1fr; gap: 12px; padding-bottom: 16px; position: relative; }
+  .step::before { content: ''; position: absolute; left: 11px; top: 24px; bottom: 0; width: 2px; background: #DADADA; }
+  .step:last-child::before { display: none; }
+  .step i { width: 24px; height: 24px; border-radius: 50%; background: #DADADA; display: grid; place-items: center; color: #fff; }
+  .step.is-done i { background: var(--valid); }
+  .step b { display: block; font-size: 14px; }
+  .step span { font-size: 12px; color: var(--text-4); }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Cancel trip">
+  <header class="phead">
+    <a class="phead__back tap" href="trips.html" data-go="back" aria-label="Back">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3.5M10.5 4.5 3 12l7.5 7.5"/></svg>
+    </a>
+    <div class="phead__titles"><h1 class="phead__title" id="hTitle">Cancel Trip</h1></div>
+  </header>
+
+  <section class="psheet">
+    <div class="mini enter">
+      <span class="mini__img ph"><img id="img" src="../assets/img/trip-paris.jpg" alt=""></span>
+      <div><p class="mini__t" id="tName">Paris City Break</p><p class="mini__s" id="tSub">Aug 12–19, 2026 · 2 Adults · Economy</p><span class="mini__ref" id="tRef">VYG-4892-PAR</span></div>
+    </div>
+
+    <!-- form state -->
+    <div id="formState">
+      <div class="banner banner--warn policy enter" style="--i:1"><span data-icon="info" data-size="18"></span><span id="policy"><b>Early cancellation.</b> You’re more than 14 days from departure, so you get 90% back. Travel insurance is non-refundable.</span></div>
+
+      <div class="sec"><h2 class="sec__label">Refund Breakdown</h2></div>
+      <div class="refund enter" style="--i:2">
+        <div class="kvs" id="kvs"></div>
+        <div class="refund__total"><span>You’ll get back</span><b id="refund">$2,398</b></div>
+        <p class="refund__eta" id="eta">To Visa •••• 4887 within 5–7 business days</p>
+      </div>
+
+      <div class="sec"><h2 class="sec__label" id="reasonL">Reason For Cancelling</h2></div>
+      <div class="options" id="reasons" data-options aria-labelledby="reasonL">
+        <button class="option" type="button" data-value="Change of plans"><span class="option__radio"></span><span class="option__body"><span class="option__title">Change of plans</span></span></button>
+        <button class="option" type="button" data-value="Found a better price"><span class="option__radio"></span><span class="option__body"><span class="option__title">Found a better price</span></span></button>
+        <button class="option" type="button" data-value="Travel dates changed"><span class="option__radio"></span><span class="option__body"><span class="option__title">My travel dates changed</span></span></button>
+        <button class="option" type="button" data-value="Health or emergency"><span class="option__radio"></span><span class="option__body"><span class="option__title">Health or family emergency</span></span></button>
+        <button class="option" type="button" data-value="Other"><span class="option__radio"></span><span class="option__body"><span class="option__title">Something else</span></span></button>
+      </div>
+      <div class="fg" id="otherWrap" hidden>
+        <label class="label label--sm" for="other">Tell us more</label>
+        <textarea class="field" id="other" maxlength="200" data-charcount="otherCount" placeholder="Optional — this helps us improve"></textarea>
+        <p class="counter-hint" id="otherCount"></p>
+      </div>
+      <p class="err" id="reasonErr" role="alert" hidden></p>
+
+      <div class="actions">
+        <button class="btn btn--danger" type="button" id="cancelBtn"><span>Cancel Trip</span></button>
+        <a class="btn btn--neutral" id="keep" href="trips.html"><span>Keep My Trip</span></a>
+      </div>
+      <p class="small center mt-16">Prefer different dates? <a class="link" id="modLink" href="modify-booking.html?trip=paris-aug">Modify instead</a></p>
+    </div>
+
+    <!-- blocked state (past / active trips) -->
+    <div id="blocked" hidden>
+      <div class="empty"><div class="empty__icon" data-icon="info" data-size="30"></div><p class="empty__title" id="blkT">This trip can’t be cancelled</p><p class="empty__msg" id="blkM">Completed trips are no longer refundable.</p><a class="btn btn--primary btn--inline" href="support.html">Contact Support</a></div>
+    </div>
+
+    <!-- cancelled result -->
+    <div id="doneState" class="done" hidden>
+      <div class="hero-check hero-check--info" aria-hidden="true"><svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+      <h2 class="result__title">Trip Cancelled</h2>
+      <p class="result__msg" id="doneMsg">Your Paris City Break has been cancelled. A confirmation email is on its way.</p>
+      <div class="refbox"><span class="refbox__k">Refund Amount</span><span class="refbox__v" id="doneAmt">$2,398</span></div>
+      <div class="timeline">
+        <div class="step is-done"><i></i><div><b>Cancellation confirmed</b><span id="st1">Today</span></div></div>
+        <div class="step is-done"><i></i><div><b>Refund issued</b><span id="st2">To Visa •••• 4887</span></div></div>
+        <div class="step"><i></i><div><b>Money in your account</b><span id="st3">Expected in 5–7 business days</span></div></div>
+      </div>
+      <a class="btn btn--primary mt-24" href="trips.html?tab=past"><span>Back to My Trips</span></a>
+      <a class="btn btn--ghost mt-8" id="rebook" href="book-dates.html"><span>Book a New Trip</span></a>
+    </div>
+  </section>
+
+  <nav data-tabbar="trip"></nav>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const V = window.Voyager, D = V.date;
+    const $ = (s) => document.querySelector(s);
+    const key = V.q('trip') || 'paris-aug';
+    let trip = V.trips.get(key) || V.trips.get('paris-aug') || V.trips.list('upcoming')[0];
+    const d = V.dest(trip.dest) || V.dest('paris');
+    const card = V.cards.get(trip.card) || V.cards.default();
+    const cardTxt = card ? `${card.brand} •••• ${card.last4}` : 'your original card';
+
+    $('#img').src = V.img(trip.img || d.img);
+    $('#tName').textContent = trip.title;
+    const trav = trip.adults + trip.children;
+    $('#tSub').textContent = `${D.range(trip.start, trip.end)}, ${trip.start.slice(0, 4)} · ${trav} Traveller${trav === 1 ? '' : 's'} · ${trip.cls === 'business' ? 'Business' : 'Economy'}`;
+    $('#tRef').textContent = trip.ref;
+    $('#modLink').href = `modify-booking.html?trip=${encodeURIComponent(trip.id)}`;
+    document.querySelectorAll('.step i').forEach((i) => { i.innerHTML = V.icon('check', 14, 'stroke-width="3"'); });
+
+    const refund = V.trips.refund(trip);
+    const ins = trip.addons && trip.addons.insurance ? V.PRICES.insurance : 0;
+    const fee = trip.total - ins - refund;
+    $('#kvs').innerHTML = [
+      ['Amount paid', V.fmt(trip.total), ''],
+      ...(ins ? [['Travel insurance (non-refundable)', '−' + V.fmt(ins), 'minus']] : []),
+      [`Cancellation fee (${Math.round((1 - V.trips.refundRate(trip)) * 100)}%)`, '−' + V.fmt(fee), 'minus'],
+    ].map(([k, v, c]) => `<div><span class="k">${k}</span><span class="v ${c}">${v}</span></div>`).join('');
+    $('#refund').textContent = V.fmt(refund);
+    const togo = V.trips.daysToGo(trip);
+    $('#policy').innerHTML = V.trips.refundRate(trip) === 0.9
+      ? `<b>Early cancellation.</b> You’re ${togo} days from departure, so you get 90% back. Travel insurance is non-refundable.`
+      : `<b>Late cancellation.</b> You’re ${togo} days from departure (under 14), so you get 50% back. Travel insurance is non-refundable.`;
+    $('#eta').textContent = `To ${cardTxt} within 5–7 business days`;
+
+    const showDone = (t) => {
+      $('#formState').hidden = true; $('#blocked').hidden = true; $('#doneState').hidden = false;
+      $('#hTitle').textContent = 'Trip Cancelled';
+      $('#doneMsg').textContent = `Your ${t.title} has been cancelled${t.cancelReason ? ` (${t.cancelReason.toLowerCase()})` : ''}. A confirmation email is on its way.`;
+      $('#doneAmt').textContent = V.fmt(V.trips.refund(t));
+      $('#st1').textContent = t.cancelledAt ? D.fmt(t.cancelledAt, 'long') : 'Today';
+      $('#st2').textContent = `To ${cardTxt}`;
+      $('#rebook').addEventListener('click', () => V.booking.start(t.dest));
+    };
+
+    if (trip.status === 'cancelled') showDone(trip);
+    else if (trip.status === 'past' || trip.status === 'active') {
+      $('#formState').hidden = true; $('#blocked').hidden = false;
+      if (trip.status === 'active') { $('#blkT').textContent = 'Your trip is in progress'; $('#blkM').textContent = 'Trips that have started can’t be cancelled in the app. Our team can help with changes.'; }
+    }
+
+    // reason
+    let reason = '';
+    $('#reasons').addEventListener('select', (e) => {
+      reason = e.detail; $('#reasonErr').hidden = true;
+      $('#otherWrap').hidden = reason !== 'Other';
+      if (reason === 'Other') setTimeout(() => $('#other').focus(), 50);
+    });
+
+    $('#cancelBtn').addEventListener('click', async (e) => {
+      const btn = e.currentTarget;   // currentTarget is null once the dialog below has been awaited
+      if (!reason) {
+        $('#reasonErr').hidden = false; $('#reasonErr').innerHTML = V.icon('warning', 14, 'stroke-width="2"') + '<span>Choose a reason so we can process your cancellation</span>';
+        $('#reasons').querySelector('.option').focus(); V.haptic(); return;
+      }
+      const ok = await V.dialog({ title: `Cancel ${trip.title}?`, message: `You’ll get ${V.fmt(refund)} back to ${cardTxt} in 5–7 business days. This can’t be undone.`, confirm: 'Cancel Trip', cancel: 'Keep Trip', tone: 'danger' });
+      if (!ok) return;
+      await V.loading(btn, 1200);
+      const why = reason === 'Other' ? ($('#other').value.trim() || 'Other') : reason;
+      trip = V.trips.cancel(trip.id, why);
+      V.notifications.add({ title: 'Trip Cancelled', body: `${trip.title} (${trip.ref}) Was Cancelled. Your Refund Of ${V.fmt(refund)} Is On Its Way.`, href: `cancel-trip.html?trip=${trip.id}` });
+      showDone(trip);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      V.toast('Trip cancelled · refund issued');
+    });
+  })();
+</script>
+</body>
+</html>

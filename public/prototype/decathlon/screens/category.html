@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Categories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* Pixel-matched to Category.png: canvas #A0D5F1 (y0) -> white (y400) -> #B2DDF3 (y770),
+     4 x 6 tiles 80x80 r10, cols x14/109/204/299, rows y156 + 104n. */
+  .cat-canvas { background: linear-gradient(180deg, #A0D5F1 0px, #C6E6F7 160px, #FFFFFF 400px, #B2DDF3 770px, #B2DDF3 100%); min-height: 852px; }
+  .tile { box-shadow: 0 1px 2px rgba(1, 42, 74, .08); outline-offset: 3px; }
+  /* Sport name appears while the tile is pressed / focused (the grid stays label-free like the design) */
+  .tile .tile__label { opacity: 0; transform: translateY(4px); transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out); font-size: 10.5px; line-height: 1.2; }
+  .tile:active .tile__label, .tile:focus-visible .tile__label, .tile.is-peek .tile__label { opacity: 1; transform: none; }
+  @media (hover: hover) { .tile:hover .tile__label { opacity: 1; transform: none; } }
+
+  /* Below the fold: every sport by name */
+  .more { padding: 800px 14px calc(var(--tabbar-h) + 32px); }
+  .more .section-head { margin: 0 2px 12px; }
+  .more .section-title { color: #000; }
+  .az { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .az a { display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 6px 10px 6px 6px; border-radius: var(--r-tile); background: rgba(255,255,255,.78); box-shadow: 0 1px 2px rgba(1,42,74,.06); font-size: 13px; font-weight: 500; color: #111; }
+  .az a img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; background: var(--surface); flex-shrink: 0; }
+  .az a .n { margin-left: auto; font-size: 11px; font-weight: 500; color: var(--muted-2); }
+  .az-search { display: flex; align-items: center; gap: 8px; height: 40px; margin: 0 0 12px; padding: 0 12px; border-radius: var(--r-pill); background: #fff; box-shadow: inset 0 0 0 1px var(--border); }
+  .az-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font-size: 14px; }
+  .az-search svg { color: var(--muted-2); }
+  .az-empty { grid-column: 1 / -1; text-align: center; padding: 18px 8px; font-size: 13px; color: var(--muted-2); }
+</style>
+</head>
+<body>
+<main class="screen cat-canvas" aria-label="Categories" id="cat">
+  <h1 class="sr-only">Shop by sport</h1>
+  <header class="brand-head abs" style="left:0;top:0;width:393px" data-brandhead data-ring="#A6D8F2"></header>
+
+  <nav aria-label="Sports" id="grid"></nav>
+
+  <section class="more" aria-labelledby="azT">
+    <div class="section-head"><h2 class="section-title" id="azT">All sports A–Z</h2><span class="see-all" id="azCount" style="color:var(--muted-2)"></span></div>
+    <label class="az-search"><i data-icon="search" data-size="16"></i><span class="sr-only">Find a sport</span><input id="azQ" type="search" placeholder="Find a sport, e.g. swimming" autocomplete="off"></label>
+    <div class="az" id="az"></div>
+  </section>
+
+  <nav data-tabbar="categories"></nav>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$;
+    // Grid order = Category.png (6 rows). Row 4-6 differ from Home.
+    const ORDER = ['winter', 'cycling', 'football', 'cricket', 'tennis', 'badminton', 'basketball', 'table-tennis',
+      'gym', 'bags', 'fitness', 'yoga', 'football-boots', 'running', 'skating', 'hiking',
+      'skateboarding', 'snowboarding', 'skiing', 'trekking', 'rainwear', 'camping', 'fishing', 'tents'];
+    const X = [14, 109, 204, 299];
+    $('#grid').innerHTML = ORDER.map((slug, i) => {
+      const s = D.sport(slug); const r = Math.floor(i / 4);
+      return `<a class="tile abs tap enter" href="sport.html?sport=${slug}" style="left:${X[i % 4]}px;top:${156 + r * 104}px;--i:${Math.min(r + 1, 6)}" aria-label="${D.esc(s.name)}"><img src="${D.img(s.img)}" alt="" loading="${r < 4 ? 'eager' : 'lazy'}"><span class="tile__label" aria-hidden="true">${D.esc(s.name)}</span></a>`;
+    }).join('');
+
+    // Long-press peek: show the sport name after 350 ms on touch, before the tap navigates
+    D.$$('#grid .tile').forEach((t) => {
+      let h; t.addEventListener('pointerdown', () => { h = setTimeout(() => t.classList.add('is-peek'), 350); });
+      ['pointerup', 'pointerleave', 'pointercancel'].forEach((ev) => t.addEventListener(ev, () => { clearTimeout(h); setTimeout(() => t.classList.remove('is-peek'), 600); }));
+    });
+
+    // A-Z list (includes Swimming, which has no tile in the grid)
+    const all = D.sports.slice().sort((a, b) => a.name.localeCompare(b.name));
+    const n = (slug) => D.bySport(slug).length;
+    const render = (q = '') => {
+      const s = q.trim().toLowerCase();
+      const list = all.filter((x) => !s || x.name.toLowerCase().includes(s) || x.slug.includes(s));
+      $('#az').innerHTML = list.length ? list.map((x) => `<a class="tap" href="sport.html?sport=${x.slug}"><img src="${D.img(x.img)}" alt="" loading="lazy">${D.esc(x.name)}<span class="n num">${n(x.slug) ? n(x.slug) : 'Soon'}</span></a>`).join('')
+        : `<p class="az-empty" role="status">No sport called “${D.esc(q)}”. Try <button class="text-btn text-btn--brand" type="button" id="azSearch">searching products</button> instead.</p>`;
+      const b = $('#azSearch'); if (b) b.onclick = () => { D.searches.add(q); location.href = 'search-results.html?q=' + encodeURIComponent(q); };
+      $('#azCount').textContent = `${list.length} sports`;
+    };
+    render();
+    $('#azQ').addEventListener('input', (e) => render(e.target.value));
+    $('#azQ').addEventListener('keydown', (e) => { if (e.key === 'Enter') { const a = $('#az a'); if (a) location.href = a.href; } });
+    D.hydrate($('#cat'));
+  })();
+</script>
+</body>
+</html>

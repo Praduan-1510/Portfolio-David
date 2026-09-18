@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Search</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* Same search row as Search results (field x41..378, y25..67) so the hand-off is seamless */
+  .sr-head { display: flex; align-items: center; height: 67px; padding-top: 25px; }
+  .sr-head .back { width: 30px; height: 42px; margin-left: -12px; display: grid; place-items: center; color: #000; border-radius: 8px; flex-shrink: 0; }
+  .sr-head .back svg { width: 10px; height: 17px; }
+  .sr-head .search-field { margin: 0 -9px 0 -1px; height: 42px; padding: 0 12px 0 11px; gap: 9px; }
+  .sr-head .search-field > svg { width: 17px; height: 17px; }
+  .sr-head .search-field button { color: #111; }
+  .sr-head .search-field .clear { width: 26px; margin-right: -4px; color: var(--muted-2); }
+  .sec { margin-top: 26px; }
+  .sec-h { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .sec-h h2 { font-size: 16px; font-weight: 600; color: #000; }
+  .recent { margin: 0 -8px; }
+  .recent li { display: flex; align-items: center; }
+  .recent a { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 8px; border-radius: 8px; font-size: 15px; color: #111; }
+  .recent a svg { color: var(--muted-2); flex-shrink: 0; }
+  .recent .fill { width: 44px; height: 44px; display: grid; place-items: center; color: var(--muted-2); border-radius: 8px; }
+  .recent .fill svg { transform: rotate(-135deg); }
+  .trend .chip { height: 34px; padding: 0 14px; font-size: 14px; gap: 6px; background: #fff; }
+  .trend .chip svg { color: var(--brand); }
+  .pop { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px 11px; }
+  .pop a { text-align: center; }
+  .pop .tile { width: 100%; height: auto; aspect-ratio: 1; }
+  .scan-cta { display: flex; align-items: center; gap: 14px; margin-top: 26px; padding: 14px; border-radius: var(--r-tile); background: var(--navy); color: #fff; }
+  .scan-cta .icon-tile { background: rgba(255,255,255,.12); color: #fff; }
+  .scan-cta b { display: block; font-size: 15px; font-weight: 600; }
+  .scan-cta span.s { font-size: 12px; color: #BFE6FA; }
+  /* Live suggestions */
+  .sugg { margin-top: 10px; }
+  .sugg__row { display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 4px; border-radius: 8px; font-size: 15px; color: #111; }
+  .sugg mark { background: none; color: #000; font-weight: 600; }
+  .sugg__row .muted-2 { color: var(--muted-2); font-size: 12px; margin-left: auto; white-space: nowrap; }
+  .sugg__row > svg { color: var(--muted-2); flex-shrink: 0; }
+  .sugg__row.is-hl { background: var(--surface); }
+  .sugg-prod { display: flex; align-items: center; gap: 12px; padding: 8px 4px; border-radius: 8px; }
+  .sugg-prod .thumb { width: 52px; height: 52px; }
+  .sugg-prod__n { font-size: 14px; color: #111; line-height: 1.3; }
+  .sugg-prod__b { font-size: 11px; color: var(--steel); text-transform: uppercase; letter-spacing: .5px; }
+  .sugg .label-caps { margin: 16px 0 6px; }
+  .noq { padding: 28px 8px 0; text-align: center; }
+  .noq b { display: block; font-size: 16px; font-weight: 600; color: #000; }
+  .noq p { font-size: 13px; color: var(--muted-2); margin-top: 4px; line-height: 1.5; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Search" id="sp">
+  <form class="sr-head" id="form" role="search" action="search-results.html">
+    <a class="back tap" href="home.html" data-go="back" aria-label="Back"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <div class="search-field">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m20 20-4.4-4.4"/></svg>
+      <label class="sr-only" for="q">Search products, sports and brands</label>
+      <input id="q" name="q" type="search" enterkeyhint="search" autocomplete="off" placeholder="Search products, sports, brands" role="combobox" aria-expanded="false" aria-controls="sugg" aria-autocomplete="list">
+      <button class="clear tap" type="button" id="clearQ" aria-label="Clear search" hidden><i data-icon="x-circle" data-size="18"></i></button>
+      <button class="tap" type="button" data-action="voice" aria-label="Search by voice"><i data-icon="mic" data-size="17" data-sw="1.6"></i></button>
+    </div>
+  </form>
+
+  <div id="idle">
+    <section class="sec" id="recentSec" aria-labelledby="recentH">
+      <div class="sec-h"><h2 id="recentH">Recent searches</h2><button class="text-btn text-btn--brand tap" type="button" id="clearRecent">Clear all</button></div>
+      <ul class="recent" id="recent" data-delegate></ul>
+    </section>
+
+    <section class="sec trend" aria-labelledby="trendH">
+      <div class="sec-h"><h2 id="trendH">Trending now</h2></div>
+      <div class="chip-row" id="trending" style="gap:8px"></div>
+    </section>
+
+    <section class="sec" aria-labelledby="popH">
+      <div class="sec-h"><h2 id="popH">Popular categories</h2><a class="see-all see-all--brand tap" href="category.html">See all</a></div>
+      <div class="pop" id="pop"></div>
+    </section>
+
+    <a class="scan-cta tap" href="scanner.html"><span class="icon-tile"><i data-icon="scan" data-size="22"></i></span><span class="grow"><b>Scan a barcode in store</b><span class="s">See reviews, stock and prices instantly</span></span><i data-icon="chevron" data-size="18" data-sw="2"></i></a>
+  </div>
+
+  <div id="sugg" class="sugg" role="listbox" aria-label="Suggestions" hidden></div>
+
+  <nav data-tabbar="categories"></nav>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const input = $('#q');
+    const capture = document.body.classList.contains('capture');
+    if (D.q('q')) input.value = D.q('q');
+    if (!capture) setTimeout(() => input.focus(), 60);
+
+    const go = (q) => { q = String(q || '').trim(); if (!q) { input.focus(); D.toast('Type what you’re looking for'); return; } D.searches.add(q); location.href = 'search-results.html?q=' + encodeURIComponent(q); };
+
+    /* Idle: recent, trending, popular */
+    function paintRecent() {
+      const list = D.searches.list();
+      $('#recentSec').hidden = !list.length;
+      $('#recent').innerHTML = list.map((s) => `<li><a class="tap" href="search-results.html?q=${encodeURIComponent(s)}" data-q="${D.esc(s)}">${D.icon('history', 18)}<span class="ellipsis">${D.esc(s)}</span></a><button class="fill tap" type="button" data-fill="${D.esc(s)}" aria-label="Edit “${D.esc(s)}” in the search box">${D.icon('arrow', 18)}</button></li>`).join('');
+    }
+    paintRecent();
+    $('#recent').addEventListener('click', (e) => {
+      const f = e.target.closest('[data-fill]'); const a = e.target.closest('[data-q]');
+      if (f) { input.value = f.dataset.fill; input.focus(); update(); return; }
+      if (a) { e.preventDefault(); go(a.dataset.q); }
+    });
+    $('#clearRecent').addEventListener('click', async () => {
+      const prev = D.searches.list().slice();
+      if (!(await D.dialog({ title: 'Clear recent searches?', message: 'Your search history on this device will be removed.', confirm: 'Clear', tone: 'danger', icon: 'trash' }))) return;
+      D.searches.clear(); paintRecent();
+      D.toast('Recent searches cleared', { action: 'Undo', onAction: () => { prev.slice().reverse().forEach((s) => D.searches.add(s)); paintRecent(); } });
+    });
+    $('#trending').innerHTML = D.trending.map((t) => `<a class="chip tap" href="search-results.html?q=${encodeURIComponent(t)}" data-q="${D.esc(t)}">${D.icon('arrow', 14, { sw: 2 }).replace('<svg', '<svg style="transform:rotate(-45deg)"')}${t}</a>`).join('');
+    $('#trending').addEventListener('click', (e) => { const a = e.target.closest('[data-q]'); if (a) { e.preventDefault(); go(a.dataset.q); } });
+    $('#pop').innerHTML = ['running', 'cycling', 'tennis', 'camping', 'yoga', 'football', 'hiking', 'gym'].map((s) => { const sp = D.sport(s); return `<a class="tap" href="sport.html?sport=${s}"><span class="tile"><img src="${D.img(sp.img)}" alt="" loading="lazy"></span><span class="tile-cap">${sp.name}</span></a>`; }).join('');
+
+    /* Live suggestions */
+    const hl = (text, q) => { const i = text.toLowerCase().indexOf(q.toLowerCase()); return i < 0 ? D.esc(text) : D.esc(text.slice(0, i)) + '<mark>' + D.esc(text.slice(i, i + q.length)) + '</mark>' + D.esc(text.slice(i + q.length)); };
+    let items = [], cursor = -1;
+    function update() {
+      const q = input.value.trim(); $('#clearQ').hidden = !input.value;
+      const typing = q.length > 0; $('#idle').hidden = typing; $('#sugg').hidden = !typing; input.setAttribute('aria-expanded', String(typing));
+      if (!typing) return;
+      const s = q.toLowerCase();
+      const terms = [];
+      D.sports.forEach((x) => { if (x.name.toLowerCase().includes(s)) terms.push({ t: x.name, sub: `${D.bySport(x.slug).length || 'In store'} ${D.bySport(x.slug).length ? 'products' : ''}`.trim(), href: `sport.html?sport=${x.slug}`, ic: 'grid' }); });
+      D.brands.forEach((b) => { if (b.toLowerCase().includes(s)) terms.push({ t: b, sub: 'Brand', q: b, ic: 'tag' }); });
+      D.trending.concat(D.searches.list()).forEach((t) => { if (t.toLowerCase().includes(s) && !terms.some((x) => x.t.toLowerCase() === t.toLowerCase())) terms.push({ t, sub: '', q: t, ic: 'search' }); });
+      const prods = D.search(q).slice(0, 4);
+      const pr = prods.length ? prods : D.products.filter((p) => `${p.name} ${p.brand} ${p.sport}`.toLowerCase().split(/\s+/).some((w) => w.startsWith(s.slice(0, 3)))).slice(0, 3);
+      items = [{ t: `Search for “${q}”`, q, ic: 'search', main: true }].concat(terms.slice(0, 5));
+      cursor = -1;
+      $('#sugg').innerHTML = items.map((it, i) => `<a class="sugg__row tap" role="option" id="sg${i}" href="${it.href || 'search-results.html?q=' + encodeURIComponent(it.q)}" ${it.q ? `data-q="${D.esc(it.q)}"` : ''}>${D.icon(it.ic, 18)}<span class="ellipsis">${it.main ? `Search for “<mark>${D.esc(q)}</mark>”` : hl(it.t, q)}</span>${it.sub ? `<span class="muted-2">${it.sub}</span>` : ''}</a>`).join('')
+        + (pr.length ? `<p class="label-caps">${prods.length ? 'Products' : 'You might like'}</p>` + pr.map((p) => `<a class="sugg-prod tap" href="product.html?id=${p.id}"><span class="thumb"><img src="${D.img(p.img)}" alt="" loading="lazy"></span><span class="grow"><span class="sugg-prod__b">${D.esc(p.brand)}</span><span class="sugg-prod__n" style="display:block">${hl(p.name, q)}</span><span class="pcard__price">${D.priceHtml(p)}</span></span></a>`).join('') : '')
+        + (!terms.length && !prods.length ? `<div class="noq" role="status"><b>No exact matches for “${D.esc(q)}”</b><p>Press search to look anyway, or check the spelling. Try a sport like “running” or a brand like “Nike”.</p></div>` : '');
+    }
+    input.addEventListener('input', update);
+    $('#clearQ').addEventListener('click', () => { input.value = ''; update(); input.focus(); });
+    $('#sugg').addEventListener('click', (e) => { const a = e.target.closest('[data-q]'); if (a) { e.preventDefault(); go(a.dataset.q); } });
+    input.addEventListener('keydown', (e) => {
+      const rows = $$('#sugg .sugg__row'); if (!rows.length) return;
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); cursor = (cursor + (e.key === 'ArrowDown' ? 1 : -1) + rows.length) % rows.length; rows.forEach((r, i) => r.classList.toggle('is-hl', i === cursor)); input.setAttribute('aria-activedescendant', 'sg' + cursor); }
+    });
+    $('#form').addEventListener('submit', (e) => { e.preventDefault(); if (cursor >= 0) { $$('#sugg .sugg__row')[cursor].click(); return; } go(input.value); });
+    update();
+    D.hydrate($('#sp'));
+  })();
+</script>
+</body>
+</html>

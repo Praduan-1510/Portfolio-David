@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Saved</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .phead.sv-h { padding-top: 50px; }
+  .sv-h .phead__icon { margin: -9px -7px 0 0; position: relative; }
+  .sv-h .phead__icon > span { height: 31px; }
+  .sv-h .phead__icon .dot-badge { top: 1px; right: 1px; background: var(--orange); color: #000; box-shadow: 0 0 0 2px var(--navy); }
+  .psheet.sv { padding: 24px 0 25px; }
+  .sv-filter { display: flex; align-items: center; justify-content: space-between; margin: -6px 37px 14px; font-size: 13px; color: var(--text-3); }
+  .sv-filter b { color: #000; }
+  .dgrid.sv-grid { row-gap: 10px; }
+  .sv-grid .dcard { transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out); }
+  .sv-grid .dcard.is-leaving { opacity: 0; transform: scale(.92); }
+  .sv-cta { display: flex; width: 327px !important; height: 34px; margin: 30px auto 0; font-size: 16px; }
+  .sv-cta::before { content: ''; position: absolute; inset: -6px 0; }
+  .sv-count { text-align: center; font-size: 12px; color: var(--text-4); margin-top: 12px; }
+</style>
+</head>
+<body>
+<main class="page page--tabs" aria-label="Saved destinations">
+  <header class="phead phead--plain sv-h">
+    <div class="phead__titles"><h1 class="phead__title">Saved</h1></div>
+    <button class="phead__icon tap" type="button" data-sheet="filterSheet" id="filterBtn" aria-label="Filter saved destinations"><span><svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.2c-.2 0-.3 0-.5-.1C11.1 20.9 2.5 16.1 2.5 9.9a5.3 5.3 0 0 1 9.5-3.3 5.3 5.3 0 0 1 9.5 3.3c0 6.2-8.6 11-9 11.2-.2.1-.3.1-.5.1Z"/></svg></span></button>
+  </header>
+
+  <section class="psheet psheet--round sv">
+    <div class="sv-filter" id="fbar" hidden><span>Showing <b id="fName">Beach</b> · <span id="fN">3</span></span><button class="link" type="button" id="fClear">Show all</button></div>
+    <div class="dgrid sv-grid" id="grid" aria-live="polite"></div>
+    <a class="btn btn--primary sv-cta" href="search-results.html"><span>Explore More Destinations</span></a>
+  </section>
+
+  <nav data-tabbar="explore"></nav>
+</main>
+
+<section class="sheet" id="filterSheet" aria-labelledby="fT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="fT">Filter saved</p><p class="sheet__sub" id="fSub">8 destinations in your wishlist</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><span data-icon="close" data-size="14" data-sw="2.4"></span></button>
+  </div>
+  <div class="options" id="fOpts" data-options></div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const V = window.Voyager; const $ = (s) => document.querySelector(s);
+  const STYLES = ['Beach', 'Cultural', 'Luxury', 'Adventure', 'Food & Wine', 'Family'];
+  let style = V.q('style') || 'all';
+  const grid = $('#grid');
+
+  const renderOpts = () => {
+    const list = V.saved.list();
+    $('#fSub').textContent = `${list.length} destination${list.length === 1 ? '' : 's'} in your wishlist`;
+    $('#fOpts').innerHTML = [['all', 'All saved', list.length]].concat(STYLES.map((s) => [s, s, list.filter((d) => d.styles.includes(s)).length]))
+      .map(([v, l, n]) => `<button class="option" type="button" data-value="${V.esc(v)}" aria-checked="${v === style}"><span class="option__radio"></span><span class="option__body"><span class="option__title">${V.esc(l)}</span><span class="option__sub">${n} destination${n === 1 ? '' : 's'}</span></span></button>`).join('');
+    V.refresh($('#fOpts'));
+  };
+
+  const render = () => {
+    const all = V.saved.list();
+    const list = style === 'all' ? all : all.filter((d) => d.styles.includes(style));
+    const badge = $('#filterBtn .dot-badge'); badge && badge.remove();
+    $('#fbar').hidden = style === 'all';
+    if (style !== 'all') {
+      $('#fName').textContent = style; $('#fN').textContent = `${list.length} of ${all.length}`;
+      const b = document.createElement('span'); b.className = 'dot-badge'; b.textContent = '1'; $('#filterBtn').appendChild(b);
+    }
+    if (!all.length || !list.length) {
+      grid.style.display = 'block';
+      grid.innerHTML = `<div class="empty">
+        <div class="empty__icon">${V.icon('heart', 32, 'stroke-width="2"')}</div>
+        <p class="empty__title">${all.length ? `No ${V.esc(style)} trips saved` : 'Nothing saved yet'}</p>
+        <p class="empty__msg">${all.length ? 'Try another style, or explore and tap the heart on anything you like.' : 'Tap the heart on any destination and it will be waiting for you here.'}</p>
+        ${all.length ? '<button class="btn btn--navy btn--inline" type="button" id="emptyAll" style="width:auto">Show all saved</button>' : ''}
+      </div>`;
+      const b = $('#emptyAll'); b && b.addEventListener('click', () => { style = 'all'; render(); });
+      return;
+    }
+    grid.style.display = '';
+    grid.innerHTML = list.map((d) => V.cardHTML(d)).join('');
+    V.hydrateHearts(grid);
+  };
+
+  // removing a heart fades the card out, then re-renders (Undo toast comes from app.js)
+  document.addEventListener('voyager:saved', (e) => {
+    const card = grid.querySelector(`[data-heart="${e.detail.id}"]`);
+    if (!e.detail.saved && card) { card.closest('.dcard').classList.add('is-leaving'); setTimeout(render, 220); }
+    else render();
+    renderOpts();
+  });
+
+  $('#fOpts').addEventListener('select', (e) => {
+    style = e.detail; V.sheet.close(); render();
+    const u = new URL(location.href); if (style === 'all') u.searchParams.delete('style'); else u.searchParams.set('style', style); history.replaceState(null, '', u);
+  });
+  $('#fClear').addEventListener('click', () => { style = 'all'; history.replaceState(null, '', location.pathname); render(); renderOpts(); });
+
+  renderOpts(); render();
+})();
+</script>
+</body>
+</html>

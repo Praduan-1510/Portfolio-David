@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Sport</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  .sp-hero { height: 176px; margin-top: 18px; }
+  .sp-hero .hero-banner__eyebrow, .sp-hero .hero-banner__title { display: block; }
+  .sp-hero .hero-banner__title { font-size: 26px; }
+  .sp-hero__count { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; height: 24px; padding: 0 10px; border-radius: 12px; background: rgba(255,255,255,.92); color: var(--navy); font-size: 12px; font-weight: 600; }
+  .sp-hero__count svg { width: 13px; height: 13px; }
+  .subcats { margin-top: 16px; }
+  .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 16px 0 12px; }
+  .toolbar__n { font-size: 16px; font-weight: 600; color: var(--steel); }
+  .toolbar__btns { display: flex; gap: 8px; }
+  .toolbar .chip { position: relative; }
+  .toolbar .chip .dot-badge { top: -5px; right: -5px; min-width: 10px; width: 10px; height: 10px; padding: 0; }
+  .sp-grid .pcard .add-btn { height: 30px; font-size: 13px; margin-top: 7px; }
+  .brands { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -24px; padding: 2px 24px; }
+  .brands::-webkit-scrollbar { display: none; }
+  .brands a { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 96px; height: 64px; border-radius: var(--r); background: var(--surface); box-shadow: inset 0 0 0 1px var(--border); color: var(--navy); font-size: 14px; font-weight: 700; letter-spacing: .2px; }
+  .brands a small { font-size: 10.5px; font-weight: 500; color: var(--muted-2); letter-spacing: 0; margin-top: 2px; }
+  .brands a.is-house { background: var(--navy); color: #fff; box-shadow: none; }
+  .brands a.is-house small { color: #BFE6FA; }
+  .others { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; margin: 0 -24px; padding: 2px 24px; }
+  .others::-webkit-scrollbar { display: none; }
+  .others a { flex-shrink: 0; width: 80px; }
+  .soon { text-align: center; }
+  .soon .empty-state { padding-bottom: 20px; }
+  .soon .btn-pair { max-width: 320px; margin: 0 auto; }
+  #priceOpts .option[aria-disabled="true"] { opacity: .45; pointer-events: none; }
+  #brandChips .chip[disabled] { opacity: .4; pointer-events: none; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Sport" id="sp">
+  <header class="appbar">
+    <a class="back tap" href="category.html" data-go="back" aria-label="Back"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <h1 class="appbar__title" id="title">Sport</h1>
+    <div class="appbar__icons" id="hdrIcons"></div>
+  </header>
+  <div class="page-divider"></div>
+
+  <a class="hero-banner sp-hero enter" id="hero" href="#grid" style="--i:1">
+    <img id="heroImg" src="../assets/img/cat-running.jpg" alt="">
+    <span class="hero-banner__text"><span class="hero-banner__eyebrow">Shop by sport</span><span class="hero-banner__title" id="heroTitle">Running</span><span class="sp-hero__count" id="heroCount"></span></span>
+  </a>
+
+  <div id="shop">
+    <div class="chip-scroll subcats" id="subcats" aria-label="Product types"></div>
+    <div class="toolbar">
+      <p class="toolbar__n num" id="count" role="status" aria-live="polite"></p>
+      <div class="toolbar__btns">
+        <button class="chip tap" type="button" data-sheet="sortSheet" id="sortBtn"><i data-icon="sort" data-size="14"></i>Sort</button>
+        <button class="chip tap" type="button" data-sheet="filterSheet" id="filterBtn"><i data-icon="filter" data-size="14"></i>Filter</button>
+      </div>
+    </div>
+    <div class="pgrid sp-grid" id="grid" aria-label="Products"></div>
+    <div id="gridEmpty"></div>
+  </div>
+
+  <div id="soon" class="soon" hidden></div>
+
+  <div class="section-head"><h2 class="section-title">Shop by brand</h2></div>
+  <div class="brands" id="brands"></div>
+
+  <div class="section-head"><h2 class="section-title">More sports</h2><a class="see-all see-all--brand tap" href="category.html">See all</a></div>
+  <div class="others" id="others"></div>
+
+  <nav data-tabbar="categories"></nav>
+</main>
+
+<section class="sheet" id="sortSheet" aria-labelledby="sortT">
+  <div class="sheet__head"><div><p class="sheet__title" id="sortT">Sort by</p></div><button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button></div>
+  <div class="options" data-options id="sortOpts">
+    <button class="option" type="button" data-value="relevance" aria-checked="true"><span class="option__radio"></span><span class="option__body"><span class="option__title">Popular</span></span></button>
+    <button class="option" type="button" data-value="price-asc"><span class="option__radio"></span><span class="option__body"><span class="option__title">Price: low to high</span></span></button>
+    <button class="option" type="button" data-value="price-desc"><span class="option__radio"></span><span class="option__body"><span class="option__title">Price: high to low</span></span></button>
+    <button class="option" type="button" data-value="rating"><span class="option__radio"></span><span class="option__body"><span class="option__title">Top rated</span></span></button>
+    <button class="option" type="button" data-value="discount"><span class="option__radio"></span><span class="option__body"><span class="option__title">Biggest discount</span></span></button>
+  </div>
+</section>
+
+<section class="sheet" id="filterSheet" aria-labelledby="filT">
+  <div class="sheet__head"><div><p class="sheet__title" id="filT">Filter</p><p class="sheet__sub" id="filSub"></p></div><button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button></div>
+  <p class="label-caps" style="margin-bottom:8px">Price</p>
+  <div class="options" data-options id="priceOpts">
+    <button class="option" type="button" data-value="any" aria-checked="true"><span class="option__radio"></span><span class="option__body"><span class="option__title">Any price</span></span><span class="option__meta num" data-n="any"></span></button>
+    <button class="option" type="button" data-value="0-999"><span class="option__radio"></span><span class="option__body"><span class="option__title">Under ₹1,000</span></span><span class="option__meta num" data-n="0-999"></span></button>
+    <button class="option" type="button" data-value="1000-4999"><span class="option__radio"></span><span class="option__body"><span class="option__title">₹1,000 – ₹4,999</span></span><span class="option__meta num" data-n="1000-4999"></span></button>
+    <button class="option" type="button" data-value="5000-999999"><span class="option__radio"></span><span class="option__body"><span class="option__title">₹5,000 and above</span></span><span class="option__meta num" data-n="5000-999999"></span></button>
+  </div>
+  <p class="label-caps" style="margin:18px 0 8px">Brand</p>
+  <div class="chip-row" data-multi id="brandChips" style="gap:8px"></div>
+  <label class="check-row check-row--dark" style="margin-top:12px;font-size:15px"><input type="checkbox" id="saleOnly"><span class="check-box"></span>On sale (30% off or more)</label>
+  <div class="sheet__foot"><button class="btn btn--primary btn--lg tap" type="button" id="applyF"><span>Show products</span></button><button class="btn btn--ghost tap" type="button" id="clearF">Clear filters</button></div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const sp = D.sport(D.q('sport')) || D.sport('running');
+    document.title = 'Decathlon · ' + sp.name;
+    $('#hdrIcons').innerHTML = D.headIcons('#fff');
+    $('#title').textContent = sp.name;
+    $('#heroTitle').textContent = sp.name;
+    const HERO = { running: 'hero-running', football: 'hero-football', camping: 'hero-outdoor', hiking: 'hero-outdoor', trekking: 'hero-outdoor', tents: 'hero-outdoor' };
+    $('#heroImg').src = D.img(HERO[sp.slug] || sp.img);
+    $('#heroImg').alt = '';
+
+    const all = D.bySport(sp.slug);
+    // Sub-categories by product type
+    const typeOf = (p) => ({ shoe: 'footwear', clothing: 'clothing', accessory: 'accessories' }[p.kind] || 'equipment');
+    const TYPES = [['all', 'All'], ['footwear', 'Shoes'], ['clothing', 'Clothing'], ['equipment', 'Equipment'], ['accessories', 'Accessories']].filter(([k]) => k === 'all' || all.some((p) => typeOf(p) === k));
+
+    let type = 'all', sort = 'relevance', price = 'any', brands = [], saleOnly = false;
+    const inPrice = (p, v) => v === 'any' || (() => { const [a, b] = v.split('-').map(Number); return p.price >= a && p.price <= b; })();
+    const base = () => all.filter((p) => (type === 'all' || typeOf(p) === type));
+    const apply = (list, pr = price, br = brands, so = saleOnly) => list.filter((p) => inPrice(p, pr) && (!br.length || br.includes(p.brand)) && (!so || D.pct(p) >= 30));
+    const sorted = (list) => { const l = list.slice(); if (sort === 'price-asc') l.sort((a, b) => a.price - b.price); if (sort === 'price-desc') l.sort((a, b) => b.price - a.price); if (sort === 'rating') l.sort((a, b) => b.rating - a.rating || b.reviews - a.reviews); if (sort === 'discount') l.sort((a, b) => D.pct(b) - D.pct(a)); return l; };
+
+    if (!all.length) {
+      // Coming soon
+      $('#shop').hidden = true; $('#soon').hidden = false;
+      $('#heroCount').innerHTML = `${D.icon('clock', 13)}Coming soon online`;
+      const notify = () => D.store.get('notify', []);
+      const on = () => notify().includes(sp.slug);
+      const similar = D.sports.filter((x) => x.slug !== sp.slug && D.bySport(x.slug).length).slice(0, 6);
+      $('#soon').innerHTML = `<div class="empty-state"><div class="empty-state__icon">${D.icon('store', 40)}</div><h3>${D.esc(sp.name)} gear is in stores only</h3><p>We haven’t listed ${D.esc(sp.name.toLowerCase())} products online yet. Our Kolkata stores stock the full range, or we can tell you when it arrives here.</p>
+        <div class="btn-pair"><button class="btn btn--primary btn--md tap" type="button" id="notifyBtn"></button><a class="btn btn--outline btn--md tap" href="stores.html">Find a store</a></div></div>
+        <p class="label-caps" style="text-align:left;margin:8px 0 10px">Shop a similar sport</p><div class="chip-row" style="gap:8px">${similar.map((x) => `<a class="chip tap" href="sport.html?sport=${x.slug}">${x.name}</a>`).join('')}</div>`;
+      const paintN = () => { $('#notifyBtn').textContent = on() ? 'You’ll be notified' : 'Notify me'; $('#notifyBtn').classList.toggle('btn--soft', on()); $('#notifyBtn').classList.toggle('btn--primary', !on()); };
+      paintN();
+      $('#notifyBtn').addEventListener('click', async (e) => {
+        if (on()) { D.store.set('notify', notify().filter((x) => x !== sp.slug)); paintN(); D.toast('Alert removed'); return; }
+        await D.loading(e.currentTarget, 700); D.store.set('notify', notify().concat(sp.slug)); paintN();
+        D.toast(`We’ll let you know when ${sp.name.toLowerCase()} gear is online`, { icon: 'bell' });
+      });
+      $('#hero').setAttribute('href', 'stores.html'); $('#hero').setAttribute('aria-label', `${sp.name}: find it in a store`);
+    } else {
+      $('#heroCount').innerHTML = `${D.icon('tag', 13)}<span class="num">${all.length}</span> ${all.length === 1 ? 'product' : 'products'}`;
+      $('#hero').setAttribute('aria-label', `${sp.name}: ${all.length} products`);
+      $('#subcats').innerHTML = TYPES.map(([k, l], i) => `<button class="chip tap${i ? '' : ' is-active'}" type="button" role="tab" data-value="${k}">${l}</button>`).join('');
+      $('#subcats').setAttribute('data-group', '');
+      $('#subcats').addEventListener('change', (e) => { type = e.detail; render(true); });
+    }
+
+    // Filter sheet content
+    const brandSet = [...new Set(all.map((p) => p.brand))];
+    $('#brandChips').innerHTML = brandSet.map((b) => `<button class="chip tap" type="button" data-value="${b}" aria-pressed="false">${b}</button>`).join('') || '<span class="helper">No brands</span>';
+    let dPrice = price, dBrands = [], dSale = false;
+    const paintSheetCounts = () => {
+      // Counts on every option; an option that would show nothing is disabled, never offered
+      $$('#priceOpts [data-n]').forEach((m) => { const k = apply(base(), m.dataset.n, dBrands, dSale).length; m.textContent = k; const o = m.closest('.option'); o.setAttribute('aria-disabled', String(!k && o.getAttribute('aria-checked') !== 'true')); });
+      $$('#brandChips .chip').forEach((c) => { const on = c.getAttribute('aria-pressed') === 'true'; const k = apply(base(), dPrice, [c.dataset.value], dSale).length; c.disabled = !k && !on; c.setAttribute('aria-label', `${c.dataset.value}, ${k} ${k === 1 ? 'product' : 'products'}`); });
+      const n = apply(base(), dPrice, dBrands, dSale).length;
+      $('#applyF span').textContent = n ? `Show ${n} ${n === 1 ? 'product' : 'products'}` : 'No products match';
+      $('#applyF').disabled = !n; $('#filSub').textContent = `${sp.name} · ${base().length} products`;
+    };
+    $('#filterSheet').addEventListener('sheet:open', () => { dPrice = price; dBrands = brands.slice(); dSale = saleOnly; $$('#priceOpts .option').forEach((o) => o.setAttribute('aria-checked', String(o.dataset.value === dPrice))); $$('#brandChips .chip').forEach((c) => { const on = dBrands.includes(c.dataset.value); c.setAttribute('aria-pressed', String(on)); c.classList.toggle('is-active', on); }); $('#saleOnly').checked = dSale; paintSheetCounts(); });
+    $('#priceOpts').addEventListener('select', (e) => { dPrice = e.detail; paintSheetCounts(); });
+    $('#brandChips').addEventListener('change', (e) => { dBrands = e.detail; paintSheetCounts(); });
+    $('#saleOnly').addEventListener('change', (e) => { dSale = e.target.checked; paintSheetCounts(); });
+    $('#applyF').addEventListener('click', async (e) => { await D.loading(e.currentTarget, 450); price = dPrice; brands = dBrands; saleOnly = dSale; D.sheet.close(); render(true); });
+    $('#clearF').addEventListener('click', () => { price = 'any'; brands = []; saleOnly = false; D.sheet.close(); render(true); D.toast('Filters cleared'); });
+
+    $('#sortOpts').addEventListener('select', (e) => { sort = e.detail; setTimeout(() => { D.sheet.close(); render(true); }, 160); });
+
+    function render(animate) {
+      if (!all.length) return;
+      const list = sorted(apply(base()));
+      const nf = (price !== 'any' ? 1 : 0) + brands.length + (saleOnly ? 1 : 0);
+      $('#count').textContent = `${list.length} ${list.length === 1 ? 'product' : 'products'}`;
+      $('#filterBtn').innerHTML = `${D.icon('filter', 14)}Filter${nf ? `<span class="dot-badge" aria-hidden="true"></span><span class="sr-only">, ${nf} applied</span>` : ''}`;
+      $('#sortBtn').innerHTML = `${D.icon('sort', 14)}Sort${sort !== 'relevance' ? '<span class="dot-badge" aria-hidden="true"></span>' : ''}`;
+      const grid = $('#grid');
+      const paint = () => {
+        grid.innerHTML = list.map((p) => D.card(p, { add: true })).join('');
+        $('#gridEmpty').innerHTML = list.length ? '' : `<div class="empty-state" role="status"><div class="empty-state__icon">${D.icon('filter', 40)}</div><h3>Nothing matches</h3><p>No ${D.esc(sp.name.toLowerCase())} products fit these filters. Clear them to see all ${base().length}.</p><button class="btn btn--primary btn--md tap" type="button" id="resetAll">Clear filters</button></div>`;
+        const r = $('#resetAll'); if (r) r.onclick = () => { price = 'any'; brands = []; saleOnly = false; type = 'all'; $$('#subcats .chip').forEach((c, i) => { c.classList.toggle('is-active', !i); c.setAttribute('aria-selected', String(!i)); }); render(true); };
+        D.hydrate($('#shop'));
+      };
+      if (animate && !document.body.classList.contains('capture')) { grid.innerHTML = Array.from({ length: Math.min(4, Math.max(2, list.length)) }, () => '<div class="skeleton" style="height:180px" aria-hidden="true"></div>').join(''); setTimeout(paint, 260); }
+      else paint();
+    }
+
+    // Shop by brand: brands in this sport first, then Decathlon house brands
+    const HOUSE = ['Quechua', 'Kipsta', 'Kalenji', 'Artengo', 'Btwin', 'Domyos'];
+    const brandList = brandSet.concat(D.brands.filter((b) => !brandSet.includes(b) && b !== 'Decathlon')).slice(0, 8);
+    $('#brands').innerHTML = brandList.map((b) => { const n = all.filter((p) => p.brand === b).length; return `<a class="tap${HOUSE.includes(b) ? ' is-house' : ''}" href="search-results.html?q=${encodeURIComponent(b)}">${b}<small>${n ? `${n} in ${sp.name.toLowerCase()}` : HOUSE.includes(b) ? 'Decathlon brand' : 'All products'}</small></a>`; }).join('');
+
+    // More sports
+    $('#others').innerHTML = D.sports.filter((x) => x.slug !== sp.slug).slice(0, 12).map((x) => `<a class="tap" href="sport.html?sport=${x.slug}"><span class="tile"><img src="${D.img(x.img)}" alt="" loading="lazy"></span><span class="tile-cap">${x.name}</span></a>`).join('');
+
+    render(false);
+    D.hydrate($('#sp'));
+  })();
+</script>
+</body>
+</html>

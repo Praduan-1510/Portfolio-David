@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Welcome</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* Pixel-matched to Welcome.png (393 x 852). Logo 86..307 x 365..399,
+     reflection below, tagline cap-top 459, CTAs 280 wide at x56. */
+  .welcome { height: 852px; min-height: 852px; }
+  body:not(.capture) .welcome { height: 100vh; min-height: 852px; }
+  .wl-logo { left: 86px; top: 365px; width: 221px; height: 34.4px; color: #fff; }
+  .wl-logo svg { width: 221px; height: 34.4px; }
+  .wl-reflect { left: 86px; top: 399.4px; width: 221px; height: 34.4px; color: #fff; transform: scaleY(-1); opacity: .5; filter: blur(.6px);
+    -webkit-mask-image: linear-gradient(0deg, transparent 0%, rgba(0,0,0,.2) 30%, #000 100%); mask-image: linear-gradient(0deg, transparent 0%, rgba(0,0,0,.2) 30%, #000 100%); pointer-events: none; }
+  .wl-reflect svg { width: 221px; height: 34.4px; }
+  .wl-tag { left: 0; right: 0; top: 456.6px; text-align: center; font-size: 15.7px; color: #fff; letter-spacing: 0; }
+  .wl-cta { left: 56px; width: 280px; font-size: 19.6px; font-weight: 600; }
+  .wl-get { top: 682px; height: 32px; padding-top: 2px; }
+  .wl-sign { top: 728px; height: 34px; }
+  .wl-glow { left: 50%; top: 300px; width: 420px; height: 260px; margin-left: -210px; border-radius: 50%; background: radial-gradient(closest-side, rgba(120,200,245,.18), rgba(120,200,245,0)); pointer-events: none; }
+  body:not(.capture) .wl-logo { animation: wl-in 700ms var(--ease-out) both; }
+  body:not(.capture) .wl-reflect { animation: wl-in-r 900ms 120ms var(--ease-out) both; }
+  @keyframes wl-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @keyframes wl-in-r { from { opacity: 0; } to { opacity: .5; } }
+</style>
+</head>
+<body>
+<main class="screen bg-welcome welcome" aria-label="Welcome">
+  <span class="abs wl-glow" aria-hidden="true"></span>
+  <h1 class="abs wl-logo" style="margin:0">
+    <svg viewBox="0 0 135 21" fill="currentColor" role="img" aria-label="Decathlon">
+      <path fill-rule="evenodd" d="M0 .5h8.2C13.2.5 16.4 4.4 16.4 10.5S13.2 20.5 8.2 20.5H0Zm5.2 5v10h2.4c2.2 0 3.6-1.9 3.6-5s-1.4-5-3.6-5Z"/>
+      <path d="M16 .5h12.4v4.6h-7.2v3h6.9v4.4h-6.9v3.4h7.3v4.6H16Z"/>
+      <path d="M45.6 3.4C43.9 1.4 41.5.3 38.7.3 33.4.3 29.6 4.5 29.6 10.5s3.8 10.2 9.1 10.2c2.8 0 5.2-1.1 6.9-3.1l-3.5-3.5c-.8 1-1.9 1.6-3.2 1.6-2.3 0-3.9-2-3.9-5.2s1.6-5.2 3.9-5.2c1.3 0 2.4.6 3.2 1.6Z"/>
+      <path fill-rule="evenodd" d="M50 .5h6v20h-5.2v-4.9h-8.6v-3.2Zm.8 7.2-2.9 4.6h2.9Z"/>
+      <path d="M57 .5h12.6v4.6h-3.7v15.4h-5.2V5.1H57Z"/>
+      <path d="M71 .5h5v7.6h6V.5h5v20h-5v-7.9h-6v7.9h-5Z"/>
+      <path d="M88.2.5h5.4v15h6.4v5H88.2Z"/>
+      <path fill-rule="evenodd" d="M107.4.3c5.8 0 10.2 4.4 10.2 10.2s-4.4 10.2-10.2 10.2S97.2 16.3 97.2 10.5 101.6.3 107.4.3Zm0 5c-2.4 0-4.2 2.2-4.2 5.2s1.8 5.2 4.2 5.2 4.2-2.2 4.2-5.2-1.8-5.2-4.2-5.2Z"/>
+      <path d="M117.6.5h5.4l6.4 10V.5h5.4v20h-5.2l-6.6-10.3v10.3h-5.4Z"/>
+    </svg>
+  </h1>
+  <div class="abs wl-reflect" aria-hidden="true">
+    <svg viewBox="0 0 135 21" fill="currentColor">
+      <path fill-rule="evenodd" d="M0 .5h8.2C13.2.5 16.4 4.4 16.4 10.5S13.2 20.5 8.2 20.5H0Zm5.2 5v10h2.4c2.2 0 3.6-1.9 3.6-5s-1.4-5-3.6-5Z"/>
+      <path d="M16 .5h12.4v4.6h-7.2v3h6.9v4.4h-6.9v3.4h7.3v4.6H16Z"/>
+      <path d="M45.6 3.4C43.9 1.4 41.5.3 38.7.3 33.4.3 29.6 4.5 29.6 10.5s3.8 10.2 9.1 10.2c2.8 0 5.2-1.1 6.9-3.1l-3.5-3.5c-.8 1-1.9 1.6-3.2 1.6-2.3 0-3.9-2-3.9-5.2s1.6-5.2 3.9-5.2c1.3 0 2.4.6 3.2 1.6Z"/>
+      <path fill-rule="evenodd" d="M50 .5h6v20h-5.2v-4.9h-8.6v-3.2Zm.8 7.2-2.9 4.6h2.9Z"/>
+      <path d="M57 .5h12.6v4.6h-3.7v15.4h-5.2V5.1H57Z"/>
+      <path d="M71 .5h5v7.6h6V.5h5v20h-5v-7.9h-6v7.9h-5Z"/>
+      <path d="M88.2.5h5.4v15h6.4v5H88.2Z"/>
+      <path fill-rule="evenodd" d="M107.4.3c5.8 0 10.2 4.4 10.2 10.2s-4.4 10.2-10.2 10.2S97.2 16.3 97.2 10.5 101.6.3 107.4.3Zm0 5c-2.4 0-4.2 2.2-4.2 5.2s1.8 5.2 4.2 5.2 4.2-2.2 4.2-5.2-1.8-5.2-4.2-5.2Z"/>
+      <path d="M117.6.5h5.4l6.4 10V.5h5.4v20h-5.2l-6.6-10.3v10.3h-5.4Z"/>
+    </svg>
+  </div>
+  <p class="t wl-tag enter" style="--i:2">Your sports. Your world.</p>
+
+  <a class="abs btn btn--brand wl-cta wl-get tap enter" style="--i:3" href="onboarding-1.html">Get Started</a>
+  <a class="abs btn btn--white wl-cta wl-sign tap enter" style="--i:4" href="login.html">Sign in</a>
+</main>
+<script src="../assets/js/app.js"></script>
+</body>
+</html>

@@ -6,6 +6,7 @@ import { gsap, registerGsap } from "@/lib/motion/gsap";
 import { durations } from "@/lib/motion/durations";
 import { useReducedMotion, prefersReducedMotion } from "@/hooks/useReducedMotion";
 import { cn } from "@/lib/utils/cn";
+import "@/components/primitives/button.css";
 
 /*
  * Continuous auto-scrolling marquee (DESIGN_GUIDELINES.md §7.8 ambient motion).
@@ -245,10 +246,12 @@ export function Marquee({
           type="button"
           onClick={togglePause}
           // `.marquee-stop` clips this to a point until it takes keyboard focus,
-          // at which point it becomes the pill below. Nothing is drawn over the
-          // artwork at rest, and the ::before hit-area overhang (44px past a
-          // small pill) only exists while it is visible.
-          className="marquee-stop absolute right-space-2 top-space-2 z-10 inline-flex items-center gap-[5px] rounded-full border border-line bg-[color:color-mix(in_srgb,var(--bg)_88%,transparent)] px-space-2 py-[2px] font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[color:color-mix(in_srgb,var(--fg)_85%,transparent)] backdrop-blur-sm before:absolute before:-inset-3 before:content-['']"
+          // at which point it becomes the pill below: a glass chip, the site's
+          // button family at artwork scale (.btn-chip, primitives/button.css).
+          // Nothing is drawn over the artwork at rest, and the ::before
+          // hit-area overhang (44px past a small pill) only exists while it is
+          // visible.
+          className="marquee-stop btn-chip absolute right-space-2 top-space-2 z-10 inline-flex items-center gap-[5px] rounded-full px-space-2 py-[2px] font-mono text-[0.6875rem] uppercase tracking-[0.14em] before:absolute before:-inset-3 before:content-['']"
         >
           <span
             aria-hidden="true"

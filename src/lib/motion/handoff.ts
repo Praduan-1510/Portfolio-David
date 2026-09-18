@@ -16,20 +16,49 @@
  * Nothing here touches the DOM; the store only holds geometry and references.
  */
 
+export interface HandoffRect {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+}
+
+/** Four corner radii in px, clockwise from top-left (the order CSS uses). */
+export type HandoffRadii = [number, number, number, number];
+
 export interface HandoffSource {
   slug: string;
   /** The screen image the clone shows: the source <img>'s currentSrc. */
   src: string;
-  /** Viewport rect of the source screen well at click time. */
-  rect: { top: number; left: number; width: number; height: number };
-  /** Look of the source well, copied so the clone is pixel-identical at t=0. */
+  /** Viewport rect of the source FRAME at click time: the element that clips
+   *  the screenshot (a `[data-handoff-frame]` inside the source, else the
+   *  image's parent, which is the screen well of PhoneFrame/BrowserMockup). */
+  rect: HandoffRect;
+  /** Look of the source frame, copied so the clone is pixel-identical at t=0. */
   radius: string;
   bezel: string;
+  /**
+   * The image as it was actually drawn, relative to `rect`: its real box after
+   * every transform in play at the click (a card's hover zoom, a thumbnail's
+   * drift, a phone screen's scroll), resolved through object-fit into the
+   * painted content box when the natural size is known (`exact`). The clone
+   * draws the image at exactly this box, so a moving thumbnail is caught where
+   * it was rather than snapped back to its resting position.
+   */
+  image: HandoffRect & { exact: boolean };
+  /** object-fit / object-position for the inexact case only (no natural size
+   *  yet): the clone then draws the element box the way the source did. */
   fit: string;
   position: string;
-  /** The source <img>'s own transform (hover scale on cards), so no pop at click. */
-  transform: string;
-  transformOrigin: string;
+  /**
+   * The part of the frame that was actually on screen, as insets (px) from each
+   * edge of `rect`, plus the corner radii of that visible shape. A frame that
+   * bleeds off its card (a phone rising out of the bottom edge, a browser
+   * window running off the right) is clipped by the card; without this the
+   * clone would show the hidden bleed the instant it appears. The flight opens
+   * the clip out to the target frame's own shape.
+   */
+  clip: { top: number; right: number; bottom: number; left: number; radii: HandoffRadii };
 }
 
 export interface HandoffState {

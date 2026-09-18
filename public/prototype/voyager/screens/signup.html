@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Create Account</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .su { height: auto; min-height: max(874px, 100vh); padding-bottom: 29px; background: #FCA311; }
+  .su-back { left: 24px; top: 52px; width: 34px; height: 34px; border-radius: var(--r-sm); background: rgba(255,255,255,.3); color: var(--navy); display: grid; place-items: center; z-index: 2; }
+  .su-back::after { content: ''; position: absolute; inset: -6px; }
+  .su-logo { left: 113px; top: 118px; }
+  .su-name { left: -4px; right: 0; top: 305px; text-align: center; font-size: 29.8px; font-weight: 700; color: #fff; }
+  .su-tag { left: 0; right: 0; top: 352px; text-align: center; font-size: 14px; color: #000; letter-spacing: .305em; padding-left: .305em; }
+
+  .su-card { position: relative; z-index: 1; margin: 389px 0 0 29px; width: 344px; min-height: 456px; padding: 27.5px 19px 8px; border-radius: 16px; background: rgba(255,238,212,.86); box-shadow: 0 4px 8px rgba(0,0,0,.22), inset 0 0 0 1px rgba(255,255,255,.35); }
+  .su-card .label { margin: 0 0 11.5px 1px; font-size: 16px; line-height: 18px; }
+  .su-card .fg + .fg { margin-top: 9.5px; }
+  .su-card .field { height: 40px; box-shadow: none; padding-left: 15px; font-size: 16px; }
+  .su-card .field:focus { box-shadow: inset 0 0 0 2px var(--navy); }
+  .su-card .fg.is-valid .field { box-shadow: inset 0 0 0 1.5px var(--valid); }
+  .su-card .fg.has-error .field { box-shadow: inset 0 0 0 1.5px var(--danger); }
+  .su-card .error-text { color: #B3261E; font-weight: 500; }
+  .su-card .field-wrap__btn { right: 2px; height: 40px; color: #8A8A8A; }
+  .su-pw { min-height: 111.5px; }
+  .su-card .fg.su-pw.has-error { margin-bottom: 12px; }
+  .su-meter { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+  .su-meter .strength { flex: 1; margin: 0; }
+  .su-meter .strength i { background: rgba(20,33,61,.12); }
+  .su-meter .strength-label { margin: 0; min-width: 56px; text-align: right; font-size: 12px; font-weight: 600; color: var(--text-3); }
+  .su-card .fg.has-error .su-meter { display: none; }
+  .su-hint { font-size: 11.5px; color: var(--text-3); margin-top: 5px; }
+  .su-create { height: 40px; }
+  .su-or { margin: 13.5px 0 0; text-align: center; font-size: 13.7px; line-height: 16px; color: var(--text-3); }
+  .su-social { display: grid; grid-template-columns: 140px 140px; gap: 25px; margin: 15.5px 0 0 1px; }
+  .su-social .btn { height: 40px; background: #fff; gap: 10px; font-size: 16px; }
+  .su-login { display: block; margin: 9px auto 0; width: max-content; font-size: 12.5px; line-height: 16px; color: var(--text-3); padding: 0; }
+  .su-login b { color: var(--navy); font-weight: 700; }
+  .su-login::after { content: ''; position: absolute; inset: -14px -10px; }
+  .su-login { position: relative; }
+
+  /* Account-picker sheets (Google / Apple) */
+  .brand-badge { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; background: #fff; box-shadow: inset 0 0 0 1px var(--line-2); }
+  .brand-badge--apple { background: #000; color: #fff; box-shadow: none; }
+  .acct { display: flex; align-items: center; gap: 14px; width: 100%; min-height: 64px; padding: 10px 14px; border-radius: 14px; background: var(--grey-1); text-align: left; position: relative; }
+  .acct + .acct { margin-top: 10px; }
+  .acct__av { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
+  .acct__av--icon { display: grid; place-items: center; background: var(--orange-tint); color: var(--orange); }
+  .acct__name { display: block; font-size: 15px; font-weight: 600; color: #000; }
+  .acct__mail { display: block; font-size: 12.5px; color: var(--text-3); margin-top: 1px; }
+  .acct__end { margin-left: auto; color: var(--text-4); display: grid; place-items: center; width: 24px; height: 24px; }
+  .acct.is-busy .acct__end svg { display: none; }
+  .acct.is-busy .acct__end::after { content: ''; width: 18px; height: 18px; border-radius: 50%; border: 2.2px solid rgba(20,33,61,.15); border-top-color: var(--navy); animation: spin 700ms linear infinite; }
+  .sheet-note { font-size: 12px; line-height: 1.5; color: var(--text-4); margin-top: 16px; }
+  .apple-card { background: var(--grey-1); border-radius: 14px; padding: 4px 16px; }
+  .apple-card .kvs > div { font-size: 14px; }
+  .btn--apple { background: #000; color: #fff; }
+  .btn--apple.is-loading::after { border-color: rgba(255,255,255,.25); border-top-color: #fff; }
+  .faceid { display: grid; place-items: center; gap: 10px; padding: 18px 0 6px; text-align: center; }
+  .faceid__ring { width: 76px; height: 76px; border-radius: 22px; display: grid; place-items: center; background: var(--valid-bg); color: var(--valid); animation: rise 360ms var(--ease-spring) both; }
+  .faceid p { font-size: 15px; font-weight: 600; }
+</style>
+</head>
+<body>
+<main class="screen su topo topo--light" aria-label="Create your Voyager account">
+  <a class="abs su-back tap" href="onboarding-3.html" data-go="back" aria-label="Back">
+    <svg width="12" height="20" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.5 1.5 2 10l8.5 8.5"/></svg>
+  </a>
+  <div class="abs logo logo--navy su-logo enter" data-logo aria-hidden="true"></div>
+  <p class="t su-name enter" style="--i:1">VOYAGER</p>
+  <h1 class="t su-tag enter" style="--i:1">Create your free account</h1>
+
+  <form class="su-card enter" id="form" novalidate style="--i:2" aria-label="Sign up form">
+    <div class="fg">
+      <label class="label" for="name">Full Name</label>
+      <input class="field" id="name" name="name" type="text" autocomplete="name" autocapitalize="words" value="Alex Johnson" data-validate="required|name">
+    </div>
+    <div class="fg">
+      <label class="label" for="email">Email Address</label>
+      <input class="field" id="email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" value="alex.johnson@email.com" data-validate="required|email">
+    </div>
+    <div class="fg su-pw">
+      <label class="label" for="pw">Password</label>
+      <div class="field-wrap">
+        <input class="field" id="pw" name="password" type="password" autocomplete="new-password" value="Voyager#Paris2026" data-validate="required|password" aria-describedby="pwHint">
+        <button type="button" class="field-wrap__btn" data-pw-toggle aria-label="Show password"></button>
+      </div>
+      <div class="su-meter" id="meter" hidden>
+        <div class="strength" data-strength-for="pw" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <p class="strength-label" data-strength-label aria-live="polite"></p>
+      </div>
+      <p class="su-hint" id="pwHint" hidden>8+ characters with letters and a number</p>
+    </div>
+
+    <button class="btn btn--navy su-create" type="submit" id="create"><span>Create Account</span></button>
+    <p class="su-or">Or sign in with</p>
+    <div class="su-social">
+      <button class="btn btn--outline tap" type="button" data-sheet="googleSheet" aria-label="Sign up with Google">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8Z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24Z"/><path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6H1.3a12 12 0 0 0 0 10.8l4-3.1Z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9Z"/></svg>
+        <span>Google</span>
+      </button>
+      <button class="btn btn--outline tap" type="button" data-sheet="appleSheet" aria-label="Sign up with Apple">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="#000" d="M16.4 12.7c0-2.6 2.1-3.8 2.2-3.9a4.8 4.8 0 0 0-3.8-2c-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9a5 5 0 0 0-4.2 2.6c-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.6-1-2.6-4.1ZM13.9 5.1c.7-.9 1.2-2 1.1-3.1-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.1.1 2.3-.6 3-1.6Z"/></svg>
+        <span>Apple</span>
+      </button>
+    </div>
+    <a class="su-login" href="login.html">Already have an account? <b>Log In</b></a>
+  </form>
+</main>
+
+<!-- Google account picker -->
+<section class="sheet" id="googleSheet" aria-labelledby="gTitle">
+  <div class="sheet__head">
+    <div class="row" style="gap:12px;align-items:center">
+      <span class="brand-badge"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8Z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24Z"/><path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6H1.3a12 12 0 0 0 0 10.8l4-3.1Z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9Z"/></svg></span>
+      <div><p class="sheet__title" id="gTitle">Choose an account</p><p class="sheet__sub">to continue to Voyager</p></div>
+    </div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div id="gPick">
+    <button class="acct tap" type="button" data-account="google" data-action="pick-account" data-name="Alex Johnson" data-email="alex.johnson@email.com">
+      <span class="acct__av ph ph--warm"><img src="../assets/img/avatar-alex.jpg" alt="" width="40" height="40"></span>
+      <span><span class="acct__name">Alex Johnson</span><span class="acct__mail">alex.johnson@email.com</span></span>
+      <span class="acct__end"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 4.5 7.5 7.5L9 19.5"/></svg></span>
+    </button>
+    <button class="acct tap" type="button" id="gOtherBtn">
+      <span class="acct__av acct__av--icon"><span data-icon="user" data-size="20" data-sw="1.8"></span></span>
+      <span><span class="acct__name">Use another account</span><span class="acct__mail">Sign in with a different Google account</span></span>
+      <span class="acct__end"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 4.5 7.5 7.5L9 19.5"/></svg></span>
+    </button>
+  </div>
+  <form id="gOther" novalidate hidden>
+    <div class="fg">
+      <label class="label" for="gEmail">Google email</label>
+      <input class="field" id="gEmail" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="you@gmail.com" data-validate="required|email">
+    </div>
+    <div class="btn-pair mt-16">
+      <button class="btn btn--neutral" type="button" id="gOtherBack">Back</button>
+      <button class="btn btn--primary" type="submit" id="gOtherGo"><span>Next</span></button>
+    </div>
+  </form>
+  <p class="sheet-note">To continue, Google will share your name, email address and profile picture with Voyager. You can review this in your Google Account.</p>
+</section>
+
+<!-- Sign in with Apple -->
+<section class="sheet" id="appleSheet" aria-labelledby="aTitle">
+  <div class="sheet__head">
+    <div class="row" style="gap:12px;align-items:center">
+      <span class="brand-badge brand-badge--apple"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.4 12.7c0-2.6 2.1-3.8 2.2-3.9a4.8 4.8 0 0 0-3.8-2c-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9a5 5 0 0 0-4.2 2.6c-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.6-1-2.6-4.1ZM13.9 5.1c.7-.9 1.2-2 1.1-3.1-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.1.1 2.3-.6 3-1.6Z"/></svg></span>
+      <div><p class="sheet__title" id="aTitle">Sign in with Apple</p><p class="sheet__sub">Create your Voyager account with your Apple ID</p></div>
+    </div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div id="aForm">
+    <div class="apple-card kvs"><div><span class="k">Name</span><span class="v">Alex Johnson</span></div></div>
+    <p class="caps caps--grey mt-16" id="aMailLbl" style="margin-bottom:10px">Email</p>
+    <div class="options" data-options id="aMail" aria-labelledby="aMailLbl">
+      <button class="option" type="button" data-value="share" aria-checked="true"><span class="option__radio"></span><span class="option__body"><span class="option__title">Share My Email</span><span class="option__sub">alex.johnson@email.com</span></span></button>
+      <button class="option" type="button" data-value="hide" aria-checked="false"><span class="option__radio"></span><span class="option__body"><span class="option__title">Hide My Email</span><span class="option__sub">Forwards to your inbox from a private relay address</span></span></button>
+    </div>
+    <div class="sheet__foot"><button class="btn btn--apple" type="button" id="aGo"><span>Continue</span></button></div>
+  </div>
+  <div class="faceid" id="aDone" hidden>
+    <span class="faceid__ring"><span data-icon="check" data-size="36" data-sw="2.4"></span></span>
+    <p>Signed in with Apple</p>
+    <span class="small">Setting up your account…</span>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const V = window.Voyager;
+    const $ = (s) => document.querySelector(s);
+    const form = $('#form'), pw = $('#pw');
+
+    // ---- Live validation: green tick state once a field is touched and valid
+    const ok = (inp) => inp.dataset.validate.split('|').every((r) => V.rules[r](inp.value, inp) === true);
+    const touched = new Set();
+    const mark = (inp) => { const fg = inp.closest('.fg'); fg.classList.toggle('is-valid', touched.has(inp.id) && ok(inp) && !fg.classList.contains('has-error')); };
+    form.querySelectorAll('[data-validate]').forEach((inp) => {
+      inp.addEventListener('input', () => { touched.add(inp.id); mark(inp); });
+      inp.addEventListener('blur', () => { touched.add(inp.id); setTimeout(() => mark(inp), 0); });
+    });
+
+    // ---- Password: strength meter + rule hint appear once the user edits it
+    const meter = $('#meter'), hint = $('#pwHint');
+    pw.addEventListener('input', () => {
+      meter.hidden = !pw.value;
+      hint.hidden = !pw.value || V.rules.password(pw.value) === true;
+    });
+
+    // ---- Create account → loading → OTP
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hint.hidden = true;
+      if (!V.validate(form)) { V.haptic(); return; }
+      const btn = $('#create');
+      const name = $('#name').value.trim().replace(/\s+/g, ' ');
+      const email = $('#email').value.trim().toLowerCase();
+      await V.loading(btn, 1100);
+      V.store.set('pendingSignup', { name, email, via: 'email' });
+      location.href = `otp.html?flow=signup&email=${encodeURIComponent(email)}`;
+    });
+
+    // ---- Social: Google account picker
+    const finishSocial = async (via, name, email) => {
+      V.store.set('pendingSignup', { name, email, via });
+      await V.wait(700);
+      location.href = 'permissions.html?via=' + via;
+    };
+    document.querySelector('[data-account="google"]').addEventListener('click', async (e) => {
+      const b = e.currentTarget; if (b.classList.contains('is-busy')) return;
+      b.classList.add('is-busy'); b.setAttribute('aria-busy', 'true');
+      await V.wait(900);
+      V.toast('Signed in as ' + b.dataset.email);
+      finishSocial('google', b.dataset.name, b.dataset.email);
+    });
+    $('#gOtherBtn').addEventListener('click', () => { $('#gPick').hidden = true; $('#gOther').hidden = false; setTimeout(() => $('#gEmail').focus(), 50); });
+    $('#gOtherBack').addEventListener('click', () => { $('#gOther').hidden = true; $('#gPick').hidden = false; });
+    $('#gOther').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!V.validate($('#gOther'))) return;
+      const email = $('#gEmail').value.trim().toLowerCase();
+      await V.loading($('#gOtherGo'), 1000);
+      const guess = email.split('@')[0].split(/[._-]/).filter(Boolean).map((w) => w[0].toUpperCase() + w.slice(1)).join(' ');
+      finishSocial('google', guess || 'Traveller', email);
+    });
+    $('#googleSheet').addEventListener('sheet:close', () => { $('#gOther').hidden = true; $('#gPick').hidden = false; });
+
+    // ---- Social: Sign in with Apple
+    $('#aGo').addEventListener('click', async (e) => {
+      const hide = $('#aMail').querySelector('[aria-checked="true"]').dataset.value === 'hide';
+      await V.loading(e.currentTarget, 1000);
+      $('#aForm').hidden = true; $('#aDone').hidden = false; V.haptic();
+      finishSocial('apple', 'Alex Johnson', hide ? 'k7p2x9qm4d@privaterelay.appleid.com' : 'alex.johnson@email.com');
+    });
+  })();
+</script>
+</body>
+</html>

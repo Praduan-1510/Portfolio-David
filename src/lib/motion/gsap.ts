@@ -30,6 +30,7 @@ export const gsapEase = {
   inOutQuart: "inOutQuart",
   outQuad: "outQuad",
   outBack: "outBack",
+  standard: "standard",
 } as const;
 
 export { gsap, ScrollTrigger, SplitText, CustomEase };

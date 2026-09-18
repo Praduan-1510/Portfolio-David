@@ -21,6 +21,10 @@ const config: Config = {
       // the hero + case-study headers dial themselves down for that case only.
       screens: {
         "short-land": { raw: "(max-height: 520px) and (orientation: landscape)" },
+        // A real hover: a mouse or trackpad. Hover-only reveals (card overlays,
+        // the glass droplet lens) are gated on it so a tap never has to "hover"
+        // before it can navigate.
+        "can-hover": { raw: "(hover: hover) and (pointer: fine)" },
       },
 
       // ---- Semantic colors (DESIGN_GUIDELINES.md §4) ----
@@ -99,6 +103,7 @@ const config: Config = {
         "in-out-quart": "var(--ease-in-out-quart)",
         "out-quad": "var(--ease-out-quad)",
         "out-back": "var(--ease-out-back)",
+        standard: "var(--ease-standard)",
       },
 
       // ---- Duration scale (DESIGN_GUIDELINES.md §7.3) ----

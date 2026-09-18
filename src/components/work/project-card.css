@@ -1,0 +1,85 @@
+/* ── Project cards: the ambient loops ─────────────────────────────────────────
+   Imported once by components/work/ProjectCard.tsx.
+
+   Each card's "motion" is a still that behaves as if it were being used: a web
+   screenshot drifts slowly inside its browser window, and a tall phone
+   screenshot scrolls from its top to its bottom inside the screen, holding at
+   each end. A screenshot barely taller than the screen has nothing to scroll,
+   so its phone floats instead.
+
+   Four rules keep that honest:
+     1. Motion only when welcome. Nothing here exists under
+        prefers-reduced-motion: reduce; the cards are simply stills.
+     2. Motion only when watched. Every loop is declared paused, and
+        ProjectGrid's single IntersectionObserver sets [data-playing] on the
+        cards in view. Paused, not removed, so a card scrolled away and back
+        resumes where it was instead of snapping to its start.
+     3. Motion only when asked for. A loop runs while its card is hovered or
+        holds keyboard focus and freezes when the reader moves on, so nothing
+        starts by itself and no site-wide Motion switch is needed
+        (WCAG 2.2.2).
+     4. Compositor only. Each loop animates the individual `translate`
+        property, never `transform`, so the Tailwind hover zoom and lift on the
+        same elements (which write `transform`) compose with it instead of
+        fighting it.
+
+   Print needs nothing: the print sheet kills every animation, and `translate`
+   is only ever set by these keyframes, so a printed card is at rest. */
+
+/* Web: the page drifts up and to the left inside its window. The screenshot is
+   zoomed 1.06 from its top-left corner at rest, so a 3% / 2% travel never
+   uncovers the window's edge. */
+@keyframes pc-drift {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: -3% -2%;
+  }
+}
+
+/* App: the whole screenshot passes through the screen. 100% is the scroller's
+   own height (the image at its natural height) and 100cqh the screen's, so the
+   end state puts the image's bottom edge on the screen's bottom edge. The
+   first and last 9% hold still, so each end rests about three seconds once the
+   alternate run folds them together. */
+@keyframes pc-scroll {
+  0%,
+  9% {
+    translate: 0 0;
+  }
+  91%,
+  100% {
+    translate: 0 calc(100cqh - 100%);
+  }
+}
+
+/* App, short screenshot: the device breathes a few pixels instead. */
+@keyframes pc-float {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: 0 -2.4%;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pc-drift {
+    animation: pc-drift 24s ease-in-out infinite alternate both;
+    animation-play-state: paused;
+  }
+  .pc-scroll {
+    animation: pc-scroll 18s ease-in-out infinite alternate both;
+    animation-play-state: paused;
+  }
+  .pc-float {
+    animation: pc-float 6s ease-in-out infinite alternate both;
+    animation-play-state: paused;
+  }
+  /* Motion is the reader's to start: a loop runs while its card is hovered or
+     holds keyboard focus, and freezes where it is when they move on. */
+  .pc-card[data-playing]:is(:hover, :focus-within) :is(.pc-drift, .pc-scroll, .pc-float) {
+    animation-play-state: running;
+  }
+}

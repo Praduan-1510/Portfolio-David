@@ -53,7 +53,8 @@ async function shoot(file, screen, name, clip = { width: 1280, height: 800 }) {
   // reduced motion gives a settled frame rather than a half-faded one.
   await page.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: "reduce" }]);
 
-  const url = screen ? `${BASE}/${file}#${screen}` : `${BASE}/${file}`;
+  // ?case-link=0 keeps the portfolio's "Back to the case study" link out of the stills.
+  const url = `${BASE}/${file}?case-link=0` + (screen ? `#${screen}` : "");
   await page.goto(url, { waitUntil: "networkidle0", timeout: 30000 });
   await sleep(900);
 

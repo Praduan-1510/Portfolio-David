@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Order confirmed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* Pixel-matched to Confirmation.png (393 x 708): circle 158 at x117 y112, badge 100,
+     title cap y296, sub y331, CTAs 280 x 34 at y466 / y512. Order details follow below y600. */
+  .cf-top { position: relative; height: 560px; }
+  .cf-circle { left: 117px; top: 112px; width: 158px; height: 158px; }
+  .result__circle.cf-circle { position: absolute; margin: 0; }
+  .result__circle.cf-circle svg { width: 100px; height: 100px; }
+  .cf-title { left: 0; right: 0; top: 295px; text-align: center; font-size: 24px; font-weight: 700; color: #000; }
+  .cf-sub { left: 0; right: 0; top: 330px; text-align: center; font-size: 18px; color: var(--steel); }
+  .cf-note { left: 40px; right: 40px; top: 372px; text-align: center; font-size: 13px; line-height: 1.5; color: var(--muted-2); white-space: normal; }
+  .cf-btn { left: 58px; width: 280px; height: 34px; }
+  .cf-details { padding: 40px 24px calc(var(--tabbar-h) + 32px); }
+  .cf-id { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .cf-id b { font-size: 13px; font-weight: 700; color: var(--order-id); letter-spacing: .2px; }
+  .cf-id .text-btn { min-height: 32px; font-size: 12px; }
+  .cf-line { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--divider-soft); }
+  .cf-line .thumb { width: 46px; height: 46px; }
+  .cf-line__name { display: block; font-size: 14px; color: #111; }
+  .cf-line__meta { display: block; font-size: 11.5px; color: var(--muted-2); }
+  .cf-eta { display: flex; gap: 12px; align-items: center; }
+  .cf-eta b { display: block; font-size: 15px; font-weight: 600; color: var(--navy); }
+  .cf-eta span { font-size: 12px; color: var(--muted-2); }
+</style>
+</head>
+<body>
+<main class="screen" aria-label="Order confirmed">
+  <div class="cf-top">
+    <div class="result__circle abs cf-circle" id="badge" aria-hidden="true"></div>
+    <h1 class="t cf-title">Order Confirmed</h1>
+    <p class="t cf-sub">Happy Shopping</p>
+    <p class="sr-only" role="status" id="srStatus">Your order has been placed.</p>
+    <a class="btn btn--primary tap abs cf-btn" style="top:466px" href="home.html"><span>Continue Shopping</span></a>
+    <a class="btn btn--outline tap abs cf-btn" id="trackBtn" style="top:512px;font-size:20px" href="order-tracking.html"><span>Track your order</span></a>
+  </div>
+
+  <section class="cf-details" aria-label="Order details">
+    <div class="panel">
+      <div class="cf-id"><b id="oid">#DEC2026</b><button class="text-btn text-btn--brand tap" type="button" id="copyId" data-action="copy" data-copy="" data-copied="Order ID copied"><i data-icon="copy" data-size="14"></i>Copy ID</button></div>
+      <p class="form-note" id="placedOn" style="margin-top:-2px">Placed today</p>
+      <div class="cf-eta" style="margin-top:14px"><span class="icon-tile"><i data-icon="truck" data-size="22"></i></span><div><b id="eta">Arriving by Tue, 22 Sep</b><span id="shipTo">Delivering to Home</span></div></div>
+    </div>
+    <div class="panel" style="padding-top:8px;padding-bottom:6px">
+      <p class="label-caps" style="padding:6px 0 8px" id="itemsHead">3 items</p>
+      <div id="lines"></div>
+    </div>
+    <div class="panel" style="padding-top:6px;padding-bottom:6px">
+      <div class="kvs kvs--sm" id="kvs"></div>
+    </div>
+    <div class="banner banner--ok" style="margin-top:12px" id="points"><i data-icon="trophy" data-size="18"></i><span>You earned <b id="pts">280</b> Club points with this order</span></div>
+    <a class="btn btn--outline-steel btn--md tap" id="detailBtn" href="order-detail.html" style="margin-top:16px"><span>View order details</span></a>
+  </section>
+
+  <nav data-tabbar="bag"></nav>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$;
+    $('#badge').innerHTML = D.icon('verified', 100);
+    let o = (D.q('id') && D.orders.get(D.q('id'))) || (D.store.get('lastOrder') && D.orders.get(D.store.get('lastOrder')));
+    let preview = false;
+    if (!o && D.bag.count()) {
+      // Opened directly (demo jump, screen gallery): show the order the current bag would
+      // place, exactly as checkout would, without placing it.
+      const t = D.bag.totals(); const a0 = D.addresses.selected(); preview = true;
+      o = { id: 'DEC20261307', date: D.iso(), status: 'processing', eta: D.iso(D.addDays(D.location.days(a0 && a0.pin))), payment: D.payment.get(), addressId: D.addresses.selectedId(),
+        items: D.bag.items().map((it) => ({ id: it.id, qty: it.qty, price: it.product.price, size: it.size, colour: it.colour })), total: t.total, promo: t.promo, promoCode: t.promoCode };
+    }
+    o = o || D.orders.list()[0];
+    if (!o) return;
+    const items = D.orders.items(o); const n = D.orders.count(o);
+    const a = D.addresses.get(o.addressId) || D.addresses.selected();
+    $('#oid').textContent = '#' + o.id;
+    $('#copyId').dataset.copy = o.id;
+    $('#placedOn').textContent = `Placed on ${D.fmtDate(o.date)} · ${D.payment.label(o.payment)}`;
+    $('#eta').textContent = `Arriving by ${D.fmtDay(o.eta || D.addDays(4))}`;
+    $('#shipTo').textContent = a ? `${a.label} · ${a.text}` : '';
+    $('#trackBtn').href = preview ? 'orders.html' : `order-tracking.html?id=${o.id}`;
+    $('#detailBtn').href = preview ? 'orders.html' : `order-detail.html?id=${o.id}`;
+    $('#itemsHead').textContent = `${n} ${n === 1 ? 'item' : 'items'}`;
+    $('#lines').innerHTML = items.map((it) => `<a class="cf-line tap" href="product.html?id=${it.id}"><span class="thumb"><img src="${D.img(it.product.img)}" alt=""></span><span class="grow"><span class="cf-line__name">${D.esc(it.product.name)}</span><span class="cf-line__meta">${[it.size, it.colour, 'Qty ' + it.qty].filter(Boolean).join(' · ')}</span></span><span class="num fw-6">${D.fmt(it.price * it.qty)}</span></a>`).join('');
+    const sub = items.reduce((s, it) => s + it.price * it.qty, 0);
+    const mrp = items.reduce((s, it) => s + it.product.mrp * it.qty, 0);
+    $('#kvs').innerHTML = `<div><span class="k">MRP</span><span class="v">${D.fmt(mrp)}</span></div><div><span class="k">Discount</span><span class="v">${D.fmt(-(mrp - sub))}</span></div>${o.promo ? `<div><span class="k">Promo ${o.promoCode || ''}</span><span class="v v--ok">${D.fmt(-o.promo)}</span></div>` : ''}<div><span class="k">Delivery</span><span class="v v--ok">${o.total - sub + (o.promo || 0) > 0 ? D.fmt(o.total - sub + (o.promo || 0)) : 'Free'}</span></div><div class="total"><span class="k">${o.payment === 'cod' ? 'To pay on delivery' : 'Paid'}</span><span class="v">${D.fmt(o.total)}</span></div>`;
+    $('#points span').innerHTML = `${o.status === 'delivered' ? 'You earned' : 'You’ll earn'} <b class="num">${D.fmtNum(Math.round(o.total / 100))}</b> Club points ${o.status === 'delivered' ? 'with this order' : 'when it’s delivered'}`;
+    $('#srStatus').textContent = `Order ${o.id} confirmed. ${n} items, ${D.fmt(o.total)}.`;
+    D.hydrate($('.cf-details'));
+    // A preview doesn't empty the bag, but a placed order would have: don't show a bag count on the result
+    if (preview) D.$$('[data-badge="bag"]').forEach((b) => { b.textContent = ''; b.dataset.n = 0; });
+
+  })();
+</script>
+</body>
+</html>

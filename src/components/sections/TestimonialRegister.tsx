@@ -98,6 +98,19 @@ function StatementStack({ items }: { items: Testimonial[] }) {
  * and visibility also takes it out of the accessibility tree and tab order, so
  * a screen reader hears one statement rather than two.
  */
+/*
+ * Statement type. A short quote is set large in a narrow column; a long one
+ * (a full recommendation, three paragraphs of it) drops to heading-s in a
+ * reading measure. Set large, the longest statement made the GHOST ~1350px
+ * tall at 1440, so every other record sat on a panel mostly empty. The ghost
+ * uses the same rule, so it still measures exactly what the live quote needs.
+ */
+const LONG_QUOTE = 320;
+const statementType = (quote: string) =>
+  quote.length > LONG_QUOTE
+    ? "max-w-[54ch] font-display text-heading-s leading-[1.5]"
+    : "max-w-[24ch] font-display text-heading-l leading-[1.28]";
+
 function StatementBody({ t, ghost = false }: { t: Testimonial; ghost?: boolean }) {
   return (
     <>
@@ -109,7 +122,7 @@ function StatementBody({ t, ghost = false }: { t: Testimonial; ghost?: boolean }
       <blockquote className="relative mt-space-6 pl-space-8">
         <QuoteMark className="top-[-0.08em] text-[4rem]" />
         {ghost ? (
-          <p className="max-w-[24ch] font-display text-heading-l leading-[1.28]">{t.quote}</p>
+          <p className={statementType(t.quote)}>{t.quote}</p>
         ) : (
           /* Keyed on the person: GSAP's SplitText replaces this element's
              children with its own word wrappers, so React's text update on a
@@ -121,9 +134,10 @@ function StatementBody({ t, ghost = false }: { t: Testimonial; ghost?: boolean }
             key={t.name}
             as="p"
             by="words"
+            effect="mask"
             trigger="load"
             duration={0.55}
-            className="max-w-[24ch] font-display text-heading-l leading-[1.28] text-fg [text-wrap:pretty]"
+            className={`${statementType(t.quote)} text-fg [text-wrap:pretty]`}
           >
             {t.quote}
           </TextReveal>

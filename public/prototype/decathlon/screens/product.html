@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Product</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* Pixel-matched to Product details.png (393 x 902). Header + hero are absolute;
+     everything from the rule (y440) down is flow so longer copy / size lists reflow. */
+  .pdp-back { left: 14px; top: 18px; width: 28px; height: 44px; display: grid; place-items: center; color: #000; border-radius: 8px; }
+  .pdp-icons { left: 299px; top: 26px; display: flex; }
+  .pdp-icons .count-badge { --badge-ring: #fff; }
+  .pdp-hero { left: 0; top: 80px; width: 393px; height: 263px; display: block; background: linear-gradient(135deg, #3E6B4E, #1E3A2A); overflow: hidden; }
+  .pdp-hero img { width: 100%; height: 100%; object-fit: cover; transition: transform 600ms var(--ease-out); }
+  .pdp-hero:active img { transform: scale(1.02); }
+  .pdp-count { position: absolute; right: 11px; bottom: 10px; height: 22px; padding: 0 8px; border-radius: 11px; background: rgba(1,31,48,.62); color: #fff; font-size: 11px; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; pointer-events: none; }
+  .pdp-count svg { width: 12px; height: 12px; }
+  .pdp-top { position: relative; height: 97px; }             /* y343 -> y440 */
+  .pdp-rate { position: absolute; left: 250px; top: 21px; width: 112px; height: 46px; display: block; border-radius: 8px; }
+  .pdp-rate .stars { position: absolute; left: 3px; top: 4px; gap: 1px; }
+  .pdp-rate .stars svg { width: 20px; height: 20px; }
+  .pdp-rate .stars .s-empty { stroke-width: 1.3; }
+  .pdp-rate__n { position: absolute; right: 7px; top: 31px; font-size: 10px; line-height: 1; color: #111; }
+  .pdp-price { position: absolute; left: 39px; top: 54px; display: flex; align-items: baseline; gap: 2px; line-height: 1; }
+  .pdp-price .mrp { font-size: 14px; }
+  .pdp-off { font-size: 12px; font-weight: 600; color: var(--ok); margin-left: 8px; }
+  .pdp .rule { margin: 0 31px; }
+  .pdp-h { font-size: 18px; font-weight: 600; line-height: 1; color: #000; }
+  .pdp-row { display: flex; align-items: baseline; justify-content: space-between; }
+  .pdp-row .swatch-name { font-size: 13px; font-weight: 400; margin-left: 8px; color: var(--muted-2); }
+  .size-guide { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 500; color: var(--brand); padding: 12px 0; margin: -12px 0; }
+  .size-guide svg { width: 15px; height: 15px; }
+  .pdp-sizes { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .pdp-sizes .sizes { flex: 1; min-width: 0; row-gap: 12px; }
+  .pdp-qty { display: flex; align-items: center; gap: 8px; flex-shrink: 0; font-size: 12px; color: var(--muted-2); height: 31px; }
+  .pdp-qty .qty button { width: 24px; height: 24px; background: #fff; color: var(--navy); box-shadow: inset 0 0 0 1px var(--border); }
+  .pdp-qty .qty button::after { inset: -10px -6px; }
+  .pdp-qty .qty button svg { width: 12px; height: 12px; }
+  .pdp-qty .qty output { font-size: 14px; font-weight: 600; color: #000; }
+  .size-error { display: none; font-size: 12px; color: var(--danger); margin-top: 8px; }
+  .sizes.is-error ~ .size-error, .pdp-sizes.is-error + .size-error { display: block; }
+  .pdp-desc { font-size: 14px; line-height: 20.7px; color: #000; max-width: 300px; }
+  .pdp-cta { width: 280px; height: 34px; margin-left: 57px; font-size: 18px; }
+  .pdp-extra { padding: 0 var(--gutter); margin-top: 44px; }
+  .pdp-extra .menu__item { min-height: 56px; }
+  .pdp-extra .menu__label { color: #111; }
+  .pdp-extra .menu__label b { font-weight: 600; }
+  .pdp-extra .menu__meta { color: var(--brand); font-weight: 500; }
+  .rating-sum { display: flex; align-items: center; gap: 18px; }
+  .rating-sum__big { font-size: 34px; font-weight: 700; color: var(--navy); line-height: 1; }
+  .rating-sum__n { font-size: 12px; color: var(--muted-2); margin-top: 6px; }
+  .bars { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+  .bars div { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted-2); }
+  .bars span:nth-child(2) { flex: 1; height: 6px; border-radius: 3px; background: var(--surface); overflow: hidden; }
+  .bars i { display: block; height: 100%; background: var(--star); border-radius: 3px; }
+  .review-peek { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+  .review-peek__who { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; }
+  .review-peek__who .avatar { width: 30px; height: 30px; }
+  .review-peek p { font-size: 13px; line-height: 1.5; color: #333; margin-top: 8px; }
+  .added { display: flex; gap: 14px; align-items: center; }
+  .added .thumb { width: 72px; height: 72px; }
+  .added__name { font-size: 15px; font-weight: 500; }
+  .added__meta { font-size: 12px; color: var(--muted-2); margin-top: 2px; }
+  .size-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .size-table th, .size-table td { text-align: left; padding: 10px 6px; border-bottom: 1px solid var(--divider-soft); }
+  .size-table th { font-weight: 600; color: var(--steel); font-size: 12px; }
+  .size-table tr.is-sel td { background: var(--surface); font-weight: 600; }
+  .stock { font-size: 12px; font-weight: 600; }
+  .stock--in { color: var(--ok); } .stock--low { color: var(--warn); } .stock--out { color: var(--danger); }
+</style>
+</head>
+<body>
+<main class="screen" aria-label="Product details" id="pdp">
+  <!-- Header: back · "Product" · bell / heart / cart -->
+  <a class="abs pdp-back tap" href="home.html" data-go="back" aria-label="Back"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+  <h1 class="t" style="left:52px;top:29px;font-size:20px;font-weight:600;color:#000">Product</h1>
+  <div class="abs pdp-icons" id="pdpIcons"></div>
+
+  <!-- Hero -> gallery -->
+  <a class="abs pdp-hero" id="hero" href="gallery.html?id=racket" aria-label="Open photo gallery">
+    <img id="heroImg" src="../assets/img/racket-hero.jpg" alt="">
+    <span class="pdp-count" id="heroCount"><i data-icon="image" data-size="12" data-sw="2"></i><span>1 / 4</span></span>
+  </a>
+  <button class="heart heart--box abs" id="heart" data-heart="racket" type="button" aria-label="Save to wishlist" style="top:90px;right:11px"></button>
+
+  <div class="pdp" style="padding-top:343px">
+    <div class="pdp-top">
+      <p class="t" id="pName" style="left:38px;top:21.7px;font-size:15px;color:#000">Tennis Racket</p>
+      <a class="pdp-rate tap" id="rateLink" href="reviews.html?id=racket" aria-label="Rated 4 out of 5 from 12.8k reviews. Read reviews">
+        <span id="pStars"></span><span class="pdp-rate__n" id="pReviews">(12.8k)</span>
+      </a>
+      <p class="pdp-price" id="pPrice"><span class="price price--lg num">₹12,000</span><span class="mrp num">₹22,000</span></p>
+    </div>
+    <div class="rule" role="separator"></div>
+
+    <section style="padding:18.3px 31px 0 35px" aria-labelledby="colourH">
+      <div class="pdp-row"><h2 class="pdp-h" id="colourH">Colour<span class="swatch-name" id="colourName">White</span></h2></div>
+      <div class="swatches" id="swatches" data-radio aria-labelledby="colourH" style="margin-top:13.7px;height:23px"></div>
+    </section>
+
+    <section id="sizeSec" style="padding:27.3px 31px 0 31px" aria-labelledby="sizeH">
+      <div class="pdp-row" style="padding-left:6px"><h2 class="pdp-h" id="sizeH">Size</h2><button class="size-guide tap" type="button" data-sheet="guideSheet"><i data-icon="ruler" data-size="15"></i>Size guide</button></div>
+      <div class="pdp-sizes" style="margin-top:14.7px">
+        <div class="sizes" id="sizes" data-radio aria-labelledby="sizeH"></div>
+        <div class="pdp-qty"><span id="qtyLbl">Qty</span><div class="qty" id="qty" data-qty data-min="1" data-max="10" aria-labelledby="qtyLbl"><button type="button" data-action="dec" aria-label="Decrease quantity"><i data-icon="minus" data-size="12" data-sw="2.4"></i></button><output aria-live="polite">1</output><button type="button" data-action="inc" aria-label="Increase quantity"><i data-icon="plus" data-size="12" data-sw="2.4"></i></button></div></div>
+      </div>
+      <p class="size-error" id="sizeErr" role="alert">Please select a size to add this to your bag</p>
+    </section>
+
+    <section style="padding:19.3px 31px 0 32px" aria-labelledby="descH">
+      <h2 class="pdp-h" id="descH" style="padding-left:5px">Description</h2>
+      <p class="pdp-desc" id="pDesc" style="margin-top:17.2px">Graphite frame, 285 g, with a 100 sq in head for easy power from the baseline and control at the net. Pre-strung at 24 kg for club players.</p>
+    </section>
+
+    <button class="btn btn--primary tap pdp-cta" id="addBtn" type="button" style="margin-top:26.7px"><span>Add to bag</span></button>
+
+    <!-- Below the fold -->
+    <div class="pdp-extra">
+      <div class="menu">
+        <button class="menu__item tap" type="button" id="deliverRow" data-action="pincode"><span class="icon-tile" style="width:36px;height:36px"><i data-icon="truck" data-size="19"></i></span><span class="menu__body"><span class="menu__label">Deliver to <b data-bind="pin">700135</b></span><span class="menu__sub">Free delivery by <span data-bind="eta">Sun, 20 Sep</span></span></span><span class="menu__meta">Change</span></button>
+        <button class="menu__item tap" type="button" data-sheet="storeSheet"><span class="icon-tile" style="width:36px;height:36px"><i data-icon="store" data-size="19"></i></span><span class="menu__body"><span class="menu__label" id="storeLine">In stock at 3 stores near you</span><span class="menu__sub">Reserve online, pick up in 2 hours</span></span><span class="menu__meta">Check</span></button>
+        <button class="menu__item tap" type="button" data-sheet="returnsSheet"><span class="icon-tile" style="width:36px;height:36px"><i data-icon="return" data-size="19"></i></span><span class="menu__body"><span class="menu__label">30-day free returns</span><span class="menu__sub">2-year warranty on Decathlon brands</span></span><i class="chev" data-icon="chevron" data-size="18" data-sw="2"></i></button>
+      </div>
+
+      <div id="specWrap">
+        <div class="section-head"><h2 class="section-title">Specifications</h2></div>
+        <div class="panel" style="padding:4px 16px"><div class="kvs kvs--plain" id="specs"></div></div>
+      </div>
+
+      <div class="section-head"><h2 class="section-title">Ratings &amp; reviews</h2><a class="see-all see-all--brand tap" id="allReviews" href="reviews.html?id=racket">See all</a></div>
+      <div class="panel">
+        <div class="rating-sum">
+          <div><p class="rating-sum__big num" id="rBig">4.0</p><div id="rStars" style="margin-top:6px"></div><p class="rating-sum__n" id="rCount">12.8k ratings</p></div>
+          <div class="bars" id="bars"></div>
+        </div>
+        <div class="review-peek" id="peek"></div>
+        <a class="btn btn--outline btn--md tap" id="writeReview" href="write-review.html?id=racket" style="margin-top:14px"><i data-icon="edit" data-size="16"></i><span>Write a review</span></a>
+      </div>
+
+      <div class="section-head"><h2 class="section-title">You may also like</h2><a class="see-all see-all--brand tap" id="moreLink" href="sport.html?sport=tennis">See all</a></div>
+      <div class="rail" id="related" aria-label="Related products"></div>
+      <div style="height:calc(var(--tabbar-h) + 28px)"></div>
+    </div>
+  </div>
+
+  <nav data-tabbar="categories"></nav>
+</main>
+
+<!-- Added to bag -->
+<section class="sheet" id="addedSheet" aria-labelledby="addedT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="addedT">Added to bag</p><p class="sheet__sub" id="addedSub">Your bag now has 7 items</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button>
+  </div>
+  <div class="added"><span class="thumb"><img id="addedImg" src="../assets/img/racket.jpg" alt=""></span><div class="grow"><p class="added__name" id="addedName">Tennis Racket</p><p class="added__meta" id="addedMeta">White · Size L · Qty 1</p><p class="price price--md num" id="addedPrice" style="margin-top:4px">₹12,000</p></div></div>
+  <div class="banner banner--ok" style="margin-top:16px"><i data-icon="truck" data-size="18"></i><span>Free delivery on this order · arriving by <b data-bind="eta">Sun, 20 Sep</b></span></div>
+  <div class="sheet__foot">
+    <a class="btn btn--primary btn--lg tap" href="bag.html"><span>View bag</span></a>
+    <button class="btn btn--outline btn--lg tap" type="button" data-close><span>Continue shopping</span></button>
+  </div>
+</section>
+
+<!-- Size guide -->
+<section class="sheet" id="guideSheet" aria-labelledby="guideT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="guideT">Size guide</p><p class="sheet__sub" id="guideSub">Measure the grip circumference of your current racket</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button>
+  </div>
+  <table class="size-table num" id="guideTable"></table>
+  <div class="banner banner--info" style="margin-top:16px"><i data-icon="info" data-size="18"></i><span>Between two sizes? Pick the larger one. You can exchange for free within 30 days.</span></div>
+  <div class="sheet__foot"><button class="btn btn--primary btn--lg tap" type="button" data-close>Got it</button></div>
+</section>
+
+<!-- Store availability -->
+<section class="sheet" id="storeSheet" aria-labelledby="storeT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="storeT">Available in stores</p><p class="sheet__sub">Kolkata · stock updated 10 minutes ago</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button>
+  </div>
+  <div class="options" id="storeList" data-options></div>
+  <div class="sheet__foot"><button class="btn btn--primary btn--lg tap" type="button" id="reserveBtn"><span>Reserve for pickup</span></button><p class="helper" style="text-align:center">Free · held for 48 hours · pay at the store</p></div>
+</section>
+
+<!-- Returns -->
+<section class="sheet" id="returnsSheet" aria-labelledby="retT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="retT">Returns &amp; warranty</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button>
+  </div>
+  <ol class="track">
+    <li class="done"><span class="track__title">30-day free returns</span><span class="track__meta">Unused, with tags. Pickup from your door or drop at any store.</span></li>
+    <li class="done"><span class="track__title">Refund in 3–5 days</span><span class="track__meta">Back to your original payment method once we receive it.</span></li>
+    <li class="done"><span class="track__title">2-year warranty</span><span class="track__meta">On Decathlon brands like Artengo, Quechua and Kalenji.</span></li>
+  </ol>
+  <div class="sheet__foot"><a class="btn btn--outline btn--lg tap" href="help.html?topic=returns"><span>Read the returns policy</span></a></div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const p = D.product(D.q('id')) || D.product('racket');
+    const imgs = p.imgs || [p.img];
+    let colour = p.defaultColour || (p.colours[0] && p.colours[0].name) || '';
+    let size = p.defaultSize || (p.sizes.length === 1 ? p.sizes[0] : '');
+    const needsSize = p.sizes.length > 1;
+    document.title = 'Decathlon · ' + p.name;
+    D.store.set('recent', [p.id].concat((D.store.get('recent', []) || []).filter((x) => x !== p.id)).slice(0, 10));
+
+    // Header icons (bell / heart / cart with live badges)
+    $('#pdpIcons').innerHTML = D.headIcons('#fff');
+
+    // Hero + heart
+    $('#heroImg').src = D.img(p.hero || p.img);
+    $('#heroImg').alt = p.name;
+    $('#hero').href = `gallery.html?id=${p.id}`;
+    $('#heroCount span').textContent = `1 / ${imgs.length}`;
+    $('#heroCount').hidden = imgs.length < 2;
+    $('#heart').dataset.heart = p.id;
+    $('#heart').setAttribute('aria-label', `Save ${p.name} to wishlist`);
+
+    // Title, rating, price
+    $('#pName').textContent = p.name;
+    $('#pStars').innerHTML = D.stars(p.rating);
+    const rc = D.reviews.fmtCount(p.reviews);
+    $('#pReviews').textContent = `(${rc})`;
+    $('#rateLink').href = `reviews.html?id=${p.id}`;
+    $('#rateLink').setAttribute('aria-label', `Rated ${Math.round(p.rating)} out of 5 from ${rc} reviews. Read reviews`);
+    $('#pPrice').innerHTML = D.priceHtml(p, true);
+    $('#pDesc').textContent = p.id === 'racket' ? $('#pDesc').textContent : p.description;
+
+    // Colour swatches
+    const light = (hex) => /^#(f|e)/i.test(hex);
+    $('#swatches').innerHTML = p.colours.map((c) => `<button type="button" class="swatch" role="radio" aria-checked="${c.name === colour}" data-value="${c.name}" aria-label="${c.name}" style="--c:${c.hex}"${light(c.hex) ? ' data-light' : ''}></button>`).join('');
+    $('#colourName').textContent = colour;
+    $('#swatches').addEventListener('change', (e) => { colour = e.detail; $('#colourName').textContent = colour; });
+
+    // Sizes (required when more than one)
+    const sizeLbl = p.sizeLabel || 'Size';
+        if (!p.sizes.length) { $('#sizes').innerHTML = '<span style="font-size:13px;color:var(--muted-2);line-height:31px">One size</span>'; $('.size-guide').hidden = true; }
+    else $('#sizes').innerHTML = p.sizes.map((s) => `<button type="button" class="size${s.length > 2 ? ' size--wide' : ''}" role="radio" aria-checked="${s === size}" data-value="${s}" aria-label="${sizeLbl} ${s}">${s}</button>`).join('');
+    $('#sizes').addEventListener('change', (e) => { size = e.detail; $('#sizes').classList.remove('is-error'); $('#sizeErr').style.display = 'none'; renderGuide(); });
+    D.hydrate($('#pdp'));
+
+    // Qty
+    let qty = 1;
+    $('#qty').addEventListener('change', (e) => { qty = e.detail; });
+
+    // Add to bag: validate size -> loading -> Deca.bag.add -> "Added to bag" sheet
+    const addBtn = $('#addBtn');
+    addBtn.addEventListener('click', async () => {
+      if (needsSize && !size) {
+        const s = $('#sizes'); s.classList.remove('is-error'); void s.offsetWidth; s.classList.add('is-error');
+        $('#sizeErr').style.display = 'block'; D.haptic(30);
+        $('#sizeSec').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        s.querySelector('[role=radio]').focus({ preventScroll: true });
+        return;
+      }
+      await D.loading(addBtn, 900);
+      D.bag.add(p.id, { size, colour, qty });
+      D.haptic(15);
+      $('#addedImg').src = D.img(p.img);
+      $('#addedName').textContent = p.name;
+      $('#addedMeta').textContent = [colour, size && `${sizeLbl} ${size}`, `Qty ${qty}`].filter(Boolean).join(' · ');
+      $('#addedPrice').textContent = D.fmt(p.price * qty);
+      const n = D.bag.count();
+      $('#addedSub').textContent = `Your bag now has ${n} ${n === 1 ? 'item' : 'items'} · ${D.fmt(D.bag.totals().total)}`;
+      D.sheet.open('addedSheet');
+    });
+
+    // Size guide table (adapts to shoe / apparel / grip sizes)
+    function renderGuide() {
+      const shoe = p.sizes.some((s) => /^UK/.test(s));
+      const grip = p.sport === 'tennis' && !shoe;
+      let head, rows;
+      if (shoe) { head = ['UK', 'EU', 'Foot length']; rows = p.sizes.map((s) => { const n = +s.replace(/\D/g, ''); return [s, 'EU ' + (n + 33), (22.5 + (n - 6) * 0.85).toFixed(1) + ' cm']; }); $('#guideSub').textContent = 'Measure your foot from heel to longest toe'; }
+      else if (grip) { head = ['Grip', 'Circumference', 'Hand length']; rows = p.sizes.map((s, i) => [s, `${10 + i * 0.3} cm`.replace(/(\.\d)\d+/, '$1'), `${16 + i} – ${17 + i} cm`]); }
+      else { head = ['Size', 'Chest', 'Waist']; rows = p.sizes.map((s, i) => [s, `${84 + i * 8} cm`, `${70 + i * 8} cm`]); $('#guideSub').textContent = 'Body measurements, not garment measurements'; }
+      $('#guideTable').innerHTML = `<thead><tr>${head.map((h) => `<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${rows.map((r) => `<tr${r[0] === size ? ' class="is-sel"' : ''}>${r.map((c) => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody>`;
+    }
+    renderGuide();
+
+    // Store availability
+    const inStock = D.stores.filter((s) => D.stock(s.id, p.id) !== 'out').length;
+    $('#storeLine').textContent = inStock ? `In stock at ${inStock} ${inStock === 1 ? 'store' : 'stores'} near you` : 'Out of stock in nearby stores';
+    $('#storeList').innerHTML = D.stores.slice().sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance)).map((s, i) => {
+      const st = D.stock(s.id, p.id);
+      return `<div class="option tap" data-value="${s.id}" aria-checked="${i === 0 && st !== 'out'}"${st === 'out' ? ' aria-disabled="true" style="opacity:.55"' : ''}><span class="option__radio"></span><span class="option__body"><span class="option__title">${s.full}</span><span class="option__sub">${s.distance} · ${s.hours}</span></span><span class="stock stock--${st}">${D.stockLabel[st]}</span></div>`;
+    }).join('');
+    D.hydrate($('#storeSheet'));
+    let store = (D.stores.slice().sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance)).find((s) => D.stock(s.id, p.id) !== 'out') || {}).id;
+    $('#storeList').addEventListener('select', (e) => { store = e.detail; });
+    $$('#storeList .option[aria-disabled="true"]').forEach((o) => o.addEventListener('click', (e) => { e.stopImmediatePropagation(); D.toast('Out of stock at this store'); }, true));
+    $('#reserveBtn').addEventListener('click', async (e) => {
+      if (!store) { D.toast('Not available in nearby stores right now'); return; }
+      await D.loading(e.currentTarget, 900);
+      D.sheet.close();
+      const s = D.storeById(store);
+      D.toast(`Reserved at ${s.name} · ready in 2 hours`, { icon: 'check', action: 'Directions', href: `store-detail.html?id=${s.id}` });
+    });
+
+    // Specs
+    if (p.specs) $('#specs').innerHTML = p.specs.map(([k, v]) => `<div><span class="k">${k}</span><span class="v">${v}</span></div>`).join('');
+    else $('#specs').innerHTML = `<div><span class="k">Brand</span><span class="v">${p.brand}</span></div><div><span class="k">Sport</span><span class="v">${(D.sport(p.sport) || { name: p.sport }).name}</span></div><div><span class="k">Colours</span><span class="v">${p.colours.map((c) => c.name).join(', ')}</span></div>${p.sizes.length ? `<div><span class="k">Sizes</span><span class="v">${p.sizes[0]} – ${p.sizes[p.sizes.length - 1]}</span></div>` : ''}`;
+
+    // Ratings summary + first review
+    $('#rBig').textContent = D.reviews.avg(p.id).toFixed(1);
+    $('#rStars').innerHTML = D.stars(p.rating, 'stars--md');
+    $('#rCount').textContent = `${rc} ratings`;
+    $('#bars').innerHTML = D.reviews.breakdown(p.id).map((b) => `<div><span>${b.stars}</span><span><i style="width:${b.pct}%"></i></span><span class="num" style="width:26px;text-align:right">${b.pct}%</span></div>`).join('');
+    const rv = D.reviews.list(p.id)[0];
+    $('#peek').innerHTML = `<div class="review-peek__who"><span class="avatar"><img src="${D.img(rv.avatar)}" alt=""></span><span class="grow">${D.esc(rv.name)}</span>${D.stars(rv.rating)}</div><p><b style="font-weight:600">${D.esc(rv.title)}.</b> ${D.esc(rv.text)}</p>`;
+    $('#allReviews').href = `reviews.html?id=${p.id}`;
+    $('#writeReview').href = `write-review.html?id=${p.id}`;
+
+    // Related rail
+    $('#related').innerHTML = D.related(p.id, 6).map((x) => D.card(x, { rail: true })).join('');
+    $('#moreLink').href = `sport.html?sport=${p.sport}`;
+    D.hydrate($('.pdp-extra'));
+  })();
+</script>
+</body>
+</html>

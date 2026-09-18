@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Edit profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  .me { display: flex; flex-direction: column; align-items: center; padding: 24px 0 6px; }
+  .me__ring { position: relative; width: 104px; height: 104px; border-radius: 50%; padding: 4px; background: conic-gradient(from 200deg, var(--brand), #9FD5F1, var(--brand)); }
+  .me__ring .avatar { width: 96px; height: 96px; box-shadow: 0 0 0 3px #fff; }
+  .me__cam { position: absolute; right: -2px; bottom: 2px; width: 34px; height: 34px; border-radius: 50%; background: var(--navy); color: #fff; display: grid; place-items: center; box-shadow: 0 0 0 3px #fff; }
+  .me__cam svg { width: 17px; height: 17px; }
+  .me__cam::after { content: ''; position: absolute; inset: -6px; }
+  .me__change { font-size: 13px; font-weight: 500; color: var(--brand); margin-top: 8px; padding: 6px 8px; }
+  .me__since { font-size: 12px; color: var(--muted-2); display: inline-flex; align-items: center; gap: 6px; }
+  .form-sec { margin-top: 22px; }
+  .form-sec > .label-caps { display: block; margin-bottom: 12px; }
+  .gender .chip { height: 36px; padding: 0 14px; }
+  .sport-chips { gap: 8px; }
+  .sport-chips .chip { height: 34px; }
+  .verified-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; color: var(--ok); flex-shrink: 0; }
+  .verified-tag svg { width: 14px; height: 14px; }
+  .tel-prefix { font-size: 15px; font-weight: 500; color: #111 !important; padding-right: 10px; box-shadow: inset -1px 0 0 var(--border); }
+  input[type="date"].field { display: block; line-height: 44px; }
+  input[type="date"]::-webkit-calendar-picker-indicator { opacity: .6; cursor: pointer; }
+  .danger-zone { margin-top: 28px; text-align: center; }
+  .photo-opts .option { min-height: 56px; }
+  .photo-opts .icon-tile { width: 38px; height: 38px; }
+</style>
+</head>
+<body>
+<main class="page page--no-nav" aria-label="Edit profile">
+  <header class="appbar">
+    <a class="back tap" href="account.html" id="back" aria-label="Back"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <h1 class="appbar__title">Edit profile</h1>
+    <button class="appbar__action appbar__action--brand tap" type="button" id="saveTop">Save</button>
+  </header>
+  <div class="page-divider"></div>
+
+  <section class="me enter" style="--i:0">
+    <div class="me__ring">
+      <span class="avatar" id="avatar"></span>
+      <button class="me__cam tap" type="button" data-sheet="photoSheet" aria-label="Change profile photo"><i data-icon="camera" data-size="17" data-sw="2"></i></button>
+    </div>
+    <button class="me__change tap" type="button" data-sheet="photoSheet" id="photoLbl">Change photo</button>
+    <span class="me__since"><span class="pill pill--club pill--sm" id="tierPill">Club member</span><span id="since">Member since 2023</span></span>
+  </section>
+
+  <form id="profileForm" novalidate>
+    <div class="form-sec">
+      <span class="label-caps">Personal details</span>
+      <div class="fg">
+        <label class="label" for="name">Full name<span class="req" aria-hidden="true">*</span></label>
+        <input class="field" id="name" name="name" autocomplete="name" data-validate="required|name">
+      </div>
+      <div class="fg">
+        <label class="label" for="dob">Date of birth</label>
+        <input class="field" id="dob" name="dob" type="date" max="2014-12-31" min="1920-01-01" data-validate="dob">
+        <span class="helper">We send you 200 bonus points on your birthday</span>
+      </div>
+      <div class="fg">
+        <p class="label" id="genderL">Gender</p>
+        <div class="chip-row gender" data-group id="gender" aria-labelledby="genderL">
+          <button class="chip" type="button" role="tab" data-value="Male">Male</button>
+          <button class="chip" type="button" role="tab" data-value="Female">Female</button>
+          <button class="chip" type="button" role="tab" data-value="Other">Other</button>
+          <button class="chip" type="button" role="tab" data-value="Prefer not to say">Prefer not to say</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-sec">
+      <span class="label-caps">Contact</span>
+      <div class="fg">
+        <label class="label" for="email" style="display:flex;justify-content:space-between">Email<span class="verified-tag" id="emailTag"><i data-icon="check-circle" data-size="14" data-sw="2"></i>Verified</span></label>
+        <input class="field" id="email" name="email" type="email" inputmode="email" autocomplete="email" data-validate="required|email">
+      </div>
+      <div class="fg">
+        <label class="label" for="phone" style="display:flex;justify-content:space-between">Mobile number<span class="verified-tag" id="phoneTag"><i data-icon="check-circle" data-size="14" data-sw="2"></i>Verified</span></label>
+        <div class="field field-affix"><span class="tel-prefix">+91</span><input id="phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" data-mask="phone" data-validate="required|phone"></div>
+        <span class="helper" id="phoneHelp">Changing your number needs a new verification code</span>
+      </div>
+    </div>
+
+    <div class="form-sec">
+      <span class="label-caps" id="sportsL">Favourite sports</span>
+      <div class="chip-row sport-chips" data-multi id="sports" aria-labelledby="sportsL" role="group"></div>
+      <span class="helper" style="margin-top:8px">Shapes your Home feed and offers</span>
+    </div>
+  </form>
+
+  <div class="danger-zone">
+    <a class="text-btn text-btn--danger tap" href="settings.html#danger">Delete account</a>
+  </div>
+
+  <div class="cta-bar">
+    <button class="btn btn--primary btn--lg tap" type="button" id="save"><span>Save changes</span></button>
+  </div>
+</main>
+
+<section class="sheet" id="photoSheet" aria-labelledby="photoT">
+  <div class="sheet__head"><div><p class="sheet__title" id="photoT">Profile photo</p><p class="sheet__sub">Shown on your reviews and Club card</p></div><button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button></div>
+  <div class="options photo-opts">
+    <button class="option tap" type="button" id="takePhoto"><span class="icon-tile"><i data-icon="camera" data-size="20"></i></span><span class="option__body"><span class="option__title">Take a photo</span><span class="option__sub">Use your camera</span></span></button>
+    <button class="option tap" type="button" id="pickPhoto"><span class="icon-tile"><i data-icon="image" data-size="20"></i></span><span class="option__body"><span class="option__title">Choose from library</span><span class="option__sub">JPG or PNG, up to 10 MB</span></span></button>
+    <button class="option tap" type="button" id="removePhoto"><span class="icon-tile" style="background:var(--danger-bg);color:var(--danger)"><i data-icon="trash" data-size="20"></i></span><span class="option__body"><span class="option__title" style="color:var(--danger)">Remove photo</span><span class="option__sub">Show the default avatar</span></span></button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const SPORTS = [['running', 'Running'], ['cycling', 'Cycling'], ['tennis', 'Tennis'], ['football', 'Football'], ['badminton', 'Badminton'], ['yoga', 'Yoga'], ['hiking', 'Hiking'], ['swimming', 'Swimming'], ['gym', 'Gym'], ['cricket', 'Cricket'], ['camping', 'Camping'], ['basketball', 'Basketball']];
+    const GLYPH = '<svg width="96" height="96" viewBox="0 0 80 80" fill="#0F96DB" aria-hidden="true"><ellipse cx="40" cy="27" rx="10.8" ry="11.6"/><path d="M18.5 63v-1.5C18.5 53 28 47 40 47s21.5 6 21.5 14.5V63a3.5 3.5 0 0 1-3.5 3.5H22A3.5 3.5 0 0 1 18.5 63Z"/></svg>';
+    const u = D.user.get();
+    let photo = !!u.photo;
+    const origPhone = (u.phone || '').replace('+91 ', '');
+    // Rules: DOB must be 12+ and a real date
+    D.rules.dob = (v) => { const d = new Date(v); if (isNaN(d)) return 'Pick your date of birth'; const age = (Date.now() - d) / 31557600000; return (age >= 12 && age <= 110) || 'You need to be at least 12 years old'; };
+
+    // Fill form
+    $('#name').value = u.name || '';
+    $('#email').value = u.email || '';
+    $('#phone').value = origPhone;
+    $('#dob').value = u.dob || '';
+    $('#since').textContent = 'Member since ' + (u.memberSince || '2023');
+    $('#tierPill').textContent = u.club ? (u.tier || 'Club member') : 'Guest';
+    const fav = u.sports || ['running', 'tennis', 'cycling'];
+    $('#sports').innerHTML = SPORTS.map(([v, n]) => `<button class="chip tap${fav.includes(v) ? ' is-active' : ''}" type="button" data-value="${v}" aria-pressed="${fav.includes(v)}">${n}</button>`).join('');
+    $$('#gender .chip').forEach((c) => { const on = c.dataset.value === (u.gender || 'Male'); c.classList.toggle('is-active', on); c.setAttribute('aria-selected', String(on)); });
+    D.hydrate($('#profileForm'));
+    let gender = u.gender || 'Male';
+    $('#gender').addEventListener('change', (e) => { gender = e.detail; dirty = true; });
+
+    const renderAvatar = () => { $('#avatar').innerHTML = photo ? `<img src="${D.img(u.avatar || 'avatar-david')}" alt="Profile photo of ${D.esc(u.name)}">` : GLYPH; $('#photoLbl').textContent = photo ? 'Change photo' : 'Add a photo'; $('#removePhoto').hidden = !photo; };
+    renderAvatar();
+
+    // Track unsaved changes
+    let dirty = false;
+    $('#profileForm').addEventListener('input', () => { dirty = true; });
+    $('#sports').addEventListener('change', () => { dirty = true; });
+    $('#phone').addEventListener('input', () => { const changed = $('#phone').value.replace(/\D/g, '') !== origPhone.replace(/\D/g, ''); $('#phoneTag').hidden = changed; });
+    $('#email').addEventListener('input', () => { $('#emailTag').hidden = $('#email').value.trim() !== u.email; });
+
+    // Photo sheet
+    const setPhoto = async (btn, on, msg) => { const sub = btn.querySelector('.option__sub'); const t = sub.textContent; sub.textContent = on ? 'Uploading…' : 'Removing…'; await D.wait(900); sub.textContent = t; photo = on; dirty = true; renderAvatar(); D.sheet.close(); D.toast(msg, { icon: 'check' }); };
+    $('#takePhoto').addEventListener('click', (e) => setPhoto(e.currentTarget, true, 'New photo added'));
+    $('#pickPhoto').addEventListener('click', (e) => setPhoto(e.currentTarget, true, 'Photo updated'));
+    $('#removePhoto').addEventListener('click', (e) => setPhoto(e.currentTarget, false, 'Photo removed'));
+
+    // Save
+    const save = async () => {
+      if (!D.validate($('#profileForm'))) { D.toast('Fix the highlighted fields to save'); return; }
+      const btn = $('#save'); await D.loading(btn, 1000);
+      const v = $('#phone').value.replace(/\D/g, '').slice(-10);
+      const name = $('#name').value.trim();
+      D.user.set({ name, first: name.split(' ')[0], email: $('#email').value.trim(), phone: '+91 ' + v.slice(0, 5) + ' ' + v.slice(5), dob: $('#dob').value, gender, sports: $$('#sports [aria-pressed="true"]').map((c) => c.dataset.value), photo });
+      dirty = false;
+      btn.classList.add('is-done'); btn.querySelector('span').textContent = 'Saved';
+      D.toast('Profile updated', { icon: 'check' });
+      await D.wait(900);
+      (history.length > 1 && document.referrer) ? history.back() : (location.href = 'account.html');
+    };
+    $('#save').addEventListener('click', save);
+    $('#saveTop').addEventListener('click', save);
+
+    // Back with unsaved changes -> confirm
+    $('#back').addEventListener('click', async (e) => {
+      e.preventDefault();
+      if (dirty && !(await D.dialog({ title: 'Discard changes?', message: 'You have edits that are not saved yet.', confirm: 'Discard', cancel: 'Keep editing', tone: 'danger' }))) return;
+      (history.length > 1 && document.referrer) ? history.back() : (location.href = 'account.html');
+    });
+  })();
+</script>
+</body>
+</html>

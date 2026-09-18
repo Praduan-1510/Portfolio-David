@@ -1,9 +1,9 @@
-import { Container, Button, Link } from "@/components/primitives";
+import { Container, Button } from "@/components/primitives";
 import { Hero } from "@/components/sections/Hero";
 import { HomeAtmosphere } from "@/components/sections/HomeAtmosphere";
 import { CinematicReel } from "@/components/sections/reel/CinematicReel";
 import { GraphicsShowcase } from "@/components/sections/GraphicsShowcase";
-import { WorkDrum } from "@/components/sections/WorkDrum";
+import { ProjectGrid } from "@/components/work/ProjectGrid";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { SideNav } from "@/components/layout/SideNav";
 import {
@@ -12,7 +12,6 @@ import {
   AnimatedDivider,
   Magnetic,
   FlapText,
-  AmbientField,
 } from "@/components/motion";
 import { getAllProjectsMeta } from "@/lib/content/work";
 
@@ -27,26 +26,19 @@ import { getAllProjectsMeta } from "@/lib/content/work";
  */
 export default function Home() {
   // Every SCREEN project, in the index's own order (Nukkad first at order -1,
-  // the concept tier last). The drum carries the whole body of work rather
-  // than a curated four: a board with two thirds of its rows missing is not a
-  // board, and "All work" stops being a different page from this one.
+  // the concept work last), as one grid of cards: the whole body of work
+  // rather than a curated four, each card labelled for what it is (live,
+  // prototype or concept), so the home page does not have to hide the
+  // concepts to stay honest about them.
   //
-  // The graphics study is deliberately not on it. The drum's whole geometry is
-  // device frames of one height and honest width, and a 1:1 campaign square is
-  // a third medium that would have to be boxed to ride it. It also already
-  // owns the full-bleed section directly below, so a flap here would be the
-  // same work twice in one screenful.
+  // The graphics study is deliberately not in it. The cards are built around a
+  // device (a browser window, a phone), and a 1:1 campaign square has no
+  // device to sit in. It also owns the full-bleed section directly below, so a
+  // card here would be the same work twice in one screenful.
   const allWork = getAllProjectsMeta().filter((p) => p.kind !== "graphic");
 
   return (
     <>
-      {/* Ambient ledger field: a WebGL shader behind the whole page. Mounted
-          OUTSIDE the `relative isolate` wrapper below, because an isolated
-          stacking context would clip a -z fixed layer to that subtree. Carries
-          its own pause control (WCAG 2.2.2) and never starts under reduced
-          motion. */}
-      <AmbientField />
-
       {/* Desktop-only section rail: complements the top <Nav>; scrolls to the
           in-page section ids below (#top is on the Hero). Hidden on mobile. */}
       <SideNav />
@@ -96,10 +88,14 @@ export default function Home() {
             </TextReveal>
           </div>
           <Reveal delay={0.1} className="shrink-0">
-            <Link href="/work" className="inline-flex min-h-[44px] items-center">All work</Link>
+            {/* Ghost, optically flush: the label sits on the column edge and
+                the lens condenses out into the gutter. */}
+            <Button href="/work" variant="ghost" arrow="right" className="-mr-3.5">
+              All work
+            </Button>
           </Reveal>
         </div>
-        <WorkDrum projects={allWork} />
+        <ProjectGrid projects={allWork} />
       </Container>
 
       {/* The graphics wall, immediately after the case studies: it is the same
@@ -135,9 +131,9 @@ export default function Home() {
             <FlapText text="DESIGN → BUILD · ONE PAIR OF HANDS" trigger="inView" flips={3} />
           </Reveal>
           <Reveal delay={0.18}>
-            <Link href="/about" className="inline-flex min-h-[44px] items-center">
+            <Button href="/about" variant="ghost" arrow="right" className="-mx-3.5">
               More about me
-            </Link>
+            </Button>
           </Reveal>
         </div>
       </Container>
@@ -196,7 +192,7 @@ export default function Home() {
               {"Let's build something worth remembering."}
             </TextReveal>
             <Magnetic className="mt-space-7">
-              <Button href="/contact" variant="primary" size="lg">
+              <Button href="/contact" variant="primary" size="lg" arrow="right">
                 Get in touch
               </Button>
             </Magnetic>

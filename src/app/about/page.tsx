@@ -562,7 +562,7 @@ export default function About() {
           </Text>
           <div className="mt-space-6 flex flex-wrap gap-space-4">
             <Magnetic className="inline-block">
-              <Button href="/contact" variant="primary">
+              <Button href="/contact" variant="primary" arrow="right">
                 Get in touch
               </Button>
             </Magnetic>
@@ -574,7 +574,9 @@ export default function About() {
             {/* The full record: everything this page summarises, set as a
                 document and downloadable as a PDF. */}
             <Magnetic className="inline-block">
-              <Button href="/resume" variant="ghost">
+              {/* On a phone the row stacks, and the ghost's label is pulled
+                  back onto the column edge its neighbours stand on. */}
+              <Button href="/resume" variant="ghost" arrow="right" className="max-sm:-ml-3.5">
                 Read the résumé
               </Button>
             </Magnetic>

@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Reviews</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  .prod { display: flex; align-items: center; gap: 12px; margin-top: 16px; }
+  .prod .thumb { width: 52px; height: 52px; }
+  .prod__name { font-size: 14px; font-weight: 500; color: #111; }
+  .rsum { display: flex; align-items: center; gap: 20px; }
+  .rsum__big { font-size: 40px; font-weight: 700; line-height: 1; color: var(--navy); }
+  .rsum__n { font-size: 12px; color: var(--muted-2); margin-top: 6px; }
+  .bars { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+  .bar { display: flex; align-items: center; gap: 8px; min-height: 22px; font-size: 12px; color: var(--muted-2); border-radius: 4px; }
+  .bar__track { flex: 1; height: 7px; border-radius: 4px; background: var(--surface); overflow: hidden; }
+  .bar__track i { display: block; height: 100%; background: var(--star); border-radius: 4px; }
+  .bar b { width: 30px; text-align: right; font-weight: 500; }
+  .bar[aria-pressed="true"] { color: var(--navy); font-weight: 600; }
+  .fit { display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--divider-soft); font-size: 12px; color: var(--muted-2); align-items: center; }
+  .fit__track { position: relative; flex: 1; height: 6px; border-radius: 3px; background: var(--surface); }
+  .fit__track i { position: absolute; top: -3px; width: 12px; height: 12px; border-radius: 50%; background: var(--navy); margin-left: -6px; }
+  .toolbar { display: flex; align-items: center; gap: 8px; margin-top: 18px; }
+  .toolbar .chip-scroll { flex: 1; margin-right: 0; padding-right: 8px; }
+  .chip svg { width: 12px; height: 12px; }
+  .chip .star { color: var(--star); }
+  .chip.is-active .star { color: var(--star); }
+  .sort-btn { flex-shrink: 0; display: inline-flex; align-items: center; gap: 4px; height: 28px; padding: 0 10px; border-radius: var(--r); font-size: 13px; background: #fff; box-shadow: inset 0 0 0 1.5px var(--steel); color: #111; }
+  .sort-btn svg { width: 14px; height: 14px; }
+  .meta-line { display: flex; justify-content: space-between; align-items: center; margin: 14px 0 4px; font-size: 12px; color: var(--muted-2); }
+  .rv { padding: 16px 0; border-bottom: 1px solid var(--divider-soft); }
+  .rv__who { display: flex; align-items: center; gap: 10px; }
+  .rv__who .avatar { width: 36px; height: 36px; font-size: 13px; font-weight: 600; }
+  .rv__name { display: block; font-size: 14px; font-weight: 600; color: #111; }
+  .rv__date { display: block; font-size: 11.5px; color: var(--muted-2); }
+  .rv__head { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+  .rv__title { font-size: 14px; font-weight: 600; color: #111; }
+  .rv__text { font-size: 13.5px; line-height: 1.55; color: #333; margin-top: 4px; }
+  .rv__badges { display: flex; flex-wrap: wrap; gap: 6px 12px; margin-top: 8px; font-size: 11.5px; color: var(--muted-2); }
+  .rv__badges .ok { display: inline-flex; align-items: center; gap: 4px; color: var(--ok); font-weight: 500; }
+  .rv__badges svg { width: 13px; height: 13px; }
+  .rv__photos { display: flex; gap: 8px; margin-top: 10px; }
+  .rv__photos a { width: 64px; height: 64px; border-radius: 8px; overflow: hidden; display: block; background: var(--surface); }
+  .rv__photos img { width: 100%; height: 100%; object-fit: cover; }
+  .rv__foot { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+  .helpful { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 16px; font-size: 12.5px; color: var(--navy); box-shadow: inset 0 0 0 1px var(--border); background: #fff; }
+  .helpful svg { width: 15px; height: 15px; }
+  .helpful[aria-pressed="true"] { background: var(--navy); color: #fff; box-shadow: none; }
+  .rv__mine { font-size: 11px; font-weight: 600; color: var(--brand); background: var(--surface); padding: 2px 8px; border-radius: 5px; }
+  .more-btn { margin-top: 16px; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Ratings and reviews">
+  <header class="appbar">
+    <a class="back tap" id="back" href="product.html" data-go="back" aria-label="Back to product"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <h1 class="appbar__title">Reviews</h1>
+    <a class="appbar__action appbar__action--brand tap" id="writeTop" href="write-review.html">Write</a>
+  </header>
+  <div class="page-divider"></div>
+
+  <a class="prod tap" id="prod" href="product.html"><span class="thumb"><img id="prodImg" src="../assets/img/racket.jpg" alt=""></span><span class="grow"><span class="prod__name" id="prodName" style="display:block">Tennis Racket</span><span id="prodPrice"></span></span><i class="chev" data-icon="chevron" data-size="18" data-sw="2"></i></a>
+
+  <section class="panel" style="margin-top:16px" aria-label="Rating summary">
+    <div class="rsum">
+      <div><p class="rsum__big num" id="avg">4.0</p><div id="avgStars" style="margin-top:8px"></div><p class="rsum__n" id="total">12.8k ratings</p></div>
+      <div class="bars" id="bars" data-delegate></div>
+    </div>
+    <div class="fit" id="fitRow"><span>Runs small</span><span class="fit__track"><i id="fitDot" style="left:56%"></i></span><span>Runs large</span></div>
+    <a class="btn btn--primary btn--md tap" id="writeBtn" href="write-review.html" style="margin-top:14px"><i data-icon="edit" data-size="16"></i><span>Write a review</span></a>
+  </section>
+
+  <div class="toolbar">
+    <div class="chip-scroll" id="filters" data-group aria-label="Filter reviews">
+      <button class="chip is-active" role="tab" data-value="all">All</button>
+      <button class="chip" role="tab" data-value="photos"><i data-icon="camera" data-size="12" data-sw="2"></i>With photos</button>
+      <button class="chip" role="tab" data-value="5">5 <span class="star"></span></button>
+      <button class="chip" role="tab" data-value="4">4 <span class="star"></span></button>
+      <button class="chip" role="tab" data-value="3">3 <span class="star"></span></button>
+      <button class="chip" role="tab" data-value="2">2 <span class="star"></span></button>
+      <button class="chip" role="tab" data-value="1">1 <span class="star"></span></button>
+    </div>
+    <button class="sort-btn tap" type="button" data-sheet="sortSheet"><i data-icon="sort" data-size="14"></i><span id="sortLbl">Helpful</span></button>
+  </div>
+  <p class="meta-line"><span id="showing" aria-live="polite">Showing 12 reviews</span><span id="sortFull">Most helpful first</span></p>
+
+  <div id="list" data-delegate></div>
+  <div class="empty-state" id="empty" hidden style="padding-top:28px">
+    <div class="empty-state__icon"><i data-icon="chat" data-size="40" data-sw="1.6"></i></div>
+    <h3>No reviews match</h3>
+    <p>Try another filter, or be the first to share your experience.</p>
+    <button class="btn btn--outline tap" type="button" id="clearFilter" style="height:44px">Show all reviews</button>
+  </div>
+  <button class="btn btn--outline btn--md tap more-btn" type="button" id="more"><span>Load more reviews</span></button>
+
+  <nav data-tabbar="categories"></nav>
+</main>
+
+<section class="sheet" id="sortSheet" aria-labelledby="sortT">
+  <div class="sheet__head"><div><p class="sheet__title" id="sortT">Sort reviews</p></div><button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button></div>
+  <div class="options" id="sortOpts" data-options>
+    <button class="option" type="button" data-value="helpful" aria-checked="true"><span class="option__radio"></span><span class="option__body"><span class="option__title">Most helpful</span></span></button>
+    <button class="option" type="button" data-value="newest"><span class="option__radio"></span><span class="option__body"><span class="option__title">Newest first</span></span></button>
+    <button class="option" type="button" data-value="high"><span class="option__radio"></span><span class="option__body"><span class="option__title">Highest rating</span></span></button>
+    <button class="option" type="button" data-value="low"><span class="option__radio"></span><span class="option__body"><span class="option__title">Lowest rating</span></span></button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const p = D.product(D.q('id')) || D.product('racket');
+    document.title = 'Decathlon · Reviews · ' + p.name;
+    $$('.chip .star').forEach((s) => (s.innerHTML = D.icon('star', 12)));
+    $('#back').href = `product.html?id=${p.id}`; $('#prod').href = `product.html?id=${p.id}`;
+    $('#prodImg').src = D.img(p.img); $('#prodName').textContent = p.name;
+    $('#prodPrice').innerHTML = `<span class="pcard__price" style="display:flex">${D.priceHtml(p)}</span>`;
+    $('#writeBtn').href = $('#writeTop').href = `write-review.html?id=${p.id}`;
+    const rc = D.reviews.fmtCount(p.reviews);
+    $('#avg').textContent = D.reviews.avg(p.id).toFixed(1);
+    $('#avgStars').innerHTML = D.stars(p.rating, 'stars--md');
+    $('#total').textContent = `${rc} ratings`;
+    const bd = D.reviews.breakdown(p.id);
+    $('#bars').innerHTML = bd.map((b) => `<button class="bar tap" type="button" data-star="${b.stars}" aria-pressed="false" aria-label="${b.stars} star: ${b.pct}%. Show these reviews"><span style="width:10px">${b.stars}</span><span class="bar__track"><i style="width:${b.pct}%"></i></span><b class="num">${b.pct}%</b></button>`).join('');
+    $('#fitRow').hidden = !p.sizes.length;
+
+    // Extra reviews (page-level sample) so filters and paging have something to work with
+    const EXTRA = [
+      { name: 'Meera Iyer', rating: 5, date: '2026-05-02', title: 'Exactly as described', text: 'Arrived a day early. Quality is on par with brands that cost twice as much.', size: 'M', helpful: 23 },
+      { name: 'Karan Shah', rating: 4, date: '2026-04-21', title: 'Great value', text: 'Good build and comfortable. Took a couple of sessions to break in.', size: 'L', helpful: 9 },
+      { name: 'Sneha Roy', rating: 2, date: '2026-04-09', title: 'Not for me', text: 'Felt heavier than I expected. Returned it easily at the New Town store though.', size: 'S', helpful: 5 },
+      { name: 'Vikram Pillai', rating: 5, date: '2026-03-27', title: 'Second one I bought', text: 'Bought another for my brother after using mine for six months. Still going strong.', size: 'L', helpful: 31 },
+      { name: 'Farah Khan', rating: 4, date: '2026-03-15', title: 'Good starter pick', text: 'Perfect for a beginner. The size guide was spot on.', size: 'M', helpful: 4 },
+      { name: 'Rahul Bose', rating: 1, date: '2026-02-28', title: 'Arrived damaged', text: 'Box was crushed and there was a scratch. Support replaced it within four days.', size: 'XL', helpful: 12 },
+      { name: 'Divya Menon', rating: 5, date: '2026-02-11', title: 'Love it', text: 'Light, looks premium, and the colour is even nicer in person.', size: 'S', helpful: 8 },
+      { name: 'Aman Gupta', rating: 3, date: '2026-01-30', title: 'Decent', text: 'Does the job. Nothing extraordinary but fair for the price.', size: 'M', helpful: 2 },
+    ];
+    const shots = (p.imgs || [p.img]);
+    const all = D.reviews.list(p.id).concat(EXTRA.map((r, k) => Object.assign({}, r, { size: p.sizes.includes(r.size) ? r.size : D.reviews.sizeFor(p, k + 4) }))).map((r, k) => Object.assign({ key: `${p.id}-${k}-${r.name}`, photos: r.photos || (/Ananya|Priya|Vikram/.test(r.name) ? shots.slice(0, 2) : r.mine ? [] : []) }, r));
+    const helpful = D.store.get('helpful', {});
+    let filter = 'all', sort = 'helpful', shown = 6;
+    const SORTS = { helpful: ['Helpful', 'Most helpful first'], newest: ['Newest', 'Newest first'], high: ['Highest', 'Highest rating first'], low: ['Lowest', 'Lowest rating first'] };
+    const initials = (n) => n.split(' ').map((w) => w[0]).slice(0, 2).join('');
+
+    function render() {
+      let list = all.filter((r) => filter === 'all' ? true : filter === 'photos' ? r.photos.length : r.rating === +filter);
+      list.sort((a, b) => (b.mine ? 1 : 0) - (a.mine ? 1 : 0) || (sort === 'newest' ? b.date.localeCompare(a.date) : sort === 'high' ? b.rating - a.rating : sort === 'low' ? a.rating - b.rating : (b.helpful + (helpful[b.key] ? 1 : 0)) - (a.helpful + (helpful[a.key] ? 1 : 0))));
+      const vis = list.slice(0, shown);
+      $('#list').innerHTML = vis.map((r) => {
+        const on = !!helpful[r.key]; const n = r.helpful + (on ? 1 : 0);
+        return `<article class="rv">
+          <div class="rv__who"><span class="avatar">${r.avatar ? `<img src="${D.img(r.avatar)}" alt="">` : initials(r.name)}</span><span class="grow"><span class="rv__name">${D.esc(r.name)}</span><span class="rv__date">${D.fmtDate(r.date)}</span></span>${r.mine ? '<span class="rv__mine">Your review</span>' : ''}</div>
+          <div class="rv__head">${D.stars(r.rating, 'stars--md')}<span class="rv__title">${D.esc(r.title)}</span></div>
+          <p class="rv__text">${D.esc(r.text)}</p>
+          ${r.photos.length ? `<div class="rv__photos">${r.photos.map((s, k) => `<a class="tap" href="gallery.html?id=${p.id}&i=${Math.min(k, shots.length - 1)}" aria-label="Open photo ${k + 1}"><img src="${D.img(s)}" alt="" loading="lazy"></a>`).join('')}</div>` : ''}
+          <div class="rv__badges"><span class="ok">${D.icon('check-circle', 13, { sw: 2 })}Verified purchase</span>${r.size ? `<span>Size bought: ${D.esc(r.size)}</span>` : ''}${r.fit ? `<span>Fit: ${D.esc(r.fit)}</span>` : ''}${r.recommend === false ? '' : r.mine ? '<span>Recommends this</span>' : ''}</div>
+          ${r.mine ? '' : `<div class="rv__foot"><button class="helpful tap" type="button" data-help="${D.esc(r.key)}" aria-pressed="${on}">${D.icon('thumbs-up', 15)}Helpful <span class="num">(${n})</span></button></div>`}
+        </article>`;
+      }).join('');
+      $('#empty').hidden = list.length > 0;
+      $('#more').hidden = list.length <= shown;
+      $('#showing').textContent = list.length ? `Showing ${vis.length} of ${list.length} ${filter === 'all' ? 'written reviews' : 'matching reviews'}` : 'No matching reviews';
+      $('#sortLbl').textContent = SORTS[sort][0]; $('#sortFull').textContent = SORTS[sort][1];
+      $$('#bars .bar').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.star === filter)));
+    }
+
+    const setFilter = (v) => { filter = v; shown = 6; $$('#filters .chip').forEach((c) => { const on = c.dataset.value === v; c.classList.toggle('is-active', on); c.setAttribute('aria-selected', String(on)); }); render(); };
+    $('#filters').addEventListener('change', (e) => { filter = e.detail; shown = 6; render(); });
+    $('#bars').addEventListener('click', (e) => { const b = e.target.closest('[data-star]'); if (!b) return; setFilter(filter === b.dataset.star ? 'all' : b.dataset.star); $('#filters').scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+    $('#clearFilter').addEventListener('click', () => setFilter('all'));
+    $('#sortOpts').addEventListener('select', (e) => { sort = e.detail; render(); setTimeout(() => D.sheet.close(), 150); });
+    $('#more').addEventListener('click', async (e) => { await D.loading(e.currentTarget, 700); shown += 6; render(); });
+    $('#list').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-help]'); if (!b) return;
+      const k = b.dataset.help; helpful[k] = !helpful[k]; if (!helpful[k]) delete helpful[k]; D.store.set('helpful', helpful); D.haptic(8);
+      const r = all.find((x) => x.key === k); const on = !!helpful[k];
+      b.setAttribute('aria-pressed', String(on)); b.querySelector('.num').textContent = `(${r.helpful + (on ? 1 : 0)})`;
+      if (on) D.toast('Thanks for your feedback');
+    });
+    if (D.q('new') === '1') D.toast('Your review is live', { icon: 'check' });
+    render();
+  })();
+</script>
+</body>
+</html>

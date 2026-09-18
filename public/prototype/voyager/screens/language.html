@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Language &amp; Region</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .lg-sec { margin: 30px 0 12px; display: flex; justify-content: space-between; align-items: baseline; scroll-margin-top: 20px; }
+  .lg-sec:first-child { margin-top: 0; }
+  .search { height: 46px; margin-bottom: 12px; }
+  .search input { font-size: 14px; }
+  .search input::placeholder { color: var(--text-4); }
+  .search__clear { width: 36px; height: 36px; margin-right: -10px; border-radius: 50%; display: grid; place-items: center; color: var(--text-4); }
+  .options .option { min-height: 54px; }
+  .lg-native { font-size: 12px; color: var(--text-4); }
+  .sym { width: 38px; height: 38px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 1px #E3E3E3; display: grid; place-items: center; font-weight: 700; color: var(--navy); flex-shrink: 0; font-size: 14px; }
+  .opt-flag { width: 38px; height: 38px; border-radius: 50%; background: var(--navy); color: #fff; display: grid; place-items: center; font-size: 11px; font-weight: 700; letter-spacing: .04em; flex-shrink: 0; }
+  select.field { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4.5 9 7.5 7.5L19.5 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px; }
+  .preview { margin-top: 12px; padding: 12px 14px; border-radius: 12px; background: var(--grey-2); font-size: 12.5px; color: var(--text-3); display: flex; justify-content: space-between; gap: 10px; }
+  .preview b { color: #000; }
+  .flash { animation: flash 1.8s var(--ease-out); border-radius: 12px; }
+  @keyframes flash { 0%, 40% { background: var(--orange-tint-2); } 100% { background: transparent; } }
+  .more-btn { margin-top: 10px; }
+</style>
+</head>
+<body>
+<main class="page page--cta" aria-label="Language and region">
+  <header class="phead">
+    <a class="phead__back tap" href="settings.html" id="back" aria-label="Back">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3.5M10.5 4.5 3 12l7.5 7.5"/></svg>
+    </a>
+    <div class="phead__titles"><h1 class="phead__title">Language &amp; Region</h1></div>
+  </header>
+
+  <section class="psheet">
+    <div class="lg-sec"><p class="caps" id="langLabel">App Language</p><span class="small" id="langCount"></span></div>
+    <label class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="7"/><path d="m16 16 5 5"/></svg><input type="search" id="q" placeholder="Search languages" aria-label="Search languages" autocomplete="off"><button class="search__clear" type="button" id="clear" hidden aria-label="Clear search"><span data-icon="close" data-size="16"></span></button></label>
+    <div class="options" id="langs" data-options aria-labelledby="langLabel"></div>
+    <div class="empty" id="noLang" hidden style="padding:20px 10px"><p class="empty__title" style="font-size:15px">No languages match “<span id="qEcho"></span>”</p><p class="empty__msg" style="margin-bottom:10px">We support 12 languages. Try another spelling.</p><button class="btn btn--neutral btn--sm btn--inline" type="button" id="clear2">Show All Languages</button></div>
+
+    <div class="lg-sec"><p class="caps">Region</p></div>
+    <div class="fg"><label class="label" for="region">Country or region</label>
+      <select class="field" id="region"><option>United Kingdom</option><option>United States</option><option>Ireland</option><option>France</option><option>Germany</option><option>Spain</option><option>Italy</option><option>India</option><option>Australia</option><option>Japan</option><option>Canada</option></select>
+      <span class="helper">Sets date format, units and local deals</span>
+    </div>
+    <div class="preview" aria-live="polite"><span>Dates <b id="pvDate">14 Aug 2026</b></span><span>Distance <b id="pvDist">mi</b></span><span>Price <b id="pvPrice">$2,709</b></span></div>
+
+    <div class="lg-sec" id="currency"><p class="caps" id="curLabel">Currency</p><span class="small">Charged in USD</span></div>
+    <div class="options" id="curs" data-options aria-labelledby="curLabel"></div>
+  </section>
+
+  <div class="cta-bar"><div class="cta-bar__in">
+    <button class="btn btn--primary" type="button" id="save"><span>Save Preferences</span></button>
+  </div></div>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const $ = (s) => document.querySelector(s);
+  const LANGS = [
+    ['English (UK)', 'English', 'EN'], ['English (US)', 'English', 'US'], ['French', 'Français', 'FR'], ['German', 'Deutsch', 'DE'], ['Spanish', 'Español', 'ES'], ['Italian', 'Italiano', 'IT'],
+    ['Portuguese', 'Português', 'PT'], ['Dutch', 'Nederlands', 'NL'], ['Japanese', '日本語', 'JA'], ['Hindi', 'हिन्दी', 'HI'], ['Chinese (Simplified)', '简体中文', 'ZH'], ['Arabic', 'العربية', 'AR'],
+  ];
+  const CURS = [['USD', 'US Dollar', '$', 1], ['EUR', 'Euro', '€', .92], ['GBP', 'British Pound', '£', .79], ['INR', 'Indian Rupee', '₹', 83.4], ['AUD', 'Australian Dollar', 'A$', 1.52], ['JPY', 'Japanese Yen', '¥', 147], ['CAD', 'Canadian Dollar', 'C$', 1.36]];
+  const u = V.user.get();
+  let pick = { language: u.language || 'English (UK)', region: u.region || 'United Kingdom', currency: u.currency || 'USD' };
+  const initial = JSON.stringify(pick);
+
+  $('#langs').innerHTML = LANGS.map(([n, nat, c]) => `<button class="option" type="button" data-value="${n}" data-search="${(n + ' ' + nat + ' ' + c).toLowerCase()}"><span class="opt-flag">${c}</span><span class="option__body"><span class="option__title">${V.esc(n)}</span><span class="option__sub">${V.esc(nat)}</span></span><span class="option__radio"></span></button>`).join('');
+  $('#curs').innerHTML = CURS.map(([c, n, s]) => `<button class="option" type="button" data-value="${c}"><span class="sym">${s}</span><span class="option__body"><span class="option__title">${V.esc(n)}</span><span class="option__sub">${c}</span></span><span class="option__radio"></span></button>`).join('');
+  V.refresh($('#langs')); V.refresh($('#curs'));
+  $('#langs').select(pick.language); $('#curs').select(pick.currency); $('#region').value = pick.region;
+  $('#langCount').textContent = `${LANGS.length} available`;
+
+  const preview = () => {
+    const us = pick.region === 'United States'; const c = CURS.find((x) => x[0] === pick.currency);
+    $('#pvDate').textContent = us ? 'Aug 14, 2026' : pick.region === 'Japan' ? '2026/08/14' : '14 Aug 2026';
+    $('#pvDist').textContent = us || pick.region === 'United Kingdom' ? 'mi' : 'km';
+    const v = Math.round(2709 * c[3]); $('#pvPrice').textContent = `${c[2]}${v.toLocaleString('en-US')}`;
+  };
+  $('#langs').addEventListener('select', (e) => { pick.language = e.detail; });
+  $('#curs').addEventListener('select', (e) => { pick.currency = e.detail; preview(); });
+  $('#region').addEventListener('change', (e) => { pick.region = e.target.value; preview(); });
+  preview();
+
+  // ---- search
+  const filter = () => {
+    const q = $('#q').value.trim().toLowerCase(); let n = 0;
+    document.querySelectorAll('#langs .option').forEach((o) => { const on = !q || o.dataset.search.includes(q); o.hidden = !on; if (on) n++; });
+    $('#noLang').hidden = n > 0; $('#qEcho').textContent = $('#q').value.trim(); $('#clear').hidden = !q;
+    $('#langCount').textContent = q ? `${n} of ${LANGS.length}` : `${LANGS.length} available`;
+  };
+  $('#q').addEventListener('input', filter);
+  const clear = () => { $('#q').value = ''; filter(); $('#q').focus(); };
+  $('#clear').addEventListener('click', clear); $('#clear2').addEventListener('click', clear);
+
+  // ---- save / back
+  $('#save').addEventListener('click', async (e) => {
+    if (JSON.stringify(pick) === initial) { V.toast('Nothing changed'); return; }
+    await V.loading(e.currentTarget, 900);
+    V.user.set(pick);
+    V.toast(`Saved · ${pick.language} · ${pick.region} · ${pick.currency}`);
+    await V.wait(700);
+    if (history.length > 1 && document.referrer) history.back(); else location.href = 'settings.html';
+  });
+  $('#back').addEventListener('click', async (e) => {
+    e.preventDefault();
+    if (JSON.stringify(pick) !== initial && !(await V.dialog({ title: 'Discard changes?', message: 'Your language and currency choices haven’t been saved.', confirm: 'Discard', cancel: 'Keep Editing', tone: 'warn' }))) return;
+    if (history.length > 1 && document.referrer) history.back(); else location.href = 'settings.html';
+  });
+
+  if (location.hash === '#currency') setTimeout(() => { const c = $('#currency'); c.scrollIntoView({ block: 'start' }); $('#curs').classList.add('flash'); }, 60);
+})();
+</script>
+</body>
+</html>

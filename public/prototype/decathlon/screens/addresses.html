@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Addresses</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  .add-row { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 56px; margin-top: 20px; padding: 0 14px; border-radius: var(--r); box-shadow: inset 0 0 0 1.5px var(--steel); background: var(--surface); color: var(--navy); font-size: 15px; font-weight: 500; }
+  .add-row .icon-tile { width: 34px; height: 34px; background: #fff; }
+  .addr-card { position: relative; border-radius: var(--r); box-shadow: inset 0 0 0 1px var(--border); background: #fff; padding: 14px 14px 8px; transition: box-shadow var(--dur), background-color var(--dur), opacity 220ms, transform 220ms var(--ease-out); }
+  .addr-card + .addr-card { margin-top: 12px; }
+  .addr-card.is-sel { box-shadow: inset 0 0 0 2px var(--navy); background: #F6FBFD; }
+  .addr-card.is-leaving { opacity: 0; transform: translateX(-16px); }
+  .addr-card__main { display: flex; gap: 12px; width: 100%; text-align: left; }
+  .addr-card__main .radio-dot { margin-top: 2px; }
+  .addr-card input { position: absolute; opacity: 0; pointer-events: none; }
+  .addr-card__head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .addr-card__name { font-size: 15px; font-weight: 600; color: #111; }
+  .addr-card__text { display: block; font-size: 13.5px; line-height: 1.5; color: #333; margin-top: 4px; }
+  .addr-card__phone { display: block; font-size: 12.5px; color: var(--muted-2); margin-top: 2px; }
+  .addr-card__actions { display: flex; gap: 4px; margin-top: 8px; padding-top: 4px; border-top: 1px solid var(--divider-soft); }
+  .addr-card__actions .text-btn { min-height: 38px; padding: 0 8px; font-size: 13px; font-weight: 500; }
+  .addr-card__actions .text-btn svg { width: 15px; height: 15px; }
+  .tag { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 5px; font-size: 11px; font-weight: 600; background: var(--surface); color: var(--navy); }
+  .tag--default { background: var(--ok-bg); color: var(--ok); }
+  .page.has-cta { padding-bottom: calc(var(--tabbar-h) + 110px); }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Saved addresses" id="pg">
+  <header class="appbar">
+    <a class="back tap" href="account.html" id="backBtn" data-go="back" aria-label="Back"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <h1 class="appbar__title" id="title">Saved addresses</h1>
+  </header>
+  <div class="page-divider"></div>
+  <ol class="steps" id="steps" aria-label="Checkout progress" hidden>
+    <li class="current" aria-current="step">Address</li>
+    <li>Payment</li>
+    <li>Confirm</li>
+  </ol>
+
+  <a class="add-row tap" id="addNew" href="add-address.html"><span class="icon-tile"><i data-icon="plus" data-size="18" data-sw="2.2"></i></span>Add a new address<i class="chev" data-icon="chevron" data-size="18" data-sw="2" style="margin-left:auto"></i></a>
+
+  <div class="section-head"><h2 class="section-title" id="listH">Your addresses</h2><span class="muted" style="font-size:12px" id="count"></span></div>
+  <div id="list" role="list" data-delegate></div>
+
+  <div class="empty-state" id="empty" hidden>
+    <div class="empty-state__icon"><i data-icon="pin" data-size="40" data-sw="1.6"></i></div>
+    <h3>No saved addresses</h3>
+    <p>Add your home or office so checkout takes seconds.</p>
+    <a class="btn btn--primary tap" href="add-address.html" style="height:44px">Add address</a>
+  </div>
+
+  <div class="cta-bar cta-bar--above-tabs" id="cta" hidden>
+    <button class="btn btn--primary btn--lg tap" type="button" id="deliverBtn"><span>Deliver here</span></button>
+  </div>
+  <nav data-tabbar="account"></nav>
+  <script>/* Bag tab while choosing an address for checkout, Account otherwise */ if (/[?&]select=1/.test(location.search)) document.currentScript.previousElementSibling.setAttribute('data-tabbar', 'bag');</script>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const select = D.q('select') === '1';
+    let chosen = D.addresses.selectedId();
+    // ?select=1 is step 1 of checkout. From the bag it continues to Payment; from the
+    // Confirm step (?next=checkout) it goes straight back there.
+    const toConfirm = D.q('next') === 'checkout';
+    if (select) {
+      $('#title').textContent = 'Checkout';
+      $('#steps').hidden = false;
+      $('#backBtn').href = toConfirm ? 'checkout.html' : 'bag.html';
+      $('#addNew').href = 'add-address.html?from=checkout' + (toConfirm ? '&next=checkout' : '');
+      $('#listH').textContent = 'Deliver to';
+      $('#deliverBtn span').textContent = toConfirm ? 'Deliver here' : 'Continue to payment';
+      $('#cta').hidden = false; $('#pg').classList.add('has-cta');
+      if (!D.bag.count()) { D.toast('Your bag is empty'); setTimeout(() => { location.href = 'bag.html'; }, 1200); }
+    }
+    const defId = () => { const all = D.addresses.list(); return (all.find((a) => a.isDefault) || all[0] || {}).id; };
+
+    function render() {
+      const all = D.addresses.list(); const def = defId();
+      $('#count').textContent = `${all.length} saved`;
+      $('#empty').hidden = all.length > 0; $('#cta').hidden = !select || !all.length;
+      $('#list').innerHTML = all.map((a) => `<article class="addr-card${select && a.id === chosen ? ' is-sel' : ''}" role="listitem" data-id="${a.id}">
+        <${select ? 'label' : 'div'} class="addr-card__main">
+          ${select ? `<input type="radio" name="addr" value="${a.id}"${a.id === chosen ? ' checked' : ''}><span class="radio-dot"></span>` : `<span class="icon-tile" style="width:36px;height:36px">${D.icon(a.label === 'Work' ? 'store' : a.label === 'Home' ? 'home' : 'pin', 18)}</span>`}
+          <span class="grow"><span class="addr-card__head"><span class="addr-card__name">${D.esc(a.name)}</span><span class="tag">${D.esc(a.label || 'Other')}</span>${a.id === def ? '<span class="tag tag--default">Default</span>' : ''}</span>
+          <span class="addr-card__text">${D.esc(a.text)}</span><span class="addr-card__phone">${D.esc(a.phone || '')}</span></span>
+        </${select ? 'label' : 'div'}>
+        <div class="addr-card__actions">
+          <a class="text-btn text-btn--brand tap" href="add-address.html?edit=${a.id}${select ? '&from=checkout' + (toConfirm ? '&next=checkout' : '') : ''}">${D.icon('edit', 15)}Edit</a>
+          ${a.id === def ? '' : `<button class="text-btn tap" type="button" data-default="${a.id}">${D.icon('check-circle', 15)}Set as default</button>`}
+          <button class="text-btn text-btn--danger tap" type="button" data-del="${a.id}" style="margin-left:auto">${D.icon('trash', 15)}Delete</button>
+        </div></article>`).join('');
+    }
+
+    $('#list').addEventListener('change', (e) => { if (e.target.name === 'addr') { chosen = e.target.value; $$('.addr-card').forEach((c) => c.classList.toggle('is-sel', c.dataset.id === chosen)); D.haptic(6); } });
+    $('#list').addEventListener('click', async (e) => {
+      const d = e.target.closest('[data-del]'), df = e.target.closest('[data-default]');
+      if (df) { D.addresses.list().forEach((a) => D.addresses.update(a.id, { isDefault: a.id === df.dataset.default })); D.toast('Default address updated', { icon: 'check' }); render(); return; }
+      if (!d) return;
+      const a = D.addresses.get(d.dataset.del);
+      if (!(await D.dialog({ title: 'Delete this address?', message: `${a.label}: ${a.text}`, confirm: 'Delete', tone: 'danger', icon: 'trash' }))) return;
+      const card = d.closest('.addr-card'); card.classList.add('is-leaving'); await D.wait(200);
+      const wasSel = D.addresses.selectedId() === a.id;
+      D.addresses.remove(a.id); if (chosen === a.id) chosen = D.addresses.selectedId();
+      render();
+      D.toast('Address deleted', { action: 'Undo', onAction: () => { D.addresses.add(a); if (wasSel) { D.addresses.select(a.id); chosen = a.id; } render(); } });
+    });
+    $('#deliverBtn').addEventListener('click', async (e) => {
+      if (!chosen) { D.toast('Pick an address first'); return; }
+      await D.loading(e.currentTarget, 500);
+      D.addresses.select(chosen); location.href = toConfirm ? 'checkout.html' : 'payment.html';
+    });
+    render();
+  })();
+</script>
+</body>
+</html>

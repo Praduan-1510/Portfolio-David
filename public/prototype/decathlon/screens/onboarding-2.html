@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Gear tested by athletes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* Onboarding: full-bleed Welcome gradient, visual on top fading into the canvas */
+  .onb { height: 852px; min-height: 852px; touch-action: pan-y; }
+  body:not(.capture) .onb { height: 100vh; min-height: 852px; }
+  .onb__visual { left: 0; top: 0; width: 393px; height: 520px; overflow: hidden; }
+  .onb__visual::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(1,38,57,.55) 0%, rgba(1,38,57,0) 20%, rgba(14,127,188,0) 62%, rgba(14,127,188,.75) 88%, #0E7FBC 100%); pointer-events: none; }
+  .onb__top { left: 0; right: 0; top: 14px; height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; z-index: 3; }
+  .onb__skip, .onb__back { height: 44px; min-width: 44px; padding: 0 12px; border-radius: 22px; display: inline-flex; align-items: center; gap: 6px; color: #fff; font-size: 14px; font-weight: 500; }
+  .onb__skip { background: rgba(1,31,48,.35); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); height: 34px; }
+  .onb__back { width: 44px; padding: 0; justify-content: center; background: rgba(1,31,48,.35); height: 34px; width: 34px; border-radius: 50%; }
+  .onb__mark { color: #fff; }
+  .onb__step { left: 32px; top: 548px; font-size: 12px; font-weight: 600; letter-spacing: 1.6px; color: #9FD5F1; text-transform: uppercase; }
+  .onb__title { left: 32px; right: 32px; top: 572px; font-size: 27px; font-weight: 700; line-height: 1.18; color: #fff; letter-spacing: -.2px; }
+  .onb__title em { font-style: italic; color: #9FE0FF; }
+  .onb__body { left: 32px; right: 40px; top: 646px; font-size: 14.5px; line-height: 1.55; color: #CFE7F4; }
+  .onb__dots { left: 32px; top: 752px; display: flex; gap: 6px; }
+  .onb__dots a { position: relative; width: 8px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.35); transition: width 260ms var(--ease-out), background-color 260ms; }
+  .onb__dots a::after { content: ''; position: absolute; inset: -14px -3px; }
+  .onb__dots a[aria-current="step"] { width: 24px; background: #fff; }
+  .onb__next { left: 225px; top: 734px; width: 136px; height: 44px; font-size: 17px; gap: 8px; }
+  .onb__next svg { width: 18px; height: 18px; }
+  .onb__signin { left: 0; right: 0; top: 800px; text-align: center; font-size: 13px; color: #CFE7F4; }
+  .onb__signin a { color: #fff; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; padding: 10px 2px; }
+  .photo2 { position: absolute; inset: 0; background: linear-gradient(135deg, #2F5C7A, #0F96DB); }
+  .photo2 img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+  .float { position: absolute; z-index: 2; display: flex; align-items: center; gap: 10px; padding: 10px 14px 10px 10px; border-radius: 14px; background: rgba(255,255,255,.94); color: var(--navy); box-shadow: 0 10px 30px rgba(1,31,48,.28); }
+  .float .icon-tile { width: 36px; height: 36px; border-radius: 10px; }
+  .float .icon-tile svg { width: 20px; height: 20px; }
+  .float b { display: block; font-size: 14px; font-weight: 700; line-height: 1.2; }
+  .float small { display: block; font-size: 11px; color: var(--muted-2); line-height: 1.3; }
+  body:not(.capture) .float { animation: bob 3.6s ease-in-out infinite alternate; }
+  @keyframes bob { from { transform: translateY(0); } to { transform: translateY(-6px); } }
+  .stamp { position: absolute; right: 24px; top: 78px; z-index: 2; width: 86px; height: 86px; border-radius: 50%; background: var(--navy); color: #fff; display: grid; place-items: center; text-align: center; font-size: 10px; font-weight: 600; letter-spacing: .8px; text-transform: uppercase; line-height: 1.25; box-shadow: 0 0 0 4px rgba(255,255,255,.25); transform: rotate(10deg); }
+  .stamp b { display: block; font-size: 22px; letter-spacing: -.5px; font-style: italic; }
+</style>
+</head>
+<body>
+<main class="screen bg-welcome onb" id="onb" aria-label="Onboarding step 2 of 3" aria-roledescription="onboarding step">
+  <div class="abs onb__visual" aria-hidden="true">
+    <div class="photo2"><img src="../assets/img/hero-running.jpg" alt=""></div>
+    <div class="stamp"><span><b>2 yr</b>warranty</span></div>
+    <div class="float" style="left:24px;top:300px"><span class="icon-tile"><i data-icon="shield" data-size="20"></i></span><span><b>2-year warranty</b><small>On all Decathlon brands</small></span></div>
+    <div class="float" style="left:150px;top:386px;animation-delay:.8s"><span class="icon-tile"><i data-icon="return" data-size="20"></i></span><span><b>30-day easy returns</b><small>Free pickup from your door</small></span></div>
+  </div>
+  <div class="abs onb__top">
+    <a class="onb__back tap" href="onboarding-1.html" aria-label="Previous step"><svg width="9" height="15" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <a class="onb__skip tap" href="signup.html">Skip</a>
+  </div>
+  <p class="t onb__step enter" style="--i:1">02 / 03 · Quality</p>
+  <h1 class="abs onb__title enter" style="--i:2">Gear tested<br>by <em>real athletes.</em></h1>
+  <p class="abs onb__body enter" style="--i:3">Every product is field-tested before it reaches you. Backed by a 2-year warranty and 30-day easy returns.</p>
+  <nav class="abs onb__dots" aria-label="Onboarding steps">
+    <a class="tap" href="onboarding-1.html" aria-label="Step 1 of 3"></a><a class="tap" href="onboarding-2.html" aria-label="Step 2 of 3" aria-current="step"></a><a class="tap" href="onboarding-3.html" aria-label="Step 3 of 3"></a>
+  </nav>
+  <a class="abs btn btn--brand onb__next tap enter" style="--i:4" href="onboarding-3.html" id="next">Next<i data-icon="arrow" data-size="18" data-sw="2.2"></i></a>
+  <p class="t onb__signin">Already a member? <a class="tap" href="login.html">Sign in</a></p>
+</main>
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    // Swipe left = next, swipe right = previous (keyboard: arrow keys)
+    const next = 'onboarding-3.html', prev = 'onboarding-1.html';
+    let x0 = null, y0 = 0;
+    const el = document.getElementById('onb');
+    el.addEventListener('pointerdown', (e) => { x0 = e.clientX; y0 = e.clientY; });
+    el.addEventListener('pointerup', (e) => { if (x0 == null) return; const dx = e.clientX - x0, dy = e.clientY - y0; x0 = null; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) { if (dx < 0) location.href = next; else if (prev) location.href = prev; } });
+    document.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') location.href = next; if (e.key === 'ArrowLeft' && prev) location.href = prev; });
+
+  })();
+</script>
+</body>
+</html>

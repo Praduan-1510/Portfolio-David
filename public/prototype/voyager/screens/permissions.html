@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Almost There</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .pm-count { flex-shrink: 0; margin-top: 2px; height: 30px; padding: 0 12px; border-radius: 999px; background: rgba(255,255,255,.1); color: #fff; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 0; white-space: pre; font-variant-numeric: tabular-nums; }
+  .pm-count b { color: var(--orange); }
+  .pm-intro h2 { font-size: 22px; line-height: 28px; font-weight: 700; color: #000; }
+  .pm-intro p { font-size: 14px; line-height: 1.55; color: var(--text-3); margin-top: 6px; }
+  .pm-banner { margin-bottom: 18px; }
+  .perm { background: var(--grey-1); border-radius: 16px; padding: 16px 16px 14px; transition: box-shadow var(--dur), background var(--dur); }
+  .perm + .perm { margin-top: 12px; }
+  .perm__top { display: flex; gap: 14px; align-items: flex-start; }
+  .perm__icon { width: 44px; height: 44px; border-radius: 50%; background: var(--orange-tint); color: var(--orange); display: grid; place-items: center; flex-shrink: 0; transition: background var(--dur), color var(--dur); }
+  .perm__title { display: block; font-size: 15px; line-height: 19px; font-weight: 600; color: #000; }
+  .perm__sub { display: block; font-size: 12.5px; line-height: 1.45; color: var(--text-3); margin-top: 3px; }
+  .perm__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .perm__actions .btn { height: 40px; font-size: 14px; }
+  .perm__status { display: none; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; min-height: 40px; padding-left: 58px; }
+  .perm__status .link { font-size: 13px; }
+  .perm[data-state="on"] { background: #F1FAEE; box-shadow: inset 0 0 0 1px #CFEBC7; }
+  .perm[data-state="on"] .perm__icon { background: var(--valid-bg); color: var(--valid); }
+  .perm[data-state="on"] .perm__actions, .perm[data-state="off"] .perm__actions { display: none; }
+  .perm[data-state="on"] .perm__status, .perm[data-state="off"] .perm__status { display: flex; }
+  .perm[data-state="off"] .perm__icon { background: #ECECEC; color: #8C8C8C; }
+  .styles { margin-top: 4px; }
+  .styles .chip { height: 40px; padding: 0 16px 0 13px; font-size: 14px; gap: 8px; }
+  .styles .chip svg { color: var(--text-2); transition: color var(--dur); }
+  .styles .chip[aria-pressed="true"] svg { color: #000; }
+  .styles-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; font-size: 12.5px; color: var(--text-4); min-height: 20px; }
+  .styles-meta b { color: var(--navy); }
+  .skip { display: block; width: 100%; height: 40px; font-size: 14px; font-weight: 600; color: var(--text-3); border-radius: 8px; }
+  .skip:hover { color: var(--navy); }
+</style>
+</head>
+<body>
+<main class="page page--cta" aria-label="Set up permissions and preferences">
+  <header class="phead phead--plain phead--sub">
+    <div class="phead__titles">
+      <h1 class="phead__title">Almost There</h1><br>
+      <p class="phead__sub">Step 3 of 3 · Personalise Voyager</p>
+    </div>
+    <span class="pm-count" id="count" aria-live="polite"><b>0</b>/2 allowed</span>
+  </header>
+
+  <section class="psheet">
+    <div class="banner banner--ok pm-banner" id="viaBanner" hidden></div>
+    <div class="pm-intro enter">
+      <h2 id="hello">Welcome aboard, Alex</h2>
+      <p>Two quick permissions and your travel style, then you’re ready to explore. You can change these anytime in Settings.</p>
+    </div>
+
+    <div class="sec" style="margin-top:26px"><h2 class="sec__label">Permissions</h2></div>
+
+    <article class="perm enter" data-delegate data-perm="location" data-state="idle" style="--i:1">
+      <div class="perm__top">
+        <span class="perm__icon"><span data-icon="map-pin" data-size="22" data-sw="1.8"></span></span>
+        <span><span class="perm__title">Location</span><span class="perm__sub" data-sub>Find experiences near you, local weather and live directions on your trips.</span></span>
+      </div>
+      <div class="perm__actions">
+        <button class="btn btn--neutral" type="button" data-act="off">Not Now</button>
+        <button class="btn btn--navy" type="button" data-act="on">Allow</button>
+      </div>
+      <div class="perm__status"><span class="badge" data-badge>Allowed</span><button class="link" type="button" data-act="change">Change</button></div>
+    </article>
+
+    <article class="perm enter" data-delegate data-perm="notifications" data-state="idle" style="--i:2">
+      <div class="perm__top">
+        <span class="perm__icon"><span data-icon="bell" data-size="22" data-sw="1.8"></span></span>
+        <span><span class="perm__title">Notifications</span><span class="perm__sub" data-sub>Flight and gate changes, booking confirmations and members-only deals.</span></span>
+      </div>
+      <div class="perm__actions">
+        <button class="btn btn--neutral" type="button" data-act="off">Not Now</button>
+        <button class="btn btn--navy" type="button" data-act="on">Allow</button>
+      </div>
+      <div class="perm__status"><span class="badge" data-badge>Allowed</span><button class="link" type="button" data-act="change">Change</button></div>
+    </article>
+
+    <div class="sec" style="margin-top:30px"><h2 class="sec__label" id="stylesLabel">Travel Style</h2></div>
+    <p class="small" style="margin:-4px 0 14px 1px">Pick a few and we’ll tailor destinations and deals for you.</p>
+    <div class="chips styles enter" id="styles" data-group data-multi aria-labelledby="stylesLabel" style="--i:3">
+      <button class="chip" type="button" data-value="Adventure"><span data-icon="compass" data-size="18" data-sw="1.8"></span>Adventure</button>
+      <button class="chip" type="button" data-value="Beach"><span data-icon="sun" data-size="18" data-sw="1.8"></span>Beach</button>
+      <button class="chip" type="button" data-value="Cultural"><span data-icon="building" data-size="18" data-sw="1.8"></span>Cultural</button>
+      <button class="chip" type="button" data-value="Luxury"><span data-icon="sparkle" data-size="18" data-sw="1.8"></span>Luxury</button>
+      <button class="chip" type="button" data-value="Food & Wine"><span data-icon="cutlery" data-size="18" data-sw="1.8"></span>Food &amp; Wine</button>
+      <button class="chip" type="button" data-value="Family"><span data-icon="user" data-size="18" data-sw="1.8"></span>Family</button>
+    </div>
+    <p class="styles-meta" aria-live="polite"><span id="stylesCount">Nothing selected yet</span><button class="link" type="button" id="clearStyles" hidden>Clear</button></p>
+  </section>
+
+  <div class="cta-bar"><div class="cta-bar__in">
+    <button class="btn btn--primary" type="button" id="continue"><span>Continue</span><svg class="arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 12h17M14 5.5l6.5 6.5-6.5 6.5"/></svg></button>
+    <button class="skip tap" type="button" id="skip">Skip for now</button>
+  </div></div>
+</main>
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const V = window.Voyager;
+    const $ = (s) => document.getElementById(s);
+    const pending = V.store.get('pendingSignup', null);
+    const first = ((pending && pending.name) || V.user.get().name).split(' ')[0];
+    $('hello').textContent = `Welcome aboard, ${first}`;
+    const via = V.q('via');
+    if (via === 'google' || via === 'apple') {
+      const b = $('viaBanner'); b.hidden = false;
+      b.innerHTML = V.icon('check', 18, 'stroke-width="2.4"') + `<span>Signed in with ${via === 'google' ? 'Google' : 'Apple'}${pending && pending.email ? ' as ' + V.esc(pending.email) : ''}</span>`;
+    }
+
+    // ---- Permission cards with a simulated system prompt
+    const PROMPT = {
+      location: { title: '“Voyager” Would Like to Use Your Location', message: 'Used to show experiences near you, local weather and live directions during your trips.', icon: 'map-pin' },
+      notifications: { title: '“Voyager” Would Like to Send You Notifications', message: 'Notifications may include flight and gate updates, booking confirmations and deals. Sounds and badges can be changed in Settings.', icon: 'bell' },
+    };
+    const SUB_OFF = { location: 'Off for now. Nearby experiences and live directions won’t be available.', notifications: 'Off for now. You won’t get flight or gate change alerts.' };
+    const subs = {};
+    const saved = V.store.get('permissions', {});
+    const count = () => { const n = document.querySelectorAll('.perm[data-state="on"]').length; $('count').innerHTML = `<b>${n}</b>/2 allowed`; };
+    const setState = (card, state) => {
+      const k = card.dataset.perm; card.dataset.state = state;
+      const badge = card.querySelector('[data-badge]');
+      badge.className = 'badge ' + (state === 'on' ? 'badge--valid' : 'badge--expiring');
+      badge.innerHTML = state === 'on' ? V.icon('check', 12, 'stroke-width="3"') + 'Allowed' : 'Not now';
+      card.querySelector('[data-sub]').textContent = state === 'off' ? SUB_OFF[k] : subs[k];
+      if (state !== 'idle') { saved[k] = state; V.store.set('permissions', saved); V.user.pref(k, state === 'on'); }
+      count();
+    };
+    document.querySelectorAll('.perm').forEach((card) => {
+      const k = card.dataset.perm; subs[k] = card.querySelector('[data-sub]').textContent;
+      if (saved[k] === 'on' || saved[k] === 'off') setState(card, saved[k]);
+      card.addEventListener('click', async (e) => {
+        const b = e.target.closest('[data-act]'); if (!b) return;
+        const act = b.dataset.act;
+        if (act === 'change') { card.dataset.state = 'idle'; card.querySelector('[data-sub]').textContent = subs[k]; delete saved[k]; V.store.set('permissions', saved); count(); card.querySelector('[data-act="on"]').focus(); return; }
+        if (act === 'off') { setState(card, 'off'); V.toast(`${k === 'location' ? 'Location' : 'Notifications'} off. Turn on anytime in Settings`); return; }
+        const p = PROMPT[k];
+        const ok = await V.dialog({ title: p.title, message: p.message, confirm: 'Allow', cancel: 'Don’t Allow', tone: 'info', icon: p.icon });
+        setState(card, ok ? 'on' : 'off'); if (ok) V.haptic();
+      });
+    });
+    count();
+
+    // ---- Travel style chips (persisted on the user)
+    const group = $('styles');
+    const initial = V.user.get().travelStyles || [];
+    group.querySelectorAll('.chip').forEach((c) => { const on = initial.includes(c.dataset.value); c.classList.toggle('is-active', on); c.setAttribute('aria-pressed', String(on)); });
+    const renderCount = (list) => {
+      $('stylesCount').innerHTML = list.length ? `<b>${list.length}</b> selected · ${V.esc(list.join(', '))}` : 'Nothing selected yet';
+      $('clearStyles').hidden = !list.length;
+    };
+    renderCount(initial);
+    group.addEventListener('change', (e) => { V.user.set({ travelStyles: e.detail }); renderCount(e.detail); V.haptic(); });
+    $('clearStyles').addEventListener('click', () => { group.reset(); V.user.set({ travelStyles: [] }); renderCount([]); });
+
+    // ---- Finish → Home (signed in)
+    const finish = async (btn, skipped) => {
+      if (pending && pending.name) {
+        const name = pending.name.trim();
+        V.user.set({ name, first: name.split(' ')[0], email: pending.email || V.user.get().email });
+      }
+      V.store.remove('pendingSignup');
+      V.auth.signIn();
+      if (btn) await V.loading(btn, 900);
+      if (skipped) V.store.set('permissionsSkipped', true);
+      location.href = 'dashboard.html';
+    };
+    $('continue').addEventListener('click', (e) => finish(e.currentTarget, false));
+    $('skip').addEventListener('click', () => finish(null, true));
+  })();
+</script>
+</body>
+</html>

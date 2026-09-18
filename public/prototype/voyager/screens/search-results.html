@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Find Destinations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .srh { position: relative; padding: 49px 16px 0; min-height: 270px; color: #fff; flex-shrink: 0; }
+  .srh__title { font-size: 24px; line-height: 29px; font-weight: 700; letter-spacing: -.1px; margin-left: 10px; }
+  .srh__row { display: flex; align-items: center; gap: 9px; margin-top: 22px; }
+  .srh .search { width: 313px; height: 54px; gap: 14px; padding-left: 18px; flex-shrink: 0; }
+  .srh .search__text { font-size: 12px; font-weight: 500; }
+  .srh__filter { position: relative; width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; color: #fff; background: rgba(255,255,255,.08); box-shadow: inset 0 0 0 1px rgba(255,255,255,.14); }
+  .srh__filter .dot-badge { box-shadow: 0 0 0 2px var(--navy); background: var(--orange); color: #000; }
+  .srh .chips { margin-top: 11px; gap: 11px 10px; max-width: 320px; }
+  .srh .chip { height: 34px; font-size: 13px; padding: 0 18px; }
+  .srh .chip:first-child { min-width: 53px; }
+  .srh .chip:not(.is-active) { background: #E8E7E7; }
+  .srh .chip:not(.is-active):hover { background: #DCDBDB; }
+  .psheet.rs { margin-top: 0; border-radius: 0 0 var(--r-sheet) var(--r-sheet); padding: 16px 0 28px; }
+  .rs__bar { display: flex; align-items: center; justify-content: space-between; padding: 0 23px 0 28px; min-height: 12px; }
+  .rs__count { font-size: 12px; line-height: 12px; color: #8A8A8A; }
+  .rs__count b { color: #000; font-weight: 700; }
+  .rs__sort { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: var(--navy); padding: 12px 4px; margin: -12px -4px; }
+  .rs__filters { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 28px 0; }
+  .rs__filters:empty { display: none; }
+  .ftag { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 8px 0 12px; border-radius: 14px; background: var(--orange-tint); color: #6B4500; font-size: 12px; font-weight: 500; }
+  .ftag button { width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; position: relative; }
+  .ftag button::after { content: ''; position: absolute; inset: -10px; }
+  .rs__promo { margin: 12px 17px 0; }
+  .dgrid.rs__grid { margin-top: 15px; row-gap: 10px; }
+  .rs__grid .skeleton { width: 142px; height: 168px; }
+  .rs__more { display: block; text-align: center; font-size: 12px; color: var(--text-4); margin-top: 18px; }
+</style>
+</head>
+<body>
+<main class="page page--tabs" aria-label="Find destinations">
+  <header class="srh">
+    <h1 class="srh__title enter">Find Destinations</h1>
+    <div class="srh__row enter" style="--i:1">
+      <a class="search tap" id="pill" href="search.html" aria-label="Edit search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="7.5"/><path d="m16 16 5.5 5.5"/></svg>
+        <span class="search__text" id="pillText">Europe · Aug · 2 Guests</span>
+      </a>
+      <a class="srh__filter tap" id="filterBtn" href="filters.html" aria-label="Filters"><span data-icon="sliders" data-size="22" data-sw="1.9"></span></a>
+    </div>
+    <div class="chips enter" id="cats" data-group role="tablist" aria-label="Result type" style="--i:2">
+      <button class="chip is-active" role="tab" data-value="All">All</button>
+      <button class="chip" role="tab" data-value="Flights">Flights</button>
+      <button class="chip" role="tab" data-value="Hotels">Hotels</button>
+      <button class="chip" role="tab" data-value="Tours">Tours</button>
+      <button class="chip" role="tab" data-value="Package">Package</button>
+    </div>
+  </header>
+
+  <section class="psheet rs" aria-live="polite">
+    <div class="rs__bar">
+      <p class="rs__count num" id="count">148 results for <b>Europe</b></p>
+      <button class="rs__sort tap" type="button" data-sheet="sortSheet" id="sortBtn" aria-label="Sort results" hidden><span id="sortLabel">Recommended</span><span data-icon="chevron-down" data-size="12" data-sw="2.6"></span></button>
+    </div>
+    <div class="rs__filters" id="ftags"></div>
+    <div id="promo"></div>
+    <div class="dgrid rs__grid" id="grid"></div>
+    <p class="rs__more" id="more" hidden></p>
+  </section>
+
+  <nav data-tabbar="search"></nav>
+</main>
+
+<!-- Sort -->
+<section class="sheet" id="sortSheet" aria-labelledby="sortT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="sortT">Sort results</p><p class="sheet__sub">Choose how destinations are ordered</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><span data-icon="close" data-size="14" data-sw="2.4"></span></button>
+  </div>
+  <div class="options" id="sortOpts" data-options>
+    <button class="option" type="button" data-value="recommended" aria-checked="true"><span class="option__radio"></span><span class="option__body"><span class="option__title">Recommended</span><span class="option__sub">Best match for your search</span></span></button>
+    <button class="option" type="button" data-value="price-asc"><span class="option__radio"></span><span class="option__body"><span class="option__title">Price: low to high</span><span class="option__sub">Cheapest packages first</span></span></button>
+    <button class="option" type="button" data-value="price-desc"><span class="option__radio"></span><span class="option__body"><span class="option__title">Price: high to low</span><span class="option__sub">Premium stays first</span></span></button>
+    <button class="option" type="button" data-value="rating"><span class="option__radio"></span><span class="option__body"><span class="option__title">Top rated</span><span class="option__sub">Highest traveller rating</span></span></button>
+    <button class="option" type="button" data-value="duration"><span class="option__radio"></span><span class="option__body"><span class="option__title">Shortest trips</span><span class="option__sub">Fewest days first</span></span></button>
+  </div>
+  <div class="sheet__foot"><button class="btn btn--primary" type="button" id="sortApply"><span>Apply</span></button></div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const V = window.Voyager; const $ = (s) => document.querySelector(s);
+  const DESIGN_ORDER = ['paris', 'bali', 'rome', 'prague', 'sydney', 'minsk', 'jaipur', 'toronto', 'santorini', 'kyoto', 'dubai', 'swiss-alps'];
+  const CAT = { All: 1, Flights: 0.64, Hotels: 0.81, Tours: 0.47, Package: 0.38 };
+  const BASE = 148;
+  const W = (list) => list.reduce((a, d) => a + d.reviews, 0);
+
+  // ---- filter model (shared with filters.html through V.store 'vb:filters')
+  const bucket = (days) => days <= 3 ? '1-3' : days <= 7 ? '4-7' : days <= 14 ? '8-14' : '15+';
+  const DEFAULT_F = { budget: [1000, 2900], duration: ['4-7'], styles: ['Adventure', 'Beach'], rating: 3, incl: { flights: true, hotel: true, transfers: false } };
+  const passF = (d, f) => d.from >= f.budget[0] && d.from <= f.budget[1]
+    && (!f.duration.length || f.duration.includes(bucket(d.days)))
+    && (!f.styles.length || d.styles.some((s) => f.styles.includes(s)))
+    && d.hotelStars >= (f.rating || 0)
+    && Object.keys(f.incl).every((k) => !f.incl[k] || d.inclusions[k]);
+
+  // ---- query
+  const rawQ = (V.q('q') || '').trim();
+  const promo = V.q('promo');
+  const q = rawQ || 'Europe';
+  const isDefault = !rawQ || /^europe$/i.test(rawQ);
+  const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  // "Europe" (the default search) means Europe: never list Bali or Sydney under it.
+  const EUROPE = (d) => d.region === 'Europe';
+  const matchQ = (d) => {
+    if (isDefault) return EUROPE(d);
+    const n = norm(q);
+    return [d.name, d.country, d.region, d.package.name, ...d.styles].some((s) => norm(s).includes(n) || n.includes(norm(s)));
+  };
+  const guests = V.store.get('vb:search', {}).guests || 2;
+  const month = V.store.get('vb:search', {}).when || 'Aug';
+  $('#pillText').textContent = `${q.charAt(0).toUpperCase() + q.slice(1)} · ${month} · ${guests} Guest${guests === 1 ? '' : 's'}`;
+  $('#pill').href = 'search.html?q=' + encodeURIComponent(rawQ || 'Europe');
+
+  let state = { cat: V.q('cat') && CAT[V.q('cat')] ? V.q('cat') : 'All', sort: V.q('sort') || 'recommended' };
+  const filters = V.store.get('vb:filters', null);
+  const applied = filters && filters.applied ? filters : null;
+  $('#filterBtn').href = 'filters.html' + (rawQ ? '?q=' + encodeURIComponent(rawQ) : '');
+
+  // promo landing (dashboard "Explore Details")
+  if (promo) {
+    $('#promo').innerHTML = `<div class="banner banner--warn rs__promo">${V.icon('tag', 18, 'stroke-width="1.8"')}<span><b>20% Summer Escapes</b> · Beach &amp; sun trips. Use code <b>SUMMER20</b> at payment.</span></div>`;
+  }
+
+  // active filter tags
+  const tags = [];
+  if (applied) {
+    const f = applied;
+    tags.push(['budget', `$${V.fmtNum(f.budget[0])}–$${V.fmtNum(f.budget[1])}`]);
+    f.duration.forEach((x) => tags.push(['duration:' + x, { '1-3': '1–3 Days', '4-7': '4–7 Days', '8-14': '8–14 Days', '15+': '2+ Weeks' }[x]]));
+    f.styles.forEach((x) => tags.push(['style:' + x, x]));
+    if (f.rating) tags.push(['rating', f.rating + '★ hotels+']);
+    $('#ftags').innerHTML = tags.map(([k, l]) => `<span class="ftag">${V.esc(l)}<button type="button" data-rm="${V.esc(k)}" aria-label="Remove ${V.esc(l)} filter">${V.icon('close', 10, 'stroke-width="3"')}</button></span>`).join('')
+      + `<button class="ftag tap" type="button" id="clearF" style="background:#F1F1F1;color:#333;padding-right:12px">Clear all</button>`;
+    const badge = document.createElement('span'); badge.className = 'dot-badge'; badge.textContent = tags.length; $('#filterBtn').appendChild(badge);
+  }
+  document.addEventListener('click', (e) => {
+    const rm = e.target.closest('[data-rm]');
+    if (rm) {
+      const f = V.store.get('vb:filters'); const k = rm.dataset.rm;
+      if (k === 'budget') f.budget = [500, 4500];
+      else if (k === 'rating') f.rating = 0;
+      else if (k.startsWith('duration:')) f.duration = f.duration.filter((x) => x !== k.slice(9));
+      else if (k.startsWith('style:')) f.styles = f.styles.filter((x) => x !== k.slice(6));
+      V.store.set('vb:filters', f); location.reload(); return;
+    }
+    if (e.target.closest('#clearF')) { V.store.remove('vb:filters'); V.toast('Filters cleared'); setTimeout(() => location.reload(), 250); }
+  });
+
+  const sorters = {
+    recommended: null,
+    'price-asc': (a, b) => a.from - b.from,
+    'price-desc': (a, b) => b.from - a.from,
+    rating: (a, b) => b.rating - a.rating || b.reviews - a.reviews,
+    duration: (a, b) => a.days - b.days,
+  };
+  const SORT_LABEL = { recommended: 'Recommended', 'price-asc': 'Price ↑', 'price-desc': 'Price ↓', rating: 'Top rated', duration: 'Shortest' };
+
+  const cardFor = (d, cat) => {
+    if (cat === 'Flights') return V.cardHTML(d, { meta: `LHR → ${d.code} · Return`, price: `Flights from $ ${Math.round(d.from * 0.22 / 10) * 10}` });
+    if (cat === 'Hotels') return V.cardHTML(d, { meta: `${d.hotelStars}★ Hotels · ${d.days} Nights`, price: `From $ ${Math.round(d.package.pp * 0.09)} /night`, href: d.id === 'paris' ? 'hotel.html?id=paris' : `destination.html?id=${d.id}` });
+    if (cat === 'Tours') return V.cardHTML(d, { meta: `${d.name} Guided · ${Math.max(2, Math.round(d.days / 2))} Tours`, price: `Tours from $ ${Math.round(d.from * 0.06)}` });
+    if (cat === 'Package') return V.cardHTML(d, { meta: `${d.package.name}`, price: `${V.fmt(d.package.pp)} /person` });
+    return V.cardHTML(d);
+  };
+
+  const compute = () => {
+    let list = DESIGN_ORDER.map(V.dest).filter(matchQ);
+    if (promo) list = list.filter((d) => d.styles.includes('Beach') || d.styles.includes('Luxury'));
+    let n;
+    if (applied) {
+      const pool = list;
+      list = pool.filter((d) => passF(d, applied));
+      const ref = W(DESIGN_ORDER.map(V.dest).filter(EUROPE).filter((d) => passF(d, DEFAULT_F))) || 1;
+      n = Math.round(BASE * W(list) / ref);
+    } else {
+      n = Math.round(BASE * W(list) / W(V.destinations.filter(EUROPE)));
+    }
+    if (state.cat !== 'All') { list = list.filter((d) => d.cats.includes(state.cat)); n = Math.round(n * CAT[state.cat]); }
+    if (list.length && n < list.length) n = list.length;
+    if (!list.length) n = 0;
+    if (sorters[state.sort]) list = list.slice().sort(sorters[state.sort]);
+    return { list, n };
+  };
+
+  const grid = $('#grid');
+  const render = () => {
+    const { list, n } = compute();
+    const label = promo ? 'Summer Escapes' : q.charAt(0).toUpperCase() + q.slice(1);
+    $('#count').innerHTML = n ? `${V.fmtNum(n)} result${n === 1 ? '' : 's'} for <b>${V.esc(label)}</b>` : `0 results for <b>${V.esc(label)}</b>`;
+    $('#sortBtn').hidden = !n;
+    $('#sortLabel').textContent = SORT_LABEL[state.sort];
+    if (!list.length) {
+      grid.style.display = 'block';
+      grid.innerHTML = `<div class="empty">
+        <div class="empty__icon">${V.icon('search', 30, 'stroke-width="2"')}</div>
+        <p class="empty__title">No results for “${V.esc(label)}”</p>
+        <p class="empty__msg">${applied ? 'Your filters are a little too strict. Try widening the budget or removing a style.' : state.cat !== 'All' ? `No ${state.cat.toLowerCase()} match this search yet. Try another category.` : 'Check the spelling or try a country, city or travel style, like “Beach”.'}</p>
+        ${applied ? '<button class="btn btn--primary btn--inline" type="button" id="emptyClear" style="width:auto">Clear filters</button>' : state.cat !== 'All' ? '<button class="btn btn--primary btn--inline" type="button" id="emptyAll" style="width:auto">Show all results</button>' : '<a class="btn btn--primary btn--inline" href="search.html" style="width:auto">New search</a>'}
+      </div>`;
+      const c = $('#emptyClear'); c && c.addEventListener('click', () => { V.store.remove('vb:filters'); location.reload(); });
+      const a = $('#emptyAll'); a && a.addEventListener('click', () => $('#cats [data-value="All"]').click());
+      $('#more').hidden = true;
+      return;
+    }
+    grid.style.display = '';
+    grid.innerHTML = list.map((d) => cardFor(d, state.cat)).join('');
+    V.hydrateHearts(grid);
+    $('#more').hidden = n <= list.length;
+    $('#more').textContent = `Showing ${list.length} top destination${list.length === 1 ? '' : 's'} · ${V.fmtNum(n)} packages`;
+  };
+
+  const loadThen = async () => {
+    grid.style.display = '';
+    grid.innerHTML = Array.from({ length: 4 }, () => '<div class="skeleton" aria-hidden="true"></div>').join('');
+    await V.wait(550); render();
+  };
+
+  // category chips
+  const cats = $('#cats');
+  if (state.cat !== 'All') { cats.querySelectorAll('.chip').forEach((c) => { const on = c.dataset.value === state.cat; c.classList.toggle('is-active', on); c.setAttribute('aria-selected', String(on)); }); }
+  cats.addEventListener('change', (e) => {
+    state.cat = e.detail;
+    const u = new URL(location.href); if (state.cat === 'All') u.searchParams.delete('cat'); else u.searchParams.set('cat', state.cat); history.replaceState(null, '', u);
+    loadThen();
+  });
+
+  // sort
+  $('#sortOpts').select(state.sort);
+  $('#sortApply').addEventListener('click', () => {
+    const v = [...document.querySelectorAll('#sortOpts .option')].find((o) => o.getAttribute('aria-checked') === 'true');
+    state.sort = v ? v.dataset.value : 'recommended';
+    V.sheet.close(); V.toast('Sorted by ' + SORT_LABEL[state.sort].replace('↑', 'lowest price').replace('↓', 'highest price'));
+    loadThen();
+  });
+
+  // re-render counts when a heart is toggled elsewhere (keeps hearts synced)
+  document.addEventListener('voyager:saved', () => V.hydrateHearts(grid));
+  render();
+})();
+</script>
+</body>
+</html>

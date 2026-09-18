@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Explore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .mh { padding: 36px 18px 0; flex-shrink: 0; }
+  .mh .search { width: 350px; height: 52px; margin-left: 8px; gap: 14px; padding-left: 18px; border-radius: 26px; }
+  .mh .search__text { font-size: 12px; font-weight: 500; }
+  .mapw { position: relative; width: 366px; height: 295px; margin-top: 15px; border-radius: 12px; overflow: hidden; background: #EEF0E8; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
+  .mapw.is-drag { cursor: grabbing; }
+  .mapl { position: absolute; left: 0; top: -2.5px; width: 366px; height: 300px; transform-origin: 0 0; transition: transform 320ms var(--ease-out); will-change: transform; }
+  .mapw.is-drag .mapl { transition: none; }
+  .mapl > img { width: 100%; height: 100%; display: block; pointer-events: none; -webkit-user-drag: none; }
+  .pinpos { position: absolute; width: 0; height: 0; transform: scale(var(--inv, 1)); transform-origin: 0 0; transition: transform 320ms var(--ease-out); }
+  .mapw.is-drag .pinpos { transition: none; }
+  .pinpos .pin { left: 0; top: 0; }
+  .pin__lbl { position: absolute; left: 50%; top: 100%; transform: translate(-50%, 3px); white-space: nowrap; font: 600 9.5px/1 var(--font); color: var(--navy); background: rgba(255,255,255,.92); padding: 3px 5px; border-radius: 5px; opacity: 0; transition: opacity 200ms; pointer-events: none; }
+  .mapw.zoomed .pin__lbl, .pin.is-active .pin__lbl { opacity: 1; }
+  .me { position: absolute; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #2F74C7; box-shadow: 0 0 0 3px #fff, 0 0 0 10px rgba(47,116,199,.22); }
+  .mapctl { position: absolute; right: 8px; top: 8px; display: flex; flex-direction: column; gap: 8px; z-index: 3; }
+  .mapctl button { width: 36px; height: 36px; border-radius: 10px; background: #fff; color: var(--navy); display: grid; place-items: center; box-shadow: 0 2px 6px rgba(20,33,61,.18); }
+  .mapctl .grp { display: flex; flex-direction: column; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(20,33,61,.18); }
+  .mapctl .grp button { box-shadow: none; border-radius: 0; }
+  .mapctl .grp button + button { border-top: 1px solid #E6E6E6; }
+  .mapctl button[disabled] { color: #B5B5B5; }
+  .osm { position: absolute; right: 4px; bottom: 3px; z-index: 3; font-size: 8.5px; color: #333; background: rgba(255,255,255,.75); padding: 1px 4px; border-radius: 3px; }
+  .psheet.mp { margin-top: 13px; padding: 28px 17px 25px; }
+  .page > .psheet.mp { padding-bottom: 24px; }
+  .mp .sec { margin: 0 0 30px; padding: 0 12px 0 11px; }
+  .mp .dgrid { row-gap: 25px; }
+  .pinsheet__img { height: 170px; border-radius: 16px; overflow: hidden; }
+  .pinsheet__meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; color: var(--text-3); margin-top: 12px; }
+  .pinsheet__meta b { color: #000; }
+  .pinsheet__blurb { font-size: 14px; line-height: 1.5; color: #333; margin-top: 10px; }
+  .pinsheet__acts { display: grid; grid-template-columns: 1fr 1.4fr; gap: 12px; margin-top: 18px; }
+</style>
+</head>
+<body>
+<main class="page page--tabs" aria-label="Explore map">
+  <header class="mh">
+    <a class="search tap" href="search.html" aria-label="Search destinations">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="7.5"/><path d="m16 16 5.5 5.5"/></svg>
+      <span class="search__text">Where Do You Want To Go?</span>
+    </a>
+    <div class="mapw" id="map" role="application" aria-label="Map of Paris. Drag to pan, use the zoom buttons, or tap a pin.">
+      <div class="mapl" id="layer" data-delegate>
+        <img src="../assets/img/map-paris.jpg" alt="Street map of Paris" draggable="false">
+        <span class="me" id="me" hidden></span>
+      </div>
+      <div class="mapctl">
+        <div class="grp">
+          <button type="button" id="zin" aria-label="Zoom in"><span data-icon="plus" data-size="18" data-sw="2.4"></span></button>
+          <button type="button" id="zout" aria-label="Zoom out"><span data-icon="minus" data-size="18" data-sw="2.4"></span></button>
+        </div>
+        <button type="button" id="locate" aria-label="Show my location"><span data-icon="compass" data-size="20" data-sw="2"></span></button>
+      </div>
+      <span class="osm">© OpenStreetMap contributors</span>
+    </div>
+  </header>
+
+  <section class="psheet psheet--round mp">
+    <div class="sec"><h2 class="sec__label">Explore</h2><a class="sec__more" href="search-results.html">See All</a></div>
+    <div class="dgrid" id="grid"></div>
+  </section>
+
+  <nav data-tabbar="explore"></nav>
+</main>
+
+<section class="sheet" id="pinSheet" aria-labelledby="pT">
+  <div class="pinsheet__img ph ph--warm"><img id="pImg" src="../assets/img/hero-paris.jpg" alt=""></div>
+  <div class="sheet__head" style="margin:16px 0 0">
+    <div><p class="sheet__title" id="pT">Eiffel Tower</p><p class="sheet__sub" id="pSub">Landmark · 7th arrondissement</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><span data-icon="close" data-size="14" data-sw="2.4"></span></button>
+  </div>
+  <div class="pinsheet__meta"><span id="pStars"></span><b id="pRate">4.7</b><span id="pRev">(312k)</span><span aria-hidden="true">·</span><span id="pDist">3.8 km from your hotel</span></div>
+  <p class="pinsheet__blurb" id="pBlurb"></p>
+  <div class="pinsheet__acts">
+    <button class="btn btn--outline" type="button" id="pDir"><span data-icon="map" data-size="18" data-sw="1.8"></span><span>Directions</span></button>
+    <a class="btn btn--primary" id="pGo" href="destination.html?id=paris"><span id="pGoL">View Package</span><svg class="arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12h17M14 5.5l6.5 6.5-6.5 6.5"/></svg></a>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const V = window.Voyager; const $ = (s) => document.querySelector(s);
+  // pin positions from assets/img/map-paris.json (percent of the 1100×900 image)
+  const PINS = [
+    { id: 'eiffel-tower', name: 'Eiffel Tower', sub: 'Landmark · 7th arrondissement', x: 19.39, y: 48.24, lat: 48.85837, lon: 2.294481, img: 'hero-paris', rate: 4.7, rev: '312k', blurb: 'Ride to the summit at dusk, then watch the tower sparkle on the hour from the Trocadéro. Priority access is part of the Paris City Break.', go: 'destination.html?id=paris', goL: 'View Package' },
+    { id: 'louvre', name: 'Louvre Museum', sub: 'Museum · 1st arrondissement', x: 42.25, y: 46.04, lat: 48.860611, lon: 2.337644, img: 'gal-louvre', rate: 4.8, rev: '268k', blurb: 'The Mona Lisa, the Winged Victory and 35,000 more works. Day 2 of the package includes a skip-the-line entry.', go: 'destination.html?id=paris', goL: 'View Package' },
+    { id: 'notre-dame', name: 'Notre-Dame de Paris', sub: 'Cathedral · Île de la Cité', x: 48.74, y: 53.56, lat: 48.852968, lon: 2.349902, img: 'gal-seine-cruise', rate: 4.7, rev: '190k', blurb: 'Freshly restored and glowing again. Best seen from the river on the evening Seine cruise.', go: 'destination.html?id=paris', goL: 'View Package' },
+    { id: 'montmartre', name: 'Montmartre & Sacré-Cœur', sub: 'Neighbourhood · 18th arrondissement', x: 45.14, y: 20.36, lat: 48.886705, lon: 2.343104, img: 'gal-montmartre', rate: 4.8, rev: '154k', blurb: 'Cobbled lanes, painters on Place du Tertre and the best free view over the city.', go: 'destination.html?id=paris', goL: 'View Package' },
+    { id: 'hotel-le-marais', name: 'Hôtel Le Marais', sub: '4★ Boutique · Rue De Bretagne', x: 54.94, y: 43.93, lat: 48.86275, lon: 2.3616, img: 'hotel-marais', rate: 4.8, rev: '612', blurb: 'Your base for the Paris City Break — a quiet courtyard hotel a short walk from the Picasso Museum and the Marché des Enfants Rouges.', go: 'hotel.html?id=paris', goL: 'View Hotel', hotel: true },
+    { id: 'arc-de-triomphe', name: 'Arc de Triomphe', sub: 'Monument · Champs-Élysées', x: 19.68, y: 33.07, lat: 48.873792, lon: 2.295028, img: 'itin-paris-sunset', rate: 4.7, rev: '176k', blurb: 'Climb 284 steps for a view straight down the Champs-Élysées — spectacular at sunset.', go: 'destination.html?id=paris', goL: 'View Package' },
+  ];
+  const HOTEL = PINS[4];
+  const km = (a, b) => { const R = 6371, r = Math.PI / 180; const dLat = (b.lat - a.lat) * r, dLon = (b.lon - a.lon) * r; const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(dLon / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(h)); };
+
+  const map = $('#map'), layer = $('#layer');
+  const W = 366, H = 300, BOX_H = 295;
+  layer.insertAdjacentHTML('beforeend', PINS.map((p) => `<span class="pinpos" style="left:${p.x}%;top:${p.y}%"><button class="pin" type="button" data-pin="${p.id}" aria-label="${V.esc(p.name)}">${V.icon('map-pin-fill', 32)}<span class="pin__lbl">${V.esc(p.name.split(' &')[0])}</span></button></span>`).join(''));
+
+  // ---- pan + zoom
+  let k = 1, tx = 0, ty = 0;
+  const clamp = () => { tx = Math.min(0, Math.max(W - W * k, tx)); ty = Math.min(0, Math.max(BOX_H - H * k + 2.5, ty)); };
+  const apply = () => {
+    clamp();
+    layer.style.transform = `translate(${tx}px, ${ty}px) scale(${k})`;
+    layer.style.setProperty('--inv', 1 / k);
+    map.classList.toggle('zoomed', k >= 2);
+    $('#zin').disabled = k >= 4; $('#zout').disabled = k <= 1;
+  };
+  const zoomAt = (nk, cx = W / 2, cy = BOX_H / 2) => { nk = Math.max(1, Math.min(4, nk)); tx = cx - (cx - tx) * nk / k; ty = cy - (cy - ty) * nk / k; k = nk; apply(); };
+  $('#zin').addEventListener('click', () => zoomAt(k * 1.6));
+  $('#zout').addEventListener('click', () => zoomAt(k / 1.6));
+  const centerOn = (xPct, yPct, nk) => { k = nk || k; tx = W / 2 - (xPct / 100) * W * k; ty = BOX_H / 2 - (yPct / 100) * H * k; apply(); };
+
+  let drag = null;
+  map.addEventListener('pointerdown', (e) => { if (e.target.closest('.mapctl')) return; drag = { x: e.clientX, y: e.clientY, tx, ty, moved: false, id: e.pointerId }; });
+  map.addEventListener('pointermove', (e) => {
+    if (!drag) return; const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    if (!drag.moved && Math.hypot(dx, dy) < 6) return;
+    if (!drag.moved) { drag.moved = true; map.classList.add('is-drag'); try { map.setPointerCapture(drag.id); } catch (err) {} }
+    tx = drag.tx + dx; ty = drag.ty + dy; apply();
+  });
+  const end = () => { if (drag && drag.moved) { map.classList.remove('is-drag'); map._justDragged = true; setTimeout(() => (map._justDragged = false), 50); } drag = null; };
+  map.addEventListener('pointerup', end); map.addEventListener('pointercancel', end);
+  map.addEventListener('dblclick', (e) => { const r = map.getBoundingClientRect(); zoomAt(k * 1.6, e.clientX - r.left, e.clientY - r.top); });
+  map.addEventListener('wheel', (e) => { e.preventDefault(); const r = map.getBoundingClientRect(); zoomAt(k * (e.deltaY < 0 ? 1.15 : 1 / 1.15), e.clientX - r.left, e.clientY - r.top); }, { passive: false });
+
+  // ---- locate me
+  $('#locate').addEventListener('click', async (e) => {
+    const btn = e.currentTarget; btn.disabled = true; btn.style.color = 'var(--tab-active)';
+    await V.wait(500);
+    const me = $('#me'); me.hidden = false; me.style.left = '50%'; me.style.top = '50%';
+    centerOn(50, 50, Math.max(k, 2)); btn.disabled = false;
+    V.toast('You’re in central Paris · 1.1 km from Hôtel Le Marais');
+  });
+
+  // ---- pin → bottom sheet
+  const openPin = (id, animate = true) => {
+    const p = PINS.find((x) => x.id === id) || PINS[0];
+    document.querySelectorAll('.pin').forEach((b) => b.classList.toggle('is-active', animate && b.dataset.pin === p.id));
+    $('#pImg').src = V.img(p.img); $('#pImg').alt = p.name;
+    $('#pT').textContent = p.name; $('#pSub').textContent = p.sub;
+    $('#pStars').innerHTML = V.starsHTML(Math.round(p.rate), 13);
+    $('#pRate').textContent = p.rate.toFixed(1); $('#pRev').textContent = `(${p.rev})`;
+    const dk = km(HOTEL, p);
+    $('#pDist').textContent = p.hotel ? 'Your hotel · Aug 12–19' : `${dk.toFixed(1)} km from your hotel · ${Math.round(dk * 13)} min walk`;
+    $('#pBlurb').textContent = p.blurb;
+    $('#pGo').href = p.go; $('#pGoL').textContent = p.goL;
+    $('#pDir').dataset.name = p.name;
+    if (animate) V.sheet.open('pinSheet');
+    else document.getElementById('pinSheet').addEventListener('sheet:open', () => document.querySelectorAll('.pin').forEach((b) => b.classList.toggle('is-active', b.dataset.pin === p.id)), { once: true });
+  };
+  map.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-pin]'); if (!b || map._justDragged) return;
+    V.haptic(); openPin(b.dataset.pin);
+  });
+  $('#pinSheet').addEventListener('sheet:close', () => document.querySelectorAll('.pin').forEach((b) => b.classList.remove('is-active')));
+  $('#pDir').addEventListener('click', (e) => { V.sheet.close(); V.toast(`Walking route to ${e.currentTarget.dataset.name} ready`); });
+  openPin(V.q('pin') || 'eiffel-tower', false);
+  if (V.q('pin') && !V.q('sheet')) setTimeout(() => V.sheet.open('pinSheet'), 300);
+
+  // ---- explore cards
+  const grid = $('#grid');
+  grid.innerHTML = ['paris', 'bali', 'rome', 'prague'].map((id) => V.cardHTML(id)).join('');
+  V.hydrateHearts(grid);
+  apply();
+})();
+</script>
+</body>
+</html>

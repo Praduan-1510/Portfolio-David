@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Write a Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .psheet.wr { padding: 24px 23px 24px; }
+  .trip-pick { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 12px 10px 10px; border-radius: 14px; background: var(--grey-1); text-align: left; box-shadow: inset 0 0 0 1px #E6E6E6; }
+  .trip-pick__img { width: 56px; height: 48px; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
+  .trip-pick__t { font-size: 15px; font-weight: 600; color: #000; }
+  .trip-pick__s { font-size: 12px; color: var(--text-4); margin-top: 2px; }
+  .trip-pick .chg { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--orange); }
+  .wr-lbl { display: flex; justify-content: flex-start; gap: 2px; align-items: baseline; font-size: 15px; color: var(--text-3); margin: 24px 0 10px 1px; }
+  .wr-lbl .req { margin-left: 2px; }
+  .starpick { display: flex; align-items: center; gap: 2px; margin-left: -6px; }
+  .starpick button { width: 44px; height: 44px; display: grid; place-items: center; color: #D5D5D5; border-radius: 10px; transition: transform 200ms var(--ease-spring), color var(--dur); }
+  .starpick button.on { color: var(--star); }
+  .starpick button:active { transform: scale(.88); }
+  .starpick button.pop { animation: heartpop 320ms var(--ease-spring); }
+  .starpick__txt { white-space: nowrap; margin-left: 8px; font-size: 14px; font-weight: 600; color: #333; min-width: 70px; }
+  .starpick.has-error button { color: #F2B8B6; }
+  .star-err { display: none; gap: 6px; align-items: center; font-size: 12px; color: var(--danger); margin-top: 4px; }
+  .star-err.show { display: flex; }
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .tile { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; }
+  .tile--add { display: grid; place-items: center; align-content: center; gap: 4px; background: var(--grey-1); box-shadow: inset 0 0 0 1.5px #D2D2D2; color: #666; font-size: 11px; font-weight: 500; border-radius: 12px; }
+  .tile--add:hover { box-shadow: inset 0 0 0 1.5px var(--orange); color: var(--orange); }
+  .tile__rm { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border-radius: 50%; background: rgba(11,20,38,.7); color: #fff; display: grid; place-items: center; }
+  .tile__rm::after { content: ''; position: absolute; inset: -8px; }
+  .wr .chips { gap: 8px; }
+  .wr .chips .chip { height: 34px; font-size: 13px; padding: 0 14px; }
+  .wr textarea.field { height: 140px; }
+  .count-row { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--text-5); margin-top: 6px; }
+  .pickgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .pickgrid button { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; }
+  .pickgrid button[aria-pressed="true"]::after { content: ''; position: absolute; inset: 0; box-shadow: inset 0 0 0 3px var(--orange); border-radius: 12px; }
+  .pickgrid .tick { position: absolute; top: 6px; right: 6px; width: 22px; height: 22px; border-radius: 50%; background: var(--orange); color: #000; display: none; place-items: center; z-index: 1; }
+  .pickgrid button[aria-pressed="true"] .tick { display: grid; }
+  .done { padding: 40px 8px 10px; }
+  .pts { display: inline-flex; margin-top: 18px; }
+</style>
+</head>
+<body>
+<main class="page page--cta" aria-label="Write a review">
+  <header class="phead">
+    <a class="phead__back tap" href="reviews.html?id=rome" id="back" aria-label="Back">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3.5M10.5 4.5 3 12l7.5 7.5"/></svg>
+    </a>
+    <div class="phead__titles"><h1 class="phead__title">Write a Review</h1></div>
+  </header>
+
+  <section class="psheet wr">
+    <form id="form" novalidate>
+      <p class="wr-lbl" style="margin-top:0">Your trip</p>
+      <button class="trip-pick tap" type="button" data-sheet="tripSheet" id="tripBtn" aria-label="Change the trip you are reviewing"></button>
+      <p class="banner banner--info mt-12" id="tripNote" hidden></p>
+
+      <p class="wr-lbl" id="rateL">Overall rating<span class="req">*</span></p>
+      <div class="starpick" id="stars" role="radiogroup" aria-labelledby="rateL"></div>
+      <p class="star-err" id="starErr" role="alert"></p>
+
+      <div class="fg" style="margin-top:22px">
+        <label class="label" for="title">Review title<span class="req">*</span></label>
+        <input class="field" id="title" maxlength="60" placeholder="e.g. A perfect anniversary week" data-validate="required">
+      </div>
+
+      <div class="fg">
+        <label class="label" for="text">Tell other travellers about it<span class="req">*</span></label>
+        <textarea class="field" id="text" maxlength="500" placeholder="What stood out? How were the hotel, guides and transfers?" data-validate="required" aria-describedby="textHelp"></textarea>
+        <p class="count-row"><span id="textHelp">At least 20 characters</span><span id="count">0/500</span></p>
+      </div>
+
+      <p class="wr-lbl">Photos <small class="muted" style="font-size:12px;margin-left:auto">Up to 4</small></p>
+      <div class="tiles" id="tiles"></div>
+
+      <p class="wr-lbl" id="tagsL">What did you love?</p>
+      <div class="chips" id="tags" data-group data-multi aria-labelledby="tagsL">
+        <button class="chip" type="button" data-value="Great value">Great value</button>
+        <button class="chip" type="button" data-value="Well organised">Well organised</button>
+        <button class="chip" type="button" data-value="Great hotel">Great hotel</button>
+        <button class="chip" type="button" data-value="Friendly guides">Friendly guides</button>
+        <button class="chip" type="button" data-value="Family friendly">Family friendly</button>
+        <button class="chip" type="button" data-value="Would book again">Would book again</button>
+      </div>
+      <label class="check mt-24"><input type="checkbox" id="anon"> Show my full name (Alex Johnson) instead of “Alex J.”</label>
+    </form>
+
+    <div class="result done" id="done" hidden>
+      <div class="hero-check"><svg width="84" height="84" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+      <h2 class="result__title">Review Published</h2>
+      <p class="result__msg" id="doneMsg">Thanks for sharing your Roman Holiday. Your review helps other travellers plan.</p>
+      <span class="badge badge--valid pts" id="ptsBadge">+100 Pts added to your Gold balance</span>
+    </div>
+  </section>
+
+  <div class="cta-bar"><div class="cta-bar__in" id="ctaIn">
+    <button class="btn btn--primary" type="button" id="submit"><span>Publish Review</span></button>
+  </div></div>
+</main>
+
+<!-- Trip picker -->
+<section class="sheet" id="tripSheet" aria-labelledby="tsT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="tsT">Which trip?</p><p class="sheet__sub">You can review trips you’ve completed</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><span data-icon="close" data-size="14" data-sw="2.4"></span></button>
+  </div>
+  <div class="options" id="tripOpts" data-options></div>
+</section>
+
+<!-- Photo picker -->
+<section class="sheet" id="photoSheet" aria-labelledby="psT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="psT">Add photos</p><p class="sheet__sub" id="psSub">From your trip camera roll</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><span data-icon="close" data-size="14" data-sw="2.4"></span></button>
+  </div>
+  <div class="pickgrid" id="pickgrid"></div>
+  <div class="sheet__foot"><button class="btn btn--primary" type="button" id="pickDone"><span>Add selected</span></button></div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const V = window.Voyager; const $ = (s) => document.querySelector(s);
+  const past = V.trips.list('past');
+  const qid = V.q('id');
+  let trip = past.find((t) => t.dest === qid) || past.find((t) => !t.reviewed) || past[0];
+  let rating = 0, photos = [], sent = false;
+  const LABELS = ['', 'Terrible', 'Poor', 'Okay', 'Great', 'Amazing'];
+
+  const paintTrip = () => {
+    const d = V.dest(trip.dest);
+    $('#tripBtn').innerHTML = `<span class="trip-pick__img ph"><img src="${V.img(trip.img)}" alt=""></span><span><span class="trip-pick__t" style="display:block">${V.esc(trip.title)}</span><span class="trip-pick__s" style="display:block">${V.esc(d.name)} · ${V.date.range(trip.start, trip.end)}, ${V.date.parse(trip.start).getFullYear()}${trip.reviewed ? ' · reviewed' : ''}</span></span><span class="chg">Change</span>`;
+    $('#back').href = `reviews.html?id=${qid && V.dest(qid) ? qid : trip.dest}`;
+    const note = $('#tripNote');
+    const want = qid && V.dest(qid) && qid !== trip.dest ? V.dest(qid) : null;
+    note.hidden = !want && !trip.reviewed;
+    note.innerHTML = want ? `${V.icon('info', 18, 'stroke-width="2"')}<span>Your ${V.esc(want.name)} trip hasn’t happened yet, so we’ve picked a completed trip to review.</span>` : trip.reviewed ? `${V.icon('info', 18, 'stroke-width="2"')}<span>You’ve already reviewed this trip. Publishing again will update your review.</span>` : '';
+    $('#psSub').textContent = `From your ${d.name} camera roll`;
+  };
+  $('#tripOpts').innerHTML = past.map((t) => `<button class="option" type="button" data-value="${t.id}" aria-checked="${t.id === trip.id}"><span class="option__radio"></span><span class="option__body"><span class="option__title">${V.esc(t.title)}</span><span class="option__sub">${V.date.range(t.start, t.end)} · ${t.reviewed ? 'Reviewed' : 'Not reviewed yet'}</span></span></button>`).join('');
+  V.refresh($('#tripOpts'));
+  $('#tripOpts').addEventListener('select', (e) => { trip = V.trips.get(e.detail); photos = []; paintTiles(); paintTrip(); V.sheet.close(); });
+  paintTrip();
+
+  // ---- stars
+  $('#stars').innerHTML = [1, 2, 3, 4, 5].map((n) => `<button type="button" role="radio" aria-checked="false" data-star="${n}" aria-label="${n} star${n > 1 ? 's' : ''} — ${LABELS[n]}">${V.icon('star-fill', 34)}</button>`).join('') + '<span class="starpick__txt" id="starTxt">Tap to rate</span>';
+  const paintStars = (hover) => {
+    const v = hover || rating;
+    document.querySelectorAll('[data-star]').forEach((b) => { b.classList.toggle('on', +b.dataset.star <= v); b.setAttribute('aria-checked', String(+b.dataset.star === rating)); });
+    $('#starTxt').textContent = v ? LABELS[v] : 'Tap to rate';
+  };
+  $('#stars').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-star]'); if (!b) return;
+    rating = +b.dataset.star; paintStars(); b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); V.haptic();
+    $('#stars').classList.remove('has-error'); $('#starErr').classList.remove('show');
+  });
+  $('#stars').addEventListener('mouseover', (e) => { const b = e.target.closest('[data-star]'); if (b) paintStars(+b.dataset.star); });
+  $('#stars').addEventListener('mouseleave', () => paintStars());
+  $('#stars').addEventListener('keydown', (e) => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); rating = Math.max(1, Math.min(5, rating + (e.key === 'ArrowRight' ? 1 : -1))); paintStars(); $(`[data-star="${rating}"]`).focus(); } });
+
+  // ---- counter
+  const text = $('#text');
+  const count = () => { const n = text.value.length; $('#count').textContent = `${n}/500`; $('#count').style.color = n >= 450 ? 'var(--warn)' : ''; $('#textHelp').textContent = n && n < 20 ? `${20 - n} more characters to go` : 'At least 20 characters'; };
+  text.addEventListener('input', count); count();
+
+  // ---- photos
+  const paintTiles = () => {
+    $('#tiles').innerHTML = photos.map((p, i) => `<div class="tile ph"><img src="${V.img(p)}" alt="Selected photo ${i + 1}"><button class="tile__rm" type="button" data-rm="${i}" aria-label="Remove photo ${i + 1}">${V.icon('close', 12, 'stroke-width="3"')}</button></div>`).join('')
+      + (photos.length < 4 ? `<button class="tile tile--add" type="button" id="addPhoto" aria-label="Add photos">${V.icon('camera', 22, 'stroke-width="1.8"')}<span>Add</span></button>` : '');
+  };
+  const pool = () => { const d = V.dest(trip.dest); return [d.img, d.hero, ...(trip.dest === 'paris' ? ['gal-louvre', 'gal-montmartre', 'gal-paris-cafe'] : []), trip.img].filter((v, i, a) => a.indexOf(v) === i); };
+  let picked = [];
+  $('#tiles').addEventListener('click', (e) => {
+    const rm = e.target.closest('[data-rm]');
+    if (rm) { const i = +rm.dataset.rm; const was = photos[i]; photos.splice(i, 1); paintTiles(); V.toast('Photo removed', { action: 'Undo', onAction: () => { photos.splice(i, 0, was); paintTiles(); } }); return; }
+    if (e.target.closest('#addPhoto')) {
+      picked = photos.slice();
+      $('#pickgrid').innerHTML = pool().map((p) => `<button type="button" class="ph" data-p="${p}" aria-pressed="${picked.includes(p)}" aria-label="Select photo"><span class="tick">${V.icon('check', 14, 'stroke-width="3"')}</span><img src="${V.img(p)}" alt=""></button>`).join('');
+      V.sheet.open('photoSheet');
+    }
+  });
+  $('#pickgrid').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-p]'); if (!b) return; const p = b.dataset.p;
+    if (picked.includes(p)) picked = picked.filter((x) => x !== p); else if (picked.length < 4) picked.push(p); else { V.toast('You can add up to 4 photos'); return; }
+    b.setAttribute('aria-pressed', String(picked.includes(p)));
+  });
+  $('#pickDone').addEventListener('click', () => { photos = picked.slice(); paintTiles(); V.sheet.close(); if (photos.length) V.toast(`${photos.length} photo${photos.length > 1 ? 's' : ''} attached`); });
+  paintTiles();
+
+  // ---- dirty check on back
+  const dirty = () => !sent && (rating || $('#title').value.trim() || text.value.trim() || photos.length);
+  $('#back').addEventListener('click', async (e) => {
+    e.preventDefault(); const href = e.currentTarget.getAttribute('href');
+    if (dirty() && !(await V.dialog({ title: 'Discard this review?', message: 'Your rating and text will be lost.', confirm: 'Discard', cancel: 'Keep writing', tone: 'danger' }))) return;
+    if (history.length > 1 && document.referrer && !sent) history.back(); else location.href = href;
+  });
+
+  // ---- submit
+  $('#submit').addEventListener('click', async (e) => {
+    if (sent) return;
+    let ok = V.validate($('#form'));
+    if (text.value.trim() && text.value.trim().length < 20) {
+      const fg = text.closest('.fg'); fg.classList.add('has-error');
+      let et = fg.querySelector('.error-text'); if (!et) { et = document.createElement('span'); et.className = 'error-text'; et.setAttribute('role', 'alert'); fg.appendChild(et); }
+      et.innerHTML = V.icon('warning', 14, 'stroke-width="2"') + '<span>Write at least 20 characters so it’s useful to others</span>';
+      if (ok) text.focus(); ok = false;
+    }
+    if (!rating) {
+      $('#stars').classList.add('has-error');
+      $('#starErr').innerHTML = V.icon('warning', 14, 'stroke-width="2"') + '<span>Choose a star rating from 1 to 5</span>'; $('#starErr').classList.add('show');
+      if (ok) $('[data-star="1"]').focus(); ok = false;
+    }
+    if (!ok) { V.toast('Please fix the highlighted fields'); return; }
+    await V.loading(e.currentTarget, 1100);
+    const review = { who: $('#anon').checked ? 'Alex Johnson' : 'Alex J.', stars: rating, title: $('#title').value.trim(), text: text.value.trim(), photos, tags: $('#tags').value(), when: V.today };
+    const key = 'vb:reviews:' + trip.dest;
+    V.store.set(key, [review].concat(V.store.get(key, []).slice(0, 4)));
+    const first = !trip.reviewed;
+    V.trips.update(trip.id, { reviewed: true });
+    if (first) V.user.earn(100, `Review · ${V.dest(trip.dest).name}`);
+    sent = true;
+    $('#form').hidden = true; $('#done').hidden = false;
+    $('#doneMsg').textContent = `Thanks for sharing your ${trip.title}. Your review helps other travellers plan.`;
+    $('#ptsBadge').hidden = !first;
+    $('#ctaIn').innerHTML = `<a class="btn btn--primary" href="reviews.html?id=${trip.dest}&new=1"><span>See Your Review</span></a><a class="btn btn--outline-soft" href="trips.html"><span>Back to My Trips</span></a>`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
+</script>
+</body>
+</html>

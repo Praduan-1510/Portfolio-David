@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Payment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .psheet { padding-bottom: 28px !important; }
+  /* Trip banner (x26–376, y181–319) */
+  .tbanner { position: relative; display: block; margin: 24px -5px 0; height: 138px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,.18); color: var(--navy); }
+  .tbanner__img { position: absolute; inset: 0; }
+  .tbanner__img img { width: 100%; height: 100%; object-fit: cover; object-position: 70% 38%; }
+  .tbanner__img img.is-paris { position: absolute; width: 434px; height: 288px; max-width: none; left: -21px; top: -14px; }
+  .tbanner::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(255,255,255,.96) 0%, rgba(255,255,255,.86) 36%, rgba(255,255,255,.25) 64%, rgba(255,255,255,0) 80%), linear-gradient(0deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 45%); }
+  .tbanner__txt { position: absolute; left: 11px; top: 42px; z-index: 1; }
+  .tbanner__title { font-size: 24px; line-height: 29px; font-weight: 700; color: var(--navy); letter-spacing: -.1px; }
+  .tbanner__sub { font-size: 12px; line-height: 15px; color: #1D2740; margin-top: 3px; }
+  .tbanner__edit { position: absolute; right: 8px; top: 6px; z-index: 2; height: 32px; padding: 0 10px; border-radius: 16px; background: rgba(255,255,255,.9); color: var(--navy); font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+  .tbanner__edit::after { content: ''; position: absolute; inset: -6px; }
+
+  /* Saved cards carousel (x33–370, y338–527) */
+  .cards { display: flex; gap: 14px; margin: 19px 0 0 2px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; border-radius: 8px; }
+  .cards::-webkit-scrollbar { display: none; }
+  .cards .paycard { flex: 0 0 338px; scroll-snap-align: start; cursor: pointer; }
+  .paycard__num { margin-top: 42px; font-size: 14px; letter-spacing: .36em; }
+  
+  .paycard__row { gap: 44px; margin-top: 29px; }
+  .paycard__k { font-size: 14px; }
+  .paycard__v { font-size: 16px; margin-top: 1px; }
+  .paycard__brand { font-size: 13px; font-style: normal; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; opacity: .75; bottom: 24px; }
+  .paycard__sel { position: absolute; right: 16px; top: 16px; height: 22px; padding: 0 8px; border-radius: 11px; background: rgba(255,255,255,.14); color: #fff; font-size: 10.5px; font-weight: 600; letter-spacing: .06em; display: none; align-items: center; gap: 4px; }
+  .card-dots { display: flex; justify-content: center; gap: 6px; height: 0; position: relative; top: 5px; }
+  .card-dots i { width: 6px; height: 6px; border-radius: 3px; background: #D5D5D5; transition: width 240ms var(--ease-out), background 240ms; }
+  .card-dots i.on { width: 18px; background: var(--navy); }
+  .addcard { margin: 15px 0 0 7px; width: 326px !important; font-size: 16px; font-weight: 600; }
+
+  .summary { margin: 17px 2px 0; padding: 13px 10px 25px; min-height: 150px; }
+  .summary__row { font-size: 11.5px; line-height: 20px; color: #444; }
+  .summary__div { background: #8E8E8E; margin: 3px 0 9px; }
+  .summary__total { font-size: 14px; color: #555; }
+  .summary__row span:last-child, .summary__total span:last-child { transition: color 300ms; }
+  .flash { animation: flash 700ms var(--ease-out); }
+  @keyframes flash { 0% { background: var(--orange-tint); } 100% { background: transparent; } }
+
+  /* Below the fold: promo + secure note */
+  .promo-box { margin-top: 26px; }
+  .promo-row { display: grid; grid-template-columns: 1fr 96px; gap: 10px; }
+  .promo-row .field { text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
+  .promo-row .field::placeholder { text-transform: none; letter-spacing: 0; font-weight: 400; }
+  .promo-row .btn { height: 44px; font-size: 14px; }
+  .promo-applied { display: flex; align-items: center; gap: 10px; }
+  .promo-applied .grow b { font-weight: 700; }
+  .promo-applied button { color: #1F6B1F; font-weight: 600; font-size: 13px; padding: 10px 4px; margin: -10px -4px; text-decoration: underline; text-underline-offset: 2px; }
+  .promo-hint { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .promo-hint .chip { height: 30px; font-size: 12px; padding: 0 12px; }
+  .secure { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 22px; font-size: 12px; color: var(--text-4); }
+  .testlink { display: block; margin: 8px auto 0; font-size: 12px; color: var(--text-5); text-decoration: underline; text-underline-offset: 2px; padding: 10px; }
+
+  /* Processing overlay */
+  .proc { position: fixed; inset: 0; z-index: 960; display: grid; place-items: center; background: rgba(8,14,28,.62); opacity: 0; pointer-events: none; transition: opacity 220ms var(--ease-out); }
+  .proc.show { opacity: 1; pointer-events: auto; }
+  .proc__card { width: 280px; background: #fff; border-radius: 24px; padding: 28px 22px 24px; text-align: center; transform: scale(.94); transition: transform 280ms var(--ease-spring); }
+  .proc.show .proc__card { transform: none; }
+  .proc__spin { width: 54px; height: 54px; margin: 0 auto 16px; border-radius: 50%; border: 4px solid var(--orange-tint); border-top-color: var(--orange); animation: spin 800ms linear infinite; }
+  .proc__title { font-size: 18px; font-weight: 700; }
+  .proc__msg { font-size: 13px; color: var(--text-3); margin-top: 6px; line-height: 1.45; }
+  body.capture .proc { position: absolute; }
+
+  .otp-wrap { margin-top: 6px; }
+  .otp input { width: 46px; }
+  .bank { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px; background: var(--grey-1); margin-bottom: 18px; }
+  .bank__logo { width: 44px; height: 30px; border-radius: 6px; background: var(--navy); color: #fff; font: 800 10px var(--font); letter-spacing: .08em; display: grid; place-items: center; }
+  .otp-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
+  .otp-err { color: var(--danger); font-size: 12px; margin-top: 10px; min-height: 16px; }
+  .btn .arrow { margin-left: 2px; }
+</style>
+</head>
+<body>
+<main class="page page--cta" aria-label="Payment — step 3 of 4">
+  <header class="phead">
+    <a class="phead__back tap" href="book-extras.html" aria-label="Back to extras">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3.5M10.5 4.5 3 12l7.5 7.5"/></svg>
+    </a>
+    <div class="phead__titles"><h1 class="phead__title">Payment</h1></div>
+  </header>
+
+  <section class="psheet">
+    <div class="steps enter" data-step="3" data-total="4"></div>
+
+    <a class="tbanner tap enter" href="book-dates.html" style="--i:1" aria-label="Trip summary — tap to change dates or guests">
+      <span class="tbanner__img ph"><img id="tbImg" src="../assets/img/dest-paris.jpg" class="is-paris" alt=""></span>
+      <span class="tbanner__txt"><span class="tbanner__title" id="tbTitle" style="display:block">Paris City Break</span><span class="tbanner__sub" id="tbSub" style="display:block">Aug 12–19 · 2 Adults · Economy</span></span>
+    </a>
+
+    <h2 class="sr-only" id="cardsL">Pay with</h2>
+    <div class="cards enter" id="cards" style="--i:2" role="radiogroup" aria-labelledby="cardsL"></div>
+    <div class="card-dots" id="cardDots" aria-hidden="true"></div>
+
+    <a class="btn btn--outline-orange addcard enter" href="add-card.html?from=booking" style="--i:3"><span>+ Add New Card</span></a>
+
+    <div class="summary enter" id="summary" style="--i:4" aria-live="polite"></div>
+
+    <!-- below the fold -->
+    <div class="promo-box">
+      <p class="caps" id="promoL" style="margin-left:2px">Promo Code</p>
+      <div id="promoForm" class="mt-12">
+        <div class="fg">
+          <div class="promo-row">
+            <input class="field" id="promo" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Enter a code, e.g. SUMMER20" aria-labelledby="promoL" maxlength="16">
+            <button class="btn btn--navy" type="button" id="applyPromo">Apply</button>
+          </div>
+          <span class="error-text" id="promoErr" role="alert"></span>
+        </div>
+        <div class="promo-hint" data-delegate aria-label="Available codes">
+          <button class="chip" type="button" data-code="SUMMER20">SUMMER20</button>
+          <button class="chip" type="button" data-code="WELCOME50">WELCOME50</button>
+          <button class="chip" type="button" data-code="GOLD100">GOLD100</button>
+        </div>
+      </div>
+      <div class="banner banner--ok promo-applied" id="promoOn" hidden>
+        <span data-icon="tag" data-size="18"></span>
+        <span class="grow" id="promoOnTxt"></span>
+        <button type="button" id="removePromo">Remove</button>
+      </div>
+    </div>
+
+    <p class="secure"><span data-icon="lock" data-size="15"></span>Payments are encrypted and processed securely</p>
+    <button class="testlink" type="button" data-sheet="outcome">Test payment outcomes</button>
+  </section>
+
+  <div class="cta-bar">
+    <div class="cta-bar__in">
+      <button class="btn btn--primary" type="button" id="pay"><span id="payLabel">Pay $2,709</span><svg class="arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12h17M14 5.5l6.5 6.5-6.5 6.5"/></svg></button>
+    </div>
+  </div>
+</main>
+
+<!-- 3-D Secure -->
+<section class="sheet" id="secure" aria-labelledby="secT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="secT">Verify it’s you</p><p class="sheet__sub" id="secSub">Your bank sent a 6-digit code to +44 •••• ••0123.</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="bank"><span class="bank__logo" id="bankLogo">VISA</span><div class="grow"><p class="h-card" style="font-size:14px" id="bankCard">Visa •••• 4887</p><p class="small" id="bankAmt">Voyager Travel · $2,709.00</p></div><span data-icon="shield-check" data-size="22" class="c-valid"></span></div>
+  <div class="otp-wrap"><div class="otp" id="otp" data-length="6" aria-label="Verification code"></div></div>
+  <p class="otp-err" id="otpErr" role="alert"></p>
+  <div class="otp-meta"><button class="link" type="button" id="demoCode">Fill demo code</button><button class="link link--dark" type="button" id="resend">Resend code</button></div>
+  <div class="sheet__foot"><button class="btn btn--primary" type="button" id="verify"><span>Verify &amp; Pay</span></button></div>
+</section>
+
+<!-- Test outcomes (prototype only) -->
+<section class="sheet" id="outcome" aria-labelledby="outT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="outT">Test payment outcome</p><p class="sheet__sub">Prototype only. Cards ending 0000 are always declined.</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="options" id="outOpts" data-options>
+    <button class="option" type="button" data-value="ok" aria-checked="true"><span class="option__radio"></span><span class="option__body"><span class="option__title">Approve payment</span><span class="option__sub">Booking completes normally</span></span></button>
+    <button class="option" type="button" data-value="declined" aria-checked="false"><span class="option__radio"></span><span class="option__body"><span class="option__title">Decline — bank refused</span><span class="option__sub">Card issuer rejects the charge</span></span></button>
+    <button class="option" type="button" data-value="funds" aria-checked="false"><span class="option__radio"></span><span class="option__body"><span class="option__title">Decline — insufficient funds</span><span class="option__sub">Not enough available balance</span></span></button>
+  </div>
+  <div class="sheet__foot"><button class="btn btn--primary" type="button" data-close>Done</button></div>
+</section>
+
+<div class="proc" id="proc" role="alertdialog" aria-modal="true" aria-labelledby="procT" aria-hidden="true">
+  <div class="proc__card"><div class="proc__spin"></div><p class="proc__title" id="procT">Processing…</p><p class="proc__msg" id="procMsg">Confirming your payment with your bank. Please don’t close this screen.</p></div>
+</div>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const V = window.Voyager, B = V.booking;
+    const $ = (s) => document.querySelector(s);
+    let b = B.get();
+    const d = B.dest();
+
+    // ---- trip banner
+    $('#tbImg').src = V.img(d.img); $('#tbImg').classList.toggle('is-paris', d.id === 'paris');
+    $('#tbTitle').textContent = d.package.name;
+    const renderBanner = () => { $('#tbSub').textContent = B.summary(); };
+    renderBanner();
+
+    // ---- cards carousel
+    const cardsEl = $('#cards'), dotsEl = $('#cardDots');
+    let cards = V.cards.list();
+    if (!cards.find((c) => c.id === b.card)) { const def = V.cards.default(); b = B.set({ card: def ? def.id : '' }); }
+    const cardHTML = (c) => `<div class="paycard" role="radio" tabindex="0" data-card="${c.id}" aria-checked="${c.id === b.card}" aria-label="${V.esc(c.brand)} ending ${c.last4}, ${V.esc(c.holder)}, expires ${c.exp}">
+        <div class="paycard__chip"></div>
+        <p class="paycard__num">**** **** **** ${c.last4}</p>
+        <div class="paycard__row"><div><span class="paycard__k">Card Holder</span><span class="paycard__v">${V.esc(c.holder)}</span></div><div><span class="paycard__k">Expires</span><span class="paycard__v">${V.esc(c.exp)}</span></div></div>
+        ${cards.length > 1 ? `<span class="paycard__brand">${V.esc(c.brand)}</span>` : ''}
+      </div>`;
+    // Selected card first so the default view matches the design
+    const ordered = () => [...cards].sort((x, y) => (y.id === b.card) - (x.id === b.card));
+    const renderCards = () => {
+      const list = ordered();
+      cardsEl.innerHTML = list.map(cardHTML).join('');
+      cardsEl.classList.toggle('is-multi', list.length > 1);
+      dotsEl.innerHTML = list.length > 1 ? list.map((c, i) => `<i class="${i === 0 ? 'on' : ''}"></i>`).join('') : '';
+      cardsEl.scrollLeft = 0;
+    };
+    renderCards();
+    const selectCard = (id, announce) => {
+      b = B.set({ card: id });
+      cardsEl.querySelectorAll('[data-card]').forEach((el) => el.setAttribute('aria-checked', String(el.dataset.card === id)));
+      const c = V.cards.get(id);
+      if (announce && c) V.toast(`Paying with ${c.brand} •••• ${c.last4}`);
+    };
+    let snapT;
+    cardsEl.addEventListener('scroll', () => {
+      clearTimeout(snapT);
+      snapT = setTimeout(() => {
+        const i = Math.round(cardsEl.scrollLeft / (338 + 14));
+        const el = cardsEl.querySelectorAll('[data-card]')[i]; if (!el) return;
+        dotsEl.querySelectorAll('i').forEach((dot, k) => dot.classList.toggle('on', k === i));
+        if (el.dataset.card !== b.card) selectCard(el.dataset.card, true);
+      }, 120);
+    });
+    cardsEl.addEventListener('click', (e) => {
+      const el = e.target.closest('[data-card]'); if (!el) return;
+      el.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+      if (el.dataset.card !== b.card) selectCard(el.dataset.card, true);
+    });
+    cardsEl.addEventListener('keydown', (e) => {
+      if (!['ArrowRight', 'ArrowLeft'].includes(e.key)) return;
+      const els = [...cardsEl.querySelectorAll('[data-card]')]; const i = els.findIndex((x) => x.dataset.card === b.card);
+      const n = els[(i + (e.key === 'ArrowRight' ? 1 : -1) + els.length) % els.length]; n.focus(); n.click();
+    });
+    if (V.q('added')) { const c = V.cards.get(V.q('added')); if (c) { selectCard(c.id); renderCards(); V.toast(`${c.brand} •••• ${c.last4} added and selected`); } }
+
+    // ---- summary + CTA
+    const renderSummary = (flash) => {
+      const t = B.totals();
+      $('#summary').innerHTML = t.lines.map((l) => `<div class="summary__row${l.discount ? ' is-discount' : ''}"><span>${V.esc(l.label)}</span><span class="num">${V.fmt(l.amount)}</span></div>`).join('') +
+        `<div class="summary__div"></div><div class="summary__total"><span>Total</span><span class="num" id="sumTotal">${V.fmt(t.total)}</span></div>`;
+      $('#payLabel').textContent = `Pay ${V.fmt(t.total)}`;
+      $('#bankAmt').textContent = `Voyager Travel · ${V.fmt(t.total, { cents: true })}`;
+      if (flash) { const s = $('#summary'); s.classList.remove('flash'); void s.offsetWidth; s.classList.add('flash'); }
+      return t;
+    };
+    renderSummary();
+
+    // ---- promo code
+    const promoIn = $('#promo');
+    const renderPromo = () => {
+      const p = V.promo(B.get().promo);
+      const t = B.totals(); const line = t.lines.find((l) => l.key === 'promo');
+      $('#promoForm').hidden = !!(p && line); $('#promoOn').hidden = !(p && line);
+      if (p && line) $('#promoOnTxt').innerHTML = `<b>${V.esc(p.code)}</b> applied · you save <b class="num">${V.fmt(-line.amount)}</b>`;
+    };
+    const promoError = (msg) => { const fg = promoIn.closest('.fg'); fg.classList.add('has-error'); $('#promoErr').innerHTML = V.icon('warning', 14, 'stroke-width="2"') + `<span>${V.esc(msg)}</span>`; promoIn.setAttribute('aria-invalid', 'true'); promoIn.focus(); };
+    const apply = async (code) => {
+      code = String(code || '').trim().toUpperCase();
+      if (!code) return promoError('Enter a promo code first');
+      const p = V.promo(code);
+      await V.loading($('#applyPromo'), 600);
+      if (!p) return promoError(`“${code}” isn’t a valid code. Try SUMMER20.`);
+      const test = B.totals(Object.assign(B.get(), { promo: code }));
+      if (!test.lines.some((l) => l.key === 'promo')) {
+        return promoError(p.minNights ? `${p.code} needs a stay of ${p.minNights}+ nights` : p.min ? `${p.code} needs a package over ${V.fmt(p.min)}` : `${p.code} can’t be used on this trip`);
+      }
+      B.set({ promo: code }); promoIn.value = ''; renderSummary(true); renderPromo();
+      V.toast(`${code} applied`);
+    };
+    $('#applyPromo').addEventListener('click', () => apply(promoIn.value));
+    promoIn.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); apply(promoIn.value); } });
+    document.querySelectorAll('[data-code]').forEach((c) => c.addEventListener('click', () => { promoIn.value = c.dataset.code; apply(c.dataset.code); }));
+    $('#removePromo').addEventListener('click', () => {
+      const was = B.get().promo; B.set({ promo: '' }); renderSummary(true); renderPromo();
+      V.toast(`${was} removed`, { action: 'Undo', onAction: () => { B.set({ promo: was }); renderSummary(true); renderPromo(); } });
+    });
+    renderPromo();
+
+    // ---- outcome (prototype)
+    let outcome = 'ok';
+    $('#outOpts').addEventListener('select', (e) => { outcome = e.detail; });
+
+    // ---- pay → 3-D Secure → processing → result
+    const otp = $('#otp');
+    const openSecure = () => {
+      const c = V.cards.get(B.get().card) || V.cards.default();
+      $('#bankLogo').textContent = (c.brand === 'Mastercard' ? 'MC' : c.brand).toUpperCase();
+      $('#bankCard').textContent = `${c.brand} •••• ${c.last4}`;
+      $('#otpErr').textContent = ''; otp.reset && otp.reset();
+      V.sheet.open('secure');
+    };
+    $('#pay').addEventListener('click', async (e) => {
+      const c = V.cards.get(B.get().card);
+      if (!c) { V.toast('Add a card to pay'); location.href = 'add-card.html?from=booking'; return; }
+      await V.loading(e.currentTarget, 700);
+      openSecure();
+    });
+    $('#demoCode').addEventListener('click', () => { otp.fill('482915'); });
+    $('#resend').addEventListener('click', () => { V.toast('A new code is on its way'); otp.reset(); });
+    otp.addEventListener('input', () => { $('#otpErr').textContent = ''; });
+    otp.addEventListener('complete', () => $('#verify').focus());
+
+    const proc = $('#proc');
+    $('#verify').addEventListener('click', async (e) => {
+      const code = otp.value();
+      if (code.length < 6) { otp.classList.add('is-error'); $('#otpErr').textContent = 'Enter all 6 digits of the code'; V.haptic(); return; }
+      if (code === '000000') { otp.classList.add('is-error'); $('#otpErr').textContent = 'That code is incorrect. Check the SMS and try again.'; return; }
+      await V.loading(e.currentTarget, 800);
+      otp.classList.add('is-ok');
+      V.sheet.close();
+      proc.classList.add('show'); proc.setAttribute('aria-hidden', 'false');
+      await V.wait(900);
+      $('#procMsg').textContent = 'Securing your flights and hotel…';
+      await V.wait(900);
+      const c = V.cards.get(B.get().card) || {};
+      const reason = c.last4 === '0000' ? 'declined' : outcome !== 'ok' ? outcome : '';
+      if (reason) { location.href = `payment-failed.html?reason=${reason}`; return; }
+      const trip = B.confirm();
+      location.href = `book-confirmed.html?ref=${encodeURIComponent(trip.ref)}`;
+    });
+  })();
+</script>
+</body>
+</html>

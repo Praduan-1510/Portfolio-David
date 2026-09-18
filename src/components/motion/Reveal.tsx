@@ -4,18 +4,25 @@ import { createElement, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, registerGsap, gsapEase } from "@/lib/motion/gsap";
 import { durations } from "@/lib/motion/durations";
+import { distance } from "@/lib/motion/tokens";
 import { useReducedMotion, prefersReducedMotion } from "@/hooks/useReducedMotion";
+import { blurIn } from "./TextReveal";
 
 /*
  * In-view reveal: fades/translates in once when scrolled into view
- * (DESIGN_GUIDELINES.md §7.5). Transform + opacity only. Content is visible by
- * default and only hidden in a layout effect (useGSAP), so no-JS / reduced-motion
- * never traps content behind the animation (§10).
+ * (DESIGN_GUIDELINES.md §7.5). Transform + opacity only, unless `blur` asks for
+ * the heading blur-in. Content is visible by default and only hidden in a
+ * layout effect (useGSAP), so no-JS / reduced-motion never traps content
+ * behind the animation (§10).
  */
 interface RevealProps extends React.HTMLAttributes<HTMLElement> {
   as?: React.ElementType;
-  /** Translate distance in px (16–40 per §7.3). */
+  /** Translate distance in px (16–40 per §7.3; `distance.sm` with `blur`). */
   y?: number;
+  /** Resolve out of a blur like a <TextReveal> heading, for a heading phrase
+   *  that cannot be split (e.g. one clipped to a gradient). Headings only:
+   *  never on long text, where the blur is GPU-heavy. */
+  blur?: boolean;
   /** Delay in seconds: stagger siblings 0.04–0.08 (§7.4). */
   delay?: number;
   /** Tween duration in seconds (defaults to the `slow` token). */
@@ -28,7 +35,8 @@ interface RevealProps extends React.HTMLAttributes<HTMLElement> {
 export function Reveal({
   as: Tag = "div",
   className,
-  y = 24,
+  y,
+  blur = false,
   delay = 0,
   duration = durations.slow,
   trigger = "inView",
@@ -49,21 +57,24 @@ export function Reveal({
       ) {
         return;
       }
-      const vars: gsap.TweenVars = {
-        opacity: 0,
-        y,
-        duration,
-        ease: gsapEase.outExpo,
-        delay,
-      };
+      const timing: gsap.TweenVars = { duration, delay };
       if (trigger === "inView") {
-        vars.scrollTrigger = { trigger: ref.current, start: "top 85%", once: true };
+        timing.scrollTrigger = { trigger: ref.current, start: "top 85%", once: true };
       }
-      gsap.from(ref.current, vars);
+      if (blur) {
+        blurIn(ref.current, timing, y ?? distance.sm);
+        return;
+      }
+      gsap.from(ref.current, {
+        opacity: 0,
+        y: y ?? 24,
+        ease: gsapEase.outExpo,
+        ...timing,
+      });
     },
     {
       scope: ref,
-      dependencies: [reduced, y, delay, duration, trigger],
+      dependencies: [reduced, y, blur, delay, duration, trigger],
       revertOnUpdate: true,
     },
   );

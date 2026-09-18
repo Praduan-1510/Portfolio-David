@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Delivery location</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* Auth shell: gradient band (Welcome palette) + white card that overlaps it */
+  .auth-hero { position: relative; height: 184px; margin: 0 calc(-1 * var(--gutter)); color: #fff; overflow: hidden;
+    background: linear-gradient(180deg, #012639 0px, #075881 104px, #1296DB 184px); }
+  .auth-hero::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(112deg, rgba(255,255,255,.055) 0 2px, transparent 2px 34px); -webkit-mask-image: linear-gradient(90deg, transparent, #000 60%); mask-image: linear-gradient(90deg, transparent, #000 60%); }
+  .auth-hero__back { position: absolute; left: 14px; top: 20px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.14); display: grid; place-items: center; color: #fff; }
+  .auth-hero__back svg { width: 9px; height: 15px; }
+  .auth-hero__logo { position: absolute; left: 50%; top: 66px; width: 150px; transform: translateX(-50%); }
+  .auth-hero__tag { position: absolute; left: 0; right: 0; top: 100px; text-align: center; font-size: 11px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; color: #9FD5F1; }
+  .auth-hero__help { position: absolute; right: 14px; top: 20px; height: 40px; padding: 0 14px; border-radius: 20px; background: rgba(255,255,255,.14); display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: #fff; }
+  .auth-hero__help svg { width: 16px; height: 16px; }
+  .auth-card { position: relative; margin: -34px calc(-1 * var(--gutter)) 0; padding: 26px var(--gutter) 0; background: #fff; border-radius: 24px 24px 0 0; }
+  .auth-title { font-size: 24px; font-weight: 700; color: #000; line-height: 1.25; letter-spacing: -.2px; }
+  .auth-sub { font-size: 14px; color: var(--muted-2); line-height: 1.5; margin-top: 4px; }
+  .auth-sub b { color: #000; font-weight: 600; }
+  .auth-or { display: flex; align-items: center; gap: 12px; margin: 24px 0 16px; font-size: 12px; color: var(--muted-2); }
+  .auth-or::before, .auth-or::after { content: ''; flex: 1; height: 1px; background: var(--divider-soft); }
+  .auth-foot { text-align: center; font-size: 14px; color: var(--muted-2); margin-top: 22px; }
+  .auth-foot a { color: var(--brand); font-weight: 600; padding: 10px 2px; }
+  .auth-legal { text-align: center; font-size: 11.5px; line-height: 1.55; color: var(--muted); margin: 18px auto 0; max-width: 300px; }
+  .auth-legal button, .auth-legal a { color: var(--steel); text-decoration: underline; text-underline-offset: 2px; }
+  .tel-prefix { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 500; color: #111 !important; padding-right: 10px; margin-right: 2px; box-shadow: inset -1px 0 0 var(--border); height: 24px; }
+  .flag { width: 20px; height: 14px; border-radius: 2px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 0 0 1px rgba(0,0,0,.06); }
+  .flag i { flex: 1; } .flag i:nth-child(1) { background: #FF9933; } .flag i:nth-child(2) { background: #fff; display: grid; place-items: center; } .flag i:nth-child(3) { background: #138808; }
+  .flag i:nth-child(2)::after { content: ''; width: 4px; height: 4px; border-radius: 50%; box-shadow: inset 0 0 0 1px #000080; }
+  .segmented button { text-align: center; }
+  .option .avatar { width: 40px; height: 40px; }
+  .social { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 48px; border-radius: var(--r); font-size: 15px; font-weight: 600; }
+  .social--google { background: #fff; color: #111; box-shadow: inset 0 0 0 1px var(--border); }
+  .social--apple { background: #000; color: #fff; }
+  .social svg { width: 20px; height: 20px; }
+  .loc-hero { height: 212px; }
+  .loc-pin { position: absolute; left: 50%; top: 100px; width: 64px; height: 64px; margin-left: -32px; border-radius: 50%; background: #fff; color: var(--brand); display: grid; place-items: center; box-shadow: 0 10px 28px rgba(1,31,48,.35); z-index: 2; }
+  .loc-pin svg { width: 30px; height: 30px; }
+  .loc-pin::before, .loc-pin::after { content: ''; position: absolute; inset: -14px; border-radius: 50%; border: 2px solid rgba(255,255,255,.45); animation: pulse-ring 2.4s var(--ease-out) infinite; }
+  .loc-pin::after { animation-delay: 1.2s; }
+  body.capture .loc-pin::before, body.capture .loc-pin::after { animation: none; opacity: .5; }
+  .loc-hero .auth-hero__tag { top: 64px; }
+  .loc-hero .auth-hero__logo { top: 32px; width: 120px; }
+  .gps { display: flex; align-items: center; gap: 14px; width: 100%; padding: 14px; border-radius: 12px; background: var(--navy); color: #fff; text-align: left; margin-top: 22px; }
+  .gps .icon-tile { background: rgba(255,255,255,.12); color: #fff; }
+  .gps b { display: block; font-size: 15px; font-weight: 600; }
+  .gps small { display: block; font-size: 12px; color: #BFD9E8; }
+  .gps.is-loading { pointer-events: none; }
+  .gps.is-loading .icon-tile svg { animation: spin 1.2s linear infinite; }
+  .result-card { margin-top: 22px; border-radius: 12px; box-shadow: inset 0 0 0 1.5px var(--ok); background: #F6FCF5; padding: 16px; }
+  .result-card__head { display: flex; align-items: flex-start; gap: 12px; }
+  .result-card__head .icon-tile { background: var(--ok-bg); color: var(--ok); }
+  .result-card__area { font-size: 16px; font-weight: 600; color: #000; }
+  .result-card__pin { font-size: 13px; color: var(--muted-2); }
+  .result-card .kvs { margin-top: 10px; border-top: 1px solid #D5EDD2; }
+  .result-card .kvs > div { padding: 8px 0; }
+  .result-card .kvs .k { display: inline-flex; align-items: center; gap: 8px; }
+  .result-card .kvs .k svg { width: 16px; height: 16px; color: var(--brand); }
+
+</style>
+</head>
+<body>
+<main class="page page--no-nav" aria-label="Delivery location">
+  <header class="auth-hero loc-hero">
+    <span class="wordmark wordmark--white auth-hero__logo" role="img" aria-label="Decathlon"></span>
+    <p class="auth-hero__tag">Almost there</p>
+    <span class="loc-pin" aria-hidden="true"><i data-icon="pin-fill" data-size="30"></i></span>
+  </header>
+  <section class="auth-card">
+    <ol class="steps" id="steps" aria-label="Sign-up progress" style="--n:3;margin:0 0 18px"><li class="done">Details</li><li class="done">Verify</li><li class="current">Location</li></ol>
+    <h1 class="auth-title enter" style="--i:0">Where should we deliver?</h1>
+    <p class="auth-sub enter" style="--i:1">We use your location to show delivery dates, stock and your nearest store.</p>
+
+    <button class="gps tap" type="button" id="gps"><span class="icon-tile"><i data-icon="locate" data-size="22"></i></span><span class="grow"><b>Use my current location</b><small id="gpsSub">Fastest. Needs location permission</small></span><i data-icon="chevron" data-size="18" data-sw="2"></i></button>
+
+    <p class="auth-or">or enter a pincode</p>
+    <form id="pinForm" novalidate>
+      <div class="fg">
+        <label class="label" for="pin">Delivery pincode</label>
+        <div class="field field-affix"><i data-icon="pin" data-size="18" style="color:var(--muted-2)"></i><input id="pin" name="pin" inputmode="numeric" maxlength="6" autocomplete="postal-code" placeholder="e.g. 700135" data-mask="pin" data-validate="required|pin"><button class="affix-btn" type="submit" id="check">Check</button></div>
+      </div>
+    </form>
+
+    <div class="result-card" id="result" hidden role="status" aria-live="polite">
+      <div class="result-card__head"><span class="icon-tile"><i data-icon="check" data-size="22" data-sw="2.4"></i></span><span class="grow"><span class="result-card__area" id="rArea" style="display:block">New Town, Kolkata</span><span class="result-card__pin" id="rPin">Pincode 700135 · We deliver here</span></span><button class="text-btn text-btn--brand tap" type="button" id="changeLoc" style="min-height:24px">Change</button></div>
+      <div class="kvs kvs--plain">
+        <div><span class="k"><i data-icon="truck" data-size="16"></i>Delivery by</span><span class="v fw-6" id="rEta">Sun, 20 Sep</span></div>
+        <div><span class="k"><i data-icon="tag" data-size="16"></i>Free delivery</span><span class="v">above ₹999</span></div>
+        <div><span class="k"><i data-icon="store" data-size="16"></i>Nearest store</span><span class="v" id="rStore">New Town · 1.4 km</span></div>
+      </div>
+    </div>
+  </section>
+  <div class="cta-bar">
+    <button class="btn btn--primary btn--lg tap" type="button" id="start" disabled><span>Start shopping</span></button>
+    <a class="btn btn--ghost btn--md tap" href="home.html" id="skip">Skip for now</a>
+  </div>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const fromSettings = D.q('from') === 'settings';
+    if (fromSettings) {
+      $('#steps').hidden = true; $('#skip').hidden = true; $('.auth-hero__tag').textContent = 'Delivery location';
+      $('.loc-hero').insertAdjacentHTML('afterbegin', '<a class="auth-hero__back tap" href="settings.html" data-go="back" aria-label="Back"><svg viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>');
+      $('#start span').textContent = 'Save location';
+    }
+    const show = (v) => {
+      $('#rArea').textContent = v.area; $('#rPin').textContent = `Pincode ${v.pin} · We deliver here`;
+      $('#rEta').textContent = D.location.eta(v.pin);
+      const local = /^7001/.test(v.pin);
+      $('#rStore').textContent = local ? 'New Town · 1.4 km' : 'Ships from our Kolkata hub';
+      $('#result').hidden = false; $('#start').disabled = false;
+      $('#result').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    };
+    $('#gps').addEventListener('click', async (e) => {
+      const b = e.currentTarget;
+      const ok = await D.dialog({ title: 'Allow Decathlon to use your location?', message: 'Used only to show delivery dates and stores near you.', confirm: 'Allow', cancel: 'Don’t allow', tone: 'info', icon: 'locate' });
+      if (!ok) { D.toast('No problem. Enter your pincode instead'); $('#pin').focus(); return; }
+      b.classList.add('is-loading'); $('#gpsSub').textContent = 'Finding you…';
+      await D.wait(1200); b.classList.remove('is-loading');
+      const v = D.location.set('700135'); $('#gpsSub').textContent = 'Found: ' + v.area + ' ' + v.pin; $('#pin').value = v.pin; show(v);
+    });
+    $('#pinForm').addEventListener('submit', async (e) => {
+      e.preventDefault(); if (!D.validate(e.target)) return;
+      const b = $('#check'); b.textContent = 'Checking…'; await D.wait(700); b.textContent = 'Check';
+      const v = D.location.set($('#pin').value.trim()); if (v) show(v);
+    });
+    $('#changeLoc').addEventListener('click', () => { $('#result').hidden = true; $('#start').disabled = true; $('#pin').value = ''; $('#pin').focus(); });
+    $('#start').addEventListener('click', async (e) => { await D.loading(e.currentTarget, 700); D.toast('Delivering to ' + D.location.get().area, { icon: 'truck' }); await D.wait(500); location.href = fromSettings ? 'settings.html' : 'home.html'; });
+    $('#skip').addEventListener('click', () => D.toast('You can set this later from the Home header'));
+    if (D.q('state') === 'set') show(D.location.get());
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  body.capture .page { min-height: 932px; }
+  :root { --st-card: #fff; --st-sheet: var(--grey-2); --st-ink: #000; --st-label: #333; --st-line: #D0D0D0; }
+  .psheet { padding: 26px 17px 16px; background: var(--st-sheet); transition: background 300ms; }
+  .st-label { font-size: 13px; line-height: 1; color: var(--st-label); text-transform: uppercase; margin: 0 0 12px; }
+  .st-card { background: var(--st-card); border-radius: 16px; padding: 10px 17px 0; transition: background 300ms; }
+  .st-row { position: relative; display: flex; align-items: center; width: 100%; height: 52px; padding: 0 0 12px 21px; text-align: left; color: var(--st-ink); -webkit-tap-highlight-color: transparent; }
+  .st-row + .st-row::before { content: ''; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: var(--st-line); }
+  .st-row__ic { width: 24px; height: 24px; display: grid; place-items: center; flex-shrink: 0; }
+  .st-row__t { flex: 1; font-size: 15px; font-weight: 600; margin-left: 9px; }
+  .st-row__v { font-size: 12.5px; color: var(--text-4); margin-right: 4px; }
+  .st-chev { margin-right: 14px; transition: transform var(--dur) var(--ease-out); }
+  .st-row:hover .st-chev { transform: translateX(2px); }
+  .st-row .toggle { margin-right: 19px; }
+  a.st-row:active, button.st-row:active, .st-row[data-switch-row]:active { background: rgba(0,0,0,.02); }
+  .st-row.flash { animation: rowflash 1.8s var(--ease-out); }
+  @keyframes rowflash { 0%, 40% { background: var(--orange-tint-2); } 100% { background: transparent; } }
+  .st-ver { text-align: center; font-size: 11px; line-height: 1.5; color: var(--text-5); margin: 14px 0 0; }
+  svg .cut { stroke: var(--st-card); } svg .cutf { fill: var(--st-card); }
+
+  /* Dark theme (page-level preview) */
+  body.dark { --st-card: #1B2742; --st-sheet: #0E1629; --st-ink: #F2F4F8; --st-label: #9AA3B5; --st-line: #2C3A58; }
+  body.dark .tabbar__in { background: #0E1629; }
+  body.dark .tabbar__in::before { background: linear-gradient(to bottom, rgba(14,22,41,0), #0E1629); }
+  body.dark .tab { color: #C4C7CF; }
+  body.dark .tab[aria-current="page"] { color: var(--tab-active); }
+  body.dark .st-ver { color: #6B7690; }
+  body.dark .toggle[aria-checked="true"] { background: var(--orange); }
+
+  /* Sheets */
+  .policy { max-height: 52vh; overflow-y: auto; padding-right: 6px; font-size: 13.5px; line-height: 1.6; color: var(--text-2); }
+  .policy h3 { font-size: 14px; font-weight: 700; color: #000; margin: 16px 0 4px; }
+  .policy h3:first-child { margin-top: 0; }
+  .cur-list .option { min-height: 52px; }
+  .cur-sym { width: 36px; height: 36px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 1px #E3E3E3; display: grid; place-items: center; font-weight: 700; color: var(--navy); flex-shrink: 0; }
+</style>
+</head>
+<body>
+<main class="page page--tabs" aria-label="Settings">
+  <header class="phead">
+    <a class="phead__back tap" href="profile.html" data-go="back" aria-label="Back">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3.5M10.5 4.5 3 12l7.5 7.5"/></svg>
+    </a>
+    <div class="phead__titles"><h1 class="phead__title">Settings</h1></div>
+  </header>
+
+  <section class="psheet psheet--grey">
+    <h2 class="st-label" style="margin-left:-9px">Account</h2>
+    <nav class="st-card enter" aria-label="Account">
+      <a class="st-row tap" href="edit-profile.html"><span class="st-row__ic" data-fi="user"></span><span class="st-row__t" style="margin-left:7px">Edit Profile</span><span class="st-chev" data-chev></span></a>
+      <a class="st-row tap" href="change-password.html"><span class="st-row__ic" data-fi="key"></span><span class="st-row__t" style="margin-left:8px">Change Password</span><span class="st-chev" data-chev></span></a>
+      <a class="st-row tap" href="language.html"><span class="st-row__ic" data-fi="globe"></span><span class="st-row__t" style="margin-left:8px">Language &amp; Region</span><span class="st-chev" data-chev></span></a>
+    </nav>
+
+    <h2 class="st-label" style="margin:31px 0 12px 2px">Preferences</h2>
+    <div class="st-card enter" style="padding-top:20px;padding-bottom:8px;--i:1" role="group" aria-label="Preferences">
+      <div class="st-row" id="notifications" data-switch-row style="height:52px"><span class="st-row__ic" data-fi="bell"></span><span class="st-row__t" style="margin-left:7px" id="lNotif">Notifications</span><button class="toggle" type="button" role="switch" data-pref="notifications" aria-labelledby="lNotif"></button></div>
+      <div class="st-row" data-switch-row style="height:50px;padding-bottom:10px"><span class="st-row__ic" data-fi="envelope"></span><span class="st-row__t" style="margin-left:12px" id="lEmail">Email Updates</span><button class="toggle" type="button" role="switch" data-pref="email" aria-labelledby="lEmail"></button></div>
+      <div class="st-row" data-switch-row><span class="st-row__ic" data-fi="moon"></span><span class="st-row__t" style="margin-left:9px" id="lDark">Dark Mode</span><button class="toggle" type="button" role="switch" data-pref="dark" aria-labelledby="lDark"></button></div>
+      <button class="st-row tap" type="button" data-sheet="curSheet"><span class="st-row__ic" data-fi="currency"></span><span class="st-row__t" style="margin-left:8px">Currency</span><span class="st-row__v" id="curV"></span><span class="st-chev" data-chev></span></button>
+    </div>
+
+    <h2 class="st-label" style="margin:34px 0 12px 1px">Privacy</h2>
+    <nav class="st-card enter" style="padding-top:15px;padding-bottom:3px;--i:2" aria-label="Privacy">
+      <button class="st-row tap" type="button" data-sheet="policySheet"><span class="st-row__ic" data-fi="lock"></span><span class="st-row__t" style="margin-left:7px">Privacy Policy</span><span class="st-chev" data-chev></span></button>
+      <button class="st-row tap" type="button" data-sheet="deleteSheet"><span class="st-row__ic" data-fi="trash"></span><span class="st-row__t" style="margin-left:7px">Delete Account</span><span class="st-chev" data-chev></span></button>
+    </nav>
+    <p class="st-ver">Voyager 2.6.0 (418) · <button class="link" type="button" id="checkUpd" style="font-size:11px;padding:6px 2px;margin:-6px -2px">Check for updates</button></p>
+  </section>
+  <nav data-tabbar="profile" data-tabbar-grey></nav>
+</main>
+
+<!-- Currency -->
+<section class="sheet" id="curSheet" aria-labelledby="cuT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="cuT">Currency</p><p class="sheet__sub">Prices are shown in this currency. You’re always charged in USD.</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="options cur-list" data-options id="curList">
+    <button class="option" type="button" data-value="USD"><span class="cur-sym">$</span><span class="option__body"><span class="option__title">US Dollar</span><span class="option__sub">USD</span></span><span class="option__radio"></span></button>
+    <button class="option" type="button" data-value="EUR"><span class="cur-sym">€</span><span class="option__body"><span class="option__title">Euro</span><span class="option__sub">EUR</span></span><span class="option__radio"></span></button>
+    <button class="option" type="button" data-value="GBP"><span class="cur-sym">£</span><span class="option__body"><span class="option__title">British Pound</span><span class="option__sub">GBP</span></span><span class="option__radio"></span></button>
+    <button class="option" type="button" data-value="INR"><span class="cur-sym">₹</span><span class="option__body"><span class="option__title">Indian Rupee</span><span class="option__sub">INR</span></span><span class="option__radio"></span></button>
+    <button class="option" type="button" data-value="AUD"><span class="cur-sym">A$</span><span class="option__body"><span class="option__title">Australian Dollar</span><span class="option__sub">AUD</span></span><span class="option__radio"></span></button>
+  </div>
+  <div class="sheet__foot">
+    <button class="btn btn--primary" type="button" id="curSave"><span>Save Currency</span></button>
+    <a class="btn btn--ghost" href="language.html#currency" style="margin-top:6px">More currencies</a>
+  </div>
+</section>
+
+<!-- Privacy policy -->
+<section class="sheet" id="policySheet" aria-labelledby="ppT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="ppT">Privacy Policy</p><p class="sheet__sub">Last updated 1 Sep 2026</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="policy" tabindex="0" aria-label="Privacy policy text">
+    <h3>1. What we collect</h3>
+    <p>Your name, email, phone number, date of birth and nationality; travel documents you choose to store; bookings, payment method tokens (never full card numbers) and the destinations you save.</p>
+    <h3>2. Why we use it</h3>
+    <p>To book and manage your trips, check you in with airlines and hotels, keep your documents ready at borders, prevent fraud, and — only if you allow it — send you deals for places you’ve saved.</p>
+    <h3>3. Who we share it with</h3>
+    <p>Airlines, hotels, transfer and tour partners that fulfil your booking; payment processors; and authorities when the law requires it (for example, advance passenger information). We never sell your data.</p>
+    <h3>4. Travel documents</h3>
+    <p>Passport and ID scans are encrypted on your device and in our vault. They’re shared with a partner only when you tap Share or check in online.</p>
+    <h3>5. How long we keep it</h3>
+    <p>For as long as your account is open, then up to 6 years for bookings where tax law requires. Deleting your account removes stored documents immediately.</p>
+    <h3>6. Your rights</h3>
+    <p>You can access, correct, export or delete your data at any time from Settings, or by writing to privacy@voyager.app. You can also complain to the UK Information Commissioner’s Office.</p>
+    <h3>7. Cookies &amp; analytics</h3>
+    <p>We use essential cookies to keep you signed in and optional analytics you can turn off in Email Updates and Notifications.</p>
+  </div>
+  <div class="sheet__foot btn-pair">
+    <button class="btn btn--neutral" type="button" id="ppExport">Export My Data</button>
+    <button class="btn btn--primary" type="button" data-close>Got It</button>
+  </div>
+</section>
+
+<!-- Delete account -->
+<section class="sheet" id="deleteSheet" aria-labelledby="dlT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="dlT">Delete your account?</p><p class="sheet__sub">This permanently removes your profile, 4,820 reward points, saved places and stored documents. Upcoming bookings stay with our partners.</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="banner banner--danger"><span data-icon="warning" data-size="18"></span><span id="dlWarn">You have 3 upcoming trips. Cancel them first if you want a refund.</span></div>
+  <div class="fg mt-16">
+    <label class="label" for="dlInput">Type <b style="color:#000">DELETE</b> to confirm</label>
+    <input class="field" id="dlInput" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="DELETE">
+    <span class="helper" id="dlHelp">This can’t be undone.</span>
+  </div>
+  <div class="sheet__foot btn-pair">
+    <button class="btn btn--neutral" type="button" data-close>Keep Account</button>
+    <button class="btn btn--danger" type="button" id="dlGo" disabled>Delete</button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const $ = (s) => document.querySelector(s);
+  const FI = {
+    user: '<circle cx="12" cy="7.8" r="5" fill="currentColor"/><path fill="currentColor" d="M2.6 20.3C4.5 16.9 8 15 12 15s7.5 1.9 9.4 5.3a.8.8 0 0 1-.7 1.2H3.3a.8.8 0 0 1-.7-1.2Z"/>',
+    key: '<circle cx="15.2" cy="8.8" r="6.3" fill="currentColor"/><path d="M11 13 3.2 20.8M5.9 18.1l2.4 2.4M8.5 15.5l2 2" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><circle class="cutf" cx="17" cy="7" r="1.5"/>',
+    globe: '<circle cx="12" cy="12" r="9.2" stroke="currentColor" stroke-width="2"/><path d="M5.4 5.8 7 8.6l2.8.9-.6 2.6 2.5 1.9-.6 3.2-2.4 2.1M18.7 6.3l-2.4 1.1-.3 2.8 2.6 1.4 2.6-.3M13.5 21l.9-2.8 2.5-1.1" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>',
+    bell: '<path fill="#FFC21A" d="M20.8 17.1c-.6-1-1.4-3.3-1.4-6.9a7.4 7.4 0 0 0-14.8 0c0 3.6-.8 5.9-1.4 6.9a1.4 1.4 0 0 0 1.2 2.1h3.8a3.8 3.8 0 0 0 7.6 0h3.8a1.4 1.4 0 0 0 1.2-2.1Z"/>',
+    envelope: '<path fill="currentColor" d="M2 5.8c0-.6.5-1.1 1.1-1.1h17.8c.6 0 1.1.5 1.1 1.1V18c0 .8-.7 1.4-1.5 1.4H3.5c-.8 0-1.5-.6-1.5-1.4V5.8Z"/><path class="cut" d="m2.6 5.4 9.4 7.4 9.4-7.4" stroke-width="1.7" stroke-linejoin="round"/>',
+    moon: '<path fill="currentColor" d="M20.5 14.4A8.6 8.6 0 0 1 9.6 3.5a8.6 8.6 0 1 0 10.9 10.9Z"/>',
+    currency: '<circle cx="12" cy="12" r="9.8" fill="currentColor"/><path class="cut" d="M12 6.3v11.4M14.9 8.9c-.4-.9-1.5-1.5-2.9-1.5-1.6 0-2.9.8-2.9 2 0 3 6 1.5 6 4.4 0 1.2-1.3 2.2-3.1 2.2-1.4 0-2.6-.6-3.1-1.6" stroke-width="1.9" stroke-linecap="round"/>',
+    lock: '<rect x="3.8" y="9.6" width="16.4" height="12" rx="1.6" fill="currentColor"/><path d="M7.9 9.6V7a4.1 4.1 0 0 1 8.2 0v2.6" stroke="currentColor" stroke-width="2.3"/>',
+    trash: '<path d="M3.5 5.6h17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M8.8 5.6V4a1.5 1.5 0 0 1 1.5-1.5h3.4A1.5 1.5 0 0 1 15.2 4v1.6" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M5.3 5.6h13.4V20a1.6 1.6 0 0 1-1.6 1.6H6.9A1.6 1.6 0 0 1 5.3 20V5.6Z"/><path class="cut" d="M10 10v7M14 10v7" stroke-width="1.8" stroke-linecap="round"/>',
+  };
+  document.querySelectorAll('[data-fi]').forEach((el) => { el.innerHTML = `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="margin:-1px">${FI[el.dataset.fi]}</svg>`; });
+  document.querySelectorAll('[data-chev]').forEach((el) => { el.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 4.5 7.5 7.5L9 19.5"/></svg>'; });
+
+  // ---- toggles (persisted in V.user.prefs)
+  const applyDark = (on) => document.body.classList.toggle('dark', !!on);
+  document.querySelectorAll('[data-pref]').forEach((t) => {
+    t.setAttribute('aria-checked', String(!!V.user.pref(t.dataset.pref)));
+    t.addEventListener('change', (e) => {
+      const k = t.dataset.pref, on = e.detail; V.user.pref(k, on);
+      if (k === 'dark') { applyDark(on); V.toast(on ? 'Dark theme on for Settings · rolling out app-wide soon' : 'Dark theme off'); }
+      if (k === 'notifications') V.toast(on ? 'Push notifications on' : 'Push notifications off · you’ll still get booking emails', on ? {} : { action: 'Undo', onAction: () => { V.user.pref(k, true); t.setAttribute('aria-checked', 'true'); } });
+      if (k === 'email') V.toast(on ? 'Email updates on' : 'Unsubscribed from deal emails');
+    });
+  });
+  applyDark(V.user.pref('dark'));
+
+  // ---- currency
+  const SYM = { USD: '$', EUR: '€', GBP: '£', INR: '₹', AUD: 'A$', JPY: '¥', CAD: 'C$' };
+  const renderCur = () => { const c = V.user.get().currency || 'USD'; $('#curV').textContent = document.body.classList.contains('capture') ? '' : `${c} ${SYM[c] || ''}`.trim(); $('#curList').select(c); };
+  let pick = null;
+  $('#curList').addEventListener('select', (e) => { pick = e.detail; });
+  $('#curSheet').addEventListener('sheet:open', () => { pick = V.user.get().currency || 'USD'; $('#curList').select(pick); });
+  $('#curSave').addEventListener('click', async (e) => { await V.loading(e.currentTarget, 600); V.user.set({ currency: pick || 'USD' }); renderCur(); V.sheet.close(); V.toast(`Prices will show in ${pick} ${SYM[pick] || ''}`); });
+  renderCur();
+
+  // ---- privacy export
+  $('#ppExport').addEventListener('click', async (e) => { await V.loading(e.currentTarget, 900); V.sheet.close(); V.toast(`Your data export is on its way to ${V.user.get().email}`); });
+
+  // ---- delete account
+  const up = V.trips.count('upcoming'); $('#dlWarn').textContent = up ? `You have ${up} upcoming trip${up === 1 ? '' : 's'}. Cancel them first if you want a refund.` : 'You have no upcoming trips.';
+  $('#dlT').nextElementSibling.textContent = `This permanently removes your profile, ${V.fmtNum(V.user.get().points)} reward points, saved places and stored documents. Upcoming bookings stay with our partners.`;
+  $('#dlInput').addEventListener('input', (e) => { const ok = e.target.value.trim() === 'DELETE'; $('#dlGo').disabled = !ok; $('#dlHelp').textContent = ok ? 'Confirmed. Tap Delete to finish.' : 'This can’t be undone.'; });
+  $('#deleteSheet').addEventListener('sheet:close', () => { $('#dlInput').value = ''; $('#dlGo').disabled = true; });
+  $('#dlGo').addEventListener('click', async (e) => {
+    if ($('#dlInput').value.trim() !== 'DELETE') return;
+    await V.loading(e.currentTarget, 1400);
+    V.reset(); V.auth.signOut();
+    V.toast('Your account has been deleted');
+    await V.wait(800);
+    location.href = 'onboarding-1.html';
+  });
+
+  $('#checkUpd').addEventListener('click', async (e) => { const b = e.currentTarget; b.textContent = 'Checking…'; await V.wait(900); b.textContent = 'Check for updates'; V.toast('You’re on the latest version'); });
+
+  // deep link from Notifications gear
+  if (location.hash === '#notifications') { const r = $('#notifications'); r.classList.add('flash'); r.querySelector('.toggle').focus({ preventScroll: true }); }
+})();
+</script>
+</body>
+</html>

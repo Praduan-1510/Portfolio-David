@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Create account</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* Auth shell: gradient band (Welcome palette) + white card that overlaps it */
+  .auth-hero { position: relative; height: 184px; margin: 0 calc(-1 * var(--gutter)); color: #fff; overflow: hidden;
+    background: linear-gradient(180deg, #012639 0px, #075881 104px, #1296DB 184px); }
+  .auth-hero::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(112deg, rgba(255,255,255,.055) 0 2px, transparent 2px 34px); -webkit-mask-image: linear-gradient(90deg, transparent, #000 60%); mask-image: linear-gradient(90deg, transparent, #000 60%); }
+  .auth-hero__back { position: absolute; left: 14px; top: 20px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.14); display: grid; place-items: center; color: #fff; }
+  .auth-hero__back svg { width: 9px; height: 15px; }
+  .auth-hero__logo { position: absolute; left: 50%; top: 66px; width: 150px; transform: translateX(-50%); }
+  .auth-hero__tag { position: absolute; left: 0; right: 0; top: 100px; text-align: center; font-size: 11px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; color: #9FD5F1; }
+  .auth-hero__help { position: absolute; right: 14px; top: 20px; height: 40px; padding: 0 14px; border-radius: 20px; background: rgba(255,255,255,.14); display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: #fff; }
+  .auth-hero__help svg { width: 16px; height: 16px; }
+  .auth-card { position: relative; margin: -34px calc(-1 * var(--gutter)) 0; padding: 26px var(--gutter) 0; background: #fff; border-radius: 24px 24px 0 0; }
+  .auth-title { font-size: 24px; font-weight: 700; color: #000; line-height: 1.25; letter-spacing: -.2px; }
+  .auth-sub { font-size: 14px; color: var(--muted-2); line-height: 1.5; margin-top: 4px; }
+  .auth-sub b { color: #000; font-weight: 600; }
+  .auth-or { display: flex; align-items: center; gap: 12px; margin: 24px 0 16px; font-size: 12px; color: var(--muted-2); }
+  .auth-or::before, .auth-or::after { content: ''; flex: 1; height: 1px; background: var(--divider-soft); }
+  .auth-foot { text-align: center; font-size: 14px; color: var(--muted-2); margin-top: 22px; }
+  .auth-foot a { color: var(--brand); font-weight: 600; padding: 10px 2px; }
+  .auth-legal { text-align: center; font-size: 11.5px; line-height: 1.55; color: var(--muted); margin: 18px auto 0; max-width: 300px; }
+  .auth-legal button, .auth-legal a { color: var(--steel); text-decoration: underline; text-underline-offset: 2px; }
+  .tel-prefix { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 500; color: #111 !important; padding-right: 10px; margin-right: 2px; box-shadow: inset -1px 0 0 var(--border); height: 24px; }
+  .flag { width: 20px; height: 14px; border-radius: 2px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 0 0 1px rgba(0,0,0,.06); }
+  .flag i { flex: 1; } .flag i:nth-child(1) { background: #FF9933; } .flag i:nth-child(2) { background: #fff; display: grid; place-items: center; } .flag i:nth-child(3) { background: #138808; }
+  .flag i:nth-child(2)::after { content: ''; width: 4px; height: 4px; border-radius: 50%; box-shadow: inset 0 0 0 1px #000080; }
+  .segmented button { text-align: center; }
+  .option .avatar { width: 40px; height: 40px; }
+  .social { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 48px; border-radius: var(--r); font-size: 15px; font-weight: 600; }
+  .social--google { background: #fff; color: #111; box-shadow: inset 0 0 0 1px var(--border); }
+  .social--apple { background: #000; color: #fff; }
+  .social svg { width: 20px; height: 20px; }
+  .sport-chips { gap: 8px; }
+  .sport-chips .chip { height: 34px; padding: 0 14px; }
+  .sport-chips .chip[aria-pressed="true"]::before { content: ''; width: 9px; height: 5px; border: solid #fff; border-width: 0 0 2px 2px; transform: translateY(-1px) rotate(-45deg); margin-right: 2px; }
+  .fg-sports.has-error .chip { box-shadow: inset 0 0 0 1.5px var(--danger); }
+  .fg-sports.has-error .chip[aria-pressed="true"] { box-shadow: none; }
+  .terms { align-items: flex-start; color: #111; font-size: 13px; line-height: 1.5; min-height: 0; padding: 4px 0; }
+  .terms .check-box { margin-top: 1px; }
+  .terms button { color: var(--brand); font-weight: 500; }
+  .fg-terms.has-error .check-box { box-shadow: inset 0 0 0 1.5px var(--danger); }
+  .fg-terms .error-text, .fg-sports .error-text { display: none; }
+  .fg-terms.has-error .error-text, .fg-sports.has-error .error-text { display: block; }
+  .club-opt { display: flex; align-items: center; gap: 12px; margin-top: 18px; padding: 12px 14px; border-radius: var(--r); background: var(--profile); box-shadow: inset 0 0 0 1px var(--border); }
+  .club-opt .icon-tile { width: 38px; height: 38px; }
+  .club-opt b { display: block; font-size: 14px; font-weight: 600; color: #000; }
+  .club-opt small { display: block; font-size: 12px; color: var(--muted-2); line-height: 1.35; }
+  .steps { --n: 3; margin: 18px 0 4px; }
+
+</style>
+</head>
+<body>
+<main class="page page--bare" aria-label="Create account">
+  <header class="auth-hero">
+    <a class="auth-hero__back tap" href="login.html" data-go="back" aria-label="Back"><svg viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    
+    <span class="wordmark wordmark--white auth-hero__logo" role="img" aria-label="Decathlon"></span>
+    <p class="auth-hero__tag">Create account</p>
+  </header>
+  <section class="auth-card">
+    <h1 class="auth-title enter" style="--i:0">Create your account</h1>
+    <p class="auth-sub enter" style="--i:1">Join free in under a minute and get <b>500 welcome points</b>.</p>
+    <ol class="steps" aria-label="Sign-up progress"><li class="current">Details</li><li>Verify</li><li>Location</li></ol>
+
+    <form id="signupForm" novalidate style="margin-top:14px">
+      <div class="fg">
+        <label class="label" for="name">Full name<span class="req" aria-hidden="true">*</span></label>
+        <input class="field" id="name" name="name" autocomplete="name" placeholder="e.g. Priya Sharma" data-validate="required|name">
+      </div>
+      <div class="fg">
+        <label class="label" for="phone">Mobile number<span class="req" aria-hidden="true">*</span></label>
+        <div class="field field-affix"><span class="tel-prefix"><span class="flag" aria-hidden="true"><i></i><i></i><i></i></span>+91</span><input id="phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="98311 20456" data-mask="phone" data-validate="required|phone"></div>
+        <span class="helper">We will send a code to verify this number</span>
+      </div>
+      <div class="fg">
+        <label class="label" for="email">Email<span class="req" aria-hidden="true">*</span></label>
+        <input class="field" id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="name@gmail.com" data-validate="required|email">
+        <span class="helper">For order updates and receipts</span>
+      </div>
+      <div class="fg fg-sports" id="sportsFg" style="margin-top:20px">
+        <p class="label" id="sportsL">Your favourite sports<span class="req" aria-hidden="true">*</span></p>
+        <span class="helper" style="margin:-2px 0 10px 2px">Pick at least one so we can tailor your feed</span>
+        <div class="chip-row sport-chips" data-multi id="sports" aria-labelledby="sportsL" role="group"><button class="chip tap" type="button" data-value="running" aria-pressed="false">Running</button><button class="chip tap" type="button" data-value="cycling" aria-pressed="false">Cycling</button><button class="chip tap" type="button" data-value="tennis" aria-pressed="false">Tennis</button><button class="chip tap" type="button" data-value="football" aria-pressed="false">Football</button><button class="chip tap" type="button" data-value="badminton" aria-pressed="false">Badminton</button><button class="chip tap" type="button" data-value="yoga" aria-pressed="false">Yoga</button><button class="chip tap" type="button" data-value="hiking" aria-pressed="false">Hiking</button><button class="chip tap" type="button" data-value="swimming" aria-pressed="false">Swimming</button><button class="chip tap" type="button" data-value="gym" aria-pressed="false">Gym</button><button class="chip tap" type="button" data-value="cricket" aria-pressed="false">Cricket</button><button class="chip tap" type="button" data-value="camping" aria-pressed="false">Camping</button><button class="chip tap" type="button" data-value="basketball" aria-pressed="false">Basketball</button></div>
+        <span class="error-text" role="alert">Choose at least one sport you play</span>
+      </div>
+      <div class="club-opt">
+        <span class="icon-tile"><i data-icon="trophy" data-size="20"></i></span>
+        <span class="grow"><b>Join Decathlon Club</b><small>Free delivery, points on every order, early sale access</small></span>
+        <button class="switch" type="button" role="switch" aria-checked="true" aria-label="Join Decathlon Club" id="club"></button>
+      </div>
+      <div class="fg fg-terms" id="termsFg" style="margin-top:18px">
+        <label class="check-row terms"><input type="checkbox" id="terms"><span class="check-box"></span><span>I agree to the <button type="button" class="tap" data-sheet="termsSheet">Terms of use</button> and <button type="button" class="tap" data-sheet="privacySheet">Privacy policy</button></span></label>
+        <span class="error-text" role="alert">Please accept the terms to create your account</span>
+      </div>
+      <button class="btn btn--primary btn--lg tap" type="submit" style="margin-top:20px"><span>Create account</span></button>
+    </form>
+    <p class="auth-foot">Already have an account? <a class="tap" href="login.html">Sign in</a></p>
+  </section>
+</main>
+<section class="sheet" id="termsSheet" aria-labelledby="termsSheetT">
+  <div class="sheet__head"><div><p class="sheet__title" id="termsSheetT">Terms of use</p><p class="sheet__sub">Last updated 1 September 2026</p></div><button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button></div>
+  <div class="legal-copy" style="font-size:13.5px;line-height:1.6;color:#333">
+    <p><b>1. Your account.</b> You are responsible for keeping your login details safe. One account per person.</p>
+    <p style="margin-top:10px"><b>2. Orders and prices.</b> Prices include GST. We confirm an order only once payment is received or Cash on delivery is accepted.</p>
+    <p style="margin-top:10px"><b>3. Returns.</b> Unused items can be returned within 30 days. Decathlon brands carry a 2-year warranty.</p>
+    <p style="margin-top:10px"><b>4. Decathlon Club.</b> Points have no cash value, expire after 12 months of inactivity and can be redeemed as vouchers.</p>
+  </div>
+<div class="sheet__foot"><button class="btn btn--primary btn--lg tap" type="button" data-close>Got it</button></div>
+</section>
+<section class="sheet" id="privacySheet" aria-labelledby="privacySheetT">
+  <div class="sheet__head"><div><p class="sheet__title" id="privacySheetT">Privacy policy</p><p class="sheet__sub">How we use your data</p></div><button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button></div>
+  <ol class="track">
+    <li class="done"><span class="track__title">What we collect</span><span class="track__meta">Name, contact details, delivery addresses and your order history.</span></li>
+    <li class="done"><span class="track__title">Why we collect it</span><span class="track__meta">To deliver orders, run Decathlon Club and suggest gear for your sports.</span></li>
+    <li class="done"><span class="track__title">Your control</span><span class="track__meta">Download or delete your data any time from Settings.</span></li>
+  </ol>
+<div class="sheet__foot"><button class="btn btn--primary btn--lg tap" type="button" data-close>Got it</button></div>
+</section>
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    // Restore a draft if the user came back from OTP to edit
+    const draft = D.store.get('signup');
+    if (draft) { $('#name').value = draft.name || ''; $('#phone').value = (draft.phone || '').replace('+91 ', ''); $('#email').value = draft.email || '';
+      (draft.sports || []).forEach((s) => { const c = $(`#sports [data-value="${s}"]`); if (c) { c.setAttribute('aria-pressed', 'true'); c.classList.add('is-active'); } });
+      $('#terms').checked = !!draft.terms; if (draft.club === false) $('#club').setAttribute('aria-checked', 'false'); }
+    const picked = () => $$('#sports [aria-pressed="true"]').map((c) => c.dataset.value);
+    $('#sports').addEventListener('change', () => { if (picked().length) $('#sportsFg').classList.remove('has-error'); });
+    $('#terms').addEventListener('change', () => { if ($('#terms').checked) $('#termsFg').classList.remove('has-error'); });
+    $('#signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      let ok = D.validate(e.target);
+      const noSport = !picked().length; $('#sportsFg').classList.toggle('has-error', noSport);
+      const noTerms = !$('#terms').checked; $('#termsFg').classList.toggle('has-error', noTerms);
+      if (ok && noSport) { $('#sports .chip').focus(); $('#sportsFg').scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+      else if (ok && noTerms) { $('#terms').focus(); $('#termsFg').scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+      if (!ok || noSport || noTerms) { D.haptic(30); return; }
+      const v = $('#phone').value.replace(/\D/g, '').slice(-10); const phone = '+91 ' + v.slice(0, 5) + ' ' + v.slice(5);
+      await D.loading(e.target.querySelector('[type=submit]'), 1000);
+      D.store.set('signup', { name: $('#name').value.trim(), phone, email: $('#email').value.trim(), sports: picked(), club: $('#club').getAttribute('aria-checked') === 'true', terms: true });
+      D.store.set('auth', { via: 'phone', to: phone, flow: 'signup' });
+      location.href = 'otp.html?flow=signup';
+    });
+  })();
+</script>
+</body>
+</html>

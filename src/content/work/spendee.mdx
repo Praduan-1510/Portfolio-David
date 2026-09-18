@@ -7,6 +7,7 @@ year: 2025
 services: [UX Design, UI Design, Design System, Prototyping]
 summary: "A dark-mode finance super-app for Indian small businesses: ledger, GST, invoicing, payments, and credit in one legible interface."
 indexNote: 'The domain study. GST filing mechanics and khata conventions, turned into a ledger whose numbers actually add up across forty-five screens you can click through.'
+outcome: "45 working screens, every figure reconciled against one ledger spine."
 cover: /images/work/spendee/dashboard.png
 # Hero reel: a looping 3D montage of the app screens, floated over the hero bg.
 # H.264 MP4 (plays everywhere incl. Safari); opaque near-black surround is cropped
@@ -23,23 +24,27 @@ video:
 # still carries the uncorrected data, and it cost the route ~197 requests.
 prototype:
   poster: /images/work/spendee/stage.png
-  alt: "The Spendee prototype: a phone running the app beside flow shortcuts for onboarding, ledger, invoices, payments, GST and credit"
+  alt: "The Spendee demo: the app booting in a handset beside a panel of things to try and jump-to shortcuts for every flow"
   aspect: 1.6
+  # A phone app that only draws its stage above 880px and is full-bleed below,
+  # the same shape as Nukkad, so no tablet (it would show a stretched phone).
+  devices: [desktop, phone]
   launchNote: >-
-    It opens on the welcome screen with every flow one tap away. The code
-    screen shows its own demo code, and nothing you enter leaves the page.
-  hint: "Pick a flow beside the phone, or start from the beginning. Browse all screens scrolls to every screen and sheet."
+    It opens on the splash and walks you into the welcome screen, fresh every
+    time. On a wide screen a panel beside the phone jumps to any flow, and
+    nothing you enter leaves the page.
+  hint: "Scan a receipt, pay a supplier, file GSTR-3B or discount an invoice. On a wide screen the panel beside the phone jumps to any flow. Restart returns to the splash."
   surfaces:
     - id: app
-      label: Prototype
+      label: App
       shortLabel: App
-      src: /prototype/spendee/index.html
+      src: /prototype/spendee/app.html
       domain: spendee.app
-    - id: system
-      label: Design system
-      shortLabel: System
-      src: /prototype/spendee/index.html#system
-      domain: spendee.app/design
+    - id: screens
+      label: All screens
+      shortLabel: Screens
+      src: /prototype/spendee/index.html#screens
+      domain: spendee.app/screens
 accent: "#A1A329" # Spendee acid lime, DEEPENED. Brand #C2E000's hue held at 105 (brand is 111), but ceding the bright end of lime to OmniStock, whose hi-vis vest #C6FF3D is load-bearing in a way a finance app's lime is not: the whole --hivis token family there is a safety-vest reference and every screenshot in that study is painted with it. The two measured dE 8.7 apart, well inside the 20 the work index needs for two cards sitting side by side, so one had to move and this is the one with the weaker claim on the hue. 7.20:1 on --bg, 6.62:1 on --surface, dE 22.7 from OmniStock and 16.2 from Spendee's own brand. The deep end reads as the brand lime under warehouse light rather than as a second hi-vis.
 motif: ledger
 featured: true

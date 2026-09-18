@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Payment Failed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .psheet { padding: 70px 31px 24px !important; }
+  .steps { margin: 0 -4px 0 -4px; }
+  .steps__dot.is-active { background: var(--danger); }
+  .hero-check { margin-top: 56px; width: 150px; height: 150px; animation: shake 420ms 300ms; }
+  .hero-check svg path { stroke-dasharray: 40; stroke-dashoffset: 40; animation: draw 420ms 250ms var(--ease-out) forwards; }
+  body.capture .hero-check svg path { stroke-dashoffset: 0; }
+  .result__title { margin-top: 36px; }
+  .result__msg { max-width: 310px; }
+  .fail-box { margin-top: 24px; border-radius: 16px; background: var(--grey-1); padding: 4px 18px; }
+  .fail-box .kvs > div { font-size: 13.5px; }
+  .banner { margin-top: 14px; }
+  .tips { margin-top: 18px; font-size: 13px; color: var(--text-3); line-height: 1.5; }
+  .tips li { display: flex; gap: 10px; align-items: flex-start; }
+  .tips li + li { margin-top: 8px; }
+  .tips li span:first-child { color: var(--text-4); margin-top: 1px; }
+  .cta-bar__in { padding-top: 16px !important; }
+  .help { display: flex; justify-content: center; }
+  .help a { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--navy); height: 44px; padding: 0 12px; }
+</style>
+</head>
+<body>
+<main class="page page--white page--cta" aria-label="Payment failed">
+  <section class="psheet">
+    <div class="steps" data-step="3" data-total="4"></div>
+    <div class="result">
+      <div class="hero-check hero-check--fail" aria-hidden="true">
+        <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M7 7l10 10M17 7 7 17"/></svg>
+      </div>
+      <h1 class="result__title">Payment Failed</h1>
+      <p class="result__msg" id="reason">Your bank declined this payment. Please try again or use a different card.</p>
+    </div>
+
+    <div class="fail-box">
+      <div class="kvs">
+        <div><span class="k">Amount</span><span class="v num" id="amt">$2,709</span></div>
+        <div><span class="k">Card</span><span class="v" id="card">Visa •••• 4887</span></div>
+        <div><span class="k">Trip</span><span class="v" id="trip">Paris City Break</span></div>
+        <div><span class="k">Error code</span><span class="v" id="code">DECLINED-05</span></div>
+      </div>
+    </div>
+    <div class="banner banner--ok"><span data-icon="shield-check" data-size="18"></span><span><b>No money was taken.</b> Any pending hold on your card will be released automatically.</span></div>
+
+    <ul class="tips" id="tips">
+      <li><span data-icon="check" data-size="16" data-sw="2.2"></span><span>Check your card details and available balance</span></li>
+      <li><span data-icon="check" data-size="16" data-sw="2.2"></span><span>Your bank may need you to approve online payments</span></li>
+      <li><span data-icon="check" data-size="16" data-sw="2.2"></span><span>Your trip is held for 30 minutes at this price</span></li>
+    </ul>
+  </section>
+
+  <div class="cta-bar">
+    <div class="cta-bar__in">
+      <a class="btn btn--primary" id="retry" href="book-payment.html"><span data-icon="refresh" data-size="18" data-sw="2"></span><span>Retry Payment</span></a>
+      <a class="btn btn--outline-soft" href="add-card.html?from=booking"><span>Use Another Card</span></a>
+      <div class="help"><a href="support.html"><span data-icon="headset" data-size="18"></span>Contact Support</a></div>
+    </div>
+  </div>
+</main>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const V = window.Voyager, B = V.booking;
+    const $ = (s) => document.querySelector(s);
+    const REASONS = {
+      declined: ['Your bank declined this payment. Please try again or use a different card.', 'DECLINED-05'],
+      funds: ['There weren’t enough available funds on this card to complete the payment.', 'INSUFFICIENT-51'],
+      timeout: ['We couldn’t reach your bank in time. Please try again in a moment.', 'TIMEOUT-91'],
+    };
+    const [msg, code] = REASONS[V.q('reason')] || REASONS.declined;
+    $('#reason').textContent = msg; $('#code').textContent = code;
+    const t = B.totals(); const c = V.cards.get(B.get().card) || V.cards.default();
+    $('#amt').textContent = V.fmt(t.total);
+    $('#card').textContent = c ? `${c.brand} •••• ${c.last4}` : '—';
+    $('#trip').textContent = `${B.dest().package.name} · ${V.date.range(B.get().depart, B.get().ret)}`;
+    $('#retry').addEventListener('click', async (e) => { e.preventDefault(); await V.loading(e.currentTarget, 600); location.href = 'book-payment.html'; });
+  })();
+</script>
+</body>
+</html>

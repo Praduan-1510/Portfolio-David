@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Rewards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .psheet { padding: 20px 17px 24px 18px; }
+  body.capture .page { min-height: 932px; }
+  /* Points card (PNG x32–369 y123–312) */
+  .pts { position: relative; height: 190px; border-radius: 8px; background: #DDDEE1; overflow: hidden; }
+  .pts .t { position: absolute; line-height: 1; white-space: nowrap; }
+  .pts__k { left: 21px; top: 35px; font-size: 10.5px; color: var(--orange); letter-spacing: .02em; }
+  .pts__tier { right: 22px; top: 35px; font-size: 10.5px; color: var(--orange); letter-spacing: .08em; }
+  .pts__v { left: 21px; top: 63px; font-size: 30px; font-weight: 700; letter-spacing: -.3px; color: #111; font-variant-numeric: tabular-nums; }
+  .pts__from { left: 24px; top: 108px; font-size: 9.5px; color: #6B6B6B; }
+  .pts__to { right: 20px; top: 108px; font-size: 9.5px; color: #6B6B6B; }
+  .pts__bar { position: absolute; left: 21px; right: 24px; top: 125px; height: 6px; border-radius: 3px; background: #CFCFCF; overflow: hidden; }
+  .pts__bar i { display: block; height: 100%; width: var(--p, 0%); background: var(--orange); border-radius: 3px; transition: width 1100ms var(--ease-out); }
+  .pts__need { left: 24px; top: 137px; font-size: 12px; font-weight: 600; color: #111; }
+  .pts__glow { position: absolute; right: -60px; top: -70px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(252,163,17,.16), rgba(252,163,17,0) 70%); pointer-events: none; }
+  .pts__v.bump { animation: bump 420ms var(--ease-spring); }
+  @keyframes bump { 40% { transform: scale(1.06); color: var(--orange); } }
+
+  .rw-label { font-size: 14px; line-height: 1; color: #333; margin: 10px 0 0 -1px; }
+  .tiles { display: grid; grid-template-columns: 162px 162px; gap: 13px 11px; margin: 14px 0 0 -3px; }
+  .tile { position: relative; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; height: 106px; border-radius: 16px; background: #fff; text-align: left; padding: 15px 0 0 21px; transition: transform var(--dur) var(--ease-out), box-shadow var(--dur); }
+  .tile:hover { box-shadow: 0 6px 16px rgba(20,33,61,.08); }
+  .tile:active { transform: scale(.97); }
+  .tile__ic { display: block; color: #111; height: 24px; margin: -2px 0 0 -1px; }
+  .tile__t { display: block; font-size: 16px; line-height: 1; font-weight: 600; color: #111; margin-top: 7px; }
+  .tile__p { display: block; font-size: 14.5px; line-height: 1; font-weight: 600; color: var(--orange); margin-top: 12px; font-variant-numeric: tabular-nums; }
+  .tile.is-locked .tile__p { color: #B7B7B7; }
+  .tile__lock { position: absolute; right: 14px; top: 14px; color: #B7B7B7; }
+  .tile__prog { position: absolute; left: 21px; right: 18px; bottom: 11px; height: 3px; border-radius: 2px; background: #EEE; overflow: hidden; }
+  .tile__prog i { display: block; height: 100%; background: #C9C9C9; }
+
+  .act { background: #fff; border-radius: 16px; padding: 0 38px 0 39px; margin: 13px -3px 0 -3px; }
+  .act__row { display: flex; align-items: center; justify-content: space-between; min-height: 49px; padding: 0 0 6px; position: relative; }
+  .act__row:first-child { min-height: 61px; padding: 0 0 1px; }
+  .act__row + .act__row::before { content: ''; position: absolute; left: -22px; right: -17px; top: 0; height: 1px; background: #D0D0D0; }
+  .act__t { font-size: 14.5px; font-weight: 600; color: #111; }
+  .act__d { display: block; font-size: 11px; font-weight: 400; color: var(--text-4); margin-top: 2px; }
+  .act .badge { height: 21px; font-size: 10px; min-width: 71px; }
+  .act__more { display: block; width: 100%; text-align: center; font-size: 13px; font-weight: 600; color: var(--orange); padding: 12px 0 14px; border-top: 1px solid #EEE; margin: 0 -17px 0 -22px; width: calc(100% + 39px); }
+
+  .vch { display: flex; align-items: center; gap: 12px; background: #fff; border-radius: 16px; padding: 14px 16px; margin-top: 10px; border: 1.5px dashed #F2C27A; }
+  .vch__ic { width: 40px; height: 40px; border-radius: 50%; background: var(--orange-tint); color: var(--orange); display: grid; place-items: center; flex-shrink: 0; }
+  .vch__code { font-size: 12px; letter-spacing: .12em; color: var(--text-3); font-variant-numeric: tabular-nums; }
+  .earn { background: #fff; border-radius: 16px; padding: 4px 17px; margin-top: 13px; }
+  .earn .list__item { min-height: 58px; }
+  .earn .list__icon { width: 36px; height: 36px; border-radius: 50%; background: var(--grey-2); }
+  .earn .badge { margin-right: 2px; }
+
+  /* Redeem sheet */
+  .rd-hero { display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 16px; background: var(--grey-2); }
+  .rd-hero__ic { width: 52px; height: 52px; border-radius: 14px; background: var(--navy); color: var(--orange); display: grid; place-items: center; flex-shrink: 0; }
+  .voucher { position: relative; margin-top: 4px; border-radius: 16px; background: var(--navy); color: #fff; padding: 20px 18px 18px; overflow: hidden; isolation: isolate; }
+  .voucher::before { content: ''; position: absolute; right: -50px; top: -60px; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(252,163,17,.55), rgba(252,163,17,0) 70%); z-index: -1; }
+  .voucher__k { font-size: 10px; letter-spacing: .3em; color: #C4C7CF; text-transform: uppercase; }
+  .voucher__code { font-size: 22px; font-weight: 700; letter-spacing: .08em; margin-top: 6px; font-variant-numeric: tabular-nums; }
+  .voucher__row { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; font-size: 12px; color: #C4C7CF; }
+  .copy-btn { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 17px; background: var(--orange); color: #000; font-size: 13px; font-weight: 600; }
+  /* Tier table */
+  .tiers { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12.5px; }
+  .tiers th, .tiers td { padding: 11px 6px; text-align: center; border-bottom: 1px solid #EDEDED; }
+  .tiers th:first-child, .tiers td:first-child { text-align: left; padding-left: 0; color: var(--text-2); font-weight: 500; }
+  .tiers thead th { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #111; border-bottom: 0; padding-bottom: 8px; }
+  .tiers .is-cur { background: var(--orange-tint-2); }
+  .tiers thead .is-cur { border-radius: 10px 10px 0 0; color: #B26F00; }
+  .tiers tbody tr:last-child .is-cur { border-radius: 0 0 10px 10px; }
+  .tiers .yes { color: var(--valid); } .tiers .no { color: #C4C4C4; }
+  .cta-bar__in { padding: 20px 22px 16px 25px; }
+</style>
+</head>
+<body>
+<main class="page page--cta" aria-label="Rewards">
+  <header class="phead phead--sub">
+    <a class="phead__back tap" href="profile.html" data-go="back" aria-label="Back">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3.5M10.5 4.5 3 12l7.5 7.5"/></svg>
+    </a>
+    <div class="phead__titles"><h1 class="phead__title">Rewards</h1><p class="phead__sub" id="hdrSub">Gold Member · 4,820 Points</p></div>
+  </header>
+
+  <section class="psheet psheet--grey">
+    <div class="pts enter" role="group" aria-labelledby="ptsK">
+      <span class="pts__glow" aria-hidden="true"></span>
+      <p class="t pts__k" id="ptsK">Points Balance</p>
+      <p class="t pts__tier" id="ptsTier">GOLD</p>
+      <p class="t pts__v" id="ptsV">4,820</p>
+      <p class="t pts__from" id="ptsFrom">Gold</p>
+      <p class="t pts__to" id="ptsTo">Platinum (10,000)</p>
+      <div class="pts__bar" role="progressbar" aria-valuemin="0" aria-valuemax="10000" aria-valuenow="4820" id="ptsBar" aria-label="Progress to Platinum"><i></i></div>
+      <p class="t pts__need" id="ptsNeed">5,180 Points To Platinum</p>
+    </div>
+
+    <h2 class="rw-label enter" style="--i:1">Redeem Points</h2>
+    <div class="tiles" id="tiles" data-delegate></div>
+
+    <h2 class="rw-label enter" style="margin-top:30px;--i:3">Recent Activity</h2>
+    <div class="act enter" id="act" style="--i:3"></div>
+
+    <div id="vchWrap" hidden>
+      <h2 class="rw-label" style="margin-top:26px">Your Vouchers</h2>
+      <div id="vchList"></div>
+    </div>
+
+    <h2 class="rw-label enter" style="margin-top:26px;--i:4">How To Earn</h2>
+    <nav class="earn list enter" style="--i:4" aria-label="Ways to earn points">
+      <a class="list__item tap" href="search.html"><span class="list__icon" data-icon="plane" data-size="20"></span><span class="list__body"><span class="list__title">Book a trip</span><span class="list__sub">1 point per $2 of package price</span></span><span class="badge badge--valid">$2 = 1 Pt</span></a>
+      <a class="list__item tap" href="write-review.html?id=rome"><span class="list__icon" data-icon="star" data-size="20"></span><span class="list__body"><span class="list__title">Review your Rome trip</span><span class="list__sub">Share your experience with the community</span></span><span class="badge badge--valid">+100 Pts</span></a>
+      <button class="list__item tap" type="button" id="refer"><span class="list__icon" data-icon="gift" data-size="20"></span><span class="list__body"><span class="list__title">Refer a friend</span><span class="list__sub">You both get points after their first trip</span></span><span class="badge badge--valid">+500 Pts</span></button>
+      <a class="list__item tap" href="edit-profile.html"><span class="list__icon" data-icon="user" data-size="20"></span><span class="list__body"><span class="list__title">Complete your profile</span><span class="list__sub">Add travel preferences and home airport</span></span><span class="badge badge--valid">+50 Pts</span></a>
+    </nav>
+    <p class="small center mt-16">Points never expire while you travel at least once every 24 months.</p>
+  </section>
+
+  <div class="cta-bar cta-bar--grey"><div class="cta-bar__in">
+    <button class="btn btn--primary" type="button" data-sheet="tierSheet"><span>View Tier Benefits</span></button>
+  </div></div>
+</main>
+
+<!-- Redeem confirm -->
+<section class="sheet" id="redeemSheet" aria-labelledby="rdT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="rdT">Redeem reward</p><p class="sheet__sub" id="rdSub">Points are deducted immediately and the voucher is valid for 12 months.</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div id="rdStep1">
+    <div class="rd-hero"><span class="rd-hero__ic" id="rdIc"></span><div><p class="h-card" id="rdName">$50 Off</p><p class="small" id="rdDesc">Use on any booking over $500</p></div></div>
+    <div class="kvs mt-8">
+      <div><span class="k">Your balance</span><span class="v num" id="rdBal">4,820 Pts</span></div>
+      <div><span class="k">Reward cost</span><span class="v num" id="rdCost">−500 Pts</span></div>
+      <div><span class="k">Balance after</span><span class="v num" id="rdAfter">4,320 Pts</span></div>
+    </div>
+    <div class="banner banner--warn mt-12" id="rdWarn" hidden><span data-icon="warning" data-size="18"></span><span id="rdWarnT">You need 1,180 more points for this reward.</span></div>
+    <div class="sheet__foot"><button class="btn btn--primary" type="button" id="rdGo"><span>Redeem 500 Pts</span></button></div>
+  </div>
+  <div id="rdStep2" hidden>
+    <div class="voucher" aria-live="polite">
+      <p class="voucher__k">Voucher code</p>
+      <p class="voucher__code" id="vCode">VYG-50OFF-7K2Q</p>
+      <div class="voucher__row"><span id="vMeta">$50 Off · valid until Sep 2027</span><button class="copy-btn tap" type="button" id="vCopy">Copy</button></div>
+    </div>
+    <div class="banner banner--ok mt-12"><span data-icon="check" data-size="18"></span><span id="vOk">Redeemed. We’ve saved this voucher to your account and emailed it to you.</span></div>
+    <div class="sheet__foot btn-pair">
+      <button class="btn btn--neutral" type="button" data-close>Done</button>
+      <a class="btn btn--primary" href="search.html" id="vUse"><span>Use Now</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- Tier benefits -->
+<section class="sheet" id="tierSheet" aria-labelledby="tbT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="tbT">Tier benefits</p><p class="sheet__sub" id="tbSub">You’re Gold. 5,180 more points unlock Platinum.</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <table class="tiers" aria-describedby="tbSub">
+    <thead><tr><th scope="col"><span class="sr-only">Benefit</span></th><th scope="col" data-tier="Silver">Silver</th><th scope="col" data-tier="Gold">Gold</th><th scope="col" data-tier="Platinum">Platinum</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Points to reach</th><td data-tier="Silver">0</td><td data-tier="Gold">2,500</td><td data-tier="Platinum">10,000</td></tr>
+      <tr><th scope="row">Points per $2</th><td data-tier="Silver">1</td><td data-tier="Gold">1</td><td data-tier="Platinum">1.5</td></tr>
+      <tr><th scope="row">Free cancel after booking</th><td data-tier="Silver">24 h</td><td data-tier="Gold">72 h</td><td data-tier="Platinum">7 days</td></tr>
+      <tr><th scope="row">Seat upgrades</th><td data-tier="Silver" class="no">—</td><td data-tier="Gold">When free</td><td data-tier="Platinum">Guaranteed</td></tr>
+      <tr><th scope="row">Lounge passes / yr</th><td data-tier="Silver" class="no">—</td><td data-tier="Gold">1</td><td data-tier="Platinum">4</td></tr>
+      <tr><th scope="row">Priority support</th><td data-tier="Silver" class="no">—</td><td data-tier="Gold" class="yes">24/7 line</td><td data-tier="Platinum" class="yes">Own agent</td></tr>
+    </tbody>
+  </table>
+  <div class="mt-16"><p class="small" style="margin-bottom:6px" id="tbProgT">Gold → Platinum</p><div class="pts__bar" style="position:static;height:8px;border-radius:4px" id="tbBar"><i></i></div></div>
+  <div class="sheet__foot"><a class="btn btn--primary" href="search.html"><span>Book A Trip To Earn</span></a></div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const $ = (s) => document.querySelector(s);
+  const REWARDS = [
+    { id: 'off50', name: '$50 Off', pts: 500, icon: 'card', desc: 'Use on any booking over $500', prefix: '50OFF' },
+    { id: 'upgrade', name: 'Free Upgrade', pts: 2000, icon: 'plane', desc: 'One-way economy to business on partner airlines', prefix: 'UPGR' },
+    { id: 'night', name: 'Free Night', pts: 3500, icon: 'building', desc: 'One night at any 4★ Voyager partner hotel', prefix: 'NIGHT' },
+    { id: 'lounge', name: 'Lounge Pass', pts: 1500, icon: 'globe', desc: 'One visit to 1,300+ airport lounges worldwide', prefix: 'LOUNGE' },
+  ];
+  const vouchers = { list: () => V.store.get('vouchers', []), add: (v) => { const l = vouchers.list(); l.unshift(v); V.store.set('vouchers', l); } };
+
+  // ---- points card
+  let shown = V.user.get().points;
+  const renderPoints = (animate) => {
+    const u = V.user.get();
+    const pct = Math.round(V.user.progress() * 1000) / 10;
+    $('#hdrSub').textContent = `${u.tier} Member · ${V.fmtNum(u.points)} Points`;
+    $('#ptsTier').textContent = u.tier.toUpperCase(); $('#ptsFrom').textContent = u.tier;
+    $('#ptsTo').textContent = `${u.nextTier} (${V.fmtNum(u.nextTierAt)})`;
+    $('#ptsNeed').textContent = `${V.fmtNum(V.user.toNext())} Points To ${u.nextTier}`;
+    $('#ptsBar').setAttribute('aria-valuenow', u.points); $('#ptsBar').setAttribute('aria-valuemax', u.nextTierAt);
+    document.querySelectorAll('.pts__bar i').forEach((i) => i.style.setProperty('--p', pct + '%'));
+    $('#tbSub').textContent = `You’re ${u.tier}. ${V.fmtNum(V.user.toNext())} more points unlock ${u.nextTier}.`;
+    $('#tbProgT').textContent = `${u.tier} → ${u.nextTier} · ${pct}%`;
+    const el = $('#ptsV');
+    if (animate && shown !== u.points) {
+      const from = shown, to = u.points, t0 = performance.now();
+      const step = (t) => { const p = Math.min(1, (t - t0) / 700); el.textContent = V.fmtNum(Math.round(from + (to - from) * (1 - Math.pow(1 - p, 3)))); if (p < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step); el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump');
+    } else el.textContent = V.fmtNum(u.points);
+    shown = u.points;
+    renderTiles();
+  };
+
+  // ---- redeem tiles
+  const renderTiles = () => {
+    const bal = V.user.get().points;
+    $('#tiles').innerHTML = REWARDS.map((r, i) => {
+      const locked = bal < r.pts;
+      return `<button class="tile tap enter${locked ? ' is-locked' : ''}" type="button" data-reward="${r.id}" style="--i:${2}" aria-label="${V.esc(r.name)}, ${V.fmtNum(r.pts)} points${locked ? ', needs ' + V.fmtNum(r.pts - bal) + ' more' : ''}">
+        <span class="tile__ic">${V.icon(r.icon, 24, 'stroke-width="1.6"')}</span>
+        <span class="tile__t">${V.esc(r.name)}</span><span class="tile__p">${V.fmtNum(r.pts)} Pts</span>
+        ${locked ? `<span class="tile__lock">${V.icon('lock', 16)}</span><span class="tile__prog" aria-hidden="true"><i style="width:${Math.round(bal / r.pts * 100)}%"></i></span>` : ''}
+      </button>`;
+    }).join('');
+  };
+
+  // ---- activity
+  const renderActivity = () => {
+    const acts = V.user.get().activity;
+    const expanded = $('#act').dataset.all === '1';
+    const rows = expanded ? acts : acts.slice(0, 4);
+    $('#act').innerHTML = rows.map((a) => `<div class="act__row"><span class="act__t">${V.esc(a.label)}${a.date ? `<span class="act__d">${V.esc(a.date)}</span>` : ''}</span><span class="badge ${a.pts >= 0 && a.tone !== 'expiring' ? 'badge--valid' : 'badge--expiring'} num">${a.pts >= 0 ? '+' : '−'}${V.fmtNum(Math.abs(a.pts))} Pts</span></div>`).join('')
+      + (acts.length > 4 ? `<button class="act__more tap" type="button" id="actMore">${expanded ? 'Show less' : `Show all ${acts.length}`}</button>` : '');
+    const m = $('#actMore'); if (m) m.onclick = () => { $('#act').dataset.all = expanded ? '0' : '1'; renderActivity(); };
+  };
+
+  const renderVouchers = () => {
+    const l = vouchers.list(); $('#vchWrap').hidden = !l.length;
+    $('#vchList').innerHTML = l.map((v) => `<div class="vch"><span class="vch__ic">${V.icon('ticket', 20)}</span><div class="grow"><p class="h-card" style="font-size:15px">${V.esc(v.name)}</p><p class="vch__code">${V.esc(v.code)}</p></div><button class="copy-btn tap" type="button" data-copy="${V.esc(v.code)}">${V.icon('copy', 16)}Copy</button></div>`).join('');
+  };
+
+  // ---- redeem flow
+  // The sheet's static content is the $50 Off tile, so a deep-linked ?sheet=redeemSheet acts on it too.
+  let cur = V.q('sheet') === 'redeemSheet' ? REWARDS[0] : null;
+  const code = (r) => `VYG-${r.prefix}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+  const openRedeem = (id) => {
+    cur = REWARDS.find((r) => r.id === id) || REWARDS[0];
+    const bal = V.user.get().points, after = bal - cur.pts, ok = after >= 0;
+    $('#rdStep1').hidden = false; $('#rdStep2').hidden = true;
+    $('#rdT').textContent = `Redeem ${cur.name}`;
+    $('#rdIc').innerHTML = V.icon(cur.icon, 26);
+    $('#rdName').textContent = cur.name; $('#rdDesc').textContent = cur.desc;
+    $('#rdBal').textContent = V.fmtPts(bal); $('#rdCost').textContent = '−' + V.fmtPts(cur.pts);
+    $('#rdAfter').textContent = ok ? V.fmtPts(after) : '—';
+    $('#rdWarn').hidden = ok; $('#rdWarnT').textContent = `You need ${V.fmtNum(-after)} more points for this reward. Book a trip or write a review to earn them.`;
+    const go = $('#rdGo'); go.disabled = !ok; go.querySelector('span').textContent = ok ? `Redeem ${V.fmtNum(cur.pts)} Pts` : 'Not enough points';
+    V.sheet.open('redeemSheet');
+  };
+  document.addEventListener('click', (e) => {
+    const t = e.target.closest('[data-reward]'); if (t) openRedeem(t.dataset.reward);
+    const c = e.target.closest('[data-copy]'); if (c) copy(c.dataset.copy);
+  });
+  const copy = async (txt) => { try { await navigator.clipboard.writeText(txt); } catch (err) {} V.toast(`Copied ${txt}`); };
+  $('#rdGo').addEventListener('click', async (e) => {
+    if (!cur) return;
+    await V.loading(e.currentTarget, 900);
+    if (!V.user.redeem(cur.pts, `${cur.name} Redeemed`)) { V.toast('Not enough points'); return; }
+    const v = { code: code(cur), name: cur.name, at: V.today };
+    vouchers.add(v);
+    $('#vCode').textContent = v.code; $('#vMeta').textContent = `${cur.name} · valid 12 months`;
+    $('#vOk').textContent = `Redeemed. ${V.fmtNum(cur.pts)} points used · ${V.fmtNum(V.user.get().points)} left.`;
+    $('#vUse').href = cur.id === 'night' ? 'hotel.html?id=paris' : cur.id === 'lounge' ? 'e-ticket.html?ref=VYG-4892-PAR' : 'search.html';
+    $('#rdStep1').hidden = true; $('#rdStep2').hidden = false;
+    renderPoints(true); renderActivity(); renderVouchers();
+  });
+  $('#vCopy').innerHTML = V.icon('copy', 16) + 'Copy';
+  $('#vCopy').addEventListener('click', () => copy($('#vCode').textContent));
+
+  $('#refer').addEventListener('click', async () => {
+    const link = 'https://voyager.app/r/ALEX-JOHNSON';
+    if (navigator.share) { try { await navigator.share({ title: 'Travel with Voyager', text: 'Join me on Voyager and we both get 500 points.', url: link }); return; } catch (err) { return; } }
+    try { await navigator.clipboard.writeText(link); } catch (err) {}
+    V.toast('Invite link copied · voyager.app/r/ALEX-JOHNSON');
+  });
+
+  // highlight current tier column
+  const tier = V.user.get().tier;
+  document.querySelectorAll(`.tiers [data-tier="${tier}"]`).forEach((c) => c.classList.add('is-cur'));
+
+  renderPoints(false); renderActivity(); renderVouchers();
+  // animate the bar from 0 on load
+  const bars = document.querySelectorAll('.pts__bar i');
+  if (!document.body.classList.contains('capture')) {
+    const p = bars[0].style.getPropertyValue('--p'); bars.forEach((b) => b.style.setProperty('--p', '0%'));
+    requestAnimationFrame(() => requestAnimationFrame(() => bars.forEach((b) => b.style.setProperty('--p', p))));
+  }
+})();
+</script>
+</body>
+</html>

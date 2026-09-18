@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Welcome</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .splash { height: 874px; min-height: 100vh; cursor: pointer; }
+  .splash.topo::before { animation: sp-drift 26s ease-in-out infinite alternate; }
+  .sp-glow { width: 200px; height: 200px; background: radial-gradient(circle, rgba(252,163,17,.62) 0%, rgba(252,163,17,.26) 24%, rgba(252,163,17,.06) 45%, rgba(252,163,17,0) 60%); animation: sp-breathe 4.8s ease-in-out infinite; }
+  .sp-glow--b { animation-delay: -2.4s; }
+  .sp-logo { left: 114px; top: 300px; width: 172px; height: 172px; box-shadow: 0 0 0 0 rgba(252,163,17,.35); animation: sp-pop 900ms var(--ease-spring) both, sp-ring 2.4s 900ms ease-out infinite; }
+  .sp-logo svg * { stroke-dasharray: 1; stroke-dashoffset: 1; animation: sp-draw 1300ms 250ms var(--ease-out) forwards; }
+  .sp-name { left: -4px; right: 0; top: 511px; text-align: center; font-size: 29.8px; font-weight: 700; color: #fff; letter-spacing: 0; animation: sp-rise 700ms 450ms var(--ease-out) both; }
+  .sp-tag { left: 0; right: 0; top: 558px; text-align: center; font-size: 13px; font-weight: 400; color: var(--orange); letter-spacing: .355em; padding-left: .355em; text-transform: uppercase; animation: sp-track 900ms 650ms var(--ease-out) both; }
+  .sp-bar { left: 171px; top: 806px; width: 60px; height: 3px; border-radius: 2px; background: rgba(255,255,255,.14); overflow: hidden; opacity: 0; animation: fade 400ms 900ms both; }
+  .sp-bar i { display: block; height: 100%; width: 100%; background: var(--orange); transform-origin: left; transform: scaleX(0); animation: sp-load 1300ms 900ms var(--ease-out) forwards; }
+  body.capture .sp-bar { display: none; }
+  body.capture .sp-logo svg * { stroke-dashoffset: 0; }
+  @keyframes sp-pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+  @keyframes sp-ring { 0% { box-shadow: 0 0 0 0 rgba(252,163,17,.35); } 100% { box-shadow: 0 0 0 26px rgba(252,163,17,0); } }
+  @keyframes sp-draw { to { stroke-dashoffset: 0; } }
+  @keyframes sp-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @keyframes sp-track { from { opacity: 0; letter-spacing: .6em; } to { opacity: 1; letter-spacing: .355em; } }
+  @keyframes sp-breathe { 0%, 100% { opacity: .85; transform: scale(1); } 50% { opacity: 1; transform: scale(1.12); } }
+  @keyframes sp-drift { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-6px, -14px, 0); } }
+  @keyframes sp-load { to { transform: scaleX(1); } }
+  .sp-out { animation: sp-out 320ms var(--ease-out) forwards; }
+  @keyframes sp-out { to { opacity: 0; transform: scale(1.03); } }
+</style>
+</head>
+<body>
+<main class="screen splash topo" id="splash" aria-label="Voyager — your world awaits" role="button" tabindex="0" data-action="continue">
+  <span class="glow sp-glow" style="left:230px;top:-5px" aria-hidden="true"></span>
+  <span class="glow sp-glow sp-glow--b" style="left:-50px;top:720px" aria-hidden="true"></span>
+  <div class="abs logo sp-logo" data-logo aria-hidden="true"></div>
+  <h1 class="t sp-name">VOYAGER</h1>
+  <p class="t sp-tag">Your World Awaits</p>
+  <div class="abs sp-bar" aria-hidden="true"><i></i></div>
+</main>
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const V = window.Voyager;
+    const el = document.getElementById('splash');
+    // Draw-on monogram: normalise every stroke to length 1
+    el.querySelectorAll('.sp-logo svg circle, .sp-logo svg path').forEach((p) => p.setAttribute('pathLength', '1'));
+
+    // Always the first-run path: onboarding is the demo's entry, so a returning visitor
+    // (voyager:signedIn left in localStorage) must not be shortcut past it to Home.
+    const next = 'onboarding-1.html';
+    let gone = false;
+    const leave = () => {
+      if (gone) return; gone = true;
+      el.classList.add('sp-out');
+      setTimeout(() => { location.href = next; }, 300);
+    };
+    el.addEventListener('click', leave);
+    el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); leave(); } });
+    if (!document.body.classList.contains('capture')) setTimeout(leave, 2200);
+  })();
+</script>
+</body>
+</html>

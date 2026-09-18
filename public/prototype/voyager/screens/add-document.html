@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Add Document</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .ad-label { display: block; margin: 26px 0 12px 2px; }
+  .ad-label:first-child { margin-top: 4px; }
+  .types { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .type { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; height: 84px; border-radius: 12px; background: var(--grey-1); box-shadow: inset 0 0 0 1px transparent; font-size: 12.5px; font-weight: 600; color: #222; text-align: center; transition: background var(--dur), box-shadow var(--dur), transform var(--dur) var(--ease-out); }
+  .type svg { color: var(--navy); }
+  .type:active { transform: scale(.97); }
+  .type[aria-checked="true"] { background: var(--orange-tint); box-shadow: inset 0 0 0 1.5px var(--orange); }
+  .type[aria-checked="true"] svg { color: #B26F00; }
+  .cap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cap__tile { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; min-height: 104px; padding: 16px; border-radius: 12px; border: 1.5px dashed #C9CDD6; background: #FAFBFC; text-align: left; color: #111; transition: border-color var(--dur), background var(--dur); }
+  .cap__tile:hover { border-color: var(--orange); background: var(--orange-tint-2); }
+  .cap__ic { width: 38px; height: 38px; border-radius: 10px; background: var(--navy); color: var(--orange); display: grid; place-items: center; }
+  .cap__t { font-size: 14px; font-weight: 600; } .cap__s { font-size: 11.5px; color: var(--text-4); margin-top: -6px; }
+  .shot { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: #E8F8E3; }
+  .shot__thumb { width: 64px; height: 44px; border-radius: 6px; overflow: hidden; flex-shrink: 0; background: linear-gradient(135deg, #3B4A6B, #9AA5BC); position: relative; }
+  .shot__thumb::after { content: ''; position: absolute; left: 6px; top: 7px; width: 16px; height: 20px; border-radius: 3px; background: rgba(255,255,255,.55); box-shadow: 22px 2px 0 -4px rgba(255,255,255,.4), 22px 10px 0 -4px rgba(255,255,255,.4); }
+  .shot__t { font-size: 13.5px; font-weight: 600; color: #1F6B1F; } .shot__s { font-size: 12px; color: #3B7A3B; }
+  select.field { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4.5 9 7.5 7.5L19.5 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px; }
+  input[type="date"].field { padding-right: 10px; }
+  .fg[hidden] { display: none; }
+  /* Camera sheet */
+  .cam { position: relative; height: 360px; margin: 0 -24px; background: radial-gradient(ellipse at 50% 40%, #2B3753, #0B1222 75%); overflow: hidden; }
+  .cam__frame { position: absolute; left: 36px; right: 36px; top: 70px; height: 200px; border-radius: 14px; }
+  .cam__frame i { position: absolute; width: 28px; height: 28px; border: 3px solid var(--orange); }
+  .cam__frame i:nth-child(1) { left: 0; top: 0; border-right: 0; border-bottom: 0; border-radius: 12px 0 0 0; }
+  .cam__frame i:nth-child(2) { right: 0; top: 0; border-left: 0; border-bottom: 0; border-radius: 0 12px 0 0; }
+  .cam__frame i:nth-child(3) { left: 0; bottom: 0; border-right: 0; border-top: 0; border-radius: 0 0 0 12px; }
+  .cam__frame i:nth-child(4) { right: 0; bottom: 0; border-left: 0; border-top: 0; border-radius: 0 0 12px 0; }
+  .cam__doc { position: absolute; left: 50px; right: 50px; top: 86px; height: 168px; border-radius: 10px; background: linear-gradient(135deg, #D8DEE8, #AEB8C9); opacity: .78; transform: rotate(-2deg); }
+  .cam__doc::before { content: ''; position: absolute; left: 16px; top: 22px; width: 52px; height: 66px; border-radius: 5px; background: #8B96AA; }
+  .cam__doc::after { content: ''; position: absolute; left: 16px; right: 16px; bottom: 16px; height: 22px; background: repeating-linear-gradient(90deg, #7D889C 0 6px, transparent 6px 9px); opacity: .6; border-radius: 3px; }
+  .cam__scan { position: absolute; left: 40px; right: 40px; top: 74px; height: 2px; background: linear-gradient(90deg, transparent, var(--orange), transparent); box-shadow: 0 0 14px var(--orange); animation: scanl 1.8s ease-in-out infinite alternate; }
+  @keyframes scanl { to { transform: translateY(192px); } }
+  .cam__hint { position: absolute; left: 0; right: 0; top: 24px; text-align: center; color: #fff; font-size: 13px; font-weight: 500; }
+  .cam__state { position: absolute; left: 0; right: 0; bottom: 30px; text-align: center; color: #C4C7CF; font-size: 12px; }
+  .cam__flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+  .cam.flash .cam__flash { animation: flash 420ms ease-out; }
+  @keyframes flash { 0% { opacity: .95; } 100% { opacity: 0; } }
+  .shutter { width: 72px; height: 72px; margin: 18px auto 0; border-radius: 50%; background: #fff; box-shadow: 0 0 0 4px #fff, 0 0 0 7px var(--navy); display: grid; place-items: center; color: var(--navy); }
+  .shutter:active { transform: scale(.94); }
+</style>
+</head>
+<body>
+<main class="page page--cta" aria-label="Add document">
+  <header class="phead">
+    <a class="phead__back tap" href="documents.html" data-go="back" aria-label="Back">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3.5M10.5 4.5 3 12l7.5 7.5"/></svg>
+    </a>
+    <div class="phead__titles"><h1 class="phead__title">Add Document</h1></div>
+  </header>
+
+  <section class="psheet">
+    <form id="form" novalidate autocomplete="off">
+      <p class="caps ad-label enter" id="typeLabel">Document Type</p>
+      <div class="types enter" id="types" data-options aria-labelledby="typeLabel" style="--i:1"></div>
+
+      <p class="caps ad-label enter" id="capLabel" style="--i:2">Scan Or Upload</p>
+      <div class="cap enter" id="capTiles" style="--i:2">
+        <button class="cap__tile tap" type="button" id="openCam"><span class="cap__ic" data-icon="camera" data-size="22"></span><span class="cap__t">Scan with camera</span><span class="cap__s">We’ll read the details for you</span></button>
+        <label class="cap__tile tap" for="file" tabindex="0" role="button"><span class="cap__ic" data-icon="upload" data-size="22"></span><span class="cap__t">Upload file</span><span class="cap__s">PDF, JPG or PNG · max 10 MB</span><input type="file" id="file" accept="image/*,application/pdf" class="sr-only"></label>
+      </div>
+      <div class="shot mt-12" id="shot" hidden role="status">
+        <span class="shot__thumb" aria-hidden="true"></span>
+        <div class="grow"><p class="shot__t" id="shotT">Photo page captured</p><p class="shot__s" id="shotS">Sharp and readable · 2.1 MB</p></div>
+        <button class="btn btn--xs btn--neutral btn--inline" type="button" id="retake">Retake</button>
+      </div>
+
+      <p class="caps ad-label enter" style="--i:3">Details</p>
+      <div class="fg" data-types="all">
+        <label class="label" for="dName">Document name<span class="req">*</span></label>
+        <input class="field" id="dName" data-validate="required" maxlength="40" value="UK Passport">
+      </div>
+      <div class="fg" data-types="visa">
+        <label class="label" for="dVisa">Visa type<span class="req">*</span></label>
+        <select class="field" id="dVisa" data-validate="required"><option value="">Select visa type</option><option>Tourist</option><option>Schengen (short stay)</option><option>ETIAS travel authorisation</option><option>Business</option><option>Transit</option></select>
+      </div>
+      <div class="fg" data-types="insurance">
+        <label class="label" for="dProv">Insurance provider<span class="req">*</span></label>
+        <input class="field" id="dProv" data-validate="required" placeholder="e.g. Voyager Cover by Allianz">
+      </div>
+      <div class="fg" data-types="vaccination">
+        <label class="label" for="dVac">Vaccine<span class="req">*</span></label>
+        <select class="field" id="dVac" data-validate="required"><option value="">Select vaccine</option><option>Yellow fever</option><option>Hepatitis A</option><option>Typhoid</option><option>COVID-19</option><option>Japanese encephalitis</option></select>
+      </div>
+      <div class="fg" data-types="passport visa id licence insurance">
+        <label class="label" for="dNum" id="numLabel">Passport number<span class="req">*</span></label>
+        <input class="field num" id="dNum" data-validate="required|passport" data-mask="passport" placeholder="e.g. 123456789" inputmode="text" autocapitalize="characters">
+        <span class="helper" id="numHelp">6–9 letters or digits, as printed on the photo page</span>
+      </div>
+      <div class="fg" data-types="passport visa id licence">
+        <label class="label" for="dCountry" id="ctyLabel">Issuing country<span class="req">*</span></label>
+        <select class="field" id="dCountry" data-validate="required">
+          <option value="">Select country</option><option value="GBR" selected>United Kingdom</option><option value="IRL">Ireland</option><option value="FRA">France</option><option value="DEU">Germany</option><option value="ESP">Spain</option><option value="ITA">Italy</option><option value="SCH">Schengen Area</option><option value="USA">United States</option><option value="CAN">Canada</option><option value="AUS">Australia</option><option value="IND">India</option><option value="JPN">Japan</option>
+        </select>
+      </div>
+      <div class="field-row" id="dateRow">
+        <div class="fg" data-types="passport visa id licence vaccination" style="margin-top:16px">
+          <label class="label" for="dIssue" id="issueLabel">Issue date<span class="req">*</span></label>
+          <input class="field" type="date" id="dIssue" data-validate="required" max="2026-12-31">
+        </div>
+        <div class="fg" data-types="passport visa id licence insurance" style="margin-top:16px">
+          <label class="label" for="dExp" id="expLabel">Expiry date<span class="req">*</span></label>
+          <input class="field" type="date" id="dExp" data-validate="required">
+        </div>
+      </div>
+      <div class="fg" data-types="insurance">
+        <label class="label" for="dEm">Emergency assistance line</label>
+        <input class="field" type="tel" id="dEm" data-validate="phone" data-mask="phone" placeholder="+44 20 7946 0000">
+      </div>
+      <div class="banner banner--info mt-16" id="tip"><span data-icon="shield-check" data-size="18"></span><span>Documents are encrypted on your device and only shared when you choose to.</span></div>
+    </form>
+  </section>
+
+  <div class="cta-bar"><div class="cta-bar__in">
+    <button class="btn btn--primary" type="submit" form="form" id="save"><span>Save Document</span></button>
+  </div></div>
+</main>
+
+<!-- Camera -->
+<section class="sheet" id="camSheet" aria-labelledby="camT" style="background:#0B1222;color:#fff">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="camT" style="color:#fff">Scan passport</p><p class="sheet__sub" style="color:#C4C7CF" id="camSub">Use good light and avoid glare.</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close camera"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="cam" id="cam" role="img" aria-label="Camera viewfinder">
+    <p class="cam__hint" id="camHint">Align the photo page inside the frame</p>
+    <div class="cam__doc"></div>
+    <div class="cam__frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <span class="cam__scan" id="camScan"></span>
+    <p class="cam__state" id="camState" aria-live="polite">Looking for document edges…</p>
+    <span class="cam__flash"></span>
+  </div>
+  <button class="shutter tap" type="button" id="shutter" aria-label="Capture photo"><span data-icon="camera" data-size="28"></span></button>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const $ = (s) => document.querySelector(s);
+  const TYPES = [
+    { id: 'passport', label: 'Passport', icon: 'passport', name: 'UK Passport', num: 'Passport number', help: '6–9 letters or digits, as printed on the photo page', rule: 'required|passport', mask: 'passport', ph: 'e.g. 123456789' },
+    { id: 'visa', label: 'Visa', icon: 'file', name: 'Visa', num: 'Visa number', help: 'Printed at the top right of the visa sticker', rule: 'required', ph: 'e.g. FRA 0098341', cty: 'Issued for' },
+    { id: 'id', label: 'ID card', icon: 'id-card', name: 'National ID Card', num: 'Card number', help: 'Found on the front of the card', rule: 'required', ph: 'e.g. IDGBR7741902' },
+    { id: 'licence', label: "Driver's licence", icon: 'car', name: "Driver's Licence", num: 'Licence number', help: 'Field 5 on UK photocard licences', rule: 'required', ph: 'e.g. JOHNS901146AJ9' },
+    { id: 'insurance', label: 'Insurance', icon: 'shield-check', name: 'Travel Insurance', num: 'Policy number', help: 'On your policy certificate', rule: 'required', ph: 'e.g. VYG-INS-77120', exp: 'Cover ends' },
+    { id: 'vaccination', label: 'Vaccination', icon: 'plus', name: 'Vaccination Record', issue: 'Date given' },
+  ];
+  const TYPE_ICON = { passport: 'book', visa: 'file', id: 'id-card', licence: 'id-card', insurance: 'shield-check', vaccination: 'shield' };
+  $('#types').innerHTML = TYPES.map((t) => `<button class="type" type="button" data-option data-value="${t.id}" aria-checked="false">${V.icon(t.icon, 26)}<span>${V.esc(t.label)}</span></button>`).join('');
+  V.refresh($('#types'));
+
+  let type = 'passport', captured = false, nameTouched = false;
+  const setType = (id) => {
+    type = id; const t = TYPES.find((x) => x.id === id) || TYPES[0];
+    $('#types').select(id);
+    document.querySelectorAll('[data-types]').forEach((fg) => { const on = fg.dataset.types === 'all' || fg.dataset.types.split(' ').includes(id); fg.hidden = !on; fg.classList.remove('has-error'); });
+    if (!nameTouched) $('#dName').value = id === 'passport' ? `${$('#dCountry').value === 'GBR' || !$('#dCountry').value ? 'UK' : $('#dCountry').selectedOptions[0].text} Passport` : t.name;
+    const num = $('#dNum');
+    if (t.num) { $('#numLabel').innerHTML = `${V.esc(t.num)}<span class="req">*</span>`; $('#numHelp').textContent = t.help; num.dataset.validate = t.rule; num.placeholder = t.ph; if (t.mask) num.dataset.mask = t.mask; else delete num.dataset.mask; }
+    $('#ctyLabel').innerHTML = `${t.cty || 'Issuing country'}<span class="req">*</span>`;
+    $('#expLabel').innerHTML = `${t.exp || 'Expiry date'}<span class="req">*</span>`;
+    $('#issueLabel').innerHTML = `${t.issue || 'Issue date'}<span class="req">*</span>`;
+    $('#dateRow').style.gridTemplateColumns = (id === 'vaccination' || id === 'insurance') ? '1fr' : '';
+    $('#camT').textContent = `Scan ${t.label.toLowerCase()}`;
+    $('#capLabel').textContent = id === 'vaccination' ? 'Upload Certificate' : 'Scan Or Upload';
+  };
+  $('#types').addEventListener('select', (e) => setType(e.detail));
+  $('#dName').addEventListener('input', () => { nameTouched = true; });
+  $('#dCountry').addEventListener('change', () => { if (type === 'passport' && !nameTouched) setType('passport'); });
+
+  // ---- camera (simulated)
+  const genNum = () => ({ passport: String(5e8 + Math.floor(Math.random() * 4e8)), visa: 'FRA' + Math.floor(1e6 + Math.random() * 8e6), id: 'IDGBR' + Math.floor(1e6 + Math.random() * 8e6), licence: 'JOHNS901146AJ9', insurance: 'VYG-INS-' + Math.floor(80000 + Math.random() * 9999) }[type]);
+  $('#openCam').addEventListener('click', () => { $('#camState').textContent = 'Looking for document edges…'; $('#shutter').disabled = false; V.sheet.open('camSheet'); setTimeout(() => { $('#camState').textContent = 'Document detected · hold still'; }, 900); });
+  $('#shutter').addEventListener('click', async () => {
+    const cam = $('#cam'); cam.classList.remove('flash'); void cam.offsetWidth; cam.classList.add('flash'); V.haptic();
+    $('#shutter').disabled = true; $('#camState').textContent = 'Reading details…';
+    await V.wait(1000);
+    V.sheet.close();
+    const n = genNum(); if (n) $('#dNum').value = n;
+    if (type !== 'vaccination' && type !== 'insurance') $('#dIssue').value = type === 'passport' ? '2021-04-09' : '2025-11-03';
+    if (type !== 'vaccination') $('#dExp').value = type === 'passport' ? '2031-04-08' : type === 'visa' ? '2027-11-02' : '2029-06-30';
+    if (type === 'vaccination') { $('#dVac').value = 'Yellow fever'; $('#dIssue').value = '2026-07-14'; }
+    showShot('Photo captured', 'Details filled in · please check them');
+    V.toast('Details read from your scan — please check them');
+  });
+  const showShot = (t, s) => { captured = true; $('#shot').hidden = false; $('#shotT').textContent = t; $('#shotS').textContent = s; $('#capTiles').hidden = true; };
+  $('#retake').addEventListener('click', () => { captured = false; $('#shot').hidden = true; $('#capTiles').hidden = false; $('#file').value = ''; });
+  $('#file').addEventListener('change', (e) => {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    if (f.size > 10 * 1024 * 1024) { V.toast('That file is over 10 MB — try a smaller one'); e.target.value = ''; return; }
+    showShot(f.name.length > 28 ? f.name.slice(0, 25) + '…' : f.name, `${(f.size / 1048576).toFixed(1)} MB · uploaded`);
+  });
+  document.querySelector('label.cap__tile').addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('#file').click(); } });
+
+  // ---- validation helpers
+  const setErr = (inp, msg) => {
+    const fg = inp.closest('.fg'); fg.classList.add('has-error'); inp.setAttribute('aria-invalid', 'true');
+    let et = fg.querySelector('.error-text'); if (!et) { et = document.createElement('span'); et.className = 'error-text'; et.setAttribute('role', 'alert'); fg.appendChild(et); }
+    et.innerHTML = V.icon('warning', 14, 'stroke-width="2"') + `<span>${V.esc(msg)}</span>`;
+  };
+  const monYr = (iso) => { const d = V.date.parse(iso); return `${V.date.MON[d.getMonth()]} ${d.getFullYear()}`; };
+
+  $('#form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!V.validate($('#form'))) return;
+    const today = V.today;
+    const iss = $('#dIssue'), exp = $('#dExp');
+    const issOn = !iss.closest('.fg').hidden, expOn = !exp.closest('.fg').hidden;
+    if (issOn && iss.value > today) { setErr(iss, 'Issue date can’t be in the future'); iss.focus(); return; }
+    if (expOn && exp.value <= today) { setErr(exp, 'This document has expired — add a valid one'); exp.focus(); return; }
+    if (issOn && expOn && exp.value <= iss.value) { setErr(exp, 'Expiry must be after the issue date'); exp.focus(); return; }
+    if (type === 'passport' && V.documents.list().some((d) => d.type === 'passport' && d.number === $('#dNum').value.trim())) { setErr($('#dNum'), 'This passport is already saved'); $('#dNum').focus(); return; }
+    const months = expOn ? V.date.nights(today, exp.value) / 30.4 : 99;
+    const doc = {
+      type, name: $('#dName').value.trim(),
+      number: type === 'vaccination' ? ($('#dVac').value || 'Certificate') : $('#dNum').value.trim().toUpperCase(),
+      country: type === 'insurance' || type === 'vaccination' ? 'GBR' : $('#dCountry').value,
+      issued: issOn && iss.value ? monYr(iss.value) : '',
+      expires: expOn ? monYr(exp.value) : '',
+      status: months < 6 ? 'expiring' : 'valid',
+      icon: TYPE_ICON[type], scanned: captured,
+    };
+    if (type === 'visa') doc.name = doc.name === 'Visa' ? `${$('#dVisa').value} Visa`.replace('ETIAS travel authorisation Visa', 'ETIAS Authorisation') : doc.name;
+    if (type === 'insurance') doc.provider = $('#dProv').value.trim();
+    await V.loading($('#save'), 1000);
+    const d = V.documents.add(doc);
+    location.href = `documents.html?added=${encodeURIComponent(d.id)}`;
+  });
+
+  // ---- init
+  setType(V.q('type') && TYPES.some((t) => t.id === V.q('type')) ? V.q('type') : 'passport');
+  $('#dIssue').max = V.today;
+})();
+</script>
+</body>
+</html>

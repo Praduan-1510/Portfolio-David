@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager — Live prototype</title>
+<meta name="description" content="Voyager: plan, book and manage a trip in one app. Live, tappable iPhone prototype.">
+<meta name="theme-color" content="#0F1A31">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 172 172'%3E%3Ccircle cx='86' cy='86' r='86' fill='%23FCA311'/%3E%3Cg fill='none' stroke='%2314213D' stroke-width='7' stroke-linecap='round' stroke-linejoin='round' transform='translate(17 17) scale(.8)'%3E%3Ccircle cx='86' cy='67.5' r='33.5'/%3E%3Cpath d='M32 40 86 139 138 40M33 138 86 35 139 138M59 89h53M86 34v105M67 41l19 46 19-46M86 67.5h32'/%3E%3C/g%3E%3C/svg%3E">
+<script>
+  /* Fresh start on every launch: forget the previous visitor's demo state (sign-in, bookings,
+     redeemed points, a cancelled trip) BEFORE the phone's first screen loads. ?resume=1 keeps it. */
+  (function () {
+    if (new URLSearchParams(location.search).get('resume') === '1') return;
+    [window.localStorage, window.sessionStorage].forEach(function (s) {
+      try { for (let i = s.length - 1; i >= 0; i--) { const k = s.key(i); if (k && k.indexOf('voyager:') === 0) s.removeItem(k); } } catch (e) {}
+    });
+  })();
+</script>
+<style>
+  :root {
+    --night: #0F1A31;          /* a shade under the app navy, as on the prototype's own index */
+    --navy: #14213D;
+    --navy-2: #1B2A4A;
+    --amber: #FCA311;
+    --amber-soft: #FFD18A;
+    --tint: #FFE7C1;
+    --sky: #69A9F5;            /* the app's active-tab blue */
+    --text: #F4F1EA;
+    --soft: #C9CFDB;
+    --muted: #A9B1C3;
+    --dim: #76819A;
+    --line: rgba(255,255,255,.09);
+    --line-2: rgba(255,255,255,.16);
+    --ease: cubic-bezier(.22,1,.36,1);
+    --display: 'Poppins', system-ui, sans-serif;
+    --ui: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --s: 1; /* handset scale, set by fit() */
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--night); color: var(--text); overflow-x: clip; }
+  body { font-family: var(--ui); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; border-radius: 8px; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  /* ── Phone first: the app IS the viewport ─────────────────────────────── */
+  .stage { min-height: 100dvh; }
+  .side, .hs-island, .hs-btn, .aura, .topo { display: none; }
+  .hs-box, .handset { position: static; }
+  #phone {
+    position: fixed; top: 0; left: 0; display: block; border: 0; background: var(--navy);
+    width: 100vw; height: 100dvh;
+  }
+
+  /* ── Desktop stage ─────────────────────────────────────────────────────── */
+  @media (min-width: 880px) {
+    /* Atmosphere: the splash's two amber glows and its contour lines, at room scale */
+    .aura, .topo { display: block; position: fixed; inset: 0; pointer-events: none; }
+    .aura {
+      background:
+        radial-gradient(820px 600px at 84% -6%, rgba(252,163,17,.17), transparent 62%),
+        radial-gradient(700px 520px at -4% 106%, rgba(252,163,17,.10), transparent 62%),
+        radial-gradient(900px 700px at 40% 50%, rgba(27,42,74,.55), transparent 70%),
+        linear-gradient(180deg, #0F1A31 0%, #111D37 60%, #0D1629 100%);
+    }
+    .topo { opacity: .075;
+      background: url('assets/css/topo.svg') 0 0 / 804px 1748px repeat;
+      -webkit-mask-image: radial-gradient(110% 90% at 72% 30%, #000 25%, transparent 78%);
+              mask-image: radial-gradient(110% 90% at 72% 30%, #000 25%, transparent 78%); }
+
+    .stage {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: minmax(300px, 388px) auto;
+      gap: clamp(40px, 5.5vw, 84px); justify-content: center; align-items: center;
+      padding: 24px 32px;
+    }
+
+    /* Side panel */
+    .side { display: flex; flex-direction: column; gap: clamp(12px, 2.2vh, 22px); min-width: 0; }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .brand-mark { width: 52px; height: 52px; flex: none; border-radius: 50%; background: var(--amber); color: var(--navy); display: grid; place-items: center;
+      box-shadow: 0 0 0 5px rgba(252,163,17,.13), 0 10px 30px -6px rgba(252,163,17,.45); }
+    .brand-name { font-family: var(--display); font-size: 25px; font-weight: 700; letter-spacing: .2em; line-height: 1; margin: 0; }
+    .tagline { font-family: var(--display); font-size: 11px; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--amber); margin: 8px 0 0; }
+    .desc { margin: 0; font-size: 14px; line-height: 1.62; color: var(--soft); max-width: 40ch; }
+
+    /* The demo trip, set as a route strip: the one booking every figure in the app reconciles to */
+    .route { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 4px 12px; padding: 11px 16px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(27,42,74,.9), rgba(20,33,61,.7)); box-shadow: inset 0 0 0 1px var(--line), 0 18px 40px -24px rgba(0,0,0,.8); }
+    .route__ap { font-family: var(--display); font-weight: 700; font-size: 20px; letter-spacing: .06em; line-height: 1; }
+    .route__ap small { display: block; margin-top: 5px; font-family: var(--ui); font-weight: 500; font-size: 10.5px; letter-spacing: .04em; color: var(--dim); }
+    .route__ap:last-child { text-align: right; }
+    .route__line { position: relative; height: 22px; }
+    .route__line svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .route__line .arc { stroke: rgba(252,163,17,.55); stroke-width: 1.4; stroke-dasharray: 3 5; fill: none; }
+    .route__plane { position: absolute; left: 50%; top: -4px; width: 18px; height: 18px; margin-left: -9px; color: var(--amber); }
+    .route__meta { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 10px; padding-top: 8px; margin-top: 4px; border-top: 1px dashed var(--line-2); font-size: 11.5px; color: var(--muted); }
+    .route__meta b { color: var(--amber); font-weight: 600; }
+
+    .eyebrow { display: flex; align-items: center; gap: 12px; margin: 0 0 12px; font-family: var(--display); font-size: 11.5px; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; color: var(--amber); }
+    .eyebrow::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--line-2), transparent); }
+
+    /* "Things worth trying", drawn like the app's itinerary timeline: dots on a rail */
+    .tries { list-style: none; margin: 0; padding: 0; counter-reset: t; position: relative; }
+    .tries::before { content: ''; position: absolute; left: 11px; top: 14px; bottom: 16px; width: 2px; border-radius: 2px;
+      background: linear-gradient(180deg, var(--amber) 0 22%, rgba(255,255,255,.14) 22% 100%); }
+    .tries li { counter-increment: t; position: relative; padding: 2px 0 clamp(7px, 1.3vh, 12px) 38px; font-size: 13px; line-height: 1.5; color: var(--soft); }
+    .tries li:last-child { padding-bottom: 0; }
+    .tries li::before { content: counter(t); position: absolute; left: 0; top: 0; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center;
+      font-family: var(--display); font-size: 11.5px; font-weight: 600; background: var(--navy-2); color: var(--soft); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.18), 0 0 0 4px var(--night); }
+    .tries li:first-child::before { background: var(--amber); color: var(--navy); box-shadow: 0 0 0 4px var(--night); }
+    .tries .k { font-family: var(--display); font-size: 10px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--dim); margin-right: 7px; }
+    .tries b { color: var(--text); font-weight: 600; }
+    .tries .amt { font-weight: 600; color: var(--amber); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .tries code { font-family: var(--display); font-size: 11.5px; font-weight: 600; letter-spacing: .06em; padding: 1px 6px; border-radius: 5px; background: rgba(252,163,17,.12); color: var(--amber-soft); box-shadow: inset 0 0 0 1px rgba(252,163,17,.3); }
+
+    /* Jump to: the app's pill chips, amber when active */
+    .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+    .chip { height: 32px; padding: 0 13px; border-radius: 999px; font-size: 12.5px; font-weight: 500; color: var(--soft); background: rgba(255,255,255,.035); box-shadow: inset 0 0 0 1px var(--line-2);
+      transition: background .25s var(--ease), color .25s var(--ease), box-shadow .25s var(--ease), transform .25s var(--ease); }
+    .chip:hover { background: rgba(255,255,255,.08); color: var(--text); }
+    .chip:active { transform: scale(.97); }
+    .chip[aria-pressed="true"] { background: var(--amber); color: var(--navy); font-weight: 600; box-shadow: 0 8px 22px -8px rgba(252,163,17,.65); }
+    .chip--restart { display: inline-flex; align-items: center; gap: 6px; color: var(--amber-soft); background: transparent; box-shadow: inset 0 0 0 1px rgba(252,163,17,.38); }
+    .chip--restart:hover { background: rgba(252,163,17,.1); color: var(--amber); }
+    .chip--restart svg { transition: transform .5s var(--ease); }
+    .chip--restart:hover svg { transform: rotate(-200deg); }
+
+    /* Now showing: a line off a departures board */
+    .bar { display: flex; align-items: center; gap: 10px; margin-top: 10px; min-width: 0; }
+    .now { margin: 0; min-width: 0; display: flex; align-items: center; gap: 10px; min-height: 30px; padding: 6px 12px 6px 10px; border-radius: 8px; width: fit-content; max-width: 100%;
+      background: rgba(10,17,33,.7); box-shadow: inset 0 0 0 1px var(--line); font-size: 12px; color: var(--dim); }
+    .now i { width: 7px; height: 7px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 0 3px rgba(252,163,17,.18); flex: none; animation: blink 2.4s ease-in-out infinite; }
+    .now .k { font-family: var(--display); font-weight: 600; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; white-space: nowrap; }
+    .now b { font-family: var(--display); font-weight: 600; font-size: 13px; letter-spacing: .02em; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .foot { font-size: 12px; line-height: 1.75; color: var(--dim); padding-top: 14px; border-top: 1px solid var(--line); }
+    .foot a { color: var(--amber-soft); text-decoration: none; white-space: nowrap; }
+    .foot a:hover { color: var(--amber); text-decoration: underline; text-underline-offset: 3px; }
+
+    /* Handset: 402×874 screen + 12px bezel, navy titanium. Scaled as one piece by fit(). */
+    .hs-box { position: relative; width: calc(426px * var(--s)); height: calc(898px * var(--s)); }
+    .hs-box::before { content: ''; position: absolute; inset: 6% -20%; border-radius: 50%; pointer-events: none;
+      background: radial-gradient(closest-side, rgba(252,163,17,.2), rgba(252,163,17,.05) 55%, transparent); filter: blur(22px); }
+    .handset { position: absolute; top: 0; left: 0; width: 426px; height: 898px; padding: 12px; border-radius: 64px;
+      transform: scale(var(--s)); transform-origin: 0 0;
+      background: linear-gradient(145deg, #3a4356, #151c2b 40%, #28324a);
+      box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.16), inset 0 0 0 5px #070b14,
+        0 60px 110px -24px rgba(0,0,0,.85), 0 30px 60px -30px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.04); }
+    .hs-btn { display: block; position: absolute; width: 4px; background: linear-gradient(90deg, #2c3446, #1c2232); }
+    .hs-btn--l { left: -3px; border-radius: 2px 0 0 2px; }
+    .hs-btn--r { right: -3px; border-radius: 0 2px 2px 0; top: 250px; height: 100px; }
+    .hs-btn--a { top: 150px; height: 32px; }
+    .hs-btn--b { top: 212px; height: 62px; }
+    .hs-btn--c { top: 288px; height: 62px; }
+    #phone { position: static; width: 402px; height: 874px; border-radius: 52px; transform: none; }
+    .hs-island { display: block; position: absolute; z-index: 3; top: 23px; left: 50%; width: 124px; height: 36px; margin-left: -62px; border-radius: 20px; background: #000; pointer-events: none;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.04); }
+    .hs-island::after { content: ''; position: absolute; right: 13px; top: 12px; width: 12px; height: 12px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #2a3a55, #0b0f18 60%); }
+
+    /* Entrance: one orchestrated load. Transform/opacity only, so nothing shifts. */
+    .js .side > * { animation: rise .9s var(--ease) both; animation-delay: calc(120ms + var(--i, 0) * 70ms); }
+    .js .hs-box { animation: lift 1.1s var(--ease) 60ms both; }
+    .js .route__plane { animation: fly 1.6s var(--ease) 420ms both; }
+
+    /* Fitting the panel (last in the block so these win over the rules above) */
+    @media (max-height: 820px) { .desc { font-size: 13.5px; line-height: 1.55; } .eyebrow { margin-bottom: 9px; } .chip { height: 30px; } .foot { padding-top: 10px; } }
+    /* Short windows (a 13" laptop with the browser chrome, a landscape tablet): keep the whole panel on screen */
+    @media (max-height: 760px) { .desc, .foot__note { display: none; } .tries li { font-size: 12.5px; line-height: 1.45; } .route { padding: 9px 14px; } }
+    /* Narrow desktop: push the pair right so the brand clears the portfolio's top-left "Case study" link */
+    @media (max-width: 1180px) { .stage { justify-content: end; } }
+    @media (max-width: 960px) { .stage { grid-template-columns: 340px auto; } .tries .k, .now .k { display: none; } .chip { padding: 0 10px; font-size: 12px; } }
+    @media (max-height: 720px) { .route { display: none; } }
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+  @keyframes lift { from { opacity: 0; transform: translateY(48px) scale(.975); } }
+  @keyframes fly { from { opacity: 0; transform: translateX(-60px); } }
+  @keyframes blink { 50% { opacity: .35; } }
+  @media (prefers-reduced-motion: reduce) {
+    .js .side > *, .js .hs-box, .js .route__plane, .now i { animation: none !important; }
+    .chip, .chip--restart svg { transition: none; }
+  }
+</style>
+<script defer src="/prototype/_shared/case-link.js" data-href="/work/voyager" data-label="Back to the Voyager case study" data-position="top-left short; (max-width: 879px) top-center 0 compact"></script>
+</head>
+<body>
+<script>document.documentElement.classList.add('js');</script>
+<div class="aura" aria-hidden="true"></div>
+<div class="topo" aria-hidden="true"></div>
+
+<main class="stage">
+  <!-- Desktop-only context panel. On a phone the app fills the screen and this is hidden. -->
+  <aside class="side" aria-label="About this prototype">
+    <div class="brand" style="--i:0">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 172 172" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><circle cx="86" cy="67.5" r="33.5"/><path d="M32 40 86 139 138 40M33 138 86 35 139 138M59 89h53M86 34v105M67 41l19 46 19-46M86 67.5h32"/></svg>
+      </span>
+      <div>
+        <h1 class="brand-name">VOYAGER</h1>
+        <p class="tagline">Your world awaits</p>
+      </div>
+    </div>
+
+    <p class="desc" style="--i:1">From “where should I go?” to a booked, day-by-day trip, with tickets and documents kept in one place.</p>
+
+    <div class="route" style="--i:2" aria-label="The demo trip: Paris City Break, London Heathrow to Paris Charles de Gaulle, August 12 to 19, 2026, two adults, 2,709 dollars">
+      <div class="route__ap" aria-hidden="true">LHR<small>London</small></div>
+      <div class="route__line" aria-hidden="true">
+        <svg viewBox="0 0 100 22" preserveAspectRatio="none"><path class="arc" d="M0 18 Q50 -6 100 18" vector-effect="non-scaling-stroke"/></svg>
+        <svg class="route__plane" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12c0-.9-.7-1.6-1.6-1.6h-4.6L9.9 3H7.8l2.6 7.4H6.1L4.4 8.5H3l1 3.5-1 3.5h1.4l1.7-1.9h4.3L7.8 21h2.1l4.9-7.4h4.6c.9 0 1.6-.7 1.6-1.6Z"/></svg>
+      </div>
+      <div class="route__ap" aria-hidden="true">CDG<small>Paris</small></div>
+      <div class="route__meta" aria-hidden="true"><span>Paris City Break · Aug 12–19 · 2 Adults</span><b class="num">$2,709</b></div>
+    </div>
+
+    <section style="--i:3" aria-labelledby="triesH">
+      <h2 class="eyebrow" id="triesH">Things worth trying</h2>
+      <ol class="tries">
+        <li><span class="k">Book</span>Book the Paris break for two and pay <span class="amt">$2,709</span>. Switch to <b>Business</b> on step two and the total climbs <span class="amt">$1,785</span>, tax included.</li>
+        <li><span class="k">Save</span>At payment, tap <code>SUMMER20</code>: 20% off the package, capped at <span class="amt">$300</span>, so you pay <span class="amt">$2,409</span>.</li>
+        <li><span class="k">Change</span>Cancel Paris from <b>My Trips</b>. Fifteen days out you get <span class="amt">$2,398</span> back: 90%, with the $45 insurance kept.</li>
+        <li><span class="k">Redeem</span>In <b>Rewards</b>, trade 500 points for $50 off and watch <span class="amt">4,820</span> drop to <span class="amt">4,320</span>.</li>
+      </ol>
+    </section>
+
+    <section style="--i:4" aria-labelledby="demoH">
+      <h2 class="eyebrow" id="demoH">Jump to</h2>
+      <div class="chips" role="group" aria-label="Jump the phone to a flow">
+        <button class="chip" data-load="onboarding-1" aria-pressed="false">Onboarding</button>
+        <button class="chip" data-load="login" aria-pressed="false">Sign in</button>
+        <button class="chip" data-load="dashboard" aria-pressed="false">Home</button>
+        <button class="chip" data-load="search" aria-pressed="false">Search</button>
+        <button class="chip" data-load="destination" aria-pressed="false">Paris</button>
+        <button class="chip" data-load="book-dates" aria-pressed="false">Booking</button>
+        <button class="chip" data-load="trips" aria-pressed="false">My Trips</button>
+        <button class="chip" data-load="profile" aria-pressed="false">Profile</button>
+        <button class="chip" data-load="support" aria-pressed="false">Support</button>
+      </div>
+      <div class="bar">
+        <button class="chip chip--restart" id="restart" type="button" aria-label="Restart the demo from the splash screen"><svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7a5 5 0 1 0 1.6-3.7"/><path d="M2 1.8v2.8h2.8"/></svg>Restart</button>
+        <p class="now" aria-live="polite"><i aria-hidden="true"></i><span class="k">On screen</span><b id="now">Splash</b></p>
+      </div>
+    </section>
+
+    <p class="foot" style="--i:5"><span class="foot__note">Every screen and sheet is plain HTML/CSS.<br></span><a href="index.html#screens" target="_self">Browse all 45 screens →</a> &nbsp;·&nbsp; <a href="index.html#system" target="_self">Design system →</a></p>
+  </aside>
+
+  <!-- The app itself -->
+  <div class="hs-box" id="hsBox">
+    <div class="handset" id="handset">
+      <span class="hs-btn hs-btn--l hs-btn--a" aria-hidden="true"></span>
+      <span class="hs-btn hs-btn--l hs-btn--b" aria-hidden="true"></span>
+      <span class="hs-btn hs-btn--l hs-btn--c" aria-hidden="true"></span>
+      <span class="hs-btn hs-btn--r" aria-hidden="true"></span>
+      <span class="hs-island" aria-hidden="true"></span>
+      <iframe id="phone" name="phone" src="screens/splash.html" title="Voyager app prototype: tap to use it like a phone" loading="eager"></iframe>
+    </div>
+  </div>
+</main>
+
+<script>
+(function () {
+  const phone = document.getElementById('phone');
+  const root = document.documentElement;
+  const now = document.getElementById('now');
+  const chips = [...document.querySelectorAll('.chip[data-load]')];
+  const DESK = matchMedia('(min-width: 880px)');
+
+  /* Fit. Desktop: scale the whole handset (426×898) to the viewport height, never above 1.
+     Phone: the iframe is the viewport; below 402px wide, scale the 402pt screens down to fit. */
+  function fit() {
+    const w = innerWidth, h = innerHeight;
+    if (DESK.matches) {
+      phone.style.cssText = '';
+      const s = Math.min(1, (h - 48) / 898, Math.max(.4, (w - 64 - 300 - 48) / 426));
+      root.style.setProperty('--s', Math.max(.4, s).toFixed(4));
+    } else {
+      root.style.setProperty('--s', 1);
+      if (w < 402) {
+        const s = w / 402;
+        phone.style.cssText = `width:402px;height:${h / s}px;transform:scale(${s});transform-origin:0 0`;
+      } else phone.style.cssText = '';
+    }
+  }
+  fit();
+  addEventListener('resize', fit);
+
+  /* Which chip owns which screen: every one of the 45 screen ids in index.html's SCREENS. */
+  const FLOW_CHIP = {
+    splash: 'onboarding-1', 'onboarding-1': 'onboarding-1', 'onboarding-2': 'onboarding-1', 'onboarding-3': 'onboarding-1',
+    signup: 'login', otp: 'login', permissions: 'login', login: 'login', 'forgot-password': 'login', 'reset-password': 'login',
+    dashboard: 'dashboard', notifications: 'dashboard',
+    search: 'search', 'search-results': 'search', filters: 'search', map: 'search', saved: 'search',
+    destination: 'destination', gallery: 'destination', hotel: 'destination', reviews: 'destination', 'write-review': 'destination',
+    'book-dates': 'book-dates', 'book-extras': 'book-dates', 'book-payment': 'book-dates', 'add-card': 'book-dates', 'payment-failed': 'book-dates', 'book-confirmed': 'book-dates',
+    trips: 'trips', itinerary: 'trips', 'e-ticket': 'trips', 'modify-booking': 'trips', 'cancel-trip': 'trips',
+    profile: 'profile', rewards: 'profile', documents: 'profile', 'add-document': 'profile', 'payment-methods': 'profile', 'promo-codes': 'profile',
+    settings: 'profile', 'edit-profile': 'profile', 'change-password': 'profile', language: 'profile',
+    support: 'support', help: 'support' };
+  const NAMES = { splash: 'Splash', 'onboarding-1': 'Explore the World', 'onboarding-2': 'Plan Your Itinerary', 'onboarding-3': 'Get Started',
+    signup: 'Create Account', otp: 'Verify Email', permissions: 'Permissions', login: 'Log In', 'forgot-password': 'Forgot Password', 'reset-password': 'New Password',
+    dashboard: 'Home', notifications: 'Notifications', search: 'Search', 'search-results': 'Search Results', filters: 'Filters', map: 'Map', saved: 'Saved',
+    destination: 'Destination', gallery: 'Photo Gallery', hotel: 'Hotel', reviews: 'Reviews', 'write-review': 'Write a Review',
+    'book-dates': 'Dates & Guests', 'book-extras': 'Add Extras', 'book-payment': 'Payment', 'add-card': 'Add Card', 'payment-failed': 'Payment Failed', 'book-confirmed': 'Booking Confirmed',
+    trips: 'My Trips', itinerary: 'Itinerary', 'e-ticket': 'E-Ticket', 'modify-booking': 'Modify Booking', 'cancel-trip': 'Cancel Trip',
+    profile: 'Profile', rewards: 'Rewards', documents: 'Travel Documents', 'add-document': 'Add Document', 'payment-methods': 'Payment Methods', 'promo-codes': 'Promo Codes',
+    settings: 'Settings', 'edit-profile': 'Edit Profile', 'change-password': 'Change Password', language: 'Language & Region',
+    support: 'Live Chat', help: 'Help Centre' };
+
+  let current = '';
+  function setCurrent(id) {
+    if (!id || id === current || !(id in FLOW_CHIP)) return;
+    current = id;
+    now.textContent = NAMES[id] || id;
+    chips.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.load === FLOW_CHIP[id])));
+  }
+  setCurrent('splash');
+
+  addEventListener('message', (e) => {
+    if (e.source !== phone.contentWindow || !e.data || !e.data.voyagerScreen) return;
+    setCurrent(e.data.voyagerScreen);
+  });
+  // Belt and braces: same-origin, so read the path on every load too.
+  phone.addEventListener('load', () => {
+    try { setCurrent((phone.contentWindow.location.pathname.match(/([\w-]+)\.html$/) || [])[1]); } catch (e) {}
+  });
+
+  const go = (id) => { phone.src = 'screens/' + id + '.html'; };
+  chips.forEach((b) => b.addEventListener('click', () => { setCurrent(b.dataset.load); go(b.dataset.load); }));
+
+  document.getElementById('restart').addEventListener('click', () => {
+    [window.localStorage, window.sessionStorage].forEach((s) => {
+      try { for (let i = s.length - 1; i >= 0; i--) { const k = s.key(i); if (k && k.indexOf('voyager:') === 0) s.removeItem(k); } } catch (e) {}
+    });
+    current = ''; setCurrent('splash');
+    go('splash');
+  });
+})();
+</script>
+</body>
+</html>

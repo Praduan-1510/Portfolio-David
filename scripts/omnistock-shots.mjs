@@ -22,7 +22,8 @@ import puppeteer from "puppeteer-core";
 import { mkdirSync } from "node:fs";
 
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-const BASE = "http://localhost:3000/prototype/omnistock/omnistock.html";
+// ?case-link=0 keeps the portfolio's "Back to the case study" link out of the stills.
+const BASE = "http://localhost:3000/prototype/omnistock/omnistock.html?case-link=0";
 const OUT = "public/images/work/omnistock";
 mkdirSync(OUT, { recursive: true });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

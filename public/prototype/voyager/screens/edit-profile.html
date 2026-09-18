@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Edit Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .ep-top { display: flex; flex-direction: column; align-items: center; padding: 4px 0 22px; }
+  .ep-av { position: relative; width: 96px; height: 96px; border-radius: 50%; box-shadow: 0 0 0 4px #fff, 0 0 30px 6px rgba(252,163,17,.3); }
+  .ep-av__img { width: 100%; height: 100%; border-radius: 50%; overflow: hidden; display: grid; place-items: center; }
+  .ep-av__img img { width: 100%; height: 100%; object-fit: cover; }
+  .ep-av__ini { font-size: 34px; font-weight: 700; color: var(--navy); }
+  .ep-av__cam { position: absolute; right: -2px; bottom: 2px; width: 32px; height: 32px; border-radius: 50%; background: var(--navy); color: var(--orange); display: grid; place-items: center; box-shadow: 0 0 0 3px #fff; }
+  .ep-change { margin-top: 12px; }
+  .ep-sec { margin: 28px 0 14px; }
+  .ep-sec:first-of-type { margin-top: 0; }
+  .phone-row { display: grid; grid-template-columns: 96px 1fr; gap: 10px; }
+  select.field { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4.5 9 7.5 7.5L19.5 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 34px; }
+  .chips .chip[aria-pressed="true"]::before { content: ''; width: 12px; height: 12px; margin-left: -4px; background: currentColor; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4.5 12.5 5 5L19.5 7'/%3E%3C/svg%3E") center/contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4.5 12.5 5 5L19.5 7'/%3E%3C/svg%3E") center/contain no-repeat; }
+  .ep-verified { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; color: var(--valid); font-weight: 600; margin: 6px 0 0 1px; }
+  .av-opts .list__item { min-height: 56px; }
+</style>
+</head>
+<body>
+<main class="page page--cta" aria-label="Edit profile">
+  <header class="phead">
+    <a class="phead__back tap" href="profile.html" id="back" aria-label="Back">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3.5M10.5 4.5 3 12l7.5 7.5"/></svg>
+    </a>
+    <div class="phead__titles"><h1 class="phead__title">Edit Profile</h1></div>
+  </header>
+
+  <section class="psheet">
+    <div class="ep-top enter">
+      <button class="ep-av tap" type="button" data-sheet="avSheet" aria-label="Change profile photo">
+        <span class="ep-av__img ph ph--warm" id="avImg"></span>
+        <span class="ep-av__cam"><span data-icon="camera" data-size="17" data-sw="2"></span></span>
+      </button>
+      <button class="link ep-change" type="button" data-sheet="avSheet">Change Photo</button>
+    </div>
+
+    <form id="form" novalidate>
+      <p class="caps ep-sec">Personal Details</p>
+      <div class="fg"><label class="label" for="fName">Full name<span class="req">*</span></label><input class="field" id="fName" autocomplete="name" data-validate="required|name" maxlength="50"></div>
+      <div class="fg"><label class="label" for="fEmail">Email<span class="req">*</span></label><input class="field" id="fEmail" type="email" autocomplete="email" data-validate="required|email"><span class="ep-verified" id="emailOk"><span data-icon="check" data-size="13" data-sw="3"></span>Verified</span></div>
+      <div class="fg">
+        <label class="label" for="fPhone">Phone<span class="req">*</span></label>
+        <div class="phone-row">
+          <select class="field" id="fCode" aria-label="Country code"><option value="+44">+44</option><option value="+1">+1</option><option value="+33">+33</option><option value="+49">+49</option><option value="+91">+91</option><option value="+61">+61</option><option value="+353">+353</option></select>
+          <input class="field num" id="fPhone" type="tel" autocomplete="tel-national" inputmode="tel" data-validate="required|phone" data-mask="phone" placeholder="7700 900123">
+        </div>
+        <span class="helper">We text you if a flight changes</span>
+      </div>
+      <div class="field-row" style="margin-top:16px">
+        <div class="fg"><label class="label" for="fDob">Date of birth<span class="req">*</span></label><input class="field" id="fDob" type="date" data-validate="required" autocomplete="bday"></div>
+        <div class="fg" style="margin-top:0"><label class="label" for="fNat">Nationality<span class="req">*</span></label>
+          <select class="field" id="fNat" data-validate="required"><option>British</option><option>Irish</option><option>American</option><option>Canadian</option><option>French</option><option>German</option><option>Indian</option><option>Australian</option><option>Spanish</option><option>Italian</option></select></div>
+      </div>
+
+      <p class="caps ep-sec">Travel</p>
+      <div class="fg"><label class="label" for="fAir">Home airport</label>
+        <select class="field" id="fAir"><option value="LHR">London Heathrow (LHR)</option><option value="LGW">London Gatwick (LGW)</option><option value="STN">London Stansted (STN)</option><option value="MAN">Manchester (MAN)</option><option value="EDI">Edinburgh (EDI)</option><option value="BHX">Birmingham (BHX)</option><option value="DUB">Dublin (DUB)</option></select>
+        <span class="helper">Used to pre-fill flight searches</span>
+      </div>
+      <div class="fg"><p class="label" id="styleLabel">Travel preferences</p>
+        <div class="chips" id="styles" data-group data-multi aria-labelledby="styleLabel">
+          <button class="chip" type="button" data-value="Beach">Beach</button><button class="chip" type="button" data-value="Cultural">Cultural</button><button class="chip" type="button" data-value="Food & Wine">Food &amp; Wine</button><button class="chip" type="button" data-value="Adventure">Adventure</button><button class="chip" type="button" data-value="Luxury">Luxury</button><button class="chip" type="button" data-value="Family">Family</button><button class="chip" type="button" data-value="Nature">Nature</button><button class="chip" type="button" data-value="Nightlife">Nightlife</button>
+        </div>
+        <span class="helper" id="styleHelp">Pick a few — we tailor deals and your home feed</span>
+      </div>
+      <div class="fg"><p class="label" id="seatLabel">Seat preference</p>
+        <div class="seg" id="seat" aria-labelledby="seatLabel"><button type="button" data-value="window">Window</button><button type="button" data-value="aisle">Aisle</button><button type="button" data-value="any">No preference</button></div>
+      </div>
+    </form>
+  </section>
+
+  <div class="cta-bar"><div class="cta-bar__in">
+    <button class="btn btn--primary" type="submit" form="form" id="save"><span>Save Changes</span></button>
+  </div></div>
+</main>
+
+<section class="sheet" id="avSheet" aria-labelledby="avT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="avT">Profile photo</p><p class="sheet__sub">Hosts and guides see this when you check in.</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div data-delegate class="list list--grey av-opts" style="padding:4px 16px">
+    <label class="list__item tap" for="camIn" role="button" tabindex="0"><span class="list__icon" data-icon="camera"></span><span class="list__body"><span class="list__title">Take photo</span></span><input class="sr-only" type="file" id="camIn" accept="image/*" capture="user"></label>
+    <label class="list__item tap" for="libIn" role="button" tabindex="0"><span class="list__icon" data-icon="image"></span><span class="list__body"><span class="list__title">Choose from library</span></span><input class="sr-only" type="file" id="libIn" accept="image/*"></label>
+    <button class="list__item tap" type="button" id="avDefault"><span class="list__icon" data-icon="user"></span><span class="list__body"><span class="list__title">Use original photo</span></span></button>
+    <button class="list__item list__item--danger tap" type="button" id="avRemove"><span class="list__icon" data-icon="trash"></span><span class="list__body"><span class="list__title">Remove photo</span><span class="list__sub">Show your initials instead</span></span></button>
+  </div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+(function () {
+  const $ = (s) => document.querySelector(s);
+  const u = V.user.get();
+  // pending avatar: undefined = unchanged · null = initials · 'default' · dataURL
+  let avatar = u.avatarData || (u.avatarRemoved ? null : 'default');
+  const initials = (n) => n.trim().split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
+  const renderAv = () => {
+    const el = $('#avImg');
+    if (avatar === null) { el.className = 'ep-av__img'; el.style.background = 'var(--orange)'; el.innerHTML = `<span class="ep-av__ini">${V.esc(initials($('#fName').value || u.name))}</span>`; }
+    else { el.className = 'ep-av__img ph ph--warm'; el.style.background = ''; el.innerHTML = `<img src="${avatar === 'default' ? V.img(u.avatar) : avatar}" alt="">`; }
+  };
+
+  // ---- fill
+  const phone = (u.phone || '').match(/^(\+\d+)\s*(.*)$/) || [null, '+44', u.phone];
+  $('#fName').value = u.name; $('#fEmail').value = u.email; $('#fCode').value = phone[1]; $('#fPhone').value = phone[2];
+  $('#fDob').value = u.dob; $('#fDob').max = V.date.add(V.today, -365 * 18);
+  $('#fNat').value = u.nationality; $('#fAir').value = u.airport || 'LHR';
+  const styles = u.travelStyles || ['Cultural', 'Food & Wine'];
+  document.querySelectorAll('#styles .chip').forEach((c) => { const on = styles.includes(c.dataset.value); c.classList.toggle('is-active', on); c.setAttribute('aria-pressed', String(on)); });
+  $('#seat').select(u.seat || 'window');
+  renderAv();
+
+  // ---- dirty tracking
+  const snap = () => JSON.stringify([$('#fName').value, $('#fEmail').value, $('#fCode').value, $('#fPhone').value, $('#fDob').value, $('#fNat').value, $('#fAir').value, $('#styles').value(), (document.querySelector('#seat [aria-selected="true"]') || {}).dataset?.value, avatar]);
+  let initial = snap();
+  const dirty = () => snap() !== initial;
+  $('#fEmail').addEventListener('input', () => { $('#emailOk').hidden = $('#fEmail').value.trim() === u.email; });
+  $('#fName').addEventListener('input', () => { if (avatar === null) renderAv(); });
+  $('#styles').addEventListener('change', (e) => { $('#styleHelp').textContent = e.detail.length ? `${e.detail.length} selected · we’ll tailor deals to these` : 'Pick a few — we tailor deals and your home feed'; });
+
+  // ---- avatar sheet
+  const readFile = (inp) => inp.addEventListener('change', () => {
+    const f = inp.files && inp.files[0]; if (!f) return;
+    if (!/^image\//.test(f.type)) { V.toast('Choose an image file'); return; }
+    if (f.size > 8 * 1048576) { V.toast('That photo is over 8 MB — try another'); return; }
+    const img = new Image(); const r = new FileReader();
+    r.onload = () => { img.onload = () => { const c = document.createElement('canvas'); c.width = c.height = 240; const s = Math.min(img.width, img.height); c.getContext('2d').drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, 240, 240); avatar = c.toDataURL('image/jpeg', .82); renderAv(); V.sheet.close(); V.toast('New photo ready · tap Save Changes'); }; img.src = r.result; };
+    r.readAsDataURL(f); inp.value = '';
+  });
+  readFile($('#camIn')); readFile($('#libIn'));
+  document.querySelectorAll('label.list__item').forEach((l) => l.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); l.querySelector('input').click(); } }));
+  $('#avDefault').addEventListener('click', () => { avatar = 'default'; renderAv(); V.sheet.close(); });
+  $('#avRemove').addEventListener('click', async () => { V.sheet.close(); if (await V.dialog({ title: 'Remove profile photo?', message: 'Your initials will show instead.', confirm: 'Remove', cancel: 'Keep', tone: 'danger' })) { avatar = null; renderAv(); } });
+
+  // ---- save
+  $('#form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!V.validate($('#form'))) return;
+    const dob = $('#fDob'); if (dob.value > dob.max) { const fg = dob.closest('.fg'); fg.classList.add('has-error'); let et = fg.querySelector('.error-text'); if (!et) { et = document.createElement('span'); et.className = 'error-text'; et.setAttribute('role', 'alert'); fg.appendChild(et); } et.innerHTML = V.icon('warning', 14, 'stroke-width="2"') + '<span>You need to be 18 or over to book</span>'; dob.focus(); return; }
+    if (!dirty()) { V.toast('No changes to save'); return; }
+    await V.loading($('#save'), 1000);
+    const name = $('#fName').value.trim().replace(/\s+/g, ' ');
+    V.user.set({
+      name, first: name.split(' ')[0], email: $('#fEmail').value.trim(), phone: `${$('#fCode').value} ${$('#fPhone').value.trim()}`,
+      dob: $('#fDob').value, nationality: $('#fNat').value, airport: $('#fAir').value, travelStyles: $('#styles').value(),
+      seat: (document.querySelector('#seat [aria-selected="true"]') || {}).dataset?.value || 'window',
+      avatarData: avatar && avatar !== 'default' ? avatar : null, avatarRemoved: avatar === null,
+    });
+    initial = snap();
+    V.toast('Profile updated');
+    await V.wait(700);
+    if (history.length > 1 && document.referrer) history.back(); else location.href = 'profile.html';
+  });
+
+  // ---- back with unsaved changes
+  $('#back').addEventListener('click', async (e) => {
+    e.preventDefault();
+    if (dirty() && !(await V.dialog({ title: 'Discard changes?', message: 'You have unsaved edits to your profile.', confirm: 'Discard', cancel: 'Keep Editing', tone: 'warn' }))) return;
+    if (history.length > 1 && document.referrer) history.back(); else location.href = 'profile.html';
+  });
+})();
+</script>
+</body>
+</html>

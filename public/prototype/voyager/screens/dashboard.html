@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .greet { left: 26px; top: 48px; font-size: 28px; line-height: 34px; font-weight: 700; color: #fff; letter-spacing: -.1px; }
+  .greet span { color: var(--orange); }
+  .d-sec { font-family: var(--font-2); font-size: 12.5px; line-height: 1; font-weight: 600; letter-spacing: .3em; color: var(--orange); text-transform: uppercase; }
+  .d-more { font-family: var(--font-2); font-size: 12px; line-height: 1; font-weight: 600; color: var(--navy); }
+  .d-more::after { content: ''; position: absolute; inset: -14px -10px; }
+</style>
+</head>
+<body>
+<main class="screen" style="height:1188px;min-height:1188px" aria-label="Home">
+  <div class="vsheet" style="top:144px"></div>
+
+  <!-- Greeting + avatar -->
+  <h1 class="abs greet enter">Good Morning<br><span id="firstName">Alex</span></h1>
+  <a class="abs avatar-glow tap enter" href="profile.html" style="left:311px;top:38px;--i:1" aria-label="Your profile">
+    <span class="ph ph--warm" style="display:block;width:100%;height:100%"><img src="../assets/img/avatar-alex.jpg" alt="" width="74" height="74"></span>
+  </a>
+
+  <!-- Search -->
+  <a class="abs search tap enter" href="search.html" style="left:41px;top:167px;width:312px;height:54px;gap:14px;padding-left:18px;--i:2" aria-label="Search destinations">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="7.5"/><path d="m16 16 5.5 5.5"/></svg>
+    <span class="search__text">Where Do You Want To Go?</span>
+  </a>
+
+  <!-- Explore -->
+  <h2 class="t d-sec" style="left:41px;top:247px">Explore</h2>
+  <a class="t d-more tap" href="search-results.html" style="left:322px;top:247px">See All</a>
+
+  <article class="abs dcard enter" style="left:41px;top:270px;--i:3">
+    <a class="dcard__link" href="destination.html?id=paris" aria-label="Paris, France 7 Days, From $ 1240"></a>
+    <div class="dcard__img ph"><img src="../assets/img/dest-paris.jpg" alt=""></div>
+    <div class="dcard__body"><span class="dcard__name">Paris</span><span class="dcard__meta">France 7 Days</span><span class="dcard__price">From $ 1240</span></div>
+    <button class="heart" type="button" data-heart="paris" aria-pressed="true" aria-label="Save Paris"></button>
+  </article>
+  <article class="abs dcard enter" style="left:211px;top:270px;--i:4">
+    <a class="dcard__link" href="destination.html?id=bali" aria-label="Bali, Indonesia 10 Days, From $ 800"></a>
+    <div class="dcard__img ph ph--sea"><img src="../assets/img/dest-bali.jpg" alt=""></div>
+    <div class="dcard__body"><span class="dcard__name">Bali</span><span class="dcard__meta">Indonesia 10 Days</span><span class="dcard__price">From $ 800</span></div>
+    <button class="heart" type="button" data-heart="bali" aria-pressed="false" aria-label="Save Bali"></button>
+  </article>
+
+  <!-- Promo -->
+  <section class="abs promo enter" style="left:31px;top:460px;width:340px;height:203px;--i:5" aria-labelledby="promoTitle">
+    <span class="promo__art" aria-hidden="true"></span>
+    <p class="t promo__eyebrow" style="left:16px;top:17px">Limited Offer</p>
+    <h2 class="abs promo__title" id="promoTitle" style="left:16px;top:49px;margin:0">20%<br>Summer Escapes</h2>
+    <a class="abs btn btn--primary promo__cta" href="search-results.html?promo=summer" style="left:16px;top:138px;width:188px;margin:0">
+      <span>Explore Details</span>
+      <svg class="arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12h17M14 5.5l6.5 6.5-6.5 6.5"/></svg>
+    </a>
+  </section>
+
+  <!-- Top rated -->
+  <h2 class="t d-sec" style="left:41px;top:689px">Top Rated</h2>
+  <a class="t d-more tap" href="search-results.html?sort=rating" style="left:322px;top:689px">See All</a>
+
+  <article class="abs dcard enter" style="left:41px;top:712px;--i:6">
+    <a class="dcard__link" href="destination.html?id=rome" aria-label="Rome, Italy 5 Days, From $ 1100"></a>
+    <div class="dcard__img ph ph--warm"><img src="../assets/img/dest-rome.jpg" alt=""></div>
+    <div class="dcard__body"><span class="dcard__name">Rome</span><span class="dcard__meta">Italy 5 Days</span><span class="dcard__price">From $ 1100</span></div>
+    <button class="heart" type="button" data-heart="rome" aria-pressed="false" aria-label="Save Rome"></button>
+  </article>
+  <article class="abs dcard enter" style="left:211px;top:712px;--i:7">
+    <a class="dcard__link" href="destination.html?id=prague" aria-label="Prague, Czech Rep 5 Days, From $ 800"></a>
+    <div class="dcard__img ph ph--dusk"><img src="../assets/img/dest-prague.jpg" alt=""></div>
+    <div class="dcard__body"><span class="dcard__name">Prague</span><span class="dcard__meta">Czech Rep 5 Days</span><span class="dcard__price">From $ 800</span></div>
+    <button class="heart" type="button" data-heart="prague" aria-pressed="true" aria-label="Save Prague"></button>
+  </article>
+  <article class="abs dcard enter" style="left:41px;top:902px;--i:8">
+    <a class="dcard__link" href="destination.html?id=sydney" aria-label="Sydney, Australia 8 Days, From $ 1500"></a>
+    <div class="dcard__img ph ph--sea"><img src="../assets/img/dest-sydney.jpg" alt=""></div>
+    <div class="dcard__body"><span class="dcard__name">Sydney</span><span class="dcard__meta">Australia 8 Days</span><span class="dcard__price">From $ 1500</span></div>
+    <button class="heart" type="button" data-heart="sydney" aria-pressed="true" aria-label="Save Sydney"></button>
+  </article>
+  <article class="abs dcard enter" style="left:211px;top:902px;--i:9">
+    <a class="dcard__link" href="destination.html?id=minsk" aria-label="Minsk, Belarus 10 Days, From $ 2000"></a>
+    <div class="dcard__img ph"><img src="../assets/img/dest-minsk.jpg" alt=""></div>
+    <div class="dcard__body"><span class="dcard__name">Minsk</span><span class="dcard__meta">Belarus 10 Days</span><span class="dcard__price">From $ 2000</span></div>
+    <button class="heart" type="button" data-heart="minsk" aria-pressed="false" aria-label="Save Minsk"></button>
+  </article>
+
+  <nav data-tabbar="home"></nav>
+</main>
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const u = Voyager.user.get();
+    document.getElementById('firstName').textContent = u.first;
+    // Morning / afternoon / evening greeting (design shows "Good Morning"; capture keeps the design copy)
+    if (!document.body.classList.contains('capture')) {
+      const h = new Date().getHours();
+      const g = h < 12 ? 'Good Morning' : h < 18 ? 'Good Afternoon' : 'Good Evening';
+      document.querySelector('.greet').firstChild.textContent = g;
+    }
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyager · Booking Confirmed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/voyager.css">
+<style>
+  .psheet { padding: 0 !important; min-height: 0; }
+  /* First viewport = the design frame (402×932) */
+  .fold { position: relative; height: 932px; }
+  .fold .steps { position: absolute; left: 27px; top: 70px; width: 339px; }
+  .fold .steps__line { margin: 0 11px; }
+  .fold .steps__line.is-active-navy { background: var(--navy); }
+  .hero-check { position: absolute; left: 118px; top: 147px; margin: 0; background: radial-gradient(circle at 62% 86%, #FF7A3D 0%, rgba(255,122,61,0) 48%), radial-gradient(circle at 92% 48%, #FAD2A6 0%, rgba(250,210,166,0) 38%), linear-gradient(115deg, #E6D8D6 0%, #F0BFB0 45%, #F7A986 100%); }
+  .hero-check svg { position: absolute; inset: 0; width: 166px; height: 166px; }
+  .hero-check svg path { stroke-dasharray: 120; stroke-dashoffset: 120; animation: draw 650ms 300ms var(--ease-out) forwards; }
+  body.capture .hero-check svg path { stroke-dashoffset: 0; }
+  .pop-in { animation: popin 620ms var(--ease-spring) both; }
+  @keyframes popin { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+  .ring { position: absolute; left: 118px; top: 147px; width: 166px; height: 166px; border-radius: 50%; box-shadow: 0 0 0 0 rgba(252,163,17,.45); animation: ring 1400ms 350ms var(--ease-out) both; pointer-events: none; }
+  @keyframes ring { from { box-shadow: 0 0 0 0 rgba(252,163,17,.45); } to { box-shadow: 0 0 0 36px rgba(252,163,17,0); } }
+  body.capture .ring { display: none; }
+  .cf-title { position: absolute; left: 0; right: 0; top: 356px; text-align: center; font-size: 27.5px; line-height: 32px; font-weight: 700; color: #000; letter-spacing: -.1px; }
+  .cf-msg { position: absolute; left: 40px; right: 40px; top: 401px; text-align: center; font-size: 13px; line-height: 17px; color: var(--text-3); }
+  .refbox { position: absolute; left: 52px; top: 466px; margin: 0; width: 298px; height: 57px; gap: 7px; padding-top: 3px; }
+  .refbox__k { font-size: 10px; letter-spacing: .44em; margin-right: -.44em; color: #A5A5A5; }
+  .refbox__v { font-size: 16px; }
+  .refbox:active { transform: scale(.98); }
+  .cf-actions { position: absolute; left: 35px; top: 780px; width: 327px; }
+  .cf-actions .btn + .btn { margin-top: 13px; }
+
+  /* Below the fold */
+  .more { padding: 8px 31px 48px; }
+  .tsum { display: grid; grid-template-columns: 84px 1fr; gap: 14px; align-items: center; padding: 12px; border-radius: 16px; background: var(--grey-1); }
+  .tsum__img { width: 84px; height: 84px; border-radius: 10px; overflow: hidden; }
+  .tsum__name { font-size: 16px; font-weight: 700; color: #000; }
+  .tsum__sub { font-size: 12px; color: var(--text-3); margin-top: 3px; line-height: 1.4; }
+  .kvs { margin-top: 6px; }
+  .qa { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .qa__btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; height: 84px; border-radius: 16px; background: var(--grey-1); font-size: 12px; font-weight: 600; color: #222; text-align: center; }
+  .qa__btn span:first-child { width: 36px; height: 36px; border-radius: 50%; background: var(--orange-tint); color: var(--orange); display: grid; place-items: center; }
+  .pts { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 12px; background: var(--navy); color: #fff; }
+  .pts b { color: var(--orange); }
+  .pts__ic { width: 36px; height: 36px; border-radius: 50%; background: rgba(252,163,17,.16); color: var(--orange); display: grid; place-items: center; flex-shrink: 0; }
+  .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .share-grid button { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 12px; color: #333; padding: 6px 0; }
+  .share-grid button span:first-child { width: 52px; height: 52px; border-radius: 16px; background: var(--grey-1); display: grid; place-items: center; color: var(--navy); }
+  .linkbox { display: flex; align-items: center; gap: 10px; margin-top: 18px; padding: 0 6px 0 14px; height: 48px; border-radius: 12px; background: var(--grey-1); font-size: 13px; color: var(--text-3); }
+  .linkbox span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+</style>
+</head>
+<body>
+<main class="page page--white" aria-label="Booking confirmed — step 4 of 4">
+  <section class="psheet">
+    <div class="fold">
+      <div class="steps" data-step="4" data-total="4"></div>
+
+      <span class="ring" aria-hidden="true"></span>
+      <div class="hero-check pop-in" aria-hidden="true">
+        <svg viewBox="0 0 166 166" fill="none" stroke="#fff" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"><path d="M47 81 L71 104 L122 55"/></svg>
+      </div>
+      <h1 class="cf-title enter" style="--i:2">Booking Confirmed</h1>
+      <p class="cf-msg enter" id="msg" style="--i:3">Your Paris adventure is booked.<br>Get ready for an unforgettable journey.</p>
+      <button class="refbox refbox--btn tap enter" type="button" id="ref" style="--i:4" aria-label="Booking reference VYG-4892-PAR. Tap to copy.">
+        <span class="refbox__k">Booking Reference</span>
+        <span class="refbox__v" id="refV">VYG-4892-PAR</span>
+      </button>
+
+      <div class="cf-actions">
+        <a class="btn btn--primary" id="itin" href="itinerary.html?trip=paris-aug"><span>View Full Itinerary</span></a>
+        <a class="btn btn--outline-soft" id="pdf" href="e-ticket.html?ref=VYG-4892-PAR"><span>Download PDF Ticket</span></a>
+      </div>
+    </div>
+
+    <div class="more">
+      <div class="sec"><h2 class="sec__label">Trip Summary</h2></div>
+      <div class="tsum">
+        <span class="tsum__img ph"><img id="sImg" src="../assets/img/trip-paris.jpg" alt=""></span>
+        <div><p class="tsum__name" id="sName">Paris City Break</p><p class="tsum__sub" id="sSub">Aug 12–19, 2026 · 7 nights<br>2 Adults · Economy</p></div>
+      </div>
+      <div class="kvs" id="kvs"></div>
+
+      <div class="pts mt-16">
+        <span class="pts__ic" data-icon="crown-fill" data-size="18"></span>
+        <p class="small" style="color:#fff;font-size:13px">You earned <b id="ptsV">1,240 points</b> with this booking. <a class="c-orange" href="rewards.html" style="font-weight:600">View rewards</a></p>
+      </div>
+
+      <div class="sec"><h2 class="sec__label">Next Steps</h2></div>
+      <div class="qa">
+        <button class="qa__btn tap" type="button" id="addCal"><span data-icon="calendar" data-size="18"></span><span>Add to Calendar</span></button>
+        <button class="qa__btn tap" type="button" data-sheet="share"><span data-icon="share" data-size="18"></span><span>Share Trip</span></button>
+        <a class="qa__btn tap" href="documents.html"><span data-icon="passport" data-size="18"></span><span>Travel Documents</span></a>
+      </div>
+
+      <a class="btn btn--navy mt-24" href="dashboard.html"><span>Back to Home</span></a>
+      <a class="btn btn--ghost mt-8" href="trips.html"><span>Go to My Trips</span></a>
+    </div>
+  </section>
+</main>
+
+<section class="sheet" id="share" aria-labelledby="shT">
+  <div class="sheet__head">
+    <div><p class="sheet__title" id="shT">Share your trip</p><p class="sheet__sub" id="shSub">Send your Paris itinerary to travel companions.</p></div>
+    <button class="sheet__close tap" type="button" data-close aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1 1 10 10M11 1 1 11"/></svg></button>
+  </div>
+  <div class="share-grid">
+    <button type="button" data-share="Messages"><span data-icon="chat" data-size="22"></span><span>Messages</span></button>
+    <button type="button" data-share="Email"><span data-icon="envelope" data-size="22"></span><span>Email</span></button>
+    <button type="button" data-share="copy"><span data-icon="copy" data-size="22"></span><span>Copy Link</span></button>
+    <button type="button" data-share="more"><span data-icon="share" data-size="22"></span><span>More</span></button>
+  </div>
+  <div class="linkbox"><span id="shLink">voyager.app/t/VYG-4892-PAR</span><button class="btn btn--xs btn--navy btn--inline" type="button" data-share="copy">Copy</button></div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const V = window.Voyager, B = V.booking;
+    const $ = (s) => document.querySelector(s);
+    const ref = V.q('ref') || B.get().ref || 'VYG-4892-PAR';
+    const trip = V.trips.get(ref) || V.trips.get('VYG-4892-PAR') || V.trips.list()[0];
+    const d = V.dest(trip.dest) || V.dest('paris');
+    const nights = V.date.nights(trip.start, trip.end);
+    const trav = `${trip.adults} Adult${trip.adults === 1 ? '' : 's'}` + (trip.children ? ` · ${trip.children} Child${trip.children === 1 ? '' : 'ren'}` : '');
+
+    $('#msg').innerHTML = `Your ${V.esc(d.name)} adventure is booked.<br>Get ready for an unforgettable journey.`;
+    $('#refV').textContent = trip.ref;
+    $('#ref').setAttribute('aria-label', `Booking reference ${trip.ref}. Tap to copy.`);
+    $('#itin').href = `itinerary.html?trip=${encodeURIComponent(trip.id)}`;
+    $('#pdf').href = `e-ticket.html?ref=${encodeURIComponent(trip.ref)}`;
+
+    // summary
+    $('#sImg').src = V.img(trip.img || d.img);
+    $('#sName').textContent = trip.title;
+    $('#sSub').innerHTML = `${V.esc(V.date.range(trip.start, trip.end))}, ${trip.start.slice(0, 4)} · ${nights} nights<br>${V.esc(trav)} · ${trip.cls === 'business' ? 'Business' : 'Economy'}`;
+    const card = V.cards.get(trip.card) || V.cards.default();
+    const extras = Object.entries(trip.addons || {}).filter(([, on]) => on).map(([k]) => ({ insurance: 'Insurance', tour: 'City Tour', transfer: 'Transfer' }[k])).join(', ') || 'None';
+    $('#kvs').innerHTML = [
+      ['Flight', `${trip.flight || V.travel(d.id).out} · LHR → ${V.travel(d.id).airport[0]}`],
+      ['Hotel', trip.hotel || V.travel(d.id).hotel],
+      ['Extras', extras],
+      ['Paid', `<span class="num c-orange">${V.fmt(trip.total)}</span>`],
+      ['Card', card ? `${V.esc(card.brand)} •••• ${card.last4}` : '—'],
+    ].map(([k, v]) => `<div><span class="k">${k}</span><span class="v">${k === 'Paid' ? v : V.esc(v)}</span></div>`).join('');
+    $('#ptsV').textContent = `${V.fmtNum(Math.round(d.package.pp * trip.adults / 2))} points`;   // Paris × 2 → 1,240 (matches Rewards)
+
+    // copy reference
+    const copy = async (text, msg) => { try { await navigator.clipboard.writeText(text); } catch (e) {} V.toast(msg); };
+    $('#ref').addEventListener('click', () => copy(trip.ref, `Reference ${trip.ref} copied`));
+
+    // download ticket: loading → e-ticket
+    $('#pdf').addEventListener('click', async (e) => {
+      e.preventDefault(); const a = e.currentTarget;
+      await V.loading(a, 1100);
+      V.toast('Ticket saved to Files');
+      await V.wait(500);
+      location.href = a.href;
+    });
+
+    // add to calendar
+    $('#addCal').addEventListener('click', async (e) => {
+      const b = e.currentTarget; if (b.dataset.done) { V.toast('Already in your calendar'); return; }
+      b.dataset.done = '1'; b.querySelector('span:last-child').textContent = 'Added';
+      b.querySelector('span:first-child').innerHTML = V.icon('check', 18, 'stroke-width="2.4"');
+      V.toast(`${trip.title} added to your calendar`, { action: 'Undo', onAction: () => { delete b.dataset.done; b.querySelector('span:last-child').textContent = 'Add to Calendar'; b.querySelector('span:first-child').innerHTML = V.icon('calendar', 18); } });
+    });
+
+    // share
+    const link = `voyager.app/t/${trip.ref}`;
+    $('#shLink').textContent = link;
+    $('#shSub').textContent = `Send your ${d.name} itinerary to travel companions.`;
+    document.querySelectorAll('[data-share]').forEach((b) => b.addEventListener('click', async () => {
+      const how = b.dataset.share;
+      if (how === 'copy') { V.sheet.close(); copy('https://' + link, 'Link copied'); return; }
+      if (how === 'more' && navigator.share) { try { await navigator.share({ title: trip.title, url: 'https://' + link }); } catch (e) {} V.sheet.close(); return; }
+      V.sheet.close(); V.toast(how === 'more' ? 'Share options opened' : `Opening ${how}…`);
+    }));
+  })();
+</script>
+</body>
+</html>

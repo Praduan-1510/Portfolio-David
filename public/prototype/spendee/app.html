@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spendee — Live prototype</title>
+<meta name="description" content="Spendee: a smart business ledger for Indian small businesses. Live, tappable iPhone prototype.">
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 110 110'%3E%3Crect width='110' height='110' rx='24' fill='%23131313'/%3E%3Cpath d='M74.5 51.5C76 37 65 27 54 27C42.5 27 36 33.5 36 41.5C36 50 44.5 53.2 54 56C64 59 71.5 62.8 71.5 71C71.5 79 63.5 83 53 83C41 83 31.5 75 31.5 63' fill='none' stroke='%23e9cf73' stroke-width='6' stroke-linecap='round'/%3E%3Cpath d='M64 12 36 98M73 14 45 100' stroke='%238df15e' stroke-width='4.5' stroke-linecap='round'/%3E%3C/svg%3E">
+<script>
+  /* Fresh start on every launch: forget the previous visitor's demo state (sign-in, drafts,
+     filed returns) BEFORE the phone's first screen loads. ?resume=1 keeps it. */
+  (function () {
+    if (new URLSearchParams(location.search).get('resume') === '1') return;
+    try {
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const k = localStorage.key(i);
+        if (k && k.indexOf('spendee:') === 0) localStorage.removeItem(k);
+      }
+    } catch (e) {}
+  })();
+</script>
+<style>
+  :root {
+    --bg: #000;
+    --text: #f4f4f4;
+    --soft: #c9c9c9;
+    --muted: #9a9a9a;
+    --dim: #6a6a6a;
+    --line: rgba(255,255,255,.08);
+    --line-2: rgba(255,255,255,.15);
+    --green: #8df15e;
+    --red: #f15858;
+    --yellow: #f1ea58;
+    --blue: #5fb2f1;
+    --primary: #c8e7ff;
+    --surface: #1a1a1a;
+    --ease: cubic-bezier(.22,1,.36,1);
+    --font: 'Kodchasan', system-ui, sans-serif;
+    --ui: 'Poppins', system-ui, sans-serif;
+    --s: 1; /* handset scale, set by fit() */
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); overflow-x: clip; }
+  body { font-family: var(--ui); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 10px; }
+
+  /* ── Phone first: the app IS the viewport ─────────────────────────────── */
+  .stage { min-height: 100dvh; }
+  .side, .hs-status, .hs-island, .hs-btn, .aura, .grain { display: none; }
+  .hs-box, .handset { position: static; }
+  #phone {
+    position: fixed; top: 0; left: 0; display: block; border: 0; background: #000;
+    width: 100vw; height: 100dvh;
+  }
+
+  /* ── Desktop stage ─────────────────────────────────────────────────────── */
+  @media (min-width: 880px) {
+    .aura, .grain { display: block; position: fixed; inset: 0; pointer-events: none; }
+    .aura {
+      background:
+        radial-gradient(760px 620px at 78% 38%, rgba(3,85,149,.34), transparent 62%),
+        radial-gradient(640px 520px at 4% 108%, rgba(140,137,10,.26), transparent 62%),
+        radial-gradient(420px 320px at 30% -8%, rgba(95,178,241,.08), transparent 70%),
+        var(--bg);
+    }
+    .grain { opacity: .05; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+    .stage {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: minmax(280px, 380px) auto;
+      gap: clamp(40px, 5vw, 72px); justify-content: center; align-items: center;
+      padding: 24px 32px;
+    }
+
+    /* Side panel */
+    .side { display: flex; flex-direction: column; gap: clamp(16px, 2.6vh, 24px); min-width: 0; }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .brand-mark { width: 50px; height: 50px; flex: none; border-radius: 14px; background: var(--surface); display: grid; place-items: center;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), inset 1px 1px 0 rgba(255,255,255,.08), 0 10px 30px -8px rgba(0,0,0,.8); }
+    .brand-name { font-family: var(--font); font-size: 28px; font-weight: 500; line-height: 1; letter-spacing: .3px; margin: 0; }
+    .tagline { font-family: var(--font); font-size: 13.5px; letter-spacing: .5px; color: var(--muted); margin: 6px 0 0; }
+    .tagline b { color: var(--green); font-weight: 600; }
+    .desc { margin: 0; font-size: 14px; line-height: 1.6; color: var(--soft); max-width: 38ch; }
+
+    .eyebrow { display: flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--dim); margin: 0 0 10px; }
+    .eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+    /* "Things worth trying": set like ledger lines, each keyed to a money-state colour */
+    .tries { list-style: none; margin: 0; padding: 0; counter-reset: t; }
+    .tries li { counter-increment: t; position: relative; display: grid; grid-template-columns: 28px 1fr; gap: 0 10px;
+      padding: clamp(6px, 1.1vh, 10px) 0; border-top: 1px dashed rgba(255,255,255,.09); font-size: 13px; line-height: 1.5; color: var(--soft); }
+    .tries li:first-child { border-top: 0; padding-top: 2px; }
+    .tries li::before { content: counter(t, decimal-leading-zero); font-family: var(--font); font-weight: 600; font-size: 13px; color: var(--c); font-variant-numeric: tabular-nums; padding-top: 1px; }
+    .tries b { color: var(--text); font-weight: 500; }
+    .tries .amt { font-family: var(--font); font-weight: 600; color: var(--c); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .tries kbd { font-family: var(--font); font-size: 12px; font-weight: 600; padding: 0 5px; border-radius: 5px; background: #262626; color: var(--text); box-shadow: inset 0 0 0 1px var(--line-2); }
+
+    /* Demo panel */
+    .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+    .chip { height: 32px; padding: 0 13px; border-radius: 999px; font-size: 12.5px; color: #d6d6d6; box-shadow: inset 0 0 0 1px var(--line-2); background: rgba(255,255,255,.02);
+      transition: background .25s var(--ease), color .25s var(--ease), box-shadow .25s var(--ease); }
+    .chip:hover { background: rgba(255,255,255,.07); color: var(--text); }
+    .chip[aria-pressed="true"] { background: var(--primary); color: #000; font-weight: 500; box-shadow: 0 6px 22px -6px rgba(200,231,255,.45); }
+    .chip--restart { display: inline-flex; align-items: center; gap: 6px; color: var(--blue); box-shadow: inset 0 0 0 1px rgba(95,178,241,.35); }
+    .chip--restart:hover { background: rgba(95,178,241,.1); color: var(--blue); }
+    .chip--restart svg { transition: transform .5s var(--ease); }
+    .chip--restart:hover svg { transform: rotate(-200deg); }
+    .now { margin: 10px 0 0; font-size: 12px; color: var(--dim); display: flex; align-items: center; gap: 8px; min-height: 18px; }
+    .now i { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px rgba(141,241,94,.16); flex: none; }
+    .now b { color: var(--soft); font-weight: 500; }
+
+    .foot { font-size: 12px; line-height: 1.7; color: var(--dim); padding-top: 14px; border-top: 1px solid var(--line); }
+    .foot a { color: var(--primary); text-decoration: none; white-space: nowrap; }
+    .foot a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* Handset: 402×874 screen + 12px bezel. Scaled as one piece by fit(). */
+    .hs-box { position: relative; width: calc(426px * var(--s)); height: calc(898px * var(--s)); }
+    .hs-box::before { content: ''; position: absolute; inset: 8% -18%; border-radius: 50%; pointer-events: none;
+      background: radial-gradient(closest-side, rgba(95,178,241,.2), rgba(141,241,94,.05) 60%, transparent); filter: blur(20px); }
+    .handset { position: absolute; top: 0; left: 0; width: 426px; height: 898px; padding: 12px; border-radius: 66px;
+      transform: scale(var(--s)); transform-origin: 0 0;
+      background: linear-gradient(145deg, #2e2e30, #0d0d0e 42%, #1d1d1f);
+      box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.13), inset 0 0 0 5px #050505,
+        0 60px 110px -24px rgba(0,0,0,.9), 0 30px 60px -30px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.04); }
+    .hs-btn { display: block; position: absolute; width: 4px; background: linear-gradient(90deg, #232325, #19191a); }
+    .hs-btn--l { left: -3px; border-radius: 2px 0 0 2px; }
+    .hs-btn--r { right: -3px; border-radius: 0 2px 2px 0; top: 250px; height: 100px; }
+    .hs-btn--a { top: 150px; height: 32px; }
+    .hs-btn--b { top: 212px; height: 62px; }
+    .hs-btn--c { top: 288px; height: 62px; }
+    #phone { position: static; width: 402px; height: 874px; border-radius: 54px; transform: none; }
+    .hs-island { display: block; position: absolute; z-index: 3; top: 23px; left: 50%; width: 124px; height: 36px; margin-left: -62px; border-radius: 20px; background: #000; pointer-events: none;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.04); }
+    .hs-island::after { content: ''; position: absolute; right: 13px; top: 12px; width: 12px; height: 12px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #2a3a55, #0b0f18 60%); }
+    .hs-status { display: flex; position: absolute; z-index: 2; top: 12px; left: 12px; right: 12px; height: 54px; padding: 0 34px 0 44px; align-items: center; justify-content: space-between;
+      font-family: -apple-system, 'SF Pro Text', var(--ui); font-size: 16px; font-weight: 600; color: #fff; pointer-events: none; border-radius: 54px 54px 0 0; }
+    .hs-status span:last-child { display: flex; gap: 6px; align-items: center; }
+
+    /* Entrance: one orchestrated load. Transform/opacity only, so nothing shifts. */
+    .js .side > * { animation: rise .9s var(--ease) both; animation-delay: calc(120ms + var(--i, 0) * 70ms); }
+    .js .hs-box { animation: lift 1.1s var(--ease) 60ms both; }
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+  @keyframes lift { from { opacity: 0; transform: translateY(48px) scale(.975); } }
+  @media (prefers-reduced-motion: reduce) {
+    .js .side > *, .js .hs-box { animation: none !important; }
+    .chip, .chip--restart svg { transition: none; }
+  }
+</style>
+<script defer src="/prototype/_shared/case-link.js" data-href="/work/spendee" data-label="Back to the Spendee case study" data-position="top-left short; (max-width: 879px) top-center 0 compact"></script>
+</head>
+<body>
+<script>document.documentElement.classList.add('js');</script>
+<div class="aura" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<main class="stage">
+  <!-- Desktop-only context panel. On a phone the app fills the screen and this is hidden. -->
+  <aside class="side" aria-label="About this prototype">
+    <div class="brand" style="--i:0">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="36" height="36" viewBox="0 0 110 110"><defs><linearGradient id="nb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9ef25a"/><stop offset=".5" stop-color="#d9e46a"/><stop offset="1" stop-color="#8ec8f0"/></linearGradient></defs><path d="M74.5 51.5C76 37 65 27 54 27C42.5 27 36 33.5 36 41.5C36 50 44.5 53.2 54 56C64 59 71.5 62.8 71.5 71C71.5 79 63.5 83 53 83C41 83 31.5 75 31.5 63" fill="none" stroke="#e9cf73" stroke-width="6" stroke-linecap="round"/><path d="M64 12 36 98M73 14 45 100" stroke="url(#nb)" stroke-width="4.5" stroke-linecap="round"/></svg>
+      </span>
+      <div>
+        <h1 class="brand-name">Spendee</h1>
+        <p class="tagline">Track effortlessly. <b>Spend wisely.</b></p>
+      </div>
+    </div>
+
+    <p class="desc" style="--i:1">A smart business ledger for Indian small businesses. Ledger, GST, invoicing, UPI payments and credit live in one app, with every figure reconciling from screen to screen.</p>
+
+    <section style="--i:2" aria-labelledby="triesH">
+      <h2 class="eyebrow" id="triesH">Things worth trying</h2>
+      <ol class="tries">
+        <li style="--c:var(--blue)"><span>Tap <kbd>+</kbd>, then <b>Scan with camera</b>. The vendor, amount and GST are read off the receipt and fill in a new ledger entry.</span></li>
+        <li style="--c:var(--red)"><span>Send <span class="amt">₹28,900</span> to MK Suppliers from Bank and approve it with any 6-digit UPI PIN. <kbd>000000</kbd> shows the failed payment.</span></li>
+        <li style="--c:var(--yellow)"><span>File <b>GSTR-3B</b> from the GST Center: review the return, pay the tax, then verify with any 6-digit EVC code.</span></li>
+        <li style="--c:var(--green)"><span>In Credit &amp; Growth, discount <b>INV-1038</b> and get <span class="amt">₹62,000</span> today for a 1.2% fee.</span></li>
+      </ol>
+    </section>
+
+    <section style="--i:3" aria-labelledby="demoH">
+      <h2 class="eyebrow" id="demoH">Jump to</h2>
+      <div class="chips" role="group" aria-label="Jump the phone to a flow">
+        <button class="chip" data-load="welcome" aria-pressed="false">Onboarding</button>
+        <button class="chip" data-load="login" aria-pressed="false">Sign in</button>
+        <button class="chip" data-load="dashboard" aria-pressed="false">Home</button>
+        <button class="chip" data-load="contact" aria-pressed="false">Ledger</button>
+        <button class="chip" data-load="invoices" aria-pressed="false">Invoices</button>
+        <button class="chip" data-load="bank" aria-pressed="false">Payments</button>
+        <button class="chip" data-load="gst-center" aria-pressed="false">GST</button>
+        <button class="chip" data-load="credit-growth" aria-pressed="false">Credit</button>
+        <button class="chip" data-load="more" aria-pressed="false">More</button>
+        <button class="chip chip--restart" id="restart" type="button" aria-label="Restart the demo from the splash screen"><svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7a5 5 0 1 0 1.6-3.7"/><path d="M2 1.8v2.8h2.8"/></svg>Restart</button>
+      </div>
+      <p class="now" aria-live="polite"><i aria-hidden="true"></i><span>On screen: <b id="now">Splash</b></span></p>
+    </section>
+
+    <p class="foot" style="--i:4">Every screen and sheet is plain HTML/CSS.<br><a href="index.html#screens" target="_self">Browse all 45 screens →</a> &nbsp;·&nbsp; <a href="index.html#system" target="_self">Design system →</a></p>
+  </aside>
+
+  <!-- The app itself -->
+  <div class="hs-box" id="hsBox">
+    <div class="handset" id="handset">
+      <span class="hs-btn hs-btn--l hs-btn--a" aria-hidden="true"></span>
+      <span class="hs-btn hs-btn--l hs-btn--b" aria-hidden="true"></span>
+      <span class="hs-btn hs-btn--l hs-btn--c" aria-hidden="true"></span>
+      <span class="hs-btn hs-btn--r" aria-hidden="true"></span>
+      <div class="hs-status" aria-hidden="true">
+        <span>9:41</span>
+        <span>
+          <svg width="18" height="12" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg>
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.4c2.3 0 4.4.9 6 2.4l1.1-1.1A10 10 0 0 0 8 .8 10 10 0 0 0 .9 3.7L2 4.8a8.4 8.4 0 0 1 6-2.4Zm0 3.2c1.4 0 2.7.5 3.7 1.4l1.1-1.1A7 7 0 0 0 8 4a7 7 0 0 0-4.8 1.9L4.3 7c1-.9 2.3-1.4 3.7-1.4Zm0 3.2c.6 0 1.1.2 1.5.5L8 10.8 6.5 9.3c.4-.3.9-.5 1.5-.5Z"/></svg>
+          <svg width="27" height="13" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 0 0 0-4z" fill="currentColor" opacity=".5"/></svg>
+        </span>
+      </div>
+      <span class="hs-island" aria-hidden="true"></span>
+      <iframe id="phone" name="phone" src="screens/splash.html" title="Spendee app prototype: tap to use it like a phone" loading="eager"></iframe>
+    </div>
+  </div>
+</main>
+
+<script>
+(function () {
+  const phone = document.getElementById('phone');
+  const box = document.getElementById('hsBox');
+  const root = document.documentElement;
+  const now = document.getElementById('now');
+  const chips = [...document.querySelectorAll('.chip[data-load]')];
+  const DESK = matchMedia('(min-width: 880px)');
+
+  /* Fit. Desktop: scale the whole handset (426×898) to the viewport height, never above 1.
+     Phone: the iframe is the viewport; below 402px wide, scale the 402pt screens down to fit. */
+  function fit() {
+    const w = innerWidth, h = innerHeight;
+    if (DESK.matches) {
+      phone.style.cssText = '';
+      const s = Math.min(1, (h - 48) / 898, Math.max(.4, (w - 64 - 280 - 48) / 426));
+      root.style.setProperty('--s', Math.max(.4, s).toFixed(4));
+    } else {
+      root.style.setProperty('--s', 1);
+      if (w < 402) {
+        const s = w / 402;
+        phone.style.cssText = `width:402px;height:${h / s}px;transform:scale(${s});transform-origin:0 0`;
+      } else phone.style.cssText = '';
+    }
+  }
+  fit();
+  addEventListener('resize', fit);
+
+  /* Which chip owns which screen (same map as the showcase's FLOW_CHIP). */
+  const FLOW_CHIP = { splash: 'welcome', welcome: 'welcome', 'onboarding-1': 'welcome', 'onboarding-2': 'welcome', 'onboarding-3': 'welcome',
+    login: 'login', signup: 'login', otp: 'login', 'create-pin': 'login', 'forgot-pin': 'login', permissions: 'login', 'setup-complete': 'login',
+    dashboard: 'dashboard', notifications: 'dashboard',
+    contact: 'contact', 'add-contact': 'contact', 'customer-details': 'contact', 'transaction-detail': 'contact', 'add-entry': 'contact', 'receipt-scan': 'contact',
+    invoices: 'invoices', 'create-invoice': 'invoices', 'invoice-preview': 'invoices', 'invoice-detail': 'invoices', 'invoice-discount': 'invoices',
+    bank: 'bank', 'send-money': 'bank', 'scan-pay': 'bank', beneficiaries: 'bank', 'payment-success': 'bank', 'payment-failed': 'bank', statement: 'bank', 'card-controls': 'bank',
+    'credit-growth': 'credit-growth', 'loan-apply': 'credit-growth', 'loan-success': 'credit-growth', 'gst-center': 'gst-center', 'gst-file': 'gst-center', reports: 'gst-center', inventory: 'gst-center',
+    more: 'more', settings: 'more', 'edit-profile': 'more', team: 'more', help: 'more' };
+  const NAMES = { splash: 'Splash', welcome: 'Welcome', 'onboarding-1': 'Smart Ledger', 'onboarding-2': 'AI Insights', 'onboarding-3': 'Smart Credit',
+    login: 'Sign In', signup: 'Register', otp: 'Verify Number', 'create-pin': 'Create PIN', 'forgot-pin': 'Reset PIN', permissions: 'Permissions', 'setup-complete': 'All Set',
+    dashboard: 'Home', notifications: 'Notifications', contact: 'Contacts', 'add-contact': 'Add Contact', 'customer-details': 'Customer', 'transaction-detail': 'Entry Details',
+    'add-entry': 'New Entry', 'receipt-scan': 'Scan Receipt', invoices: 'Invoices', 'create-invoice': 'New Invoice', 'invoice-preview': 'Invoice Preview', 'invoice-detail': 'Invoice Detail',
+    'invoice-discount': 'Get Paid Early', bank: 'Cards & Banking', 'send-money': 'Send Money', 'scan-pay': 'Scan & Pay', beneficiaries: 'Transfer', 'payment-success': 'Payment Success',
+    'payment-failed': 'Payment Failed', statement: 'Statement', 'card-controls': 'Card Controls', 'credit-growth': 'Credit & Growth', 'loan-apply': 'Apply for Loan', 'loan-success': 'Loan Approved',
+    'gst-center': 'GST Center', 'gst-file': 'File GSTR-3B', reports: 'Reports', inventory: 'Inventory', more: 'More', settings: 'Settings', 'edit-profile': 'Edit Profile',
+    team: 'Team & Roles', help: 'Help & Support' };
+
+  let current = '';
+  function setCurrent(id) {
+    if (!id || id === current || !(id in FLOW_CHIP)) return;
+    current = id;
+    now.textContent = NAMES[id] || id;
+    chips.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.load === FLOW_CHIP[id])));
+  }
+  setCurrent('splash');
+
+  addEventListener('message', (e) => {
+    if (e.source !== phone.contentWindow || !e.data || !e.data.spendeeScreen) return;
+    setCurrent(e.data.spendeeScreen);
+  });
+  // Belt and braces: same-origin, so read the path on every load too.
+  phone.addEventListener('load', () => {
+    try { setCurrent((phone.contentWindow.location.pathname.match(/([\w-]+)\.html$/) || [])[1]); } catch (e) {}
+  });
+
+  const go = (id) => { phone.src = 'screens/' + id + '.html'; };
+  chips.forEach((b) => b.addEventListener('click', () => { setCurrent(b.dataset.load); go(b.dataset.load); }));
+
+  document.getElementById('restart').addEventListener('click', () => {
+    try {
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const k = localStorage.key(i);
+        if (k && k.indexOf('spendee:') === 0) localStorage.removeItem(k);
+      }
+    } catch (e) {}
+    current = ''; setCurrent('splash');
+    go('splash');
+  });
+})();
+</script>
+</body>
+</html>

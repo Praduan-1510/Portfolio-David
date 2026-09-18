@@ -32,7 +32,8 @@ async function openApp(vp) {
   page.on("pageerror", (e) => errs.push(`[pageerror] ${e.message}`));
   page.on("console", (m) => m.type() === "error" && errs.push(`[console] ${m.text()}`));
   await page.setViewport(vp);
-  await page.goto(`${BASE}/app.html`, { waitUntil: "networkidle0", timeout: 30000 });
+  // ?case-link=0 keeps the portfolio's "Back to the case study" link out of the stills.
+  await page.goto(`${BASE}/app.html?case-link=0`, { waitUntil: "networkidle0", timeout: 30000 });
   // Sign in: the gate ships pre-filled, so submit → MFA → any 6 digits.
   await page.click('[data-auth="submit"]');
   await page.waitForSelector('[data-otp="0"]');
@@ -105,7 +106,7 @@ for (const [file, name] of [
   // Both pages reveal on scroll (IntersectionObserver), so reduced motion gives
   // a settled frame instead of a half-faded one.
   await page.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: "reduce" }]);
-  await page.goto(`${BASE}/${file}`, { waitUntil: "networkidle0", timeout: 30000 });
+  await page.goto(`${BASE}/${file}?case-link=0`, { waitUntil: "networkidle0", timeout: 30000 });
   await sleep(700);
   await shoot(page, name, { width: 1280, height: 800 });
   await page.close();

@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decathlon · Decathlon Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/decathlon.css">
+<style>
+  /* Membership card */
+  .mcard { position: relative; margin-top: 20px; height: 212px; border-radius: 18px; overflow: hidden; color: #fff; background: linear-gradient(125deg, #012A4A 0%, #075881 55%, #0F96DB 100%); box-shadow: 0 14px 30px rgba(1,42,74,.28); isolation: isolate; }
+  .mcard img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .22; mix-blend-mode: luminosity; z-index: -1; }
+  .mcard::before { content: ''; position: absolute; inset: 0; z-index: -1; background: repeating-linear-gradient(112deg, rgba(255,255,255,.05) 0 2px, transparent 2px 30px); }
+  .mcard::after { content: ''; position: absolute; right: -60px; top: -80px; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(closest-side, rgba(159,224,138,.28), rgba(159,224,138,0)); z-index: -1; }
+  .mcard__top { display: flex; align-items: center; justify-content: space-between; padding: 18px 18px 0; }
+  .mcard__tier { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 13px; background: rgba(159,224,138,.18); color: #B8F0A4; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+  .mcard__pts { padding: 16px 18px 0; display: flex; align-items: baseline; gap: 8px; }
+  .mcard__pts b { font-size: 40px; font-weight: 700; line-height: 1; letter-spacing: -1px; }
+  .mcard__pts span { font-size: 14px; color: #CFE7F4; }
+  .mcard__worth { padding: 4px 18px 0; font-size: 12.5px; color: #CFE7F4; }
+  .mcard__worth b { color: #fff; font-weight: 600; }
+  .mcard__prog { position: absolute; left: 18px; right: 18px; bottom: 18px; }
+  .mcard__bar { height: 7px; border-radius: 4px; background: rgba(255,255,255,.2); overflow: hidden; }
+  .mcard__bar i { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #9FE08A, #D8F7A6); transition: width 800ms var(--ease-out); }
+  .mcard__meta { display: flex; justify-content: space-between; margin-top: 7px; font-size: 11.5px; color: #CFE7F4; }
+  .mcard__meta b { color: #fff; font-weight: 600; }
+  .mcard__id { font-size: 11px; letter-spacing: 1.5px; color: rgba(255,255,255,.7); font-variant-numeric: tabular-nums; }
+
+  .quick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; }
+  .quick button, .quick a { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 6px; border-radius: 12px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--border); font-size: 12.5px; font-weight: 500; color: var(--navy); text-align: center; }
+  .quick .icon-circle { width: 34px; height: 34px; }
+  .quick .icon-circle svg { width: 18px; height: 18px; }
+
+  .tiers { display: flex; gap: 8px; }
+  .tiers li { flex: 1; padding: 10px 8px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--border); text-align: center; font-size: 11px; color: var(--muted-2); line-height: 1.35; }
+  .tiers li b { display: block; font-size: 13px; font-weight: 600; color: #000; }
+  .tiers li.is-now { box-shadow: inset 0 0 0 2px var(--club); background: #F3FCEF; }
+  .tiers li.is-now b { color: #1F7A0A; }
+
+  .benefits .menu__item { min-height: 58px; gap: 12px; }
+  .benefits .menu__label { color: #111; font-weight: 500; }
+  .benefits .icon-tile { width: 38px; height: 38px; }
+  .benefits .icon-tile svg { width: 20px; height: 20px; }
+  .lock { font-size: 11px; font-weight: 600; color: var(--muted-2); display: inline-flex; align-items: center; gap: 4px; }
+  .lock svg { width: 13px; height: 13px; }
+
+  .hist li { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--divider-soft); }
+  .hist li:last-child { border-bottom: 0; }
+  .hist .icon-tile { width: 38px; height: 38px; }
+  .hist__t { font-size: 14px; color: #111; line-height: 1.3; }
+  .hist__m { font-size: 12px; color: var(--muted-2); }
+  .hist__p { margin-left: auto; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .hist__p.plus { color: var(--ok); } .hist__p.minus { color: var(--danger); }
+  .hist-empty { font-size: 13px; color: var(--muted-2); padding: 12px 0; }
+
+  .refer { display: flex; gap: 14px; align-items: center; padding: 16px; border-radius: 14px; background: var(--profile); box-shadow: inset 0 0 0 1px var(--border); }
+  .refer__art { width: 58px; height: 58px; border-radius: 14px; background: var(--navy); color: #9FE08A; display: grid; place-items: center; flex-shrink: 0; }
+  .refer__art svg { width: 30px; height: 30px; }
+  .refer b { display: block; font-size: 15px; font-weight: 600; color: #000; }
+  .refer small { display: block; font-size: 12.5px; color: var(--muted-2); line-height: 1.4; }
+
+  .code-box { display: flex; align-items: center; justify-content: space-between; gap: 10px; height: 56px; padding: 0 8px 0 16px; border-radius: 12px; border: 1.5px dashed var(--steel); background: var(--surface); }
+  .code-box b { font-size: 20px; font-weight: 700; letter-spacing: 2px; color: var(--navy); font-variant-numeric: tabular-nums; }
+  .voucher-done { text-align: center; }
+  .voucher-done .result__circle { width: 96px; height: 96px; }
+  .voucher-done .result__circle svg { width: 58px; height: 58px; }
+  .v-opts .option[aria-disabled="true"] { opacity: .5; }
+  .steps3 li { display: flex; gap: 10px; font-size: 13px; line-height: 1.5; color: #333; padding: 6px 0; }
+  .steps3 li span:first-child { width: 22px; height: 22px; border-radius: 50%; background: var(--navy); color: #fff; font-size: 11px; font-weight: 600; display: grid; place-items: center; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<main class="page" aria-label="Decathlon Club">
+  <header class="appbar">
+    <a class="back tap" href="account.html" data-go="back" aria-label="Back"><svg width="10" height="17" viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5 1.5 8.5l7 7"/></svg></a>
+    <h1 class="appbar__title">Decathlon Club</h1>
+    <button class="appbar__action appbar__action--brand tap" type="button" data-sheet="howSheet">How it works</button>
+  </header>
+  <div class="page-divider"></div>
+
+  <section class="mcard enter" style="--i:0" aria-label="Your membership">
+    <img src="../assets/img/club-banner.jpg" alt="">
+    <div class="mcard__top"><span class="mcard__tier"><i data-icon="trophy" data-size="13" data-sw="2"></i><span id="tier">Club member</span></span><span class="wordmark wordmark--white" style="width:86px;opacity:.9" role="img" aria-label="Decathlon"></span></div>
+    <p class="mcard__pts"><b class="num" id="pts">2,450</b><span>points</span></p>
+    <p class="mcard__worth">Worth <b id="worth">₹245</b> in vouchers · <span class="mcard__id" id="memberId">DC 4471 2026</span></p>
+    <div class="mcard__prog">
+      <div class="mcard__bar" role="progressbar" aria-label="Progress to Club Gold" aria-valuemin="0" aria-valuemax="5000" id="bar"><i id="barFill" style="width:49%"></i></div>
+      <div class="mcard__meta"><span id="toNext"><b>2,550</b> to Club Gold</span><span>5,000</span></div>
+    </div>
+  </section>
+
+  <div class="quick">
+    <button class="tap" type="button" data-sheet="redeemSheet"><span class="icon-circle"><i data-icon="ticket" data-size="18"></i></span>Redeem</button>
+    <button class="tap" type="button" data-sheet="referSheet"><span class="icon-circle"><i data-icon="gift" data-size="18"></i></span>Refer a friend</button>
+    <button class="tap" type="button" data-sheet="cardSheet"><span class="icon-circle"><i data-icon="qr" data-size="18"></i></span>Club card</button>
+  </div>
+
+  <div class="section-head"><h2 class="section-title">Your tier</h2><span class="see-all" style="color:var(--muted-2)" id="tierNote">Resets every April</span></div>
+  <ol class="tiers" aria-label="Club tiers">
+    <li class="is-now" id="t1"><b>Member</b>0 – 4,999 pts</li>
+    <li id="t2"><b>Gold</b>5,000+ pts</li>
+    <li id="t3"><b>Platinum</b>15,000+ pts</li>
+  </ol>
+
+  <div class="section-head"><h2 class="section-title">Your benefits</h2></div>
+  <div class="menu benefits" data-delegate>
+    <button class="menu__item tap" type="button" data-benefit="delivery"><span class="icon-tile"><i data-icon="truck"></i></span><span class="menu__body"><span class="menu__label">Free delivery, any order</span><span class="menu__sub">No minimum for Club members</span></span><i class="chev" data-icon="chevron" data-size="18" data-sw="2"></i></button>
+    <button class="menu__item tap" type="button" data-benefit="sale"><span class="icon-tile"><i data-icon="flash"></i></span><span class="menu__body"><span class="menu__label">Early sale access</span><span class="menu__sub">Shop sales 24 hours before everyone</span></span><i class="chev" data-icon="chevron" data-size="18" data-sw="2"></i></button>
+    <button class="menu__item tap" type="button" data-benefit="instore"><span class="icon-tile"><i data-icon="qr"></i></span><span class="menu__body"><span class="menu__label">Points in store too</span><span class="menu__sub">Scan your Club card at any till</span></span><i class="chev" data-icon="chevron" data-size="18" data-sw="2"></i></button>
+    <button class="menu__item tap" type="button" data-benefit="birthday"><span class="icon-tile"><i data-icon="gift"></i></span><span class="menu__body"><span class="menu__label">Birthday bonus</span><span class="menu__sub">200 points every year</span></span><i class="chev" data-icon="chevron" data-size="18" data-sw="2"></i></button>
+    <button class="menu__item tap" type="button" data-benefit="workshops"><span class="icon-tile"><i data-icon="store"></i></span><span class="menu__body"><span class="menu__label">Free in-store workshops</span><span class="menu__sub">Bike servicing, running form, yoga</span></span><span class="lock" id="goldLock"><i data-icon="lock" data-size="13" data-sw="2"></i>Gold</span></button>
+  </div>
+
+  <div class="section-head"><h2 class="section-title">Points history</h2><button class="see-all see-all--brand tap" type="button" id="histMore">Show all</button></div>
+  <div class="panel" style="padding:2px 16px"><ul class="hist" id="hist"></ul></div>
+
+  <div class="section-head"><h2 class="section-title">Invite friends</h2></div>
+  <button class="refer tap" type="button" data-sheet="referSheet" style="width:100%;text-align:left">
+    <span class="refer__art"><i data-icon="gift" data-size="30"></i></span>
+    <span class="grow"><b>Give 250, get 250</b><small>Your friend gets 250 points on their first order, and so do you.</small></span>
+    <i class="chev" data-icon="chevron" data-size="18" data-sw="2"></i>
+  </button>
+
+  <nav data-tabbar="account"></nav>
+</main>
+
+<!-- Redeem vouchers -->
+<section class="sheet" id="redeemSheet" aria-labelledby="redeemT">
+  <div class="sheet__head"><div><p class="sheet__title" id="redeemT">Redeem points</p><p class="sheet__sub">You have <b id="rPts">2,450</b> points · 10 points = ₹1</p></div><button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button></div>
+  <div id="rPick">
+    <div class="options v-opts" data-options id="vOpts"></div>
+    <div class="sheet__foot"><button class="btn btn--primary btn--lg tap" type="button" id="genBtn"><span>Generate voucher</span></button><p class="helper" style="text-align:center">Valid for 90 days on the app and in stores</p></div>
+  </div>
+  <div class="voucher-done" id="rDone" hidden>
+    <div class="result__circle" id="vBadge"></div>
+    <p class="result__title" style="margin-top:18px;font-size:20px" id="vTitle">₹100 voucher ready</p>
+    <p class="result__msg" style="margin-bottom:16px">Use it at checkout or show it at the till. Expires <span id="vExp">17 Dec 2026</span>.</p>
+    <div class="code-box"><b id="vCode">CLUB-7F3K2Q</b><button class="btn btn--sm btn--soft tap" type="button" data-action="copy" data-copy="" data-copied="Voucher code copied" id="vCopy"><i data-icon="copy" data-size="16"></i><span>Copy</span></button></div>
+    <div class="sheet__foot"><a class="btn btn--primary btn--lg tap" href="bag.html"><span>Use it in my bag</span></a><button class="btn btn--outline btn--lg tap" type="button" data-close><span>Done</span></button></div>
+  </div>
+</section>
+
+<!-- Refer -->
+<section class="sheet" id="referSheet" aria-labelledby="referT">
+  <div class="sheet__head"><div><p class="sheet__title" id="referT">Refer a friend</p><p class="sheet__sub">You both get 250 points after their first order</p></div><button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button></div>
+  <p class="label-caps" style="margin-bottom:8px">Your invite code</p>
+  <div class="code-box"><b id="refCode">DAVID250</b><button class="btn btn--sm btn--soft tap" type="button" data-action="copy" data-copy="DAVID250" data-copied="Invite code copied" id="refCopy"><i data-icon="copy" data-size="16"></i><span>Copy</span></button></div>
+  <ol class="steps3" style="margin-top:16px">
+    <li><span>1</span><span>Share your code with a friend who has never shopped with Decathlon.</span></li>
+    <li><span>2</span><span>They sign up and use it on their first order above ₹999.</span></li>
+    <li><span>3</span><span>250 points land in both accounts once the order is delivered.</span></li>
+  </ol>
+  <p class="form-note" style="margin-top:6px" id="refStat">3 friends joined · 750 points earned</p>
+  <div class="sheet__foot"><button class="btn btn--primary btn--lg tap" type="button" data-action="share" data-title="Join me on Decathlon: use code DAVID250 for 250 points"><i data-icon="share" data-size="18"></i><span>Share invite</span></button></div>
+</section>
+
+<!-- Club card (scan at till) -->
+<section class="sheet" id="cardSheet" aria-labelledby="cardT">
+  <div class="sheet__head"><div><p class="sheet__title" id="cardT">Your Club card</p><p class="sheet__sub">Scan at the till to earn points in store</p></div><button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button></div>
+  <div class="panel" style="text-align:center;padding:20px">
+    <svg id="barcode" width="260" height="70" viewBox="0 0 260 70" aria-label="Membership barcode" role="img" style="margin:0 auto"></svg>
+    <p class="num" style="font-size:15px;font-weight:600;letter-spacing:3px;margin-top:10px" id="cardNo">DC 4471 2026</p>
+    <p class="form-note" id="cardName">Aditya Banerjee · Club member</p>
+  </div>
+  <div class="banner banner--info" style="margin-top:14px"><i data-icon="info" data-size="18"></i><span>Turn up your screen brightness for faster scanning.</span></div>
+  <div class="sheet__foot"><button class="btn btn--outline btn--lg tap" type="button" data-toast="Club card added to Apple Wallet"><i data-icon="wallet" data-size="18"></i><span>Add to Wallet</span></button></div>
+</section>
+
+<!-- How it works -->
+<section class="sheet" id="howSheet" aria-labelledby="howT">
+  <div class="sheet__head"><div><p class="sheet__title" id="howT">How Club points work</p></div><button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button></div>
+  <ol class="track">
+    <li class="done"><span class="track__title">Earn</span><span class="track__meta">1 point for every ₹100 you spend online or in store. Points arrive once the order is delivered.</span></li>
+    <li class="done"><span class="track__title">Level up</span><span class="track__meta">Reach 5,000 points in a year for Gold and 15,000 for Platinum.</span></li>
+    <li class="done"><span class="track__title">Redeem</span><span class="track__meta">Turn 1,000 points into a ₹100 voucher. Points expire after 12 months without activity.</span></li>
+  </ol>
+  <div class="sheet__foot"><a class="btn btn--outline btn--lg tap" href="help.html"><span>Club FAQs</span></a></div>
+</section>
+
+<!-- Benefit detail -->
+<section class="sheet" id="benefitSheet" aria-labelledby="benT">
+  <div class="sheet__head"><div><p class="sheet__title" id="benT">Benefit</p><p class="sheet__sub" id="benSub"></p></div><button class="sheet__close tap" type="button" data-close aria-label="Close"><i data-icon="close" data-size="14" data-sw="2.2"></i></button></div>
+  <p id="benBody" style="font-size:14px;line-height:1.6;color:#333"></p>
+  <div class="sheet__foot"><a class="btn btn--primary btn--lg tap" id="benCta" href="home.html"><span>Start shopping</span></a></div>
+</section>
+
+<script src="../assets/js/app.js"></script>
+<script>
+  (function () {
+    const D = window.Deca, $ = D.$, $$ = D.$$;
+    const GOLD = 5000, PLAT = 15000;
+    const VOUCHERS = [[100, 1000], [250, 2500], [500, 5000]];
+    // Points history: derived from delivered orders + any redemptions stored on this device
+    const history = () => {
+      const earn = D.orders.list().filter((o) => o.status === 'delivered').map((o) => ({ t: 'Order #' + o.id, m: D.fmtShort(o.deliveredOn || o.date), p: Math.round(o.total / 100), icon: 'bag', d: o.deliveredOn || o.date }));
+      // Everything before the four online orders, so the history adds up to the balance (2,450 seeded)
+      const dob = D.user.get().dob || '1994-08-12'; const now = new Date(); let bday = new Date(now.getFullYear(), +dob.slice(5, 7) - 1, +dob.slice(8, 10), 12);
+      if (bday > now) bday = new Date(now.getFullYear() - 1, bday.getMonth(), bday.getDate(), 12);
+      const at = (n) => D.iso(D.addDays(-n));
+      const base = [{ t: 'Welcome bonus', p: 500, icon: 'sparkle', d: '2023-03-12' }, { t: 'Birthday bonus', p: 200, icon: 'gift', d: D.iso(bday) }, { t: 'Friend joined: Rohit M.', p: 250, icon: 'user', d: at(210) },
+        { t: 'In store: Decathlon New Town', p: 510, icon: 'store', d: at(64) }, { t: 'In store: Decathlon Salt Lake', p: 340, icon: 'store', d: at(152) }].map((x) => Object.assign(x, { m: D.fmtShort(x.d) }));
+      const spent = (D.store.get('clubRedeemed', []) || []).map((r) => ({ t: `₹${r.value} voucher`, m: D.fmtShort(r.on), p: -r.points, icon: 'ticket', d: r.on }));
+      return spent.concat(earn, base).sort((a, b) => (a.d < b.d ? 1 : -1));
+    };
+    let showAll = false;
+    const render = () => {
+      const u = D.user.get(); const pts = u.points || 0;
+      const next = pts >= GOLD ? PLAT : GOLD; const tier = pts >= PLAT ? 'Platinum' : pts >= GOLD ? 'Gold' : 'Member';
+      $('#pts').textContent = D.fmtNum(pts); $('#rPts').textContent = D.fmtNum(pts);
+      $('#worth').textContent = D.fmt(Math.floor(pts / 10));
+      $('#tier').textContent = tier === 'Member' ? (u.tier || 'Club member') : 'Club ' + tier;
+      $('#barFill').style.width = Math.min(100, Math.round(pts / next * 100)) + '%';
+      $('#bar').setAttribute('aria-valuenow', pts); $('#bar').setAttribute('aria-valuemax', next);
+      $('#toNext').innerHTML = pts >= PLAT ? '<b>Top tier reached</b>' : `<b>${D.fmtNum(next - pts)}</b> to Club ${pts >= GOLD ? 'Platinum' : 'Gold'}`;
+      $('#toNext').nextElementSibling.textContent = D.fmtNum(next);
+      ['t1', 't2', 't3'].forEach((id, i) => $('#' + id).classList.toggle('is-now', ['Member', 'Gold', 'Platinum'][i] === tier));
+      $('#goldLock').hidden = tier !== 'Member';
+      $('#cardName').textContent = `${u.name} · ${$('#tier').textContent}`;
+      const h = history(); const list = showAll ? h : h.slice(0, 4);
+      $('#hist').innerHTML = list.length ? list.map((x) => `<li><span class="icon-tile">${D.icon(x.icon, 20)}</span><span><span class="hist__t" style="display:block">${D.esc(x.t)}</span><span class="hist__m">${x.m}</span></span><span class="hist__p ${x.p < 0 ? 'minus' : 'plus'}">${x.p < 0 ? '−' : '+'}${D.fmtNum(Math.abs(x.p))}</span></li>`).join('') : '<li class="hist-empty">No points activity yet. Your first order earns points.</li>';
+      $('#histMore').textContent = showAll ? 'Show less' : 'Show all';
+      $('#histMore').hidden = h.length <= 4;
+      // Voucher options (disabled when not enough points)
+      $('#vOpts').innerHTML = VOUCHERS.map(([v, p], i) => `<div class="option tap" data-value="${i}" aria-checked="${i === 0 && pts >= p}"${pts < p ? ' aria-disabled="true"' : ''}><span class="option__radio"></span><span class="option__body"><span class="option__title">₹${v} voucher</span><span class="option__sub">${pts < p ? `Need ${D.fmtNum(p - pts)} more points` : 'Instant · works on everything'}</span></span><span class="option__meta num">${D.fmtNum(p)} pts</span></div>`).join('');
+      delete $('#vOpts').dataset.inited; D.hydrate($('#redeemSheet'));
+      $('#genBtn').disabled = pts < VOUCHERS[0][1];
+    };
+    render();
+    D.on('user', render);
+    $('#histMore').addEventListener('click', () => { showAll = !showAll; render(); });
+
+    // Barcode (deterministic bars)
+    let x = 6, bars = ''; const seed = '447120262450DAVID';
+    for (let i = 0; x < 250; i++) { const w = 1 + (seed.charCodeAt(i % seed.length) + i) % 3; if (i % 2 === 0) bars += `<rect x="${x}" y="0" width="${w}" height="70" fill="#012A4A"/>`; x += w + 1; }
+    $('#barcode').innerHTML = bars;
+
+    // Redeem flow: choose -> generate (loading) -> code -> copy
+    let choice = 0;
+    $('#vOpts').addEventListener('select', (e) => { choice = +e.detail; });
+    $('#vOpts').addEventListener('click', (e) => { const o = e.target.closest('[aria-disabled="true"]'); if (o) { e.stopImmediatePropagation(); D.toast('Not enough points for this voucher yet'); } }, true);
+    $('#genBtn').addEventListener('click', async (e) => {
+      const [value, cost] = VOUCHERS[choice]; const u = D.user.get();
+      if ((u.points || 0) < cost) { D.toast('Not enough points for this voucher yet'); return; }
+      await D.loading(e.currentTarget, 1100);
+      const code = 'CLUB-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+      D.store.set('clubRedeemed', [{ value, points: cost, on: D.iso(), code }].concat(D.store.get('clubRedeemed', []) || []));
+      D.user.set({ points: u.points - cost });
+      $('#vBadge').innerHTML = D.icon('verified', 58);
+      $('#vTitle').textContent = `₹${value} voucher ready`; $('#vCode').textContent = code; $('#vCopy').dataset.copy = code;
+      $('#vExp').textContent = D.fmtShort(D.addDays(90));
+      $('#rPick').hidden = true; $('#rDone').hidden = false;
+    });
+    $('#redeemSheet').addEventListener('sheet:close', () => setTimeout(() => { $('#rPick').hidden = false; $('#rDone').hidden = true; }, 330));
+
+    // Benefit detail sheet
+    const BEN = {
+      delivery: ['Free delivery, any order', 'Active on your account', 'As a Club member every order ships free, even a ₹399 cap. Non-members pay ₹99 below ₹999.', 'Start shopping', 'home.html'],
+      sale: ['Early sale access', 'Next sale: Diwali Sports Fest, 17 Oct', 'We will notify you 24 hours before a sale opens to everyone else, so you get first pick of sizes.', 'Notification settings', 'settings.html'],
+      instore: ['Points in store too', 'Every Decathlon store in India', 'Show the Club card on this screen at the till and earn 1 point for every ₹100, exactly as you do online.', 'Find a store', 'stores.html'],
+      birthday: ['Birthday bonus', 'Add your birthday to get it', '200 points arrive on your birthday every year. Make sure your date of birth is up to date.', 'Edit profile', 'edit-profile.html'],
+      workshops: ['Free in-store workshops', 'Unlocks at Club Gold', 'Bike servicing basics, running form clinics and weekend yoga at Decathlon New Town. Reach 5,000 points to unlock.', 'See stores near me', 'stores.html'],
+    };
+    $$('[data-benefit]').forEach((b) => b.addEventListener('click', () => { const [t, s, body, cta, href] = BEN[b.dataset.benefit]; $('#benT').textContent = t; $('#benSub').textContent = s; $('#benBody').textContent = body; $('#benCta span').textContent = cta; $('#benCta').href = href; D.sheet.open('benefitSheet'); }));
+    $('#refCopy').dataset.copy = $('#refCode').textContent = (D.user.get().first || 'ADITYA').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 6) + '250';
+  })();
+</script>
+</body>
+</html>

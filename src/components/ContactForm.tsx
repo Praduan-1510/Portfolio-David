@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 import { useFormStatus } from "react-dom";
-import { ArrowRight, ChevronDown, Check } from "lucide-react";
+import { ChevronDown, Check } from "lucide-react";
 import { Button } from "@/components/primitives";
 import { Reveal, FlapText } from "@/components/motion";
 import { gsap } from "@/lib/motion/gsap";
@@ -58,17 +58,11 @@ function SubmitButton() {
       type="submit"
       variant="primary"
       size="lg"
+      arrow={pending ? undefined : "right"}
       disabled={pending}
       className="mt-space-3 w-full"
     >
-      {pending ? (
-        "Sending…"
-      ) : (
-        <>
-          Send message
-          <ArrowRight aria-hidden className="size-[18px]" />
-        </>
-      )}
+      {pending ? "Sending…" : "Send message"}
     </Button>
   );
 }

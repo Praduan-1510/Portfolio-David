@@ -246,7 +246,9 @@
       root.style.setProperty('--s', Math.max(.4, s).toFixed(4));
     } else {
       root.style.setProperty('--s', 1);
-      if (w < 402) {
+      /* Fill the width on any portrait phone: scale down below 402, and UP on wider
+         phones (most Androids are 412-480 wide), which otherwise got side bands. */
+      if (w < 402 || (w <= 600 && h > w)) {
         const s = w / 402;
         phone.style.cssText = `width:402px;height:${h / s}px;transform:scale(${s});transform-origin:0 0`;
       } else phone.style.cssText = '';

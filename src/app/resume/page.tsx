@@ -272,7 +272,7 @@ export default function Resume() {
                 facts sit together where a recruiter looks for them. */}
             <div className="lg:col-span-4 lg:col-start-9">
               <Reveal trigger="load" delay={0.34}>
-                <div className="card-neon resume-panel relative overflow-hidden rounded-[3px] border border-line p-space-6">
+                <div className="card-neon resume-panel relative overflow-hidden rounded-panel border border-line p-space-6">
                   <span
                     aria-hidden="true"
                     className="absolute inset-x-0 top-0 h-px print:hidden"
@@ -544,7 +544,7 @@ export default function Resume() {
       <Container as="section" className="pb-space-11" data-noprint>
         <Reveal
           as="div"
-          className="card-neon relative isolate overflow-hidden rounded-[3px] border border-line p-space-8 sm:p-space-9"
+          className="card-neon relative isolate overflow-hidden rounded-panel border border-line p-space-8 sm:p-space-9"
         >
           <div
             aria-hidden="true"

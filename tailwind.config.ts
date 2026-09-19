@@ -60,6 +60,16 @@ const config: Config = {
         "neon-soft": "0 14px 28px -16px var(--neon-glow)",
       },
 
+      // ---- Panel radius ----
+      // ONE corner for every bordered content panel (the contact form card on
+      // /contact and in the drawer, the home CTA card, the About and Résumé
+      // panels), so a card reads as the same object wherever it appears.
+      // Taken from the contact drawer's input panel; the pill chrome (dock,
+      // buttons) stays fully round and is not a panel.
+      borderRadius: {
+        panel: "18px",
+      },
+
       // ---- Fluid type scale (DESIGN_GUIDELINES.md §5) ----
       // clamp() so type scales between mobile and desktop without breakpoints.
       fontSize: {

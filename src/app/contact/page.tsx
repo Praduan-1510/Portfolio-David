@@ -184,7 +184,7 @@ export default function Contact() {
             <Reveal trigger="load" delay={0.3}>
               <div
                 data-transmit-panel
-                className="group relative overflow-hidden rounded-[3px] border border-line bg-surface p-space-6 sm:p-space-7"
+                className="group relative overflow-hidden rounded-panel border border-line bg-surface p-space-6 sm:p-space-7"
               >
                 {/* Spectrum crown: the wayfinding signal across the panel top.
                     A masked wrapper with two layers: the resting hairline (0.55,

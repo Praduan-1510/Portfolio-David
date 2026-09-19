@@ -144,7 +144,7 @@ export default function Home() {
           a flat surface. The Magnetic "Get in touch" button is preserved. */}
       <Container as="section" id="contact" className="scroll-mt-16 py-space-9">
         <Reveal>
-          <div className="card-neon relative isolate overflow-hidden rounded-[3px] border border-line bg-surface p-space-6 sm:p-space-8 md:p-space-9">
+          <div className="card-neon relative isolate overflow-hidden rounded-panel border border-line bg-surface p-space-6 sm:p-space-8 md:p-space-9">
             {/* Top accent hairline: the spectrum lit across the crown of the
                 panel (faded ends), so the closing CTA carries the same signal as
                 the hero and footer. */}

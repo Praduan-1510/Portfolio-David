@@ -112,6 +112,15 @@ export const TESTIMONIALS: Testimonial[] = [
     provenance: { kind: "on-file", medium: "Message, quoted with permission" },
   },
   {
+    name: "Rupal Chakrabarty",
+    portrait: "/testimonials/rupal-chakrabarty.jpg",
+    role: "Team Lead",
+    company: "InsightsTap",
+    quote:
+      "I’ve had the pleasure of working alongside Praduan, and his ability to turn complex ideas into clean, intuitive designs really stands out. He brings a strong product mindset, pays close attention to detail, and collaborates exceptionally well with engineering. He’s someone I’ve genuinely enjoyed working with and would be happy to work with again.",
+    provenance: { kind: "on-file", medium: "Message, quoted with permission" },
+  },
+  {
     name: "Claire Bennett",
     portrait: "/testimonials/claire-bennett.jpg",
     role: "Founder",

@@ -365,7 +365,7 @@ export function ContactDrawer({
                   data-received once it lands (the crown's pulse). */}
               <div
                 data-transmit-panel
-                className="group relative mt-space-6 overflow-hidden rounded-[18px] border border-line bg-[color:color-mix(in_srgb,var(--bg)_42%,transparent)] p-space-5 sm:p-space-6"
+                className="group relative mt-space-6 overflow-hidden rounded-panel border border-line bg-[color:color-mix(in_srgb,var(--bg)_42%,transparent)] p-space-5 sm:p-space-6"
               >
                 <span
                   aria-hidden="true"

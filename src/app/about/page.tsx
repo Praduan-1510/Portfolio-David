@@ -403,7 +403,7 @@ export default function About() {
           {CAPABILITIES.map((item, i) => (
             <div
               key={item.title}
-              className="card-neon group/cap relative overflow-hidden rounded-[3px] border border-line p-space-6"
+              className="card-neon group/cap relative overflow-hidden rounded-panel border border-line p-space-6"
             >
               <div className="flex items-start gap-space-5">
                 <span className="shrink-0 text-fg transition-[transform,color] duration-base ease-out-quad group-hover/cap:-translate-y-1 group-hover/cap:text-neon">
@@ -550,7 +550,7 @@ export default function About() {
       <Container as="section" className="pb-space-11">
         <Reveal
           as="div"
-          className="card-neon relative isolate overflow-hidden rounded-[3px] border border-line p-space-8 sm:p-space-9"
+          className="card-neon relative isolate overflow-hidden rounded-panel border border-line p-space-8 sm:p-space-9"
         >
           <div
             aria-hidden="true"

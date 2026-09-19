@@ -1281,6 +1281,10 @@ function DemoWindow({
   const xl = useMedia("(min-width: 1280px)");
   const xxl = useMedia("(min-width: 1536px)");
   const shortLand = useMedia("(max-height: 520px) and (orientation: landscape)");
+  // A touch screen under the app stages' 880px breakpoint is a phone (or a
+  // phone-sized tablet in portrait): the prototypes draw their full-bleed app
+  // there, so the demo must open as that app, not as a scaled desktop stage.
+  const touchSmall = useMedia("(pointer: coarse) and (max-width: 879px)");
   const finePointer = useMedia("(pointer: fine)");
   const twoRow = belowLg && !shortLand;
   const fullLabels = !narrow && (twoRow || xl);
@@ -1298,7 +1302,7 @@ function DemoWindow({
   // Centring is done in pixels rather than with a translate(-50%) because
   // percentage translates resolve against the element's UNSCALED box, which is
   // wrong by a factor of `scale`.
-  const phoneWindow = narrow || shortLand;
+  const phoneWindow = narrow || shortLand || touchSmall;
   const measured = stage.w > 0 && stage.h > 0;
   const simulated = !phoneWindow && device !== "desktop" ? DEVICE_SIZE[device] : null;
   const desktopScaled = !phoneWindow && !simulated && measured && stage.w < DESKTOP_MIN_W;
@@ -1917,6 +1921,10 @@ function DemoWindow({
     <dialog
       ref={dialogRef}
       className="lp-dialog"
+      // NATIVE: on a phone the demo opens as the app itself, edge to edge,
+      // with no window chrome (no title bar, address line, tabs or loading
+      // card): only a small floating close handle, plus the phone's own Back.
+      data-native={phoneWindow ? "" : undefined}
       // A literal name: labelled by the heading plus an sr-only suffix, it was
       // computed as "Meridian , live demo", space before the comma.
       aria-label={`${title}, live demo`}
@@ -1944,7 +1952,7 @@ function DemoWindow({
       <div ref={veilRef} aria-hidden="true" className="lp-veil" />
       <div ref={panelRef} className="lp-panel" data-state="open">
         <div ref={barRef} className="lp-bar">
-          {twoRow ? (
+          {phoneWindow ? null : twoRow ? (
             <>
               <div className="flex items-center gap-space-2">
                 {closeButton}
@@ -1962,6 +1970,7 @@ function DemoWindow({
             </div>
           )}
         </div>
+        {phoneWindow && <div className="lp-native-close">{closeButton}</div>}
         <p id={descId} className="sr-only">
           Esc, or your browser&apos;s Back button, closes the demo and returns you
           to the case study.

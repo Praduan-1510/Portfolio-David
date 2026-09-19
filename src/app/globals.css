@@ -1725,6 +1725,60 @@ html.lenis body {
    phone two thirds of it showed the live app booting underneath. Its ground
    is the stage's own (bezel plus the accent bloom), and `progress` says why
    a click does nothing yet. */
+/* NATIVE (phone-width or small touch window): the demo opens as the app
+   itself. No window chrome, no bench, no loading card; black behind the app
+   while it boots (every prototype opens on a dark splash), the status-bar
+   inset kept clear, and one small close tab on the left edge. */
+.lp-dialog[data-native] .lp-bar {
+  display: none;
+}
+.lp-dialog[data-native] .lp-panel {
+  background: #000;
+  padding-top: env(safe-area-inset-top, 0px);
+}
+.lp-dialog[data-native] .lp-stage,
+.lp-dialog[data-native] .lp-boot {
+  background: #000;
+}
+.lp-dialog[data-native] .lp-boot-card,
+.lp-dialog[data-native] .lp-boot-pill {
+  display: none;
+}
+.lp-native-close {
+  /* A tab on the left edge, vertically centred: the one place neither the
+     phone apps nor the web apps put a control (top bars, tab bars and CTAs
+     all live at the top and bottom), and where a phone's own back gesture
+     starts, so it reads as "back" without explaining itself. */
+  position: absolute;
+  z-index: 6;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  opacity: 0.78;
+  transition: opacity var(--dur-fast) var(--ease-out-quad);
+}
+.lp-native-close:hover,
+.lp-native-close:focus-within {
+  opacity: 1;
+}
+.lp-native-close button {
+  width: 1.75rem;
+  min-width: 0;
+  height: 3.5rem;
+  min-height: 0;
+  padding: 0;
+  border-radius: 0 1rem 1rem 0;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(10px) saturate(1.4);
+  backdrop-filter: blur(10px) saturate(1.4);
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.lp-native-close button svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
 .lp-boot {
   cursor: progress;
   background:

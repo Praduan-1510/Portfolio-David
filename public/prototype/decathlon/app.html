@@ -231,6 +231,7 @@
 
   /* Fit. Desktop: scale the whole handset (417×876) to the viewport height, never above 1.
      Phone: the iframe is the viewport; below 393px wide, scale the 393pt screens down to fit. */
+  let oneScreen = false;
   function fit() {
     const w = innerWidth, h = innerHeight;
     if (DESK.matches) {
@@ -242,13 +243,45 @@
       /* Fill the width on any portrait phone: scale down below 393, and UP on wider
          phones (most Androids are 412-480 wide), which otherwise got side bands. */
       if (w < W || (w <= 600 && h > w)) {
-        const s = w / W;
-        phone.style.cssText = `width:${W}px;height:${h / s}px;transform:scale(${s});transform-origin:0 0`;
+        const s = oneScreen ? Math.min(w / W, h / H) : w / W;
+        const x = Math.max(0, (w - W * s) / 2);
+        phone.style.cssText = `width:${W}px;height:${h / s}px;transform:scale(${s});transform-origin:0 0;left:${x}px`;
       } else phone.style.cssText = '';
     }
   }
   fit();
-  addEventListener('resize', fit);
+
+  /* One-screen designs fit the phone's HEIGHT. Scaling a screen to fill a wide
+     phone's width leaves it less height than it was drawn for, so a fixed
+     canvas (splash, welcome, onboarding, sign-in) would scroll. After every
+     load, lay the screen out at full width; if it would then scroll but its
+     content ends within the design height, it is one of those canvases: scale
+     it to contain instead, centred, and paint the margin in the screen's own
+     background so it reads as the app, not a band. Screens that are meant to
+     scroll (home, lists, product pages) keep the full width. */
+  function settle() {
+    oneScreen = false; fit();
+    let d = null, need = false;
+    try {
+      d = phone.contentDocument;
+      const se = d && d.scrollingElement;
+      need = !DESK.matches && !!se && se.scrollHeight > phone.contentWindow.innerHeight + 1 && se.scrollHeight <= H + 2;
+    } catch (e) {}
+    oneScreen = need;
+    if (need) fit();
+    let bg = '';
+    if (need) try {
+      const v = d.defaultView, el = d.querySelector('main') || d.body;
+      const cs = v.getComputedStyle(el), bs = v.getComputedStyle(d.body);
+      const img = cs.backgroundImage !== 'none' && cs.backgroundImage.indexOf('url(') < 0 ? cs.backgroundImage + ', ' : '';
+      const col = cs.backgroundColor !== 'rgba(0, 0, 0, 0)' ? cs.backgroundColor : bs.backgroundColor;
+      bg = img + col;
+    } catch (e) {}
+    document.documentElement.style.background = bg;
+    document.body.style.background = bg;
+  }
+  phone.addEventListener('load', settle);
+  addEventListener('resize', settle);
 
   /* Which chip owns which screen (all 45 ids in index.html's SCREENS). */
   const FLOW_CHIP = {
